@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Product from '$lib/components/product-catalogue/product-card2.svelte'
+	import Product from '$lib/components/product-catalogue/product-card.svelte'
 	import { FeaturedProductsGrid } from '$lib/core/composables/index.js'
 
 	let { data, displayProduct, loadMore, hasMore = false, loading = false } = $props()
@@ -14,21 +14,10 @@
 		</div>
 	</div>
 {:else}
-	<div class="grid grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+	<div class="intra-gap grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 		{#each data || [] as p}
-			<Product
-				product={{
-					id: p.id,
-					slug: p.slug,
-					thumbnail: p.thumbnail,
-					price: p.price,
-					mrp: p.mrp,
-					title: p.title,
-					vendor: p.vendor,
-					variants: p.variants,
-					tag: p.tag
-				}}
-				aspectRatio="square"
+					<Product
+				product={p}
 				{displayProduct}
 				hideVariations={true}
 				hideCartControls={true}
