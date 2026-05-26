@@ -25,7 +25,7 @@
 					</Button>
 				</Drawer.Trigger>
 				<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-screen sm:w-fit sm:max-w-xl [&>div:first-child]:hidden">
-					<div in:fly={{ duration: 300 }} class="mx-auto w-full max-w-4xl pb-16 sm:pb-0">
+					<div in:fly={{ duration: 300 }} class="mx-auto w-full max-w-4xl pb-20 sm:pb-0">
 						<Drawer.Header class="text-left">
 							<Drawer.Title>Apply Promo Code</Drawer.Title>
 							<Drawer.Close
