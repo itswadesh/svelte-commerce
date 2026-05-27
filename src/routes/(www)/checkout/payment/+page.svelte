@@ -79,8 +79,7 @@
 							<div class="grid grid-cols-1 gap-4">
 								{#each paymentModule.listOfPaymentMethods as method}
 									<label
-										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-white px-6 py-5 {paymentModule.SELECTED_PG_CODE ===
-										method?.code
+										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-white px-6 py-5 {(paymentModule.selectedPGCode == method?.code && paymentModule.listOfPaymentMethods?.length !== 1)
 											? 'border-primary ring-1 ring-primary'
 											: 'border-gray-100 shadow-sm'}"
 									>
@@ -91,7 +90,7 @@
 													name="paymentMethod"
 													value={method?.code}
 													checked={paymentModule.SELECTED_PG_CODE === method?.code}
-													onchange={() => (paymentModule.SELECTED_PG_CODE = method?.code)}
+													onchange={() => paymentModule.SELECTED_PG_CODE = method?.code}
 													class="peer h-5 w-5 appearance-none rounded-full border-2 border-gray-200 transition-all checked:border-primary"
 												/>
 												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 transition-opacity peer-checked:opacity-100"></div>
