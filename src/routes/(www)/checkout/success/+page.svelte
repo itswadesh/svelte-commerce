@@ -53,7 +53,7 @@
 	<title>Success | Order #{orderNo || ''}</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[#fafafa] py-12 md:py-20">
+<div class="min-h-screen bg-[#fafafa] py-12 md:py-5">
 	<div class="container mx-auto max-w-3xl px-4">
 		<div
 			in:fly={{ y: 20, duration: 600 }}
@@ -70,7 +70,7 @@
 					</div>
 				</div>
 				<h1 class="mb-3 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Thank you for your order</h1>
-				<p class="mx-auto max-w-md text-lg text-gray-500">We've received your order and we'll notify you as soon as it's on its way.</p>
+				<p class="mx-auto max-w-lg text-lg text-gray-500 text-sm">We've received your order and we'll notify you as soon as it's on its way.</p>
 
 				<!--{#if orderNo}
 					<div class="mt-6 inline-flex items-center rounded-full border border-gray-100 bg-gray-50 px-4 py-1.5 text-sm font-medium text-gray-600">
@@ -111,20 +111,24 @@
 			</div>
 
 			<!-- Items List -->
-			<div class="border-b border-gray-100 p-8 md:p-12">
+			<div class="border-b border-muted/30 p-4 md:p-12">
 				<h2 class="mb-6 text-lg font-bold text-gray-900">Order Summary</h2>
 				<div class="divide-y divide-gray-100">
 					{#each orders as { lineItems }}
 						{#each lineItems as item}
 							<div class="group flex flex-col md:flex-row items-center gap-6 py-6 first:pt-0 last:pb-0">
 								<div
-									class="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-50 transition-all duration-300"
+									class="relative flex-shrink-0 overflow-hidden transition-all duration-300"
 								>
-									<LazyImg src={item.thumbnail} alt={item.title} class="h-full w-full object-cover" />
+													<LazyImg
+														src={item.thumbnail || '/placeholder.svg'}
+														alt={item.title}
+														class="aspect-[3/4] w-16 object-contain sm:w-16"
+													/>
 								</div>
 								<div class="flex flex-1 flex-col transition-all duration-300">
 									<div class="flex justify-between text-base font-semibold text-gray-900">
-										<h3 class="transition-colors hover:text-primary">
+										<h3 class="transition-colors ">
 											<a href={`/products/${item.slug}`}>
 												{item.title}
 											</a>
@@ -145,40 +149,40 @@
 			</div>
 
 			<!-- Shipping and Delivery Info -->
-			<div class="grid gap-0 border-b border-gray-100 sm:grid-cols-2">
+			<div class="grid gap-0 border-b border-muted/30 sm:grid-cols-2">
 				<!-- Shipping Info -->
-				<div class="border-b border-gray-100 p-8 sm:border-b-0 sm:border-r md:p-12">
-					<div class="mb-4 flex items-center gap-2 font-bold text-gray-900">
+				<div class="border-b border-muted/30 p-4 sm:border-b-0 sm:border-r md:p-6">
+					<div class="mb-4 flex text-base items-center gap-2 font-bold text-gray-900">
 						<MapPin class="h-5 w-5 text-primary" />
 						<h3>Shipping Address</h3>
 					</div>
 					<div class="text-sm leading-relaxed text-gray-600">
-						<p class="mb-1 font-bold text-gray-900">
+						<p class="mb-1 font-bold text-gray-700">
 							{firstOrder?.shippingAddress?.firstName}
 							{firstOrder?.shippingAddress?.lastName}
 						</p>
-						<p>{firstOrder?.shippingAddress?.address_1}</p>
+						<p class="text-gray-700">{firstOrder?.shippingAddress?.address_1}</p>
 						{#if firstOrder?.shippingAddress?.address_2}
 							<p>{firstOrder?.shippingAddress?.address_2}</p>
 						{/if}
 						<p>{firstOrder?.shippingAddress?.city}, {firstOrder?.shippingAddress?.state} {firstOrder?.shippingAddress?.zip}</p>
-						<p class="mt-2 flex items-center gap-2">
-							<span class="inline-block h-1 w-1 rounded-full bg-gray-300"></span>
+						<p class="flex items-center gap-2">
+							<!-- <span class="inline-block h-1 w-1 rounded-full bg-gray-700"></span> -->
 							{firstOrder?.shippingAddress?.phone}
 						</p>
 					</div>
 				</div>
 
 				<!-- Delivery Status -->
-				<div class="bg-gray-50/30 p-8 md:p-12">
-					<div class="mb-4 flex items-center gap-2 font-bold text-gray-900">
+				<div class="p-4 md:p-6">
+					<div class="mb-4 flex items-center gap-2 text-base font-bold text-gray-900">
 						<Calendar class="h-5 w-5 text-primary" />
 						<h3>Estimated Delivery</h3>
 					</div>
-					<p class="text-2xl font-bold tracking-tight text-gray-900">{estimatedDeliveryDateDisplay}</p>
-					<div class="mt-4 flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-4">
+					<p class="text-xl font-bold tracking-tight text-gray-900">{estimatedDeliveryDateDisplay}</p>
+					<div class="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-2">
 						<Mail class="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-						<p class="text-xs leading-relaxed text-gray-500">
+						<p class="text-sm leading-relaxed text-gray-700">
 							Confirmation sent to <span class="font-bold text-gray-700">{useremail}</span>. We'll email you again when your items ship.
 						</p>
 					</div>
