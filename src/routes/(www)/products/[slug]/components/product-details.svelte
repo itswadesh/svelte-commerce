@@ -48,7 +48,7 @@
 
 <!-- <ProductRenderer bind:data>
 {#snippet content(productState)} -->
-<div class="page-width hidden md:block">
+<div class="intra-pt page-width hidden md:block">
 	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
 </div>
 
