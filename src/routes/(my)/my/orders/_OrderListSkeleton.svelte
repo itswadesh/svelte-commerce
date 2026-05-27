@@ -1,4 +1,4 @@
-<div>
+<div class="pt-5 sm:pt-10">
 	<div class="m-1 flex flex-col bg-zinc-200">
 		<span class="flex h-16 w-full flex-row justify-between bg-zinc-200">
 			<div class="m-3 flex w-1/2 flex-row">
