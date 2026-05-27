@@ -67,7 +67,7 @@
 		>
 			<div class="relative z-50 flex h-full flex-col justify-between bg-white p-4">
 				<div class="sm:mx-3">
-					<h2 class="mb-4 mt-4 text-xl font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+					<h2 class="mb-4 mt-4 text-xl font-semibold text-gray-900">
 						My Shopping Cart
 					</h2>
 					<Button
@@ -95,12 +95,12 @@
 					<div class="space-y-1">
 						{#if cartState.cart?.lineItems?.length > 0}
 							<div class="mx-4 flex items-center justify-between">
-								<p class="text-xs font-bold uppercase tracking-widest text-gray-400 sm:text-sm">Total</p>
+								<p class="text-xs font-bold text-muted sm:text-base">Total</p>
 								<p class="text-base font-bold text-gray-900 sm:text-xl">
 									{formatPrice(cartState?.cart?.total, storeData?.currencyCode)}
 								</p>
 							</div>
-							<p class="mx-4 text-right text-[10px] font-bold uppercase tracking-tighter text-gray-400">MRP includes of all taxes</p>
+							<p class="mx-4 text-right text-xs font-bold  tracking-tighter text-gray-400">MRP includes of all taxes</p>
 						{:else}
 							<div class="flex min-h-[80vh] flex-col items-center justify-center gap-3 bg-white">
 								<div class="mb-6 rounded-full bg-gray-50 p-8 ring-1 ring-gray-100">

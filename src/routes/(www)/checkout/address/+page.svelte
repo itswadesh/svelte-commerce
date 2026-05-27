@@ -78,7 +78,7 @@
 								</p>
 							{/if}
 						{/await}
-						<div class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
+						<div class="overflow-hidden rounded-lg border border-muted/20 bg-white shadow-sm">
 							<div class="flex items-center justify-between border-b border-gray-50 px-5 py-4">
 								<div class="flex items-center space-x-3">
 									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
@@ -162,7 +162,7 @@
 						</div>
 						<!-- Shipping Address -->
 						{#if isEmailOk && isPhoneOk}
-							<div class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
+							<div class="overflow-hidden rounded-lg border border-muted/20 bg-white shadow-sm">
 								{#if cartState.cart.shippingAddress}
 									<div class="">
 										<div class="flex items-center justify-between border-b border-gray-50 px-5 py-4">
@@ -259,7 +259,7 @@
 							</div>
 
 							{#if !addressModule.isBillingAddressSameAsShipping}
-								<div class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
+								<div class="overflow-hidden rounded-lg border border-muted/20 bg-white shadow-sm transition-all duration-300">
 									<div class="">
 										<div class="flex items-center justify-between border-b border-gray-50 px-5 py-4">
 											<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
@@ -313,7 +313,7 @@
 									</div>
 								</div>
 							{/if}
-							<div class="flex items-center justify-start gap-2 rounded-lg border border-gray-100 bg-gray-50 p-4 transition-all hover:bg-gray-100">
+							<div class="flex items-center justify-start gap-2 p-4 transition-all hover:bg-gray-100">
 								<Checkbox
 									checked={addressModule.isBillingAddressSameAsShipping}
 									onCheckedChange={(val) => {
@@ -337,7 +337,7 @@
 
 					<!-- Right Column - Order Summary -->
 					<div class="space-y-4">
-						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-muted/20 bg-white p-6 shadow-sm">
 							<div class="mb-6 flex flex-col gap-1">
 								<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 									Price Summary
