@@ -171,15 +171,7 @@
 											</h2>
 											{#if !addressModule.loadingForSaveToCart}
 												<Button
-													onclick={() => {
-														if (!userState?.user?.role && !cartState?.cart?.shippingAddress) {
-															addressModule.openAddressForm(emptyAddress('new'), 'shipping', true)
-														} else if (!userState.user?.role) {
-															addressModule.openAddressForm({ ...cartState.cart.shippingAddress }, 'shipping', true)
-														} else {
-															addressModule.openAddressList('shipping')
-														}
-													}}
+													onclick={addressModule.handleAddressChangeClick}
 													variant="ghost"
 													class="h-8"
 												>
@@ -316,16 +308,7 @@
 							<div class="flex items-center justify-start gap-2 p-4 transition-all hover:bg-gray-100">
 								<Checkbox
 									checked={addressModule.isBillingAddressSameAsShipping}
-									onCheckedChange={(val) => {
-										addressModule.isBillingAddressSameAsShipping = val
-										if (val) {
-											cartState.updateShippingAddress({
-												shippingAddress: cartState?.cart?.shippingAddress,
-												billingAddress: null,
-												isBillingAddressSameAsShipping: true
-											})
-										}
-									}}
+									onCheckedChange={addressModule?.handleBillingAddressSameCheck}
 									id="isBillingAddressSameAsShipping"
 								/>
 								<label for="isBillingAddressSameAsShipping" class="cursor-pointer text-xs font-bold uppercase tracking-tight text-gray-700"
