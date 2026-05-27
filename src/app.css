@@ -6,8 +6,8 @@
 	:root {
 		--background: 0 0% 100%;
 		--foreground: 0 0% 0%;
-		--muted: 0 0% 96.1%;
-		--muted-foreground: 0 0% 45.1%;
+		--muted: 220 13% 61%;
+		--muted-foreground: 220 13% 61%;
 		--popover: 0 0% 100%;
 		--popover-foreground: 0 0% 0%;
 		--card: 0 0% 100%;
