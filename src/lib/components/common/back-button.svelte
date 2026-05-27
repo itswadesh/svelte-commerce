@@ -31,9 +31,9 @@
 		</svg>
 
 		<div class="flex flex-col text-left leading-3">
-			<span class="hidden font-normal text-gray-500 sm:block"> Prev </span>
+			<span class="hidden font-medium text-gray-600 sm:block"> Prev </span>
 
-			<span class="font-semibold">{title}</span>
+			<span class="font-semibold text-xs pt-1">{title}</span>
 		</div>
 	</Button>
 {/if}
