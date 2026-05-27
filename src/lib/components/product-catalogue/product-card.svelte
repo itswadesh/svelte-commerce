@@ -48,7 +48,7 @@
 						<LazyImg
 							src={product.thumbnail || product?.image_url}
 							alt="{product.title || product.name} product image"
-							class="w-full rounded-md object-cover transition-transform duration-500"
+							class="w-full rounded-md object-top object-contain transition-transform duration-500"
 						/>
 					{:else}
 						<EmptyImage class="w-full object-cover" style="aspect-ratio: 3 / 4; border-radius: 8px;" />
@@ -122,10 +122,10 @@
 						{formatPrice(product.price, page?.data?.store?.currency?.code)}
 					</span>
 					{#if product.mrp && product.mrp > product.price}
-						<span class="text-xs text-gray-400 line-through" data-testid="product-card-mrp">
+						<span class="text-xs text-gray-600 line-through" data-testid="product-card-mrp">
 							{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
 						</span>
-						<span class="hidden text-xs font-bold uppercase text-green-600 md:block lg:text-sm" data-testid="product-card-discount">
+						<span class="hidden text-xs font-bold uppercase text-green-700 md:block lg:text-sm" data-testid="product-card-discount">
 							{discount}% OFF
 						</span>
 					{/if}

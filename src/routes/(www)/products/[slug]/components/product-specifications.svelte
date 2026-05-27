@@ -6,7 +6,6 @@
 
 	const productState = useProductState()
 	const data = $derived(page.data)
-  $inspect(data.product)
 
 	let isOpen = $state(true)
 </script>
