@@ -6,6 +6,15 @@
 	import { page } from '$app/state'
 	import { formatPrice, toast } from '$lib/core/utils/index.js'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import * as Dialog from '$lib/components/ui/dialog'
+
+	let showRemoveConfirmation = $state(false)
+	let itemToRemove = $state<any>(null)
+
+	function confirmRemove(item: any) {
+		itemToRemove = item
+		showRemoveConfirmation = true
+	}
 </script>
 
 <svelte:head>
@@ -103,7 +112,7 @@
 										onclick={(e) => {
 											e.preventDefault()
 											e.stopPropagation()
-											removeFromWishlist(item?.productId, item?.variantId)
+											confirmRemove(item)
 										}}
 										title="Remove from wishlist"
 									>
@@ -128,6 +137,33 @@
 					{/each}
 				</div>
 			{/if}
+
+			<Dialog.Root bind:open={showRemoveConfirmation}>
+				<Dialog.Content class="sm:max-w-[425px]">
+					<Dialog.Header>
+						<Dialog.Title>Remove from Wishlist</Dialog.Title>
+						<Dialog.Description>
+							Are you sure you want to remove this item from your wishlist?
+						</Dialog.Description>
+					</Dialog.Header>
+					<Dialog.Footer class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+						<Button variant="outline" onclick={() => (showRemoveConfirmation = false)} class="flex-1 sm:flex-none"
+							>Cancel</Button
+						>
+						<Button
+							variant="destructive"
+							onclick={async () => {
+								if (itemToRemove) {
+									await removeFromWishlist(itemToRemove.productId, itemToRemove.variantId)
+									showRemoveConfirmation = false
+									itemToRemove = null
+								}
+							}}
+							class="flex-1 sm:flex-none">Remove</Button
+						>
+					</Dialog.Footer>
+				</Dialog.Content>
+			</Dialog.Root>
 		</div>
 	{/snippet}
 </MyWishlistRenderer>
