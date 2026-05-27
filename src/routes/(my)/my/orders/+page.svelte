@@ -56,7 +56,7 @@
 	{#snippet content({ loading, orders })}
 		<div class="mx-auto max-w-6xl px-0 md:py-8 md:py-12">
 			<!-- Header -->
-			<div class="mb-10">
+			<div class="mb-7">
 				<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Order History</h1>
 				<p class="mt-2 text-sm text-gray-500">Check the status of recent orders and manage returns.</p>
 			</div>
@@ -90,25 +90,25 @@
 
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-							class="overflow-hidden rounded-md border border-gray-100 bg-background"
+							class="overflow-hidden rounded-md border border-muted/30 bg-background"
 						>
 							<!-- Order Header -->
-							<div class="border-b border-gray-100 bg-gray-50/30 p-6">
+							<div class="border-b border-gray-100 bg-muted/10 p-3">
 								<div class="flex flex-wrap items-center justify-between gap-6">
 									<div class="flex items-center gap-8">
 										<div>
-											<p class="text-xs font-bold uppercase  text-gray-400">Order Number</p>
-											<p class="mt-1.5 text-sm font-bold text-gray-900">#{order.orderNo || '_'}</p>
+											<p class="text-xs font-bold   text-gray-400">Order Number</p>
+											<p class="mt-1.5 text-sm font-semibold text-gray-900">#{order.orderNo || '_'}</p>
 										</div>
 										<div class="h-10 w-px bg-gray-200"></div>
 										<div>
-											<p class="text-xs font-bold uppercase  text-gray-400">Date Placed</p>
-											<p class="mt-1.5 text-sm font-bold text-gray-900">{date(order.createdAt)}</p>
+											<p class="text-xs font-bold   text-gray-400">Date Placed</p>
+											<p class="mt-1.5 text-sm font-semibold text-gray-900">{date(order.createdAt)}</p>
 										</div>
 										<div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
 										<div class="hidden sm:block">
-											<p class="text-xs font-bold uppercase  text-gray-400">Total Amount</p>
-											<p class="mt-1.5 text-sm font-bold text-gray-900">
+											<p class="text-xs font-bold   text-gray-400">Total Amount</p>
+											<p class="mt-1.5 text-sm font-semibold text-gray-900">
 												{formatPrice(
 													order.lineItems.reduce((acc: number, item: any) => acc + item.total, 0),
 													page?.data?.store?.currency?.code
@@ -147,15 +147,28 @@
 							</div>
 
 							<!-- Order Items -->
-							<div class="divide-y divide-gray-100 bg-background">
+							<div class=" bg-background">
 								{#each order.lineItems as item}
-									<div class="group flex items-center intra-gap px-2">
+									<div class="group flex items-center intra-gap p-2">
 										<a
 											href="/my/orders/{order.parentOrderNo}"
-											class="relative h-24 w-20 shrink-0 overflow-hidden border border-gray-100 bg-gray-50 transition-transform duration-500"
+											class="relative shrink-0 overflow-hidden transition-transform duration-500"
 										>
 											{#if item.thumbnail}
-												<LazyImg src={item.thumbnail} alt={item.title} class="h-full w-full object-cover" />
+												<!-- <LazyImg
+													src={item.thumbnail}
+													alt={item.title}
+													aspectRatio="5:6"
+													height="96"
+													width="80"
+													class="h-full w-full object-cover object-center"
+												/> -->
+													<LazyImg
+														src={item.thumbnail || '/placeholder.svg'}
+														alt={item.title}
+														class="aspect-[3/4] w-24 object-contain sm:w-16"
+													/>
+												
 											{:else}
 												<div class="flex h-full w-full items-center justify-center bg-gray-100">
 													<ShoppingBag class="h-8 w-8 text-gray-200" />
@@ -166,7 +179,7 @@
 										<div class="flex flex-1 flex-col">
 											<div class="flex items-start justify-between gap-4">
 												<div>
-													<h3 class="text-sm font-medium text-gray-900 md:text-base">
+													<h3 class=" font-medium text-gray-900 text-xs sm:text-sm">
 														<a href="/my/orders/{order.parentOrderNo}" class="transition-colors hover:text-gray-500">
 															{item.title || '_'}
 														</a>
@@ -182,7 +195,7 @@
 														{/if}
 													</div>
 												</div>
-												<p class="text-sm font-bold text-gray-900 md:text-base">
+												<p class="text-sm font-semibold text-gray-900 md:text-base">
 													{formatPrice(item.total, page?.data?.store?.currency?.code)}
 												</p>
 											</div>
