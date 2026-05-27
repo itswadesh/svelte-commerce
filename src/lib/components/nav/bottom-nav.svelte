@@ -69,21 +69,20 @@
 					<span>{item.label}</span>
 				</a>
 			{:else}
-				<Button
-					variant="ghost"
+				<button
 					onclick={item.onClick}
-					class="flex flex-col items-center gap-1 h-auto py-2"
+					class="flex flex-col items-center gap-1 text-xs text-gray-500"
 				>
 					<div class="relative">
-						<item.icon size={24} class="text-gray-500" />
+						<item.icon size={26} />
 						{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
-							<span class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px]">
+							<span class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-foreground">
 								{cartState?.cart?.qty}
 							</span>
 						{/if}
 					</div>
-					<span class="text-gray-500">{item.label}</span>
-				</Button>
+					<span>{item.label}</span>
+				</button>
 			{/if}
 		{/each}
 
