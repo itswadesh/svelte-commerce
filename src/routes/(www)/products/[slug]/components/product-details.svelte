@@ -52,7 +52,7 @@
 	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
 </div>
 
-<div class="page-width intra-gap flex flex-col">
+<div class="page-width intra-gap flex flex-col ">
 	{#if !data?.product && !productState.isLoading}
 		<div class="flex h-96 flex-col items-center justify-center space-y-4">
 			<h2 class="page-heading">Product not found</h2>
@@ -64,7 +64,7 @@
 				<ProductGallerySection />
 			</div>
 
-			<div class="intra-gap top-28 mx-0 flex flex-col space-y-0">
+			<div class="intra-gap top-28 mx-0 lg:pl-6 flex flex-col space-y-0">
 				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
@@ -80,10 +80,10 @@
 					</div>
 
 					{#if showPincodeCheck}
-						<div class="intra-gap border-t border-gray-100 intra-pt flex flex-col">
+						<div class="intra-gap border-t border-gray-300 intra-pt flex flex-col">
 							<div class="intra-gap flex items-center justify-start">
 								<Truck class="size-4 text-gray-900" />
-								<span class="text-sm font-bold uppercase tracking-widest text-gray-900">
+								<span class="text-sm  text-gray-900">
 									Delivery Options
 								</span>
 							</div>
@@ -112,9 +112,9 @@
 					{/if}
 
 					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
-						<div class="border-t border-gray-100 intra-pt">
+						<div class="intra-pt">
 							<div class="mb-3 flex items-center gap-3">
-								<span class="text-sm font-bold uppercase text-gray-900">Returns & Exchanges</span>
+								<span class="text-sm  text-gray-900">Returns & Exchanges</span>
 							</div>
 							<div
 								class="text-sm leading-relaxed text-gray-600 {!productState.showReturnPolicy
@@ -136,15 +136,15 @@
 						</div>
 					{:else}
 						<!-- Fallback return policy when plugin is not configured -->
-						<div class="border-t border-gray-100 intra-pt">
-							<h3 class="mb-2 text-sm font-bold uppercase text-gray-900">Returns & Exchanges</h3>
+						<div class="intra-pt">
+							<h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
 							<p class="text-sm leading-relaxed text-gray-600">
 								We accept returns within 7 days of delivery for unused items in original packaging.
 							</p>
 						</div>
 					{/if}
 
-					<div class="border-t border-gray-100 intra-pt">
+					<div class="">
 						<StoreCheck />
 						<ProductSpecifications />
 						<ProductDescription />
