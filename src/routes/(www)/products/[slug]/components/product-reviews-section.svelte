@@ -38,7 +38,7 @@
 				<div class="lg:sticky lg:top-24 lg:col-span-4 lg:h-fit">
 					<div class="space-y-6 lg:space-y-8">
 						<div class="flex flex-col items-center text-center lg:items-start lg:text-left">
-							<h2 class="mb-1 text-2xl font-bold tracking-tight text-foreground lg:mb-2 lg:text-3xl">Reviews</h2>
+							<h2 class="mb-1 text-2xl font-bold tracking-tight text-foreground lg:mb-2 lg:text-2xl">Reviews</h2>
 							<p class="text-sm text-muted-foreground lg:text-base">Real feedback from our community</p>
 
 							<div class="mt-6 flex items-baseline gap-2 lg:mt-8">
@@ -62,7 +62,7 @@
 						</div>
 
 						<!-- Rating Distribution -->
-						<div class="rounded-md bg-muted/50 p-6 ring-1 ring-border">
+						<div class="rounded-md bg-muted/1	0 p-6 ring-1 ring-border">
 							<div class="space-y-4">
 								{#each [5, 4, 3, 2, 1] as stars}
 									{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars - 1).length || 0}
@@ -101,7 +101,7 @@
 				<div class="lg:col-span-8">
 					<Tabs.Root value="product" class="w-full">
 						<div class="intra-gap flex flex-col sm:flex-row sm:items-center sm:justify-between">
-							<Tabs.List class="flex h-11 w-full items-center justify-center rounded-md bg-muted p-1 text-muted-foreground sm:inline-flex sm:w-auto">
+							<Tabs.List class="flex h-11 w-full items-center justify-center rounded-md bg-muted/30 p-1 text-muted-foreground sm:inline-flex sm:w-auto">
 								<Tabs.Trigger
 									value="product"
 									class="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 sm:flex-none"
@@ -127,7 +127,7 @@
 										<div class="flex items-center gap-3 sm:gap-4">
 											<div class="relative flex-shrink-0">
 												<div
-													class="flex h-10 w-10 items-center justify-center rounded-full bg-muted ring-2 ring-background ring-offset-2 sm:h-12 sm:w-12"
+													class="flex h-10 w-10 items-center justify-center rounded-full bg-muted/10 ring-2 ring-background ring-offset-2 sm:h-12 sm:w-12"
 												>
 													{#if rating?.img}
 														<img src={rating.img} alt={rating.name} class="h-full w-full rounded-full object-cover" />
@@ -151,7 +151,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/50 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
+										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/20 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
 											{#each { length: 5 } as _, i}
 												<StarIcon class="h-3 w-3 {i <= rating.rating ? 'fill-primary text-primary' : 'text-muted-foreground'} sm:h-3.5 sm:w-3.5" />
 											{/each}
@@ -199,7 +199,7 @@
 												<p class="text-[10px] font-medium text-muted-foreground sm:text-xs">{rating.createdAt ? date(rating.createdAt) : 'Recently'}</p>
 											</div>
 										</div>
-										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/50 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
+										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/10 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
 											{#each { length: 5 } as _, i}
 												<StarIcon class="h-3 w-3 {rating.rating >= i ? 'fill-primary text-primary' : 'text-muted-foreground'} sm:h-3.5 sm:w-3.5" />
 											{/each}
