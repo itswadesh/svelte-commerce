@@ -6,11 +6,19 @@
 
 	const { product } = $props()
 	const productState = useProductState()
+
+	$inspect(product)
 </script>
 
-<div class="relative sm:border-b sm:border-gray-100">
+<div class="relative">
+
+		{#if product?.categories}
+		<p class="text-sm font-semibold">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
+		{/if}
+
+
 	<div class="flex items-center justify-between gap-4">
-		<h1 class="text-md flex-1 font-bold uppercase tracking-tight text-gray-900 dark:text-white sm:text-xl">
+		<h1 class="text-md flex-1 font-medium tracking-tight text-gray-900 dark:text-white sm:text-xl">
 			{product.title}
 		</h1>
 
@@ -35,13 +43,13 @@
 	</div>
 
 	{#if product.subtitle}
-		<div class="mt-2 line-clamp-2 text-sm font-medium text-gray-500 sm:text-sm">
+		<div class="mt-3 line-clamp-3 text-xs font-medium text-muted-foreground sm:text-sm">
 			{@html product.subtitle}
 		</div>
 	{/if}
 
-	<div class="intra-pt flex items-center gap-4">
 		{#if product?.rating && page?.data?.store?.plugins?.enableReviews}
+	<div class="intra-pt flex items-center gap-4">
 			<div class="flex items-center gap-2">
 				<div class="relative flex items-center">
 					<div class="flex gap-0.5">
@@ -62,6 +70,6 @@
 				<span class="h-1 w-1 rounded-full bg-gray-300"></span>
 				<Button variant="link" class="h-auto p-0 text-xs font-medium">View Reviews</Button>
 			</div>
-		{/if}
 	</div>
+		{/if}
 </div>
