@@ -2,11 +2,28 @@
 	import { LoaderCircle, Plus, Trash2, MapPin, Pencil, Home, Briefcase, Phone, MoreVertical } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
+	import * as Dialog from '$lib/components/ui/dialog'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import { MyAddressesModule, MyOrdersRenderer } from '$lib/core/composables/index.js'
 	import { fade, fly } from 'svelte/transition'
 
 	const addressesModule = new MyAddressesModule()
+
+	let showDeleteConfirmation = $state(false)
+	let addressToDelete = $state<any>(null)
+
+	function confirmDelete(address: any) {
+		addressToDelete = address
+		showDeleteConfirmation = true
+	}
+
+	async function handleDeleteConfirmation() {
+		if (addressToDelete) {
+			await addressesModule.handleDelete(addressToDelete)
+			showDeleteConfirmation = false
+			addressToDelete = null
+		}
+	}
 </script>
 
 <svelte:head>
@@ -85,7 +102,7 @@
 							</Button>
 							<Button
 								variant="ghost"
-								onclick={() => addressesModule.handleDelete(address)}
+								onclick={() => confirmDelete(address)}
 								class="flex-1 h-auto py-3 rounded-none text-red-500"
 							>
 								<Trash2 class="h-3 w-3 mr-2" />
@@ -110,8 +127,21 @@
 		bind:address={addressesModule.selectedAddress}
 		isEdit={addressesModule.isEditing}
 		onsave={addressesModule.handleSave}
-		ondelete={addressesModule.handleDelete}
+		ondelete={confirmDelete}
 	/>
+
+	<Dialog.Root bind:open={showDeleteConfirmation}>
+		<Dialog.Content class="sm:max-w-[425px]">
+			<Dialog.Header>
+				<Dialog.Title>Delete Address</Dialog.Title>
+				<Dialog.Description>Are you sure you want to delete this address? This action cannot be undone.</Dialog.Description>
+			</Dialog.Header>
+			<Dialog.Footer class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+				<Button variant="outline" onclick={() => (showDeleteConfirmation = false)} class="flex-1 sm:flex-none">Cancel</Button>
+				<Button variant="destructive" onclick={handleDeleteConfirmation} class="flex-1 sm:flex-none">Delete</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 </div>
 
 <style>
