@@ -2,7 +2,7 @@
 	import { page } from '$app/state'
 	import { slide } from 'svelte/transition'
 	import { getCartState } from '$lib/core/stores/index.js'
-	import { Home, Grid, Heart, ShoppingCart, Minus, Plus, Trash2, Store, ArrowLeft, Play } from '@lucide/svelte'
+	import { Home, Grid, Heart, ShoppingCart, Minus, Plus, Trash2, Store, ArrowLeft, Play, ShoppingBag } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { Separator } from '$lib/components/ui/separator'
 	import { goto } from '$app/navigation'
@@ -43,7 +43,7 @@
 		// },
 		{
 			label: 'Cart',
-			icon: ShoppingCart,
+			icon: ShoppingBag,
 			onClick: () => {
 				showCartModal = true
 			}
@@ -56,32 +56,34 @@
 </script>
 
 <nav class={cn('fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white md:hidden', className)}>
-	<div class="flex h-16 items-center justify-around px-4">
+	<div class="flex h-16 items-center justify-around px-2">
 		{#each navItems as item}
 			{#if item.href}
 				<a
 					href={item.href}
-					class="flex flex-col items-center gap-1 text-xs"
+					class="flex flex-1 flex-col items-center gap-1 text-xs sm:text-sm"
 					class:text-primary={isActive(item.href)}
 					class:text-gray-500={!isActive(item.href)}
 				>
-					<item.icon size={24} />
-					<span>{item.label}</span>
+					<div class="relative flex h-6 w-6 items-center justify-center">
+						<item.icon size={24} />
+					</div>
+					<span class="truncate">{item.label}</span>
 				</a>
 			{:else}
 				<button
 					onclick={item.onClick}
-					class="flex flex-col items-center gap-1 text-xs text-gray-500"
+					class="flex flex-1 flex-col items-center gap-1 text-xs text-gray-500"
 				>
-					<div class="relative">
-						<item.icon size={26} />
+					<div class="relative flex h-6 w-6 items-center justify-center">
+						<item.icon size={24} />
 						{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
-							<span class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-foreground">
+							<span class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-foreground font-bold">
 								{cartState?.cart?.qty}
 							</span>
 						{/if}
 					</div>
-					<span>{item.label}</span>
+					<span class="truncate">{item.label}</span>
 				</button>
 			{/if}
 		{/each}
@@ -89,12 +91,14 @@
 		{#if page?.data?.store?.plugins?.isReel?.active}
 			<a
 				href="/reels"
-				class="flex flex-col items-center gap-1 text-xs"
+				class="flex flex-1 flex-col items-center gap-1 text-xs sm:text-sm"
 				class:text-primary={isActive('/reels')}
 				class:text-gray-500={!isActive('/reels')}
 			>
-				<Play size={24} />
-				<span>Reels</span>
+				<div class="relative flex h-6 w-6 items-center justify-center">
+					<Play size={24} />
+				</div>
+				<span class="truncate">Reels</span>
 			</a>
 		{/if}
 	</div>
