@@ -137,7 +137,7 @@
 					<div class="flex flex-col justify-center">
 						<h2 class="mb-4 text-4xl font-bold md:text-5xl">{data?.store?.name || 'Welcome to Our Store'}</h2>
 						<p class="mb-8 text-lg text-gray-200">
-							{data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
+							{@html data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
 						</p>
 						<Button
 							href="/products"
