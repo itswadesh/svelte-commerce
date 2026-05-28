@@ -20,9 +20,9 @@
 									{data.name}
 								</h2>
 								<div class="mt-2 h-1 w-12 bg-primary"></div>
-								<p class="mt-4 text-sm font-medium text-muted-foreground">
+								<!-- <p class="mt-4 text-sm font-medium text-muted-foreground">
 									Explore our handpicked selection of {data.name.toLowerCase()}
-								</p>
+								</p> -->
 							</div>
 
 							<!-- <div class="hidden items-center gap-2 md:flex">
