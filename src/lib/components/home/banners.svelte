@@ -29,7 +29,7 @@
 											aspectRatio="auto:auto"
 											src={b.url}
 											alt="Promotional Banner {ix + 1} - Shop the latest collection"
-											class="w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.02]"
+											class="w-full object-cover"
 											fetchpriority={ix === 0 ? 'high' : 'auto'}
 											loading={ix === 0 ? 'eager' : 'lazy'}
 										/>
@@ -78,7 +78,7 @@
 											src={b.url}
 											aspectRatio="auto:auto"
 											alt="Promotional Mobile Banner {ix + 1} - Exclusive Deals"
-											class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+											class="h-full w-full object-cover"
 											fetchpriority={ix === 0 ? 'high' : 'auto'}
 											loading={ix === 0 ? 'eager' : 'lazy'}
 										/>
