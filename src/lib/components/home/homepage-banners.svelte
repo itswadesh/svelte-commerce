@@ -50,7 +50,7 @@
 											src={banner.url}
 											alt={banner.title || banner.link}
 											aspectRatio={itemsPerRow === 1 ? '21:9' : '1:1'}
-											class="relative w-full transition-transform duration-700 ease-in-out group-hover:scale-105"
+											class="relative w-full"
 										/>
 										<div
 											class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
