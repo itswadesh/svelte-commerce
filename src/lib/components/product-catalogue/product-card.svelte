@@ -46,7 +46,6 @@
 							src={product.thumbnail || product?.image_url}
 							alt="{product.title || product.name} product image"
 							class="w-full rounded-md object-cover transition-transform duration-500"
-							style="aspect-ratio: 3 / 4; border-radius: 8px;"
 						/>
 					{:else}
 						<EmptyImage class="w-full object-cover" style="aspect-ratio: 3 / 4; border-radius: 8px;" />
