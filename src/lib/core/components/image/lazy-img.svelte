@@ -118,6 +118,7 @@
 					draggable="false"
 					{fetchpriority}
 					decoding="async"
+	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 					data-nimg="1"
 					{loading}
 					src={getImageCDNUrl(src)}
@@ -149,6 +150,7 @@
 					{fetchpriority}
 					decoding="async"
 					data-nimg="1"
+	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
