@@ -6,7 +6,8 @@
 	import MsSearch from './ms-search.svelte'
 	import AuthModal from '$lib/components/auth/auth-modal.svelte'
 	import { AuthButton } from '$lib/core/components/index.js'
-	import { fade } from 'svelte/transition'
+	import { fade, fly } from 'svelte/transition'
+	import { cubicOut } from 'svelte/easing'
 	import { NavModule } from '$lib/core/composables/index.js'
 	import { getWishlistState } from '@misiki/kitcommerce-core/stores'
 	import CartSidebar from './cart-sidebar.svelte'
@@ -195,17 +196,29 @@
 <!-- Sidebar -->
 {#if navModule.openSidebar}
 	<aside class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent">
-		<Button
-			variant="ghost"
-			aria-label="Sidebar"
-			class="absolute inset-0 bg-black/50 rounded-none hover:bg-black/50"
+		<div
+			role="button"
+			tabindex="0"
+			aria-label="Close sidebar"
+			in:fade={{ duration: 300 }}
+			out:fade={{ duration: 300 }}
+			class="absolute inset-0 bg-black/50"
 			onclick={() => {
 				navModule.openSidebar = false
 			}}
+			onkeydown={(e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					navModule.openSidebar = false
+				}
+			}}
 		>
 			<span class="sr-only">Close sidebar</span>
-		</Button>
-		<div transition:fade={{ duration: 500 }} class="relative z-[60] h-full w-full overflow-y-auto overflow-x-hidden bg-white p-6 pt-16 text-foreground">
+		</div>
+		<div
+			in:fly={{ x: -400, duration: 300, easing: cubicOut }}
+			out:fly={{ x: -400, duration: 300, easing: cubicOut }}
+			class="relative z-[60] h-full w-full overflow-y-auto overflow-x-hidden bg-white p-6 pt-16 text-foreground"
+		>
 			<Button
 				variant="ghost"
 				size="icon"
