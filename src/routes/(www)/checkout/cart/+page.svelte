@@ -317,7 +317,7 @@
 									<a class="flex flex-1 gap-3 md:gap-6 py-5 md:p-5" href={`/products/${item.slug}`} target="_blank">
 										<div class="flex flex-col items-center gap-3">
 											<div class="relative flex items-center justify-center">
-												<div class="overflow-hidden rounded-lg bg-gray-50 p-1 ring-1 ring-gray-100">
+												<div class="overflow-hidden  bg-gray-50 p-1 ring-1 ring-gray-100">
 													<LazyImg
 														src={item.thumbnail || '/placeholder.svg'}
 														alt={item.title}
@@ -338,7 +338,7 @@
 
 													<div class="mt-2 flex flex-wrap gap-2">
 														<span
-															class="inline-flex items-center rounded bg-gray-50 px-2 py-0.5 text-xxs font-bold uppercase tracking-widest text-gray-500 ring-1 ring-gray-100"
+															class="inline-flex items-center rounded bg-gray-50 px-2 py-0.5 text-xs  text-muted font-semibold ring-1 ring-gray-100"
 														>
 															Qty: {item.qty}
 														</span>
@@ -346,7 +346,7 @@
 															{#each item.variant.options as option}
 																{#if option?.option?.title && option?.value}
 																	<span
-																		class="inline-flex items-center rounded bg-primary/5 px-2 py-0.5 text-xxs font-bold uppercase tracking-widest text-primary ring-1 ring-primary/10"
+																		class="inline-flex items-center rounded bg-primary/5 px-2 py-0.5 text-xs font-semibold  text-muted ring-1 ring-primary/10"
 																	>
 																		{option.option?.title}: {option?.value}
 																	</span>

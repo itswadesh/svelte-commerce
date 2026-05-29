@@ -32,13 +32,20 @@
 				cartState.isOpen = false
 			}}
 		>
-			<div class="overflow-hidden  ring-1 ring-gray-100">
+			<!-- <div class="overflow-hidden  ring-1 ring-gray-100">
 				<LazyImg
 					src={cartProduct?.thumbnail}
 					alt={cartProduct?.title || 'Product'}
-					class="aspect-[3/4] w-20 object-contain sm:w-24"
+					class="aspect-[3/4] w-20 object-contain sm:w-20"
 				/>
-			</div>
+			</div> -->
+													<div class="overflow-hidden bg-gray-50 p-1 ring-1 ring-gray-100">
+													<LazyImg
+													src={cartProduct?.thumbnail}
+														alt={cartProduct?.title || 'Product'}
+														class="aspect-[3/4] w-24 object-contain sm:w-20"
+													/>
+												</div>
 		</a>
 
 		<div class="flex flex-1 flex-col">
