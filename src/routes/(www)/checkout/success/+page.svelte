@@ -60,7 +60,7 @@
 			class="overflow-hidden rounded-2xl bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05),0_20px_40px_rgba(0,0,0,0.02)]"
 		>
 			<!-- Header Section -->
-			<div class="border-b border-gray-100 bg-white p-8 text-center md:p-12">
+			<div class="border-b border-gray-100 bg-white p-3 sm:p-8 text-center md:p-12">
 				<div class="mb-6 flex justify-center">
 					<div class="relative">
 						<div class="absolute inset-0 animate-ping rounded-full bg-green-100 opacity-20"></div>
@@ -111,12 +111,12 @@
 			</div>
 
 			<!-- Items List -->
-			<div class="border-b border-muted/30 p-4 md:p-12">
+			<div class="border-b border-muted/30 pb-6 p-2 md:p-12">
 				<h2 class="mb-6 text-lg font-bold text-gray-900">Order Summary</h2>
 				<div class="divide-y divide-gray-100">
 					{#each orders as { lineItems }}
 						{#each lineItems as item}
-							<div class="group flex flex-col md:flex-row items-center gap-6 py-6 first:pt-0 last:pb-0">
+							<div class="group flex  items-start gap-6 py-6 first:pt-0 last:pb-0">
 								<div
 									class="relative flex-shrink-0 overflow-hidden transition-all duration-300"
 								>
@@ -156,7 +156,7 @@
 						<MapPin class="h-5 w-5 text-primary" />
 						<h3>Shipping Address</h3>
 					</div>
-					<div class="text-sm leading-relaxed text-gray-600">
+					<div class="text-sm leading-relaxed text-gray-600 px-2">
 						<p class="mb-1 font-bold text-gray-700">
 							{firstOrder?.shippingAddress?.firstName}
 							{firstOrder?.shippingAddress?.lastName}
@@ -179,7 +179,7 @@
 						<Calendar class="h-5 w-5 text-primary" />
 						<h3>Estimated Delivery</h3>
 					</div>
-					<p class="text-xl font-bold tracking-tight text-gray-900">{estimatedDeliveryDateDisplay}</p>
+					<p class="text-lg px-2 font-bold tracking-tight text-gray-900">{estimatedDeliveryDateDisplay}</p>
 					<div class="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-2">
 						<Mail class="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
 						<p class="text-sm leading-relaxed text-gray-700">
