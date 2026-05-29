@@ -37,9 +37,9 @@
 							</Button>
 						{:else}
 							<Button
-								variant={productState.isVariantOptionSelected(option.id, v.value) ? 'default' : 'outline'}
+								variant={productState.isVariantOptionSelected(option.id, v.value) ? 'default' : 'plain'}
 								disabled={!v.selectable}
-								class="min-w-[3.5rem] px-4 py-2"
+								class="min-w-[3.5rem] px-4 py-2 !bg-primary !border-gray-800"
 								onclick={() => productState.selectVariant({ option, value: v })}
 							>
 								{v.value}
