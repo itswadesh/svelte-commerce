@@ -29,7 +29,7 @@
 		<Button
 			variant="outline"
 			size="icon"
-			class="h-full w-20 lg:w-24"
+			class="h-full w-[4rem]"
 			onclick={productState.handleWishlistClick}
 			aria-label="Add to wishlist"
 		>
@@ -37,7 +37,7 @@
 				<LoaderCircle class="h-7 w-7 animate-spin text-primary" />
 			{:else}
 				<HeartIcon
-					class="h-7 w-7 {productState.wishlisted
+					class="!h-6 !w-6 stroke-[1.3] {productState.wishlisted
 						? 'scale-110 fill-red-500 text-red-500'
 						: 'text-gray-900'} transition-transform duration-300"
 				/>

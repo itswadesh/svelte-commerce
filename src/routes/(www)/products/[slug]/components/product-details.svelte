@@ -75,7 +75,7 @@
 					<ProductVariation />
 
 					<!-- Desktop Cart Button -->
-					<div class="intra-gap hidden flex-col sm:flex">
+					<div class="intra-gap hidden flex-col sm:flex mt-2">
 						<ProductCartAndWishlistButtons />
 					</div>
 

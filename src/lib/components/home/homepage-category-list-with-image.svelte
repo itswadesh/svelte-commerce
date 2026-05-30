@@ -56,7 +56,7 @@
 							/>
 						</div>
 						<span
-							class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary lg:text-base"
+							class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-300 lg:text-base"
 						>
 							{name}
 						</span>
