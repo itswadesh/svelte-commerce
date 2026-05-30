@@ -31,7 +31,7 @@
 				</div>
 			{/if}
 		{/if}
-			<span class="w-fit text-sm font-medium text-900">Inclusive of all taxes</span>
+			<span class="w-fit text-sm font-medium text-900 ml-1">Inclusive of all taxes</span>
 	</div>
 
 </div>
