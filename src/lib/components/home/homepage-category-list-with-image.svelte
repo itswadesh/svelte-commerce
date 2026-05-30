@@ -54,9 +54,6 @@
 								alt={name}
 								class="h-full w-full object-cover transition-transform duration-700 ease-in-out"
 							/>
-							<div
-								class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-							></div>
 						</div>
 						<span
 							class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary lg:text-base"
