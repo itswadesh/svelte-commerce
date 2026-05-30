@@ -152,7 +152,6 @@
 								</video>
 							{:else}
 								<LazyImg
-									aspectRatio="2:3"
 									src={img}
 									alt="Product Image"
 									class="w-full object-cover"
