@@ -13,12 +13,12 @@
 <div class="relative">
 
 		{#if product?.categories}
-		<p class="text-sm font-semibold">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
+		<p class="text-sm font-semibold leading-[1]">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
 		{/if}
 
 
 	<div class="flex items-center justify-between gap-4">
-		<h1 class="text-md flex-1 font-medium tracking-tight text-gray-900 dark:text-white sm:text-xl">
+		<h1 class="text-md flex-1 font-medium tracking-tight text-gray-900 dark:text-white sm:text-xl leading-[1]">
 			{product.title}
 		</h1>
 

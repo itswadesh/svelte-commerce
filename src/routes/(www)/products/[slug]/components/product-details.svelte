@@ -92,9 +92,9 @@
 					{:else}
 						<!-- Fallback delivery estimate when plugin is not enabled -->
 						<div class="intra-gap border-t border-gray-100 intra-pt flex flex-col">
-							<div class="intra-gap flex items-center">
+							<div class="flex items-center gap-2">
 								<Truck class="size-4 text-gray-900" />
-								<span class="text-sm font-bold uppercase text-gray-900">Delivery Information</span>
+								<span class="text-base font-bold text-gray-900">Delivery Information</span>
 							</div>
 							<div class="space-y-1">
 								<p class="text-sm font-medium text-gray-700">Free delivery on orders above ₹999</p>
