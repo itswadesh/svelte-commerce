@@ -7,7 +7,7 @@
 	const productState = useProductState()
 	const data = $derived(page.data)
 
-	let isOpen = $state(false)
+	let isOpen = $state(true)
 </script>
 
 	{#if productState.selectedVariant?.description || data?.product?.description}

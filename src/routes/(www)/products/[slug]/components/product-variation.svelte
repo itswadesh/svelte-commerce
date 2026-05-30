@@ -12,7 +12,7 @@
 			<div class="flex flex-col gap-3">
 				<div class="flex items-center justify-between">
 					<div class="flex items-center gap-2">
-					  <span class="text-xs font-semibold uppercase  text-gray-900 dark:text-gray-100">
+					  <span class="text-sm font-semibold  text-gray-900 dark:text-gray-100">
 							{option.title}
 
 							{#if productState.selectedVariant?.options?.find((opt: Record<string, any>) => option.id === opt.optionId)?.value}
@@ -49,7 +49,7 @@
 							<Button
 								variant={productState.isVariantOptionSelected(option.id, v.value) ? 'default' : 'plain'}
 								disabled={!v.selectable}
-								class={`min-w-[3.5rem] px-4 py-2 !bg-primary ${productState.isVariantOptionSelected(option.id, v.value) ? '' : '!bg-transparent border !border-primary'}`}
+								class={`min-w-[3.5rem] px-4 py-2 !bg-primary ${productState.isVariantOptionSelected(option.id, v.value) ? '!bg-accent text-accent-foreground' : '!bg-transparent border !border-accent'}`}
 								onclick={() => productState.selectVariant({ option, value: v })}
 							>
 								{v.value}
