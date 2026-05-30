@@ -67,7 +67,7 @@
 								<span class="text-2xl font-bold tracking-tight"> {storeData?.name} </span>
 							{/if}
 						</a>
-						
+
 						{#if storeData?.description}
 							<div class="prose prose-sm text-muted-foreground">
 								{#await sanitize(storeData.description) then html}
@@ -147,7 +147,9 @@
 					</div>
 
 					<div class="flex flex-1 flex-col gap-10 lg:flex-row lg:justify-end lg:gap-20">
-						<Newsletter />
+            {#if page.data?.store?.plugins?.newsletter?.active}
+						  <Newsletter />
+            {/if}
 						<FooterMenu items={footerMenu} />
 					</div>
 				</div>
