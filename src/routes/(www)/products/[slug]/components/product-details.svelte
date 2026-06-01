@@ -113,9 +113,7 @@
 
 					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
 						<div class="">
-							<div class="mb-3 flex items-center gap-3">
-								<span class="text-sm  text-gray-900">Returns & Exchanges</span>
-							</div>
+							  <h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
 							<div
 								class="text-sm leading-relaxed text-gray-600 {!productState.showReturnPolicy
 									? 'line-clamp-2 overflow-hidden'
@@ -136,12 +134,12 @@
 						</div>
 					{:else}
 						<!-- Fallback return policy when plugin is not configured -->
-						<div class="">
+						<!-- <div class="">
 							<h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
 							<p class="text-sm leading-relaxed text-gray-600">
 								We accept returns within 7 days of delivery for unused items in original packaging.
 							</p>
-						</div>
+						</div> -->
 					{/if}
 
 					<div class="">
