@@ -86,7 +86,8 @@ const config: Config = {
 				xl: '24px',
 				lg: '8px',
 				md: '4px',
-				sm: '2px'
+				sm: '2px',
+        radius: 'var(--radius)'
 			},
 			keyframes: {
 				'accordion-down': {

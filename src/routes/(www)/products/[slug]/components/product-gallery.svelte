@@ -74,7 +74,7 @@
 			{@const youtubeId = getYoutubeId(img)}
 			<div
 				class={cn(
-					'relative overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20 p-0.5',
+					'relative rounded-radius overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20 p-0.5',
 					idx === currentIndex && 'border-primary'
 				)}
 				role="button"
@@ -101,7 +101,7 @@
 						Video not supported
 					</video>
 				{:else}
-					<LazyImg src={img} alt="Product Image" class=" w-full border object-cover" />
+					<LazyImg src={img} alt="Product Image" class=" w-full rounded-radius object-cover" />
 				{/if}
 			</div>
 		{/each}
@@ -125,7 +125,7 @@
 					{@const youtubeId = getYoutubeId(img)}
 					<Carousel.Item>
 						<div
-							class="border sm:mb-5 sm:cursor-zoom-in"
+							class="sm:mb-5 sm:cursor-zoom-in"
 							role="button"
 							tabindex="0"
 							onclick={() => showCarousel(img)}
@@ -154,7 +154,7 @@
 								<LazyImg
 									src={img}
 									alt="Product Image"
-									class="w-full object-cover"
+									class="w-full rounded-radius object-cover"
 								/>
 							{/if}
 						</div>
@@ -227,7 +227,7 @@
 									<iframe
 										width="100%"
 										height="100%"
-										class="aspect-square rounded-lg"
+										class="aspect-square rounded-radius"
 										src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
 										title="Video"
 										frameborder="0"
@@ -244,7 +244,7 @@
 									<LazyImg
 										src={img}
 										alt="Product Image"
-										class="!max-h-[calc(100vh-6rem)] w-full object-contain"
+										class="!max-h-[calc(100vh-6rem)] rounded-radius w-full object-contain"
 									/>
 								{/if}
 							</div>
@@ -263,7 +263,7 @@
 					{@const youtubeId = getYoutubeId(img)}
 					<Button
 						variant="ghost"
-						class="relative aspect-square h-24 w-24 overflow-hidden rounded-md p-0 {currentIndex === i ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : ''}"
+						class="relative aspect-square h-24 w-24 overflow-hidden rounded-radius p-0 {currentIndex === i ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : ''}"
 						onclick={() => {
 							if (carouselApi) {
 								carouselApi.scrollTo(i)
@@ -273,7 +273,7 @@
 						}}
 					>
 						{#if isVideoURL(img)}
-							<video height="100%" width="100%" class="aspect-square rounded-lg" loop autoplay>
+							<video height="100%" width="100%" class="aspect-square rounded-radius" loop autoplay>
 								<source src={img} />
 								Video not supported
 							</video>
@@ -281,7 +281,7 @@
 							<LazyImg
 								src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
 								alt="Thumbnail"
-								class="h-full w-full object-cover"
+								class="h-full w-full rounded-radius object-cover"
 							/>
 						{/if}
 					</Button>

@@ -174,7 +174,7 @@
 						{#if !env.PUBLIC_LOGIN_TYPE}
 							<div class="relative flex w-full rounded-xl bg-gray-100/80 p-1.5 shadow-inner dark:bg-gray-800/80">
 								<!-- Active Background Indicator -->
-								<div 
+								<div
 									class="absolute left-1.5 top-1.5 flex h-[calc(100%-12px)] w-[calc(50%-6px)] rounded-lg bg-white shadow-sm transition-transform duration-300 ease-in-out dark:bg-gray-700"
 									style:transform={loginModule.isPhoneNumber ? 'translateX(0)' : 'translateX(100%)'}
 								></div>
@@ -187,7 +187,7 @@
 									<Phone class="h-4 w-4" />
 									Phone
 								</button>
-								
+
 								<button
 									type="button"
 									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-colors {!loginModule.isPhoneNumber ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
@@ -346,7 +346,7 @@
 					</InputOTP.Root>
 				</div>
 				<input type="hidden" name="otp" bind:value={loginModule.otp} />
-				
+
 				<div class="space-y-4 text-center">
 					<Button class="h-12 w-full text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]" onclick={loginModule.handleVerifyOtp}>
 						{#if userState.loading}
