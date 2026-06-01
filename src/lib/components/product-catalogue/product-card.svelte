@@ -11,9 +11,12 @@
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 
 	const cartState = getCartState()
+
 	let { product, aspectRatio, displayProduct, hideVariations = true, hideCartControls = true }: any = $props()
 
 	const discount = product.mrp && product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0
+
+	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 
 	const categoryName = $derived.by(() => {
 		const name = product?.categories?.[0]?.category?.name
@@ -86,24 +89,26 @@
 					<span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm" data-testid="product-brand">
 						{categoryName || page.data?.store?.name}
 					</span>
-					<Button
-						variant="ghost"
-						size="icon"
-						class="h-auto w-auto p-1"
-						data-testid="wishlist-button"
-						onclick={(e) => {
-							e.stopPropagation()
-							e.preventDefault()
-							toggleWishlist()
-						}}
-					>
-						{#if isWishlisted}
-							<Heart class="size-4 fill-red-500 stroke-red-500" />
-						{:else}
-							<Heart class="size-4" />
-						{/if}
-						<span class="sr-only">Toggle wishlist</span>
-					</Button>
+					{#if wishlistPlugin?.active}
+						<Button
+							variant="ghost"
+							size="icon"
+							class="h-auto w-auto p-1"
+							data-testid="wishlist-button"
+							onclick={(e) => {
+								e.stopPropagation()
+								e.preventDefault()
+								toggleWishlist()
+							}}
+						>
+							{#if isWishlisted}
+								<Heart class="size-4 fill-red-500 stroke-red-500" />
+							{:else}
+								<Heart class="size-4" />
+							{/if}
+							<span class="sr-only">Toggle wishlist</span>
+						</Button>
+					{/if}
 				</div>
 
 				<a href="/products/{product.slug}" class="block overflow-hidden">
@@ -130,12 +135,7 @@
 					<div class="mt-3">
 						{#if cartState.cart?.lineItems?.some((item) => item.productId === product.id)}
 							<div class="flex items-center justify-between rounded-md border border-gray-200 p-1">
-								<Button
-									disabled={!!cartState.isUpdatingCart}
-									variant="ghost"
-									size="icon"
-									onclick={() => changeQuantity(product, -1)}
-								>
+								<Button disabled={!!cartState.isUpdatingCart} variant="ghost" size="icon" onclick={() => changeQuantity(product, -1)}>
 									<Minus class="h-4 w-4" />
 								</Button>
 								<div class="flex-1 text-center text-sm font-bold">
@@ -145,22 +145,12 @@
 										{cartState.cart?.lineItems?.find((item) => item.productId === product.id)?.qty}
 									{/if}
 								</div>
-								<Button
-									disabled={!!cartState.isUpdatingCart}
-									variant="ghost"
-									size="icon"
-									onclick={() => changeQuantity(product, 1)}
-								>
+								<Button disabled={!!cartState.isUpdatingCart} variant="ghost" size="icon" onclick={() => changeQuantity(product, 1)}>
 									<Plus class="h-4 w-4" />
 								</Button>
 							</div>
 						{:else}
-							<Button
-								disabled={!!cartState.isUpdatingCart}
-								variant="default"
-								class="w-full py-5"
-								onclick={() => addToCart(product)}
-							>
+							<Button disabled={!!cartState.isUpdatingCart} variant="default" class="w-full py-5" onclick={() => addToCart(product)}>
 								{#if cartState.isUpdatingCart}
 									<LoadingDots />
 								{:else}
