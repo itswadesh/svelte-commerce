@@ -224,7 +224,7 @@
 			<!-- Empty State -->
 			<div class="flex flex-col items-center justify-center py-12 text-center sm:py-20">
 				<div
-					class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted text-muted-foreground/30 ring-1 ring-border sm:mb-8 sm:h-24 sm:w-24"
+					class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border sm:mb-8 sm:h-24 sm:w-24"
 				>
 					<Star class="h-10 w-10 sm:h-12 sm:w-12" />
 				</div>
