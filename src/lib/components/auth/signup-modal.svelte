@@ -22,7 +22,7 @@
 	{#snippet content({ isLoading, handleSubmit, closeModal, schemas })}
 		<Modal {show} rounded={false} hideHeader hideFooter useMaxHeight class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none" hAuto wAuto>
 			<div
-				class="w-full transform space-y-6 border border-gray-100/50 bg-white/70 p-6 shadow-2xl backdrop-blur-xl transition-all dark:border-gray-700/50 dark:bg-gray-900/80 sm:max-w-[480px] sm:rounded-2xl sm:p-8 ring-1 ring-white/20 dark:ring-white/5"
+				class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl transition-all dark:border-gray-700/50 dark:bg-gray-900/80 sm:max-w-[480px] sm:rounded-radius sm:p-8 ring-1 ring-white/20 dark:ring-white/5"
 			>
 				<!-- Close Icon -->
 				<div class="sticky top-3 z-50 flex items-center justify-end sm:absolute sm:right-5 sm:top-5">

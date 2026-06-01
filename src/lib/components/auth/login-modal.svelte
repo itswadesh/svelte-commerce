@@ -122,7 +122,7 @@
 
 <Modal {show} rounded={false} hideHeader hideFooter useMaxHeight class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none" hAuto wAuto>
 	<div
-		class="w-full transform space-y-6 border border-gray-100/50 bg-white/70 p-6 shadow-2xl backdrop-blur-xl transition-all dark:border-gray-700/50 dark:bg-gray-900/80 sm:max-w-[480px] sm:rounded-2xl sm:p-8 ring-1 ring-white/20 dark:ring-white/5"
+		class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl transition-all dark:border-gray-700 dark:bg-gray-900 sm:max-w-[480px]  sm:rounded-radius sm:p-8 ring-1 ring-white/20 dark:ring-white/5"
 	>
 		<!-- Close Icon -->
 		<div class="sticky top-3 z-50 flex items-center justify-end sm:absolute sm:right-5 sm:top-5">
@@ -145,7 +145,7 @@
 						<img src={page.data.store.logo} alt={page.data.store.name} class="h-10 object-contain dark:brightness-110" />
 					</div>
 				{:else}
-					<div class="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700">
+					<div class="mb-2 flex h-16 w-16 items-center justify-center rounded-radius bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700">
 						<span class="text-2xl font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
 					</div>
 				{/if}
@@ -172,16 +172,16 @@
 				<div class="space-y-4">
 					<div class="space-y-4">
 						{#if !env.PUBLIC_LOGIN_TYPE}
-							<div class="relative flex w-full rounded-xl bg-gray-100/80 p-1.5 shadow-inner dark:bg-gray-800/80">
+							<div class="relative flex w-full rounded-radius bg-gray-100/80 p-1.5 shadow-inner dark:bg-gray-800/80">
 								<!-- Active Background Indicator -->
 								<div
-									class="absolute left-1.5 top-1.5 flex h-[calc(100%-12px)] w-[calc(50%-6px)] rounded-lg bg-white shadow-sm transition-transform duration-300 ease-in-out dark:bg-gray-700"
+									class="absolute left-1.5 top-1.5 flex h-[calc(100%-12px)] w-[calc(50%-6px)] rounded-radius bg-white shadow-sm transition-transform duration-300 ease-in-out dark:bg-gray-700"
 									style:transform={loginModule.isPhoneNumber ? 'translateX(0)' : 'translateX(100%)'}
 								></div>
 
 								<button
 									type="button"
-									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-colors {loginModule.isPhoneNumber ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
+									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-medium transition-colors {loginModule.isPhoneNumber ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
 									onclick={() => !loginModule.isPhoneNumber && loginModule.switchLoginType()}
 								>
 									<Phone class="h-4 w-4" />
@@ -190,7 +190,7 @@
 
 								<button
 									type="button"
-									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-colors {!loginModule.isPhoneNumber ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
+									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-medium transition-colors {!loginModule.isPhoneNumber ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
 									onclick={() => loginModule.isPhoneNumber && loginModule.switchLoginType()}
 								>
 									<Mail class="h-4 w-4" />
@@ -339,7 +339,7 @@
 						{#snippet children({ cells })}
 							<InputOTP.Group class="gap-3">
 								{#each cells as cell}
-									<InputOTP.Slot {cell} class="h-14 w-12 border border-gray-200 bg-gray-50/50 text-lg font-bold rounded-lg first:rounded-lg first:border last:rounded-lg shadow-sm transition-all dark:border-gray-700 dark:bg-gray-900/50 {cell.isActive ? 'border-primary ring-2 ring-primary/20 scale-105' : ''}" />
+									<InputOTP.Slot {cell} class="h-14 w-12 border border-gray-200 bg-gray-50/50 text-lg font-bold rounded-radius first:rounded-radius first:border last:rounded-radius shadow-sm transition-all dark:border-gray-700 dark:bg-gray-900/50 {cell.isActive ? 'border-primary ring-2 ring-primary/20 scale-105' : ''}" />
 								{/each}
 							</InputOTP.Group>
 						{/snippet}
