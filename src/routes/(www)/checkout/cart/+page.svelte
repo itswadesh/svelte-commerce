@@ -38,13 +38,13 @@
 
 {#snippet quantitySelector(item: any)}
 	<div
-		class="flex items-center rounded-sm border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md"
+		class="flex items-center rounded-radius border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md"
 	>
 		<Button
 			variant="ghost"
 			size="icon"
 			onclick={(e) => cartModule.decreaseQty(e, item)}
-			class="flex h-7 w-7 items-center justify-center rounded-full"
+			class="flex h-7 w-7 items-center justify-center"
 			aria-label="Decrease quantity"
 		>
 			<Minus class="size-3 text-gray-900" />
@@ -59,7 +59,7 @@
 		<Button
 			variant="ghost"
 			size="icon"
-			class="flex h-7 w-7 items-center justify-center rounded-full"
+			class="flex h-7 w-7 items-center justify-center"
 			aria-label="Increase quantity"
 			onclick={(e) => cartModule.increaseQty(e, item)}
 		>
@@ -138,7 +138,7 @@
 							</p>
 						</div>
 					{/if} -->
-						<div class="py-3 px-4 mb-4 border rounded-md bg-success/5 border-success/40 flex items-center justify-between">
+						<div class="py-3 px-4 mb-4 border rounded-radius bg-success/5 border-success/40 flex items-center justify-between">
 							<div class="flex items-center gap-2">
 								<Tag class="size-3.5 text-success" />
 								<span class="text-sm font-medium text-success">You saved <span class="font-bold">{formatPrice($animatedSavings, page?.data?.store?.currency?.code)}</span> on this order.</span>
@@ -147,7 +147,7 @@
 
 
 						<div
-							class="h-fit divide-y divide-gray-200 overflow-hidden rounded-md sm:border {cartModule.partialCheckoutEnabled
+							class="h-fit divide-y divide-gray-200 overflow-hidden sm:border rounded-radius {cartModule.partialCheckoutEnabled
 								? '[&>div:nth-child(2)]:max-sm:!border-t-0'
 								: ''}"
 						>
@@ -317,7 +317,7 @@
 									<a class="flex flex-1 gap-3 md:gap-6 py-5 md:p-5" href={`/products/${item.slug}`} target="_blank">
 										<div class="flex flex-col items-center gap-3">
 											<div class="relative flex items-center justify-center">
-												<div class="overflow-hidden  bg-gray-50 p-1 ring-1 ring-gray-100">
+												<div class="overflow-hidden bg-gray-50 p-1 ring-1 ring-gray-100">
 													<LazyImg
 														src={item.thumbnail || '/placeholder.svg'}
 														alt={item.title}
@@ -338,7 +338,7 @@
 
 													<div class="mt-2 flex flex-wrap gap-2">
 														<span
-															class="inline-flex items-center rounded bg-gray-50 px-2 py-0.5 text-xs  text-muted font-semibold ring-1 ring-gray-100"
+															class="inline-flex items-center rounded-radius border-primary border px-2 py-0.5 text-xs font-semibold ring-1 ring-gray-100"
 														>
 															Qty: {item.qty}
 														</span>
@@ -392,7 +392,7 @@
 
 											<div class="mt-auto flex items-center justify-between pt-6">
 													<div
-													class="hidden items-center rounded-sm border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md sm:flex"
+													class="hidden items-center rounded-radius border border-muted bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md sm:flex"
 												>
 													<Button
 														variant="ghost"

@@ -21,7 +21,7 @@
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 1 ? 'bg-primary border-primary text-foreground' : 'border-gray-200'
+					step === 1 ? 'bg-primary border-primary text-primary-foreground' : 'border-gray-200'
 				)}
 			>
 				1
