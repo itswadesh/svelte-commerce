@@ -11,7 +11,7 @@
 				destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm',
 				outline: 'border-input bg-background border shadow-sm',
 				secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm',
-				ghost: 'hover:border-primary border border-transparent hover:text-accent-foreground',
+				ghost: 'hover:border-primary border border-transparent hover:text-primary',
 				link: 'text-primary underline-offset-4 hover:underline',
 				plain: ''
 			},
