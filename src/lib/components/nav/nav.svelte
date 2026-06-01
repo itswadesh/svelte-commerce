@@ -14,19 +14,22 @@
 	import ProfileDropdown from './profile-dropdown.svelte'
 	import { Button } from '$lib/components/ui/button'
 
-	const menuItemsUser = [
-		{ title: 'Profile', url: '/my/profile' },
-		{ title: 'Orders', url: '/my/orders' },
-		// { title: 'Buy Again', url: '/my/buy-again' },
-		{ title: 'Addresses', url: '/my/addresses' },
-		{ title: 'Wishlist', url: '/my/wishlist' },
-		{ title: 'Change Password', url: '/auth/change-password' }
-	]
-
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 	const navModule = new NavModule()
 	const userState = navModule.userState
+
+	const menuItemsUser = $derived.by(() => {
+		const items = [
+			{ title: 'Profile', url: '/my/profile' },
+			{ title: 'Orders', url: '/my/orders' },
+			// { title: 'Buy Again', url: '/my/buy-again' },
+			{ title: 'Addresses', url: '/my/addresses' },
+			{ title: 'Change Password', url: '/auth/change-password' }
+		]
+		if (wishlistPlugin?.active) items.push({ title: 'Wishlist', url: '/my/wishlist' })
+		return items
+	})
 </script>
 
 <svelte:window bind:scrollY={navModule.scrollY} />
@@ -81,12 +84,7 @@
 		<div class="flex items-center justify-center sm:hidden">
 			{#if navModule.isProductListingPage}
 				<div class="flex items-center gap-2">
-					<Button
-						variant="ghost"
-						size="icon"
-						aria-label="Go back"
-						onclick={navModule.goBack}
-					>
+					<Button variant="ghost" size="icon" aria-label="Go back" onclick={navModule.goBack}>
 						<ChevronLeft class="h-6 w-6 font-bold" />
 						<span class="sr-only">Go back</span>
 					</Button>
@@ -236,9 +234,7 @@
 							{#each navModule.megaMenu as m, mx}
 								<li>
 									{#if m?.children?.length}
-										<div
-											class="flex w-full items-center justify-between gap-2 py-1"
-										>
+										<div class="flex w-full items-center justify-between gap-2 py-1">
 											<a
 												href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
 												aria-label="Click to visit category related products"
@@ -301,7 +297,8 @@
                                 {navModule.showSubCategory2[cx] ? '-rotate-180 transform' : ''}"
 																/>
 															</Button>
-														</div>													{:else}
+														</div>
+													{:else}
 														<a
 															href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
 															aria-label="Click to visit category related products page"

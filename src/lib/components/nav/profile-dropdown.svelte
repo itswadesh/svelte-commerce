@@ -5,8 +5,10 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { Button } from '$lib/components/ui/button'
+	import { page } from '$app/state'
 	const userState = getUserState()
 	const { onSignOut } = $props()
+  const wishlistPlugin = $derived(page.data?.store?.plugins?.isWishlist)
 </script>
 
 <DropdownMenu.Root>
@@ -77,16 +79,18 @@
 					My Addresses
 				</DropdownMenu.Item>
 			</a>
-			<a href="/my/wishlist" class="block w-full">
-				<DropdownMenu.Item
-					class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
-				>
-					<div class="flex h-8 w-8 items-center justify-center bg-gray-50">
-						<Heart class="h-4 w-4" />
-					</div>
-					My Wishlist
-				</DropdownMenu.Item>
-			</a>
+      {#if wishlistPlugin?.active}
+			 <a href="/my/wishlist" class="block w-full">
+			 	<DropdownMenu.Item
+			 		class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
+			 	>
+			 		<div class="flex h-8 w-8 items-center justify-center bg-gray-50">
+			 			<Heart class="h-4 w-4" />
+			 		</div>
+			 		My Wishlist
+			 	</DropdownMenu.Item>
+			  </a>
+      {/if}
 		</DropdownMenu.Group>
 
 		<div class="my-2 h-px bg-gray-50"></div>
