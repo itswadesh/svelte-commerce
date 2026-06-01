@@ -12,7 +12,7 @@
 
 	{#if productState.selectedVariant?.description || data?.product?.description}
 <div class="border-b border-gray-300">
-	  <button class="flex w-full items-center justify-between gap-2 py-5 text-base font-bold text-gray-900" onclick={() => (isOpen = !isOpen)}>
+	  <button class="flex pb-2 w-full items-center justify-between gap-2 intra-pt text-base font-bold text-gray-900" onclick={() => (isOpen = !isOpen)}>
 			<span>Product Description</span>
 
 			{#if isOpen}

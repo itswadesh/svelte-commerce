@@ -16,7 +16,7 @@
 				<LoadingDots />
 			</div>
 		{:else if !hasSingleWarehouse}
-			{#if showPincode}
+			{#if !showPincode}
 				<div class="relative flex gap-2">
 					<Input
 						type="number"
@@ -33,9 +33,7 @@
 						{/if}
 					</Button>
 				</div>
-			{/if}
-
-			{#if !showPincode}
+      {:else}
 				<Button
 					variant="plain"
 					onclick={toggleShowPincode}

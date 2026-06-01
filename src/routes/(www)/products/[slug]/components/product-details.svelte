@@ -80,7 +80,7 @@
 					</div>
 
 					{#if showPincodeCheck}
-						<div class="intra-gap border-t border-gray-300 intra-pt flex flex-col">
+						<div class="intra-gap border-t intra-pt flex flex-col">
 							<div class="intra-gap flex items-center justify-start">
 								<Truck class="size-4 text-gray-900" />
 								<span class="text-sm  text-gray-900">
@@ -112,7 +112,7 @@
 					{/if}
 
 					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
-						<div class="intra-pt">
+						<div class="">
 							<div class="mb-3 flex items-center gap-3">
 								<span class="text-sm  text-gray-900">Returns & Exchanges</span>
 							</div>
@@ -136,7 +136,7 @@
 						</div>
 					{:else}
 						<!-- Fallback return policy when plugin is not configured -->
-						<div class="intra-pt">
+						<div class="">
 							<h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
 							<p class="text-sm leading-relaxed text-gray-600">
 								We accept returns within 7 days of delivery for unused items in original packaging.
