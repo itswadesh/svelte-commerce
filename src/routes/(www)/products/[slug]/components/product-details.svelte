@@ -75,12 +75,12 @@
 					<ProductVariation />
 
 					<!-- Desktop Cart Button -->
-					<div class="intra-gap hidden flex-col sm:flex">
+					<div class="intra-gap hidden flex-col sm:flex mt-2">
 						<ProductCartAndWishlistButtons />
 					</div>
 
 					{#if showPincodeCheck}
-						<div class="intra-gap border-t border-gray-300 intra-pt flex flex-col">
+						<div class="intra-gap border-t intra-pt flex flex-col">
 							<div class="intra-gap flex items-center justify-start">
 								<Truck class="size-4 text-gray-900" />
 								<span class="text-sm  text-gray-900">
@@ -92,9 +92,9 @@
 					{:else}
 						<!-- Fallback delivery estimate when plugin is not enabled -->
 						<div class="intra-gap border-t border-gray-100 intra-pt flex flex-col">
-							<div class="intra-gap flex items-center">
+							<div class="flex items-center gap-2">
 								<Truck class="size-4 text-gray-900" />
-								<span class="text-sm font-bold uppercase text-gray-900">Delivery Information</span>
+								<span class="text-base font-bold text-gray-900">Delivery Information</span>
 							</div>
 							<div class="space-y-1">
 								<p class="text-sm font-medium text-gray-700">Free delivery on orders above ₹999</p>
@@ -112,7 +112,7 @@
 					{/if}
 
 					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
-						<div class="intra-pt">
+						<div class="">
 							<div class="mb-3 flex items-center gap-3">
 								<span class="text-sm  text-gray-900">Returns & Exchanges</span>
 							</div>
@@ -136,7 +136,7 @@
 						</div>
 					{:else}
 						<!-- Fallback return policy when plugin is not configured -->
-						<div class="intra-pt">
+						<div class="">
 							<h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
 							<p class="text-sm leading-relaxed text-gray-600">
 								We accept returns within 7 days of delivery for unused items in original packaging.
