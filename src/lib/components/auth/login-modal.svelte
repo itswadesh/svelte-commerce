@@ -212,32 +212,34 @@
 									{loginModule.isPhoneNumber ? 'Phone Number' : 'Email Address'}
 								{/if}
 							</Label>
-							<Textbox
-								name="identifier"
-								bind:value={loginModule.identifier}
-								placeholder={loginModule.isPhoneNumber ? '+91234567890' : 'johndoe@gmail.com'}
-								type={loginModule.isPhoneNumber ? 'tel' : 'email'}
-								schema={loginModule.isPhoneNumber ? customPhoneSchema : schemas.email}
-								oninput={(e) => {
-									if (loginModule.isPhoneNumber) {
-										const target = e.target as HTMLInputElement;
-										const current = target.value;
-										const cleaned = current.replace(/[^\d\+\s]/g, '');
-										if (current !== cleaned) {
-											const start = target.selectionStart;
-											target.value = cleaned;
-											loginModule.identifier = cleaned;
-											if (start !== null) {
-												target.setSelectionRange(start - 1, start - 1);
+							{#key loginModule.isPhoneNumber}
+								<Textbox
+									name="identifier"
+									bind:value={loginModule.identifier}
+									placeholder={loginModule.isPhoneNumber ? '+91234567890' : 'johndoe@gmail.com'}
+									type={loginModule.isPhoneNumber ? 'tel' : 'email'}
+									schema={loginModule.isPhoneNumber ? customPhoneSchema : schemas.email}
+									oninput={(e) => {
+										if (loginModule.isPhoneNumber) {
+											const target = e.target as HTMLInputElement;
+											const current = target.value;
+											const cleaned = current.replace(/[^\d\+\s]/g, '');
+											if (current !== cleaned) {
+												const start = target.selectionStart;
+												target.value = cleaned;
+												loginModule.identifier = cleaned;
+												if (start !== null) {
+													target.setSelectionRange(start - 1, start - 1);
+												}
+											} else {
+												loginModule.identifier = current;
 											}
-										} else {
-											loginModule.identifier = current;
 										}
-									}
-								}}
-								class="h-12"
-								required
-							/>
+									}}
+									class="h-12"
+									required
+								/>
+							{/key}
 						</div>
 
 					{#if !loginModule.isPhoneNumber}

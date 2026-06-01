@@ -104,6 +104,7 @@
 					placeholder="John"
 					schema={schemas.firstName}
 					label="First Name"
+					class="h-12"
 					required
 					aria-label="First name"
 					autocomplete="given-name"
@@ -114,6 +115,7 @@
 					placeholder="Doe"
 					schema={schemas.lastName}
 					label="Last Name"
+					class="h-12"
 					required
 					aria-label="Last name"
 					autocomplete="family-name"
@@ -127,6 +129,7 @@
 				placeholder="you@example.com"
 				schema={schemas.email}
 				label="Email address"
+				class="h-12"
 				required
 				aria-label="Email address"
 				autocomplete="email"
@@ -148,9 +151,10 @@
 				name="password"
 				type="password"
 				bind:value={password}
-				placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
+				placeholder="••••••••"
 				schema={schemas.password}
 				label="Password"
+				class="h-12"
 				required
 				aria-label="Password"
 				autocomplete="new-password"
@@ -160,18 +164,23 @@
 				name="confirmPassword"
 				type="password"
 				bind:value={confirmPassword}
-				placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
+				placeholder="••••••••"
 				schema={schemas.confirmPassword}
 				label="Confirm password"
+				class="h-12"
 				required
 				aria-label="Confirm password"
 				autocomplete="new-password"
 			/>
 
-			<Button type="submit" class="w-full" disabled={isLoading} aria-label={isLoading ? 'Creating account...' : 'Create account'}>
+			<Button
+				type="submit"
+				class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+				disabled={isLoading}
+				aria-label={isLoading ? 'Creating account...' : 'Create account'}
+			>
 				{#if isLoading}
-					<LoaderIcon class="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-					<span class="sr-only">Creating account...</span>
+					<LoaderIcon class="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
 				{/if}
 				{isLoading ? 'Creating account...' : 'Create account'}
 			</Button>
