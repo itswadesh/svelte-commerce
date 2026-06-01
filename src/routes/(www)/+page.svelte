@@ -16,6 +16,7 @@
 	import Slider from '$lib/components/home/slider.svelte'
 	import { page as sveltePage } from '$app/state'
 	import { Button } from '$lib/components/ui/button'
+	import Blocks from '$lib/components/page-blocks/blocks.svelte'
 	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
 
@@ -158,6 +159,8 @@
 </div>
 
 <Slider />
+
+<Blocks blocks={sveltePage.data.page?.blocks}/>
 
 <div class="page-width mb-8">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
