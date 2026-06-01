@@ -75,7 +75,7 @@
 			<div
 				class={cn(
 					'relative rounded-radius overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20 p-0.5',
-					idx === currentIndex && 'border-primary'
+					idx === currentIndex ? 'border-primary': 'border-muted'
 				)}
 				role="button"
 				tabindex="0"
