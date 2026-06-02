@@ -121,7 +121,7 @@
 						{/if}
 					</div>
 					{#if cartState?.cart?.total >= 0 && cartState.cart?.lineItems?.length > 0}
-						<div class="mx-4 mt-6 flex justify-between gap-3">
+						<div class="mx-4 pb-6 md:pb-0 mt-6 flex justify-between gap-3">
 							<Button
 								variant="outline"
 								disabled={!!cartState.isUpdatingCart}
