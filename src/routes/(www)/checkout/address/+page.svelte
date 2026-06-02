@@ -204,7 +204,7 @@
 														{cartState.cart.shippingAddress?.countryCode}
 														{cartState.cart.shippingAddress?.zip}
 													</p>
-													<p class="mt-4 border-t border-border pt-4 font-medium">
+													<p class="mt-4 border-border pt-4 font-medium">
 														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone</span>
 														{cartState.cart.shippingAddress?.phone}
 													</p>
