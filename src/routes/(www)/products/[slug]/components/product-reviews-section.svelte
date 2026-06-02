@@ -62,7 +62,7 @@
 						</div>
 
 						<!-- Rating Distribution -->
-						<div class="rounded-md bg-muted/1	0 p-6 ring-1 ring-border">
+						<div class="rounded-md bg-muted/10 p-6 ring-1 ring-border">
 							<div class="space-y-4">
 								{#each [5, 4, 3, 2, 1] as stars}
 									{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars - 1).length || 0}
@@ -246,7 +246,7 @@
 	{#if productState.showReviewForm}
 		<div class="fixed inset-0 z-[100] flex items-center justify-center bg-foreground backdrop-blur-sm sm:p-4" transition:fade={{ duration: 200 }}>
 			<div
-				class="font-montserrat relative h-full w-full overflow-hidden bg-white sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-radius sm:shadow-2xl"
+				class="font-montserrat relative h-full w-full overflow-hidden bg-background sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-radius sm:shadow-2xl"
 				transition:scale={{ start: 0.95, duration: 300, easing: quintOut }}
 			>
 				<!-- Modal Header -->
