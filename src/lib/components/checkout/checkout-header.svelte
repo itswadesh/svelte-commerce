@@ -44,7 +44,7 @@
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 2 ? 'bg-primary border-primary text-foreground' : 'border-gray-200'
+					step === 2 ? 'bg-primary border-primary text-primary-foreground' : 'border-gray-200'
 				)}
 			>
 				2
@@ -66,7 +66,7 @@
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 3 ? 'bg-primary border-primary text-foreground' : 'border-gray-200'
+					step === 3 ? 'bg-primary border-primary text-primary-foreground' : 'border-gray-200'
 				)}
 			>
 				3
