@@ -46,7 +46,7 @@
 		</div> -->
 
 		{#if navModule.helloBarPlugin?.content}
-			<div class="max-w-none bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
+			<div class="max-w-none bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
 				<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
 					{#if navModule.helloBarPlugin?.content}
 						<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
