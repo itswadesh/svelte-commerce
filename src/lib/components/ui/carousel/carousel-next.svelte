@@ -14,7 +14,7 @@
 	{variant}
 	{size}
 	class={cn(
-		'absolute size-8 bg-white border-muted touch-manipulation !rounded-full',
+		'absolute size-8 bg-background border-muted touch-manipulation !rounded-full',
 		emblaCtx.orientation === 'horizontal' ? '-right-12 top-1/2 -translate-y-1/2' : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
 		className
 	)}
