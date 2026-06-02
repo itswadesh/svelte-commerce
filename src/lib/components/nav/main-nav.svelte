@@ -6,11 +6,11 @@
 <div class="mr-4 md:flex">
 	<div class="flex gap-3">
 		{#if page?.data?.store?.logo}
-			<a href="/" class="transition-transform duration-300 hover:scale-105 active:scale-95">
+			<a href="/">
 				<img src={page?.data?.store?.logo} class="h-10 object-contain" alt="Arialshop — Women's Fashion Online" />
 			</a>
 		{:else}
-			<a href="/" class="flex items-center space-x-2 transition-transform duration-300 hover:scale-105 active:scale-95">
+			<a href="/" class="flex items-center space-x-2">
 				<span class="font-bold"> {page?.data?.store?.name || ''} </span>
 			</a>
 		{/if}
