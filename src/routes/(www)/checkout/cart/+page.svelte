@@ -38,7 +38,7 @@
 
 {#snippet quantitySelector(item: any)}
 	<div
-		class="flex items-center rounded-radius border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md"
+		class="flex items-center rounded-radius border border-border bg-background p-1 shadow-sm transition-all duration-300 hover:shadow-md"
 	>
 		<Button
 			variant="ghost"
@@ -321,7 +321,7 @@
 													<LazyImg
 														src={item.thumbnail || '/placeholder.svg'}
 														alt={item.title}
-														class="aspect-[3/4] w-24 object-contain sm:w-32"
+														class="w-24 object-contain sm:w-32"
 													/>
 												</div>
 											</div>
@@ -346,7 +346,7 @@
 															{#each item.variant.options as option}
 																{#if option?.option?.title && option?.value}
 																	<span
-																		class="inline-flex items-center rounded bg-primary/5 px-2 py-0.5 text-xs font-semibold  text-muted ring-1 ring-primary/10"
+																		class="inline-flex items-center border-primary border rounded-radius px-2 py-0.5 text-xs font-semibold  ring-1 ring-primary/10"
 																	>
 																		{option.option?.title}: {option?.value}
 																	</span>
@@ -392,7 +392,7 @@
 
 											<div class="mt-auto flex items-center justify-between pt-6">
 													<div
-													class="hidden items-center rounded-radius border border-muted bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md sm:flex"
+													class="hidden items-center rounded-radius border border-border bg-background p-1 shadow-sm transition-all duration-300 hover:shadow-md sm:flex"
 												>
 													<Button
 														variant="ghost"
@@ -429,7 +429,7 @@
 														aria-label="Remove item"
 														onclick={(e) => cartModule.removeItem(e, item)}
 													>
-														<Trash class="size-3.5 text-red-500" />
+														<Trash class="size-3.5 text-destructive" />
 													</Button>
 												</div>
 												<div class="text-right hidden lg:block">
@@ -439,7 +439,7 @@
 															{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 														</p>
 														{#if item.mrp > item.price}
-															<span class="text-xs text-gray-400 line-through">
+															<span class="text-xs line-through">
 																{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
 															</span>
 														{/if}
@@ -449,7 +449,7 @@
 															You saved {formatPrice((item.mrp * item.qty) - (item.price * item.qty), page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
-														<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
+														<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">
 															{formatPrice(item.price, page?.data?.store?.currency?.code)} each
 														</p>
 													{/if}
@@ -468,14 +468,14 @@
 						{#if cartState.cart.couponCode}
 							<div class="flex items-center justify-between px-1 text-sm sm:text-base">
 								<p class="font-medium">Coupon Applied</p>
-								<div class="flex items-center gap-2 rounded-lg bg-gray-100 p-2 px-3">
+								<div class="flex items-center gap-2 rounded-radius bg-gray-100 p-2 px-3">
 									<p class="text-sm font-medium text-gray-600">
 										{cartState.cart.couponCode}
 									</p>
 								<Button
 									variant="ghost"
 									size="icon"
-									class="h-auto w-auto p-1 text-red-500"
+									class="h-auto w-auto p-1 text-destructive"
 									onclick={() => cartState.removeCoupon()}
 								>
 									<X class="size-4" />
@@ -486,7 +486,7 @@
 
 						<CouponsDrawer />
 
-						<div class="space-y-4 rounded-lg border border-muted/20 bg-white p-3 md:p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-border bg-background p-3 md:p-6 shadow-sm">
 							<div class="">
 								<div class="mb-6 flex flex-col gap-1">
 									<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
@@ -500,7 +500,7 @@
 									</div>
 								{:else}
 									<div class="space-y-4">
-										<div class="space-y-3 border-b border-gray-50 pb-6">
+										<div class="space-y-3 border-b border-border pb-6">
 											<div class="flex justify-between text-sm">
 												<span class="font-medium text-gray-500">Subtotal</span>
 												<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
@@ -546,7 +546,7 @@
 										{/if} -->
 
 										{#if cartModule.showError}
-											<div class="mt-4 rounded bg-red-50 p-3 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
+											<div class="mt-4 rounded bg-destructive p-3 text-[11px] font-bold uppercase tracking-tight text-destructive-foreground ring-1 ring-red-100">
 												{cartModule.errorMessage}
 											</div>
 										{/if}

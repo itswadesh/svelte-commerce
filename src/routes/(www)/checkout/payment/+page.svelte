@@ -70,7 +70,7 @@
 							Select Payment Method
 						</h2>
 						{#if paymentModule.showError}
-							<div class="rounded bg-red-50 p-3 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
+							<div class="rounded bg-destructive p-3 text-[11px] font-bold uppercase tracking-tight text-destructive-foreground ring-1 ring-red-100">
 								{paymentModule.errorMessage}
 							</div>
 						{/if}
@@ -79,9 +79,9 @@
 							<div class="grid grid-cols-1 gap-4">
 								{#each paymentModule.listOfPaymentMethods as method}
 									<label
-										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-white px-6 py-5 {(paymentModule.selectedPGCode == method?.code && paymentModule.listOfPaymentMethods?.length !== 1)
+										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-background px-6 py-5 {(paymentModule.selectedPGCode == method?.code && paymentModule.listOfPaymentMethods?.length !== 1)
 											? 'border-primary ring-1 ring-primary'
-											: 'border-muted/20 shadow-sm'}"
+											: 'border-border shadow-sm'}"
 									>
 										<div class="flex items-center gap-4">
 											<div class="relative flex h-5 w-5 items-center justify-center">
@@ -98,7 +98,7 @@
 
 											<div class="flex items-center gap-3">
 												{#if method?.img}
-													<div class="flex h-10 w-12 items-center justify-center rounded border border-gray-50 bg-white p-1 shadow-sm">
+													<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-white p-1 shadow-sm">
 														<img src={method.img} alt={method?.name} class="h-full w-full object-contain" />
 													</div>
 												{/if}
@@ -151,7 +151,7 @@
 													id={rate.id}
 													checked={cartState?.cart?.shippingRateId === rate.id}
 													onchange={() => paymentModule.handleShippingRateChange(rate)}
-													class="peer h-5 w-5 appearance-none rounded-full border-2 border-gray-200 transition-all checked:border-primary"
+													class="peer h-5 w-5 appearance-none rounded-full border-2 border-border transition-all checked:border-primary"
 												/>
 												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 transition-opacity peer-checked:opacity-100"></div>
 											</div>
@@ -206,7 +206,7 @@
 					{/if}
 
 											{#if cartState?.cart?.shippingAddress}
-							<div class="rounded-lg border border-muted/20 bg-white shadow-sm overflow-hidden text-left">
+							<div class="rounded-lg border border-border bg-white shadow-sm overflow-hidden text-left">
 								<Button
 									variant="plain"
 									class="flex w-full items-center justify-between px-6 py-4 h-auto"
@@ -261,7 +261,7 @@
 
 					<div class="space-y-4">
 
-						<div class="space-y-4 rounded-lg border border-muted/20 bg-white p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-border bg-white p-6 shadow-sm">
 
 
 							<div class="mb-6 flex flex-col gap-1">
@@ -276,7 +276,7 @@
 								</div>
 							{:else}
 								<div class="space-y-4">
-									<div class="space-y-3 border-b border-gray-50 pb-6">
+									<div class="space-y-3 border-b border-border pb-6">
 										<div class="flex justify-between text-sm">
 											<span class="font-medium text-gray-500">Subtotal</span>
 											<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>

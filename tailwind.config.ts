@@ -33,6 +33,9 @@ const config: Config = {
 			spacing: {
 				page: '8px',
 			},
+			borderColor: {
+				DEFAULT: 'hsl(var(--border) / <alpha-value>)',
+			},
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
 				input: 'hsl(var(--input) / <alpha-value>)',

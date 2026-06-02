@@ -1,89 +1,89 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-	:root {
-		--ring: 0 0% 55%;
-		--font-primary: 'Montserrat', sans-serif;
-		--card: 0 0% 100%;
-		--input: 0 0% 89.8%;
-		--border: 21 30% 22%;
-		--radius: 0.5rem;
-		--popover: 0 0% 100%;
-		--success: 142 65% 36%;
-		--secondary: 21 30% 22%;
-		--background: 177 100% 100%;
-		--foreground: 21.18 30.36% 21.96%;
-		--destructive: 352 96% 40%;
-		--sidebar-ring: 0 0% 55%;
-		--sidebar-accent: 0 0% 95.9%;
-		--sidebar-border: 0 0% 91%;
-		--card-foreground: 21 30% 22%;
-		--sidebar-primary: 0 0% 55%;
-		--muted-foreground: 0 0% 61%;
-		--popover-foreground: 0 0% 0%;
-		--sidebar-background: 0 0% 98%;
-		--sidebar-foreground: 21 30% 22%;
-		--success-foreground: 126.89 100% 40.98%;
-		--destructive-foreground: 0 0% 100%;
-		--sidebar-accent-foreground: 21 30% 22%;
-		--sidebar-primary-foreground: 21 30% 22%;
-	}
-
-	.dark {
-	}
-}
-
-@layer base {
-	* {
-		font-family: var(--font-primary);
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
-}
-
-html {
-	scroll-behavior: smooth;
-}
-
-/*
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-} */
-
-@media only screen and (max-width: 980px) {
-	#tidio-chat-iframe {
-		bottom: 80px !important;
-	}
-	#reamaze-widget {
-		bottom: 80px !important;
-	}
-}
-
-.inter-gap {
-	@apply gap-3 sm:gap-5;
-}
-
-.inter-pt {
-	@apply pt-3 sm:gap-5;
-}
-
-.intra-gap {
-	@apply gap-2 sm:gap-4;
-}
-
-.intra-pt {
-	@apply pt-2 sm:pt-4;
-}
-
-.page-heading {
-	@apply text-xl font-bold text-foreground sm:text-xl;
-}
-
-.page-width {
-	@apply mx-page lg:container lg:mx-auto;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--ring: 0 0% 55%;
+		--font-primary: 'Montserrat', sans-serif;
+		--card: 0 0% 100%;
+		--input: 0 0% 89.8%;
+		--border: 0 0% 89.8%;
+		--radius: 0.5rem;
+		--popover: 0 0% 100%;
+		--success: 142 65% 36%;
+		--secondary: 21 30% 22%;
+		--background: 177 100% 100%;
+		--foreground: 21.18 30.36% 21.96%;
+		--destructive: 352 96% 40%;
+		--sidebar-ring: 0 0% 55%;
+		--sidebar-accent: 0 0% 95.9%;
+		--sidebar-border: 0 0% 91%;
+		--card-foreground: 21 30% 22%;
+		--sidebar-primary: 0 0% 55%;
+		--muted-foreground: 0 0% 61%;
+		--popover-foreground: 0 0% 0%;
+		--sidebar-background: 0 0% 98%;
+		--sidebar-foreground: 21 30% 22%;
+		--success-foreground: 126.89 100% 40.98%;
+		--destructive-foreground: 0 0% 100%;
+		--sidebar-accent-foreground: 21 30% 22%;
+		--sidebar-primary-foreground: 21 30% 22%;
+	}
+
+	.dark {
+	}
+}
+
+@layer base {
+	* {
+		font-family: var(--font-primary);
+		border-color: hsl(var(--border));
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+/*
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+} */
+
+@media only screen and (max-width: 980px) {
+	#tidio-chat-iframe {
+		bottom: 80px !important;
+	}
+	#reamaze-widget {
+		bottom: 80px !important;
+	}
+}
+
+.inter-gap {
+	@apply gap-3 sm:gap-5;
+}
+
+.inter-pt {
+	@apply pt-3 sm:gap-5;
+}
+
+.intra-gap {
+	@apply gap-2 sm:gap-4;
+}
+
+.intra-pt {
+	@apply pt-2 sm:pt-4;
+}
+
+.page-heading {
+	@apply text-xl font-bold text-foreground sm:text-xl;
+}
+
+.page-width {
+	@apply mx-page lg:container lg:mx-auto;
+}
