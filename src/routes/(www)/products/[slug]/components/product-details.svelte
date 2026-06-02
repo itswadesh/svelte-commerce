@@ -91,7 +91,7 @@
 						</div>
 					{:else}
 						<!-- Fallback delivery estimate when plugin is not enabled -->
-						<div class="intra-gap border-t border-gray-100 intra-pt flex flex-col">
+						<!-- <div class="intra-gap border-t border-gray-100 intra-pt flex flex-col">
 							<div class="flex items-center gap-2">
 								<Truck class="size-4 text-gray-900" />
 								<span class="text-base font-bold text-gray-900">Delivery Information</span>
@@ -102,7 +102,7 @@
 									Estimated delivery: 5-7 business days
 								</p>
 							</div>
-						</div>
+						</div> -->
 					{/if}
 
 					{#if productState.trustBadgesPlugin?.active}
