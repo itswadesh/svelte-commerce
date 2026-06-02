@@ -4,31 +4,31 @@
 
 @layer base {
 	:root {
-    --ring: hsl(0, 0%, 55%);
+		--ring: 0 0% 55%;
 		--font-primary: 'Montserrat', sans-serif;
-  --card: hsl(0, 0%, 100%);
-  --input: hsl(0, 0%, 89.8%);
-  --border: hsl(21, 30%, 22%);
-  --radius: 0.5rem;
-  --popover: hsl(0, 0%, 100%);
-  --success: hsl(142, 65%, 36%);
-  --secondary: hsl(21, 30%, 22%);
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(21.18, 30.36%, 21.96%);
-  --destructive: hsl(352, 96%, 40%);
-  --sidebar-ring: hsl(0, 0%, 55%);
-  --sidebar-accent: hsl(0, 0%, 95.9%);
-  --sidebar-border: hsl(0, 0%, 91%);
-  --card-foreground: hsl(21, 30%, 22%);
-  --sidebar-primary: hsl(0, 0%, 55%);
-  --muted-foreground: hsl(0, 0%, 61%);
-  --popover-foreground: hsl(0, 0%, 0%);
-  --sidebar-background: hsl(0, 0%, 98%);
-  --sidebar-foreground: hsl(21, 30%, 22%);
-  --success-foreground: hsl(126.89, 100%, 40.98%);
-  --destructive-foreground: hsl(0, 0%, 100%);
-  --sidebar-accent-foreground: hsl(21, 30%, 22%);
-  --sidebar-primary-foreground: hsl(21, 30%, 22%);
+		--card: 0 0% 100%;
+		--input: 0 0% 89.8%;
+		--border: 21 30% 22%;
+		--radius: 0.5rem;
+		--popover: 0 0% 100%;
+		--success: 142 65% 36%;
+		--secondary: 21 30% 22%;
+		--background: 177 100% 100%;
+		--foreground: 21.18 30.36% 21.96%;
+		--destructive: 352 96% 40%;
+		--sidebar-ring: 0 0% 55%;
+		--sidebar-accent: 0 0% 95.9%;
+		--sidebar-border: 0 0% 91%;
+		--card-foreground: 21 30% 22%;
+		--sidebar-primary: 0 0% 55%;
+		--muted-foreground: 0 0% 61%;
+		--popover-foreground: 0 0% 0%;
+		--sidebar-background: 0 0% 98%;
+		--sidebar-foreground: 21 30% 22%;
+		--success-foreground: 126.89 100% 40.98%;
+		--destructive-foreground: 0 0% 100%;
+		--sidebar-accent-foreground: 21 30% 22%;
+		--sidebar-primary-foreground: 21 30% 22%;
 	}
 
 	.dark {
