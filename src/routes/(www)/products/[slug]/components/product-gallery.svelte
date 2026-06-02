@@ -180,8 +180,9 @@
 	</div>
 </div>
 
+<!-- Fullscreen view -->
 <div
-	class="fixed left-0 top-0 z-[100] {displayCarousel} h-screen w-screen flex-col items-center justify-start bg-black"
+	class="fixed left-0 top-0 z-[100] {displayCarousel} h-[100dvh] w-screen flex-col items-center justify-start bg-black overflow-hidden"
 >
 	<!-- Background overlay -->
 	<Button
@@ -192,7 +193,7 @@
 		<span class="sr-only">Close Carousel</span>
 	</Button>
 
-	<div class="relative mx-auto flex h-screen max-w-[1200px] items-center gap-4 px-4 py-12">
+	<div class="relative mx-auto flex h-full w-full max-w-[1200px] items-center gap-4 px-4 py-12">
 		<!-- Close button -->
 		<Button
 			variant="plain"
@@ -204,7 +205,7 @@
 		</Button>
 
 		<!-- Main carousel -->
-		<div class="flex-1">
+		<div class="flex-1 h-full overflow-hidden">
 			<Carousel.Root
 				opts={{ loop: true }}
 				setApi={(api) => {
@@ -216,13 +217,13 @@
 						})
 					}
 				}}
-				class="relative w-full"
+				class="relative w-full h-full"
 			>
-				<Carousel.Content>
+				<Carousel.Content class="h-full">
 					{#each carouselImages || [] as img, index (index)}
 						{@const youtubeId = getYoutubeId(img)}
-						<Carousel.Item>
-							<div class="flex h-[calc(100vh-6rem)] items-center justify-center">
+						<Carousel.Item class="h-full">
+							<div class="flex h-full items-center justify-center">
 								{#if youtubeId}
 									<iframe
 										width="100%"
@@ -244,7 +245,7 @@
 									<LazyImg
 										src={img}
 										alt="Product Image"
-										class="!max-h-[calc(100vh-6rem)] rounded-radius w-full object-contain"
+										class="max-h-full rounded-radius h-full object-contain"
 									/>
 								{/if}
 							</div>
@@ -257,7 +258,7 @@
 		<!-- Thumbnails on the right -->
 		{#if carouselImages?.length > 0}
 			<div
-				class="hidden h-[calc(100vh-6rem)] min-w-[120px] max-w-[120px] flex-none items-center gap-2 overflow-y-auto py-2 scrollbar-thin md:flex md:flex-col"
+				class="hidden h-full min-w-[120px] max-w-[120px] flex-none items-center gap-2 overflow-y-auto py-2 scrollbar-thin md:flex md:flex-col"
 			>
 				{#each carouselImages || [] as img, i}
 					{@const youtubeId = getYoutubeId(img)}
