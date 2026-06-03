@@ -78,8 +78,8 @@
 								</p>
 							{/if}
 						{/await}
-						<div class="overflow-hidden rounded-lg border border-muted/20 bg-white shadow-sm">
-							<div class="flex items-center justify-between border-b border-gray-50 px-5 py-4">
+						<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
+							<div class="flex items-center justify-between border-b border-border px-5 py-4">
 								<div class="flex items-center space-x-3">
 									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 										Contact Details
@@ -162,10 +162,10 @@
 						</div>
 						<!-- Shipping Address -->
 						{#if isEmailOk && isPhoneOk}
-							<div class="overflow-hidden rounded-lg border border-muted/20 bg-white shadow-sm">
+							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
 								{#if cartState.cart.shippingAddress}
 									<div class="">
-										<div class="flex items-center justify-between border-b border-gray-50 px-5 py-4">
+										<div class="flex items-center justify-between border-b border-border px-5 py-4">
 											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 												Delivery Address
 											</h2>
@@ -204,7 +204,7 @@
 														{cartState.cart.shippingAddress?.countryCode}
 														{cartState.cart.shippingAddress?.zip}
 													</p>
-													<p class="mt-4 border-t border-gray-50 pt-4 font-medium">
+													<p class="mt-4 border-border pt-4 font-medium">
 														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone</span>
 														{cartState.cart.shippingAddress?.phone}
 													</p>
@@ -251,9 +251,9 @@
 							</div>
 
 							{#if !addressModule.isBillingAddressSameAsShipping}
-								<div class="overflow-hidden rounded-lg border border-muted/20 bg-white shadow-sm transition-all duration-300">
+								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm transition-all duration-300">
 									<div class="">
-										<div class="flex items-center justify-between border-b border-gray-50 px-5 py-4">
+										<div class="flex items-center justify-between border-b border-border px-5 py-4">
 											<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 												Billing Address
 											</h2>
@@ -320,7 +320,7 @@
 
 					<!-- Right Column - Order Summary -->
 					<div class="space-y-4">
-						<div class="space-y-4 rounded-lg border border-muted/20 bg-white p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
 							<div class="mb-6 flex flex-col gap-1">
 								<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 									Price Summary
@@ -333,7 +333,7 @@
 								</div>
 							{:else}
 								<div class="space-y-4">
-									<div class="space-y-3 border-b border-gray-50 pb-6">
+									<div class="space-y-3 border-b border-border pb-6">
 										<div class="flex justify-between text-sm">
 											<span class="font-medium text-gray-500">Subtotal</span>
 											<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
@@ -382,13 +382,15 @@
 										<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
 									</div>
 
-									<CheckoutButton
-										text="Continue to Payment"
-										disabledText="Select Address"
-										disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
-										onclick={addressModule.handleProceedToPayment}
-										loading={addressModule.loadingForCheckout}
-									/>
+                  {#if !addressModule.showAddressList && !addressModule.showAddressForm}
+									  <CheckoutButton
+									  	text="Continue to Payment"
+									  	disabledText="Select Address"
+									  	disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
+									  	onclick={addressModule.handleProceedToPayment}
+									  	loading={addressModule.loadingForCheckout}
+									  />
+                  {/if}
 								</div>
 							{/if}
 						</div>

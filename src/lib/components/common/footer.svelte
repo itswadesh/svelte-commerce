@@ -163,6 +163,9 @@
 								{storeData?.name}
 							</a>
 							. All Rights Reserved.
+              <a target="_blank" href="https://litekart.in" class="uppercase text-xs font-bold text-foreground transition-colors hover:text-primary">
+                Powered by Litekart
+              </a>
 						</span>
 						<TrustpilotPlugin />
 					</div>

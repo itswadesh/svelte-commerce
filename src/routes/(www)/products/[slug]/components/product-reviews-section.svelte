@@ -62,7 +62,7 @@
 						</div>
 
 						<!-- Rating Distribution -->
-						<div class="rounded-md bg-muted/1	0 p-6 ring-1 ring-border">
+						<div class="rounded-md bg-muted/10 p-6 ring-1 ring-border">
 							<div class="space-y-4">
 								{#each [5, 4, 3, 2, 1] as stars}
 									{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars - 1).length || 0}
@@ -224,7 +224,7 @@
 			<!-- Empty State -->
 			<div class="flex flex-col items-center justify-center py-12 text-center sm:py-20">
 				<div
-					class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted text-muted-foreground/30 ring-1 ring-border sm:mb-8 sm:h-24 sm:w-24"
+					class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border sm:mb-8 sm:h-24 sm:w-24"
 				>
 					<Star class="h-10 w-10 sm:h-12 sm:w-12" />
 				</div>
@@ -244,14 +244,14 @@
 
 	<!-- Review Form Modal Overlay -->
 	{#if productState.showReviewForm}
-		<div class="fixed inset-0 z-[100] flex items-center justify-center bg-foreground/60 backdrop-blur-sm sm:p-4" transition:fade={{ duration: 200 }}>
+		<div class="fixed inset-0 z-[100] flex items-center justify-center bg-foreground backdrop-blur-sm sm:p-4" transition:fade={{ duration: 200 }}>
 			<div
-				class="font-montserrat relative h-full w-full overflow-hidden bg-background sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-md sm:shadow-2xl"
+				class="font-montserrat relative h-full w-full overflow-hidden bg-background sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-radius sm:shadow-2xl"
 				transition:scale={{ start: 0.95, duration: 300, easing: quintOut }}
 			>
 				<!-- Modal Header -->
 				<div
-					class="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-background/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6"
+					class="sticky top-0 z-10 flex items-center justify-between border-b border-border px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6"
 				>
 					<div>
 						<h3 class="text-xl font-black tracking-tight text-foreground sm:text-2xl">Write a Review</h3>
