@@ -43,7 +43,7 @@
 	</div>
 
 	{#if product.subtitle}
-		<div class="mt-3 line-clamp-3 text-xs font-medium text-muted-foreground sm:text-sm">
+		<div class="mt-3 line-clamp-3 text-xs font-medium sm:text-sm">
 			{@html product.subtitle}
 		</div>
 	{/if}

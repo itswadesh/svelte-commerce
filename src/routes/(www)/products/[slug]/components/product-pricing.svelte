@@ -14,7 +14,7 @@
 
 		{#if productState.selectedVariant?.price}
 			{#if productState.selectedVariant?.mrp && productState.selectedVariant?.mrp > productState.selectedVariant?.price}
-				<div class="text-sm text-muted line-through decoration-muted">
+				<div class="text-sm line-through">
 					{formatPrice(productState.selectedVariant?.mrp, page?.data?.store?.currency?.code)}
 				</div>
 				<div class="text-lg  px-2 text-success">
@@ -23,7 +23,7 @@
 			{/if}
 		{:else if page.data?.product?.price}
 			{#if page.data?.product?.mrp && page.data?.product?.mrp > page.data?.product?.price}
-					<div class="text-sm text-muted line-through decoration-muted">
+					<div class="text-sm line-through">
 					{formatPrice(page.data?.product?.mrp, page?.data?.store?.currency?.code)}
 				</div>
 				<div class="text-lg  px-2 text-success">

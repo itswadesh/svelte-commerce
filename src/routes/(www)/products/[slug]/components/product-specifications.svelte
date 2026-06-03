@@ -6,12 +6,13 @@
 
 	const productState = useProductState()
 	const data = $derived(page.data)
+  $inspect(data.product)
 
 	let isOpen = $state(true)
 </script>
 
 <div class="">
-	<button class="flex w-full items-center justify-between gap-2 py-5 text-semibold font-bold text-gray-900" onclick={() => (isOpen = !isOpen)}>
+	<button class="flex w-full items-center justify-between gap-2 text-semibold font-bold pb-2 text-gray-900" onclick={() => (isOpen = !isOpen)}>
 		<span>Product Specifications</span>
 
 		{#if isOpen}
@@ -22,9 +23,8 @@
 	</button>
 
 	{#if isOpen}
-		<div class="grid grid-cols-1 gap-y-4 pb-6">
+		<div class="grid grid-cols-2 gap-y-4">
 			<!-- SKU and Barcode Section -->
-			<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4">
 				{#if productState.selectedVariant?.sku || data?.product?.sku}
 					<div class="flex flex-col gap-1">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">SKU</p>
@@ -35,17 +35,15 @@
 				{/if}
 
 				{#if productState.selectedVariant?.barcode || data?.product?.barcode}
-					<div class="flex flex-col gap-1 text-right">
+					<div class="flex flex-col gap-1 text-left">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Barcode</p>
 						<p class="text-sm font-medium text-gray-900">
 							{productState.selectedVariant?.barcode || data?.product?.barcode}
 						</p>
 					</div>
 				{/if}
-			</div>
 
 			<!-- Dimensions and Weight Section -->
-			<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4">
 				{#if productState.selectedVariant?.width || data?.product?.width || productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.length || data?.product?.length}
 					<div class="flex flex-col gap-1">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Dimensions</p>
@@ -82,16 +80,13 @@
 						</p>
 					</div>
 				{/if}
-			</div>
 
-			<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4">
 				{#if data?.product?.originCountry}
 					<div class="flex flex-col gap-1">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Origin</p>
 						<p class="text-sm font-medium text-gray-900">{data?.product?.originCountry}</p>
 					</div>
 				{/if}
-			</div>
 
 			{#each data?.product?.attributes as { name, value }}
 				<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
