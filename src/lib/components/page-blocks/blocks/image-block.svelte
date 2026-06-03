@@ -1,7 +1,14 @@
 <script lang="ts">
 	const { block } = $props()
+	const [aspectWidth, aspectHeight] = $derived(block.metadata.aspectRatio?.split(':') || ['1', '1'])
 </script>
 
-<div class="h-full flex justify-center items-center">
-  <img src={block.metadata.url} class="object-contain h-full" alt="">
+<div
+	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {block.metadata.maxWidth ? `max-width: ${block.metadata.maxWidth}px;` : ``} {block.metadata
+		.maxHeight
+		? ` max-height: ${block.metadata.maxHeight}px;`
+		: ``}"
+	class="flex h-full items-center justify-center"
+>
+	<img src={block.metadata.url} class="h-full object-contain" alt="" />
 </div>
