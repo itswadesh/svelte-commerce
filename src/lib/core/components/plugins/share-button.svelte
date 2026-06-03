@@ -95,7 +95,7 @@
 		<!-- Desktop Share Popover -->
 		<div
 			transition:fly={{ y: -10, duration: 300 }}
-			class="absolute right-0 top-12 z-[9999998] hidden w-72 flex-col rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xl lg:flex"
+			class="absolute right-0 top-12 z-[9999998] hidden w-72 flex-col rounded-radius border border-zinc-200 bg-white p-4 shadow-2xl lg:flex"
 		>
 			<div class="mb-4 flex items-center justify-between px-1">
 				<h3 class="text-sm font-bold text-zinc-900">Share Product</h3>

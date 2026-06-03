@@ -14,18 +14,23 @@
 	let { children }: { children: Snippet } = $props()
 	let isMobileMenuOpen = $state(false)
 
+  const wishlistPlugin = $derived(page.data?.store?.plugins?.isWishlist)
 	setWishlistState()
 	setCartState()
 	setUserState()
 
-	const menuItems = [
-		{ href: '/my', icon: Home, label: 'Dashboard' },
-		{ href: '/my/profile', icon: Users, label: 'Profile' },
-		{ href: '/my/orders', icon: Package, label: 'Orders' },
-		{ href: '/my/addresses', icon: MapPinHouse, label: 'Addresses' },
-		{ href: '/my/wishlist', icon: Heart, label: 'Wishlist' }
-		// { href: '/my/profile', icon: Settings, label: 'Profile' }
-	]
+	const menuItems = $derived.by(() => {
+    const items = [
+	  	{ href: '/my', icon: Home, label: 'Dashboard' },
+	  	{ href: '/my/profile', icon: Users, label: 'Profile' },
+	  	{ href: '/my/orders', icon: Package, label: 'Orders' },
+	  	{ href: '/my/addresses', icon: MapPinHouse, label: 'Addresses' },
+	  	// { href: '/my/profile', icon: Settings, label: 'Profile' }
+	  ]
+    if (wishlistPlugin?.active)
+      items.push({ href: '/my/wishlist', icon: Heart, label: 'Wishlist' })
+    return items
+  })
 	let breadcrumbItems = $state([])
 	// Generate breadcrumb items based on current route
 	$effect(() => {
