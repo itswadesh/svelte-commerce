@@ -2,6 +2,6 @@
   const { block } = $props()
 </script>
 
-<div>
+<div class="w-full">
   {@html block.metadata.html}
 </div>

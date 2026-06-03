@@ -10,5 +10,5 @@
 		: ``}"
 	class="flex h-full items-center justify-center"
 >
-	<img src={block.metadata.url} class="h-full object-contain" alt="" />
+	<img src={block.metadata.url} class="h-full object-cover" alt="" />
 </div>
