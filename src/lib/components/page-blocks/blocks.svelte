@@ -8,6 +8,7 @@
 
 	const activeLayout = $derived.by(() => {
     if (!pageWidth) return null
+    if (!layouts?.length) return null
 
     for (const layout of layouts) {
       if (layout.minScreenWidth <= pageWidth && pageWidth <= layout.maxScreenWidth)
@@ -15,8 +16,6 @@
     }
 		return null
 	})
-  $inspect(pageWidth)
-	$inspect(activeLayout)
 </script>
 
 <svelte:window bind:innerWidth={pageWidth} />
