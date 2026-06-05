@@ -65,7 +65,7 @@
 			</div>
 		{/if}
 	{/if}
-	<div class="page-width flex items-center justify-between bg-white py-3 sm:py-2">
+	<div class="page-width flex h-16 sm:h-14 items-center justify-between bg-white">
 		<div class="hidden justify-center gap-3 sm:flex">
 			<Button
 				variant="ghost"
