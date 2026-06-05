@@ -12,7 +12,7 @@
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger aria-label="User Profile" class="flex items-center justify-center rounded-full px-2">
+	<DropdownMenu.Trigger aria-label="User Profile" class="flex items-center justify-center rounded-full">
 		{#if userState.user?.avatar}
 			<div class="h-5 w-5 overflow-hidden rounded-full">
 				<LazyImg

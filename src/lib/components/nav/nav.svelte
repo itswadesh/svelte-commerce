@@ -122,70 +122,44 @@
 				<MegaMenu />
 			</div>
 		{/if}
-		<div class="flex items-center gap-2">
-			<!-- <Search /> -->
-			<div class="flex items-center">
-				<div class="intra-gap relative flex items-center">
-					<!-- {#if isProductListingPage}
-              <div class="block sm:hidden">
-                {#if page?.data?.store?.plugins?.socialSharingButtons?.active}
-                  <ShareButton
-                    productName={page?.url?.pathname?.split("/")?.[2]}
-                    productImage={""}
-                    url={page?.url?.href}
-                  />
-                {/if}
-              </div>
-            {/if} -->
+		<div class="flex items-center gap-2 sm:gap-2">
+			<MsSearch />
 
-					<MsSearch />
-
-					<!-- {#if page?.url?.pathname !== '/'}
-				<a
-					href="/"
-					class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95"
-					aria-label="Home"
-				>
-					<Home class="h-5 w-5" />
-				</a>
-				{/if} -->
-
-					{#if wishlistPlugin.active}
-						<div class="relative px-2" role="navigation">
-							<a href="/my/wishlist" class="rounded-full" aria-label="Toggle Cart">
-								<Heart class="h-5 w-5" />
-								{#if wishlistState?.count > 0}
-									<span
-										class="absolute text-primary-foreground right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none"
-									>
-										{wishlistState.count}
-									</span>
-								{/if}
-							</a>
-						</div>
-					{/if}
-
-					{#if !page.url.pathname.startsWith('/checkout')}
-						<CartSidebar
-							onClose={navModule.closeCartSidebar}
-							onContinueShopping={navModule.handleContinueShoppingClick}
-							onRemoveCartItem={navModule.removeCartItem}
-						/>
-					{/if}
-					<!-- {/if} -->
-
-					<div class="flex h-full items-center font-['Inter',_sans-serif]">
-						{#if userState?.user?.role}
-							<ProfileDropdown onSignOut={navModule.handleSignOut} />
-						{:else}
-							<AuthButton aria-label="Login" type="login">
-								<div class="flex items-center justify-center p-2">
-									<UserCircle class="h-5 w-5" />
-								</div>
-							</AuthButton>
+			{#if wishlistPlugin?.active}
+				<div class="relative hidden sm:block" role="navigation">
+					<a href="/my/wishlist" class="px-2 rounded-full flex items-center justify-center text-gray-700 hover:text-black transition-colors" aria-label="Wishlist">
+						<Heart class="h-5 w-5" />
+						{#if wishlistState?.count > 0}
+							<span
+								class="absolute text-primary-foreground right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none"
+							>
+								{wishlistState.count}
+							</span>
 						{/if}
-					</div>
+					</a>
 				</div>
+			{/if}
+
+			{#if !page.url.pathname.startsWith('/checkout')}
+				<div class="">
+					<CartSidebar
+						onClose={navModule.closeCartSidebar}
+						onContinueShopping={navModule.handleContinueShoppingClick}
+						onRemoveCartItem={navModule.removeCartItem}
+					/>
+				</div>
+			{/if}
+
+			<div class="flex h-full items-center font-['Inter',_sans-serif] px-2">
+				{#if userState?.user?.role}
+					<ProfileDropdown onSignOut={navModule.handleSignOut} />
+				{:else}
+					<AuthButton aria-label="Login" type="login">
+						<div class="flex items-center justify-center text-gray-700 hover:text-black transition-colors">
+							<UserCircle class="h-5 w-5" />
+						</div>
+					</AuthButton>
+				{/if}
 			</div>
 		</div>
 	</div>

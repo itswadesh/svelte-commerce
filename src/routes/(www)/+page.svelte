@@ -189,7 +189,8 @@
 		</div>
 		<Button
 			href="/products"
-			class="group"
+			class="group max-sm:hidden"
+      variant="link"
 		>
 			View All Arrivals
 			<svg

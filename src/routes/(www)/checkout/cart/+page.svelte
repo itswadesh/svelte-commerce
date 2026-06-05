@@ -127,14 +127,16 @@
 							</p>
 						</div>
 					{/if} -->
-						<div class="mb-4 flex items-center justify-between rounded-radius border border-success/40 bg-success/5 px-4 py-3">
-							<div class="flex items-center gap-2">
-								<Tag class="size-3.5 text-success" />
-								<span class="text-sm font-medium text-success"
-									>You saved <span class="font-bold">{formatPrice($animatedSavings, page?.data?.store?.currency?.code)}</span> on this order.</span
-								>
+						{#if totalSavings > 0}
+							<div class="mb-4 flex items-center justify-between rounded-radius border border-success/40 bg-success/5 px-4 py-3">
+								<div class="flex items-center gap-2">
+									<Tag class="size-3.5 text-success" />
+									<span class="text-sm font-medium text-success"
+										>You saved <span class="font-bold">{formatPrice($animatedSavings, page?.data?.store?.currency?.code)}</span> on this order.</span
+									>
+								</div>
 							</div>
-						</div>
+						{/if}
 
 						<div
 							class="h-fit divide-y divide-gray-200 overflow-hidden rounded-radius sm:border {cartModule.partialCheckoutEnabled
@@ -303,11 +305,11 @@
 										</label>
 									{/if}
 
-									<a class="flex flex-1 gap-3 sm:p-3 py-5 md:gap-6 md:p-5" href={`/products/${item.slug}`} target="_blank">
+									<a class="flex flex-1 gap-3 py-5 sm:px-4 sm:p-3 md:gap-6 md:p-5" href={`/products/${item.slug}`} target="_blank">
 										<div class="flex flex-col items-center gap-3">
 											<div class="relative flex items-center justify-center">
-												<div class="overflow-hidden bg-gray-50 p-1 ring-1 ring-gray-100">
-													<LazyImg src={item.thumbnail || '/placeholder.svg'} alt={item.title} class="w-24 object-contain sm:w-32" />
+												<div class="overflow-hidden bg-gray-50 ring-gray-100">
+													<LazyImg src={item.thumbnail || '/placeholder.svg'} alt={item.title} class="w-24 object-top object-contain sm:w-32" />
 												</div>
 											</div>
 
@@ -354,7 +356,7 @@
 															{/if}
 														</div>
 														{#if item.mrp > item.price}
-															<p class="text-xs font-medium tracking-tight text-red-900">
+															<p class="text-xs font-medium tracking-tight text-green-600">
 																You saved {formatPrice(item.mrp * item.qty - item.price * item.qty, page?.data?.store?.currency?.code)}
 															</p>
 														{:else}
@@ -363,7 +365,7 @@
 															</p>
 														{/if}
 													</div>
-													<div class="sm:hidden lg:block">
+													<div class="hidden lg:block">
 														<Button
 															variant="ghost"
 															size="icon"
@@ -441,6 +443,16 @@
 													{/if}
 												</div>
 											</div>
+
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        class="h-auto w-auto p-1.5 text-gray-400 self-end mb-1.5"
+                        aria-label="Remove item"
+                        onclick={(e) => cartModule.removeItem(e, item)}
+                      >
+                        <Trash class="size-3.5" />
+                      </Button>
 										</div>
 									</a>
 								</div>
