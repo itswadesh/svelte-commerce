@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { X, UserCircle, ChevronLeft, Phone, Mail, Menu, ChevronDown, Heart } from '@lucide/svelte'
+	import { X, UserCircle, ChevronLeft, Phone, Mail, Menu, ChevronDown, Heart, Home, LayoutGrid, Tag, Layers, Package, MapPin, KeyRound, LogOut } from '@lucide/svelte'
 	import MainNav from './main-nav.svelte'
 	import MegaMenu from './mega-menu.svelte'
 	import { page } from '$app/state'
@@ -193,14 +193,14 @@
 
 <!-- Sidebar -->
 {#if navModule.openSidebar}
-	<aside class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent">
+	<aside class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent font-['Montserrat',_sans-serif]">
 		<div
 			role="button"
 			tabindex="0"
 			aria-label="Close sidebar"
 			in:fade={{ duration: 300 }}
 			out:fade={{ duration: 300 }}
-			class="absolute inset-0 bg-black/50"
+			class="absolute inset-0 bg-black/40 backdrop-blur-xs"
 			onclick={() => {
 				navModule.openSidebar = false
 			}}
@@ -213,47 +213,108 @@
 			<span class="sr-only">Close sidebar</span>
 		</div>
 		<div
-			in:fly={{ x: -400, duration: 300, easing: cubicOut }}
-			out:fly={{ x: -400, duration: 300, easing: cubicOut }}
-			class="relative z-[60] h-full w-full overflow-y-auto overflow-x-hidden bg-white p-6 pt-16 text-foreground"
+			in:fly={{ x: -320, duration: 300, easing: cubicOut }}
+			out:fly={{ x: -320, duration: 300, easing: cubicOut }}
+			class="relative z-[60] h-full w-full max-w-[300px] overflow-hidden bg-white text-foreground flex flex-col shadow-2xl border-r border-gray-100"
 		>
-			<Button
-				variant="ghost"
-				size="icon"
-				aria-label="Close sidebar"
-				class="absolute right-4 top-4 rounded-full bg-gray-100 text-foreground hover:bg-gray-200"
-				onclick={() => (navModule.openSidebar = false)}
-			>
-				<X class="h-5 w-5" />
-			</Button>
+			<!-- Header -->
+			<div class="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+				<a href="/" class="flex items-center gap-2" onclick={() => (navModule.openSidebar = false)}>
+					{#if page?.data?.store?.logo}
+						<img src={page?.data?.store?.logo} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
+					{:else}
+						<span class="text-base font-black uppercase tracking-wider text-black">
+							{page?.data?.store?.name || 'Svelte Commerce'}
+						</span>
+					{/if}
+				</a>
+				<Button
+					variant="ghost"
+					size="icon"
+					aria-label="Close sidebar"
+					class="h-8 w-8 rounded-full bg-gray-50 text-foreground hover:bg-gray-100"
+					onclick={() => (navModule.openSidebar = false)}
+				>
+					<X class="h-4 w-4" />
+				</Button>
+			</div>
 
-			<ul class="m-0 flex w-full list-none flex-col gap-4 p-0 text-sm">
-				{#if navModule.megaMenuPluginActive && navModule.megaMenu?.length}
-					<li class="mt-2">
-						<ul class="m-0 flex w-full list-none flex-col gap-3 p-0 text-sm">
+			<!-- User Profile Banner -->
+			<div class="border-b border-gray-100 bg-gray-50/50 px-5 py-4">
+				{#if userState?.user?.role}
+					<div class="flex items-center gap-3">
+						<div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary overflow-hidden">
+							{#if userState.user?.avatar}
+								<img src={userState.user.avatar} alt="" class="h-full w-full object-cover" />
+							{:else}
+								<UserCircle class="h-5 w-5" />
+							{/if}
+						</div>
+						<div class="overflow-hidden">
+							<p class="truncate text-xs font-bold text-gray-900">
+								{userState.user?.firstName || userState.user?.name || 'My Account'}
+							</p>
+							<p class="truncate text-[10px] font-medium text-gray-500">
+								{userState.user?.email || ''}
+							</p>
+						</div>
+					</div>
+				{:else}
+					<div class="flex flex-col gap-1.5">
+						<span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Welcome Guest</span>
+						<AuthButton aria-label="Login" type="login">
+							<div class="flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground px-4 py-2 text-xs font-bold hover:bg-primary/95 transition-all duration-200 w-full cursor-pointer">
+								<UserCircle class="h-4 w-4" />
+								<span>Login / Register</span>
+							</div>
+						</AuthButton>
+					</div>
+				{/if}
+			</div>
+
+			<!-- Menu Scroll Area -->
+			<div class="flex-1 overflow-y-auto px-5 py-4 space-y-6">
+				<!-- Shop Section -->
+				<div>
+					<span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-3">Shop & Explore</span>
+					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
+						<li>
+							<a
+								href="/"
+								class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 hover:text-black transition-all duration-200"
+								onclick={() => (navModule.openSidebar = false)}
+							>
+								<Home class="h-4 w-4 text-gray-400" />
+								<span>Home</span>
+							</a>
+						</li>
+
+						<!-- MegaMenu Categories -->
+						{#if navModule.megaMenuPluginActive && navModule.megaMenu?.length}
 							{#each navModule.megaMenu as m, mx}
 								<li>
 									{#if m?.children?.length}
-										<div class="flex w-full items-center justify-between gap-2 py-1">
+										<div class="flex w-full items-center justify-between rounded-md px-3 py-1 text-xs font-semibold text-gray-700 hover:bg-gray-50 hover:text-black transition-all duration-200">
 											<a
 												href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
 												aria-label="Click to visit category related products"
-												class="flex-1 text-base font-bold text-foreground"
+												class="flex items-center gap-3 flex-1 py-1"
 												onclick={() => (navModule.openSidebar = false)}
 											>
-												{m.name}
+												<LayoutGrid class="h-4 w-4 text-gray-400" />
+												<span>{m.name}</span>
 											</a>
 
 											<Button
 												variant="ghost"
 												size="icon"
 												aria-label="Toggle subcategory"
-												class="h-auto w-auto p-2"
+												class="h-7 w-7 p-0 rounded-full hover:bg-gray-200/50"
 												onclick={() => navModule.handleToggleSubCategory(m, mx)}
 											>
 												<ChevronDown
-													class="h-5 w-5 shrink-0 transition duration-300
-                                {navModule.showSubCategory[mx] ? '-rotate-180 transform' : ''}"
+													class="h-3.5 w-3.5 shrink-0 transition-transform duration-300
+													{navModule.showSubCategory[mx] ? '-rotate-180' : ''}"
 												/>
 											</Button>
 										</div>
@@ -261,25 +322,26 @@
 										<a
 											href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
 											aria-label="Click to visit category related products"
-											class="flex w-full items-center justify-between gap-2 py-1 text-left text-base font-bold text-foreground hover:text-primary"
+											class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 hover:text-black transition-all duration-200"
 											onclick={() => (navModule.openSidebar = false)}
 										>
-											{m.name}
+											<LayoutGrid class="h-4 w-4 text-gray-400" />
+											<span>{m.name}</span>
 										</a>
 									{/if}
 
+									<!-- Category Level 2 -->
 									{#if navModule.showSubCategory[mx]}
-										<ul class="ml-4 mt-2 list-none p-0">
+										<ul class="ml-6 mt-1 list-none p-0 border-l border-gray-100 pl-3 space-y-1">
 											{#each m.children as c, cx}
-												<li class="mb-2">
+												<li>
 													{#if c.children?.length}
 														<div
-															class="flex w-full items-center justify-between gap-2 py-1
-                          {navModule.selectedCategory2 === c.name ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}"
+															class="flex w-full items-center justify-between rounded-md px-2 py-1 text-[11px] font-semibold text-gray-500 hover:bg-gray-50 hover:text-black transition-all duration-200"
 														>
 															<a
 																href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
-																class="flex-1 font-semibold"
+																class="flex-1 py-1"
 																onclick={() => (navModule.openSidebar = false)}
 															>
 																{c.name}
@@ -289,12 +351,12 @@
 																variant="ghost"
 																size="icon"
 																aria-label="Toggle subcategory"
-																class="h-auto w-auto p-2"
+																class="h-6 w-6 p-0 rounded-full hover:bg-gray-200/50"
 																onclick={() => navModule.handleToggleSubCategory2(c, cx)}
 															>
 																<ChevronDown
-																	class="h-5 w-5 shrink-0 transition duration-300
-                                {navModule.showSubCategory2[cx] ? '-rotate-180 transform' : ''}"
+																	class="h-3 w-3 shrink-0 transition-transform duration-300
+																	{navModule.showSubCategory2[cx] ? '-rotate-180' : ''}"
 																/>
 															</Button>
 														</div>
@@ -302,21 +364,22 @@
 														<a
 															href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
 															aria-label="Click to visit category related products page"
-															class="flex w-full items-center justify-between gap-2 py-1 text-left font-semibold text-muted-foreground hover:text-foreground focus:outline-none"
+															class="flex w-full items-center rounded-md px-2 py-1.5 text-[11px] font-semibold text-gray-500 hover:bg-gray-50 hover:text-black transition-all duration-200"
 															onclick={() => (navModule.openSidebar = false)}
 														>
 															{c.name}
 														</a>
 													{/if}
 
+													<!-- Category Level 3 -->
 													{#if navModule.showSubCategory2[cx]}
-														<ul class="ml-4 mt-1 list-none p-0">
+														<ul class="ml-4 mt-1 list-none p-0 border-l border-gray-100 pl-3 space-y-1">
 															{#each c.children as cc}
 																<li>
 																	<a
 																		href={cc.link ? cc.link : cc.slug ? '/' + cc.slug : '/products'}
 																		aria-label="Click to visit category related products page"
-																		class="flex w-full items-center justify-between gap-2 py-1 text-left text-muted-foreground hover:text-foreground focus:outline-none"
+																		class="flex w-full items-center rounded-md px-2 py-1 text-[10px] font-semibold text-gray-400 hover:bg-gray-50 hover:text-black transition-all duration-200"
 																		onclick={() => (navModule.openSidebar = false)}
 																	>
 																		{cc.name}
@@ -331,75 +394,118 @@
 									{/if}
 								</li>
 							{/each}
-						</ul>
-					</li>
-				{/if}
+						{/if}
 
+						<li>
+							<a
+								href="/products"
+								class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 hover:text-black transition-all duration-200"
+								onclick={() => (navModule.openSidebar = false)}
+							>
+								<Tag class="h-4 w-4 text-gray-400" />
+								<span>All Products</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<!-- NavMenu Section -->
 				{#if navModule.navMenu?.length}
-					<li class="mt-4 border-t border-gray-100 pt-4">
-						<ul class="m-0 flex w-full list-none flex-col gap-3 p-0 text-sm">
+					<div>
+						<span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-3">Quick Links</span>
+						<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 							{#each navModule.navMenu as menuItem}
 								<li>
 									<a
 										href={menuItem?.link}
-										class="transiton block py-1 text-base font-semibold text-muted-foreground duration-300 hover:text-foreground focus:outline-none"
+										class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 hover:text-black transition-all duration-200"
 										onclick={() => (navModule.openSidebar = false)}
 									>
-										{menuItem.name}
+										<Layers class="h-4 w-4 text-gray-400" />
+										<span>{menuItem.name}</span>
 									</a>
 								</li>
 							{/each}
 						</ul>
-					</li>
+					</div>
 				{/if}
 
-				{#if page?.data?.store?.businessEmail || page?.data?.store?.businessPhone}
-					<li class="mt-4 border-gray-100 pt-4 {navModule.navMenu?.length ? 'border-t' : ''}">
-						<!-- Email/Phone -->
-						<div class="flex flex-col gap-2">
-							{#if page?.data?.store?.businessEmail}
-								<a
-									href="mailto:{page?.data?.store?.businessEmail}"
-									aria-label="Email us"
-									class="transiton flex items-center gap-2 text-muted-foreground duration-300 hover:text-foreground focus:outline-none"
-								>
-									<Mail class="size-4" />
-									{page?.data?.store?.businessEmail}
-								</a>
-							{/if}
-
-							{#if page?.data?.store?.businessPhone}
-								<a
-									href="tel:+{page?.data?.store?.businessPhone}}"
-									aria-label="Call us"
-									class="transiton flex items-center gap-2 text-muted-foreground duration-300 hover:text-foreground focus:outline-none"
-								>
-									<Phone class="size-4" />
-									{page?.data?.store?.businessPhone}
-								</a>
-							{/if}
-						</div>
-					</li>
-				{/if}
-
-				{#if menuItemsUser?.length}
-					<li class="mt-4 border-t border-gray-100 pt-4">
-						<ul class="m-0 flex w-full list-none flex-col gap-3 p-0 text-sm">
+				<!-- Account Section -->
+				<div>
+					<span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-3">My Account</span>
+					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
+						{#if menuItemsUser?.length}
 							{#each menuItemsUser as m}
 								<li>
 									<a
 										href={m.url}
-										class="transiton block py-1 text-base font-semibold text-muted-foreground duration-300 hover:text-foreground focus:outline-none"
+										class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 hover:text-black transition-all duration-200"
 										onclick={() => (navModule.openSidebar = false)}
 									>
-										{m.title}
+										{#if m.title === 'Profile'}
+											<UserCircle class="h-4 w-4 text-gray-400" />
+										{:else if m.title === 'Orders'}
+											<Package class="h-4 w-4 text-gray-400" />
+										{:else if m.title === 'Addresses'}
+											<MapPin class="h-4 w-4 text-gray-400" />
+										{:else if m.title === 'Change Password'}
+											<KeyRound class="h-4 w-4 text-gray-400" />
+										{:else if m.title === 'Wishlist'}
+											<Heart class="h-4 w-4 text-gray-400" />
+										{/if}
+										<span>{m.title}</span>
 									</a>
 								</li>
 							{/each}
-						</ul>
-					</li>
-				{/if}
-			</ul>
+						{/if}
+
+						{#if userState?.user?.role}
+							<li>
+								<button
+									class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200"
+									onclick={() => {
+										navModule.openSidebar = false;
+										navModule.handleSignOut();
+									}}
+								>
+									<LogOut class="h-4 w-4 text-red-400" />
+									<span>Sign Out</span>
+								</button>
+							</li>
+						{/if}
+					</ul>
+				</div>
+			</div>
+
+			<!-- Footer Contact Box -->
+			{#if page?.data?.store?.businessEmail || page?.data?.store?.businessPhone}
+				<div class="border-t border-gray-100 p-5 bg-gray-50/50">
+					<span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Support Contact</span>
+					<div class="flex flex-col gap-2">
+						{#if page?.data?.store?.businessEmail}
+							<a
+								href="mailto:{page?.data?.store?.businessEmail}"
+								aria-label="Email us"
+								class="flex items-center gap-2.5 text-[11px] font-medium text-gray-600 hover:text-black transition-colors duration-200"
+							>
+								<Mail class="h-3.5 w-3.5 text-gray-400" />
+								<span class="truncate">{page?.data?.store?.businessEmail}</span>
+							</a>
+						{/if}
+
+						{#if page?.data?.store?.businessPhone}
+							<a
+								href="tel:+{page?.data?.store?.businessPhone}"
+								aria-label="Call us"
+								class="flex items-center gap-2.5 text-[11px] font-medium text-gray-600 hover:text-black transition-colors duration-200"
+							>
+								<Phone class="h-3.5 w-3.5 text-gray-400" />
+								<span>+{page?.data?.store?.businessPhone}</span>
+							</a>
+						{/if}
+					</div>
+				</div>
+			{/if}
 		</div>
 	</aside>
 {/if}
