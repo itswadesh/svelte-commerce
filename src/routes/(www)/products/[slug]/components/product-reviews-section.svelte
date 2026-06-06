@@ -182,30 +182,67 @@
 							{/each}
 						</Tabs.Content>
 
-						<Tabs.Content value="brand" class="space-y-6">
-							{#each page.data?.allratings as rating, i}
+						<Tabs.Content value="brand" class="intra-pt space-y-6">
+							{#each page.data?.product?.brandReviews as rating, i}
 								<div
-									class="flex flex-col gap-4 rounded-md bg-background p-5 ring-1 ring-border transition-all hover:shadow-xl sm:gap-6 sm:p-6"
+									class="relative flex flex-col gap-4 rounded-md bg-background p-5 ring-1 ring-border transition-all hover:shadow-xl sm:gap-6 sm:p-6"
 									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
 								>
-									<!-- Similar structure for brand ratings -->
-									<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+									<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 										<div class="flex items-center gap-3 sm:gap-4">
-											<div class="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-black text-muted-foreground/50 sm:h-12 sm:w-12">
-												{(rating.name || 'G')[0].toUpperCase()}
+											<div class="relative flex-shrink-0">
+												<div
+													class="flex h-10 w-10 items-center justify-center rounded-full bg-muted/10 ring-2 ring-background ring-offset-2 sm:h-12 sm:w-12"
+												>
+													{#if rating?.img}
+														<img src={rating.img} alt={rating.name} class="h-full w-full rounded-full object-cover" />
+													{:else}
+														<span class="text-base font-black text-muted-foreground/50 sm:text-lg">
+															{(rating.name || 'G')[0].toUpperCase()}
+														</span>
+													{/if}
+												</div>
+												<div
+													class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background sm:h-5 sm:w-5"
+												>
+													<Check class="h-2.5 w-2.5 stroke-[3] sm:h-3 sm:w-3" />
+												</div>
 											</div>
-											<div>
-												<h4 class="font-bold text-foreground">{rating.name || 'Guest'}</h4>
-												<p class="text-[10px] font-medium text-muted-foreground sm:text-xs">{rating.createdAt ? date(rating.createdAt) : 'Recently'}</p>
+											<div class="min-w-0">
+												<h4 class="truncate font-bold text-foreground">{rating.name || 'Guest'}</h4>
+												<div class="flex flex-wrap items-center gap-x-2 text-[10px] font-medium text-muted-foreground sm:text-xs">
+													<span>{rating.createdAt ? date(rating.createdAt) : 'Recently'}</span>
+													<span class="h-1 w-1 rounded-full bg-border"></span>
+												</div>
 											</div>
 										</div>
-										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/10 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
+										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/20 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
 											{#each { length: 5 } as _, i}
-												<StarIcon class="h-3 w-3 {rating.rating >= i ? 'fill-primary text-primary' : 'text-muted-foreground'} sm:h-3.5 sm:w-3.5" />
+												<StarIcon class="h-3 w-3 {i <= rating.rating ? 'fill-primary text-primary' : 'text-muted-foreground'} sm:h-3.5 sm:w-3.5" />
 											{/each}
 										</div>
 									</div>
-									<p class="text-base text-foreground/80 sm:text-lg">"{rating.review || 'No comment left'}"</p>
+
+									<div class="space-y-4">
+										{#if rating.review}
+											<p class="text-base leading-relaxed text-foreground/80 first-letter:uppercase sm:text-lg">
+												"{rating.review}"
+											</p>
+										{/if}
+
+										{#if rating.images?.length}
+											<div class="flex flex-wrap gap-2 sm:gap-3">
+												{#each rating.images as img}
+													<button
+														class="group relative aspect-square w-20 overflow-hidden rounded-md ring-2 ring-background transition-all hover:ring-primary sm:w-24"
+													>
+														<img src={img} alt="Review" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+														<div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10"></div>
+													</button>
+												{/each}
+											</div>
+										{/if}
+									</div>
 								</div>
 							{:else}
 								<div
