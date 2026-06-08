@@ -50,7 +50,7 @@
 		</div>
 	{/if}
 
-	<div class="intra-gap grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+	<div class="intra-gap grid" style="grid-template-columns: repeat({block.metadata.columnCount || 5}, 1fr);">
 		{#if loadingForProducts}
 			{#each Array(12) as _}
 				<div class="space-y-4">
