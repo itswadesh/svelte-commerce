@@ -169,7 +169,7 @@
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
 </div> -->
 
-<Collections />
+<!-- <Collections />-->
 
 {#if page?.sections?.length && page?.sections[0]?.isActive}
 	<div class="mx-2 mb-8 xl:mx-24">
