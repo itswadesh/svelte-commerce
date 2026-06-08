@@ -20,6 +20,7 @@
 	import { setCollectionState } from '$lib/core/stores/collection.svelte.js'
 	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
+	const [aspectWidth, aspectHeight] = $derived(data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
 
   setCollectionState()
 
@@ -128,32 +129,38 @@
 
 <div class="relative w-full">
 	{#if homepageModule.loading || !page?.desktopBanners}
-		<div class="relative aspect-[16/6] max-h-[50vh] w-full">
+		<div class="relative aspect-[4/3.5] md:aspect-[16/6] md:max-h-[calc(50vh+2px)] w-full">
 			<Skeleton class="h-full w-full rounded-none" />
 		</div>
 	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
 		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
 	{:else}
 		<!-- Fallback Hero Section when no banners are configured -->
-		<div class="relative bg-gradient-to-r from-gray-900 to-gray-700 px-4 py-20 text-white">
-			<div class="mx-auto max-w-7xl">
-				<div class="grid gap-8 md:grid-cols-2">
+		<div class="relative w-full aspect-[4/3.5] md:aspect-[16/6] md:max-h-[50vh] bg-black px-6 text-white overflow-hidden flex items-center">
+			<!-- Decorative background glow -->
+			<div class="absolute right-0 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
+
+			<div class="relative mx-auto max-w-7xl">
+				<div class="grid gap-12 md:grid-cols-2">
 					<div class="flex flex-col justify-center">
-						<h2 class="mb-4 text-4xl font-bold md:text-5xl">{data?.store?.name || 'Welcome to Our Store'}</h2>
-						<p class="mb-8 text-lg text-gray-200">
+						<h2 class="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl text-white">
+							{data?.store?.name || 'Welcome to Our Store'}
+						</h2>
+						<p class="mb-8 text-base md:text-lg text-zinc-100 leading-relaxed max-w-[55ch]">
 							{@html data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
 						</p>
 						<Button
 							href="/products"
-							variant="outline"
 							size="lg"
-							class="w-fit bg-white font-semibold text-gray-900 hover:bg-gray-100"
+							class="w-fit bg-primary text-black font-bold uppercase tracking-widest text-xs py-4 px-8 rounded-md hover:bg-primary/90 transition-colors duration-300"
 						>
 							Shop Now
 						</Button>
 					</div>
-					<div class="hidden items-center justify-center md:flex">
-						<div class="text-9xl font-bold text-white/20">NEW</div>
+					<div class="hidden items-center justify-center md:flex select-none" aria-hidden="true">
+						<div class="text-[10rem] font-black tracking-tighter text-white/20">
+							NEW
+						</div>
 					</div>
 				</div>
 			</div>
@@ -185,7 +192,8 @@
 		</div>
 		<Button
 			href="/products"
-			class="group"
+			class="group max-sm:hidden"
+      variant="link"
 		>
 			View All Arrivals
 			<svg
@@ -201,10 +209,10 @@
 	</div>
 
 	{#if homepageModule.loadingFeaturedProducts}
-		<div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+		<div class="intra-gap grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 			{#each Array(12) as _}
 				<div class="space-y-4">
-					<Skeleton class="aspect-square w-full rounded-2xl" />
+					<Skeleton class="w-full rounded-2xl" style="aspect-ratio: {aspectWidth}/{aspectHeight};" />
 					<div class="space-y-2">
 						<Skeleton class="h-4 w-3/4" />
 						<Skeleton class="h-4 w-1/2" />
