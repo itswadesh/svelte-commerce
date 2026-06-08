@@ -12,7 +12,7 @@
 
 	const cartState = getCartState()
 
-	let { product, aspectRatio, displayProduct, hideVariations = true, hideCartControls = true }: any = $props()
+	let { product, aspectRatio, hideVariations = true, hideCartControls = true }: any = $props()
 
 	const discount = product.mrp && product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0
 
