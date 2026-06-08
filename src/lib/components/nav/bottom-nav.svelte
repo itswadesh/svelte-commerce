@@ -2,105 +2,105 @@
 	import { page } from '$app/state'
 	import { slide } from 'svelte/transition'
 	import { getCartState } from '$lib/core/stores/index.js'
-	import { Home, Grid, Heart, ShoppingCart, Minus, Plus, Trash2, Store, ArrowLeft, Play, ShoppingBag } from '@lucide/svelte'
+	import { Home, Grid, Heart, ShoppingCart, Minus, Plus, Trash2, Store, ArrowLeft, Play, ShoppingBag, Compass } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { Separator } from '$lib/components/ui/separator'
 	import { goto } from '$app/navigation'
 	import { cn, formatPrice } from '$lib/core/utils'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import CartItem from '$lib/components/cart/cart-item.svelte'
 
 	let { class: className = '' } = $props()
 
 	const cartState = getCartState()
 	let showCartModal = $state(false)
 
-	const navItems = [
-		{
-			label: 'Home',
-			icon: Home,
-			href: '/'
-		},
-		{
-			label: 'Explore',
-			icon: Store,
-			href: '/products'
-		},
-		{
-			label: 'Wishlist',
-			icon: Heart,
-			href: '/my/wishlist'
-		},
-		// {
-		// 	label: 'Categories',
-		// 	icon: Grid,
-		// 	href: '/categories'
-		// },
-		// {
-		// 	label: 'Reels',
-		// 	icon: Play,
-		// 	href: '/reels'
-		// },
-		{
-			label: 'Cart',
-			icon: ShoppingBag,
-			onClick: () => {
-				showCartModal = true
-			}
+	$effect(() => {
+		if (page.url.pathname) {
+			showCartModal = false
 		}
-	]
+	})
+
+	const navItems = $derived.by(() => {
+		const items = [
+			{
+				label: 'Home',
+				icon: Home,
+				href: '/'
+			},
+			{
+				label: 'Explore',
+				icon: Compass,
+				href: '/products'
+			},
+			{
+				label: 'Wishlist',
+				icon: Heart,
+				href: '/my/wishlist'
+			},
+			{
+				label: 'Categories',
+				icon: Grid,
+				href: '/categories'
+			},
+			{
+				label: 'Cart',
+				icon: ShoppingBag,
+				onClick: () => {
+					showCartModal = true
+				}
+			}
+		]
+		if (page?.data?.store?.plugins?.isReel?.active) {
+			// Insert Reels before Cart
+			items.splice(4, 0, { label: 'Reels', icon: Play, href: '/reels' })
+		}
+		return items
+	})
 
 	function isActive(href: string) {
 		return page.url.pathname === href
 	}
 </script>
-
-<nav class={cn('fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white md:hidden', className)}>
-	<div class="flex h-16 items-center justify-around px-2">
+ 
+<nav class={cn('fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white font-[\'Montserrat\',_sans-serif] md:hidden pb-safe', className)}>
+	<div class="flex h-16 items-center justify-around px-3">
 		{#each navItems as item}
 			{#if item.href}
 				<a
 					href={item.href}
-					class="flex flex-1 flex-col items-center gap-1 text-xs sm:text-sm"
-					class:text-primary={isActive(item.href)}
-					class:text-gray-500={!isActive(item.href)}
+					class="relative flex flex-1 flex-col items-center justify-center h-full transition-all duration-200"
 				>
-					<div class="relative flex h-6 w-6 items-center justify-center">
-						<item.icon size={24} />
+					<div class="relative flex h-7 w-7 items-center justify-center transition-colors duration-200 {isActive(item.href) ? 'text-primary' : 'text-gray-600'}">
+						<item.icon size={20} class="stroke-[1.6]" />
 					</div>
-					<span class="truncate">{item.label}</span>
+					<span class="text-[9px] font-bold uppercase tracking-wider transition-colors duration-200 truncate {isActive(item.href) ? 'text-black font-black' : 'text-gray-600'}">
+						{item.label}
+					</span>
+					{#if isActive(item.href)}
+						<span class="absolute bottom-1.5 h-1 w-1 rounded-full bg-primary"></span>
+					{/if}
 				</a>
 			{:else}
 				<button
 					onclick={item.onClick}
-					class="flex flex-1 flex-col items-center gap-1 text-xs text-gray-500"
+					class="flex flex-1 flex-col items-center justify-center h-full transition-all duration-200"
 				>
-					<div class="relative flex h-6 w-6 items-center justify-center">
-						<item.icon size={24} />
+					<div class="relative flex h-7 w-7 items-center justify-center text-gray-600">
+						<item.icon size={20} class="stroke-[1.6]" />
 						{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
-							<span class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-foreground font-bold">
+							<span class="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[8px] text-black font-bold border border-white">
 								{cartState?.cart?.qty}
 							</span>
 						{/if}
 					</div>
-					<span class="truncate">{item.label}</span>
+					<span class="text-[9px] font-bold uppercase tracking-wider text-gray-600 truncate">
+						{item.label}
+					</span>
 				</button>
 			{/if}
 		{/each}
-
-		{#if page?.data?.store?.plugins?.isReel?.active}
-			<a
-				href="/reels"
-				class="flex flex-1 flex-col items-center gap-1 text-xs sm:text-sm"
-				class:text-primary={isActive('/reels')}
-				class:text-gray-500={!isActive('/reels')}
-			>
-				<div class="relative flex h-6 w-6 items-center justify-center">
-					<Play size={24} />
-				</div>
-				<span class="truncate">Reels</span>
-			</a>
-		{/if}
 	</div>
 </nav>
 
@@ -117,71 +117,9 @@
 			<div class="flex-1 overflow-auto p-4">
 				{#if cartState?.cart?.lineItems?.length}
 					<div class="space-y-4">
-						{#each cartState.cart.lineItems as item, i}
-							<div class="flex items-center gap-4 rounded-lg border p-4">
-								<a href="/products/{item?.slug}" onclick={() => (showCartModal = false)}>
-									<LazyImg src={item?.thumbnail} alt={item?.title} width={30} height={20} class="rounded-md object-cover" />
-								</a>
-								<div class="flex-1">
-									<a href="/products/{item?.slug}" onclick={() => (showCartModal = false)}>
-										<h3 class="font-medium">
-											{item?.title}
-										</h3>
-									</a>
-									<div class="mt-2 flex items-center justify-between">
-										<div class="flex items-center gap-2">
-											<Button
-												variant="ghost"
-												size="icon"
-												class="rounded-full h-8 w-8"
-												onclick={() =>
-													cartState.update({
-														qty: item.qty - 1,
-														lineId: item.id,
-														productId: item.productId,
-														variantId: item.variantId
-													})}
-											>
-												<Minus size={16} />
-											</Button>
-											<span class="mx-2">
-												{#if cartState.updatingItem[item.id]}
-													<LoadingDots />
-												{:else}
-													{item.qty}
-												{/if}
-											</span>
-											<Button
-												variant="ghost"
-												size="icon"
-												class="rounded-full h-8 w-8"
-												onclick={() =>
-													cartState.update({
-														qty: item.qty + 1,
-														lineId: item.id,
-														productId: item.productId,
-														variantId: item.variantId
-													})}
-											>
-												<Plus size={16} />
-											</Button>
-										</div>
-										<Button
-											variant="ghost"
-											size="icon"
-											class="text-red-500 h-10 w-10"
-											onclick={() =>
-												cartState.update({
-													qty: 0,
-													lineId: item.id,
-													productId: item.productId,
-													variantId: item.variantId
-												})}
-										>
-											<Trash2 size={20} />
-										</Button>
-									</div>
-								</div>
+						{#each cartState.cart.lineItems || [] as _, i}
+							<div class="rounded-lg transition-all duration-300 hover:bg-gray-50 border border-gray-100 p-2">
+								<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={() => {}} />
 							</div>
 						{/each}
 					</div>
@@ -216,12 +154,13 @@
 							<span>Total</span>
 							<span>{formatPrice(cartState.cart.total, cartState.cart.currencyCode)}</span>
 						</div>
-						<Button
-							class="w-full"
-							onclick={() => {
+            <Button
+              onclick={() => {
 								showCartModal = false
 								goto('/checkout/cart')
 							}}
+							size="lg"
+							class="w-full bg-primary text-black font-bold uppercase tracking-widest text-xs py-4 px-8 rounded-md hover:bg-primary/90 transition-colors duration-300"
 						>
 							Proceed to Checkout
 						</Button>

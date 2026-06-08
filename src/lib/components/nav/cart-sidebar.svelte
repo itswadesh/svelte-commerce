@@ -26,11 +26,11 @@
 	}
 </script>
 
-<div class="relative px-2" role="navigation">
+<div class="relative" role="navigation">
 	<button
 		variant="ghost"
 		size="icon"
-		class="rounded-full flex"
+		class="rounded-full flex px-2"
 		aria-label="Toggle Cart"
 		onclick={() => {
 			cartState.isOpen = !cartState.isOpen
