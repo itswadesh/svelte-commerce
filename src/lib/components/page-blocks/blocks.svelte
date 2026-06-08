@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Collection from './blocks/collection.svelte'
+	import FeaturedCategories from './blocks/featured-categories.svelte'
 	import ImageBlock from './blocks/image-block.svelte'
 	import RichTextBlock from './blocks/rich-text-block.svelte'
 
@@ -22,6 +23,8 @@
 					<ImageBlock {block} />
         {:else if block.type == 'COLLECTION'}
           <Collection {block} />
+        {:else if block.type == 'FEATURED_CATEGORIES'}
+          <FeaturedCategories {block} />
 				{/if}
 			</div>
 		{/each}
