@@ -165,9 +165,9 @@
 
 <Blocks layouts={sveltePage.data.page.layouts}/>
 
-<div class="page-width mb-8">
+<!-- <div class="page-width mb-8">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
-</div>
+</div> -->
 
 <Collections />
 
@@ -177,12 +177,11 @@
 	</div>
 {/if}
 
-<div class="page-width py-8 md:py-12">
+<!-- <div class="page-width py-8 md:py-12">
 	<div class="mb-8 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 		<div class="text-center md:text-left">
 			<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">New Arrivals</h2>
 			<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
-			<!-- <p class="mt-4 text-sm font-medium text-muted-foreground">Stay ahead of the curve with our latest drops and trending pieces</p> -->
 		</div>
 		<Button
 			href="/products"
@@ -243,9 +242,9 @@
 					</svg>
 				</Button>
 			</div>
-		{/if} -->
+		{/if}
 	{/if}
-</div>
+</div>-->
 
 <!-- Notification to show recent order -->
 {#if homepageModule.showRecentOrderPopup}
