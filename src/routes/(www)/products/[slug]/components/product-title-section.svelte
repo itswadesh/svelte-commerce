@@ -6,8 +6,6 @@
 
 	const { product } = $props()
 	const productState = useProductState()
-
-	$inspect(product)
 </script>
 
 <div class="relative">
