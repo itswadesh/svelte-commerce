@@ -171,11 +171,11 @@
 
 <!-- <Collections />-->
 
-{#if page?.sections?.length && page?.sections[0]?.isActive}
+<!-- {#if page?.sections?.length && page?.sections[0]?.isActive}
 	<div class="mx-2 mb-8 xl:mx-24">
 		<HomepageBanners bannersList={page?.sections} />
 	</div>
-{/if}
+{/if} -->
 
 <!-- <div class="page-width py-8 md:py-12">
 	<div class="mb-8 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
