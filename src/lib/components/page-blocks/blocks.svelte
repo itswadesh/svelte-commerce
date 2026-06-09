@@ -7,7 +7,6 @@
 	import RichTextBlock from './blocks/rich-text-block.svelte'
 
 	const { layouts } = $props()
-  $inspect(layouts)
 </script>
 
 {#each layouts as layout, idx (idx)}
