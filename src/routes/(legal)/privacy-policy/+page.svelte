@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Blocks from '$lib/components/page-blocks/blocks.svelte'
 	import type { Page } from '$lib/core/types/index.js'
 
 	interface Props {
@@ -25,3 +26,5 @@
 		</div>
 	</div>
 </section>
+
+<Blocks layouts={data.page.layouts}/>
