@@ -11,7 +11,7 @@
 
 {#each layouts as layout, idx (idx)}
 	<section
-		class="page-width grid {layout.type}"
+		class="{layout.metadata.isFullScreen ? 'px-3': 'page-width'} grid {layout.type}"
 		style="grid-template-columns: repeat({layout.columnCount}, 1fr); column-gap: {layout.columnGap}px; row-gap: {layout.rowGap}px;"
 	>
 		{#each layout.blocks as block, idx (block.id)}
