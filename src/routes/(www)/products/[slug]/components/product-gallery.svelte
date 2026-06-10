@@ -7,7 +7,6 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { cn } from '$lib/core/utils'
 	import { getYoutubeId } from '$lib/core/logic/index.js'
-	import LazyImgWithZoom from '$lib/core/components/image/lazy-img-with-zoom.svelte'
 
 	let { images = [] } = $props()
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BannerBlock from './blocks/banner-block.svelte'
 	import CollectionCarousel from './blocks/collection-carousel.svelte'
 	import Collection from './blocks/collection.svelte'
 	import FeaturedCategories from './blocks/featured-categories.svelte'
@@ -23,6 +24,8 @@
 					<RichTextBlock {block} />
 				{:else if block.type == 'IMAGE'}
 					<ImageBlock {block} />
+				{:else if block.type == 'BANNER'}
+					<BannerBlock {block} />
         {:else if block.type == 'COLLECTION'}
           <Collection {block} />
         {:else if block.type == 'FEATURED_CATEGORIES'}
