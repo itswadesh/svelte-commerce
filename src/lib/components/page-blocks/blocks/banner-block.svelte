@@ -6,7 +6,6 @@
 	import { onMount } from 'svelte'
 
 	const { block } = $props()
-	$inspect(block)
 	const [aspectWidth, aspectHeight] = $derived(block.metadata.aspectRatio?.split(':') || ['1', '1'])
 
 	let mainCarouselApi: CarouselAPI | null = $state(null)
