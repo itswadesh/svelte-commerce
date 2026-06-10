@@ -47,7 +47,7 @@
 	const categoryNames = () => cartProduct?.product?.categories?.flatMap?.((c: CartCategory) => c.category?.name) || []
 </script>
 
-<div class="flex items-center justify-between py-4" onclick={(e) => e.stopPropagation()} role="group">
+<div class="flex items-center justify-between py-4" role="group">
 	<div class="flex gap-4 w-full">
 		<a
 			href="/products/{cartProduct?.slug}"

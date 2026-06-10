@@ -487,16 +487,6 @@
 <AuthModal bind:show={navModule.showAuthModal} />
 
 <style>
-	.minimum-width-rem {
-		min-width: 360px;
-	}
-
-	@media screen and (max-width: 350px) {
-		.minimum-width-rem {
-			min-width: 300px;
-		}
-	}
-
 	.sliding-list {
 		list-style: none;
 		margin: 0;

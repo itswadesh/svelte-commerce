@@ -96,6 +96,7 @@
 						loading="lazy"
 					></iframe>
 				{:else if isVideoURL(img)}
+					<!-- svelte-ignore a11y_media_has_caption -->
 					<video height="100%" width="100%" class="aspect-square w-full" loop autoplay>
 						<source src={img} />
 						Video not supported
@@ -146,6 +147,7 @@
 									></iframe>
 								</div>
 							{:else if isVideoURL(img)}
+								<!-- svelte-ignore a11y_media_has_caption -->
 								<video height="100%" width="100%" class="aspect-square w-full" loop autoplay muted>
 									<source src={img} />
 									Video not supported
@@ -237,6 +239,7 @@
 										loading="lazy"
 									></iframe>
 								{:else if isVideoURL(img)}
+									<!-- svelte-ignore a11y_media_has_caption -->
 									<video height="100%" width="100%" class="aspect-square rounded-lg" loop autoplay>
 										<source src={img} />
 										Video not supported
@@ -274,6 +277,7 @@
 						}}
 					>
 						{#if isVideoURL(img)}
+							<!-- svelte-ignore a11y_media_has_caption -->
 							<video height="100%" width="100%" class="aspect-square rounded-radius" loop autoplay>
 								<source src={img} />
 								Video not supported

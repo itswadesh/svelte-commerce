@@ -32,17 +32,18 @@
 			<!-- Search Trigger Button -->
 
 			<!-- Search Popup/Modal -->
-			<div
-				class="fixed inset-0 z-[100] flex items-start justify-center bg-black/40 backdrop-blur-sm transition-all"
-				onclick={() => {
-					closeSearch()
-					handleCloseSearch()
-				}}
-				transition:fade={{ duration: 200 }}
-			>
+			<div class="fixed inset-0 z-[100] flex items-start justify-center bg-black/40 backdrop-blur-sm transition-all" transition:fade={{ duration: 200 }}>
+				<button
+					type="button"
+					class="absolute inset-0 cursor-default"
+					aria-label="Close search"
+					onclick={() => {
+						closeSearch()
+						handleCloseSearch()
+					}}
+				></button>
 				<div
-					class="mt-4 w-full max-w-2xl px-4 sm:mt-20"
-					onclick={(e) => e.stopPropagation()}
+					class="relative mt-4 w-full max-w-2xl px-4 sm:mt-20"
 					transition:scale={{ duration: 200, start: 0.95, opacity: 0 }}
 				>
 					<div class="flex max-h-[80vh] flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-black/5">

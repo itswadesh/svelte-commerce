@@ -14,13 +14,13 @@
 
 		<span class="flex h-32 w-full flex-row bg-zinc-100">
 			<span class="m-3 flex w-1/2 flex-row">
-				<h2 class="w-1/4 bg-zinc-200"></h2>
+				<div class="w-1/4 bg-zinc-200"></div>
 
-				<h2 class="mx-3 flex w-3/4 flex-col">
+				<div class="mx-3 flex w-3/4 flex-col">
 					<span class="h-5 bg-zinc-200"></span>
 
 					<span class="my-2 h-5 bg-zinc-200"></span>
-				</h2>
+				</div>
 			</span>
 
 			<span class="m-3 flex w-1/2 flex-row justify-around">

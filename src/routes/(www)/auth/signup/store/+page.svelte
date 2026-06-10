@@ -58,7 +58,6 @@
 
 <main
 	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800"
-	role="main"
 >
 	<div class="grid w-full max-w-4xl items-center gap-8 md:grid-cols-2">
 		<!-- Left side - Welcome message -->

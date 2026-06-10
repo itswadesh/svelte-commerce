@@ -197,16 +197,10 @@
 		flex: 1;
 	}
 
-	.item-name {
+	.item-title {
 		font-weight: 500;
 		color: #1f2937;
 		margin-bottom: 0.25rem;
-	}
-
-	.item-variant {
-		font-size: 0.875rem;
-		color: #6b7280;
-		margin-bottom: 0.5rem;
 	}
 
 	.item-price-qty {
@@ -252,17 +246,10 @@
 			justify-content: space-between;
 		}
 
-		.back-button,
-		.retry-button {
+		.action-buttons :global(.back-button),
+		.action-buttons :global(.retry-button) {
 			min-width: 180px;
 		}
 	}
 
-	.retry-button {
-		background-color: #10b981;
-	}
-
-	.retry-button:hover {
-		background-color: #059669;
-	}
 </style>

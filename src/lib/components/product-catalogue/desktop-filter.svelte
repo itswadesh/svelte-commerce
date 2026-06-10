@@ -87,6 +87,7 @@
 			<!-- <div class="mt-4 pt-4 border-t border-gray-100"></div> -->
 			{#if filterState.showCategorySearch}
 				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
+					<!-- svelte-ignore a11y_autofocus -->
 					<input
 						bind:value={filterState.categorySearchQuery}
 						type="text"
@@ -201,6 +202,7 @@
 
 			{#if filterState.showTagSearch}
 				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
+					<!-- svelte-ignore a11y_autofocus -->
 					<input
 						bind:value={filterState.tagSearchQuery}
 						type="text"

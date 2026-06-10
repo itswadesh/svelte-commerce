@@ -101,6 +101,7 @@
 				<h3 class="text-sm font-bold text-zinc-900">Share Product</h3>
 				<button
 					type="button"
+					aria-label="Close share menu"
 					class="rounded-full p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 focus:outline-none transition-colors"
 					onclick={() => (showDropDown = false)}
 				>
@@ -163,6 +164,7 @@
 				<div class="flex flex-col items-center gap-1.5">
 					<button
 						type="button"
+						aria-label="Copy product link"
 						class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-all hover:bg-primary-500 "
 						onclick={() => copyToClipboard(url)}
 					>
@@ -190,6 +192,7 @@
 				<h3 class="text-lg font-bold text-zinc-900">Share Product</h3>
 				<button
 					type="button"
+					aria-label="Close share menu"
 					class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 active:bg-zinc-200"
 					onclick={() => (showDropDown = false)}
 				>

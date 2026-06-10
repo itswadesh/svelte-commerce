@@ -4,7 +4,7 @@
 	import { toast } from 'svelte-sonner'
 	import { goto } from '$app/navigation'
 	import { userService } from '$lib/core/services/index.js'
-	let otp: any = ''
+	let otp = $state('')
 	const handleSubmit = () => {
 		toast.info('OTP Verification Success')
 		goto('/reset-password')

@@ -34,7 +34,7 @@
 	<!-- Category Banner -->
 	<div class="relative h-40 overflow-hidden bg-gray-100 md:h-64">
 		<img src={data.category.banner} alt={data.category.name} class="h-full w-full object-cover object-center" />
-		<div class="absolute inset-0 bg-black/30" />
+		<div class="absolute inset-0 bg-black/30"></div>
 		<div class="absolute inset-0 flex items-center justify-center">
 			<h1 class="text-3xl font-bold text-white md:text-4xl">{data.category.name}</h1>
 		</div>
@@ -52,7 +52,7 @@
 							alt={collection.name}
 							class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 						/>
-						<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+						<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 						<div class="absolute bottom-0 left-0 right-0 p-4">
 							<h3 class="text-lg font-medium text-white">{collection.name}</h3>
 						</div>

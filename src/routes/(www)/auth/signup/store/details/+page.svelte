@@ -105,7 +105,6 @@
 
 <main
 	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800"
-	role="main"
 >
 	<div class="grid w-full max-w-4xl items-center gap-8 md:grid-cols-2">
 		<!-- Left side - Progress -->
@@ -155,7 +154,7 @@
 				<p class="text-gray-500 dark:text-gray-400">Fill in your information to create your store</p>
 			</div>
 
-			<form class="space-y-4" on:submit={handleSubmit} aria-label="Store details form">
+			<form class="space-y-4" onsubmit={handleSubmit} aria-label="Store details form">
 				<div class="grid grid-cols-2 gap-4">
 					<Textbox
 						name="firstName"
@@ -225,7 +224,7 @@
 			</form>
 
 			<div class="text-center">
-				<button class="text-sm text-gray-500 hover:text-gray-700" on:click={() => (window.location.href = '/auth/signup/store')}>
+				<button class="text-sm text-gray-500 hover:text-gray-700" onclick={() => (window.location.href = '/auth/signup/store')}>
 					← Back to email
 				</button>
 			</div>

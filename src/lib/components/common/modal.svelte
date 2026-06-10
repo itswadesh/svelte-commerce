@@ -60,7 +60,7 @@
 				<Card.Root
 					class="overflow-hidden border
         {rounded ? '' : 'rounded-none'}
-        {wAuto ? '' : useMaxWidth ? 'w-full max-w-[80vw]' : 'width'}
+        {wAuto ? '' : useMaxWidth ? 'w-full max-w-[80vw]' : 'w-[90vw] sm:w-[80vw] md:w-[70vw] lg:w-[50vw]'}
         {hAuto ? '' : useMaxHeight ? 'max-h-[80vh] ' : 'h-[80vh]'}"
 				>
 					<div class="{hAuto ? '' : useMaxHeight ? 'max-h-[80vh] ' : 'h-[80vh]'} overflow-y-auto">
@@ -118,35 +118,5 @@
 	.frosted-black {
 		backdrop-filter: blur(12px);
 		background-color: hsla(0, 0%, 0%, 0.75);
-	}
-
-	@media (max-width: 640px) {
-		.width {
-			width: 90vw;
-		}
-	}
-
-	@media (min-width: 640px) {
-		.width {
-			width: 80vw;
-		}
-	}
-
-	@media (min-width: 768px) {
-		.width {
-			width: 70vw;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.width {
-			width: 60vw;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.width {
-			width: 50vw;
-		}
 	}
 </style>

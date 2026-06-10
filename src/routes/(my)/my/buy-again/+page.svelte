@@ -176,10 +176,3 @@
 		</div>
 	</div>
 </section>
-
-<style>
-	.track {
-		border-radius: 25px;
-		font-size: 11px;
-	}
-</style>
