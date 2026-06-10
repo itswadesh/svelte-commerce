@@ -20,8 +20,8 @@
 				You can pick up this item from our store. Please check the availability of this item at your nearest store.
 			</span>
 
-			<Sheet.Trigger asChild let:builder>
-				<Button variant="link" builders={[builder]} class="self-start h-auto p-0">Check Availability</Button>
+			<Sheet.Trigger class="self-start h-auto p-0 text-primary underline-offset-4 hover:underline">
+				Check Availability
 			</Sheet.Trigger>
 		</div>
 

@@ -1,11 +1,93 @@
-import { error, redirect } from '@sveltejs/kit'
-import { AddressService, CartService, CountryService } from '$lib/core/services'
-import { z } from 'zod'
+import { error, fail, redirect } from '@sveltejs/kit'
+import { AddressService, CountryService, type Address } from '$lib/core/services'
+import { z, type ZodError } from 'zod'
+import type { Actions, PageServerLoad } from './$types'
 
-let fetchFn
-export async function load({ locals, url, fetch }) {
+type CountrySelection = {
+	code?: string
+	dialCode?: string
+}
+
+type AddressFormFields = {
+	address: string
+	city: string
+	country: string
+	email: string
+	firstName: string
+	lastName: string
+	phone: string
+	state: string
+	zip: string
+}
+
+type HttpErrorLike = {
+	message?: string
+	status?: number
+}
+
+function getFormString(data: FormData, key: string): string {
+	const value = data.get(key)
+	return typeof value === 'string' ? value : ''
+}
+
+function parseCountrySelection(value: string): CountrySelection {
+	if (!value) return {}
+
+	try {
+		const parsed = JSON.parse(value) as unknown
+		return typeof parsed === 'object' && parsed !== null ? (parsed as CountrySelection) : {}
+	} catch {
+		return {}
+	}
+}
+
+function getHttpError(errorValue: unknown): Required<HttpErrorLike> {
+	if (typeof errorValue === 'object' && errorValue !== null) {
+		const candidate = errorValue as HttpErrorLike
+		return {
+			message: candidate.message ?? 'An unknown error occurred',
+			status: candidate.status ?? 500
+		}
+	}
+
+	return {
+		message: 'An unknown error occurred',
+		status: 500
+	}
+}
+
+function getFieldErrors(errorValue: unknown) {
+	return (errorValue as ZodError<AddressFormFields>).flatten().fieldErrors
+}
+
+function toAddressPayload(fields: AddressFormFields): Omit<Address, 'id'> {
+	return {
+		active: true,
+		address_1: fields.address,
+		address_2: null,
+		city: fields.city,
+		country: fields.country,
+		countryCode: null,
+		createdAt: '',
+		deliveryInstructions: null,
+		email: fields.email,
+		firstName: fields.firstName,
+		isPrimary: false,
+		isResidential: true,
+		lastName: fields.lastName,
+		lat: null,
+		lng: null,
+		locality: null,
+		phone: fields.phone,
+		state: fields.state,
+		updatedAt: '',
+		userId: null,
+		zip: fields.zip
+	}
+}
+
+export const load: PageServerLoad = async ({ locals, url, fetch }) => {
 	const { me } = locals
-	fetchFn = fetch
 	if (!me) {
 		redirect(307, `/login?ref=${url.pathname}${url.search}`)
 	}
@@ -15,20 +97,19 @@ export async function load({ locals, url, fetch }) {
 		const countries = await countryService.list()
 
 		const addressService = new AddressService(fetch)
-		const { addresses, count } = await addressService.list()
-
-		addresses.count = count
+		const { data: addressList, count } = await addressService.list({})
+		const addresses = Object.assign(addressList, { count })
 
 		if (addresses) {
 			return { addresses, countries }
 		}
 	} catch (e) {
-		if (e.status === 401 || e.status === 403) {
+		const caught = getHttpError(e)
+		if (caught.status === 401 || caught.status === 403) {
 			redirect(307, '/?show_auth=true&login=true')
 		}
 
-		error(e.status, e.message)
-	} finally {
+		error(caught.status, caught.message)
 	}
 }
 
@@ -77,65 +158,47 @@ const zodAddressForGBSchema = z.object({
 	zip: z.string({ required_error: 'ZIP is required' }).min(7, { message: 'ZIP must be at least 7 digits.' })
 })
 
-const saveAddress = async ({ request, cookies, locals, fetch }) => {
+const saveAddress: Actions['saveAddress'] = async ({ request, cookies, locals, fetch }) => {
 	const data = await request.formData()
 
 	const cartId = locals?.cartId
-	const isSameAsBillingAddress = data.get('isSameAsBillingAddress')
+	const isSameAsBillingAddress = getFormString(data, 'isSameAsBillingAddress')
 
 	// for shipping address
-	const address = data.get('address')
-	const city = data.get('city')
-	const country = data.get('country')
-	const email = data.get('email')
-	const firstName = data.get('firstName')
-	const id = data.get('id')
-	const lastName = data.get('lastName')
-	const phone = data.get('phone')
-	const showShippingAddressErrorMessage = data.get('showShippingAddressErrorMessage')
-	const state = data.get('state')
-	const zip = data.get('zip')
-	let selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
+	const id = getFormString(data, 'id')
+	const showShippingAddressErrorMessage = getFormString(data, 'showShippingAddressErrorMessage')
+	let selectedShippingAddressCountry = getFormString(data, 'selectedShippingAddressCountry')
 
 	// for billing address
-	const billingAddressAddress = data.get('billingAddressAddress')
-	const billingAddressCity = data.get('billingAddressCity')
-	const billingAddressCountry = data.get('billingAddressCountry')
-	const billingAddressEmail = data.get('billingAddressEmail')
-	const billingAddressFirstName = data.get('billingAddressFirstName')
-	const billingAddressLastName = data.get('billingAddressLastName')
-	const billingAddressPhone = data.get('billingAddressPhone')
-	const billingAddressState = data.get('billingAddressState')
-	const billingAddressZip = data.get('billingAddressZip')
-	const showBillingAddressErrorMessage = data.get('showBillingAddressErrorMessage')
-	let selectedBillingAddressCountry = data.get('selectedBillingAddressCountry')
+	const showBillingAddressErrorMessage = getFormString(data, 'showBillingAddressErrorMessage')
+	let selectedBillingAddressCountry = getFormString(data, 'selectedBillingAddressCountry')
 
 	const sid = cookies.get('connect.sid')
 
-	selectedShippingAddressCountry = JSON.parse(selectedShippingAddressCountry)
-	selectedBillingAddressCountry = JSON.parse(selectedBillingAddressCountry)
+	const selectedShippingCountry = parseCountrySelection(selectedShippingAddressCountry)
+	const selectedBillingCountry = parseCountrySelection(selectedBillingAddressCountry)
 
-	let shipping_address = {
-		address: address,
-		city: city,
-		country: country,
-		email: email,
-		firstName: firstName,
-		lastName: lastName,
-		phone: phone,
-		state: state,
-		zip: zip
+	let shipping_address: AddressFormFields = {
+		address: getFormString(data, 'address'),
+		city: getFormString(data, 'city'),
+		country: getFormString(data, 'country'),
+		email: getFormString(data, 'email'),
+		firstName: getFormString(data, 'firstName'),
+		lastName: getFormString(data, 'lastName'),
+		phone: getFormString(data, 'phone'),
+		state: getFormString(data, 'state'),
+		zip: getFormString(data, 'zip')
 	}
 
 	let res = {}
 
 	// Case 1: Logged in
 	if (locals?.me) {
-		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
+		if (showShippingAddressErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
-		} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
+		} else if (selectedShippingCountry?.code === 'IN' && shipping_address.zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-		} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
+		} else if (selectedShippingCountry?.code === 'GB' && shipping_address.zip.length !== 7) {
 			error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 		} else {
 			if (shipping_address.phone) {
@@ -146,22 +209,22 @@ const saveAddress = async ({ request, cookies, locals, fetch }) => {
 				}
 
 				if (!shipping_address.phone.startsWith('+')) {
-					shipping_address.phone = (selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
+					shipping_address.phone = (selectedShippingCountry?.dialCode || '+91') + shipping_address.phone
 				}
 			}
 
 			try {
-				if (selectedShippingAddressCountry?.code === 'IN') {
+				if (selectedShippingCountry?.code === 'IN') {
 					zodAddressForINSchema.parse(shipping_address)
-				} else if (selectedShippingAddressCountry?.code === 'GB') {
+				} else if (selectedShippingCountry?.code === 'GB') {
 					zodAddressForGBSchema.parse(shipping_address)
 				} else {
 					zodAddressSchema.parse(shipping_address)
 				}
 			} catch (err) {
-				const { fieldErrors: errors } = err.flatten()
+				const errors = getFieldErrors(err)
 				const { address, city, ...rest } = shipping_address
-				error(404, {
+				return fail(404, {
 					data: rest,
 					errors
 				})
@@ -169,34 +232,22 @@ const saveAddress = async ({ request, cookies, locals, fetch }) => {
 
 			try {
 				const addressService = new AddressService(fetch)
-				res = await addressService.saveAddress({
-					address,
-					city,
-					country,
-					email,
-					firstName,
-					id,
-					lastName,
-					phone,
-					state,
-					zip,
-					storeId: locals.storeId,
-					sid,
-					origin: locals?.origin
-				})
+				res = id
+					? await addressService.editAddress(id, toAddressPayload(shipping_address))
+					: await addressService.saveAddress(toAddressPayload(shipping_address))
 			} catch (e) {
-				error(404, { data: res })
+				return fail(404, { data: res })
 			}
 		}
 	}
 
 	// Case 2: Not logged in
 	else {
-		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
+		if (showShippingAddressErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
-		} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
+		} else if (selectedShippingCountry?.code === 'IN' && shipping_address.zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-		} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
+		} else if (selectedShippingCountry?.code === 'GB' && shipping_address.zip.length !== 7) {
 			error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 		} else {
 			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
@@ -206,44 +257,45 @@ const saveAddress = async ({ request, cookies, locals, fetch }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone = (selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
+				shipping_address.phone = (selectedShippingCountry?.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
-				if (selectedShippingAddressCountry?.code === 'IN') {
+				if (selectedShippingCountry?.code === 'IN') {
 					zodAddressForINSchema.parse(shipping_address)
-				} else if (selectedShippingAddressCountry?.code === 'GB') {
+				} else if (selectedShippingCountry?.code === 'GB') {
 					zodAddressForGBSchema.parse(shipping_address)
 				} else {
 					zodAddressSchema.parse(shipping_address)
 				}
 			} catch (err) {
-				const { fieldErrors: errors } = err.flatten()
+				const errors = getFieldErrors(err)
 				const { address, city, ...rest } = shipping_address
-				error(404, {
+				return fail(404, {
 					data: rest,
 					errors
 				})
 			}
 
-			const new_billing_address = {
-				address: isSameAsBillingAddress ? address : billingAddressAddress,
-				city: isSameAsBillingAddress ? city : billingAddressCity,
-				country: isSameAsBillingAddress ? country : billingAddressCountry,
-				email: isSameAsBillingAddress ? email : billingAddressEmail,
-				firstName: isSameAsBillingAddress ? firstName : billingAddressFirstName,
-				lastName: isSameAsBillingAddress ? lastName : billingAddressLastName,
-				phone: isSameAsBillingAddress ? phone : billingAddressPhone,
-				state: isSameAsBillingAddress ? state : billingAddressState,
-				zip: isSameAsBillingAddress ? zip : billingAddressZip
+			const sameAsBilling = isSameAsBillingAddress === 'true'
+			const new_billing_address: AddressFormFields = {
+				address: sameAsBilling ? shipping_address.address : getFormString(data, 'billingAddressAddress'),
+				city: sameAsBilling ? shipping_address.city : getFormString(data, 'billingAddressCity'),
+				country: sameAsBilling ? shipping_address.country : getFormString(data, 'billingAddressCountry'),
+				email: sameAsBilling ? shipping_address.email : getFormString(data, 'billingAddressEmail'),
+				firstName: sameAsBilling ? shipping_address.firstName : getFormString(data, 'billingAddressFirstName'),
+				lastName: sameAsBilling ? shipping_address.lastName : getFormString(data, 'billingAddressLastName'),
+				phone: sameAsBilling ? shipping_address.phone : getFormString(data, 'billingAddressPhone'),
+				state: sameAsBilling ? shipping_address.state : getFormString(data, 'billingAddressState'),
+				zip: sameAsBilling ? shipping_address.zip : getFormString(data, 'billingAddressZip')
 			}
 
 			if (new_billing_address && new_billing_address?.firstName && new_billing_address?.zip) {
-				if (showBillingAddressErrorMessage === true || showBillingAddressErrorMessage === 'true') {
+				if (showBillingAddressErrorMessage === 'true') {
 					error(404, 'Please enter valid phone number')
-				} else if (selectedBillingAddressCountry?.code === 'IN' && zip.length !== 6) {
+				} else if (selectedBillingCountry?.code === 'IN' && new_billing_address.zip.length !== 6) {
 					error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-				} else if (selectedBillingAddressCountry?.code === 'GB' && zip.length !== 7) {
+				} else if (selectedBillingCountry?.code === 'GB' && new_billing_address.zip.length !== 7) {
 					error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 				} else {
 					if (new_billing_address?.phone) {
@@ -254,22 +306,22 @@ const saveAddress = async ({ request, cookies, locals, fetch }) => {
 						}
 
 						if (!new_billing_address.phone.startsWith('+')) {
-							new_billing_address.phone = (selectedBillingAddressCountry?.dialCode || '+91') + new_billing_address.phone
+							new_billing_address.phone = (selectedBillingCountry?.dialCode || '+91') + new_billing_address.phone
 						}
 					}
 
 					try {
-						if (selectedBillingAddressCountry?.code === 'IN') {
+						if (selectedBillingCountry?.code === 'IN') {
 							zodAddressForINSchema.parse(new_billing_address)
-						} else if (selectedBillingAddressCountry?.code === 'GB') {
+						} else if (selectedBillingCountry?.code === 'GB') {
 							zodAddressForGBSchema.parse(new_billing_address)
 						} else {
 							zodAddressSchema.parse(new_billing_address)
 						}
 					} catch (err) {
-						const { fieldErrors: errors } = err.flatten()
+						const errors = getFieldErrors(err)
 						const { address, city, ...rest } = new_billing_address
-						error(404, {
+						return fail(404, {
 							data: rest,
 							billing_errors: errors
 						})
@@ -298,52 +350,43 @@ const saveAddress = async ({ request, cookies, locals, fetch }) => {
 	return res
 }
 
-const editAddress = async ({ request, cookies, locals, fetch }) => {
+const editAddress: Actions['editAddress'] = async ({ request, cookies, locals, fetch }) => {
 	const data = await request.formData()
 
-	const address = data.get('address')
-	const city = data.get('city')
-	const country = data.get('country')
-	const email = data.get('email')
-	const firstName = data.get('firstName')
-	const id = data.get('id')
-	const lastName = data.get('lastName')
-	const showShippingAddressErrorMessage = data.get('showShippingAddressErrorMessage')
-	const state = data.get('state')
-	const zip = data.get('zip')
-	let phone = data.get('phone')
-	let selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
+	const id = getFormString(data, 'id')
+	const showShippingAddressErrorMessage = getFormString(data, 'showShippingAddressErrorMessage')
+	let selectedShippingAddressCountry = parseCountrySelection(getFormString(data, 'selectedShippingAddressCountry'))
 
 	const sid = cookies.get('connect.sid')
 
-	let formData = {
-		address: address,
-		city: city,
-		country: country,
-		email: email,
-		firstName: firstName,
-		lastName: lastName,
-		phone: phone,
-		state: state,
-		zip: zip
+	let formData: AddressFormFields = {
+		address: getFormString(data, 'address'),
+		city: getFormString(data, 'city'),
+		country: getFormString(data, 'country'),
+		email: getFormString(data, 'email'),
+		firstName: getFormString(data, 'firstName'),
+		lastName: getFormString(data, 'lastName'),
+		phone: getFormString(data, 'phone'),
+		state: getFormString(data, 'state'),
+		zip: getFormString(data, 'zip')
 	}
 
-	if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
+	if (showShippingAddressErrorMessage === 'true') {
 		error(404, 'Please enter valid phone number')
-	} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
+	} else if (selectedShippingAddressCountry?.code === 'IN' && formData.zip.length !== 6) {
 		error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-	} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
+	} else if (selectedShippingAddressCountry?.code === 'GB' && formData.zip.length !== 7) {
 		error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 	} else {
-		if (phone) {
-			phone = phone.replace(/[a-zA-Z ]/g, '')
+		if (formData.phone) {
+			formData.phone = formData.phone.replace(/[a-zA-Z ]/g, '')
 
-			if (phone.startsWith('0')) {
-				phone = phone.substring(1)
+			if (formData.phone.startsWith('0')) {
+				formData.phone = formData.phone.substring(1)
 			}
 
-			if (!phone.startsWith('+')) {
-				phone = (selectedShippingAddressCountry?.dialCode || '+91') + phone
+			if (!formData.phone.startsWith('+')) {
+				formData.phone = (selectedShippingAddressCountry?.dialCode || '+91') + formData.phone
 			}
 		}
 
@@ -356,30 +399,18 @@ const editAddress = async ({ request, cookies, locals, fetch }) => {
 				zodAddressSchema.parse(formData)
 			}
 		} catch (err) {
-			const { fieldErrors: errors } = err.flatten()
+			const errors = getFieldErrors(err)
 			const { address, city, ...rest } = formData
-			error(404, {
+			return fail(404, {
 				data: rest,
 				errors
 			})
 		}
 		try {
 			const addressService = new AddressService(fetch)
-			const res = await addressService.saveAddress({
-				address,
-				city,
-				country,
-				email,
-				firstName,
-				id,
-				lastName,
-				phone,
-				state,
-				zip,
-				storeId: locals.storeId,
-				sid,
-				origin: locals?.origin
-			})
+			const res = id
+				? await addressService.editAddress(id, toAddressPayload(formData))
+				: await addressService.saveAddress(toAddressPayload(formData))
 
 			return res
 		} catch (e) {
@@ -389,19 +420,14 @@ const editAddress = async ({ request, cookies, locals, fetch }) => {
 	}
 }
 
-const deleteAddress = async ({ request, cookies, locals, fetch }) => {
+const deleteAddress: Actions['deleteAddress'] = async ({ request, cookies, locals, fetch }) => {
 	// if (confirm('Are you sure to delete?')) {
 	const data = await request.formData()
-	const id = data.get('id')
+	const id = getFormString(data, 'id')
 	const sid = cookies.get('connect.sid')
 	try {
 		const addressService = new AddressService(fetch)
-		const res = await addressService.deleteAddress({
-			id,
-			storeId: locals.storeId,
-			sid,
-			origin: locals?.origin
-		})
+		const res = await addressService.deleteAddress(id)
 
 		return res
 	} catch (e) {

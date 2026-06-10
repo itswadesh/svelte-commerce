@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { GoogleStructuredDataProductsList, GoogleStructuredServiceSchema, GoogleStructuredDataBreadcrumb,GoogleStructuredVideoSchema, GoogleStructuredFaqSchema } from '@misiki/kitcommerce-core/components'
+  import { GoogleStructuredDataProductsList, GoogleStructuredFaqSchema } from '@misiki/kitcommerce-core/components'
 
 	import { page } from '$app/state'
 
@@ -33,11 +33,9 @@
 		},
 	]
 
-	const categoryHierarchy = $derived(page.data.products?.categoryHierarchy)
 </script>
 
 <GoogleStructuredDataProductsList products={mappedProducts} />
-<GoogleStructuredDataBreadcrumb {categoryHierarchy} />
 <GoogleStructuredFaqSchema faqs={listingFaqs} />
 <!-- <GoogleStructuredServiceSchema
 	serviceName="Luxury Custom Jewelry Design"

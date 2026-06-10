@@ -7,9 +7,22 @@
 	import { toast } from '@misiki/kitcommerce-core'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 
-	const { block } = $props()
+	type FeaturedProductsBlock = {
+		metadata: {
+			columnCount?: number
+			redirectsTo?: string
+			showCartControls?: boolean
+			showHeader?: boolean
+			showViewMore?: boolean
+			subtitle?: string
+			title?: string
+			viewMoreText?: string
+		}
+	}
 
-	let products: Product[] | null = $state(null)
+	const { block }: { block: FeaturedProductsBlock } = $props()
+
+	let products = $state<Product[]>([])
 	let loadingForProducts = $state(false)
 
 	onMount(async () => {
@@ -18,9 +31,9 @@
 			const res = await productService.listFeaturedProducts({
 				page: 1
 			})
-			products = res?.data
-		} catch (e: any) {
-			toast.error(e?.message || 'Failed to load categories')
+			products = (res?.data ?? []).flat() as Product[]
+		} catch (e) {
+			toast.error(e instanceof Error ? e.message : 'Failed to load products')
 		} finally {
 			loadingForProducts = false
 		}
@@ -62,7 +75,7 @@
 				</div>
 			{/each}
 		{:else}
-			{#each products || [] as p}
+			{#each products as p}
 				<ProductCard product={p} hideVariations={true} hideCartControls={!block.metadata.showCartControls} />
 			{/each}
 		{/if}

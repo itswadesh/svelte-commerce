@@ -38,7 +38,6 @@
 		}).format(date)
 	})
 	onMount(async () => {
-		cartState.resetPreviousCartIdFromLocalStorage()
 		await cartState.refershCart()
 	})
 

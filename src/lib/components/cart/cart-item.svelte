@@ -12,14 +12,39 @@
 
 	let loading = $state(false)
 
+	export type CartCategory = {
+		category?: {
+			name?: string
+		}
+	}
+
+	export type CartProductWithDetails = Partial<CartProduct> & {
+		id: string
+		price: number
+		product?: Partial<CartProduct['product']> & {
+			categories?: CartCategory[]
+		}
+		productId?: string
+		qty: number
+		slug?: string
+		thumbnail?: string
+		title?: string
+		variantId?: string
+		variantTitle?: string
+		vendor?: {
+			businessName?: string
+		}
+	}
+
 	type Props = {
-		cartProduct: CartProduct
+		cartProduct: CartProductWithDetails
 		removeItem: (id: string) => void
 	}
 
 	let { cartProduct = $bindable(), removeItem }: Props = $props()
 
 	let totalPrice = $derived((cartProduct?.price || 0) * (cartProduct?.qty || 0))
+	const categoryNames = () => cartProduct?.product?.categories?.flatMap?.((c: CartCategory) => c.category?.name) || []
 </script>
 
 <div class="flex items-center justify-between py-4" onclick={(e) => e.stopPropagation()} role="group">
@@ -85,10 +110,9 @@
 								e.stopPropagation()
 								loading = true
 
-								const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
 								const productObj = {
 									...(cartProduct || {}),
-									categoryNames
+									categoryNames: categoryNames()
 								}
 
 								fireGTagEvent('remove_from_cart', {
@@ -98,8 +122,8 @@
 								await cartState.update({
 									qty: cartProduct.qty - 1,
 									lineId: cartProduct.id,
-									productId: cartProduct.productId,
-									variantId: cartProduct.variantId
+									productId: cartProduct.productId || '',
+									variantId: cartProduct.variantId || ''
 								})
 								loading = false
 							}}
@@ -127,10 +151,9 @@
 								loading = true
 								const me = userState?.user
 
-								const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
 								const productObj = {
 									...(cartProduct || {}),
-									categoryNames
+									categoryNames: categoryNames()
 								}
 
 								const dataToFire = {
@@ -148,8 +171,8 @@
 								await cartState?.update({
 									qty: cartProduct.qty + 1,
 									lineId: cartProduct.id,
-									productId: cartProduct.productId,
-									variantId: cartProduct.variantId
+									productId: cartProduct.productId || '',
+									variantId: cartProduct.variantId || ''
 								})
 								loading = false
 							}}
@@ -165,10 +188,9 @@
 							e?.preventDefault()
 							e?.stopPropagation()
 
-							const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
 							const productObj = {
 								...(cartProduct || {}),
-								categoryNames
+								categoryNames: categoryNames()
 							}
 
 							fireGTagEvent('remove_from_cart', {
@@ -178,8 +200,8 @@
 							await cartState?.update({
 								qty: 0,
 								lineId: cartProduct.id,
-								productId: cartProduct.productId,
-								variantId: cartProduct.variantId
+								productId: cartProduct.productId || '',
+								variantId: cartProduct.variantId || ''
 							})
 						}}
 					>

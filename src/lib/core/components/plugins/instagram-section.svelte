@@ -1,13 +1,13 @@
-<script>
-	import { Instagram } from '@lucide/svelte'
-	import ImagesCarousel from '../images-carousel.svelte'
+<script lang="ts">
+	import { Camera } from '@lucide/svelte'
+	import ImagesCarousel from '$lib/components/image/images-carousel.svelte'
 	let { gallery = [] } = $props()
 </script>
 
 <section class="flex flex-col items-center bg-gray-100 py-8">
 	<div class="container mx-auto flex flex-col items-center justify-center px-4">
 		<div class="mb-4 flex items-center justify-center">
-			<Instagram class="mr-2 h-6 w-6 text-gray-600" />
+			<Camera class="mr-2 h-6 w-6 text-gray-600" />
 			<h2 class="text-center text-[20px] font-bold uppercase tracking-wide text-gray-800">#LITEKART ON INSTAGRAM</h2>
 		</div>
 		<p class="text-center text-[12px] text-gray-600">Phasellus lorem malesuada ligula pulvinar commodo maecenas</p>

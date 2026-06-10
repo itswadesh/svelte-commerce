@@ -13,9 +13,13 @@
 	import { quintOut } from 'svelte/easing'
 
 	const productState = useProductState()
+	type RatingView = {
+		rating: number
+	}
+
 	const accRating = $derived.by(() => {
 		if (!page.data?.product?.ratings?.length) return 0
-		const total = page.data?.product?.ratings?.reduce((acc, cur) => acc + cur.rating, 0)
+		const total = page.data?.product?.ratings?.reduce((acc: number, cur: RatingView) => acc + cur.rating, 0)
 		const rating = total / page.data?.product?.ratings?.length
 		return Math.floor(rating * 10) / 10
 	})

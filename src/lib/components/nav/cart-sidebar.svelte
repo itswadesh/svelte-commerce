@@ -28,8 +28,7 @@
 
 <div class="relative" role="navigation">
 	<button
-		variant="ghost"
-		size="icon"
+		type="button"
 		class="rounded-full flex px-2"
 		aria-label="Toggle Cart"
 		onclick={() => {

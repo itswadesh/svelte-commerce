@@ -75,7 +75,7 @@
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Weight</p>
 						<p class="text-sm font-medium text-gray-900">
 							{productState.selectedVariant?.weight || data?.product?.weight}
-							{page?.data?.store.weight_unit || productState.settingState?.selectedStore?.weight_unit}
+							{page?.data?.store.weight_unit}
 						</p>
 					</div>
 				{/if}

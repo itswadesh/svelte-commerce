@@ -2,9 +2,19 @@
 	import { page } from '$app/state'
 	import { ChevronRight, Home } from '@lucide/svelte'
 
-	let { items: providedItems, product }: { items?: []; product?: Record<string, any> } = $props()
+	type BreadcrumbRouteItem = {
+		href?: string
+		id?: string
+		isCategory?: boolean
+		label?: string
+		link?: string
+		name?: string
+		slug?: string
+	}
 
-	let items = $state([])
+	let { items: providedItems, product }: { items?: BreadcrumbRouteItem[]; product?: Record<string, any> } = $props()
+
+	let items = $state<BreadcrumbRouteItem[]>([])
 	let isProductsPage = $derived(page.route?.id === '/(www)/products/[slug]')
 
 	$effect(() => {
@@ -13,7 +23,7 @@
 			return
 		}
 
-		let paths: any[] = decodeURIComponent(page.url?.pathname || '')
+		let paths: BreadcrumbRouteItem[] = decodeURIComponent(page.url?.pathname || '')
 			?.split?.('/')
 			?.filter?.(Boolean)
 			?.map?.((p) => {
@@ -22,7 +32,7 @@
 					isCategory: false
 				}
 			})
-		let categories: any[] = []
+		let categories: BreadcrumbRouteItem[] = []
 		if (isProductsPage && paths?.length > 0 && product?.categories?.length) {
 			paths = paths?.filter((p) => p.name !== 'products')
 			categories = product?.categories?.[0]?.category
@@ -36,8 +46,8 @@
 					]
 				: []
 			if (categories?.length) {
-				const uniqueCategories = categories?.reduce((acc: any, current: any) => {
-					const x = acc?.find((item: any) => item?.id === current?.id)
+				const uniqueCategories = categories?.reduce<BreadcrumbRouteItem[]>((acc, current) => {
+					const x = acc?.find((item) => item?.id === current?.id)
 					if (!x) {
 						return acc?.concat([current])
 					} else {
@@ -63,7 +73,7 @@
 			const titleCaseLabel = path?.name
 				?.toLowerCase()
 				?.replace(/-/g, ' ') // Remove hyphens and replace with spaces
-				?.replace(/\b\w/g, (char: any) => char?.toUpperCase()) // Convert to title case
+				?.replace(/\b\w/g, (char) => char?.toUpperCase()) // Convert to title case
 
 			return {
 				label: titleCaseLabel,

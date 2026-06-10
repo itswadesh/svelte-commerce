@@ -15,10 +15,9 @@
 </script>
 
 <ProductCardRenderer {product} {aspectRatio}>
-	{console.log(product.thumbnail || product?.image_url)}
 	{#snippet content({ aspectHeight, aspectWidth, handleCardClick, changeQuantity, addToCart })}
 		<button
-			variant="plain"
+			type="button"
 			onclick={handleCardClick}
 			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
 				':',

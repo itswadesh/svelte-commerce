@@ -20,6 +20,42 @@
 	const cartState = paymentModule.cartState
 
 	let showAddress = $state(false)
+
+	type ShippingRatesView = {
+		data?: ShippingRate[]
+		error?: {
+			countriesDeliverable?: string[]
+			message?: string
+			moreCountriesCount?: number
+			selectedCountry?: string
+		}
+	}
+
+	type ShippingRate = {
+		base_rate: number
+		description?: string
+		estimated_max_days?: string
+		estimated_min_days?: string
+		id: string
+		name: string
+	}
+
+	type CheckoutAddressView = {
+		address_1?: string
+		address_2?: string
+		city?: string
+		country?: string
+		firstName?: string
+		lastName?: string
+		locality?: string
+		state?: string
+		zip?: string
+	}
+
+	const shippingRates = $derived(paymentModule.shippingRates as ShippingRatesView)
+	const shippingAddress = $derived(cartState.cart.shippingAddress as CheckoutAddressView | undefined)
+	const countriesDeliverable = $derived(shippingRates.error?.countriesDeliverable ?? [])
+	const money = (value: unknown) => (typeof value === 'number' ? value : Number(value) || 0)
 </script>
 
 <svelte:head>
@@ -50,18 +86,18 @@
 					<div class="flex flex-col gap-6">
 
 
-						{#if paymentModule.shippingRates?.error?.message}
+						{#if shippingRates?.error?.message}
 						<div class="mb-4 rounded bg-red-50 p-4 text-[11px] font-bold tracking-tight text-red-600 ring-1 ring-red-100">
 							We currently deliver only to
-							{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
-								<span class="font-black">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
+							{#each countriesDeliverable as country, index}
+								<span class="font-black">{country}</span>{#if index !== countriesDeliverable.length - 1},
 									{' '}
 								{/if}
 							{/each}.
 
-							{#if paymentModule.shippingRates?.error?.moreCountriesCount}
-								<span class="font-black"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
-							{/if} Your selected country is <span class="font-black">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
+							{#if shippingRates?.error?.moreCountriesCount}
+								<span class="font-black"> and {shippingRates.error.moreCountriesCount} more</span>
+							{/if} Your selected country is <span class="font-black">"{shippingRates?.error?.selectedCountry}"</span>.
 						</div>
 					{/if}
 
@@ -128,14 +164,14 @@
 						{/if}
 					</div>
 
-					{#if paymentModule.shippingRates?.data?.length}
+					{#if shippingRates?.data?.length}
 						<div class="grid h-fit grid-cols-1 space-y-6  pt-4">
 							<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 								Shipping Method
 							</h2>
 
 							<div class="flex flex-col gap-3">
-								{#each paymentModule.shippingRates?.data as rate}
+								{#each shippingRates?.data as rate}
 									<label
 										for={rate.id}
 										class="flex items-center justify-between rounded-lg border bg-white p-5 transition-all duration-300 active:scale-[0.99] {cartState
@@ -161,7 +197,7 @@
 													{rate.name}
 												</span>
 												<div class="flex items-center gap-2">
-													{#if !Number.isNaN(Number.parseFloat(rate?.estimated_min_days)) && !Number.isNaN(Number.parseFloat(rate?.estimated_max_days))}
+													{#if !Number.isNaN(Number.parseFloat(rate.estimated_min_days ?? '')) && !Number.isNaN(Number.parseFloat(rate.estimated_max_days ?? ''))}
 														<span class="text-[10px] font-bold uppercase tracking-tighter text-primary">
 															{rate?.estimated_min_days} - {rate?.estimated_max_days} Days
 														</span>
@@ -205,7 +241,7 @@
 						</div>
 					{/if}
 
-											{#if cartState?.cart?.shippingAddress}
+											{#if shippingAddress}
 							<div class="rounded-lg border border-border bg-white shadow-sm overflow-hidden text-left">
 								<Button
 									variant="plain"
@@ -215,7 +251,7 @@
 									<div class="flex flex-col items-start">
 										<span class="text-sm font-bold text-muted">Delivering Order to</span>
 										<span class="text-sm font-bold uppercase tracking-tight text-gray-900">
-											{cartState.cart.shippingAddress.firstName} {cartState.cart.shippingAddress.lastName}
+											{shippingAddress.firstName} {shippingAddress.lastName}
 										</span>
 									</div>
 									<ChevronDown
@@ -228,13 +264,13 @@
 										<div class="flex items-start justify-between gap-4">
 											<div class="flex-1">
 												<p class="text-sm leading-relaxed text-gray-600">
-													{cartState.cart.shippingAddress?.address_1},<br />
-													{cartState.cart.shippingAddress.locality ? cartState.cart.shippingAddress.locality + ',' : ''}
-													{cartState.cart.shippingAddress.city}, {cartState.cart.shippingAddress.state} - {cartState.cart.shippingAddress.zip}<br />
-													{cartState.cart.shippingAddress.country}
+													{shippingAddress?.address_1},<br />
+													{shippingAddress.locality ? shippingAddress.locality + ',' : ''}
+													{shippingAddress.city}, {shippingAddress.state} - {shippingAddress.zip}<br />
+													{shippingAddress.country}
 												</p>
-												{#if cartState.cart.shippingAddress?.address_2}
-													<p class="text-xs leading-relaxed text-gray-600">{cartState.cart.shippingAddress?.address_2}</p>
+												{#if shippingAddress?.address_2}
+													<p class="text-xs leading-relaxed text-gray-600">{shippingAddress?.address_2}</p>
 												{/if}
 											</div>
 											<Button
@@ -279,22 +315,22 @@
 									<div class="space-y-3 border-b border-border pb-6">
 										<div class="flex justify-between text-sm">
 											<span class="font-medium text-gray-500">Subtotal</span>
-											<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
+											<span class="font-bold text-gray-900">{formatPrice(money(cartState.cart.subtotal), page?.data?.store?.currency?.code)}</span>
 										</div>
-										{#if cartState.cart.discountAmount > 0}
+										{#if money(cartState.cart.discountAmount) > 0}
 											<div class="flex justify-between text-sm">
 												<span class="font-medium text-gray-500">Discount</span>
 												<span class="font-bold uppercase tracking-tight text-orange-600"
-													>- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span
+													>- {formatPrice(money(cartState.cart.discountAmount), page?.data?.store?.currency?.code)}</span
 												>
 											</div>
 										{/if}
 										<div class="flex justify-between text-sm">
 											<span class="font-medium text-gray-500">Shipping</span>
-											{#if !cartState.cart.shippingAddress}
+											{#if !shippingAddress}
 												<span class="text-[10px] font-bold uppercase tracking-tighter text-gray-400"> Address required </span>
-											{:else if cartState.cart.shippingCharges}
-												<span class="font-bold text-gray-900">{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span>
+											{:else if money(cartState.cart.shippingCharges)}
+												<span class="font-bold text-gray-900">{formatPrice(money(cartState.cart.shippingCharges), page?.data?.store?.currency?.code)}</span>
 											{:else}
 												<span
 													class="rounded bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-green-600 ring-1 ring-green-100"
@@ -306,7 +342,7 @@
 
 									<div class="flex items-center justify-between pt-2">
 										<span class="text-sm font-bold uppercase  text-gray-900">Total</span>
-										<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
+										<span class="text-xl font-bold text-gray-900">{formatPrice(money(cartState.cart.total), page?.data?.store?.currency?.code)}</span>
 									</div>
 
 									<div class="mt-6 flex items-center justify-center gap-2 rounded-md border border-gray-100 bg-gray-50/50 px-4 py-3">
@@ -314,7 +350,7 @@
 										<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
 									</div>
 
-									{#if (!isPhoneRequired || cartState?.cart?.phone) && (!isEmailRequired || cartState?.cart?.email) && (cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId)}
+									{#if (!isPhoneRequired || cartState?.cart?.phone) && (!isEmailRequired || cartState?.cart?.email) && (shippingAddress || cartState?.cart?.shippingAddressId)}
 										<CheckoutButton
 											text="Complete Purchase"
 											disabledText="Select Method"
@@ -334,3 +370,4 @@
 		{/if}
 	</div>
 </div>
+

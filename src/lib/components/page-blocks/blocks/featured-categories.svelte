@@ -6,18 +6,36 @@
 	import { Button } from '$lib/components/ui/button'
 	import { toast } from '@misiki/kitcommerce-core'
 
-	const { block } = $props()
+	type FeaturedCategoriesBlock = {
+		metadata: {
+			columnCount?: number
+			limit?: number
+			redirectsTo?: string
+			showHeader?: boolean
+			showViewMore?: boolean
+			subtitle?: string
+			title?: string
+			viewMoreText?: string
+		}
+	}
 
-	let categories: Category[] | null = $state(null)
+	type FeaturedCategory = Category & {
+		link?: string
+		thumbnail?: string
+	}
+
+	const { block }: { block: FeaturedCategoriesBlock } = $props()
+
+	let categories = $state<FeaturedCategory[]>([])
 	let loadingForCategory = $state(false)
 
 	onMount(async () => {
 		try {
 			loadingForCategory = true
 			const res = await categoryService.fetchFeaturedCategories({ limit: block.metadata.limit || 1000 })
-			categories = res?.data
-		} catch (e: any) {
-			toast.error(e?.message || 'Failed to load categories')
+			categories = (res?.data ?? []) as FeaturedCategory[]
+		} catch (e) {
+			toast.error(e instanceof Error ? e.message : 'Failed to load categories')
 		} finally {
 			loadingForCategory = false
 		}
@@ -56,7 +74,7 @@
 				</div>
 			{/each}
 		{:else}
-			{#each categories as { slug, icon, color, name, link, thumbnail, parentCategoryId } (slug)}
+			{#each categories as { slug, name, link, thumbnail } (slug)}
 				<a href={link ? link : slug ? `/${slug}` : `/products`} class="group flex flex-col items-center focus:outline-none">
 					<div class="relative aspect-square w-full overflow-hidden bg-muted bg-red-200 shadow-sm transition-all duration-500 ease-out">
 						<LazyImg src={thumbnail} alt={name} class="h-full w-full object-cover transition-transform duration-700 ease-in-out" />

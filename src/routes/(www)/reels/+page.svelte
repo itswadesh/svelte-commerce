@@ -1,27 +1,39 @@
-<script lang="ts">
+	<script lang="ts">
 	import { onMount } from 'svelte'
 	import EmblaCarousel from 'embla-carousel'
+	import type { EmblaCarouselType } from 'embla-carousel'
 	import AutoScroll from 'embla-carousel-auto-scroll'
 	import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 	import { SeoHeader } from '$lib/core/components/index.js'
+	import { reelsService } from '$lib/core/services'
 
-	let reels = $state()
+	type Reel = {
+		link: string
+		name: string
+		productId?: string
+	}
 
-	let emblaNode
-	let emblaApi
-	let videos = $state([])
+	type ReelsListResponse = {
+		data?: Reel[]
+	}
+
+	let reels = $state<Reel[]>([])
+
+	let emblaNode = $state<HTMLDivElement | null>(null)
+	let emblaApi = $state<EmblaCarouselType | null>(null)
+	let videos = $state<HTMLVideoElement[]>([])
 	let currentIndex = $state(0)
 	let isPlaying = $state(true)
 	let isMuted = $state(true)
 
 	// Function to handle video playback
-	function handleVideoPlayback(index) {
+	function handleVideoPlayback(index: number) {
 		videos.forEach((video, i) => {
 			if (i === index) {
 				if (isPlaying) {
 					video.play().catch(() => {
 						// Autoplay prevented, add a play button
-						video.dataset.needsUserAction = true
+						video.dataset.needsUserAction = 'true'
 					})
 				} else {
 					video.pause()
@@ -48,16 +60,18 @@
 		try {
 			// For development, return sample data
 			// In production, uncomment the following line:
-			const reelsdata = await reelsService.list()
+			const reelsdata = (await reelsService.list()) as unknown as ReelsListResponse
 
-			reels = reelsdata.data
+			reels = reelsdata.data ?? []
 		} catch (e) {
 			console.error('Error loading reels:', e)
-			throw error(400, e?.message || 'Error loading reels')
+			reels = []
 		}
 	}
 
 	onMount(() => {
+		if (!emblaNode) return
+
 		// Initialize Embla Carousel
 		emblaApi = EmblaCarousel(
 			emblaNode,
@@ -75,11 +89,11 @@
 		)
 
 		// Get all video elements
-		videos = emblaNode.querySelectorAll('video')
+		videos = Array.from(emblaNode.querySelectorAll('video'))
 
 		// Handle slide changes
 		emblaApi.on('select', () => {
-			currentIndex = emblaApi.selectedScrollSnap()
+			currentIndex = emblaApi?.selectedScrollSnap() ?? 0
 			handleVideoPlayback(currentIndex)
 		})
 		load()
@@ -92,9 +106,16 @@
 	})
 
 	// Handle manual play button click
-	function handlePlayClick(video) {
+	function handlePlayClick(video: HTMLVideoElement) {
 		video.play()
-		video.dataset.needsUserAction = false
+		video.dataset.needsUserAction = 'false'
+	}
+
+	function handleVideoClick(event: MouseEvent) {
+		const video = event.currentTarget
+		if (video instanceof HTMLVideoElement && video.dataset.needsUserAction) {
+			handlePlayClick(video)
+		}
 	}
 </script>
 
@@ -113,11 +134,7 @@
 							loop
 							muted={isMuted}
 							playsinline
-							onclick={(e) => {
-								if (e.target.dataset.needsUserAction) {
-									handlePlayClick(e.target)
-								}
-							}}
+							onclick={handleVideoClick}
 						>
 							<track kind="captions" />
 						</video>
@@ -125,6 +142,7 @@
 						<!-- Play button overlay (shown when autoplay is prevented) -->
 						{#if videos[currentIndex]?.dataset?.needsUserAction}
 							<button
+								aria-label="Play video"
 								class="absolute inset-0 flex items-center justify-center bg-black/50 text-white"
 								onclick={() => handlePlayClick(videos[currentIndex])}
 							>

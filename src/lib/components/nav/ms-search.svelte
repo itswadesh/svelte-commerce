@@ -24,7 +24,7 @@
 		handleKeyDown,
 		handleResultClick
 	})}
-		<button variant="ghost" size="icon" class="flex rounded-full px-2" aria-label="Toggle Cart" onclick={showSearch}>
+		<button type="button" class="flex rounded-full px-2" aria-label="Toggle search" onclick={showSearch}>
 			<Search class="h-5 w-5" />
 		</button>
 

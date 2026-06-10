@@ -1,22 +1,21 @@
 <script lang="ts">
-	import { getCdnImageUrl } from '$lib/core/utils'
 	import { page } from '$app/stores'
 	import { Image } from '@unpic/svelte'
 	import { createEventDispatcher } from 'svelte'
 
 	export let alt = ''
 	export let aspect_ratio = '3:4'
-	export let height = null
+	export let height: number | 'auto' | null = null
 	export let src: string
-	export let width = null
+	export let width: number | 'auto' | null = null
 
 	let clazz: string
 	export { clazz as class }
 
 	const dispatch = createEventDispatcher()
 
-	const h = height === 'auto' ? '0' : +height * 2
-	const w = width === 'auto' ? '0' : +width * 2
+	const h = height === 'auto' || height == null ? '0' : +height * 2
+	const w = width === 'auto' || width == null ? '0' : +width * 2
 	// const h = height === 'auto' ? '0' : +height
 	// const w = width === 'auto' ? '0' : +width
 
@@ -37,10 +36,15 @@
 
 	$: useRawSrc = false
 	$: loadError = false
-	const handleLoadError = (event) => {
+
+	const getCdnImageUrl = ({ src }: { src: string; IMAGE_CDN_URL?: string; IMAGE_CDN_PROVIDER?: string; NO_QUERY?: boolean }) => src
+
+	const handleLoadError = (event: Event) => {
 		if (useRawSrc) {
 			// Remove the error listener to prevent infinite loop
-			event.target.removeEventListener('error', handleLoadError)
+			if (event.target instanceof HTMLElement) {
+				event.target.removeEventListener('error', handleLoadError)
+			}
 			loadError = true
 			dispatch('finalError', event)
 			return

@@ -61,7 +61,7 @@
 			})
 	}
 
-	async function handleSubmit(e) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault()
 		try {
 			isLoading = true

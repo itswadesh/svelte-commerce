@@ -1,6 +1,10 @@
 import { getContext, onMount, setContext } from 'svelte'
 import { collectionService, type Collection } from '$lib/core/services/index.js'
 
+type RankedCollection = Collection & {
+  rank?: number
+}
+
 class CollectionState {
   static instance: CollectionState | null = null
 
@@ -33,7 +37,7 @@ class CollectionState {
   }
 
   getOneByRank = (rank: number) => {
-    return this.collections?.find(x => x.rank === rank)
+    return (this.collections as RankedCollection[] | null)?.find(x => x.rank === rank)
   }
 }
 

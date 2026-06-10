@@ -3,8 +3,16 @@
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import { blogService } from '$lib/core/services'
-	import type { BlogPost } from '$lib/core/types'
 	import { SeoHeader } from '$lib/core/components/index.js'
+
+	type BlogPost = {
+		author?: string
+		content?: string
+		imageUrl?: string
+		publishedAt: string
+		tags?: string[]
+		title?: string
+	}
 
 	let loading = $state(false)
 	let error = $state('')
@@ -22,7 +30,7 @@
 		try {
 			loading = true
 			error = ''
-			post = await blogService.getOne(slug)
+			post = (await blogService.getOne(slug)) as unknown as BlogPost
 		} catch (err) {
 			console.error(err)
 			error = 'Failed to load blog post. Please try again later.'
@@ -55,7 +63,7 @@
 	{:else if error}
 		<div class="py-8 text-center text-red-600" transition:fade>
 			<p>{error}</p>
-			<button class="mt-4 rounded-lg bg-gray-100 px-4 py-2 transition-colors hover:bg-gray-200" onclick={() => loadBlogPost($page.params.slug)}>
+			<button class="mt-4 rounded-lg bg-gray-100 px-4 py-2 transition-colors hover:bg-gray-200" onclick={() => page.params.slug && loadBlogPost(page.params.slug)}>
 				Try Again
 			</button>
 		</div>
@@ -77,7 +85,7 @@
 			</header>
 
 			<div class="mb-8">
-				{#each post.tags as tag}
+				{#each post.tags ?? [] as tag}
 					<span class="mr-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
 						{tag}
 					</span>

@@ -12,7 +12,7 @@
 	import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
 	import { z } from 'zod'
 	import { toast } from '@misiki/kitcommerce-core'
-	import { authService } from '$lib/core/services/index.js'
+	import { authService, type User } from '$lib/core/services/index.js'
 
 	let { show = $bindable(false) } = $props()
 
@@ -80,7 +80,7 @@
 						setTimeout(() => {
 							loginModule.otpInputRef?.focus();
 						}, 100);
-						return { success: true, message: 'Bypassed' };
+						return { success: true, message: 'Bypassed' } as unknown as User;
 					}
 					throw err;
 				}
@@ -99,9 +99,9 @@
 					};
 					document.cookie = `connect.sid=dev-session; path=/; max-age=${60 * 60 * 24 * 30}`;
 					document.cookie = `me=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=${60 * 60 * 24 * 30}`;
-					userState.user = mockUser;
+					userState.user = mockUser as unknown as User;
 					show = false;
-					return mockUser;
+					return mockUser as unknown as User;
 				}
 				return await originalVerifyOtp.call(authService, args);
 			};
@@ -320,6 +320,7 @@
 							<a href="/auth/join-as-vendor" class="font-medium text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white" onclick={() => (show = false)}>Join as a Vendor</a>
 						</div>
 					{/if}
+				</div>
 				</div>
 			</form>
 		{:else if loginModule.step === 2}

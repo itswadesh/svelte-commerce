@@ -3,9 +3,13 @@
 	import { SeoHeader } from '$lib/core/components/index.js'
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
 
+	type PageWithLayouts = Page & {
+		layouts?: unknown[]
+	}
+
 	interface Props {
 		data: {
-			page: Page
+			page: PageWithLayouts
 		}
 	}
 	const { data }: Props = $props()

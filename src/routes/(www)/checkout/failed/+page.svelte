@@ -10,6 +10,20 @@
 	const cartState = getCartState()
 	let { data } = $props()
 
+	type FailedCartLineItem = {
+		price: number
+		qty: number
+		slug?: string
+		thumbnail?: string
+		title?: string
+		variant?: {
+			id?: string
+		}
+	}
+
+	const failedCartItems = $derived((cartState.cart?.lineItems ?? []) as FailedCartLineItem[])
+	const money = (value: unknown) => (typeof value === 'number' ? value : Number(value) || 0)
+
 	function handleRetry() {
 		loadingPayment = true
 		window.location.href = '/checkout/cart'
@@ -51,9 +65,9 @@
 			<div class="order-summary">
 				<h2>Order Summary</h2>
 				<div class="items-list">
-					{#each cartState.cart?.lineItems as { thumbnail, title, qty, price, variant, slug }}
+					{#each failedCartItems as { thumbnail, title, qty, price, variant, slug }}
 						<div class="item">
-							<a href={`/products/${slug}?variant_id=${variant.id}`} class="item-image">
+							<a href={`/products/${slug}?variant_id=${variant?.id ?? ''}`} class="item-image">
 								<img src={thumbnail || '/images/placeholder.png'} alt={title} />
 							</a>
 							<div class="item-details">
@@ -74,7 +88,7 @@
 				<div class="price-summary">
 					<div class="price-row">
 						<span>Subtotal</span>
-						<span>{formatPrice(cartState.cart?.subtotal, page?.data?.store?.currency?.code)}</span>
+						<span>{formatPrice(money(cartState.cart?.subtotal), page?.data?.store?.currency?.code)}</span>
 					</div>
 
 					<!-- Uncomment if shipping is available -->
@@ -85,7 +99,7 @@
 
 					<div class="price-row total">
 						<span>Total</span>
-						<span>{formatPrice(cartState.cart?.total, page?.data?.store?.currency?.code)}</span>
+						<span>{formatPrice(money(cartState.cart?.total), page?.data?.store?.currency?.code)}</span>
 					</div>
 				</div>
 			</div>

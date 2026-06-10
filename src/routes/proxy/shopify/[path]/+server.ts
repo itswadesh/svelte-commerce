@@ -16,8 +16,9 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
 
 	const shopifyStoreDomain = publicEnv.PUBLIC_SHOPIFY_STORE_DOMAIN
 	const shopifyAccessToken = env.SHOPIFY_ADMIN_ACCESS_TOKEN
+	const shopifyStorefrontToken = publicEnv.PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
 
-	if (!shopifyStoreDomain || !shopifyAccessToken) {
+	if (!shopifyStoreDomain || !shopifyAccessToken || !shopifyStorefrontToken) {
 		console.error('Shopify Proxy Error: Missing credentials in environment variables')
 		return json({ error: 'Shopify credentials not configured on server' }, { status: 500 })
 	}
@@ -33,7 +34,7 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
 
 	const headers = new Headers()
 	if (isAdminApiCall) headers.set('X-Shopify-Access-Token', shopifyAccessToken)
-	else headers.set('X-Shopify-Storefront-Access-Token', publicEnv.PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN)
+	else headers.set('X-Shopify-Storefront-Access-Token', shopifyStorefrontToken)
 
 	headers.set('Content-Type', 'application/json')
 

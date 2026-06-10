@@ -1,11 +1,21 @@
-<script>
+<script lang="ts">
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { getCartState } from '$lib/core/stores/index.js'
 	import { formatPrice } from '$lib/core/utils'
 	const cartState = getCartState()
 
-	let data = $state([])
+	type BuyAgainItem = {
+		img?: string
+		price: number
+		productId: string
+		qty: number
+		slug?: string
+		title: string
+		variantId?: string
+	}
+
+	let data = $state<BuyAgainItem[]>([])
 
 	import { onMount } from 'svelte'
 	import { Plus } from '@lucide/svelte'
@@ -13,7 +23,8 @@
 	import { orderService } from '$lib/core/services/index.js'
 
 	onMount(async () => {
-		data = await orderService.buyAgain()
+		const response = (await orderService.buyAgain()) as unknown as { data?: BuyAgainItem[] }
+		data = response.data ?? []
 	})
 </script>
 
@@ -77,7 +88,7 @@
 											cartState.add({
 												qty: item.qty,
 												productId: item.productId,
-												variantId: item.variantId
+												variantId: item.variantId || ''
 											})
 										}}
 									>
@@ -145,7 +156,7 @@
 													cartState.add({
 														qty: item.qty,
 														productId: item.productId,
-														variantId: item.variantId
+														variantId: item.variantId || ''
 													})
 												}}
 											>

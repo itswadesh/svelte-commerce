@@ -24,6 +24,7 @@
 
 				return
 			}
+			if (!page.params.id) return
 			address = await addressService.editAddress(page.params.id, address)
 		} catch (e: any) {
 			toast.error(e.message)
@@ -55,6 +56,7 @@
 
 		try {
 			if (page.params.id == 'new') return
+			if (!page.params.id) return
 			let res = await addressService.fetchAddress(page.params.id)
 
 			address = res

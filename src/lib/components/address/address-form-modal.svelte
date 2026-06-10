@@ -8,7 +8,6 @@
 	import Label from '../ui/label/label.svelte'
 	import { AddressSchema } from '$lib/core/components/index.js'
 	import { AddressFormRenderer } from '$lib/core/composables/index.js'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 
 	let {
 		show = $bindable(),
@@ -30,7 +29,7 @@
 </script>
 
 <AddressFormRenderer bind:address bind:show {onback} {ondelete} {onsave}>
-	{#snippet content({ isSaving, handleBack, handleSubmit, handleDelete })}
+	{#snippet content({ handleBack, handleSubmit, handleDelete })}
 		<Dialog bind:open={show}>
 			<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
 				<DialogHeader>
@@ -99,11 +98,7 @@
 					<br />
 					<div class="flex flex-col gap-2">
 						<Button type="submit" class="w-full">
-							{#if isSaving}
-								<LoadingDots />
-							{:else}
-								Save Contact
-							{/if}
+							Save Contact
 						</Button>
 						{#if isEdit}
 							<Button type="button" variant="link" onclick={handleDelete} class="w-full text-red-700">

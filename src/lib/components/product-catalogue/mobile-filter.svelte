@@ -9,9 +9,22 @@
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
 	import { sortOptions } from '$lib/config.js'
 
-	let { selectedSort = $bindable(), onSortChange = (value: string) => {} } = $props()
+	type MobileFilterProps = {
+		allFilters?: unknown
+		categories?: unknown
+		onSortChange?: (value: string) => void
+		priceStat?: unknown
+		selectedSort?: string
+		tags?: unknown
+	}
+
+	let { selectedSort = $bindable(), onSortChange = (value: string) => {}, allFilters, categories, priceStat, tags }: MobileFilterProps = $props()
 
 	const filterModule = getDesktopFilterState()
+	const categoryOption = (category: Record<string, string>) => ({
+		name: category.name,
+		slug: category.slug
+	})
 </script>
 
 <div class="fixed bottom-0 left-0 right-0 z-40 grid h-12 w-full grid-cols-2 border-t border-gray-200 bg-white shadow-md md:hidden">
@@ -207,7 +220,7 @@
 										variant="ghost"
 										class="group flex w-full flex-row items-center justify-start gap-3 h-auto p-0 hover:bg-transparent"
 										onclick={() => {
-											filterModule.handleCategoryClick(category)
+											filterModule.handleCategoryClick(categoryOption(category))
 										}}
 									>
 										{#if category.thumbnail}

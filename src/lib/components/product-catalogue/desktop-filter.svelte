@@ -10,12 +10,20 @@
 	import { Button } from '$lib/components/ui/button'
 
 	type FilterProps = {
+		allFilters?: unknown
+		categories?: unknown
 		class?: string
+		priceStat?: unknown
+		tags?: unknown
 	}
 
-	let { class: className = '' }: FilterProps = $props()
+	let { class: className = '', allFilters, categories, priceStat, tags }: FilterProps = $props()
 
 	const filterState = getDesktopFilterState()
+	const categoryOption = (category: Record<string, string>) => ({
+		name: category.name,
+		slug: category.slug
+	})
 </script>
 
 <div class="group sticky" style={`top: ${filterState.containerTop}px;`}>
@@ -135,7 +143,7 @@
 						<Button
 							variant="ghost"
 							class="group flex flex-row items-center justify-start gap-2 h-auto py-1 px-0 hover:bg-transparent"
-							onclick={() => filterState.handleCategoryClick(category)}
+							onclick={() => filterState.handleCategoryClick(categoryOption(category))}
 						>
 							{#if category.thumbnail}
 								<img
@@ -163,7 +171,7 @@
 						<Button
 							variant="ghost"
 							class="group flex flex-row items-center justify-start gap-3 h-auto py-1 px-0 hover:bg-transparent"
-							onclick={() => filterState.handleCategoryClick(category)}
+							onclick={() => filterState.handleCategoryClick(categoryOption(category))}
 						>
 							{#if category.thumbnail}
 								<img

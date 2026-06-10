@@ -5,7 +5,7 @@
 	import { PincodeCheckRenderer, useProductState } from '$lib/core/composables/index.js'
 	import { MapPin } from '@lucide/svelte'
 
-	let pincode: number | undefined = $state()
+	let pincode: string | undefined = $state()
 	const productState = useProductState()
 </script>
 
@@ -25,7 +25,7 @@
 						placeholder="Enter Pincode"
 						aria-label="Enter Pincode"
 					/>
-					<Button disabled={!(pincode && pincode > 0) || loading} onclick={checkPincode} class="min-w-[80px]">
+					<Button disabled={!(pincode && Number(pincode) > 0) || loading} onclick={checkPincode} class="min-w-[80px]">
 						{#if loading}
 							<LoadingDots />
 						{:else}

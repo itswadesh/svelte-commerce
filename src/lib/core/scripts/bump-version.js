@@ -10,6 +10,7 @@ const pkgPath = path.resolve(__dirname, '..', 'package.json')
 const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
 
 // Simple semver-major.minor.patch bump (increment patch)
+/** @param {string} version */
 function bumpPatch(version) {
 	const parts = version.split('.')
 	if (parts.length !== 3) {

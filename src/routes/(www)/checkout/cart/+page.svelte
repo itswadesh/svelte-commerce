@@ -19,8 +19,24 @@
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
 
+	type CartItemView = {
+		mrp?: number
+		price: number
+	}
+
+	type VariantOptionView = {
+		option?: {
+			title?: string
+		}
+		optionId?: string
+		value?: string
+	}
+
+	const itemMrp = (item: CartItemView) => item.mrp ?? item.price
+	const optionTitle = (option: VariantOptionView) => option.option?.title ?? option.optionId
+
 	const totalSavings = $derived(
-		(cartState.cart?.lineItems || []).reduce((acc, item) => acc + Math.max(0, (item.mrp || item.price) - item.price) * item.qty, 0) +
+		(cartState.cart?.lineItems || []).reduce((acc, item) => acc + Math.max(0, itemMrp(item) - item.price) * item.qty, 0) +
 			(cartState.cart?.discountAmount || 0)
 	)
 
@@ -331,11 +347,11 @@
 														</span>
 														{#if item.variant && item.variant.options && item.variant.options.length > 0}
 															{#each item.variant.options as option}
-																{#if option?.option?.title && option?.value}
+																{#if optionTitle(option) && option?.value}
 																	<span
 																		class="inline-flex items-center rounded-radius border border-primary px-2 py-0.5 text-xs font-semibold ring-1 ring-primary/10"
 																	>
-																		{option.option?.title}: {option?.value}
+																		{optionTitle(option)}: {option?.value}
 																	</span>
 																{/if}
 															{/each}
@@ -349,15 +365,15 @@
 															<p class="text-base font-bold text-gray-900 sm:text-lg">
 																{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 															</p>
-															{#if item.mrp > item.price}
+															{#if itemMrp(item) > item.price}
 																<span class="text-xs text-gray-400 line-through">
-																	{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
+																	{formatPrice(itemMrp(item) * item.qty, page?.data?.store?.currency?.code)}
 																</span>
 															{/if}
 														</div>
-														{#if item.mrp > item.price}
+														{#if itemMrp(item) > item.price}
 															<p class="text-xs font-medium tracking-tight text-green-600">
-																You saved {formatPrice(item.mrp * item.qty - item.price * item.qty, page?.data?.store?.currency?.code)}
+																You saved {formatPrice(itemMrp(item) * item.qty - item.price * item.qty, page?.data?.store?.currency?.code)}
 															</p>
 														{:else}
 															<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
@@ -426,15 +442,15 @@
 														<p class="text-base font-bold text-gray-900 sm:text-lg">
 															{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 														</p>
-														{#if item.mrp > item.price}
+														{#if itemMrp(item) > item.price}
 															<span class="text-xs line-through">
-																{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
+																{formatPrice(itemMrp(item) * item.qty, page?.data?.store?.currency?.code)}
 															</span>
 														{/if}
 													</div>
-													{#if item.mrp > item.price}
+													{#if itemMrp(item) > item.price}
 														<p class="text-xs font-medium tracking-tight text-success">
-															You saved {formatPrice(item.mrp * item.qty - item.price * item.qty, page?.data?.store?.currency?.code)}
+															You saved {formatPrice(itemMrp(item) * item.qty - item.price * item.qty, page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
 														<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">

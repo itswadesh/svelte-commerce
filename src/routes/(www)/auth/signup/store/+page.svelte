@@ -6,6 +6,8 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { AuthButton } from '$lib/core/components/index.js'
+	import { Button } from '$lib/components/ui/button'
+	import { LoaderIcon } from '@lucide/svelte'
 
 	let email = $state('')
 	let isLoading = $state(false)
@@ -18,7 +20,11 @@
 			.max(100, 'Email must be less than 100 characters')
 	}
 
-	async function handleSubmit(e) {
+	type EmailCheckResponse = {
+		exists?: boolean
+	}
+
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault()
 		try {
 			isLoading = true
@@ -27,7 +33,7 @@
 			const validatedEmail = schemas.email.parse(email)
 
 			// Check if email is available
-			const emailCheck = await userService.checkEmail(validatedEmail)
+			const emailCheck = (await userService.checkEmail(validatedEmail)) as EmailCheckResponse
 
 			if (emailCheck?.exists) {
 				toast.error('This email is already registered')

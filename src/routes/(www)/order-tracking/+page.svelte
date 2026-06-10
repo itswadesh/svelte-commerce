@@ -12,6 +12,38 @@
 	import { CheckCircle } from '@lucide/svelte'
 
 	const orderTrackingModule = new OrderTrackingModule()
+
+	type TrackingOrderItem = {
+		customizedImg?: string
+		files?: string[]
+		foodType?: 'veg' | 'nonveg' | string
+		img?: string
+		isCustomized?: boolean
+		mrp?: number
+		name?: string
+		orderItemId?: string
+		pid?: string
+		price: number
+		qty?: number
+		size?: string
+		slug?: string
+		status?: string
+		subtotal: number
+		thumbnail?: string
+		total: number
+		usedOptions?: {
+			name?: string
+			val?: string[]
+		}[]
+	}
+
+	type TrackingOrderView = typeof orderTrackingModule.order & {
+		lineItems?: TrackingOrderItem[]
+		tracking?: unknown[]
+	}
+
+	const trackingOrder = $derived(orderTrackingModule.order as TrackingOrderView | null)
+	const itemMrp = (item: TrackingOrderItem) => item.mrp ?? item.price
 </script>
 
 <svelte:head>
@@ -22,24 +54,24 @@
 		<div class="flex items-center justify-center">
 			<OrderListSkeleton />
 		</div>
-	{:else if orderTrackingModule.order && orderTrackingModule.order?.orderNo}
+	{:else if trackingOrder && trackingOrder.orderNo}
 		<section class="container mx-auto">
 			<div class="my-5 overflow-hidden rounded-lg border sm:mb-10">
 				<div class="flex flex-wrap items-center justify-between rounded-lg rounded-b-none border-b bg-gray-50 px-5 py-3">
 					<div class="flex items-center gap-4">
-						<h6>Order No : #{orderTrackingModule.order?.orderNo}</h6>
-						<StatusCell value={orderTrackingModule.order?.status} />
+						<h6>Order No : #{trackingOrder.orderNo}</h6>
+						<StatusCell value={trackingOrder.status} />
 					</div>
 
-					<h6 class="mt-2 text-sm text-gray-500 sm:mt-0">Order Date : {date(orderTrackingModule.order?.createdAt)}</h6>
+					<h6 class="mt-2 text-sm text-gray-500 sm:mt-0">Order Date : {date(trackingOrder.createdAt)}</h6>
 				</div>
 
 				<!-- Order detail  -->
 				<div class="flex flex-col lg:grid lg:grid-cols-2 lg:divide-x">
 					<div class="order-1 flex flex-col divide-y lg:order-none">
-						{#if orderTrackingModule.order?.lineItems}
+						{#if trackingOrder.lineItems}
 							<div class="divide-y divide-dashed text-xs text-zinc-500">
-								{#each orderTrackingModule.order?.lineItems as item}
+								{#each trackingOrder.lineItems as item}
 									{#if item}
 										<div class="flex gap-2 p-5 lg:gap-5">
 											<a href={`/products/${item.slug}`} aria-label="Click to view the product details" class="shrink-0">
@@ -91,7 +123,7 @@
 
 												{#if item?.usedOptions?.length}
 													{#each item?.usedOptions as option}
-														{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+														{#if option?.val?.length}
 															<div class="flex flex-wrap gap-2">
 																<span>{option.name}:</span>
 
@@ -122,16 +154,16 @@
 														{formatPrice(item.price, page?.data?.store?.currency?.code)}
 													</span>
 
-													{#if item?.mrp > item?.price}
+													{#if itemMrp(item) > item.price}
 														<span class="whitespace-nowrap text-zinc-500 line-through">
 															<strike>
-																{formatPrice(item.mrp, page?.data?.store?.currency?.code)}
+																{formatPrice(itemMrp(item), page?.data?.store?.currency?.code)}
 															</strike>
 														</span>
 
-														{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+														{#if Math.floor(((itemMrp(item) - item.price) / itemMrp(item)) * 100) > 0}
 															<span class="text-secondary-500 whitespace-nowrap">
-																({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+																({Math.floor(((itemMrp(item) - item.price) / itemMrp(item)) * 100)}% off)
 															</span>
 														{/if}
 													{/if}
@@ -334,8 +366,8 @@
 			</div>
 
 			<!-- Order Timeline -->
-			{#if orderTrackingModule.order.tracking?.length}
-				<OrderTimeline timeline={orderTrackingModule.order.tracking} />
+			{#if trackingOrder.tracking?.length}
+				<OrderTimeline timeline={trackingOrder.tracking} />
 			{/if}
 		</section>
 	{:else}

@@ -2,6 +2,16 @@
 	import { fade } from 'svelte/transition'
 	import { BlogRenderer } from '$lib/core/composables/index.js'
 	import { SeoHeader } from '$lib/core/components/index.js'
+
+	type BlogPostView = {
+		author?: string
+		createdAt: string
+		excerpt?: string
+		id: string
+		imageUrl?: string
+		tags?: string[]
+		title: string
+	}
 </script>
 
 <SeoHeader metaTitle="Blog | Insights & News" />
@@ -28,7 +38,8 @@
 				</div>
 			{:else if posts.data.length}
 				<div class="grid gap-8 md:grid-cols-2">
-					{#each posts.data as post (post.id)}
+					{#each posts.data as rawPost (rawPost.id)}
+						{@const post = rawPost as unknown as BlogPostView}
 						<article class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
 							{#if post.imageUrl}
 								<img src={post.imageUrl} alt={post.title} class="h-48 w-full object-cover" />
@@ -46,7 +57,7 @@
 								</h2>
 								<p class="mb-4 text-gray-600">{post.excerpt}</p>
 								<div class="flex gap-2">
-									{#each post.tags as tag}
+									{#each post.tags ?? [] as tag}
 										<span class="rounded-full bg-gray-100 px-2 py-1 text-sm text-gray-600">
 											{tag}
 										</span>

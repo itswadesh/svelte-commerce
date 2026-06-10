@@ -101,6 +101,7 @@
 		"@lucide/svelte": "^1.8.0",
 		"@misiki/kitcommerce-core": "^0.1.7",
 		"@misiki/litekart-connector": "^2.0.26",
+		"@tanstack/table-core": "^8.21.3",
 		"fuse.js": "^7.1.0",
 		"hi-base32": "^0.5.1",
 		"paneforge": "^0.0.6",

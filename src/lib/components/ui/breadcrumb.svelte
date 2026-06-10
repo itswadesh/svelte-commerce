@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { ChevronRight, Home } from '@lucide/svelte'
-	let { categoryHierarchy }: { categoryHierarchy?: Record<string, any>[] } = $props()
+
+	type BreadcrumbItem = {
+		href?: string
+		name?: string
+		slug?: string
+	}
+
+	let { categoryHierarchy = [] }: { categoryHierarchy?: BreadcrumbItem[] } = $props()
 
 	// let items = $state([])
 	// let isProductsPage = $derived(page.route?.id === '/(www)/products/[slug]')
@@ -16,7 +23,7 @@
 			</a>
 		</div>
 		<ol class="hidden sm:inline-flex md:items-center md:space-x-2">
-			{#each categoryHierarchy as { slug, name, href }, i}
+			{#each categoryHierarchy as { slug, name }}
 				<li>
 					<div class="flex w-max items-center">
 						<ChevronRight class="h-4 min-h-4 w-4 min-w-4 text-gray-400" />

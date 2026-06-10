@@ -15,6 +15,7 @@
 
 	const cartState = getCartState()
 	let showCartModal = $state(false)
+	const currencyCode = $derived(page?.data?.store?.currency?.code)
 
 	$effect(() => {
 		if (page.url.pathname) {
@@ -143,7 +144,7 @@
 					<div class="space-y-4">
 						<div class="flex justify-between text-sm">
 							<span>Subtotal</span>
-							<span>{formatPrice(cartState.cart.subtotal, cartState.cart.currencyCode)}</span>
+							<span>{formatPrice(cartState.cart.subtotal, currencyCode)}</span>
 						</div>
 						<div class="flex justify-between text-sm">
 							<span>Shipping</span>
@@ -152,7 +153,7 @@
 						<Separator />
 						<div class="flex justify-between font-medium">
 							<span>Total</span>
-							<span>{formatPrice(cartState.cart.total, cartState.cart.currencyCode)}</span>
+							<span>{formatPrice(cartState.cart.total, currencyCode)}</span>
 						</div>
             <Button
               onclick={() => {
@@ -171,4 +172,4 @@
 	</div>
 {/if}
 <!-- Add padding to bottom of page to account for nav on mobile only -->
-<div class="h-16 md:hidden" />
+<div class="h-16 md:hidden"></div>

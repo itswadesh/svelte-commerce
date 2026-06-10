@@ -8,7 +8,7 @@
 	import HomepageCategoryListWithImage from '$lib/components/home/homepage-category-list-with-image.svelte'
 	import HomepageBanners from '$lib/components/home/homepage-banners.svelte'
 	import Banners from '$lib/components/home/banners.svelte'
-	import { SeoHeader, GoogleStructuredDataWebsite, GoogleStructuredDataOrganization, GoogleStructuredDataProductsList } from '$lib/core/components/index.js'
+	import { SeoHeader, GoogleStructuredDataOrganization, GoogleStructuredDataProductsList } from '$lib/core/components/index.js'
 	import Collections from '$lib/components/home/collections.svelte'
 	let { data } = $props()
 	import { HomepageModule } from '$lib/core/composables/index.js'
@@ -73,13 +73,6 @@
 				contactType: 'customer service'
 			}
 		: undefined}
-/>
-
-<GoogleStructuredDataWebsite
-	name={data?.store?.name || 'ArialShop'}
-	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
-	description={data?.store?.description}
-	searchUrl={`https://${PUBLIC_LITEKART_DOMAIN}/search?q={search_term_string}`}
 />
 
 <SeoHeader

@@ -51,14 +51,16 @@
 		children,
 		...restProps
 	}: ButtonProps = $props()
+
+	const variantClass = $derived(typeof className === 'string' ? className : undefined)
 </script>
 
 {#if href}
-	<a bind:this={ref} class={cn(buttonVariants({ variant, size, className }))} {href} {...restProps}>
+	<a bind:this={ref} class={cn(buttonVariants({ variant, size, className: variantClass }))} {href} {...restProps}>
 		{@render children?.()}
 	</a>
 {:else}
-	<button bind:this={ref} class={cn(buttonVariants({ variant, size, className }))} {type} {...restProps}>
+	<button bind:this={ref} class={cn(buttonVariants({ variant, size, className: variantClass }))} {type} {...restProps}>
 		{@render children?.()}
 	</button>
 {/if}

@@ -2,9 +2,13 @@
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
 	import type { Page } from '$lib/core/types/index.js'
 
+	type PageWithLayouts = Page & {
+		layouts?: unknown[]
+	}
+
 	interface Props {
 		data: {
-			page: Page
+			page: PageWithLayouts
 		}
 	}
 	const { data }: Props = $props()

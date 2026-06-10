@@ -9,7 +9,7 @@
 	import { getYoutubeId } from '$lib/core/logic/index.js'
 	import LazyImgWithZoom from '$lib/core/components/image/lazy-img-with-zoom.svelte'
 
-	let { images = [] } = $props()
+	let { images = [], title = 'Product Image' }: { images?: string[]; title?: string } = $props()
 
 	let carouselApi: CarouselAPI | null = $state(null)
 	let mainCarouselApi: CarouselAPI | null = $state(null)

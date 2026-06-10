@@ -4,13 +4,24 @@
 	import CarouselPrevious from '$lib/components/ui/carousel/carousel-previous.svelte'
 	import CarouselNext from '$lib/components/ui/carousel/carousel-next.svelte'
 	import { CollectionsRenderer } from '$lib/core/composables/index.js'
+
+	type CollectionValue = {
+		id?: string
+		products?: unknown
+	}
+
+	type CollectionDisplay = {
+		collectionvalues?: CollectionValue[]
+		name?: string
+	}
 </script>
 
 <!-- Collection -->
 <CollectionsRenderer>
 	{#snippet content({ displayProduct, collectionData })}
 		{#if collectionData.length > 0}
-			{#each collectionData as data, index}
+			{#each collectionData as rawData, index}
+				{@const data = rawData as CollectionDisplay}
 				<div class="py-10 page-width {index % 2 === 1 ? 'bg-muted/30' : ''}">
 					<div class="mx-auto w-full">
 						<div class="mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
@@ -43,7 +54,7 @@
 								class="w-full"
 							>
 								<CarouselContent class="-ml-1">
-									{#each data?.collectionvalues as prod (prod?.id)}
+									{#each data?.collectionvalues ?? [] as prod (prod?.id)}
 										{#if prod?.products}
 											<CarouselItem class="basis-full pl-1 mobiles:basis-[48%] sm:basis-[33%] md:basis-[25%] lg:basis-[20%] xl:basis-1/6">
 												<div class="h-full">

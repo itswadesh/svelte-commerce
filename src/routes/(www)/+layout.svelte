@@ -23,7 +23,7 @@
 </svelte:head>
 
 <div class="flex min-h-screen flex-col justify-between">
-	<Nav storeData={data.store} />
+	<Nav />
 	<main class="inter-gap flex min-h-screen flex-1 flex-col">
 		{@render children()}
 	</main>
@@ -33,4 +33,4 @@
 	{/if}
 </div>
 
-<StorePlugins storeData={data.store} />
+<StorePlugins />

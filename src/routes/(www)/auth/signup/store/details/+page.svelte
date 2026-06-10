@@ -26,6 +26,7 @@
 		const savedEmail = sessionStorage.getItem('signup_email')
 		if (!savedEmail) {
 			goto('/auth/signup/store')
+			return
 		}
 		email = savedEmail
 	})
@@ -67,7 +68,7 @@
 			})
 	}
 
-	async function handleSubmit(e) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault()
 		try {
 			isLoading = true

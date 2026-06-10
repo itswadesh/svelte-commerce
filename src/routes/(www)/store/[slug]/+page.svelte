@@ -1,23 +1,57 @@
 <script lang="ts">
 	import Product from '$lib/components/product-catalogue/product-card.svelte'
-	import { chatService, reviewService, ReviewService, vendorService, VendorService } from '$lib/core/services'
+	import { chatService, reviewService, vendorService } from '$lib/core/services'
 	import { Skeleton } from '$lib/components/ui/skeleton'
 	import { page } from '$app/state'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { goto } from '$app/navigation'
 	import Pagination from '$lib/components/common/pagination.svelte'
 
+	type VendorProduct = {
+		id: string
+		mrp?: number
+		price: number
+		slug?: string
+		thumbnail?: string
+		title: string
+		variants?: unknown[]
+		vendor?: unknown
+	}
+
+	type VendorProductsResponse = {
+		data?: VendorProduct[]
+		noOfPage?: number
+	}
+
+	type ReviewItem = {
+		comment?: string
+		rating?: number
+		userName?: string
+	}
+
+	type ReviewResponse = {
+		data?: ReviewItem[]
+	}
+
+	type ChatServiceCompat = typeof chatService & {
+		chats?: (args: { vendorId: string }) => Promise<{ chatId?: string }>
+		save?: (payload: { chat_id: string; message: string; vendorId: string }) => Promise<unknown>
+	}
+
 	let productsCount = $state(0)
-	let products = $state({})
+	let products = $state<VendorProductsResponse>({})
 	let loading = $state(true)
-	let reviews = $state([])
+	let reviews = $state<ReviewItem[]>([])
 	let loadingReviews = $state(true)
 	let { data } = $props()
+	const chatApi = chatService as ChatServiceCompat
+	const productList = $derived(products.data ?? [])
 
 	const mount = async () => {
 		loading = true
 		try {
-			products = await vendorService.fetchProductsOfVendor(data?.vendor?.id)
+			if (!data?.vendor?.id) return
+			products = (await vendorService.fetchProductsOfVendor(data.vendor.id)) as unknown as VendorProductsResponse
 		} finally {
 			loading = false
 		}
@@ -27,12 +61,13 @@
 		loadingReviews = true
 		try {
 			// Replace with actual review fetching logic
-			reviews = await reviewService.fetchReviews({
-				productId: data?.product?.id,
-				search: page.url.searchParams.get('search') || undefined,
-				sort: page.url.searchParams.get('sort') || undefined,
-				currentPage: page.url.searchParams.get('page') || 1
-			})
+			const response = (await reviewService.fetchReviews({
+				productId: data?.product?.id ?? '',
+				search: page.url.searchParams.get('search') || '',
+				sort: page.url.searchParams.get('sort') || '',
+				currentPage: Number(page.url.searchParams.get('page') || 1)
+			})) as unknown as ReviewResponse
+			reviews = response.data ?? []
 		} finally {
 			loadingReviews = false
 		}
@@ -43,7 +78,7 @@
 		fetchReviews()
 	})
 
-	function getRatingColor(rating) {
+	function getRatingColor(rating: number) {
 		if (rating >= 4) return 'text-green-500'
 		if (rating >= 3) return 'text-yellow-500'
 		return 'text-red-500'
@@ -56,12 +91,12 @@
 			vendorId
 		}
 
-		const res = await chatService.save(payload)
+		await chatApi.save?.(payload)
 	}
 
 	const initiateChatWithVendor = async (vendorId: string) => {
 		try {
-			const res = await chatService.chats({ vendorId })
+			const res = await chatApi.chats?.({ vendorId })
 			if (res?.chatId) {
 				await sendMessageToChat(res.chatId, vendorId, 'Hi, I am interested in your products.')
 					.then(() => {
@@ -219,8 +254,8 @@
 		</div> -->
 
 		<div class="mb-5 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-			{#if products?.data?.length > 0}
-				{#each products?.data as p}
+			{#if productList.length > 0}
+				{#each productList as p}
 					<Product
 						product={{
 							id: p.id,
@@ -238,6 +273,6 @@
 			{/if}
 		</div>
 
-		<Pagination noOfPage={products.noOfPage} />
+		<Pagination noOfPage={products.noOfPage ?? 1} />
 	{/if}
 </div>

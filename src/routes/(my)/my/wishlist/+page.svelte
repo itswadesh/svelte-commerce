@@ -74,8 +74,8 @@
 								class="relative block w-full overflow-hidden"
 							>
 								<LazyImg
-									src={item?.product?.thumbnail}
-									alt={item?.product?.title}
+									src={item?.product?.thumbnail || '/placeholder.svg'}
+									alt={item?.product?.title || 'Product'}
 									class="w-full rounded-md object-cover transition-transform duration-500"
 									style="aspect-ratio: 4 / 5; border-radius: 8px;"
 								/>

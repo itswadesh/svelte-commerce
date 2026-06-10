@@ -26,6 +26,77 @@
 	import { MyOrdersIdRenderer } from '$lib/core/composables/index.js'
 
 	let { class: klass = '', data, ...rest } = $props()
+
+	type OrderAddressView = {
+		address_1?: string
+		address_2?: string
+		city?: string
+		country?: string
+		countryCode?: string
+		firstName?: string
+		lastName?: string
+		phone?: string
+		state?: string
+		zip?: string
+	}
+
+	type OrderItemView = {
+		customizedImg?: string
+		files?: string[]
+		img?: string
+		isCustomized?: boolean
+		mrp?: number
+		orderItemId?: string
+		pid?: string
+		price: number
+		qty: number
+		size?: string
+		slug?: string
+		status?: string
+		thumbnail?: string
+		title: string
+		variantTitle?: string
+	}
+
+	type FulfillmentView = {
+		lineItems?: OrderItemView[]
+		status?: string
+		trackingUrl?: string
+	}
+
+	type OrderDetailsView = {
+		billingAddress?: OrderAddressView
+		codCharges?: number | null
+		coupon?: string | { code?: string }
+		createdAt: string
+		discount?: number | null
+		fulfillments?: FulfillmentView[]
+		invoiceLink?: string
+		isReplaceOrReturn?: boolean
+		itemId?: string
+		lineItems?: OrderItemView[]
+		orderId?: string
+		orderNo?: number | string
+		paymentStatus?: string
+		replaceValidTill?: number | null
+		shippingAddress?: OrderAddressView
+		shippingCharges?: number | null
+		shippingRate?: {
+			estimatedMaxDays?: number
+		}
+		status?: string
+		subtotal?: number | null
+		total?: number | null
+	}
+
+	const money = (value: number | null | undefined) => value ?? 0
+	const couponCode = (coupon: OrderDetailsView['coupon']) => (typeof coupon === 'string' ? coupon : coupon?.code)
+	const estimatedArrival = (order: OrderDetailsView) => {
+		const createdAt = new Date(order.createdAt).getTime()
+		const base = Number.isNaN(createdAt) ? Date.now() : createdAt
+		const days = order.shippingRate?.estimatedMaxDays ?? 7
+		return date(new Date(base + days * 86400000).toISOString())
+	}
 </script>
 
 <svelte:head>
@@ -38,6 +109,7 @@
 			{#if loading}
 				<OrderListSkeleton />
 			{:else if order}
+				{@const orderDetails = order as unknown as OrderDetailsView}
 				<section class="space-y-5 lg:pt-8">
 					<!-- Back Navigation -->
 					<div class="flex items-center gap-4">
@@ -47,16 +119,16 @@
 					<!-- Header Section -->
 					<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 						<div>
-							<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Order #{order?.orderNo}</h1>
+							<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Order #{orderDetails.orderNo}</h1>
 							<p class="mt-2 text-sm text-gray-500">
-								Placed on <span class="font-medium text-gray-900">{date(order?.createdAt)}</span>
+								Placed on <span class="font-medium text-gray-900">{date(orderDetails.createdAt)}</span>
 							</p>
 						</div>
 						<div class="flex items-center gap-3">
-							{#if order?.invoiceLink}
+							{#if orderDetails.invoiceLink}
 								<Button
 									variant="outline"
-									href={order?.invoiceLink}
+									href={orderDetails.invoiceLink}
 									target="_blank"
 									class="h-11 gap-2"
 								>
@@ -79,18 +151,16 @@
 									<div class="flex-1">
 										<div class="flex items-center gap-4">
 											<h3 class="text-base font-bold text-gray-900">Order Status</h3>
-											<StatusCell value={order?.status || 'processing'} />
+											<StatusCell value={orderDetails.status || 'processing'} />
 										</div>
 										<p class="mt-2 text-sm text-gray-500">
-											Your order is currently {order?.status || 'being processed'}.
+											Your order is currently {orderDetails.status || 'being processed'}.
 										</p>
 										<div class="mt-4 flex w-fit items-center gap-2 rounded-lg bg-success/10 px-3 py-2 text-sm text-green-700 ring-1 ring-green-600/10">
 											<Truck class="h-4 w-4" />
 											<span class="font-medium">Estimated Arrival:</span>
 											<span class="font-bold uppercase tracking-tight">
-												{order?.shippingRate?.estimatedMaxDays
-													? date(order.createdAt + order?.shippingRate?.estimatedMaxDays * 86400000)
-													: date(new Date(Date.now() + 7 * 86400000).getTime())}
+												{estimatedArrival(orderDetails)}
 											</span>
 										</div>
 									</div>
@@ -100,10 +170,10 @@
 							<!-- Items List -->
 							<div class="overflow-hidden rounded-xl border border-muted/20 bg-background shadow-sm">
 								<div class="px-3 sm:px-6 py-4">
-									<h3 class="font-medium text-gray-900">Order Items ({order?.lineItems?.length || 0})</h3>
+									<h3 class="font-medium text-gray-900">Order Items ({orderDetails.lineItems?.length || 0})</h3>
 								</div>
 								<div class="divide-y divide-gray-100">
-									{#each order?.lineItems || [] as item}
+									{#each orderDetails.lineItems || [] as item}
 										<div class="p-3 sm:p-6 transition-colors hover:bg-gray-50/30">
 											<div class="flex gap-6">
 												<a
@@ -150,9 +220,9 @@
 															<p class="text-base font-semibold  text-gray-900">
 																{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 															</p>
-															{#if item?.mrp > item?.price}
+															{#if money(item.mrp) > item.price}
 																<p class="mt-1 text-sm text-muted-foreground line-through">
-																	{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
+																	{formatPrice(money(item.mrp) * item.qty, page?.data?.store?.currency?.code)}
 																</p>
 															{/if}
 														</div>
@@ -197,13 +267,13 @@
 							</div>
 
 							<!-- Fulfillments Timeline -->
-							{#if order.fulfillments?.length}
+							{#if orderDetails.fulfillments?.length}
 								<div class="overflow-hidden rounded-xl border border-muted/20 bg-background shadow-sm">
 									<div class="border-b border-gray-100 bg-gray-50/50 px-3 sm:px-6 py-4">
 										<h3 class="font-bold text-gray-900">Shipments</h3>
 									</div>
 									<div class="divide-y divide-gray-100">
-										{#each order.fulfillments as fulfillment, ix}
+										{#each orderDetails.fulfillments as fulfillment, ix}
 											<div class="p-6">
 												<div class="flex flex-col gap-6 sm:flex-row sm:items-center">
 													<div class="flex-1">
@@ -254,22 +324,22 @@
 										</div>
 										<div class="text-sm leading-relaxed text-gray-600">
 											<p class="font-bold text-gray-900">
-												{order?.shippingAddress?.firstName} {order?.shippingAddress?.lastName}
+												{orderDetails.shippingAddress?.firstName} {orderDetails.shippingAddress?.lastName}
 											</p>
-											<p>{order?.shippingAddress?.address_1}</p>
-											{#if order?.shippingAddress?.address_2}
-												<p>{order?.shippingAddress?.address_2}</p>
+											<p>{orderDetails.shippingAddress?.address_1}</p>
+											{#if orderDetails.shippingAddress?.address_2}
+												<p>{orderDetails.shippingAddress?.address_2}</p>
 											{/if}
-											<p>{order?.shippingAddress?.city}, {order?.shippingAddress?.state}</p>
-											<p>{order?.shippingAddress?.country || order?.shippingAddress?.countryCode} - {order?.shippingAddress?.zip}</p>
-											{#if order?.shippingAddress?.phone}
-												<p class="mt-2 font-medium text-gray-900">{order?.shippingAddress?.phone}</p>
+											<p>{orderDetails.shippingAddress?.city}, {orderDetails.shippingAddress?.state}</p>
+											<p>{orderDetails.shippingAddress?.country || orderDetails.shippingAddress?.countryCode} - {orderDetails.shippingAddress?.zip}</p>
+											{#if orderDetails.shippingAddress?.phone}
+												<p class="mt-2 font-medium text-gray-900">{orderDetails.shippingAddress.phone}</p>
 											{/if}
 										</div>
 									</div>
 
 									<!-- Billing -->
-									{#if order?.billingAddress}
+									{#if orderDetails.billingAddress}
 										<div class="pt-0">
 											<div class="flex items-center gap-2 mb-3">
 												<ReceiptText class="h-4 w-4 text-gray-400" />
@@ -277,10 +347,10 @@
 											</div>
 											<div class="text-sm leading-relaxed text-gray-600">
 												<p class="font-bold text-gray-900">
-													{order?.billingAddress?.firstName} {order?.billingAddress?.lastName}
+													{orderDetails.billingAddress.firstName} {orderDetails.billingAddress.lastName}
 												</p>
-												<p>{order?.billingAddress?.address_1}</p>
-												<p>{order?.billingAddress?.city}, {order?.billingAddress?.state} - {order?.billingAddress?.zip}</p>
+												<p>{orderDetails.billingAddress.address_1}</p>
+												<p>{orderDetails.billingAddress.city}, {orderDetails.billingAddress.state} - {orderDetails.billingAddress.zip}</p>
 											</div>
 										</div>
 									{/if}
@@ -296,19 +366,19 @@
 									<div class="space-y-2">
 										<div class="flex justify-between text-sm">
 											<span class="text-gray-500">Subtotal</span>
-											<span class="font-medium text-gray-900">{formatPrice(order?.subtotal, page?.data?.store?.currency?.code)}</span>
+											<span class="font-medium text-gray-900">{formatPrice(money(orderDetails.subtotal), page?.data?.store?.currency?.code)}</span>
 										</div>
 
-										{#if order?.discount > 0}
+										{#if money(orderDetails.discount) > 0}
 											<div class="flex justify-between text-sm text-green-600">
 												<span>Discount</span>
-												<span>-{formatPrice(order?.discount, page?.data?.store?.currency?.code)}</span>
+												<span>-{formatPrice(money(orderDetails.discount), page?.data?.store?.currency?.code)}</span>
 											</div>
 										{/if}
 
-										{#if order?.coupon?.code}
+										{#if couponCode(orderDetails.coupon)}
 											<div class="flex justify-between text-xs font-bold text-primary">
-												<span>Coupon ({order.coupon.code})</span>
+												<span>Coupon ({couponCode(orderDetails.coupon)})</span>
 												<span>Applied</span>
 											</div>
 										{/if}
@@ -316,21 +386,21 @@
 										<div class="flex justify-between text-sm">
 											<span class="text-gray-500">Shipping</span>
 											<span class="font-medium text-gray-900">
-												{order?.shippingCharges > 0 ? formatPrice(order.shippingCharges, page?.data?.store?.currency?.code) : 'FREE'}
+												{money(orderDetails.shippingCharges) > 0 ? formatPrice(money(orderDetails.shippingCharges), page?.data?.store?.currency?.code) : 'FREE'}
 											</span>
 										</div>
 
-										{#if order?.codCharges}
+										{#if orderDetails.codCharges}
 											<div class="flex justify-between text-sm">
 												<span class="text-gray-500">COD Charges</span>
-												<span class="font-medium text-gray-900">{formatPrice(order.codCharges, page?.data?.store?.currency?.code)}</span>
+												<span class="font-medium text-gray-900">{formatPrice(orderDetails.codCharges, page?.data?.store?.currency?.code)}</span>
 											</div>
 										{/if}
 
 										<div class="pt-1 flex justify-between items-baseline">
 											<span class="text-base font-bold text-gray-900">Total</span>
 											<span class="text-base font-bold text-gray-900">
-												{formatPrice(order?.total, page?.data?.store?.currency?.code)}
+												{formatPrice(money(orderDetails.total), page?.data?.store?.currency?.code)}
 											</span>
 										</div>
 
@@ -339,8 +409,8 @@
 												<CreditCardIcon class="h-4 w-4 text-gray-400" />
 												<span class="text-xs font-bold uppercase tracking-tight text-gray-400">Payment Status</span>
 											</div>
-											<span class="text-xs font-bold uppercase tracking-wider {order?.paymentStatus === 'paid' ? 'text-green-600' : 'text-red-500'}">
-												{order?.paymentStatus}
+											<span class="text-xs font-bold uppercase tracking-wider {orderDetails.paymentStatus === 'paid' ? 'text-green-600' : 'text-red-500'}">
+												{orderDetails.paymentStatus}
 											</span>
 										</div>
 									</div>
@@ -348,10 +418,10 @@
 							</div>
 
 							<!-- Exchange/Return -->
-							{#if order?.replaceValidTill != null && new Date().getTime() <= order?.replaceValidTill && !order?.isReplaceOrReturn}
+							{#if orderDetails.replaceValidTill != null && new Date().getTime() <= orderDetails.replaceValidTill && !orderDetails.isReplaceOrReturn}
 								<Button
 									variant="secondary"
-									href="/my/exchange?orderId={order?.orderId}&itemId={order?.itemId}"
+									href="/my/exchange?orderId={orderDetails.orderId}&itemId={orderDetails.itemId}"
 									class="w-full h-12 gap-2"
 								>
 									<RefreshCw class="h-4 w-4" />

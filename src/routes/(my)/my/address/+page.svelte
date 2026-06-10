@@ -32,8 +32,6 @@
 <svelte:head>
 	<title>Address</title>
 </svelte:head>
-<SEO {...seoProps} />
-
 <section>
 	<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
 		<h1>
@@ -153,7 +151,7 @@
 			<SaveAddress bind:editAddress={showEditAddressModal} shipping_address={selectedShippingAddress} countries={data.countries?.data} />
 		</Modal> -->
 
-		<Pagination count={data?.addresses?.count || 1} />
+		<Pagination noOfPage={data?.addresses?.noOfPage || 1} />
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<!-- <img src={noEmptyAddress} alt="empty wishlist" class="mb-5 h-60 object-contain" /> -->

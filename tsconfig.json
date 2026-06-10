@@ -10,8 +10,7 @@
 		"sourceMap": true,
 		"strict": true,
 		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "NodeNext"
+		"module": "ESNext"
 	},
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "tests"]
 }

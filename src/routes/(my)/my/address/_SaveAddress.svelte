@@ -1,13 +1,65 @@
-<script>
+<script lang="ts">
 	import { applyAction, enhance } from '$app/forms'
 	import { onMount } from 'svelte'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { page } from '$app/state'
-	import { countryService, zipService } from '$lib/core/services'
+	import { stateService } from '$lib/core/services'
+	import { toast } from '$lib/core/utils'
 	import { slide } from 'svelte/transition'
 	import { Button } from '$lib/components/ui/button'
+	import Textbox from '$lib/components/form/textbox.svelte'
+	import Textarea from '$lib/components/ui/textarea/textarea.svelte'
+	import type { ActionResult } from '@sveltejs/kit'
 
 	const IS_DEV = import.meta.env.DEV
+
+	type AddressType = 'shipping' | 'billing'
+
+	type AddressFormAddress = {
+		_id?: string
+		address?: string
+		city?: string
+		country?: string
+		email?: string
+		firstName?: string
+		id?: string
+		lastName?: string
+		phone?: string
+		pincode?: string
+		state?: string
+		zip?: string
+	}
+
+	type CountryOption = {
+		code: string
+		dafault?: boolean
+		default?: boolean
+		name: string
+	}
+
+	type StateOption = {
+		code?: string
+		name: string
+	}
+
+	type FieldErrors = Partial<Record<keyof AddressFormAddress, string>>
+
+	type SaveAddressActionData = {
+		_id?: string
+		id?: string
+		billing_errors?: FieldErrors
+		errors?: FieldErrors
+		message?: string
+	}
+
+	type Props = {
+		billing_address?: AddressFormAddress
+		countries?: CountryOption[]
+		editAddress?: boolean
+		selectedAddress?: string
+		selectedBillingAddress?: string
+		shipping_address?: AddressFormAddress
+	}
 
 	let {
 		billing_address = {},
@@ -16,7 +68,7 @@
 		selectedAddress = '',
 		selectedBillingAddress = '',
 		shipping_address = {}
-	} = $props()
+	}: Props = $props()
 
 	if (!shipping_address?.firstName) {
 		shipping_address = IS_DEV
@@ -41,22 +93,22 @@
 	billing_address.zip = billing_address.zip || billing_address.pincode || ''
 	billing_address.phone = billing_address.phone || page?.data?.me?.phone || ''
 
-	let err = $state(null)
+	let err = $state<unknown>(null)
 	let isSameAsBillingAddress = $state(true)
 
 	// Shipping variables
 	let loadingForShippingAddressStates = $state(false)
-	let selectedShippingAddressCountry = $state({})
-	let shippingAddressStates = $state([])
+	let selectedShippingAddressCountry = $state<CountryOption | null>(null)
+	let shippingAddressStates = $state<StateOption[]>([])
 	let showShippingAddressErrorMessage = $state(false)
-	let zodShippingErrors = $state(null)
+	let zodShippingErrors = $state<FieldErrors | null>(null)
 
 	// Billing variables
-	let billingAddressStates = $state([])
+	let billingAddressStates = $state<StateOption[]>([])
 	let loadingForBillingAddressStates = $state(false)
-	let selectedBillingAddressCountry = $state({})
+	let selectedBillingAddressCountry = $state<CountryOption | null>(null)
 	let showBillingAddressErrorMessage = $state(false)
-	let zodBillingErrors = $state(null)
+	let zodBillingErrors = $state<FieldErrors | null>(null)
 
 	onMount(async () => {
 		await invalidateAll()
@@ -97,48 +149,39 @@
 	})
 
 	function getShippingAddressSelectedCountry() {
-		selectedShippingAddressCountry = countries.filter((c) => {
-			if (c.code === shipping_address.country) {
-				return c
-			}
-		})[0]
+		selectedShippingAddressCountry = countries.find((c) => c.code === shipping_address.country) ?? null
 	}
 
 	function getBillingAddressSelectedCountry() {
-		selectedBillingAddressCountry = countries.filter((c) => {
-			if (c.code === shipping_address.country) {
-				return c
-			}
-		})[0]
+		selectedBillingAddressCountry = countries.find((c) => c.code === shipping_address.country) ?? null
 	}
 
-	async function onShippingAddressCountryChange(country) {
-		shipping_address.state = null
+	async function onShippingAddressCountryChange(country: string | null | undefined) {
+		shipping_address.state = ''
 		fetchShippingAddressStates(country)
 		getShippingAddressSelectedCountry()
 	}
 
-	async function onBillingAddressCountryChange(country) {
-		billing_address.state = null
+	async function onBillingAddressCountryChange(country: string | null | undefined) {
+		billing_address.state = ''
 		fetchBillingAddressStates(country)
 		getBillingAddressSelectedCountry()
 	}
 
-	async function fetchShippingAddressStates(country) {
+	async function fetchStates(country: string | null | undefined) {
+		if (!country) return []
+		return (await stateService.list()).map((s) => ({
+			...s,
+			name: s.name.toUpperCase()
+		}))
+	}
+
+	async function fetchShippingAddressStates(country: string | null | undefined) {
 		try {
 			err = null
 			loadingForShippingAddressStates = true
 
-			shippingAddressStates = await countryService.fetchStates({
-				countryCode: country,
-				storeId: page.data.storeId,
-				origin: page.data?.origin
-			})
-
-			shippingAddressStates = shippingAddressStates.map((s) => {
-				s.name = s.name.toUpperCase()
-				return s
-			})
+			shippingAddressStates = await fetchStates(country)
 		} catch (e) {
 			err = e
 		} finally {
@@ -146,21 +189,12 @@
 		}
 	}
 
-	async function fetchBillingAddressStates(country) {
+	async function fetchBillingAddressStates(country: string | null | undefined) {
 		try {
 			err = null
 			loadingForBillingAddressStates = true
 
-			billingAddressStates = await countryService.fetchStates({
-				countryCode: country,
-				storeId: page.data.storeId,
-				origin: page.data?.origin
-			})
-
-			billingAddressStates = billingAddressStates.map((s) => {
-				s.name = s.name.toUpperCase()
-				return s
-			})
+			billingAddressStates = await fetchStates(country)
 		} catch (e) {
 			err = e
 		} finally {
@@ -168,7 +202,8 @@
 		}
 	}
 
-	async function fetchStateAndCity(zip, addresstype) {
+	async function fetchStateAndCity(zip: string | null | undefined, addresstype: AddressType) {
+		if (!zip) return
 		if (zip.length != 6) {
 			toast('Please enter 6 digit code', 'error')
 			return
@@ -179,12 +214,8 @@
 			loadingForShippingAddressStates = true
 			loadingForBillingAddressStates = true
 
-			let { city, state } = shipping_address
-
-			const zipInfo = await zipService.findZip({
-				zip,
-				origin
-			})
+			const response = await fetch(`/api/zip?zip=${encodeURIComponent(zip)}`)
+			const zipInfo = (await response.json()) as { District?: string; StateName?: string }
 
 			if (addresstype === 'shipping') {
 				shipping_address.city = zipInfo.District || ''
@@ -195,14 +226,15 @@
 			}
 		} catch (e) {
 			err = e
-			toast(e.message.error, 'error')
+			toast(e instanceof Error ? e.message : 'Unable to find postal code', 'error')
 		} finally {
 			loadingForShippingAddressStates = false
 			loadingForBillingAddressStates = false
 		}
 	}
 
-	function validatePhoneNumber(phoneNumber, addresstype) {
+	function validatePhoneNumber(phoneNumber: string | undefined, addresstype: AddressType) {
+		if (!phoneNumber) return false
 		if (page.data.store?.storeCountry?.code === 'IN') {
 			// Remove any spaces from the phone number
 			phoneNumber = phoneNumber.replace(/\s/g, '')
@@ -236,18 +268,27 @@
 			return true
 		}
 	}
+
+	function isSuccessResult(result: ActionResult): result is Extract<ActionResult<SaveAddressActionData>, { type: 'success' | 'failure' }> {
+		return result.type === 'success' || result.type === 'failure'
+	}
 </script>
 
 <div>
-	<Error {err} class="mb-5" />
+	{#if err}
+		<p class="mb-5 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+			{err instanceof Error ? err.message : String(err)}
+		</p>
+	{/if}
 
 	<form
 		action={!shipping_address.id || shipping_address.id === 'new' ? '/my/addresses?/saveAddress' : '/my/addresses?/editAddress'}
 		method="POST"
 		use:enhance={() => {
 			return async ({ result }) => {
-				if (result?.status === 200 && result?.data) {
-					const newAddressId = result.data?._id || result.data?.id
+				if (result.status === 200 && isSuccessResult(result) && result.data) {
+					const actionData = result.data as SaveAddressActionData
+					const newAddressId = actionData._id || actionData.id || ''
 					toast('Address saved successfully', 'success')
 
 					selectedBillingAddress = newAddressId
@@ -265,11 +306,11 @@
 					} else if (!page?.data.me) {
 						goto(`/checkout/payment-options?address=${newAddressId}`)
 					}
-				} else if (result?.error) {
+				} else if (isSuccessResult(result) && result.data?.message) {
 					shipping_address.phone = ''
-					zodShippingErrors = result?.error?.errors || null
-					zodBillingErrors = result?.error?.billing_errors || null
-					err = result?.error?.message || null
+					zodShippingErrors = result.data.errors || null
+					zodBillingErrors = result.data.billing_errors || null
+					err = result.data.message || null
 					// toast(result?.error?.message, 'error')
 				}
 			}
@@ -287,7 +328,7 @@
 				</h6>
 
 				<div class="w-full">
-					<Textbox type="text" placeholder="Enter First Name" bind:value={shipping_address.firstName} autoFocus required />
+					<Textbox type="text" placeholder="Enter First Name" bind:value={shipping_address.firstName} autofocus required />
 
 					{#if zodShippingErrors?.firstName}<p class="mt-1 text-xs text-red-600">
 							{zodShippingErrors?.firstName}
@@ -340,7 +381,7 @@
 					<Textbox
 						type="tel"
 						placeholder="Enter Phone"
-						maxlength="17"
+						maxlength={17}
 						bind:value={shipping_address.phone}
 						oninput={() => validatePhoneNumber(shipping_address.phone, 'shipping')}
 						required
@@ -392,13 +433,13 @@
 						<Textbox
 							type="tel"
 							placeholder="Enter Postal Code/Pincode/Zipcode"
-							maxlength="6"
+							maxlength={6}
 							bind:value={shipping_address.zip}
-							on:blur={() => fetchStateAndCity(shipping_address.zip, 'shipping')}
+							onblur={() => fetchStateAndCity(shipping_address.zip, 'shipping')}
 							required
 						/>
 					{:else if shipping_address.country === 'GB'}
-						<Textbox type="text" placeholder="Enter Postal Code/Pincode/Zipcode" maxlength="7" bind:value={shipping_address.zip} required />
+						<Textbox type="text" placeholder="Enter Postal Code/Pincode/Zipcode" maxlength={7} bind:value={shipping_address.zip} required />
 					{:else}
 						<Textbox type="tel" placeholder="Enter Postal Code/Pincode/Zipcode" bind:value={shipping_address.zip} required />
 					{/if}
@@ -526,7 +567,7 @@
 							</h6>
 
 							<div class="w-full">
-								<Textbox type="text" placeholder="Enter First Name" bind:value={billing_address.firstName} autoFocus required />
+								<Textbox type="text" placeholder="Enter First Name" bind:value={billing_address.firstName} autofocus required />
 
 								{#if zodBillingErrors?.firstName}
 									<p class="mt-1 text-xs text-red-600">
@@ -585,7 +626,7 @@
 								<Textbox
 									type="tel"
 									placeholder="Enter Phone"
-									maxlength="17"
+									maxlength={17}
 									bind:value={billing_address.phone}
 									oninput={() => validatePhoneNumber(billing_address.phone, 'billing')}
 									required
@@ -635,13 +676,13 @@
 									<Textbox
 										type="tel"
 										placeholder="Enter Postal Code/Pincode/Zipcode"
-										maxlength="6"
+										maxlength={6}
 										bind:value={billing_address.zip}
-										on:blur={() => fetchStateAndCity(billing_address.zip, 'shipping')}
+										onblur={() => fetchStateAndCity(billing_address.zip, 'billing')}
 										required
 									/>
 								{:else if billing_address.country === 'GB'}
-									<Textbox type="text" placeholder="Enter Postal Code/Pincode/Zipcode" maxlength="7" bind:value={billing_address.zip} required />
+									<Textbox type="text" placeholder="Enter Postal Code/Pincode/Zipcode" maxlength={7} bind:value={billing_address.zip} required />
 								{:else}
 									<Textbox type="tel" placeholder="Enter Postal Code/Pincode/Zipcode" bind:value={billing_address.zip} required />
 								{/if}

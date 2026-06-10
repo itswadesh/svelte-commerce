@@ -11,6 +11,11 @@
 	import { fade, fly } from 'svelte/transition'
 	import { quintOut } from 'svelte/easing'
 
+	type BreadcrumbItem = {
+		href: string
+		label: string
+	}
+
 	let { children }: { children: Snippet } = $props()
 	let isMobileMenuOpen = $state(false)
 
@@ -31,7 +36,7 @@
       items.push({ href: '/my/wishlist', icon: Heart, label: 'Wishlist' })
     return items
   })
-	let breadcrumbItems = $state([])
+	let breadcrumbItems = $state<BreadcrumbItem[]>([])
 	// Generate breadcrumb items based on current route
 	$effect(() => {
 		breadcrumbItems = page.url.pathname

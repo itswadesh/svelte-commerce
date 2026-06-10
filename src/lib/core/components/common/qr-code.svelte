@@ -21,6 +21,10 @@
 		img.onload = () => {
 			canvas.width = img.width
 			canvas.height = img.height
+			if (!ctx) {
+				error = 'Canvas context not available'
+				return
+			}
 			ctx.drawImage(img, 0, 0)
 			error = null // Clear error on success
 		}

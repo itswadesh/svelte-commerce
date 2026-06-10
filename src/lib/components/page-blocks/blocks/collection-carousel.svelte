@@ -6,10 +6,29 @@
 	import { getCollectionState } from '$lib/core/stores/collection.svelte.js'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 
-	const { block } = $props()
+	type CollectionCarouselBlock = {
+		entityId: string
+		metadata: {
+			showCartControls?: boolean
+			showHeader?: boolean
+			viewCount?: number
+		}
+	}
+
+	type CollectionWithValues = {
+		collectionvalues?: {
+			id?: string
+			products?: unknown
+		}[]
+		name?: string
+		subTitle?: string
+	}
+
+	const { block }: { block: CollectionCarouselBlock } = $props()
 
 	const collectionState = getCollectionState()
-	const collection = $derived(collectionState.getOneById(block.entityId))
+	const collection = $derived(collectionState.getOneById(block.entityId) as CollectionWithValues | undefined)
+	const collectionValues = $derived(collection?.collectionvalues ?? [])
 
 	const flexBasis = $derived.by(() => {
 		const x = 1 / (block.metadata.viewCount || 6)
@@ -43,7 +62,7 @@
 					class="w-full"
 				>
 					<CarouselContent class="-ml-1">
-						{#each collection?.collectionvalues as prod (prod?.id)}
+						{#each collectionValues as prod (prod?.id)}
 							{#if prod?.products}
 								<CarouselItem class="pl-1" style="flex-basis: {flexBasis}%;">
 									<div class="h-full">
