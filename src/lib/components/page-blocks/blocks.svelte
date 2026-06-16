@@ -17,8 +17,7 @@
 	>
 		{#each layout.blocks as block, idx (block.id)}
 			<div
-				class="place-items-start border-black"
-				style="grid-column-start: {block.columnStart}; grid-column-end: {block.columnEnd}; grid-row-start: {block.rowStart}; grid-row-end: {block.rowEnd};"
+				style="grid-column-start: {block.columnStart}; grid-column-end: {block.columnEnd}; grid-row-start: {block.rowStart}; grid-row-end: {block.rowEnd}; justify-self: {block.metadata?.align || 'center'};"
 			>
 				{#if block.type == 'RICH_TEXT'}
 					<RichTextBlock {block} />
