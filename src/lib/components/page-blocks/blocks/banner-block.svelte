@@ -25,6 +25,11 @@
 			}
 		}
 	})
+
+	const flexBasis = $derived.by(() => {
+		const x = 1 / (block.metadata.viewCount || 1)
+		return x * 100
+	})
 </script>
 
 <div
@@ -35,7 +40,7 @@
 	class="flex-1"
 >
 	<Carousel.Root
-		opts={{ loop: true }}
+		opts={{ loop: true, align: 'start' }}
 		setApi={(api) => {
 			if (api) {
 				mainCarouselApi = api
@@ -49,7 +54,7 @@
 		<Carousel.Content>
 			{#each block.metadata.images || [] as img, index}
 				{@const youtubeId = getYoutubeId(img.file)}
-				<Carousel.Item>
+				<Carousel.Item style="flex-basis: {flexBasis}%;">
 					<div role="button" tabindex="0">
 						{#if youtubeId}
 							<div class="relative aspect-square w-full">
