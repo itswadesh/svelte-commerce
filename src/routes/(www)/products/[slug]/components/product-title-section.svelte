@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Star, StarHalf, HeartIcon, LoaderCircle } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { Button } from '$lib/components/ui/button'
+	import { Button } from '$lib/components/ui/button/index.js'
 	import { useProductState } from '$lib/core/composables/index.js'
 
 	const { product } = $props()
@@ -17,7 +17,7 @@
 
 	<div class="flex items-center justify-between gap-4">
 		<h1 class="text-md flex-1 font-medium tracking-tight text-gray-900 dark:text-white sm:text-xl leading-[1]">
-			{product.title}
+			{productState.title || product.title}
 		</h1>
 
 		{#if productState.wishlistPluginEnabled}
@@ -42,7 +42,7 @@
 
 	{#if product.subtitle}
 		<div class="mt-3 line-clamp-3 text-xs font-medium sm:text-sm">
-			{@html product.subtitle}
+			{@html productState.selectedVariant?.subtitle || product.subtitle}
 		</div>
 	{/if}
 
