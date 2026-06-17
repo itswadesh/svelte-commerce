@@ -14,11 +14,8 @@
 	<Skeleton />
 {:else if collection}
 	<div
-		style="aspect-ratio: {aspectWidth}/{aspectHeight}; {block.metadata.maxWidth ? `max-width: ${block.metadata.maxWidth}px;` : ``} {block.metadata
-			.maxHeight
-			? ` max-height: ${block.metadata.maxHeight}px;`
-			: ``}"
-		class="flex h-full items-center justify-center"
+		style="aspect-ratio: {aspectWidth}/{aspectHeight}; {block.metadata.maxWidth ? `max-width: ${block.metadata.maxWidth}px;` : ``}"
+		class="flex items-center justify-center"
 	>
 		<img src={collection.img} class="h-full object-contain" alt="" />
 	</div>
