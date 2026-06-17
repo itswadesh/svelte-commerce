@@ -47,7 +47,7 @@
 		</div>
 	{/if}
 
-	<div class="grid gap-2" style="grid-template-columns: repeat({block.metadata.columnCount || 5}, 1fr); gap: {block.metadata.gridGap || 8}px">
+	<div class="grid gap-2" style="grid-template-columns: repeat({block.metadata.columnCount || 5}, 1fr); row-gap: {block.metadata.gridRowGap ?? 8}px; column-gap: {block.metadata.gridColumnGap ?? 8}px;">
 		{#if loadingForCategory}
 			{#each Array(6) as _}
 				<div class="flex flex-col items-center">

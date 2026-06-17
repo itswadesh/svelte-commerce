@@ -45,7 +45,7 @@
 					<CarouselContent class="-ml-1">
 						{#each collection?.collectionvalues as prod (prod?.id)}
 							{#if prod?.products}
-								<CarouselItem class="pl-1" style="flex-basis: {flexBasis}%;">
+								<CarouselItem style="flex-basis: {flexBasis}%; padding-left: {block.metadata.gridColumnGap ?? 4}px;">
 									<div class="h-full">
 										<Product hideCartControls={!block.metadata.showCartControls} product={prod.products} />
 									</div>

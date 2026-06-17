@@ -54,7 +54,7 @@
 		<Carousel.Content>
 			{#each block.metadata.images || [] as img, index}
 				{@const youtubeId = getYoutubeId(img.file)}
-				<Carousel.Item style="flex-basis: {flexBasis}%;">
+				<Carousel.Item style="flex-basis: {flexBasis}%; padding-left: {block.metadata.gridColumnGap ?? 8}px;">
 					<div role="button" tabindex="0">
 						{#if youtubeId}
 							<div class="relative aspect-square w-full">
