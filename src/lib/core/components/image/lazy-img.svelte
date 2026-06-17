@@ -81,7 +81,7 @@
 
 <div
 	bind:this={containerRef}
-	class="relative w-full bg-gray-50"
+	class="relative bg-transparent w-full"
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 >
 	{#if !loaded || error}
