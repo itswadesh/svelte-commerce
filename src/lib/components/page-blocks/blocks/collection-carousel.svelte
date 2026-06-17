@@ -54,10 +54,12 @@
 						{/each}
 					</CarouselContent>
 
-					<div class="absolute -right-2 -top-20 hidden items-center gap-2 md:flex">
-						<CarouselPrevious class="static translate-y-0" />
-						<CarouselNext class="static translate-y-0" />
-					</div>
+					{#if block.metadata.showHeader}
+						<div class="absolute -right-2 -top-20 hidden items-center gap-2 md:flex">
+							<CarouselPrevious class="static translate-y-0" />
+							<CarouselNext class="static translate-y-0" />
+						</div>
+					{/if}
 				</Carousel>
 			</div>
 		</div>
