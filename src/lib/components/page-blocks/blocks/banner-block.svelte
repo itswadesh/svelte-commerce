@@ -33,10 +33,7 @@
 </script>
 
 <div
-	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {block.metadata.maxWidth ? `max-width: ${block.metadata.maxWidth}px;` : ``} {block.metadata
-		.maxHeight
-		? ` max-height: ${block.metadata.maxHeight}px;`
-		: ``}"
+	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {block.metadata.maxWidth ? `max-width: ${block.metadata.maxWidth}px;` : ``}"
 	class="flex-1"
 >
 	<Carousel.Root
