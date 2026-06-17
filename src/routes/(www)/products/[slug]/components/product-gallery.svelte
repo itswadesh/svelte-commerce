@@ -5,8 +5,9 @@
 	import { Play, X } from '@lucide/svelte'
 	import { getSettingState } from '$lib/core/stores/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { cn } from '$lib/core/utils'
+	import { cn } from '$lib/core/utils/index.js'
 	import { getYoutubeId } from '$lib/core/logic/index.js'
+	import { page } from '$app/state'
 
 	let { images = [] } = $props()
 
@@ -18,6 +19,8 @@
 	let displayCarousel = $state('hidden')
 	let selectedImage = $state<string>('')
 	const settingState = getSettingState()
+
+	const [aspectWidth, aspectHeight] = $derived(page?.data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
 
 	const onImageClick = (img: string) => {
 		selectedImage = img
@@ -68,13 +71,13 @@
 {/if}
 
 <div class="flex flex-col-reverse gap-4 sm:flex-row">
-	<div class="hidden sm:flex sm:w-24 sm:flex-col gap-4">
+	<div class="hidden gap-4 sm:flex sm:w-24 sm:flex-col">
 		{#each images as img, idx}
 			{@const youtubeId = getYoutubeId(img)}
 			<div
 				class={cn(
-					'relative rounded-radius overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20 p-0.5',
-					idx === currentIndex ? 'border-primary': 'border-muted'
+					'relative overflow-hidden rounded-radius border p-0.5 max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20',
+					idx === currentIndex ? 'border-primary' : 'border-muted'
 				)}
 				role="button"
 				tabindex="0"
@@ -150,11 +153,7 @@
 									Video not supported
 								</video>
 							{:else}
-								<LazyImg
-									src={img}
-									alt="Product Image"
-									class="w-full rounded-radius object-cover"
-								/>
+								<LazyImg src={img} alt="Product Image" class="w-full rounded-radius object-cover" />
 							{/if}
 						</div>
 					</Carousel.Item>
@@ -166,10 +165,10 @@
 			</div>
 
 			<!-- Mobile Pagination Dots -->
-			<div class="flex justify-center gap-1.5 mt-4 sm:hidden">
+			<div class="mt-4 flex justify-center gap-1.5 sm:hidden">
 				{#each images as _, i}
 					<button
-						class="h-1.5 rounded-full transition-all duration-300 {currentIndex === i ? 'bg-primary w-6' : 'bg-gray-300 w-1.5'}"
+						class="h-1.5 rounded-full transition-all duration-300 {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-gray-300'}"
 						onclick={() => mainCarouselApi?.scrollTo(i)}
 						aria-label="Go to slide {i + 1}"
 					></button>
@@ -180,49 +179,43 @@
 </div>
 
 <!-- Fullscreen view -->
-<div
-	class="fixed left-0 top-0 z-[100] {displayCarousel} h-[100dvh] w-screen flex-col items-center justify-start bg-black overflow-hidden"
->
+<div class="fixed left-0 top-0 z-[100] {displayCarousel} h-[100dvh] w-screen flex-col items-center justify-start overflow-hidden bg-black">
 	<!-- Background overlay -->
-	<Button
-		variant="ghost"
-		class="absolute left-0 top-0 h-full w-full rounded-none hover:bg-transparent"
-		onclick={hideCarousel}
-	>
+	<Button variant="ghost" class="absolute left-0 top-0 h-full w-full rounded-none hover:bg-transparent" onclick={hideCarousel}>
 		<span class="sr-only">Close Carousel</span>
 	</Button>
 
-	<div class="relative mx-auto flex h-full w-full max-w-[1200px] items-center gap-4 px-4 py-12">
+	<div class="relative mx-auto flex h-full w-full max-w-[1200px] items-center gap-4 px-4 py-[5vh]">
 		<!-- Close button -->
 		<Button
 			variant="plain"
 			size="icon"
-			class="absolute right-0 top-4 hover:border hover:border-primary rounded-full z-30 text-white hover:bg-white/10"
+			class="absolute right-0 top-4 z-30 rounded-full text-white hover:border hover:border-primary hover:bg-white/10"
 			onclick={hideCarousel}
 		>
 			<X class="h-6 w-6" />
 		</Button>
 
 		<!-- Main carousel -->
-		<div class="flex-1 h-full overflow-hidden">
+		<div class="h-full flex-1 overflow-hidden">
 			<Carousel.Root
 				opts={{ loop: true }}
 				setApi={(api) => {
 					if (api) {
 						carouselApi = api
 						api.on('select', () => {
-							currentIndex = api.selectedScrollSnap()
+							currentIndex = api.sele()
 							selectedImage = carouselImages[currentIndex]
 						})
 					}
 				}}
-				class="relative w-full h-full"
+				class="relative h-full w-full"
 			>
 				<Carousel.Content class="h-full">
 					{#each carouselImages || [] as img, index (index)}
 						{@const youtubeId = getYoutubeId(img)}
-						<Carousel.Item class="h-full">
-							<div class="flex h-full items-center justify-center">
+						<Carousel.Item class="">
+							<div class="">
 								{#if youtubeId}
 									<iframe
 										width="100%"
@@ -241,11 +234,7 @@
 										Video not supported
 									</video>
 								{:else}
-									<LazyImg
-										src={img}
-										alt="Product Image"
-										class="max-h-full rounded-radius h-full object-contain"
-									/>
+									<LazyImg src={img} alt="Product Image" class="max-h-[90vh]" />
 								{/if}
 							</div>
 						</Carousel.Item>
@@ -256,14 +245,13 @@
 
 		<!-- Thumbnails on the right -->
 		{#if carouselImages?.length > 0}
-			<div
-				class="hidden h-full min-w-[120px] max-w-[120px] flex-none items-center gap-2 overflow-y-auto py-2 scrollbar-thin md:flex md:flex-col"
-			>
+			<div class="hidden h-full min-w-[160px] max-w-[160px] flex-none items-center gap-2 overflow-y-auto py-2 scrollbar-thin md:flex md:flex-col">
 				{#each carouselImages || [] as img, i}
 					{@const youtubeId = getYoutubeId(img)}
 					<Button
 						variant="ghost"
-						class="relative aspect-square h-24 w-24 overflow-hidden rounded-radius p-0 {currentIndex === i ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : ''}"
+						style="aspect-ratio: {aspectWidth}/{aspectHeight};"
+						class="relative h-24  overflow-hidden rounded-radius p-0 {currentIndex === i ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : ''}"
 						onclick={() => {
 							if (carouselApi) {
 								carouselApi.scrollTo(i)
@@ -281,7 +269,7 @@
 							<LazyImg
 								src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
 								alt="Thumbnail"
-								class="h-full w-full rounded-radius object-cover"
+								class="h-full w-full rounded-radius object-contain"
 							/>
 						{/if}
 					</Button>
