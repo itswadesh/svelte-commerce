@@ -19,7 +19,7 @@
 			})
 			products = res?.data
 		} catch (e: any) {
-			toast.error(e?.message || 'Failed to load categories')
+			toast.error(e?.message || 'Failed to load products')
 		} finally {
 			loadingForProducts = false
 		}
