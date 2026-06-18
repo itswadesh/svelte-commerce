@@ -9,7 +9,7 @@
       window.location.href = block.metadata.redirectTo
   }}
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {block.metadata.maxWidth ? `max-width: ${block.metadata.maxWidth}px;` : ``}"
-	class="{block.metadata.redirectOnClick ? 'cursor-pointer' : 'cursor-default'} flex items-center justify-center"
+	class="{block.metadata.redirectOnClick ? 'cursor-pointer' : 'cursor-default'} {block.metadata?.horizontalAlign === 'stretch' ? 'w-full': ''} flex items-center justify-center"
 >
-	<img src={block.metadata.url} class="h-full object-contain" alt="" />
+	<img src={block.metadata.url} class="h-full w-full object-contain" alt="" />
 </button>
