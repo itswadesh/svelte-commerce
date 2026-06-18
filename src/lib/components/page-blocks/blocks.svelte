@@ -9,6 +9,7 @@
 	import RichTextBlock from './blocks/rich-text-block.svelte'
 
 	const { layouts } = $props()
+	$inspect(layouts)
 </script>
 
 {#each layouts as layout, idx (idx)}
@@ -17,11 +18,12 @@
 		style="grid-template-columns: repeat({layout.columnCount}, 1fr); column-gap: {layout.columnGap}px; row-gap: {layout.rowGap}px;"
 	>
 		{#each layout.blocks as block, idx (block.id)}
+			{@const verticalAlign = block.metadata?.verticalAlign || 'stretch'}
+			{@const horizontalAlign = block.metadata?.horizontalAlign || 'stretch'}
 			<div
-        class="w-fit h-fit"
-				style="grid-column-start: {block.columnStart}; grid-column-end: {block.columnEnd}; grid-row-start: {block.rowStart}; grid-row-end: {block.rowEnd}; justify-self: {block
-					.metadata?.horizontalAlign || 'center'}; align-self: {block
-					.metadata?.verticalAlign || 'center'}; {block.metadata.maxHeightUnit && block.metadata.maxHeight
+				class="{horizontalAlign === 'stretch' ? '' : 'w-fit'} {verticalAlign === 'stretch' ? '' : 'h-fit'}"
+				style="grid-column-start: {block.columnStart}; grid-column-end: {block.columnEnd}; grid-row-start: {block.rowStart}; grid-row-end: {block.rowEnd}; justify-self: {horizontalAlign}; align-self: {verticalAlign}; {block
+					.metadata.maxHeightUnit && block.metadata.maxHeight
 					? `height: ${block.metadata.maxHeight}${block.metadata.maxHeightUnit};`
 					: ''}"
 			>
@@ -39,8 +41,8 @@
 					<FeaturedProducts {block} />
 				{:else if block.type == 'COLLECTION_CAROUSEL'}
 					<CollectionCarousel {block} />
-        {:else if block.type == 'COLLECTION_GRID'}
-          <CollectionGrid {block} />
+				{:else if block.type == 'COLLECTION_GRID'}
+					<CollectionGrid {block} />
 				{/if}
 			</div>
 		{/each}
