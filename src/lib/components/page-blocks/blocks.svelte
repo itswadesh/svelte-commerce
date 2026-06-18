@@ -1,6 +1,7 @@
 <script lang="ts">
 	import BannerBlock from './blocks/banner-block.svelte'
 	import CollectionCarousel from './blocks/collection-carousel.svelte'
+	import CollectionGrid from './blocks/collection-grid.svelte'
 	import Collection from './blocks/collection.svelte'
 	import FeaturedCategories from './blocks/featured-categories.svelte'
 	import FeaturedProducts from './blocks/featured-products.svelte'
@@ -38,6 +39,8 @@
 					<FeaturedProducts {block} />
 				{:else if block.type == 'COLLECTION_CAROUSEL'}
 					<CollectionCarousel {block} />
+        {:else if block.type == 'COLLECTION_GRID'}
+          <CollectionGrid {block} />
 				{/if}
 			</div>
 		{/each}
