@@ -16,6 +16,13 @@
 	let { class: className = '' }: FilterProps = $props()
 
 	const filterState = getDesktopFilterState()
+
+  function formatCategoryName(input: string) {
+    const x = filterState.formatFilterOptionName(input)
+    if (x.length > 27)
+      return x.substring(0, 24) + '...'
+    return x
+  }
 </script>
 
 <div class="group sticky" style={`top: ${filterState.containerTop}px;`}>
@@ -140,7 +147,7 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formattedCategoryName}</span>
+							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
 						</Button>
 					{/each}
 					{#if filterState.filteredCategories.length > 5}
@@ -164,7 +171,7 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formattedCategoryName}</span>
+							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
 						</Button>
 					{/each}
 					<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>Show less</Button>
