@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '$lib/core/utils'
+	import { cn } from '$lib/core/utils/index.js'
 	import { X } from '@lucide/svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { quintOut } from 'svelte/easing'
@@ -7,7 +7,7 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { GetColorName } from 'hex-color-to-color-name'
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
-	import { Button } from '$lib/components/ui/button'
+	import { Button } from '$lib/components/ui/button/index.js'
 
 	type FilterProps = {
 		class?: string
@@ -27,17 +27,12 @@
 		)}
 		style={`height: ${browser ? window?.innerHeight - (filterState.containerTop || 0) : 'auto'}px`}
 	>
-		<div class="flex justify-between items-center">
+		<div class="flex items-center justify-between">
 			<p class="text-lg font-bold">Filters</p>
 
 			{#if filterState.anyFilterApplied}
-				<Button
-					variant="link"
-					size="sm"
-					class="h-auto p-0"
-					onclick={filterState.clearFilters}
-				>
-					<X class="h-3 w-3 mr-1" />
+				<Button variant="link" size="sm" class="h-auto p-0" onclick={filterState.clearFilters}>
+					<X class="mr-1 h-3 w-3" />
 					Clear
 				</Button>
 			{/if}
@@ -103,7 +98,7 @@
 					<Button
 						variant="ghost"
 						size="icon"
-						class="rounded-full h-8 w-8"
+						class="h-8 w-8 rounded-full"
 						onclick={() => filterState.toggleCategorySearch()}
 						aria-label="Toggle category search"
 					>
@@ -127,14 +122,15 @@
 				</div>
 			{/if}
 
-			<div class="flex flex-col text-sm">
+			<div class="flex flex-col items-start justify-start text-sm">
 				{#if !filterState.showMoreCategories}
 					{@const categoriesToShow = filterState.filteredCategories.slice(0, 5)}
 					{#each categoriesToShow as category}
 						{@const formattedCategoryName = filterState.formatFilterOptionName(category.name)}
 						<Button
-							variant="ghost"
-							class="group flex flex-row items-center justify-start gap-2 h-auto py-1 px-0 hover:bg-transparent"
+							variant="link"
+							title={formattedCategoryName}
+							class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
 							onclick={() => filterState.handleCategoryClick(category)}
 						>
 							{#if category.thumbnail}
@@ -148,12 +144,7 @@
 						</Button>
 					{/each}
 					{#if filterState.filteredCategories.length > 5}
-						<Button
-							variant="link"
-							size="sm"
-							class="mt-1 h-auto p-0 justify-start"
-							onclick={filterState.toggleShowMoreCategories}
-						>
+						<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>
 							+ {filterState.filteredCategories.length - 5} more
 						</Button>
 					{/if}
@@ -161,8 +152,9 @@
 					{#each filterState.filteredCategories as category}
 						{@const formattedCategoryName = filterState.formatFilterOptionName(category.name)}
 						<Button
-							variant="ghost"
-							class="group flex flex-row items-center justify-start gap-3 h-auto py-1 px-0 hover:bg-transparent"
+							variant="link"
+							title={formattedCategoryName}
+							class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
 							onclick={() => filterState.handleCategoryClick(category)}
 						>
 							{#if category.thumbnail}
@@ -175,14 +167,7 @@
 							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formattedCategoryName}</span>
 						</Button>
 					{/each}
-					<Button
-						variant="link"
-						size="sm"
-						class="mt-1 h-auto p-0 justify-start"
-						onclick={filterState.toggleShowMoreCategories}
-					>
-						Show less
-					</Button>
+					<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>Show less</Button>
 				{/if}
 			</div>
 		{/if}
@@ -259,12 +244,7 @@
 						</div>
 					{/each}
 					{#if filterState.filteredTags.length > 5}
-						<Button
-							variant="link"
-							size="sm"
-							class="mt-1 h-auto p-0 justify-start"
-							onclick={filterState.toggleShowMoreTags}
-						>
+						<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>
 							+ {filterState.filteredTags.length - 5} more
 						</Button>
 					{/if}
@@ -284,14 +264,7 @@
 							>
 						</div>
 					{/each}
-					<Button
-						variant="link"
-						size="sm"
-						class="mt-1 h-auto p-0 justify-start"
-						onclick={filterState.toggleShowMoreTags}
-					>
-						Show less
-					</Button>
+					<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>Show less</Button>
 				{/if}
 			</div>
 
@@ -374,7 +347,7 @@
 								<Button
 									variant="link"
 									size="sm"
-									class="mt-1 h-auto p-0 justify-start"
+									class="mt-1 h-auto justify-start p-0"
 									onclick={() => {
 										filterState.showMoreGeneralFilters[idx] = true
 									}}
@@ -407,7 +380,7 @@
 							<Button
 								variant="link"
 								size="sm"
-								class="mt-1 h-auto p-0 justify-start"
+								class="mt-1 h-auto justify-start p-0"
 								onclick={() => {
 									filterState.showMoreGeneralFilters[idx] = false
 								}}

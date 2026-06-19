@@ -17,7 +17,7 @@
 
 <div class="page-width inter-gap flex h-full min-h-screen flex-row">
 	{#if Object.keys(data.products.facets || {}).length}
-		<div class="hidden border-input md:block">
+		<div class="hidden max-w-[25%] border-input md:block">
 			<DesktopFilter />
 		</div>
 	{/if}
