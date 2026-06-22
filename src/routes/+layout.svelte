@@ -33,7 +33,7 @@
 
 <div class="light min-h-screen">
 	<main class="min-h-screen bg-background">
-		{#if !!$navigating}
+		<!-- {#if !!$navigating}
 			{#await new Promise((resolve) => setTimeout(resolve, 1000)) then _}
 				<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm">
 					<div class="rounded-lg bg-white p-4">
@@ -41,9 +41,9 @@
 					</div>
 				</div>
 			{:catch}
-				<!-- Ignore any errors from the promise -->
+				<!-- Ignore any errors from the promise ->
 			{/await}
-		{/if}
+		{/if}-->
 		{@render children()}
 	</main>
 </div>
