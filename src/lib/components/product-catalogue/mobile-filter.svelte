@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Drawer from '$lib/components/ui/drawer'
+	import * as Drawer from '$lib/components/ui/drawer/index.js'
 	import { GetColorName } from 'hex-color-to-color-name'
 	import { ArrowDownNarrowWide, Filter, SearchIcon, X } from '@lucide/svelte'
 	import { fly } from 'svelte/transition'
@@ -12,6 +12,12 @@
 	let { selectedSort = $bindable(), onSortChange = (value: string) => {} } = $props()
 
 	const filterModule = getDesktopFilterState()
+
+	function formatCategoryName(input: string) {
+		const x = filterModule.formatFilterOptionName(input)
+		if (x.length > 27) return x.substring(0, 24) + '...'
+		return x
+	}
 </script>
 
 <div class="fixed bottom-0 left-0 right-0 z-40 grid h-12 w-full grid-cols-2 border-t border-gray-200 bg-white shadow-md md:hidden">
@@ -68,7 +74,7 @@
 	<div class="flex flex-col items-center justify-center bg-white transition hover:bg-gray-50">
 		<Button
 			variant="ghost"
-			class="flex h-full w-full items-center justify-center p-0 rounded-none hover:bg-transparent"
+			class="flex h-full w-full items-center justify-center rounded-none p-0 hover:bg-transparent"
 			onclick={() => {
 				filterModule.showFilter = true
 			}}
@@ -113,9 +119,7 @@
 
 					{#if filterModule.anyFilterApplied}
 						<div class="h-4 w-px bg-gray-200"></div>
-						<Button variant="link" size="sm" class="h-auto p-0" onclick={filterModule.clearFilters}>
-							Clear All
-						</Button>
+						<Button variant="link" size="sm" class="h-auto p-0" onclick={filterModule.clearFilters}>Clear All</Button>
 					{/if}
 				</div>
 
@@ -137,7 +141,7 @@
 					{#each filterModule.menuItems as item}
 						<Button
 							variant="ghost"
-							class="w-full border-l-4 rounded-none h-auto px-4 py-4 justify-between {filterModule.selectedSection === item.id
+							class="h-auto w-full justify-between rounded-none border-l-4 px-4 py-4 {filterModule.selectedSection === item.id
 								? 'border-primary bg-white text-primary hover:bg-white'
 								: 'border-transparent text-gray-500 hover:bg-gray-100'}"
 							onclick={() => (filterModule.selectedSection = item.id)}
@@ -204,21 +208,20 @@
 								{#each filterModule.filteredCategories as category}
 									{@const formattedCategoryName = filterModule.formatFilterOptionName(category.name)}
 									<Button
-										variant="ghost"
-										class="group flex w-full flex-row items-center justify-start gap-3 h-auto p-0 hover:bg-transparent"
-										onclick={() => {
-											filterModule.handleCategoryClick(category)
-										}}
+										variant="link"
+										title={formattedCategoryName}
+										class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
+										onclick={() => filterModule.handleCategoryClick(category)}
 									>
 										{#if category.thumbnail}
 											<img
 												src={category.thumbnail}
 												alt={formattedCategoryName}
-												class="h-10 w-10 rounded-md object-cover shadow-sm transition-opacity group-hover:opacity-80"
+												class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 											/>
 										{/if}
-										<span class="flex-1 text-sm font-medium capitalize text-gray-700 transition-colors group-hover:text-primary"
-											>{formattedCategoryName}</span
+										<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary"
+											>{formatCategoryName(category.name)}</span
 										>
 									</Button>
 								{/each}
