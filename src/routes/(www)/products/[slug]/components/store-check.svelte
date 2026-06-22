@@ -1,8 +1,8 @@
 <script lang="ts">
-	import * as Sheet from '$lib/components/ui/sheet'
+	import * as Sheet from '$lib/components/ui/sheet/index.js'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { AlertTriangle, Check, Clock, Home, MapPin, StoreIcon } from '@lucide/svelte'
-	import { Button } from '$lib/components/ui/button'
+	import { Button } from '$lib/components/ui/button/index.js'
 
 	const productState = useProductState()
 </script>
@@ -20,8 +20,8 @@
 				You can pick up this item from our store. Please check the availability of this item at your nearest store.
 			</span>
 
-			<Sheet.Trigger asChild let:builder>
-				<Button variant="link" builders={[builder]} class="self-start h-auto p-0">Check Availability</Button>
+			<Sheet.Trigger>
+				<Button variant="link" class="self-start h-auto p-0">Check Availability</Button>
 			</Sheet.Trigger>
 		</div>
 
