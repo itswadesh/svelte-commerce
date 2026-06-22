@@ -35,7 +35,7 @@
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 	const navModule = new NavModule()
 	const userState = navModule.userState
-	const isProductDetailsPage = $derived(page.route?.id === '/(www)/products/[slug]')
+	const isHomepage = $derived(page.route?.id === '/(www)')
 
 	const menuItemsUser = $derived.by(() => {
 		const items = [
@@ -58,7 +58,7 @@
 		: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-white transition-all duration-200"
 >
 	<!-- Hello bar -->
-	{#if navModule.helloBarPlugin?.active && !navModule.isProductListingPage && !isProductDetailsPage}
+	{#if navModule.helloBarPlugin?.active && isHomepage}
 		<!-- <div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
 			{@html helloBarPlugin?.content}
 		</div> -->
