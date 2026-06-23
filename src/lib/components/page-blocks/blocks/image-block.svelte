@@ -14,5 +14,5 @@
 		: ``}"
 	class="{block.metadata.redirectOnClick ? 'cursor-pointer' : 'cursor-default'} flex h-full items-center justify-center"
 >
-	<img src={block.metadata.url} class="h-full object-cover" alt="" />
+	<img src={block.metadata.url} class="h-full object-contain" alt="" />
 </button>
