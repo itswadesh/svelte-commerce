@@ -25,8 +25,8 @@
 	const socialSharing = $derived({
 		active: true, // Force active for SEO requirements
 		...storeData?.plugins?.socialSharingButtons,
-		// youtube: storeData?.plugins?.socialSharingButtons?.youtube || 'https://www.youtube.com/@arialshop',
-		// twitter: storeData?.plugins?.socialSharingButtons?.twitter || 'https://x.com/arialshop'
+		// youtube: storeData?.plugins?.socialSharingButtons?.youtube || '',
+		// twitter: storeData?.plugins?.socialSharingButtons?.twitter || ''
 	})
 	const footerSettings = $derived(storeData?.plugins?.footerSettings)
 	const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
