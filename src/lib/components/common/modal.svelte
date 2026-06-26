@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import * as Card from '$lib/components/ui/card'
 	import type { WithElementRef } from 'bits-ui'
@@ -22,6 +23,7 @@
 		zIndex?: number
 		confirmButtonPosition?: 'top' | 'bottom'
 		loading?: boolean
+		manageHistory?: boolean
 		close?: () => any
 		submit?: () => any
 	}
@@ -32,7 +34,7 @@
 		hideFooter = false,
 		hideHeader = false,
 		class: className,
-		show,
+		show = $bindable(false),
 		title = 'Title',
 		hAuto = false,
 		wAuto = false,
@@ -42,10 +44,38 @@
 		zIndex = 1000000,
 		confirmButtonPosition = 'bottom',
 		loading,
+		manageHistory = true,
 		children,
 		close,
 		submit
 	}: ModalProps & WithElementRef<HTMLAttributes<HTMLDivElement>> = $props()
+
+	const modalHistoryKey = '__svelteCommerceModal'
+	let ownsHistoryEntry = false
+
+	function handleBrowserBack() {
+		if (!show || !ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		show = false
+	}
+
+	onMount(() => {
+		window.addEventListener('popstate', handleBrowserBack)
+		return () => window.removeEventListener('popstate', handleBrowserBack)
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined' || !manageHistory) return
+
+		if (show && !ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		} else if (!show && ownsHistoryEntry) {
+			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
+			ownsHistoryEntry = false
+			if (isCurrentModalEntry) history.back()
+		}
+	})
 </script>
 
 <ModalRenderer bind:show {disableSubmitButton} {submit} {close}>

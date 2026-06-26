@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { LoaderIcon, X, Phone, Mail } from '@lucide/svelte'
+	import { ArrowLeft, Check, LoaderIcon, X, Phone, Mail } from '@lucide/svelte'
 	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Label } from '$lib/components/ui/label/index.js'
@@ -16,22 +16,43 @@
 
 	let { show = $bindable(false) } = $props()
 
-	const customPhoneSchema = z.string().refine(
-		(val) => schemas.phone.safeParse(val.replace(/\s+/g, '')).success,
-		'Please enter a valid phone number'
-	)
+	const customPhoneSchema = z.string().refine((val) => schemas.phone.safeParse(val.replace(/\s+/g, '')).success, 'Please enter a valid phone number')
 
 	const loginModule = new LoginModule()
 	const userState = loginModule.userState
+	let resendSeconds = $state(0)
+	let otpCooldownStarted = $state(false)
+	let resendTimer: ReturnType<typeof setInterval> | undefined
+
+	const recipient = $derived(
+		loginModule.identifier.length > 4
+			? `${loginModule.identifier.slice(0, Math.min(4, loginModule.identifier.length - 4))}${'•'.repeat(4)}${loginModule.identifier.slice(-2)}`
+			: loginModule.identifier
+	)
+
+	function startResendCooldown() {
+		resendSeconds = 30
+		if (resendTimer) clearInterval(resendTimer)
+		resendTimer = setInterval(() => {
+			resendSeconds = Math.max(0, resendSeconds - 1)
+			if (resendSeconds === 0 && resendTimer) {
+				clearInterval(resendTimer)
+				resendTimer = undefined
+			}
+		}, 1000)
+	}
 
 	async function handleResendOtp() {
+		if (resendSeconds > 0) return
 		try {
 			if (dev) {
 				toast.success('OTP resent successfully (Dev Mode: 1111)')
+				startResendCooldown()
 				return
 			}
 			await authService.getOtp({ phone: loginModule.identifier })
 			toast.success('OTP resent successfully')
+			startResendCooldown()
 		} catch (e: any) {
 			toast.error(e.message || 'Failed to resend OTP')
 		}
@@ -39,55 +60,64 @@
 
 	$effect(() => {
 		if (loginModule.step === 2 && loginModule.otpInputRef) {
-			const el = loginModule.otpInputRef as HTMLElement;
-			const input = el.querySelector('input') as HTMLInputElement | null;
+			const el = loginModule.otpInputRef as HTMLElement
+			const input = el.querySelector('input') as HTMLInputElement | null
 			if (input) {
-				input.focus();
+				input.focus()
 			} else {
-				el.focus();
+				el.focus()
 			}
 		}
-	});
+	})
+
+	$effect(() => {
+		if (loginModule.step === 2 && !otpCooldownStarted) {
+			otpCooldownStarted = true
+			startResendCooldown()
+		} else if (loginModule.step !== 2) {
+			otpCooldownStarted = false
+		}
+	})
 
 	$effect(() => {
 		if (show) {
-			loginModule.step = 1;
-			loginModule.otp = '';
-			loginModule.identifier = '';
-			verifiedOtp = '';
+			loginModule.step = 1
+			loginModule.otp = ''
+			loginModule.identifier = ''
+			verifiedOtp = ''
 		}
-	});
+	})
 
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 
 	onMount(() => {
 		if (dev) {
 			// Purge any dev-session mock cookies to avoid remote API validation errors
 			if (document.cookie.includes('connect.sid=dev-session')) {
-				document.cookie = 'connect.sid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-				document.cookie = 'me=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+				document.cookie = 'connect.sid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+				document.cookie = 'me=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
 			}
 
 			// Monkey patch send OTP to intercept rate limit error
-			const originalGetOtp = authService.getOtp;
+			const originalGetOtp = authService.getOtp
 			authService.getOtp = async (args) => {
 				try {
-					return await originalGetOtp.call(authService, args);
+					return await originalGetOtp.call(authService, args)
 				} catch (err: any) {
 					if (err.message?.includes('Please wait') || err.message?.includes('cooldown') || err.status === 429) {
-						toast.success('Dev Mode: Rate limit bypassed. Use OTP 1111');
-						loginModule.step = 2;
+						toast.success('Dev Mode: Rate limit bypassed. Use OTP 1111')
+						loginModule.step = 2
 						setTimeout(() => {
-							loginModule.otpInputRef?.focus();
-						}, 100);
-						return { success: true, message: 'Bypassed' };
+							loginModule.otpInputRef?.focus()
+						}, 100)
+						return { success: true, message: 'Bypassed' } as unknown as User
 					}
-					throw err;
+					throw err
 				}
-			};
+			}
 
 			// Monkey patch verify OTP to support 1111 bypass on rate limit failover
-			const originalVerifyOtp = authService.verifyOtp;
+			const originalVerifyOtp = authService.verifyOtp
 			authService.verifyOtp = async (args) => {
 				if (args.otp === '1111') {
 					const mockUser = {
@@ -96,33 +126,47 @@
 						firstName: 'Dev',
 						lastName: 'User',
 						role: 'user'
-					};
-					document.cookie = `connect.sid=dev-session; path=/; max-age=${60 * 60 * 24 * 30}`;
-					document.cookie = `me=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=${60 * 60 * 24 * 30}`;
-					userState.user = mockUser;
-					show = false;
-					return mockUser;
+					}
+					document.cookie = `connect.sid=dev-session; path=/; max-age=${60 * 60 * 24 * 30}`
+					document.cookie = `me=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=${60 * 60 * 24 * 30}`
+					userState.user = mockUser as unknown as User
+					show = false
+					return mockUser as unknown as User
 				}
-				return await originalVerifyOtp.call(authService, args);
-			};
+				return await originalVerifyOtp.call(authService, args)
+			}
 		}
 	})
 
-	let verifiedOtp = $state('');
+	onDestroy(() => {
+		if (resendTimer) clearInterval(resendTimer)
+	})
+
+	let verifiedOtp = $state('')
 
 	$effect(() => {
 		if (loginModule.otp.length === 4 && loginModule.otp !== verifiedOtp && !loginModule.isLoading && !userState.loading) {
-			verifiedOtp = loginModule.otp;
-			loginModule.handleVerifyOtp();
+			verifiedOtp = loginModule.otp
+			loginModule.handleVerifyOtp()
 		} else if (loginModule.otp.length !== 4) {
-			verifiedOtp = '';
+			verifiedOtp = ''
 		}
-	});
+	})
 </script>
 
-<Modal {show} rounded={false} hideHeader hideFooter useMaxHeight class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none" hAuto wAuto>
+<Modal
+	bind:show
+	manageHistory={false}
+	rounded={false}
+	hideHeader
+	hideFooter
+	useMaxHeight
+	class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none"
+	hAuto
+	wAuto
+>
 	<div
-		class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl transition-all dark:border-gray-700 dark:bg-gray-900 sm:max-w-[480px]  sm:rounded-radius sm:p-8 ring-1 ring-white/20 dark:ring-white/5"
+		class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl ring-1 ring-white/20 transition-all dark:border-gray-700 dark:bg-gray-900 dark:ring-white/5 sm:max-w-[480px] sm:rounded-radius sm:p-8"
 	>
 		<!-- Close Icon -->
 		<div class="sticky top-3 z-50 flex items-center justify-end sm:absolute sm:right-5 sm:top-5">
@@ -145,7 +189,9 @@
 						<img src={page.data.store.logo} alt={page.data.store.name} class="h-10 object-contain dark:brightness-110" />
 					</div>
 				{:else}
-					<div class="mb-2 flex h-16 w-16 items-center justify-center rounded-radius bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700">
+					<div
+						class="mb-2 flex h-16 w-16 items-center justify-center rounded-radius bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700"
+					>
 						<span class="text-2xl font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
 					</div>
 				{/if}
@@ -181,7 +227,9 @@
 
 								<button
 									type="button"
-									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-medium transition-colors {loginModule.isPhoneNumber ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
+									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-medium transition-colors {loginModule.isPhoneNumber
+										? 'text-gray-900 dark:text-white'
+										: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
 									onclick={() => !loginModule.isPhoneNumber && loginModule.switchLoginType()}
 								>
 									<Phone class="h-4 w-4" />
@@ -190,7 +238,9 @@
 
 								<button
 									type="button"
-									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-medium transition-colors {!loginModule.isPhoneNumber ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
+									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-medium transition-colors {!loginModule.isPhoneNumber
+										? 'text-gray-900 dark:text-white'
+										: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
 									onclick={() => loginModule.isPhoneNumber && loginModule.switchLoginType()}
 								>
 									<Mail class="h-4 w-4" />
@@ -198,8 +248,8 @@
 								</button>
 							</div>
 						{/if}
-						<div class="space-y-2 mt-2">
-							<Label for="identifier" class="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-1">
+						<div class="mt-2 space-y-2">
+							<Label for="identifier" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 								{#if loginModule.identifier.length === 0}
 									{#if env.PUBLIC_LOGIN_TYPE === 'PHONE'}
 										Phone Number
@@ -221,18 +271,18 @@
 									schema={loginModule.isPhoneNumber ? customPhoneSchema : schemas.email}
 									oninput={(e) => {
 										if (loginModule.isPhoneNumber) {
-											const target = e.target as HTMLInputElement;
-											const current = target.value;
-											const cleaned = current.replace(/[^\d\+\s]/g, '');
+											const target = e.target as HTMLInputElement
+											const current = target.value
+											const cleaned = current.replace(/[^\d\+\s]/g, '')
 											if (current !== cleaned) {
-												const start = target.selectionStart;
-												target.value = cleaned;
-												loginModule.identifier = cleaned;
+												const start = target.selectionStart
+												target.value = cleaned
+												loginModule.identifier = cleaned
 												if (start !== null) {
-													target.setSelectionRange(start - 1, start - 1);
+													target.setSelectionRange(start - 1, start - 1)
 												}
 											} else {
-												loginModule.identifier = current;
+												loginModule.identifier = current
 											}
 										}
 									}}
@@ -242,24 +292,24 @@
 							{/key}
 						</div>
 
+						{#if !loginModule.isPhoneNumber}
+							<div class="space-y-2">
+								<Label for="password" class="text-sm font-medium text-gray-700 dark:text-gray-300">Password</Label>
+								<Textbox
+									name="password"
+									type="password"
+									bind:value={loginModule.password}
+									placeholder="Enter your password"
+									schema={schemas.password}
+									class="h-12"
+									required
+								/>
+							</div>
+						{/if}
+					</div>
 					{#if !loginModule.isPhoneNumber}
-						<div class="space-y-2">
-							<Label for="password" class="text-sm font-medium text-gray-700 dark:text-gray-300">Password</Label>
-							<Textbox
-								name="password"
-								type="password"
-								bind:value={loginModule.password}
-								placeholder="Enter your password"
-								schema={schemas.password}
-								class="h-12"
-								required
-							/>
-						</div>
-					{/if}
-				</div>
-				{#if !loginModule.isPhoneNumber}
-					<div class="flex items-center justify-center gap-2">
-						<!-- <div>
+						<div class="flex items-center justify-center gap-2">
+							<!-- <div>
 							{#if env.PUBLIC_IS_DEMO_MODE}
 								<Button
 									variant="secondary"
@@ -271,75 +321,101 @@
 								</Button>
 							{/if}
 						</div> -->
-						<div class="flex items-center justify-end">
-							<AuthButton type="forgot-password" extraqueries={{ email: loginModule.identifier }}>
-								<Button variant="link" class="-mr-4 text-sm text-gray-600 hover:text-gray-500">Forgot password?</Button>
-							</AuthButton>
+							<div class="flex items-center justify-end">
+								<AuthButton type="forgot-password" extraqueries={{ email: loginModule.identifier }}>
+									<Button variant="link" class="-mr-4 text-sm text-gray-600 hover:text-gray-500">Forgot password?</Button>
+								</AuthButton>
+							</div>
 						</div>
-					</div>
-				{/if}
-
-				<Button
-					type="submit"
-					class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
-					disabled={userState.loading || loginModule.isLoading}
-				>
-					{#if loginModule.isPhoneNumber && (loginModule.isLoading || userState.loading)}
-						<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
-						Sending OTP...
-					{:else if userState.loading && !loginModule.isPhoneNumber}
-						<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
-						Signing in...
-					{:else}
-						{loginModule.isPhoneNumber ? 'Send OTP' : 'Sign In'}
 					{/if}
-				</Button>
 
-				{#if loginModule.showSignupButton && env.PUBLIC_LOGIN_TYPE !== 'PHONE'}
-					<div class="text-center pt-2">
-						<p class="text-sm text-gray-500 dark:text-gray-400">
-							New to {page?.data?.store?.name}?
-							<AuthButton
-								type="signup"
-								class="font-semibold text-gray-900 hover:underline dark:text-white ml-1"
+					<Button
+						type="submit"
+						class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-semibold shadow-sm transition-colors"
+						disabled={userState.loading || loginModule.isLoading}
+					>
+						{#if loginModule.isPhoneNumber && (loginModule.isLoading || userState.loading)}
+							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
+							Sending OTP...
+						{:else if userState.loading && !loginModule.isPhoneNumber}
+							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
+							Signing in...
+						{:else}
+							{loginModule.isPhoneNumber ? 'Send OTP' : 'Sign In'}
+						{/if}
+					</Button>
+
+					{#if loginModule.showSignupButton && env.PUBLIC_LOGIN_TYPE !== 'PHONE'}
+						<div class="pt-2 text-center">
+							<p class="text-sm text-gray-500 dark:text-gray-400">
+								New to {page?.data?.store?.name}?
+								<AuthButton type="signup" class="ml-1 font-semibold text-gray-900 hover:underline dark:text-white">Create an account</AuthButton>
+							</p>
+						</div>
+					{/if}
+
+					<div class="space-y-1 pt-1.5 text-center text-xs leading-normal text-gray-500 dark:text-gray-400">
+						<p>
+							By continuing, you agree to our
+							<a href="/terms-and-conditions" target="_blank" class="font-medium text-gray-700 hover:underline dark:text-gray-300"
+								>Terms & Conditions</a
 							>
-								Create an account
-							</AuthButton>
 						</p>
+
+						{#if page?.data?.store?.plugins?.isMultiVendor?.active}
+							<div class="pt-0.5">
+								<a
+									href="/auth/join-as-vendor"
+									class="font-medium text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
+									onclick={() => (show = false)}>Join as a Vendor</a
+								>
+							</div>
+						{/if}
 					</div>
-				{/if}
-
-				<div class="pt-1.5 text-center text-xs leading-normal text-gray-500 dark:text-gray-400 space-y-1">
-					<p>
-						By continuing, you agree to our
-						<a href="/terms-and-conditions" target="_blank" class="font-medium text-gray-700 hover:underline dark:text-gray-300">Terms & Conditions</a>
-					</p>
-
-					{#if page?.data?.store?.plugins?.isMultiVendor?.active}
-						<div class="pt-0.5">
-							<a href="/auth/join-as-vendor" class="font-medium text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white" onclick={() => (show = false)}>Join as a Vendor</a>
-						</div>
-					{/if}
 				</div>
 			</form>
 		{:else if loginModule.step === 2}
-			<!-- Keep OTP section styling consistent -->
-			<div class="space-y-6 py-2">
-				<div class="space-y-1.5 text-center">
-					<h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Enter OTP</h2>
-					<p class="text-sm text-gray-500 dark:text-gray-400">
-						We sent a verification code to your phone number.
-						{#if dev}
-							<span class="block mt-1 text-xs font-semibold text-amber-600 dark:text-amber-400">(Dev Mode: Use OTP 1111)</span>
-						{/if}
-					</p>
+			<div class="flex min-h-[min(540px,100dvh)] flex-col py-1 sm:min-h-0">
+				<div class="flex items-center justify-between">
+					<button
+						type="button"
+						class="-ml-2 inline-flex min-h-11 items-center gap-1 rounded-md px-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+						onclick={() => (loginModule.step = 1)}
+					>
+						<ArrowLeft class="h-4 w-4" /> Change number
+					</button>
+					<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400"
+						><Check class="h-3.5 w-3.5 text-primary" /> Code sent</span
+					>
 				</div>
-				<div class="flex justify-center py-2">
-					<InputOTP.Root maxlength={4} pattern="\d*" bind:value={loginModule.otp} bind:ref={loginModule.otpInputRef}>
+
+				<div class="mt-10 space-y-2 text-center sm:mt-8">
+					<h2 class="text-3xl font-bold tracking-tight text-gray-950 dark:text-white">Check your phone</h2>
+					<p class="text-sm leading-6 text-gray-600 dark:text-gray-300">
+						Enter the 4-digit code sent to <span class="font-semibold text-gray-950 dark:text-white">{recipient}</span>.
+					</p>
+					{#if dev}
+						<p class="text-xs font-semibold text-amber-700 dark:text-amber-300">Dev mode: use 1111</p>
+					{/if}
+				</div>
+
+				<div class="flex flex-1 items-center justify-center py-10 sm:py-8">
+					<InputOTP.Root
+						aria-label="Four digit verification code"
+						maxlength={4}
+						pattern="\d*"
+						bind:value={loginModule.otp}
+						bind:ref={loginModule.otpInputRef}
+					>
 						{#snippet children({ cells })}
-							<InputOTP.Group class="gap-3">
+							<InputOTP.Group class="gap-2.5 sm:gap-3">
 								{#each cells as cell}
-									<InputOTP.Slot {cell} class="h-14 w-12 border border-gray-200 bg-gray-50/50 text-lg font-bold rounded-radius first:rounded-radius first:border last:rounded-radius shadow-sm transition-all dark:border-gray-700 dark:bg-gray-900/50 {cell.isActive ? 'border-primary ring-2 ring-primary/20 scale-105' : ''}" />
+									<InputOTP.Slot
+										{cell}
+										class="h-14 w-12 rounded-md border border-gray-300 bg-white text-xl font-bold shadow-sm transition-colors dark:border-gray-600 dark:bg-gray-900 {cell.isActive
+											? 'border-primary ring-2 ring-primary/35'
+											: ''}"
+									/>
 								{/each}
 							</InputOTP.Group>
 						{/snippet}
@@ -348,21 +424,28 @@
 				<input type="hidden" name="otp" bind:value={loginModule.otp} />
 
 				<div class="space-y-4 text-center">
-					<Button class="h-12 w-full text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]" onclick={loginModule.handleVerifyOtp}>
+					<Button
+						class="h-12 w-full text-base font-semibold shadow-sm"
+						onclick={loginModule.handleVerifyOtp}
+						disabled={loginModule.otp.length !== 4 || userState.loading}
+					>
 						{#if userState.loading}
-							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
+							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" /> Verifying…
 						{:else}
-							Verify OTP
+							Continue
 						{/if}
 					</Button>
-
-					<div class="flex flex-col items-center space-y-3 pt-4 text-sm">
-						<p class="text-gray-500 dark:text-gray-400">
-							Didn't receive the OTP?{' '}
-							<button type="button" class="font-medium text-gray-900 transition-colors hover:underline dark:text-gray-200" onclick={handleResendOtp}> Resend OTP </button>
-						</p>
-						<button type="button" class="font-medium text-gray-500 transition-colors hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-gray-200" onclick={() => (loginModule.step = 1)}> Change Phone Number </button>
-					</div>
+					<p class="text-sm text-gray-600 dark:text-gray-300">
+						{#if resendSeconds > 0}
+							Resend code in {resendSeconds}s
+						{:else}
+							Didn't get it? <button
+								type="button"
+								class="min-h-11 font-semibold text-gray-950 underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-white"
+								onclick={handleResendOtp}>Resend code</button
+							>
+						{/if}
+					</p>
 				</div>
 			</div>
 		{/if}

@@ -20,9 +20,19 @@
 
 <SignupRenderer bind:show bind:info>
 	{#snippet content({ isLoading, handleSubmit, closeModal, schemas })}
-		<Modal {show} rounded={false} hideHeader hideFooter useMaxHeight class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none" hAuto wAuto>
+		<Modal
+			bind:show
+			manageHistory={false}
+			rounded={false}
+			hideHeader
+			hideFooter
+			useMaxHeight
+			class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none"
+			hAuto
+			wAuto
+		>
 			<div
-				class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl transition-all dark:border-gray-700/50 dark:bg-gray-900/80 sm:max-w-[480px] sm:rounded-radius sm:p-8 ring-1 ring-white/20 dark:ring-white/5"
+				class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl ring-1 ring-white/20 transition-all dark:border-gray-700/50 dark:bg-gray-900/80 dark:ring-white/5 sm:max-w-[480px] sm:rounded-radius sm:p-8"
 			>
 				<!-- Close Icon -->
 				<div class="sticky top-3 z-50 flex items-center justify-end sm:absolute sm:right-5 sm:top-5">
@@ -41,7 +51,9 @@
 							<img src={page.data.store.logo} alt={page.data.store.name} class="h-10 object-contain dark:brightness-110" />
 						</div>
 					{:else}
-						<div class="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700">
+						<div
+							class="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700"
+						>
 							<span class="text-2xl font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
 						</div>
 					{/if}
