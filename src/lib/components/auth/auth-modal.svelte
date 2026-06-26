@@ -11,6 +11,49 @@
 	let type: AuthType = $state('login')
 	const modalHistoryKey = '__svelteCommerceAuthModal'
 	let ownsHistoryEntry = false
+	let scrollLock:
+		| {
+				scrollY: number
+				bodyOverflow: string
+				bodyPosition: string
+				bodyTop: string
+				bodyWidth: string
+				htmlOverflow: string
+		  }
+		| undefined
+
+	function lockPageScroll() {
+		if (typeof window === 'undefined' || scrollLock) return
+
+		const scrollY = window.scrollY
+		scrollLock = {
+			scrollY,
+			bodyOverflow: document.body.style.overflow,
+			bodyPosition: document.body.style.position,
+			bodyTop: document.body.style.top,
+			bodyWidth: document.body.style.width,
+			htmlOverflow: document.documentElement.style.overflow
+		}
+
+		document.documentElement.style.overflow = 'hidden'
+		document.body.style.overflow = 'hidden'
+		document.body.style.position = 'fixed'
+		document.body.style.top = `-${scrollY}px`
+		document.body.style.width = '100%'
+	}
+
+	function unlockPageScroll() {
+		if (typeof window === 'undefined' || !scrollLock) return
+
+		const { scrollY, bodyOverflow, bodyPosition, bodyTop, bodyWidth, htmlOverflow } = scrollLock
+		document.documentElement.style.overflow = htmlOverflow
+		document.body.style.overflow = bodyOverflow
+		document.body.style.position = bodyPosition
+		document.body.style.top = bodyTop
+		document.body.style.width = bodyWidth
+		scrollLock = undefined
+		window.scrollTo(0, scrollY)
+	}
 
 	function removeAuthParamsFromCurrentUrl() {
 		const url = new URL(window.location.href)
@@ -74,7 +117,13 @@
 		}
 	})
 
+	$effect(() => {
+		if (show) lockPageScroll()
+		else unlockPageScroll()
+	})
+
 	onDestroy(() => {
+		unlockPageScroll()
 		if (typeof window !== 'undefined' && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
 			history.back()
 		}

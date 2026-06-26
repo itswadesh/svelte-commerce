@@ -12,7 +12,7 @@
 	import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
 	import { z } from 'zod'
 	import { toast } from '@misiki/kitcommerce-core'
-	import { authService } from '$lib/core/services/index.js'
+	import { authService, type User } from '$lib/core/services/index.js'
 
 	let { show = $bindable(false) } = $props()
 
@@ -28,6 +28,9 @@
 		loginModule.identifier.length > 4
 			? `${loginModule.identifier.slice(0, Math.min(4, loginModule.identifier.length - 4))}${'•'.repeat(4)}${loginModule.identifier.slice(-2)}`
 			: loginModule.identifier
+	)
+	const loginPrompt = $derived(
+		loginModule.isPhoneNumber ? 'Use your phone number to receive a one-time code.' : 'Use your email and password to continue.'
 	)
 
 	function startResendCooldown() {
@@ -166,13 +169,13 @@
 	wAuto
 >
 	<div
-		class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl ring-1 ring-white/20 transition-all dark:border-gray-700 dark:bg-gray-900 dark:ring-white/5 sm:max-w-[480px] sm:rounded-radius sm:p-8"
+		class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl ring-1 ring-white/20 transition-all dark:border-gray-700 dark:bg-gray-900 dark:ring-white/5 max-sm:min-h-[100dvh] max-sm:px-5 max-sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] max-sm:pt-[max(1rem,env(safe-area-inset-top))] sm:max-w-[480px] sm:rounded-radius sm:p-8"
 	>
 		<!-- Close Icon -->
-		<div class="sticky top-3 z-50 flex items-center justify-end sm:absolute sm:right-5 sm:top-5">
+		<div class="z-50 flex min-h-11 items-center justify-end sm:absolute sm:right-5 sm:top-5">
 			<button
 				aria-label="Close modal button"
-				class="rounded-full bg-gray-100/50 p-2 text-gray-600 transition-all hover:bg-gray-200 hover:text-gray-900 dark:bg-gray-800/50 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+				class="inline-flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
 				onclick={() => {
 					show = false
 					loginModule.removeUrlParams()
@@ -183,21 +186,19 @@
 		</div>
 
 		{#if loginModule.step === 1}
-			<div class="flex flex-col items-center space-y-3 text-center">
+			<div class="flex flex-col items-center space-y-3 pb-2 text-center max-sm:pt-5">
 				{#if page?.data?.store?.logo}
-					<div class="mb-2 flex h-12 items-center justify-center">
-						<img src={page.data.store.logo} alt={page.data.store.name} class="h-10 object-contain dark:brightness-110" />
+					<div class="mb-1 flex h-10 items-center justify-center">
+						<img src={page.data.store.logo} alt={page.data.store.name} class="h-9 object-contain dark:brightness-110" />
 					</div>
 				{:else}
-					<div
-						class="mb-2 flex h-16 w-16 items-center justify-center rounded-radius bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700"
-					>
-						<span class="text-2xl font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
+					<div class="mb-1 flex h-12 w-12 items-center justify-center rounded-radius bg-muted shadow-sm ring-1 ring-border">
+						<span class="text-lg font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
 					</div>
 				{/if}
-				<div class="space-y-1.5">
-					<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Welcome back</h1>
-					<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Sign in to your account</p>
+				<div class="space-y-2">
+					<h1 class="text-3xl font-bold tracking-tight text-gray-950 dark:text-white">Welcome back</h1>
+					<p class="mx-auto max-w-[30ch] text-sm leading-6 text-gray-600 dark:text-gray-300">{loginPrompt}</p>
 				</div>
 			</div>
 			<form
@@ -213,7 +214,7 @@
 					const success = await loginModule.handleSubmit(e)
 					if (success) show = false
 				}}
-				class="flex flex-col space-y-5"
+				class="flex flex-col space-y-5 max-sm:pt-2"
 			>
 				<div class="space-y-4">
 					<div class="space-y-4">
@@ -227,7 +228,7 @@
 
 								<button
 									type="button"
-									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-medium transition-colors {loginModule.isPhoneNumber
+									class="relative z-10 flex min-h-11 flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-semibold transition-colors {loginModule.isPhoneNumber
 										? 'text-gray-900 dark:text-white'
 										: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
 									onclick={() => !loginModule.isPhoneNumber && loginModule.switchLoginType()}
@@ -238,7 +239,7 @@
 
 								<button
 									type="button"
-									class="relative z-10 flex flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-medium transition-colors {!loginModule.isPhoneNumber
+									class="relative z-10 flex min-h-11 flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-semibold transition-colors {!loginModule.isPhoneNumber
 										? 'text-gray-900 dark:text-white'
 										: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
 									onclick={() => loginModule.isPhoneNumber && loginModule.switchLoginType()}
@@ -249,7 +250,7 @@
 							</div>
 						{/if}
 						<div class="mt-2 space-y-2">
-							<Label for="identifier" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+							<Label for="identifier" class="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200">
 								{#if loginModule.identifier.length === 0}
 									{#if env.PUBLIC_LOGIN_TYPE === 'PHONE'}
 										Phone Number
@@ -286,7 +287,7 @@
 											}
 										}
 									}}
-									class="h-12"
+									class="h-14 text-base"
 									required
 								/>
 							{/key}
@@ -331,7 +332,7 @@
 
 					<Button
 						type="submit"
-						class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-semibold shadow-sm transition-colors"
+						class="mt-2 h-14 w-full text-wrap px-4 py-2 text-base font-semibold shadow-sm transition-colors"
 						disabled={userState.loading || loginModule.isLoading}
 					>
 						{#if loginModule.isPhoneNumber && (loginModule.isLoading || userState.loading)}
@@ -354,7 +355,7 @@
 						</div>
 					{/if}
 
-					<div class="space-y-1 pt-1.5 text-center text-xs leading-normal text-gray-500 dark:text-gray-400">
+					<div class="space-y-1 pt-1.5 text-center text-xs leading-5 text-gray-500 dark:text-gray-400">
 						<p>
 							By continuing, you agree to our
 							<a href="/terms-and-conditions" target="_blank" class="font-medium text-gray-700 hover:underline dark:text-gray-300"
@@ -430,7 +431,7 @@
 						disabled={loginModule.otp.length !== 4 || userState.loading}
 					>
 						{#if userState.loading}
-							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" /> Verifying…
+							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" /> Verifying...
 						{:else}
 							Continue
 						{/if}
