@@ -15,15 +15,18 @@
 </script>
 
 <ProductCardRenderer {product} {aspectRatio}>
-	{console.log(product.thumbnail || product?.image_url)}
 	{#snippet content({ aspectHeight, aspectWidth, handleCardClick, changeQuantity, addToCart })}
 		<button
 			variant="plain"
 			onclick={handleCardClick}
-			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
-				':',
-				'/'
-			)}] mb-4 flex w-full flex-col justify-start overflow-hidden border-none bg-white p-0 h-auto rounded-md hover:bg-transparent"
+			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
+
+				':',
+
+				'/'
+
+			)}] mb-4 flex w-full flex-col justify-start overflow-hidden border-none bg-white p-0 h-auto rounded-md hover:bg-transparent"
+
 			aria-label="Product card for {product.name}"
 		>
 			<div class="group relative flex h-full w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
