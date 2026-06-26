@@ -383,7 +383,6 @@ const editAddress = async ({ request, cookies, locals, fetch }) => {
 
 			return res
 		} catch (e) {
-			console.log('e', e)
 			return null
 		}
 	}
@@ -405,7 +404,6 @@ const deleteAddress = async ({ request, cookies, locals, fetch }) => {
 
 		return res
 	} catch (e) {
-		console.log('e', e)
 		return null
 	}
 }

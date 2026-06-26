@@ -17,7 +17,6 @@
 				goto('/')
 			}
 		} catch (e: any) {
-			console.log('This is error:', e)
 		}
 	}
 	$effect(() => {

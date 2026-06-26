@@ -10,7 +10,7 @@
 	const newsTickerPlugin = $derived(page.data?.store?.plugins?.newsTicker)
 
 	onMount(() => {
-		if (!emblaNode) return //console.log('.')
+		if (!emblaNode) return
 		carouselApi = EmblaCarousel(
 			emblaNode,
 			{

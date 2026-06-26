@@ -5,11 +5,8 @@ import { env as publicEnv } from '$env/dynamic/public'
 import base32 from 'hi-base32'
 
 export const fallback: RequestHandler = async ({ request, params, url }) => {
-	//console.log("Proxy to url", params.path)
 	const indetenedUrl = base32.decode(params.path)
-	//console.log("Decoded", indetenedUrl)
 	const shopifyApiType = request.headers.get('X-Shopify-Api-Type')
-	//console.log("Shopify api type", shopifyApiType)
 	const isAdminApiCall = shopifyApiType === 'admin'
 	const path = params.path
 	const searchParams = url.searchParams.toString()
@@ -28,8 +25,6 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
 	const shopifyUrl = isAdminApiCall
 		? `https://${shopifyStoreDomain}/admin/api/2026-01/${indetenedUrl}`
 		: `https://${shopifyStoreDomain}/api/2026-01/graphql.json`
-
-	// console.log(`Proxying request to Shopify: ${shopifyUrl}`);
 
 	const headers = new Headers()
 	if (isAdminApiCall) headers.set('X-Shopify-Access-Token', shopifyAccessToken)
@@ -62,8 +57,6 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
 			data = await response.text()
 		}
 		if (!response.ok) {
-			console.log('Proxy request failed')
-			console.log(response)
 			console.error(data)
 		}
 		return json(data, {

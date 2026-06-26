@@ -69,12 +69,10 @@
 						goto('/messages')
 					})
 					.catch((e) => {
-						// console.log('error', e)
 						toast.error((e as any)?.message)
 					})
 			}
 		} catch (e) {
-			console.log('error', e)
 			toast.error((e as any)?.message)
 		}
 	}

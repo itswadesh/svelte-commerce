@@ -10,7 +10,7 @@
 		"sourceMap": true,
 		"strict": true,
 		"target": "ESNext",
-		"module": "ESNext",
+		"module": "nodenext",
 		"moduleResolution": "NodeNext"
 	},
 	"exclude": ["node_modules"]

@@ -45,7 +45,6 @@
 			dispatch('finalError', event)
 			return
 		}
-		// console.log('Error loading image', event)
 		dispatch('error', event)
 		useRawSrc = true
 	}

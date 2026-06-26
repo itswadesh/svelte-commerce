@@ -43,7 +43,6 @@
 		try {
 			user = await userService.getMe()
 		} catch (e) {
-			console.log(e)
 		}
 	}
 
