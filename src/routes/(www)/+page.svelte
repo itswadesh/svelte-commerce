@@ -8,7 +8,12 @@
 	import HomepageCategoryListWithImage from '$lib/components/home/homepage-category-list-with-image.svelte'
 	import HomepageBanners from '$lib/components/home/homepage-banners.svelte'
 	import Banners from '$lib/components/home/banners.svelte'
-	import { SeoHeader, GoogleStructuredDataWebsite, GoogleStructuredDataOrganization, GoogleStructuredDataProductsList } from '$lib/core/components/index.js'
+	import {
+		SeoHeader,
+		GoogleStructuredDataWebsite,
+		GoogleStructuredDataOrganization,
+		GoogleStructuredDataProductsList
+	} from '$lib/core/components/index.js'
 	import Collections from '$lib/components/home/collections.svelte'
 	let { data } = $props()
 	import { HomepageModule } from '$lib/core/composables/index.js'
@@ -22,7 +27,7 @@
 	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
 	const [aspectWidth, aspectHeight] = $derived(data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
 
-  setCollectionState()
+	setCollectionState()
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {
@@ -129,38 +134,36 @@
 
 <div class="relative w-full">
 	{#if homepageModule.loading || !page?.desktopBanners}
-		<div class="relative aspect-[4/3.5] md:aspect-[16/6] md:max-h-[calc(50vh+2px)] w-full">
+		<div class="relative aspect-[4/3.5] w-full md:aspect-[16/6] md:max-h-[calc(50vh+2px)]">
 			<Skeleton class="h-full w-full rounded-none" />
 		</div>
 	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
 		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
 	{:else}
 		<!-- Fallback Hero Section when no banners are configured -->
-		<div class="relative w-full aspect-[4/3.5] md:aspect-[16/6] md:max-h-[50vh] bg-black px-6 text-white overflow-hidden flex items-center">
+		<div class="relative flex aspect-[4/3.5] w-full items-center overflow-hidden bg-black px-6 text-white md:aspect-[16/6] md:max-h-[50vh]">
 			<!-- Decorative background glow -->
-			<div class="absolute right-0 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
+			<div class="pointer-events-none absolute right-0 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl"></div>
 
 			<div class="relative mx-auto max-w-7xl">
 				<div class="grid gap-12 md:grid-cols-2">
 					<div class="flex flex-col justify-center">
-						<h2 class="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl text-white">
+						<h2 class="mb-4 text-4xl font-extrabold tracking-tight text-white md:text-5xl">
 							{data?.store?.name || 'Welcome to Our Store'}
 						</h2>
-						<p class="mb-8 text-base md:text-lg text-zinc-100 leading-relaxed max-w-[55ch]">
+						<p class="mb-8 max-w-[55ch] text-base leading-relaxed text-zinc-100 md:text-lg">
 							{@html data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
 						</p>
 						<Button
 							href="/products"
 							size="lg"
-							class="w-fit bg-primary text-black font-bold uppercase tracking-widest text-xs py-4 px-8 rounded-md hover:bg-primary/90 transition-colors duration-300"
+							class="w-fit rounded-md bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-black transition-colors duration-300 hover:bg-primary/90"
 						>
 							Shop Now
 						</Button>
 					</div>
-					<div class="hidden items-center justify-center md:flex select-none" aria-hidden="true">
-						<div class="text-[10rem] font-black tracking-tighter text-white/20">
-							NEW
-						</div>
+					<div class="hidden select-none items-center justify-center md:flex" aria-hidden="true">
+						<div class="text-[10rem] font-black tracking-tighter text-white/20">NEW</div>
 					</div>
 				</div>
 			</div>
@@ -170,7 +173,7 @@
 
 <Slider />
 
-<Blocks layouts={sveltePage.data.page.layouts}/>
+<Blocks layouts={data?.page?.layouts || []} />
 
 <!-- <div class="page-width mb-8">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
@@ -286,7 +289,7 @@
 			<Button
 				variant="ghost"
 				size="icon"
-				class="self-start h-8 w-8"
+				class="h-8 w-8 self-start"
 				onclick={() => (homepageModule.showRecentOrderPopup = false)}
 				aria-label="Close notification"
 			>
