@@ -81,38 +81,34 @@
 							</div>
 						</div>
 					{/if}
+					{#if wishlistPlugin?.active}
+						<div class="absolute right-2 top-2 z-10">
+							<Button
+								variant="ghost"
+								size="icon"
+								class="h-auto w-auto rounded-full bg-white/80 p-1.5 shadow-sm backdrop-blur-sm hover:bg-white"
+								data-testid="wishlist-button"
+								onclick={(e) => {
+									e.stopPropagation()
+									e.preventDefault()
+									toggleWishlist()
+								}}
+							>
+								{#if isWishlisted}
+									<Heart class="size-4 fill-red-500 stroke-red-500" />
+								{:else}
+									<Heart class="size-4" />
+								{/if}
+								<span class="sr-only">Toggle wishlist</span>
+							</Button>
+						</div>
+					{/if}
 				</figure>
 			</a>
 
-			<div data-testid="product-card-info-wrapper" class="flex flex-col pt-[7.5px] lg:pt-3">
-				<div class="flex items-center justify-between">
-					<!-- <span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm" data-testid="product-brand">
-						{categoryName || page.data?.store?.name}
-					</span> -->
-					{#if wishlistPlugin?.active}
-						<Button
-							variant="ghost"
-							size="icon"
-							class="h-auto w-auto p-1"
-							data-testid="wishlist-button"
-							onclick={(e) => {
-								e.stopPropagation()
-								e.preventDefault()
-								toggleWishlist()
-							}}
-						>
-							{#if isWishlisted}
-								<Heart class="size-4 fill-red-500 stroke-red-500" />
-							{:else}
-								<Heart class="size-4" />
-							{/if}
-							<span class="sr-only">Toggle wishlist</span>
-						</Button>
-					{/if}
-				</div>
-
+			<div data-testid="product-card-info-wrapper" class="flex flex-col justify-between h-full pt-[7.5px] lg:pt-3">
 				<a href="/products/{product.slug}" class="block overflow-hidden">
-					<span class="block w-[80%] truncate text-xs text-gray-600 lg:text-sm" data-testid="product-title" title={product.title}>
+					<span class="block w-[80%] text-xs text-gray-600 lg:text-sm" data-testid="product-title" title={product.title}>
 						{product.title}
 					</span>
 				</a>
