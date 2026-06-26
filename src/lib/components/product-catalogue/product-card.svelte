@@ -19,7 +19,7 @@
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 
 	const categoryName = $derived.by(() => {
-		const name = product?.categories?.[0]?.category?.name
+		const name = product?.category?.name || product?.categories?.[0]?.category?.name
 		if (name?.toLowerCase() == 'uncategorized') return false
 		return name
 	})
@@ -86,9 +86,9 @@
 
 			<div data-testid="product-card-info-wrapper" class="flex flex-col pt-[7.5px] lg:pt-3">
 				<div class="flex items-center justify-between">
-					<span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm" data-testid="product-brand">
+					<!-- <span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm" data-testid="product-brand">
 						{categoryName || page.data?.store?.name}
-					</span>
+					</span> -->
 					{#if wishlistPlugin?.active}
 						<Button
 							variant="ghost"
