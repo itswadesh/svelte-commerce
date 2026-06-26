@@ -4,12 +4,13 @@
 
 	const productState = useProductState()
 	const data = $derived(page.data)
+	const metadataEntries = $derived(Object.entries(data?.product?.metadata || {}).filter(([key]) => !/^(product )?specifications?$/i.test(key.trim())))
 </script>
 
-{#if data?.product?.metadata}
+{#if metadataEntries.length}
 	<div class="mt-4">
 		<div class="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
-			{#each Object.entries(data?.product.metadata) as [key, value]}
+			{#each metadataEntries as [key, value]}
 				<div class="card">
 					<div class="card-header">
 						<h3 class="card-title">{key}</h3>

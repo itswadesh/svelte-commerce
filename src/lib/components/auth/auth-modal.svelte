@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import LoginModal from './login-modal.svelte'
 	import SignupModal from './signup-modal.svelte'
 	import { onNavigate } from '$app/navigation'
@@ -9,6 +9,23 @@
 	let { show = $bindable() } = $props()
 
 	let type: AuthType = $state('login')
+	const modalHistoryKey = '__svelteCommerceAuthModal'
+	let ownsHistoryEntry = false
+
+	function removeAuthParamsFromCurrentUrl() {
+		const url = new URL(window.location.href)
+		for (const parameter of ['show_auth', 'login', 'signup', 'forgot-password']) {
+			url.searchParams.delete(parameter)
+		}
+		history.replaceState(history.state, '', url)
+	}
+
+	function handleBrowserBack() {
+		if (!show || !ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		show = false
+		removeAuthParamsFromCurrentUrl()
+	}
 
 	const checkStateAndAct = () => {
 		const urlParams = new URLSearchParams(window?.location?.search)
@@ -37,6 +54,30 @@
 
 	onMount(() => {
 		checkStateAndAct()
+	})
+
+	onMount(() => {
+		window.addEventListener('popstate', handleBrowserBack)
+		return () => window.removeEventListener('popstate', handleBrowserBack)
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined') return
+
+		if (show && !ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		} else if (!show && ownsHistoryEntry) {
+			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
+			ownsHistoryEntry = false
+			if (isCurrentModalEntry) history.back()
+		}
+	})
+
+	onDestroy(() => {
+		if (typeof window !== 'undefined' && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
+			history.back()
+		}
 	})
 
 	onNavigate(() => {

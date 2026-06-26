@@ -6,13 +6,20 @@
 
 	const productState = useProductState()
 	const data = $derived(page.data)
+	const description = $derived(productState.selectedVariant?.description || data?.product?.description || '')
+	const hasDescription = $derived(
+		description
+			.replace(/<[^>]*>/g, '')
+			.replace(/&nbsp;/gi, '')
+			.trim().length > 0
+	)
 
 	let isOpen = $state(true)
 </script>
 
-	{#if productState.selectedVariant?.description || data?.product?.description}
-<div class="border-b border-gray-300">
-	  <button class="flex pb-2 w-full items-center justify-between gap-2 intra-pt text-base font-bold text-gray-900" onclick={() => (isOpen = !isOpen)}>
+{#if hasDescription}
+	<div class="border-b border-gray-300">
+		<button class="intra-pt flex w-full items-center justify-between gap-2 pb-2 text-base font-bold text-gray-900" onclick={() => (isOpen = !isOpen)}>
 			<span>Product Description</span>
 
 			{#if isOpen}
@@ -27,9 +34,9 @@
 				<div
 					class="prose prose-sm max-w-none leading-relaxed text-gray-600 prose-headings:text-gray-900 prose-strong:text-gray-900 prose-li:list-disc [&>table]:w-full [&>table]:border-collapse [&_td]:border-b [&_td]:border-gray-50 [&_td]:py-3 [&_td]:text-sm [&_th]:border-b [&_th]:border-gray-100 [&_th]:py-3 [&_th]:text-left [&_th]:text-xs [&_th]:font-bold [&_th]:uppercase [&_th]:tracking-widest"
 				>
-					{@html productState.selectedVariant?.description || data?.product?.description}
+					{@html description}
 				</div>
 			</div>
 		{/if}
-</div>
-	{/if}
+	</div>
+{/if}
