@@ -104,7 +104,7 @@
 					disabled={productState.addToCartButtonDisabled}
 					onclick={handleClick}
 				>
-					{#if !productState.isLoading && (!page.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? !productState.selectedVariant?.stock : !page.data?.product.stock)}
+					{#if !productState.isLoading && (!page.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? (productState.selectedVariant?.manageInventory && !productState.selectedVariant?.stock) : !page.data?.product.stock)}
 						Out of Stock
 					{:else if productState.cartState.showCheckout}
 						Go to bag
