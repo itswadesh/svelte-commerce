@@ -8,7 +8,7 @@
 	import ImageBlock from './blocks/image-block.svelte'
 	import RichTextBlock from './blocks/rich-text-block.svelte'
 
-	const { layouts } = $props()
+	let { layouts = [] }: { layouts?: any[] } = $props()
 	$inspect(layouts)
 </script>
 
