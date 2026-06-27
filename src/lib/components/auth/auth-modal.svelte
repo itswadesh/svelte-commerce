@@ -136,10 +136,10 @@
 
 <main>
 	{#if type === 'signup'}
-		<SignupModal bind:show />
+		<SignupModal bind:show manageHistory={false} />
 	{:else if type === 'login'}
-		<LoginModal bind:show />
+		<LoginModal bind:show manageHistory={false} />
 	{:else if type === 'forgot-password'}
-		<ForgotPasswordModal bind:show />
+		<ForgotPasswordModal bind:show manageHistory={false} />
 	{/if}
 </main>

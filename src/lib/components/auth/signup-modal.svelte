@@ -7,7 +7,7 @@
 	import { SignupRenderer } from '$lib/core/composables/index.js'
 	import { page } from '$app/state'
 
-	let { show = $bindable() } = $props()
+	let { show = $bindable(), manageHistory = true } = $props()
 
 	let info = $state({
 		firstName: '',
@@ -24,7 +24,7 @@
 	{#snippet content({ isLoading, handleSubmit, closeModal, schemas })}
 		<Modal
 			bind:show
-			manageHistory={false}
+			{manageHistory}
 			rounded={false}
 			hideHeader
 			hideFooter

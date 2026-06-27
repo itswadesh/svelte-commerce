@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import * as Card from '$lib/components/ui/card'
 	import type { WithElementRef } from 'bits-ui'
@@ -74,6 +74,12 @@
 			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
 			ownsHistoryEntry = false
 			if (isCurrentModalEntry) history.back()
+		}
+	})
+
+	onDestroy(() => {
+		if (typeof window !== 'undefined' && manageHistory && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
+			history.back()
 		}
 	})
 </script>

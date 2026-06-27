@@ -14,7 +14,7 @@
 	import { toast } from '@misiki/kitcommerce-core'
 	import { authService, type User } from '$lib/core/services/index.js'
 
-	let { show = $bindable(false) } = $props()
+	let { show = $bindable(false), manageHistory = true } = $props()
 
 	const customPhoneSchema = z.string().refine((val) => schemas.phone.safeParse(val.replace(/\s+/g, '')).success, 'Please enter a valid phone number')
 
@@ -159,7 +159,7 @@
 
 <Modal
 	bind:show
-	manageHistory={false}
+	{manageHistory}
 	rounded={false}
 	hideHeader
 	hideFooter

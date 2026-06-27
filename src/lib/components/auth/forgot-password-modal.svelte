@@ -8,7 +8,7 @@
 
 	import { page } from '$app/state'
 
-	let { show = $bindable() } = $props()
+	let { show = $bindable(), manageHistory = true } = $props()
 
 	const forgotPasswordModule = new ForgotPasswordModule()
 
@@ -24,7 +24,7 @@
 </svelte:head>
 <Modal
 	bind:show
-	manageHistory={false}
+	{manageHistory}
 	rounded={false}
 	hideHeader
 	hideFooter

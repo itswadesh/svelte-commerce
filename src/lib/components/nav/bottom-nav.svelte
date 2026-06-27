@@ -1,24 +1,55 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { goto } from '$app/navigation'
+	import { onDestroy, onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
 	import { getCartState } from '$lib/core/stores/index.js'
-	import { Home, Grid, Heart, ShoppingCart, Minus, Plus, Trash2, Store, ArrowLeft, Play, ShoppingBag, Compass } from '@lucide/svelte'
+	import { ArrowLeft, Compass, Grid, Heart, Home, Play, ShoppingBag } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { Separator } from '$lib/components/ui/separator'
-	import { goto } from '$app/navigation'
 	import { cn, formatPrice } from '$lib/core/utils'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
-	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import CartItem from '$lib/components/cart/cart-item.svelte'
 
 	let { class: className = '' } = $props()
 
 	const cartState = getCartState()
 	let showCartModal = $state(false)
+	const modalHistoryKey = '__svelteCommerceBottomCart'
+	let ownsHistoryEntry = false
+
+	function handleBrowserBack() {
+		if (!showCartModal || !ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		showCartModal = false
+	}
+
+	onMount(() => {
+		window.addEventListener('popstate', handleBrowserBack)
+		return () => window.removeEventListener('popstate', handleBrowserBack)
+	})
 
 	$effect(() => {
 		if (page.url.pathname) {
 			showCartModal = false
+		}
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined') return
+
+		if (showCartModal && !ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		} else if (!showCartModal && ownsHistoryEntry) {
+			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
+			ownsHistoryEntry = false
+			if (isCurrentModalEntry) history.back()
+		}
+	})
+
+	onDestroy(() => {
+		if (typeof window !== 'undefined' && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
+			history.back()
 		}
 	})
 
@@ -53,7 +84,6 @@
 			}
 		]
 		if (page?.data?.store?.plugins?.isReel?.active) {
-			// Insert Reels before Cart
 			items.splice(4, 0, { label: 'Reels', icon: Play, href: '/reels' })
 		}
 		return items
@@ -63,19 +93,24 @@
 		return page.url.pathname === href
 	}
 </script>
- 
-<nav class={cn('fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white font-[\'Montserrat\',_sans-serif] md:hidden pb-safe', className)}>
+
+<nav class={cn("pb-safe fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white font-['Montserrat',_sans-serif] md:hidden", className)}>
 	<div class="flex h-16 items-center justify-around px-3">
 		{#each navItems as item}
 			{#if item.href}
-				<a
-					href={item.href}
-					class="relative flex flex-1 flex-col items-center justify-center h-full transition-all duration-200"
-				>
-					<div class="relative flex h-7 w-7 items-center justify-center transition-colors duration-200 {isActive(item.href) ? 'text-primary' : 'text-gray-600'}">
+				<a href={item.href} class="relative flex h-full flex-1 flex-col items-center justify-center transition-all duration-200">
+					<div
+						class="relative flex h-7 w-7 items-center justify-center transition-colors duration-200 {isActive(item.href)
+							? 'text-primary'
+							: 'text-gray-600'}"
+					>
 						<item.icon size={20} class="stroke-[1.6]" />
 					</div>
-					<span class="text-[9px] font-bold uppercase tracking-wider transition-colors duration-200 truncate {isActive(item.href) ? 'text-black font-black' : 'text-gray-600'}">
+					<span
+						class="truncate text-[9px] font-bold uppercase tracking-wider transition-colors duration-200 {isActive(item.href)
+							? 'font-black text-black'
+							: 'text-gray-600'}"
+					>
 						{item.label}
 					</span>
 					{#if isActive(item.href)}
@@ -83,19 +118,18 @@
 					{/if}
 				</a>
 			{:else}
-				<button
-					onclick={item.onClick}
-					class="flex flex-1 flex-col items-center justify-center h-full transition-all duration-200"
-				>
+				<button onclick={item.onClick} class="flex h-full flex-1 flex-col items-center justify-center transition-all duration-200">
 					<div class="relative flex h-7 w-7 items-center justify-center text-gray-600">
 						<item.icon size={20} class="stroke-[1.6]" />
 						{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
-							<span class="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[8px] text-black font-bold border border-white">
+							<span
+								class="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-primary text-[8px] font-bold text-black"
+							>
 								{cartState?.cart?.qty}
 							</span>
 						{/if}
 					</div>
-					<span class="text-[9px] font-bold uppercase tracking-wider text-gray-600 truncate">
+					<span class="truncate text-[9px] font-bold uppercase tracking-wider text-gray-600">
 						{item.label}
 					</span>
 				</button>
@@ -118,7 +152,7 @@
 				{#if cartState?.cart?.lineItems?.length}
 					<div class="space-y-4">
 						{#each cartState.cart.lineItems || [] as _, i}
-							<div class="rounded-lg transition-all duration-300 hover:bg-gray-50 border border-gray-100 p-2">
+							<div class="rounded-lg border border-gray-100 p-2 transition-all duration-300 hover:bg-gray-50">
 								<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={() => {}} />
 							</div>
 						{/each}
@@ -154,13 +188,13 @@
 							<span>Total</span>
 							<span>{formatPrice(cartState.cart.total, cartState.cart.currencyCode)}</span>
 						</div>
-            <Button
-              onclick={() => {
+						<Button
+							onclick={() => {
 								showCartModal = false
 								goto('/checkout/cart')
 							}}
 							size="lg"
-							class="w-full bg-primary text-black font-bold uppercase tracking-widest text-xs py-4 px-8 rounded-md hover:bg-primary/90 transition-colors duration-300"
+							class="w-full rounded-md bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-black transition-colors duration-300 hover:bg-primary/90"
 						>
 							Proceed to Checkout
 						</Button>
@@ -170,5 +204,5 @@
 		</div>
 	</div>
 {/if}
-<!-- Add padding to bottom of page to account for nav on mobile only -->
+
 <div class="h-16 md:hidden" />
