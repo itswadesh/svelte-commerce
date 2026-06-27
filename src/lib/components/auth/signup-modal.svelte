@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { LoaderIcon, X } from '@lucide/svelte'
+	import { ArrowLeft, Check, LoaderIcon, ShieldCheck, UserPlus, X } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '../common/modal.svelte'
@@ -16,6 +16,8 @@
 		password: '',
 		confirmPassword: ''
 	})
+
+	const passwordsMismatch = $derived(info.confirmPassword.length > 0 && info.password !== info.confirmPassword)
 </script>
 
 <SignupRenderer bind:show bind:info>
@@ -32,46 +34,59 @@
 			wAuto
 		>
 			<div
-				class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl ring-1 ring-white/20 transition-all dark:border-gray-700/50 dark:bg-gray-900/80 dark:ring-white/5 sm:max-w-[480px] sm:rounded-radius sm:p-8"
+				class="flex max-h-[100dvh] w-full transform flex-col overflow-y-auto border border-gray-100/50 bg-white p-6 shadow-2xl ring-1 ring-white/20 transition-all dark:border-gray-700 dark:bg-gray-900 dark:ring-white/5 max-sm:min-h-[100dvh] max-sm:px-5 max-sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] max-sm:pt-[max(1rem,env(safe-area-inset-top))] sm:max-h-[92vh] sm:max-w-[480px] sm:rounded-radius sm:p-8"
 			>
 				<!-- Close Icon -->
-				<div class="sticky top-3 z-50 flex items-center justify-end sm:absolute sm:right-5 sm:top-5">
+				<div class="z-50 flex min-h-11 shrink-0 items-center justify-between sm:absolute sm:right-5 sm:top-5 sm:justify-end">
+					<AuthButton type="login">
+						<Button
+							type="button"
+							variant="ghost"
+							class="-ml-3 inline-flex min-h-11 items-center gap-1.5 px-3 text-sm font-semibold text-gray-600 hover:text-gray-950 dark:text-gray-300 dark:hover:text-white sm:hidden"
+						>
+							<ArrowLeft class="h-4 w-4" />
+							Login
+						</Button>
+					</AuthButton>
 					<button
 						aria-label="Close modal button"
-						class="rounded-full bg-gray-100/50 p-2 text-gray-600 transition-all hover:bg-gray-200 hover:text-gray-900 dark:bg-gray-800/50 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+						class="inline-flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
 						onclick={closeModal}
 					>
 						<X class="h-5 w-5" />
 					</button>
 				</div>
 
-				<div class="flex flex-col items-center space-y-3 text-center">
+				<div class="flex shrink-0 flex-col items-center space-y-3 pb-1 text-center max-sm:pt-3">
 					{#if page?.data?.store?.logo}
-						<div class="mb-2 flex h-12 items-center justify-center">
-							<img src={page.data.store.logo} alt={page.data.store.name} class="h-10 object-contain dark:brightness-110" />
+						<div class="mb-1 flex h-10 items-center justify-center">
+							<img src={page.data.store.logo} alt={page.data.store.name} class="h-9 object-contain dark:brightness-110" />
 						</div>
 					{:else}
-						<div
-							class="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700"
-						>
-							<span class="text-2xl font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
+						<div class="mb-1 flex h-12 w-12 items-center justify-center rounded-radius bg-muted shadow-sm ring-1 ring-border">
+							<span class="text-lg font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
 						</div>
 					{/if}
-					<div class="space-y-1.5">
-						<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Create your account</h1>
-						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Join us and start your shopping journey</p>
+					<div class="space-y-2">
+						<div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/15">
+							<UserPlus class="h-6 w-6" />
+						</div>
+						<h1 class="text-3xl font-bold tracking-tight text-gray-950 dark:text-white">Create account</h1>
+						<p class="mx-auto max-w-[31ch] text-sm leading-6 text-gray-600 dark:text-gray-300">
+							Save your details for faster checkout and easier order tracking.
+						</p>
 					</div>
 				</div>
 
-				<form class="space-y-4" onsubmit={handleSubmit} aria-label="Sign up form">
-					<div class="grid grid-cols-2 gap-4">
+				<form class="space-y-4 max-sm:pt-2" onsubmit={handleSubmit} aria-label="Sign up form">
+					<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 						<Textbox
 							name="firstName"
 							bind:value={info.firstName}
 							placeholder="John"
 							schema={schemas.firstName}
-							label="First Name"
-							class="h-12"
+							label="First name"
+							class="h-14 text-base sm:h-12"
 							required
 							aria-label="First name"
 							autocomplete="given-name"
@@ -81,8 +96,8 @@
 							bind:value={info.lastName}
 							placeholder="Doe"
 							schema={schemas.lastName}
-							label="Last Name"
-							class="h-12"
+							label="Last name"
+							class="h-14 text-base sm:h-12"
 							required
 							aria-label="Last name"
 							autocomplete="family-name"
@@ -96,7 +111,7 @@
 						placeholder="you@example.com"
 						schema={schemas.email}
 						label="Email address"
-						class="h-12"
+						class="h-14 text-base sm:h-12"
 						required
 						aria-label="Email address"
 						autocomplete="email"
@@ -106,10 +121,10 @@
 						name="password"
 						type="password"
 						bind:value={info.password}
-						placeholder="••••••••"
+						placeholder="Enter a password"
 						schema={schemas.password}
 						label="Password"
-						class="h-12"
+						class="h-14 text-base sm:h-12"
 						required
 						aria-label="Password"
 						autocomplete="new-password"
@@ -119,37 +134,54 @@
 						name="confirmPassword"
 						type="password"
 						bind:value={info.confirmPassword}
-						placeholder="••••••••"
+						placeholder="Confirm your password"
 						schema={schemas.confirmPassword}
 						label="Confirm password"
-						class="h-12"
+						class="h-14 text-base sm:h-12"
 						required
 						aria-label="Confirm password"
 						autocomplete="new-password"
 					/>
 
+					<div
+						class="flex items-start gap-2 rounded-radius bg-gray-50 p-3 text-xs leading-5 text-gray-600 ring-1 ring-gray-100 dark:bg-gray-800/70 dark:text-gray-300 dark:ring-gray-700"
+					>
+						{#if passwordsMismatch}
+							<X class="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+							<span>Passwords do not match yet.</span>
+						{:else}
+							<ShieldCheck class="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+							<span>Use at least 8 characters. Your password is only used to secure your account.</span>
+						{/if}
+					</div>
+
 					<Button
 						type="submit"
-						class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
-						disabled={isLoading || info.password !== info.confirmPassword}
-						aria-label={isLoading ? 'Creating account...' : info.password !== info.confirmPassword ? 'Passwords do not match' : 'Create account'}
+						class="h-14 w-full text-wrap px-4 py-2 text-base font-semibold shadow-sm transition-colors"
+						disabled={isLoading || passwordsMismatch}
+						aria-label={isLoading ? 'Creating account...' : passwordsMismatch ? 'Passwords do not match' : 'Create account'}
 					>
 						{#if isLoading}
 							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+							Creating account...
+						{:else if passwordsMismatch}
+							Passwords do not match
+						{:else}
+							Create account
 						{/if}
-						{isLoading ? 'Creating account...' : info.password !== info.confirmPassword ? 'Passwords do not match' : 'Create account'}
 					</Button>
 				</form>
 
-				<div class="space-y-4 text-center">
-					<p class="text-sm text-gray-500">Already have an account?</p>
+				<div class="space-y-2 text-center">
+					<p class="text-sm text-gray-600 dark:text-gray-300">Already have an account?</p>
 					<AuthButton type="login">
 						<Button
 							variant="link"
-							class="inline-block text-gray-600 transition-colors hover:text-gray-900 dark:hover:text-gray-300"
+							class="inline-flex min-h-11 items-center font-semibold text-gray-950 transition-colors hover:underline dark:text-white"
 							aria-label="Sign in to your account"
 						>
-							Sign in to your account
+							<ArrowLeft class="mr-2 h-4 w-4" />
+							Sign in
 						</Button>
 					</AuthButton>
 				</div>
@@ -160,15 +192,16 @@
 							<div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
 						</div>
 						<div class="relative flex justify-center text-sm">
-							<span class="bg-white px-2 text-gray-500 dark:bg-gray-800 dark:text-gray-400">or</span>
+							<span class="bg-white px-2 text-gray-500 dark:bg-gray-900 dark:text-gray-400">or</span>
 						</div>
 					</div>
 
 					<a
 						href="/auth/join-as-vendor"
-						class="inline-block w-full rounded-lg border border-gray-600 px-4 py-2 text-center text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-500 dark:text-gray-300 dark:hover:bg-gray-900/20"
+						class="inline-flex min-h-12 w-full items-center justify-center rounded-radius border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-950 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
 						aria-label="Join as a vendor"
 					>
+						<Check class="mr-2 h-4 w-4" />
 						Join as a Vendor
 					</a>
 				{/if}
