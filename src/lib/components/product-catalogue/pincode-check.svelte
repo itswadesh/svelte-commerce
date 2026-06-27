@@ -4,9 +4,12 @@
 	import { Input } from '$lib/components/ui/input/index.js'
 	import { PincodeCheckRenderer, useProductState } from '$lib/core/composables/index.js'
 	import { MapPin } from '@lucide/svelte'
+	import { page } from '$app/state'
 
 	let pincode: number | undefined = $state()
 	const productState = useProductState()
+
+  $inspect("productState", page.data)
 </script>
 
 <PincodeCheckRenderer bind:pincode>
