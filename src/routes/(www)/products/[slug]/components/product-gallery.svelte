@@ -126,10 +126,12 @@
 					</Carousel.Item>
 				{/each}
 			</Carousel.Content>
-			<div class="hidden sm:block">
-				<Carousel.Previous class="-top-4 left-1/2 -translate-x-1/2 rotate-90 size-7 [&>svg]:size-3.5" />
-				<Carousel.Next class="-bottom-4 left-1/2 -translate-x-1/2 rotate-90 size-7 [&>svg]:size-3.5" />
-			</div>
+      {#if images.length > 4}
+			  <div class="hidden sm:block">
+			  	<Carousel.Previous class="-top-4 left-1/2 -translate-x-1/2 rotate-90 size-7 [&>svg]:size-3.5" />
+			  	<Carousel.Next class="-bottom-4 left-1/2 -translate-x-1/2 rotate-90 size-7 [&>svg]:size-3.5" />
+			  </div>
+      {/if}
 		</Carousel.Root>
 	</div>
 
