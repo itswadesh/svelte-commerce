@@ -231,7 +231,7 @@
 					if (api) {
 						carouselApi = api
 						api.on('select', () => {
-							currentIndex = api.sele()
+							currentIndex = api.selectedScrollSnap()
 							selectedImage = carouselImages[currentIndex]
 						})
 					}
