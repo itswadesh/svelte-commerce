@@ -358,7 +358,7 @@
 					<div class="space-y-1 pt-1.5 text-center text-xs leading-5 text-gray-500 dark:text-gray-400">
 						<p>
 							By continuing, you agree to our
-							<a href="/terms-and-conditions" target="_blank" class="font-medium text-gray-700 hover:underline dark:text-gray-300"
+							<a href="/terms-and-conditions" class="font-medium text-gray-700 hover:underline dark:text-gray-300" onclick={() => (show = false)}
 								>Terms & Conditions</a
 							>
 						</p>
