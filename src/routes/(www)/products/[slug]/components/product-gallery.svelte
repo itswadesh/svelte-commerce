@@ -13,6 +13,7 @@
 
 	let carouselApi: CarouselAPI | null = $state(null)
 	let mainCarouselApi: CarouselAPI | null = $state(null)
+	let previewCarouselApi: CarouselAPI | null = $state(null)
 	let carouselImages = $state<string[]>([])
 	let currentIndex = $state(0)
 	let previewVideoPaused = $state<{ [key: string]: boolean }>({})
@@ -30,6 +31,9 @@
 	$effect(() => {
 		if (mainCarouselApi && mainCarouselApi.selectedScrollSnap() !== currentIndex) {
 			mainCarouselApi.scrollTo(currentIndex)
+		}
+		if (previewCarouselApi && previewCarouselApi.selectedScrollSnap() !== currentIndex) {
+			previewCarouselApi.scrollTo(currentIndex)
 		}
 	})
 
@@ -71,45 +75,66 @@
 {/if}
 
 <div class="flex flex-col-reverse gap-4 sm:flex-row">
-	<div class="hidden gap-4 sm:flex sm:w-24 sm:flex-col">
-		{#each images as img, idx}
-			{@const youtubeId = getYoutubeId(img)}
-			<div
-				class={cn(
-					'relative overflow-hidden rounded-radius border p-0.5 max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20',
-					idx === currentIndex ? 'border-primary' : 'border-muted'
-				)}
-				role="button"
-				tabindex="0"
-				onclick={() => onImageClick?.(img)}
-				onkeydown={(e) => e.key === 'Enter' && onImageClick?.(img)}
-				aria-label="View full image"
-			>
-				{#if youtubeId}
-					<iframe
-						width="50%"
-						height="100%"
-						class="aspect-square"
-						src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
-						title="Video"
-						frameborder="0"
-						allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-						allowfullscreen
-						loading="lazy"
-					></iframe>
-				{:else if isVideoURL(img)}
-					<video height="100%" width="100%" class="aspect-square w-full" loop autoplay>
-						<source src={img} />
-						Video not supported
-					</video>
-				{:else}
-					<LazyImg src={img} alt="Product Image" class=" w-full rounded-radius object-cover" />
-				{/if}
+  <!-- Preview images -->
+	<div class="hidden sm:flex sm:w-24 sm:flex-col">
+		<Carousel.Root
+			opts={{ align: 'start', loop: true }}
+			orientation="vertical"
+			setApi={(api) => {
+				if (api) {
+					previewCarouselApi = api
+				}
+			}}
+			class="relative w-full h-[480px]"
+		>
+			<Carousel.Content class="-mt-2 h-[480px]">
+				{#each images as img, idx}
+					{@const youtubeId = getYoutubeId(img)}
+					<Carousel.Item class="pt-2 basis-1/5">
+						<div
+							class={cn(
+								'relative overflow-hidden rounded-radius border p-0.5 w-full aspect-square',
+								idx === currentIndex ? 'border-primary' : 'border-muted'
+							)}
+							role="button"
+							tabindex="0"
+							onclick={() => onImageClick?.(img)}
+							onkeydown={(e) => e.key === 'Enter' && onImageClick?.(img)}
+							aria-label="View full image"
+						>
+							{#if youtubeId}
+								<iframe
+									width="100%"
+									height="100%"
+									class="aspect-square"
+									src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
+									title="Video"
+									frameborder="0"
+									allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+									allowfullscreen
+									loading="lazy"
+								></iframe>
+							{:else if isVideoURL(img)}
+								<video height="100%" width="100%" class="aspect-square w-full" loop autoplay>
+									<source src={img} />
+									Video not supported
+								</video>
+							{:else}
+								<LazyImg src={img} alt="Product Image" class="w-full rounded-radius object-cover" />
+							{/if}
+						</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<div class="hidden sm:block">
+				<Carousel.Previous class="-top-4 left-1/2 -translate-x-1/2 rotate-90 size-7 [&>svg]:size-3.5" />
+				<Carousel.Next class="-bottom-4 left-1/2 -translate-x-1/2 rotate-90 size-7 [&>svg]:size-3.5" />
 			</div>
-		{/each}
+		</Carousel.Root>
 	</div>
 
 	<div class="flex-1">
+    <!-- Main Preview Image -->
 		<Carousel.Root
 			opts={{ loop: true }}
 			setApi={(api) => {
@@ -153,15 +178,15 @@
 									Video not supported
 								</video>
 							{:else}
-								<LazyImg src={img} alt="Product Image" class="w-full rounded-radius object-cover" />
+								<LazyImg src={img} alt="Product Image" class="w-full rounded-radius object-contain" />
 							{/if}
 						</div>
 					</Carousel.Item>
 				{/each}
 			</Carousel.Content>
 			<div class="hidden sm:block">
-				<Carousel.Previous class="-left-4" />
-				<Carousel.Next class="-right-4" />
+				<Carousel.Previous class="-left-4 size-7 [&>svg]:size-3.5" />
+				<Carousel.Next class="-right-4 size-7 [&>svg]:size-3.5" />
 			</div>
 
 			<!-- Mobile Pagination Dots -->
