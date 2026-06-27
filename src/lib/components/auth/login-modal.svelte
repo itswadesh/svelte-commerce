@@ -20,6 +20,7 @@
 
 	const loginModule = new LoginModule()
 	const userState = loginModule.userState
+  $inspect(page.data)
 	let resendSeconds = $state(0)
 	let otpCooldownStarted = $state(false)
 	let resendTimer: ReturnType<typeof setInterval> | undefined
@@ -218,7 +219,7 @@
 			>
 				<div class="space-y-4">
 					<div class="space-y-4">
-						{#if !loginModule.loginType}
+						{#if !page.data.store?.loginType || page.data.store?.loginType == 'BOTH'}
 							<div class="relative flex w-full rounded-radius bg-gray-100/80 p-1.5 shadow-inner dark:bg-gray-800/80">
 								<!-- Active Background Indicator -->
 								<div
@@ -252,9 +253,9 @@
 						<div class="mt-2 space-y-2">
 							<Label for="identifier" class="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200">
 								{#if loginModule.identifier.length === 0}
-									{#if loginModule.loginType === 'PHONE'}
+									{#if page.data.store?.loginType === 'PHONE'}
 										Phone Number
-									{:else if loginModule.loginType === 'EMAIL'}
+									{:else if page.data.store?.loginType === 'EMAIL'}
 										Email Address
 									{:else}
 										{loginModule.isPhoneNumber ? 'Phone Number' : 'Email Address'}
@@ -346,7 +347,7 @@
 						{/if}
 					</Button>
 
-					{#if loginModule.showSignupButton && loginModule.loginType !== 'PHONE'}
+					{#if loginModule.showSignupButton && page.data.store?.loginType !== 'PHONE'}
 						<div class="pt-2 text-center">
 							<p class="text-sm text-gray-500 dark:text-gray-400">
 								New to {page?.data?.store?.name}?
