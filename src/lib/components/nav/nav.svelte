@@ -30,12 +30,45 @@
 	import CartSidebar from './cart-sidebar.svelte'
 	import ProfileDropdown from './profile-dropdown.svelte'
 	import { Button } from '$lib/components/ui/button/index.js'
+	import { onDestroy, onMount } from 'svelte'
 
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 	const navModule = new NavModule()
 	const userState = navModule.userState
 	const isHomepage = $derived(page.route?.id === '/(www)')
+	const sidebarHistoryKey = '__svelteCommerceMobileSidebar'
+	let ownsSidebarHistoryEntry = false
+
+	function handleSidebarBrowserBack() {
+		if (!navModule.openSidebar || !ownsSidebarHistoryEntry) return
+		ownsSidebarHistoryEntry = false
+		navModule.openSidebar = false
+	}
+
+	onMount(() => {
+		window.addEventListener('popstate', handleSidebarBrowserBack)
+		return () => window.removeEventListener('popstate', handleSidebarBrowserBack)
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined') return
+
+		if (navModule.openSidebar && !ownsSidebarHistoryEntry) {
+			history.pushState({ ...history.state, [sidebarHistoryKey]: true }, '', window.location.href)
+			ownsSidebarHistoryEntry = true
+		} else if (!navModule.openSidebar && ownsSidebarHistoryEntry) {
+			const isCurrentSidebarEntry = history.state?.[sidebarHistoryKey] === true
+			ownsSidebarHistoryEntry = false
+			if (isCurrentSidebarEntry) history.back()
+		}
+	})
+
+	onDestroy(() => {
+		if (typeof window !== 'undefined' && ownsSidebarHistoryEntry && history.state?.[sidebarHistoryKey] === true) {
+			history.back()
+		}
+	})
 
 	const menuItemsUser = $derived.by(() => {
 		const items = [

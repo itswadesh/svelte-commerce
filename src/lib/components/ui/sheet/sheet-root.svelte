@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte'
-	import { Drawer as DrawerPrimitive } from 'vaul-svelte'
+	import { Dialog as SheetPrimitive } from 'bits-ui'
 
-	type $$Props = DrawerPrimitive.Props
-	export let shouldScaleBackground: $$Props['shouldScaleBackground'] = true
+	type $$Props = SheetPrimitive.RootProps & {
+		manageHistory?: boolean
+	}
+
 	export let open: $$Props['open'] = false
-	export let activeSnapPoint: $$Props['activeSnapPoint'] = undefined
-	export let manageHistory: boolean = true
+	export let manageHistory: $$Props['manageHistory'] = true
 
-	const modalHistoryKey = '__svelteCommerceNestedDrawer'
+	const modalHistoryKey = '__svelteCommerceSheet'
 	let ownsHistoryEntry = false
 
 	function handleBrowserBack() {
@@ -40,6 +41,6 @@
 	})
 </script>
 
-<DrawerPrimitive.NestedRoot {shouldScaleBackground} bind:open bind:activeSnapPoint {...$$restProps}>
+<SheetPrimitive.Root bind:open {...$$restProps}>
 	<slot />
-</DrawerPrimitive.NestedRoot>
+</SheetPrimitive.Root>

@@ -107,7 +107,7 @@
 			</a>
 
 			<div data-testid="product-card-info-wrapper" class="flex flex-col justify-between h-full pt-[7.5px] lg:pt-3">
-				<a href="/products/{product.slug}" class="block overflow-hidden">
+				<a href="/products/{product.slug}" class="flex-1 block overflow-hidden">
 					<span class="block w-[80%] text-xs text-gray-600 lg:text-sm" data-testid="product-title" title={product.title}>
 						{product.title}
 					</span>
