@@ -131,7 +131,7 @@
 					{#if paymentModule.shippingRates?.data?.length}
 						<div class="grid h-fit grid-cols-1 space-y-6  pt-4">
 							<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
-								Shipping Method
+								Select Shipping Method
 							</h2>
 
 							<div class="flex flex-col gap-3">

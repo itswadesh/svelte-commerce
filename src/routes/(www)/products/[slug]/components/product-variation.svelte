@@ -49,7 +49,10 @@
 							<Button
 								variant={productState.isVariantOptionSelected(option.id, v.value) ? 'default' : 'plain'}
 								disabled={!v.selectable}
-								class={`min-w-[3.5rem] px-4 py-2 !bg-primary ${productState.isVariantOptionSelected(option.id, v.value) ? '!bg-accent text-accent-foreground' : '!bg-transparent border !border-accent'}`}
+								class="min-w-[3.5rem] !bg-primary px-4 py-2 {
+                  productState.isVariantOptionSelected(option.id, v.value)
+									? 'border !border-accent !bg-transparent'
+									: '!bg-accent text-accent-foreground'}"
 								onclick={() => productState.selectVariant({ option, value: v })}
 							>
 								{v.value}
@@ -61,3 +64,4 @@
 		{/each}
 	{/key}
 </div>
+

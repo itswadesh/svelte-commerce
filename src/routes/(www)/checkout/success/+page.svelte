@@ -38,8 +38,22 @@
 		}).format(date)
 	})
 	onMount(async () => {
-		cartState.resetPreviousCartIdFromLocalStorage()
-		await cartState.refershCart()
+		const prevCartId = localStorage.getItem('prev_cart_id')
+		if (prevCartId) {
+			if (typeof cartState.restorePrevCart === 'function') {
+				await cartState.restorePrevCart()
+			} else if (typeof cartState.resetSingleItemCheckoutSession === 'function') {
+				await cartState.resetSingleItemCheckoutSession()
+			}
+			await cartState.refershCart()
+		} else {
+			await cartState.refershCart()
+			if (!cartState.cart?.lineItems?.length) {
+				if (typeof cartState.clear === 'function') {
+					await cartState.clear()
+				}
+			}
+		}
 	})
 
 	const timelineSteps = [

@@ -16,6 +16,7 @@
 
 	let isProductDetailsPage = $derived(page.route?.id === '/(www)/products/[slug]')
 	let isProductsListingPage = $derived(page?.route?.id === '/(www)/products' || page?.route?.id === '/(www)/[slug]')
+	let isCheckoutPage = $derived(page.url.pathname.startsWith('/checkout'))
 </script>
 
 <svelte:head>
@@ -28,7 +29,7 @@
 		{@render children()}
 	</main>
 	<Footer />
-	{#if !isProductDetailsPage}
+	{#if !isProductDetailsPage && !isCheckoutPage}
 		<BottomNav class={isProductsListingPage ? 'invisible' : ''} />
 	{/if}
 </div>

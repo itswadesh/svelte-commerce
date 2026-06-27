@@ -95,8 +95,6 @@
 	image={page?.logo}
 />
 
-<h1 class="sr-only">Shop Women's Fashion Online — Dresses, Co-ord Sets & More</h1>
-
 <!-- {#if homepageModule.featuredCategories?.length > 0}
 	<div class="mx-2 flex justify-center bg-gray-100 px-2 lg:container lg:mx-auto lg:hidden">
 		<CategoryList categories={homepageModule.featuredCategories} />

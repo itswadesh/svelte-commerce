@@ -90,7 +90,7 @@
 			{#each data?.product?.attributes as { name, value }}
 				<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
 					<div class="flex flex-col gap-1">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">{name}</p>
+						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">{name.replaceAll('_', ' ')}</p>
 						<p class="text-sm font-medium text-gray-900">{value}</p>
 					</div>
 				</div>
