@@ -217,7 +217,7 @@
 			>
 				<div class="space-y-4">
 					<div class="space-y-4">
-						{#if !env.PUBLIC_LOGIN_TYPE}
+						{#if !loginModule.loginType}
 							<div class="relative flex w-full rounded-radius bg-gray-100/80 p-1.5 shadow-inner dark:bg-gray-800/80">
 								<!-- Active Background Indicator -->
 								<div
@@ -251,9 +251,9 @@
 						<div class="mt-2 space-y-2">
 							<Label for="identifier" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
 								{#if loginModule.identifier.length === 0}
-									{#if env.PUBLIC_LOGIN_TYPE === 'PHONE'}
+									{#if loginModule.loginType === 'PHONE'}
 										Phone Number
-									{:else if env.PUBLIC_LOGIN_TYPE === 'EMAIL'}
+									{:else if loginModule.loginType === 'EMAIL'}
 										Email Address
 									{:else}
 										{loginModule.isPhoneNumber ? 'Phone Number' : 'Email Address'}
@@ -345,7 +345,7 @@
 						{/if}
 					</Button>
 
-					{#if loginModule.showSignupButton && env.PUBLIC_LOGIN_TYPE !== 'PHONE'}
+					{#if loginModule.showSignupButton && loginModule.loginType !== 'PHONE'}
 						<div class="pt-2 text-center">
 							<p class="text-sm text-gray-500 dark:text-gray-400">
 								New to {page?.data?.store?.name}?
