@@ -64,6 +64,10 @@
 				<ProductGallerySection />
 			</div>
 
+      <div class="block md:hidden">
+        <Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
+      </div>
+
 			<div class="intra-gap top-28 mx-0 lg:pl-6 flex flex-col space-y-0">
 				<ProductTitleSection product={data?.product} />
 
