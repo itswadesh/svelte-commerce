@@ -11,7 +11,7 @@
 <div class="relative">
 
 		{#if product?.categories}
-		<p class="text-sm font-semibold leading-[1]">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
+		<p class="max-sm:hidden text-sm font-semibold leading-[1]">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
 		{/if}
 
 
