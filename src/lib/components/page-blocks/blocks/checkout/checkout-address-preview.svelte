@@ -9,7 +9,7 @@
 
 	const paymentModule: InstanceType<typeof PaymentModule> = getContext('checkout-payment-module')
 	const cartState = getCartState()
-	let showAddress = $state(false)
+	let showAddress = $state(block.metadata.expandedByDefault || false)
 </script>
 
 {#if cartState?.cart?.shippingAddress}
