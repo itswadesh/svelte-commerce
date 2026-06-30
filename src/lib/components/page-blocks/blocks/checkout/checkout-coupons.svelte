@@ -7,6 +7,7 @@
 	const { block } = $props()
 
 	const cartState = getCartState()
+  $inspect(cartState.cart)
 </script>
 
 <div>

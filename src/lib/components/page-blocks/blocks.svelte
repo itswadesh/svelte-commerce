@@ -17,6 +17,10 @@
 	import CheckoutButton from './blocks/checkout/checkout-button.svelte'
 	import CheckoutContactInfo from './blocks/checkout/checkout-contact-info.svelte'
 	import CheckoutAddressSelect from './blocks/checkout/checkout-address-select.svelte'
+	import CheckoutPaymentSelect from './blocks/checkout/checkout-payment-select.svelte'
+	import CheckoutShippingSelect from './blocks/checkout/checkout-shipping-select.svelte'
+	import CheckoutAddressPreview from './blocks/checkout/checkout-address-preview.svelte'
+	import CheckoutShippingError from './blocks/checkout/checkout-shipping-error.svelte'
 
 	let { layouts = [] }: { layouts?: any[] } = $props()
 </script>
@@ -70,6 +74,14 @@
           <CheckoutContactInfo {block} />
         {:else if block.type == 'CHECKOUT_ADDRESS_SELECT'}
           <CheckoutAddressSelect {block} />
+        {:else if block.type == 'CHECKOUT_PAYMENT_SELECT'}
+          <CheckoutPaymentSelect {block} />
+        {:else if block.type == 'CHECKOUT_SHIPPING_SELECT'}
+          <CheckoutShippingSelect {block} />
+        {:else if block.type == 'CHECKOUT_ADDRESS_PREVIEW'}
+          <CheckoutAddressPreview {block} />
+        {:else if block.type == 'CHECKOUT_SHIPPING_ERROR'}
+          <CheckoutShippingError {block} />
         {:else if block.type == 'CONTAINER'}
           <ContainerBlock {block} />
 				{/if}
