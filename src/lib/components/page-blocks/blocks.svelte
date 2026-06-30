@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CheckoutHeader from './blocks/checkout/checkout-header.svelte'
 	import BannerBlock from './blocks/banner-block.svelte'
 	import CollectionCarousel from './blocks/collection-carousel.svelte'
 	import CollectionGrid from './blocks/collection-grid.svelte'
@@ -7,14 +8,18 @@
 	import FeaturedProducts from './blocks/featured-products.svelte'
 	import ImageBlock from './blocks/image-block.svelte'
 	import RichTextBlock from './blocks/rich-text-block.svelte'
+	import CheckoutSavings from './blocks/checkout/checkout-savings.svelte'
+	import CheckoutItems from './blocks/checkout/checkout-items.svelte'
+	import PriceSummary from './blocks/checkout/price-summary.svelte'
+	import ContainerBlock from './blocks/container-block.svelte'
+	import CheckoutTrustBadges from './blocks/checkout/checkout-trust-badges.svelte'
 
 	let { layouts = [] }: { layouts?: any[] } = $props()
-	$inspect(layouts)
 </script>
 
 {#each layouts as layout, idx (idx)}
 	<section
-		class="{layout.metadata.isFullScreen ? 'px-3' : 'page-width'} grid {layout.type}"
+		class="{layout.metadata.isFullScreen ? (layout.id.startsWith('pl_') ? 'px-3': '') : 'page-width'} grid {layout.type}"
 		style="grid-template-columns: repeat({layout.columnCount}, 1fr); column-gap: {layout.columnGap}px; row-gap: {layout.rowGap}px;"
 	>
 		{#each layout.blocks as block, idx (block.id)}
@@ -43,6 +48,18 @@
 					<CollectionCarousel {block} />
 				{:else if block.type == 'COLLECTION_GRID'}
 					<CollectionGrid {block} />
+        {:else if block.type == 'CHECKOUT_HEADER'}
+          <CheckoutHeader {block} />
+        {:else if block.type == 'CHECKOUT_SAVINGS'}
+          <CheckoutSavings {block} />
+        {:else if block.type == 'CHECKOUT_ITEMS'}
+          <CheckoutItems {block} />
+        {:else if block.type == 'PRICE_SUMMARY'}
+          <PriceSummary {block} />
+        {:else if block.type == 'CONTAINER'}
+          <ContainerBlock {block} />
+        {:else if block.type == 'CHECKOUT_TRUST_BADGES'}
+          <CheckoutTrustBadges {block} />
 				{/if}
 			</div>
 		{/each}
