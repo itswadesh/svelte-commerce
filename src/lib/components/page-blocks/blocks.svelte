@@ -13,6 +13,8 @@
 	import PriceSummary from './blocks/checkout/price-summary.svelte'
 	import ContainerBlock from './blocks/container-block.svelte'
 	import CheckoutTrustBadges from './blocks/checkout/checkout-trust-badges.svelte'
+	import CheckoutCoupons from './blocks/checkout/checkout-coupons.svelte'
+	import CheckoutButton from './blocks/checkout/checkout-button.svelte'
 
 	let { layouts = [] }: { layouts?: any[] } = $props()
 </script>
@@ -56,10 +58,14 @@
           <CheckoutItems {block} />
         {:else if block.type == 'PRICE_SUMMARY'}
           <PriceSummary {block} />
-        {:else if block.type == 'CONTAINER'}
-          <ContainerBlock {block} />
         {:else if block.type == 'CHECKOUT_TRUST_BADGES'}
           <CheckoutTrustBadges {block} />
+        {:else if block.type == 'CHECKOUT_COUPONS'}
+          <CheckoutCoupons {block} />
+        {:else if block.type == 'CHECKOUT_BUTTON'}
+          <CheckoutButton {block} />
+        {:else if block.type == 'CONTAINER'}
+          <ContainerBlock {block} />
 				{/if}
 			</div>
 		{/each}
