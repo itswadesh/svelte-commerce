@@ -15,6 +15,8 @@
 	import CheckoutTrustBadges from './blocks/checkout/checkout-trust-badges.svelte'
 	import CheckoutCoupons from './blocks/checkout/checkout-coupons.svelte'
 	import CheckoutButton from './blocks/checkout/checkout-button.svelte'
+	import CheckoutContactInfo from './blocks/checkout/checkout-contact-info.svelte'
+	import CheckoutAddressSelect from './blocks/checkout/checkout-address-select.svelte'
 
 	let { layouts = [] }: { layouts?: any[] } = $props()
 </script>
@@ -64,6 +66,10 @@
           <CheckoutCoupons {block} />
         {:else if block.type == 'CHECKOUT_BUTTON'}
           <CheckoutButton {block} />
+        {:else if block.type == 'CHECKOUT_CONTACT_INFO'}
+          <CheckoutContactInfo {block} />
+        {:else if block.type == 'CHECKOUT_ADDRESS_SELECT'}
+          <CheckoutAddressSelect {block} />
         {:else if block.type == 'CONTAINER'}
           <ContainerBlock {block} />
 				{/if}

@@ -1,407 +1,44 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js'
-	import { goto } from '$app/navigation'
-	import { ChevronRight, LoaderCircle, LockKeyhole, MapPin, Pencil, ShoppingBag, Truck } from '@lucide/svelte'
-	import { formatPrice } from '$lib/core/utils/index.js'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import { LoaderCircle, ShoppingBag } from '@lucide/svelte'
 	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
 	import { page } from '$app/state'
-	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
-	import { showAuthModal } from '$lib/core/components/index.js'
-	import Textbox from '$lib/components/form/textbox.svelte'
-	import { AddressModule, emptyAddress, checkoutAddressSchema as schemas } from '$lib/core/composables/index.js'
-	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
-	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
-	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
+	import { AddressModule } from '$lib/core/composables/index.js'
+	import { setContext } from 'svelte'
+	import Blocks from '$lib/components/page-blocks/blocks.svelte'
 
 	const addressModule = new AddressModule()
+  setContext('checkout-address-module', addressModule)
 	const cartState = addressModule.cartState
-	const userState = addressModule.userState
-
-	const isEmailOk = $derived(addressModule.isEmailOk)
-	const isPhoneOk = $derived(addressModule.isPhoneOk)
 </script>
 
 <svelte:head>
 	<title>Address - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
-<div class="min-h-screen py-8">
-	<div class="container mx-auto px-4">
-		<CheckoutHeader step={2} />
-			<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
-		  <div>
-				<p class="font-semibold tracking-tight text-xl">My Addresses</p>
-			</div>
-			<Button variant="link" onclick={() => {
-				goto("/checkout/cart")
-			}} >
-				Back to Cart
-			</Button>
-		</div> -->
-
-		{#await cartState.hasLoaded}
-			<div class="flex min-h-96 items-center justify-center py-8">
-				<LoaderCircle class="animate-spin" />
-			</div>
-		{:then}
-			{#if addressModule.noItemsChecked && cartState?.cart?.lineItems?.length > 0}
-				<div class="flex h-96 flex-col items-center justify-center gap-3">
-					<p class="text-xl text-gray-400">You must select at least one item in cart for checkout</p>
-					<Button variant="outline" href={appendOneTimeCartId('/checkout/cart')}>Go back to cart</Button>
-				</div>
-			{:else if cartState?.cart?.lineItems?.length === 0 && !cartState?.isUpdatingCart}
-				<div class="flex h-96 flex-col items-center justify-center gap-3">
-					<p class="text-xl text-gray-400">Your cart is empty</p>
-					<Button variant="outline" href="/">Continue Shopping</Button>
-				</div>
-			{:else}
-				<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
-					<!-- Left Column -->
-					<div class="space-y-6">
-						<!-- Contact Details -->
-						{#await userState.hasLoaded then _}
-							{#if (!isPhoneOk || !isEmailOk) && !userState.user?.userId}
-								<p class="text-sm text-gray-600">
-									<Button
-										variant="link"
-										class="h-auto p-0"
-										onclick={() => {
-											showAuthModal('login')
-										}}
-									>
-										Login
-									</Button> to autofill your details
-								</p>
-							{/if}
-						{/await}
-						<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
-							<div class="flex items-center justify-between border-b border-border px-5 py-4">
-								<div class="flex items-center space-x-3">
-									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
-										Contact Details
-									</h2>
-								</div>
-								{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
-									<Button
-										onclick={addressModule.handleEditEmail}
-										variant="ghost"
-										size="sm"
-										class="h-8"
-									>
-										<Pencil class="mr-1.5 h-3 w-3" />
-										<span>Edit</span>
-									</Button>
-								{/if}
-							</div>
-
-							{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
-								<div class="grid grid-cols-1 gap-6 p-6 transition-all duration-500 sm:grid-cols-2">
-									<div class="flex flex-col gap-1">
-										<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Email Address</p>
-										<p class="text-sm font-medium text-gray-900">{cartState.cart.email}</p>
-									</div>
-									<div class="flex flex-col gap-1">
-										<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone Number</p>
-										<p class="text-sm font-medium text-gray-900">{cartState.cart.phone}</p>
-									</div>
-								</div>
-							{:else if !isEmailOk || !isPhoneOk || addressModule.editEmail}
-								<form class="space-y-4 p-5 transition-all duration-500" onsubmit={addressModule.saveContactInfo}>
-									<div class="space-y-1">
-										<label for="email" class="block text-sm font-medium text-gray-700">
-											Email address {#if !addressModule.isEmailRequired}<span class="text-gray-400">(optional)</span>{/if}
-										</label>
-										<Textbox
-											type="email"
-											bind:value={addressModule.email}
-											required={addressModule.isEmailRequired}
-											class="w-full"
-											schema={schemas.email}
-											placeholder="your@email.com"
-										/>
-										<p class="mt-1 text-xs text-gray-500">We'll send order confirmation to this email</p>
-									</div>
-									<div class="space-y-1">
-										<label for="phone" class="block text-sm font-medium text-gray-700">
-											Phone number {#if !addressModule.isPhoneRequired}<span class="text-gray-400">(optional)</span>{/if}
-										</label>
-										<Textbox
-											type="tel"
-											bind:value={addressModule.phone}
-											required={addressModule.isPhoneRequired}
-											class="w-full"
-											schema={schemas.phone}
-											placeholder="XXXXXXXXXX"
-										/>
-										<p class="mt-1 text-xs text-gray-500">For delivery updates</p>
-									</div>
-									<div class="flex justify-end space-x-3 pt-2">
-										{#if cartState.cart.email}
-											<Button
-												variant="outline"
-												onclick={() => (addressModule.editEmail = false)}
-												type="button"
-											>
-												Cancel
-											</Button>
-										{/if}
-										<Button type="submit" disabled={cartState.isUpdatingCart} class="min-w-[120px]">
-											{#if cartState.isUpdatingCart}
-												<LoadingDots />
-											{:else}
-												Save Contact
-											{/if}
-										</Button>
-									</div>
-								</form>
-							{/if}
-						</div>
-						<!-- Shipping Address -->
-						{#if isEmailOk && isPhoneOk}
-							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
-								{#if cartState.cart.shippingAddress}
-									<div class="">
-										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
-												Delivery Address
-											</h2>
-											{#if !addressModule.loadingForSaveToCart}
-												<Button
-													onclick={addressModule.handleAddressChangeClick}
-													variant="ghost"
-													class="h-8"
-												>
-													Change
-												</Button>
-											{/if}
-										</div>
-										{#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'shipping'}
-											<div class="p-6">
-												<Skeleton class="h-[100px] w-full rounded-lg" />
-											</div>
-										{:else}
-											<div class="p-6 transition-all duration-500">
-												<div class="mb-4 flex items-center">
-													<MapPin class="mr-2 h-4 w-4 text-primary" />
-													<h3 class="text-sm font-bold uppercase tracking-tight text-gray-900">
-														{cartState.cart.shippingAddress?.firstName}
-														{cartState.cart.shippingAddress?.lastName}
-													</h3>
-												</div>
-												<div class="space-y-1 text-sm leading-relaxed text-gray-600">
-													<p>{cartState.cart.shippingAddress?.address_1}</p>
-													{#if cartState.cart.shippingAddress?.address_2}
-														<p>{cartState.cart.shippingAddress?.address_2}</p>
-													{/if}
-													<p>
-														{cartState.cart.shippingAddress?.city}, {cartState.cart.shippingAddress?.state}
-													</p>
-													<p>
-														{cartState.cart.shippingAddress?.countryCode}
-														{cartState.cart.shippingAddress?.zip}
-													</p>
-													<p class="mt-4 border-border pt-4 font-medium">
-														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone</span>
-														{cartState.cart.shippingAddress?.phone}
-													</p>
-												</div>
-											</div>
-										{/if}
-									</div>
-								{:else}
-									<div class="p-6">
-										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
-												Shipping Address
-											</h2>
-
-											{#if !userState?.user?.role}
-												<Button
-													variant="link"
-													onclick={() => showAuthModal('login')}
-													class="h-auto p-0"
-												>
-													Login to view saved addresses
-												</Button>
-											{/if}
-										</div>
-										<form class="">
-											{#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'shipping'}
-												<Skeleton class="h-[100px] w-full rounded-lg" />
-											{:else}
-												<div
-													class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50 py-8 text-center transition-all duration-300 hover:bg-gray-100/50"
-												>
-													<p class="mb-6 text-sm text-gray-500">No shipping address selected</p>
-													<Button
-														type="button"
-														variant="default"
-														class="px-8"
-														onclick={addressModule.handleAddNewAddress}>Add New Address</Button
-													>
-												</div>
-											{/if}
-										</form>
-									</div>
-								{/if}
-							</div>
-
-							{#if !addressModule.isBillingAddressSameAsShipping}
-								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm transition-all duration-300">
-									<div class="">
-										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
-												Billing Address
-											</h2>
-											{#if !addressModule.loadingForSaveToCart}
-												<Button
-													onclick={addressModule.handleBilingAddOrChangeClick}
-													variant="ghost"
-													class="h-8"
-												>
-													{#if cartState.cart.billingAddress?.address_1}
-														Change
-													{:else}
-														Add Address
-													{/if}
-												</Button>
-											{/if}
-										</div>
-										{#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'billing'}
-											<div class="p-6">
-												<Skeleton class="h-[100px] w-full rounded-lg" />
-											</div>
-										{:else if cartState.cart?.billingAddress?.address_1}
-											<div class="p-6 transition-all duration-500">
-												<div class="mb-4 flex items-center">
-													<MapPin class="mr-2 h-4 w-4 text-primary" />
-													<h3 class="text-sm font-bold uppercase tracking-tight text-gray-900">
-														{cartState.cart.billingAddress?.firstName}
-														{cartState.cart.billingAddress?.lastName}
-													</h3>
-												</div>
-												<div class="space-y-1 text-sm leading-relaxed text-gray-600">
-													<p>{cartState.cart.billingAddress?.address_1}</p>
-													{#if cartState.cart.billingAddress?.address_2}
-														<p>{cartState.cart.billingAddress?.address_2}</p>
-													{/if}
-													<p>{cartState.cart.billingAddress?.city}, {cartState.cart.billingAddress?.state}</p>
-													<p>{cartState.cart.billingAddress?.countryCode} {cartState.cart.billingAddress?.zip}</p>
-													<p class="mt-4 border-t border-gray-50 pt-4 font-medium">
-														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone</span>
-														{cartState.cart.billingAddress?.phone}
-													</p>
-												</div>
-											</div>
-										{:else}
-											<div class="bg-gray-50 p-8 text-center transition-all duration-500">
-												<p class="text-sm text-gray-500">No billing address saved.</p>
-											</div>
-										{/if}
-									</div>
-								</div>
-							{/if}
-							<div class="flex items-center justify-start gap-2 p-4 transition-all hover:bg-gray-100">
-								<Checkbox
-									checked={addressModule.isBillingAddressSameAsShipping}
-									onCheckedChange={addressModule?.handleBillingAddressSameCheck}
-									id="isBillingAddressSameAsShipping"
-								/>
-								<label for="isBillingAddressSameAsShipping" class="cursor-pointer text-xs font-bold uppercase tracking-tight text-gray-700"
-									>Billing address same as shipping</label
-								>
-							</div>
-						{/if}
-					</div>
-
-					<!-- Right Column - Order Summary -->
-					<div class="space-y-4">
-						<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
-							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
-									Price Summary
-								</h2>
-								<div class="h-1 w-12 bg-primary"></div>
-							</div>
-							{#if addressModule.loadingForCart}
-								<div class="flex items-center justify-center py-8">
-									<LoadingDots />
-								</div>
-							{:else}
-								<div class="space-y-4">
-									<div class="space-y-3 border-b border-border pb-6">
-										<div class="flex justify-between text-sm">
-											<span class="font-medium text-gray-500">Subtotal</span>
-											<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
-										</div>
-										{#if cartState.cart.discountAmount > 0}
-											<div class="flex justify-between text-sm">
-												<span class="font-medium text-gray-500">Discount</span>
-												<span class="font-bold uppercase tracking-tight text-orange-600"
-													>- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span
-												>
-											</div>
-										{/if}
-										<div class="flex flex-col gap-1">
-											<div class="flex justify-between text-sm">
-												<span class="font-medium text-gray-500">Shipping</span>
-												{#if !cartState.cart.shippingAddress}
-													<span class="text-[10px] font-bold uppercase tracking-tighter text-gray-400"> Address required </span>
-												{:else if cartState.cart.shippingCharges}
-													<span class="font-bold text-gray-900">{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span
-													>
-												{:else}
-													<span
-														class="rounded bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-green-600 ring-1 ring-green-100"
-														>FREE</span
-													>
-												{/if}
-											</div>
-										</div>
-									</div>
-
-									<div class="flex items-center justify-between pt-2">
-										<span class="text-sm font-bold uppercase text-gray-900">Total</span>
-										<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
-									</div>
-
-									{#if addressModule.showError}
-										<div class="mt-4 rounded bg-red-50 p-3 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
-											{addressModule.errorMessage}
-										</div>
-									{/if}
-
-									<div
-										class="mt-6 flex items-center justify-center gap-2 rounded-md border border-gray-100 bg-gray-50/50 px-4 py-3 transition-all hover:bg-gray-100/80"
-									>
-										<LockKeyhole class="h-3.5 w-3.5 text-gray-400" />
-										<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
-									</div>
-
-                  {#if !addressModule.showAddressList && !addressModule.showAddressForm}
-									  <CheckoutButton
-									  	text="Continue to Payment"
-									  	disabledText="Select Address"
-									  	disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
-									  	onclick={addressModule.handleProceedToPayment}
-									  	loading={addressModule.loadingForCheckout}
-									  />
-                  {/if}
-								</div>
-							{/if}
-						</div>
-
-						<OrderTrustBadges />
-					</div>
-				</div>
-			{/if}
-		{/await}
+{#await cartState.hasLoaded}
+	<div class="flex min-h-96 items-center justify-center py-8">
+		<LoaderCircle class="animate-spin" />
 	</div>
-</div>
+{:then _}
+	{#if cartState.cart?.lineItems?.length === 0}
+		<div class="min-h-screen py-8">
+			<div class="container mx-auto px-4">
+				<div class="flex h-[60vh] flex-col items-center justify-center text-center">
+					<div class="mb-6 rounded-full bg-gray-50 p-8 ring-1 ring-gray-100">
+						<ShoppingBag class="h-12 w-12 text-gray-300" />
+					</div>
+					<h2 class="mb-2 text-xl font-bold uppercase tracking-widest text-gray-900">Your bag is empty</h2>
+					<p class="mb-8 max-w-xs text-sm text-gray-500">Looks like you haven't added anything to your bag yet.</p>
+					<Button href="/" variant="default" class="rounded-full px-8 py-3 text-xs font-bold uppercase tracking-[0.2em]">Start Shopping</Button>
+				</div>
+			</div>
+		</div>
+	{:else}
+		<Blocks layouts={page.data.page.layouts} />
+	{/if}
+{/await}
 
 <AddressListModal
 	bind:show={addressModule.showAddressList}

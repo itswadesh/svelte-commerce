@@ -2,16 +2,18 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { LoaderCircle, ShoppingBag, X } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
-	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import { CartModule } from '$lib/core/composables/index.js'
-	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
+	import { setContext } from 'svelte'
 
 	const cartModule = new CartModule()
+  setContext('checkout-cart-module', cartModule)
 	const cartState = cartModule.cartState
-	$inspect(page.data)
 </script>
+
+<svelte:head>
+	<title>Cart - {page?.data?.store?.name || ''}</title>
+</svelte:head>
 
 {#await cartState.hasLoaded}
 	<div class="flex min-h-96 items-center justify-center py-8">
@@ -35,7 +37,3 @@
 		<Blocks layouts={page.data.page.layouts} />
 	{/if}
 {/await}
-
-<svelte:head>
-	<title>Cart - {page?.data?.store?.name || ''}</title>
-</svelte:head>

@@ -1,22 +1,22 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button'
-	import { goto } from '$app/navigation'
-	import { ChevronDown, ChevronRight, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
-	import { formatPrice } from '$lib/core/utils'
+	import { Button } from '$lib/components/ui/button/index.js'
+	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
+	import { formatPrice } from '$lib/core/utils/index.js'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import { PaymentModule } from '$lib/core/composables/index.js'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
-	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
+	import { setContext } from 'svelte'
 
 	// Check if phone is required based on login type
 	const isPhoneRequired = page.data?.store?.isPhoneMandatory
 	const isEmailRequired = page.data?.store?.isEmailMandatory
 
 	const paymentModule = new PaymentModule()
+  setContext('checkout-payment-module', paymentModule)
 	const cartState = paymentModule.cartState
 
 	let showAddress = $state(false)
