@@ -1,6 +1,6 @@
 :root {
-	--font-body: 'Montserrat', sans-serif;
-	--font-mono: 'Montserrat', monospace;
+	--font-body: var(--font-primary, sans-serif);
+	--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
 	--color-bg-0: #ffffff;
 	--color-bg-1: #f1f2f4;
 	--color-bg-2: #ffffff;

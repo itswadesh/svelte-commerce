@@ -116,8 +116,8 @@
 				</div>
 			{:else}
 				<div class="mt-4 grid grid-cols-2 gap-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
-					{#each collections?.data as collection}
-						<CollectionCard {collection} />
+					{#each collections?.data as product}
+						<CollectionCard {product} />
 					{/each}
 				</div>
 			{/if}

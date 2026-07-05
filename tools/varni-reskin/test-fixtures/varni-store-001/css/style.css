@@ -1,0 +1,22 @@
+body { font-family: 'Jost', sans-serif; color: #2b2118; background: #faf6f0; font-size: 16px; margin: 0; }
+h1, h2, h3, .hero-title { font-family: 'Cormorant Garamond', serif; font-weight: 600; letter-spacing: 0.02em; color: #2b2118; }
+.site-header { background: #faf6f0; border-bottom: 1px solid #e2d5c3; padding: 20px 40px; display: flex; }
+.main-nav a { color: #2b2118; padding: 8px 16px; transition: color 200ms ease; }
+.main-nav a:hover { color: #7a1f2b; }
+.hero { background: #efe4d4; padding: 96px 40px; }
+.hero-title { font-size: 56px; }
+.btn { border-radius: 2px; padding: 14px 32px; font-weight: 500; transition: all 200ms ease; border: none; cursor: pointer; }
+.btn-primary { background: #7a1f2b; color: #f6efe7; }
+.btn-primary:hover { background: #5e1620; }
+.add-to-cart { background: #7a1f2b; color: #ffffff; }
+.product-card { background: #ffffff; border: 1px solid #e2d5c3; border-radius: 2px; padding: 16px; box-shadow: 0 2px 8px rgba(43,33,24,0.06); }
+.product-title { font-size: 20px; }
+.price { color: #7a1f2b; font-weight: 500; }
+.compare { color: #9a8b78; text-decoration: line-through; }
+.badge-new { background: #b98a2f; color: #fff; border-radius: 2px; padding: 4px 8px; }
+.newsletter input { border: 1px solid #e2d5c3; border-radius: 2px; padding: 12px; }
+.site-footer { background: #2b2118; color: #efe4d4; padding: 64px 40px; }
+.site-footer a { color: #b98a2f; }
+.container { max-width: 1240px; margin: 0 auto; }
+.error-msg { color: #c0392b; }
+.gap-grid { gap: 24px; padding: 24px; margin: 32px; }

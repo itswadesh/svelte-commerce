@@ -1,0 +1,34 @@
+{
+  "header": {
+    "component": "src/lib/components/Header.svelte",
+    "notes": "Keep megamenu/search/cart/account logic. Match logo placement, nav style, and sticky behavior from the target design."
+  },
+  "announcement": {
+    "component": "src/lib/components/AnnouncementBar.svelte",
+    "notes": "Single-line promo bar. Keep any dismiss logic."
+  },
+  "hero": {
+    "component": "src/lib/components/HeroBanner.svelte",
+    "notes": "Match layout (full-bleed vs contained), overlay treatment, CTA button style. Keep slide/autoplay logic if present."
+  },
+  "product-card": {
+    "component": "src/lib/components/ProductCard.svelte",
+    "notes": "Highest-impact component. Match image aspect ratio, hover behavior, price/title typography, badge and wishlist placement. Keep add-to-cart and routing logic exactly."
+  },
+  "product-grid": {
+    "component": "src/lib/components/ProductGrid.svelte",
+    "notes": "Match column counts and gaps at each breakpoint from the target design."
+  },
+  "category-nav": {
+    "component": "src/lib/components/CategoryCarousel.svelte",
+    "notes": "Match card shape (circle vs rounded rect) and label style."
+  },
+  "footer": {
+    "component": "src/lib/components/Footer.svelte",
+    "notes": "Match column structure, link styling, payment/social icons area, newsletter block placement."
+  },
+  "newsletter": {
+    "component": "src/lib/components/Newsletter.svelte",
+    "notes": "Keep form submit handler and validation. Match input/button styling."
+  }
+}

@@ -31,6 +31,8 @@
 	import ProfileDropdown from './profile-dropdown.svelte'
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { onDestroy, onMount } from 'svelte'
+	import NoorNav from '$lib/theme/noor/NoorNav.svelte'
+	import LimelightNav from '$lib/theme/limelight/LimelightNav.svelte'
 
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
@@ -79,80 +81,52 @@
 			{ title: 'Change Password', url: '/auth/change-password' }
 		]
 		if (wishlistPlugin?.active) items.push({ title: 'Wishlist', url: '/my/wishlist' })
-		return items
 	})
+
+	const activeThemeName = $derived(page.data?.theme?.name ?? 'default')
+	const storeData = $derived(page?.data?.store ?? {})
 </script>
 
 <svelte:window bind:scrollY={navModule.scrollY} />
 
-<header
-	class="{navModule.isProductListingPage
-		? 'max-sm:border-b'
-		: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-white transition-all duration-200"
->
-	<!-- Hello bar -->
-	{#if navModule.helloBarPlugin?.active && isHomepage}
-		<!-- <div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
-			{@html helloBarPlugin?.content}
-		</div> -->
+{#if activeThemeName === 'limelight'}
+	<LimelightNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} pathname={page.url.pathname} />
+{:else if activeThemeName === 'noor'}
+	<NoorNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} pathname={page.url.pathname} />
+{:else}
+	<header
+		class="{navModule.isProductListingPage
+			? 'max-sm:border-b'
+			: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-white transition-all duration-200"
+	>
+		<!-- Hello bar -->
+		{#if navModule.helloBarPlugin?.active && isHomepage}
+			<!-- <div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
+				{@html helloBarPlugin?.content}
+			</div> -->
 
-		{#if navModule.helloBarPlugin?.content}
-			<div class="max-w-none bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
-				<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
-					{#if navModule.helloBarPlugin?.content}
-						<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
-					{/if}
-					{#if navModule.helloBarPlugin?.content2}
-						<li style="--index: 2;">{@html navModule.helloBarPlugin?.content2}</li>
-					{/if}
-					{#if navModule.helloBarPlugin?.content3}
-						<li style="--index: 3;">{@html navModule.helloBarPlugin?.content3}</li>
-					{/if}
-				</ul>
-			</div>
-		{:else}
-			<div class="bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
-				{@html navModule.helloBarPlugin?.content}
-			</div>
-		{/if}
-	{/if}
-	<div class="page-width flex h-16 items-center justify-between bg-white sm:h-14">
-		<div class="hidden justify-center gap-3 sm:flex">
-			<Button
-				variant="ghost"
-				size="icon"
-				aria-label="Sidebar"
-				class="md:hidden"
-				onclick={() => {
-					navModule.openSidebar = true
-				}}
-			>
-				<Menu class="text-black" />
-			</Button>
-			<MainNav />
-		</div>
-
-		<div class="flex items-center justify-center sm:hidden">
-			{#if navModule.isProductListingPage}
-				<div class="flex items-center gap-2">
-					<Button variant="ghost" size="icon" aria-label="Go back" onclick={navModule.goBack}>
-						<ChevronLeft class="h-6 w-6 font-bold" />
-						<span class="sr-only">Go back</span>
-					</Button>
-
-					<div class="flex flex-col items-start">
-						{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
-							<p class="text-base font-semibold capitalize">
-								{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
-							</p>
-						{:else}
-							<p class="text-base font-semibold">Products</p>
+			{#if navModule.helloBarPlugin?.content}
+				<div class="max-w-none bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
+					<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
+						{#if navModule.helloBarPlugin?.content}
+							<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
 						{/if}
-
-						<p class="text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
-					</div>
+						{#if navModule.helloBarPlugin?.content2}
+							<li style="--index: 2;">{@html navModule.helloBarPlugin?.content2}</li>
+						{/if}
+						{#if navModule.helloBarPlugin?.content3}
+							<li style="--index: 3;">{@html navModule.helloBarPlugin?.content3}</li>
+						{/if}
+					</ul>
 				</div>
 			{:else}
+				<div class="bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
+					{@html navModule.helloBarPlugin?.content}
+				</div>
+			{/if}
+		{/if}
+		<div class="page-width flex h-16 items-center justify-between bg-white sm:h-14">
+			<div class="hidden justify-center gap-3 sm:flex">
 				<Button
 					variant="ghost"
 					size="icon"
@@ -165,64 +139,100 @@
 					<Menu class="text-black" />
 				</Button>
 				<MainNav />
-			{/if}
-		</div>
-
-		{#if navModule.megaMenuPluginActive}
-			<div class="hidden md:block">
-				<MegaMenu />
 			</div>
-		{/if}
-		<div class="flex items-center gap-2 sm:gap-2">
-			<MsSearch />
 
-			{#if wishlistPlugin?.active}
-				<div class="relative hidden sm:block" role="navigation">
-					<a
-						href="/my/wishlist"
-						class="flex items-center justify-center rounded-full px-2 text-gray-700 transition-colors hover:text-black"
-						aria-label="Wishlist"
-					>
-						<Heart class="h-5 w-5" />
-						{#if wishlistState?.count > 0}
-							<span
-								class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-primary-foreground"
-							>
-								{wishlistState.count}
-							</span>
-						{/if}
-					</a>
-				</div>
-			{/if}
+			<div class="flex items-center justify-center sm:hidden">
+				{#if navModule.isProductListingPage}
+					<div class="flex items-center gap-2">
+						<Button variant="ghost" size="icon" aria-label="Go back" onclick={navModule.goBack}>
+							<ChevronLeft class="h-6 w-6 font-bold" />
+							<span class="sr-only">Go back</span>
+						</Button>
 
-			{#if !page.url.pathname.startsWith('/checkout')}
-				<div class="">
-					<CartSidebar
-						onClose={navModule.closeCartSidebar}
-						onContinueShopping={navModule.handleContinueShoppingClick}
-						onRemoveCartItem={navModule.removeCartItem}
-					/>
-				</div>
-			{/if}
+						<div class="flex flex-col items-start">
+							{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
+								<p class="text-base font-semibold capitalize">
+									{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
+								</p>
+							{:else}
+								<p class="text-base font-semibold">Products</p>
+							{/if}
 
-			<div class="flex h-full items-center px-2 font-['Inter',_sans-serif]">
-				{#if userState?.user?.role}
-					<ProfileDropdown onSignOut={navModule.handleSignOut} />
-				{:else}
-					<AuthButton aria-label="Login" type="login">
-						<div class="flex items-center justify-center text-gray-700 transition-colors hover:text-black">
-							<UserCircle class="h-5 w-5" />
+							<p class="text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
 						</div>
-					</AuthButton>
+					</div>
+				{:else}
+					<Button
+						variant="ghost"
+						size="icon"
+						aria-label="Sidebar"
+						class="md:hidden"
+						onclick={() => {
+							navModule.openSidebar = true
+						}}
+					>
+						<Menu class="text-black" />
+					</Button>
+					<MainNav />
 				{/if}
 			</div>
+
+			{#if navModule.megaMenuPluginActive}
+				<div class="hidden md:block">
+					<MegaMenu />
+				</div>
+			{/if}
+			<div class="flex items-center gap-2 sm:gap-2">
+				<MsSearch />
+
+				{#if wishlistPlugin?.active}
+					<div class="relative hidden sm:block" role="navigation">
+						<a
+							href="/my/wishlist"
+							class="flex items-center justify-center rounded-full px-2 text-gray-700 transition-colors hover:text-black"
+							aria-label="Wishlist"
+						>
+							<Heart class="h-5 w-5" />
+							{#if wishlistState?.count > 0}
+								<span
+									class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-primary-foreground"
+								>
+									{wishlistState.count}
+								</span>
+							{/if}
+						</a>
+					</div>
+				{/if}
+
+				{#if !page.url.pathname.startsWith('/checkout')}
+					<div class="">
+						<CartSidebar
+							onClose={navModule.closeCartSidebar}
+							onContinueShopping={navModule.handleContinueShoppingClick}
+							onRemoveCartItem={navModule.removeCartItem}
+						/>
+					</div>
+				{/if}
+
+				<div class="flex h-full items-center px-2 font-sans">
+					{#if userState?.user?.role}
+						<ProfileDropdown onSignOut={navModule.handleSignOut} />
+					{:else}
+						<AuthButton aria-label="Login" type="login">
+							<div class="flex items-center justify-center text-gray-700 transition-colors hover:text-black">
+								<UserCircle class="h-5 w-5" />
+							</div>
+						</AuthButton>
+					{/if}
+				</div>
+			</div>
 		</div>
-	</div>
-</header>
+	</header>
+{/if}
 
 <!-- Sidebar -->
 {#if navModule.openSidebar}
-	<aside class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent font-['Montserrat',_sans-serif]">
+	<aside class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent font-sans">
 		<div
 			role="button"
 			tabindex="0"
@@ -249,7 +259,9 @@
 			<!-- Header -->
 			<div class="flex items-center justify-between border-b border-gray-100 px-5 py-4">
 				<a href="/" class="flex items-center gap-2" onclick={() => (navModule.openSidebar = false)}>
-					{#if page?.data?.store?.logo}
+					{#if activeThemeName === 'noor'}
+						<img src="/noor/logo.png" class="h-8 object-contain" alt="Noor" />
+					{:else if page?.data?.store?.logo}
 						<img src={page?.data?.store?.logo} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
 						<span class="text-base font-black uppercase tracking-wider text-black">

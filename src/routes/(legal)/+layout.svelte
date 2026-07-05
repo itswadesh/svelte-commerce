@@ -3,7 +3,6 @@
 	import type { Snippet } from 'svelte'
 	import Nav from '$lib/components/nav/nav.svelte'
 	import Footer from '$lib/components/common/footer.svelte'
-	import BottomNav from '$lib/components/nav/bottom-nav.svelte'
 	import { StorePlugins } from '$lib/core/components/index.js'
 	let { children }: { children: Snippet } = $props()
 
@@ -19,4 +18,3 @@
 	{@render children()}
 </main>
 <Footer />
-<BottomNav />

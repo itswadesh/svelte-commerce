@@ -3,62 +3,253 @@
 @tailwind utilities;
 
 @layer base {
+	@font-face {
+		font-family: 'Queens';
+		src: url('/limelight/fonts/Queens_W-Regular.woff2') format('woff2');
+		font-weight: 400 700;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'YsabeauInfant';
+		src: url('/limelight/fonts/YsabeauInfant-Regular.ttf') format('truetype');
+		font-weight: 400 700;
+		font-style: normal;
+		font-display: swap;
+	}
+
 	:root {
-		--ring: 0 0% 55%;
-		--font-primary: 'Montserrat', sans-serif;
-		--card: 0 0% 100%;
-		--input: 0 0% 89.8%;
-		--border: 0 0% 89.8%;
-		--radius: 0.5rem;
+		--background: 0 0% 93.3%;
+		--foreground: 0 0% 0%;
+		--primary: 4.1 81.7% 50.6%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 215.5 98.4% 76.1%;
+		--secondary-foreground: 0 0% 6.7%;
+		--accent: 215.8 98.4% 52.2%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 80%;
+		--muted-foreground: 0 0% 21.2%;
+		--card: 0 0% 93.3%;
+		--card-foreground: 0 0% 0%;
 		--popover: 0 0% 100%;
-		--success: 142 65% 36%;
-		--secondary: 21 30% 22%;
-		--background: 177 100% 100%;
-		--foreground: 21.18 30.36% 21.96%;
-		--destructive: 352 96% 40%;
-		--sidebar-ring: 0 0% 55%;
-		--sidebar-accent: 0 0% 95.9%;
-		--sidebar-border: 0 0% 91%;
-		--card-foreground: 21 30% 22%;
-		--sidebar-primary: 0 0% 55%;
-		--muted-foreground: 0 0% 61%;
 		--popover-foreground: 0 0% 0%;
-		--sidebar-background: 0 0% 98%;
-		--sidebar-foreground: 21 30% 22%;
-		--success-foreground: 126.89 100% 40.98%;
+		--border: 0 0% 93.3%;
+		--input: 0 0% 93.3%;
+		--ring: 4.1 81.7% 50.6%;
+		--radius: 0px;
+		--success: 142 65% 36%;
+		--success-foreground: 0 0% 100%;
+		--destructive: 4.1 82.9% 41.2%;
 		--destructive-foreground: 0 0% 100%;
-		--sidebar-accent-foreground: 21 30% 22%;
-		--sidebar-primary-foreground: 21 30% 22%;
+
+		--sidebar-ring: 4.1 81.7% 50.6%;
+		--sidebar-accent: 0 0% 96%;
+		--sidebar-border: 0 0% 89%;
+		--sidebar-primary: 4.1 81.7% 50.6%;
+		--sidebar-background: 0 0% 98%;
+		--sidebar-foreground: 0 0% 0%;
+		--sidebar-accent-foreground: 0 0% 0%;
+		--sidebar-primary-foreground: 0 0% 100%;
+
+		--sarab-red: #e8281a;
+		--sarab-red-dark: #c01e12;
+		--sarab-dark: #1a1a1a;
+		--sarab-cream: #fff8f0;
+		--sarab-cream2: #fef0dc;
+		--sarab-light: #f9f5f0;
+		--sarab-green: #2d6a4f;
+		--sarab-gold: #f6a623;
+		--sarab-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+		--sarab-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.18);
+
+		--font-heading: 'Playfair Display', serif;
+		--font-body: 'Poppins', sans-serif;
+		--font-primary: 'Poppins', sans-serif;
+		--shadow-default: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+		--container-width: 720px;
+		--transition-duration: 0.3s;
+		--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 	}
 
 	.dark {
 	}
-}
 
-@layer base {
+	[data-theme='default'] {
+		--background: 0 0% 100%;
+		--foreground: 222 47% 11%;
+		--primary: 222 47% 11%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 210 40% 96%;
+		--secondary-foreground: 222 47% 11%;
+		--accent: 210 100% 50%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 210 40% 96%;
+		--muted-foreground: 215 16% 47%;
+		--border: 214 32% 91%;
+		--input: 214 32% 91%;
+		--ring: 222 47% 11%;
+		--radius: 8px;
+		--sarab-red: hsl(var(--primary));
+		--sarab-red-dark: #020617;
+		--sarab-dark: #111827;
+		--sarab-cream: #f8fafc;
+		--sarab-cream2: #eef2f7;
+		--sarab-light: #f8fafc;
+		--sarab-green: #047857;
+		--sarab-gold: #d97706;
+		--font-heading: 'Inter', 'Poppins', sans-serif;
+		--font-body: 'Inter', 'Poppins', sans-serif;
+		--font-primary: 'Inter', 'Poppins', sans-serif;
+	}
+
+	[data-theme='sarab'] {
+		--background: 0 0% 93.3%;
+		--foreground: 0 0% 0%;
+		--primary: 4.1 81.7% 50.6%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 215.5 98.4% 76.1%;
+		--secondary-foreground: 0 0% 6.7%;
+		--accent: 215.8 98.4% 52.2%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 80%;
+		--muted-foreground: 0 0% 21.2%;
+		--border: 0 0% 93.3%;
+		--input: 0 0% 93.3%;
+		--ring: 4.1 81.7% 50.6%;
+		--radius: 0px;
+		--sarab-red: #e8281a;
+		--sarab-red-dark: #c01e12;
+		--sarab-dark: #1a1a1a;
+		--sarab-cream: #fff8f0;
+		--sarab-cream2: #fef0dc;
+		--sarab-light: #f9f5f0;
+		--sarab-green: #2d6a4f;
+		--sarab-gold: #f6a623;
+		--font-heading: 'Playfair Display', serif;
+		--font-body: 'Poppins', sans-serif;
+		--font-primary: 'Poppins', sans-serif;
+	}
+
+	[data-theme='organic'] {
+		--background: 0 0% 100%;
+		--foreground: 0 0% 13.3%;
+		--primary: 104 38% 51%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 85 25% 20%;
+		--secondary-foreground: 0 0% 100%;
+		--accent: 74 47% 52%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 95%;
+		--muted-foreground: 0 0% 45%;
+		--border: 0 0% 97%;
+		--input: 0 0% 97%;
+		--ring: 104 38% 51%;
+		--card: 0 0% 100%;
+		--card-foreground: 0 0% 13.3%;
+		--radius: 16px;
+		--font-heading: 'Inter', sans-serif;
+		--font-body: 'Nunito', sans-serif;
+		--font-primary: 'Nunito', sans-serif;
+		--heading-font: 'Inter', sans-serif;
+	}
+
+	[data-theme='limelight'] {
+		--background: 0 0% 100%;
+		--foreground: 317 100% 14%;
+		--primary: 317 100% 14%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 0 0% 96%;
+		--secondary-foreground: 317 100% 14%;
+		--accent: 329 50% 27%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 95%;
+		--muted-foreground: 0 0% 31%;
+		--border: 25 27% 78%;
+		--input: 25 27% 78%;
+		--ring: 317 100% 14%;
+		--card: 0 0% 100%;
+		--card-foreground: 317 100% 14%;
+		--radius: 0px;
+		--font-heading: 'Queens', serif;
+		--font-body: 'YsabeauInfant', 'Inter', sans-serif;
+		--font-primary: 'YsabeauInfant', 'Inter', sans-serif;
+		--limelight-plum: #460032;
+		--limelight-wine: #6f1648;
+		--limelight-blush: #f5f5f5;
+		--limelight-line: #d9c6ba;
+	}
+
+	[data-theme='noor'] {
+		--background: 0 0% 100%;
+		--foreground: 0 0% 8%;
+		--primary: 0 0% 7%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 36 31% 94%;
+		--secondary-foreground: 0 0% 8%;
+		--accent: 32 28% 78%;
+		--accent-foreground: 0 0% 8%;
+		--muted: 35 22% 94%;
+		--muted-foreground: 25 5% 42%;
+		--border: 34 17% 86%;
+		--input: 34 17% 86%;
+		--ring: 0 0% 7%;
+		--card: 0 0% 100%;
+		--card-foreground: 0 0% 8%;
+		--radius: 0px;
+		--font-heading: 'Cinzel', 'Times New Roman', serif;
+		--font-body: 'Montserrat', 'Inter', sans-serif;
+		--font-primary: 'Montserrat', 'Inter', sans-serif;
+		--noor-ink: #151515;
+		--noor-ivory: #f8f6f2;
+		--noor-line: #ded8cf;
+	}
+
 	* {
-		font-family: var(--font-primary);
 		border-color: hsl(var(--border));
 	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
 	body {
 		@apply bg-background text-foreground;
+		font-family: var(--font-body);
+		font-weight: 400;
+		line-height: 1.65;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	[data-theme] {
+		font-family: var(--font-body);
+	}
+
+	body:has([data-theme='limelight']) {
+		--font-heading: 'Queens', serif;
+		--font-body: 'YsabeauInfant', 'Inter', sans-serif;
+		--font-primary: 'YsabeauInfant', 'Inter', sans-serif;
+		font-family: var(--font-body);
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		line-height: 1.15;
+		letter-spacing: 0.8px;
 	}
 }
-
-html {
-	scroll-behavior: smooth;
-}
-
-/*
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-} */
 
 @media only screen and (max-width: 980px) {
 	#tidio-chat-iframe {
 		bottom: 80px !important;
 	}
+
 	#reamaze-widget {
 		bottom: 80px !important;
 	}
@@ -86,4 +277,82 @@ html {
 
 .page-width {
 	@apply mx-page lg:container lg:mx-auto;
+}
+
+[data-reveal] {
+	opacity: 0;
+	transform: translateY(34px);
+	transition:
+		opacity 0.8s var(--ease),
+		transform 0.8s var(--ease);
+}
+
+[data-reveal].in {
+	opacity: 1;
+	transform: none;
+}
+
+[data-reveal].d1 {
+	transition-delay: 0.08s;
+}
+
+[data-reveal].d2 {
+	transition-delay: 0.16s;
+}
+
+[data-reveal].d3 {
+	transition-delay: 0.24s;
+}
+
+[data-reveal].d4 {
+	transition-delay: 0.32s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-reveal] {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
+
+/* ------------------------------------------------------------------ *
+ * Limelight theme — PLP / PDP page fidelity
+ *
+ * The shared listing and product-detail routes are already token-driven,
+ * so under data-theme="limelight" they inherit plum primary, square
+ * corners (--radius: 0) and serif headings for free. These rules add the
+ * finer parts of the source visual contract that tokens alone don't cover:
+ * REGULAR-weight serif headings (the source never uses bold), quiet plum
+ * accents, and square media. Everything is scoped to the limelight theme
+ * so the default store and other themes are completely untouched.
+ * ------------------------------------------------------------------ */
+[data-theme='limelight'] h1,
+[data-theme='limelight'] h2,
+[data-theme='limelight'] h3,
+[data-theme='limelight'] h4,
+[data-theme='limelight'] h5,
+[data-theme='limelight'] h6 {
+	font-weight: 400;
+	letter-spacing: 0.01em;
+	color: var(--limelight-plum, #460032);
+}
+
+/* PLP listing title + any shared page heading: regular-weight plum serif */
+[data-theme='limelight'] .page-heading {
+	font-family: var(--font-heading);
+	font-weight: 400;
+	letter-spacing: 0.01em;
+	color: var(--limelight-plum, #460032);
+}
+
+/* PDP: keep product imagery + thumbnails square, matching the source */
+[data-theme='limelight'] .page-width img {
+	border-radius: 0;
+}
+
+/* Quiet, un-bold price/labels in the plum tone across the catalogue */
+[data-theme='limelight'] [data-testid='product-card-selling-price'],
+[data-theme='limelight'] [data-testid='product-card-mrp'] {
+	font-weight: 400;
 }

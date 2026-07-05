@@ -9,7 +9,6 @@
 	import RichTextBlock from './blocks/rich-text-block.svelte'
 
 	let { layouts = [] }: { layouts?: any[] } = $props()
-	$inspect(layouts)
 </script>
 
 {#each layouts as layout, idx (idx)}
