@@ -23,7 +23,7 @@
 							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap py-3 text-sm font-semibold uppercase  text-gray-900 transition-all duration-300 hover:text-gray-900 active:scale-95
 								{selectedCategory === category.name ? 'text-primary after:scale-x-100' : 'after:scale-x-0'}
 								after:ease-out-expo after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
-							style="font-family: 'Montserrat', sans-serif;"
+							style="font-family: var(--font-body);"
 							onclick={() => closeChildMenu(index, false)}
 						>
 							<span>{category.name}</span>

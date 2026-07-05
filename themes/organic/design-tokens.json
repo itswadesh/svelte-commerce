@@ -1,0 +1,154 @@
+{
+  "generatedAt": "2026-07-05T08:22:30.012Z",
+  "source": {
+    "dir": "./stores/organic",
+    "files": [
+      "normalize.css",
+      "vendor.css",
+      "style.css",
+      "index.html"
+    ]
+  },
+  "palette": {
+    "roles": {
+      "background": "#ffffff",
+      "foreground": "#222222",
+      "primary": "#222222",
+      "primary-foreground": "#ffffff",
+      "secondary": "#505050",
+      "secondary-foreground": "#ffffff",
+      "accent": "#0c0c0c",
+      "accent-foreground": "#ffffff",
+      "muted": "#e2e2e2",
+      "muted-foreground": "#676767",
+      "border": "#e2e2e2",
+      "input": "#e2e2e2",
+      "ring": "#222222",
+      "card": "#ffffff",
+      "card-foreground": "#222222",
+      "destructive": "#dc2626",
+      "destructive-foreground": "#ffffff"
+    },
+    "fullPalette": [
+      {
+        "hex": "#ffffff",
+        "weight": 33,
+        "count": 10,
+        "contexts": [
+          "interactive"
+        ]
+      },
+      {
+        "hex": "#e2e2e2",
+        "weight": 8,
+        "count": 4,
+        "contexts": [
+          "interactive"
+        ]
+      },
+      {
+        "hex": "#222222",
+        "weight": 7,
+        "count": 3,
+        "contexts": [
+          "interactive"
+        ]
+      },
+      {
+        "hex": "#000000",
+        "weight": 2,
+        "count": 1,
+        "contexts": []
+      }
+    ],
+    "confidence": {
+      "primary": "low (no chromatic colors found — check source CSS)",
+      "contrastPrimaryOnBg": 15.91,
+      "contrastFgOnBg": 15.91
+    }
+  },
+  "typography": {
+    "fontHeading": "var(--heading-font)",
+    "fontBody": "Nunito",
+    "googleFontFamilies": [
+      "var(--heading-font)",
+      "Nunito"
+    ],
+    "fontWeights": [
+      600,
+      700,
+      900
+    ],
+    "dominantBodySize": "1em",
+    "letterSpacingHeading": "0.03em"
+  },
+  "geometry": {
+    "radius": "16px",
+    "shadow": "0px 5px 22px rgba(0, 0, 0, 0.04)",
+    "containerWidth": "1600px",
+    "spacingScale": [
+      "20px",
+      "16px",
+      "0.67em",
+      "0.35em",
+      "0.75em",
+      "0.625em",
+      "60px",
+      "0.5rem"
+    ],
+    "transitionDuration": "2s"
+  },
+  "sourceCustomProps": {
+    "--heading-font": "\"Inter\", sans-serif",
+    "--bs-link-color": "#333",
+    "--bs-link-hover-color": "#333",
+    "--bs-link-color-rgb": "40,40,40",
+    "--bs-link-hover-color-rgb": "0,0,0",
+    "--bs-light-rgb": "248, 248, 248",
+    "--bs-font-sans-serif": "\"Inter\", sans-serif",
+    "--bs-body-font-family": "var(--bs-font-sans-serif)",
+    "--bs-body-font-size": "1rem",
+    "--bs-body-font-weight": "400",
+    "--bs-body-line-height": "2",
+    "--bs-body-color": "#747474",
+    "--bs-primary": "#6BB252",
+    "--bs-primary-rgb": "107, 178, 82",
+    "--bs-secondary": "#364127",
+    "--bs-secondary-rgb": "54, 65, 39",
+    "--bs-danger": "#F95F09",
+    "--bs-danger-rgb": "249, 95, 9",
+    "--bs-success": "#a3be4c",
+    "--bs-success-rgb": "163, 190, 76",
+    "--bs-primary-bg-subtle": "#FFF9EB",
+    "--bs-success-bg-subtle": "#eef5e5",
+    "--bs-border-color": "#F7F7F7",
+    "--bs-btn-color": "#222",
+    "--bs-btn-bg": "#FFEADA",
+    "--bs-btn-border-color": "transparent",
+    "--bs-btn-hover-color": "#222",
+    "--bs-btn-hover-bg": "var(--bs-primary)",
+    "--bs-btn-hover-border-color": "transparent",
+    "--bs-btn-focus-shadow-rgb": "60,153,110",
+    "--bs-btn-active-color": "#222",
+    "--bs-btn-active-bg": "#ec9b22",
+    "--bs-btn-active-border-color": "transparent",
+    "--bs-btn-active-shadow": "inset 0 3px 5px rgba(0, 0, 0, 0.125)",
+    "--bs-btn-disabled-color": "#ccc",
+    "--bs-btn-disabled-bg": "#eaeaea",
+    "--bs-btn-disabled-border-color": "#eaeaea",
+    "--bs-gradient": "none",
+    "--bs-breadcrumb-divider-color": "#fff",
+    "--bs-breadcrumb-item-active-color": "var(--bs-primary)",
+    "--bs-dropdown-link-active-bg": "var(--bs-primary)",
+    "--bs-nav-pills-link-active-color": "#111",
+    "--bs-nav-pills-link-active-bg": "#f1f1f1",
+    "--bs-pagination-active-bg": "var(--bs-primary)",
+    "--bs-pagination-active-border-color": "var(--bs-primary)",
+    "--bs-gutter-x": "3rem",
+    "--bs-nav-link-hover-color": "#111",
+    "--bs-nav-link-color": "#555",
+    "--bs-nav-tabs-link-border-color": "#fff",
+    "--bs-nav-tabs-link-hover-border-color": "transparent",
+    "--bs-nav-tabs-link-active-border-color": "#fff"
+  }
+}

@@ -15,6 +15,7 @@
 	const { onClose, onContinueShopping, onRemoveCartItem } = $props()
 	const modalHistoryKey = '__svelteCommerceCartSidebar'
 	let ownsHistoryEntry = false
+	let isNavigatingFromCart = false
 
 	function handleBrowserBack() {
 		if (!cartState.isOpen || !ownsHistoryEntry) return
@@ -37,7 +38,8 @@
 		} else if (!cartState.isOpen && ownsHistoryEntry) {
 			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
 			ownsHistoryEntry = false
-			if (isCurrentModalEntry) history.back()
+			if (isCurrentModalEntry && !isNavigatingFromCart) history.back()
+			isNavigatingFromCart = false
 		}
 	})
 
@@ -57,6 +59,17 @@
 			css: (t: number, u: number) =>
 				`transform-origin: ${params.transformOrigin || 'top right'}; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
 		}
+	}
+
+	async function proceedToCart() {
+		isNavigatingFromCart = true
+		if (typeof window !== 'undefined' && history.state?.[modalHistoryKey] === true) {
+			const nextState = { ...history.state }
+			delete nextState[modalHistoryKey]
+			history.replaceState(nextState, '', window.location.href)
+		}
+		cartState.isOpen = false
+		await goto('/checkout/cart')
 	}
 </script>
 
@@ -147,10 +160,7 @@
 								disabled={!!cartState.isUpdatingCart}
 								onclick={(e) => {
 									e.stopPropagation()
-									if (cartState) {
-										cartState.isOpen = false
-									}
-									goto('/checkout/cart')
+									proceedToCart()
 								}}
 								class="w-[48%] py-6"
 							>

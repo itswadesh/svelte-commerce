@@ -1,35 +1,31 @@
 <script lang="ts">
-	import FeaturedProductsGrid from '$lib/components/product-catalogue/featured-products-grid.svelte'
-	import { X } from '@lucide/svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import CategoryList from '$lib/components/category/category-list.svelte'
-	import { fly } from 'svelte/transition'
-	import type { Product } from '$lib/core/types/index.js'
-	import HomepageCategoryListWithImage from '$lib/components/home/homepage-category-list-with-image.svelte'
-	import HomepageBanners from '$lib/components/home/homepage-banners.svelte'
-	import Banners from '$lib/components/home/banners.svelte'
-	import {
-		SeoHeader,
-		GoogleStructuredDataWebsite,
-		GoogleStructuredDataOrganization,
-		GoogleStructuredDataProductsList
-	} from '$lib/core/components/index.js'
-	import Collections from '$lib/components/home/collections.svelte'
-	let { data } = $props()
-	import { HomepageModule } from '$lib/core/composables/index.js'
-	import { timestampToAgo } from '$lib/core/utils/index.js'
-	import Slider from '$lib/components/home/slider.svelte'
 	import { page as sveltePage } from '$app/state'
+	import { fly } from 'svelte/transition'
+	import { X } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
-	import Blocks from '$lib/components/page-blocks/blocks.svelte'
+	import {
+		GoogleStructuredDataOrganization,
+		GoogleStructuredDataProductsList,
+		GoogleStructuredDataWebsite,
+		SeoHeader
+	} from '$lib/core/components/index.js'
+	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { setCollectionState } from '$lib/core/stores/collection.svelte.js'
-	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
+	import { timestampToAgo } from '$lib/core/utils/index.js'
+	import { getThemeHomepageContent } from '$lib/theme/index.js'
+	import { themeHomepages } from '$lib/theme/homepages.js'
+	import Slider from '$lib/components/home/slider.svelte'
+	import Blocks from '$lib/components/page-blocks/blocks.svelte'
+
+	let { data } = $props()
+
 	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
-	const [aspectWidth, aspectHeight] = $derived(data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
+	const [aspectWidth, aspectHeight] = $derived(
+		data?.store?.productImageAspectRatio?.split(':') || ['1', '1']
+	)
 
 	setCollectionState()
 
-	// Type definition for page data needed for this component
 	interface ExtendedPage {
 		metaTitle?: string
 		metaDescription?: string
@@ -40,27 +36,38 @@
 		sections?: any[]
 	}
 
-	interface PageData {
-		page?: ExtendedPage
-		store?: any
-		storeId?: string
-	}
-
-	// Cast data.page to ExtendedPage type for TypeScript
 	const page = (data?.page || {}) as ExtendedPage
-
 	const homepageModule = new HomepageModule()
+	const activeTheme = $derived(data?.theme?.name || 'default')
+	const ThemeHomepage = $derived(themeHomepages[activeTheme] || themeHomepages['default'])
+	const rendersApiPageAddons = $derived(activeTheme === 'default')
+	const themeContent = $derived(getThemeHomepageContent(activeTheme))
+	const brandName = $derived(themeContent.brandName || data?.store?.name || 'Store')
+	const themeDescription = $derived(themeContent.description || page?.metaDescription || '')
+
+	const featuredCategories = $derived(homepageModule.featuredCategories || [])
+	const featuredProducts = $derived(homepageModule.featuredProducts || [])
+	const filterButtons = $derived([
+		'All',
+		...featuredCategories
+			.map((category: any) => category?.name || category?.title)
+			.filter(Boolean)
+			.slice(0, 6)
+	])
+
 </script>
 
 <GoogleStructuredDataProductsList products={homepageModule.featuredProductsStructuredData} />
 
 <GoogleStructuredDataOrganization
-	name={data?.store?.name || 'ArialShop'}
+	name={brandName}
 	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
 	logo={data?.store?.logo}
-	description={data?.store?.description}
+	description={themeDescription}
 	sameAs={data?.store?.socialSharing?.active
-		? (Object.values(data?.store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[])
+		? (Object.values(data?.store?.socialSharing || {}).filter(
+				(link: any) => typeof link === 'string' && link.startsWith('http')
+			) as string[])
 		: []}
 	address={data?.store?.address
 		? {
@@ -81,215 +88,76 @@
 />
 
 <GoogleStructuredDataWebsite
-	name={data?.store?.name || 'ArialShop'}
+	name={brandName}
 	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
-	description={data?.store?.description}
+	description={themeDescription}
 	searchUrl={`https://${PUBLIC_LITEKART_DOMAIN}/search?q={search_term_string}`}
 />
 
 <SeoHeader
-	metaTitle={page?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
-	metaDescription={page?.metaDescription ||
-		"Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
+	metaTitle={themeContent.seoTitle || page?.metaTitle || brandName}
+	metaDescription={themeDescription}
 	metaKeywords={page?.metaKeywords}
-	image={page?.logo}
+	image={themeContent.seoImage || page?.logo || data?.store?.logo}
 />
 
-<!-- {#if homepageModule.featuredCategories?.length > 0}
-	<div class="mx-2 flex justify-center bg-gray-100 px-2 lg:container lg:mx-auto lg:hidden">
-		<CategoryList categories={homepageModule.featuredCategories} />
-	</div>
-{/if} -->
+<svelte:component
+	this={ThemeHomepage}
+	{themeContent}
+	{brandName}
+	{themeDescription}
+	storeLogo={data?.store?.logo}
+	storeName={data?.store?.name}
+	storeDescription={data?.store?.description}
+	{aspectWidth}
+	{aspectHeight}
+	{featuredCategories}
+	{featuredProducts}
+	{filterButtons}
+	{homepageModule}
+	loading={homepageModule.loading}
+	desktopBanners={page?.desktopBanners}
+	mobileBanners={page?.mobileBanners}
+	currencyCode={data?.store?.currency?.code}
+/>
 
-<!-- Hello bar -->
-<!-- {#if helloBarPlugin?.active}
-	<div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
-		{@html helloBarPlugin?.content}
-	</div>
-{/if} -->
+{#if rendersApiPageAddons}
+	<Slider />
 
-<!-- {#if displayProduct === 'flex'}
-	<div class="fixed inset-0 z-40 {displayProduct} flex items-center justify-center bg-[rgba(0,0,0,0.7)] p-10">
-		<div class="absolute inset-0 h-full w-full cursor-pointer"></div>
+	<Blocks layouts={data?.page?.layouts || []} />
+{/if}
 
-		<div
-			class="relative z-50 max-w-[90vw] rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 dark:text-white sm:max-h-[90vh] sm:w-full sm:max-w-[600px] sm:p-4"
-		>
-			<Button
-				variant="secondary"
-				size="icon"
-				class="absolute right-4 top-4 m-1 rounded-full"
-				onclick={hideProduct}
-				aria-label="Close"
-			>
-				<X class="h-6 w-6" />
-			</Button>
-
-			<ProductDetails {product} />
-		</div>
-	</div>
-{/if} -->
-
-<div class="relative w-full">
-	{#if homepageModule.loading || !page?.desktopBanners}
-		<div class="relative aspect-[4/3.5] w-full md:aspect-[16/6] md:max-h-[calc(50vh+2px)]">
-			<Skeleton class="h-full w-full rounded-none" />
-		</div>
-	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
-		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
-	{:else}
-		<!-- Fallback Hero Section when no banners are configured -->
-		<div class="relative flex aspect-[4/3.5] w-full items-center overflow-hidden bg-black px-6 text-white md:aspect-[16/6] md:max-h-[50vh]">
-			<!-- Decorative background glow -->
-			<div class="pointer-events-none absolute right-0 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl"></div>
-
-			<div class="relative mx-auto max-w-7xl">
-				<div class="grid gap-12 md:grid-cols-2">
-					<div class="flex flex-col justify-center">
-						<h2 class="mb-4 text-4xl font-extrabold tracking-tight text-white md:text-5xl">
-							{data?.store?.name || 'Welcome to Our Store'}
-						</h2>
-						<p class="mb-8 max-w-[55ch] text-base leading-relaxed text-zinc-100 md:text-lg">
-							{@html data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
-						</p>
-						<Button
-							href="/products"
-							size="lg"
-							class="w-fit rounded-md bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-black transition-colors duration-300 hover:bg-primary/90"
-						>
-							Shop Now
-						</Button>
-					</div>
-					<div class="hidden select-none items-center justify-center md:flex" aria-hidden="true">
-						<div class="text-[10rem] font-black tracking-tighter text-white/20">NEW</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	{/if}
-</div>
-
-<Slider />
-
-<Blocks layouts={data?.page?.layouts || []} />
-
-<!-- <div class="page-width mb-8">
-	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
-</div> -->
-
-<!-- <Collections />-->
-
-<!-- {#if page?.sections?.length && page?.sections[0]?.isActive}
-	<div class="mx-2 mb-8 xl:mx-24">
-		<HomepageBanners bannersList={page?.sections} />
-	</div>
-{/if} -->
-
-<!-- <div class="page-width py-8 md:py-12">
-	<div class="mb-8 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
-		<div class="text-center md:text-left">
-			<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">New Arrivals</h2>
-			<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
-		</div>
-		<Button
-			href="/products"
-			class="group max-sm:hidden"
-      variant="link"
-		>
-			View All Arrivals
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-			</svg>
-		</Button>
-	</div>
-
-	{#if homepageModule.loadingFeaturedProducts}
-		<div class="intra-gap grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-			{#each Array(12) as _}
-				<div class="space-y-4">
-					<Skeleton class="w-full rounded-2xl" style="aspect-ratio: {aspectWidth}/{aspectHeight};" />
-					<div class="space-y-2">
-						<Skeleton class="h-4 w-3/4" />
-						<Skeleton class="h-4 w-1/2" />
-					</div>
-				</div>
-			{/each}
-		</div>
-	{:else}
-		<FeaturedProductsGrid
-			data={homepageModule.featuredProducts?.slice(0, 18)}
-			displayProduct={(prod: Product) => homepageModule.showProduct(prod)}
-			loadMore={homepageModule.loadMoreFeaturedProducts}
-		/>
-		<!-- {#if homepageModule.hasMoreFeaturedProducts}
-			<div class="mt-16 flex justify-center pb-12">
-				<Button
-					variant="default"
-					size="lg"
-					class="group relative overflow-hidden rounded-full px-12 py-5 text-sm font-black uppercase tracking-[0.2em] shadow-2xl"
-					onclick={homepageModule.loadMoreFeaturedProducts}
-				>
-					<div
-						class="absolute -inset-full top-0 z-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-shimmer"
-					></div>
-
-					<span class="relative z-10">Discover More</span>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:translate-y-1 group-hover:animate-bounce"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-					</svg>
-				</Button>
-			</div>
-		{/if}
-	{/if}
-</div>-->
-
-<!-- Notification to show recent order -->
 {#if homepageModule.showRecentOrderPopup}
 	<div transition:fly={{ x: 50, duration: 150 }} class="fixed bottom-20 right-4 z-50">
-		<div class="relative flex justify-between rounded-lg bg-white p-4 shadow-lg">
-			<a href="/products/{homepageModule.selectedRecentOrder?.slug || ''}" class="flex items-center justify-between">
-				<div class="flex space-x-2">
-					<div class="">
-						<img
-							src={homepageModule.selectedRecentOrder?.image ||
-								homepageModule.selectedRecentOrder?.img ||
-								homepageModule.selectedRecentOrder?.thumbnail}
-							alt={homepageModule.selectedRecentOrder?.title || 'Product'}
-							class="h-16 w-16 object-contain sm:h-28 sm:w-28"
-						/>
-					</div>
-					<div class="flex flex-col">
-						<p class="text-xs text-black sm:text-sm">
-							{homepageModule.selectedRecentOrder?.first_name || 'Someone'} from {homepageModule.selectedRecentOrder?.city || 'somewhere'}
-						</p>
-						<p class="text-xs text-gray-500 sm:text-sm">purchased a</p>
-						<p class="line-clamp-3 max-w-[200px] text-sm text-blue-600">
-							{homepageModule.selectedRecentOrder?.title || 'product'}
-						</p>
-						<p class="mt-auto text-xs text-gray-500 sm:text-xs">
-							{timestampToAgo(homepageModule.selectedRecentOrder?.created_at || homepageModule.selectedRecentOrder?.createdAt || '')}
-						</p>
-					</div>
+		<div class="flex max-w-[320px] gap-3 border-l-4 border-primary bg-white p-3.5 shadow-lg">
+			<a href="/products/{homepageModule.selectedRecentOrder?.slug || ''}" class="flex gap-3 text-foreground">
+				<img
+					src={homepageModule.selectedRecentOrder?.image ||
+						homepageModule.selectedRecentOrder?.img ||
+						homepageModule.selectedRecentOrder?.thumbnail}
+					alt={homepageModule.selectedRecentOrder?.title || 'Product'}
+					class="h-[58px] w-[58px] object-cover"
+				/>
+				<div>
+					<p class="text-xs text-gray-500">
+						{homepageModule.selectedRecentOrder?.first_name || 'Someone'} from {homepageModule.selectedRecentOrder?.city || 'nearby'}
+					</p>
+					<strong class="block text-sm text-primary">{homepageModule.selectedRecentOrder?.title || 'a menu item'}</strong>
+					<span class="text-xs text-gray-500">
+						{timestampToAgo(
+							homepageModule.selectedRecentOrder?.created_at ||
+								homepageModule.selectedRecentOrder?.createdAt ||
+								''
+						)}
+					</span>
 				</div>
 			</a>
 			<Button
 				variant="ghost"
 				size="icon"
-				class="h-8 w-8 self-start"
+				class="h-7 w-7 self-start"
 				onclick={() => (homepageModule.showRecentOrderPopup = false)}
-				aria-label="Close notification"
+				aria-label="Close recent order"
 			>
 				<X class="h-4 w-4" />
 			</Button>

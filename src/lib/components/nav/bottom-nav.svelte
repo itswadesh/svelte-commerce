@@ -94,7 +94,7 @@
 	}
 </script>
 
-<nav class={cn("pb-safe fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white font-['Montserrat',_sans-serif] md:hidden", className)}>
+<nav class={cn('pb-safe fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white font-sans md:hidden', className)}>
 	<div class="flex h-16 items-center justify-around px-3">
 		{#each navItems as item}
 			{#if item.href}
@@ -194,7 +194,7 @@
 								goto('/checkout/cart')
 							}}
 							size="lg"
-							class="w-full rounded-md bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-black transition-colors duration-300 hover:bg-primary/90"
+							class="w-full rounded-pill bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors duration-300 hover:bg-emerald-900"
 						>
 							Proceed to Checkout
 						</Button>

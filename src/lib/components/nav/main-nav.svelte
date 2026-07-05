@@ -23,7 +23,7 @@
 					href="/"
 					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
 					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
-					style="font-family: 'Montserrat', sans-serif;"
+					style="font-family: var(--font-body);"
 				>
 					<Home />
 				</a>
@@ -35,7 +35,7 @@
 					href={item.link}
 					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
 					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
-					style="font-family: 'Montserrat', sans-serif;"
+					style="font-family: var(--font-body);"
 				>
 					{item?.name}
 				</a>

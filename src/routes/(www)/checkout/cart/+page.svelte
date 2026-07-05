@@ -482,7 +482,7 @@
 						<div class="space-y-4 rounded-lg border border-border bg-background p-3 shadow-sm md:p-6">
 							<div class="">
 								<div class="mb-6 flex flex-col gap-1">
-									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">Price Summary</h2>
+									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Price Summary</h2>
 									<div class="h-1 w-12 bg-primary"></div>
 								</div>
 								{#if cartModule.loadingForCart}

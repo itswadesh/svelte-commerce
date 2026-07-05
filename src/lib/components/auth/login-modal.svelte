@@ -20,7 +20,6 @@
 
 	const loginModule = new LoginModule()
 	const userState = loginModule.userState
-  $inspect(page.data)
 	let resendSeconds = $state(0)
 	let otpCooldownStarted = $state(false)
 	let resendTimer: ReturnType<typeof setInterval> | undefined

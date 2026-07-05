@@ -23,3 +23,4 @@ playwright-report/index.html
 playwright-report/*
 test-results/*
 .claude/settings.local.json
+stores/*

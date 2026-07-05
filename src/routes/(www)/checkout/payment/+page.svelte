@@ -130,7 +130,7 @@
 
 					{#if paymentModule.shippingRates?.data?.length}
 						<div class="grid h-fit grid-cols-1 space-y-6  pt-4">
-							<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+							<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
 								Select Shipping Method
 							</h2>
 
@@ -265,7 +265,7 @@
 
 
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+								<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
 									Price Summary
 								</h2>
 								<div class="h-1 w-12 bg-primary"></div>

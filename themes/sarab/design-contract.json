@@ -1,0 +1,1998 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-05T05:28:06.358Z",
+  "source": {
+    "dir": "stores\\sarab",
+    "html": "stores\\sarab\\index.html",
+    "css": [
+      "stores\\sarab\\css\\all.min.css",
+      "stores\\sarab\\css\\aos.css",
+      "stores\\sarab\\css\\bootstrap.min.css",
+      "stores\\sarab\\css\\magnific-popup.css",
+      "stores\\sarab\\css\\style.css",
+      "stores\\sarab\\css\\swiper-bundle.min.css"
+    ]
+  },
+  "viewportChecks": [
+    {
+      "name": "desktop",
+      "width": 1366,
+      "height": 900
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "sections": [
+    {
+      "name": "topbar",
+      "selector": "#topbar",
+      "tag": "div",
+      "classes": [],
+      "text": "+1 (800) 123-4567 hello@sarabfood.com 42 Flavor Street, NY Free Delivery Today!",
+      "styles": {
+        "background": "#111",
+        "font-size": "0.82rem",
+        "padding": "8px 0"
+      },
+      "headings": [],
+      "labels": [],
+      "images": [],
+      "buttons": [],
+      "icons": [
+        "phone-alt",
+        "envelope",
+        "map-pin",
+        "flame"
+      ],
+      "cards": []
+    },
+    {
+      "name": "nav",
+      "selector": "#nav",
+      "tag": "nav",
+      "classes": [
+        "navbar",
+        "navbar-expand-lg"
+      ],
+      "text": "Sarab Fast Food & Restaurant Home About Menu Chefs Reservation Reviews Contact Order Now",
+      "styles": {
+        "display": "flex",
+        "align-items": "center",
+        "justify-content": "flex-start",
+        "background": "#fff",
+        "background-color": "transparent",
+        "padding": "0",
+        "box-shadow": "0 2px 20px rgba(0, 0, 0, 0.07)",
+        "width": "auto",
+        "height": "auto"
+      },
+      "headings": [],
+      "labels": [],
+      "images": [],
+      "buttons": [
+        {
+          "text": "Sarab Fast Food & Restaurant",
+          "href": "#",
+          "classes": [
+            "navbar-brand"
+          ],
+          "styles": {
+            "color": "var(--bs-navbar-brand-hover-color)",
+            "font-size": "var(--bs-navbar-brand-font-size)"
+          }
+        },
+        {
+          "text": "Home",
+          "href": "#hero",
+          "classes": [
+            "nav-link",
+            "active"
+          ],
+          "styles": {
+            "display": "block",
+            "background": "var(--primary)",
+            "background-color": "var(--bs-pagination-active-bg)",
+            "color": "var(--primary)",
+            "font-size": "0.87rem",
+            "font-weight": "500",
+            "margin-bottom": "calc(-1 * var(--bs-nav-tabs-border-width))",
+            "padding": "26px 13px",
+            "border-radius": "3px 3px 0 0",
+            "box-shadow": "0 0 0 .25rem rgba(13,110,253,.25)",
+            "width": "55%",
+            "height": "3px"
+          }
+        },
+        {
+          "text": "About",
+          "href": "#about",
+          "classes": [
+            "nav-link"
+          ],
+          "styles": {
+            "display": "block",
+            "background": "var(--primary)",
+            "background-color": "var(--bs-card-bg)",
+            "color": "var(--primary)",
+            "font-size": "0.87rem",
+            "font-weight": "500",
+            "margin-bottom": "calc(-1 * var(--bs-nav-tabs-border-width))",
+            "padding": "26px 13px",
+            "border-radius": "3px 3px 0 0",
+            "box-shadow": "0 0 0 .25rem rgba(13,110,253,.25)",
+            "width": "55%",
+            "height": "3px"
+          }
+        },
+        {
+          "text": "Menu",
+          "href": "#menu",
+          "classes": [
+            "nav-link"
+          ],
+          "styles": {
+            "display": "block",
+            "background": "var(--primary)",
+            "background-color": "var(--bs-card-bg)",
+            "color": "var(--primary)",
+            "font-size": "0.87rem",
+            "font-weight": "500",
+            "margin-bottom": "calc(-1 * var(--bs-nav-tabs-border-width))",
+            "padding": "26px 13px",
+            "border-radius": "3px 3px 0 0",
+            "box-shadow": "0 0 0 .25rem rgba(13,110,253,.25)",
+            "width": "55%",
+            "height": "3px"
+          }
+        },
+        {
+          "text": "Chefs",
+          "href": "#chefs",
+          "classes": [
+            "nav-link"
+          ],
+          "styles": {
+            "display": "block",
+            "background": "var(--primary)",
+            "background-color": "var(--bs-card-bg)",
+            "color": "var(--primary)",
+            "font-size": "0.87rem",
+            "font-weight": "500",
+            "margin-bottom": "calc(-1 * var(--bs-nav-tabs-border-width))",
+            "padding": "26px 13px",
+            "border-radius": "3px 3px 0 0",
+            "box-shadow": "0 0 0 .25rem rgba(13,110,253,.25)",
+            "width": "55%",
+            "height": "3px"
+          }
+        },
+        {
+          "text": "Reservation",
+          "href": "#reservation",
+          "classes": [
+            "nav-link"
+          ],
+          "styles": {
+            "display": "block",
+            "background": "var(--primary)",
+            "background-color": "var(--bs-card-bg)",
+            "color": "var(--primary)",
+            "font-size": "0.87rem",
+            "font-weight": "500",
+            "margin-bottom": "calc(-1 * var(--bs-nav-tabs-border-width))",
+            "padding": "26px 13px",
+            "border-radius": "3px 3px 0 0",
+            "box-shadow": "0 0 0 .25rem rgba(13,110,253,.25)",
+            "width": "55%",
+            "height": "3px"
+          }
+        },
+        {
+          "text": "Reviews",
+          "href": "#testimonials",
+          "classes": [
+            "nav-link"
+          ],
+          "styles": {
+            "display": "block",
+            "background": "var(--primary)",
+            "background-color": "var(--bs-card-bg)",
+            "color": "var(--primary)",
+            "font-size": "0.87rem",
+            "font-weight": "500",
+            "margin-bottom": "calc(-1 * var(--bs-nav-tabs-border-width))",
+            "padding": "26px 13px",
+            "border-radius": "3px 3px 0 0",
+            "box-shadow": "0 0 0 .25rem rgba(13,110,253,.25)",
+            "width": "55%",
+            "height": "3px"
+          }
+        },
+        {
+          "text": "Contact",
+          "href": "#contact-section",
+          "classes": [
+            "nav-link"
+          ],
+          "styles": {
+            "display": "block",
+            "background": "var(--primary)",
+            "background-color": "var(--bs-card-bg)",
+            "color": "var(--primary)",
+            "font-size": "0.87rem",
+            "font-weight": "500",
+            "margin-bottom": "calc(-1 * var(--bs-nav-tabs-border-width))",
+            "padding": "26px 13px",
+            "border-radius": "3px 3px 0 0",
+            "box-shadow": "0 0 0 .25rem rgba(13,110,253,.25)",
+            "width": "55%",
+            "height": "3px"
+          }
+        },
+        {
+          "text": "Order Now",
+          "href": "#menu",
+          "classes": [
+            "nav-link",
+            "nav-cta"
+          ],
+          "styles": {
+            "display": "none",
+            "background": "linear-gradient(135deg, var(--primary), #c01e12)",
+            "background-color": "var(--bs-card-bg)",
+            "color": "#fff",
+            "font-size": "0.84rem",
+            "font-weight": "600",
+            "margin-bottom": "calc(-1 * var(--bs-nav-tabs-border-width))",
+            "padding": "10px 20px",
+            "border-radius": "8px",
+            "box-shadow": "0 8px 22px rgba(232, 40, 26, 0.4)",
+            "width": "55%",
+            "height": "3px"
+          }
+        }
+      ],
+      "icons": [
+        "utensils",
+        "bars",
+        "search",
+        "shopping-bag"
+      ],
+      "cards": []
+    },
+    {
+      "name": "hero",
+      "selector": "#hero",
+      "tag": "section",
+      "classes": [],
+      "text": "FOOD #1 Rated Fast Food Restaurant in New York Delicious Fast Foodfor Every Moment Experience bold flavors crafted from premium ingredients. From crispy burgers to gourmet pizzas - every bite is an adventure worth savoring. Explore Menu Watch Our Story 850+Happy Customers 120+Menu Items 15+Expert Chefs 12yrExperience Hot Deal30% off today 4.9/52k+ reviews 20 minFast delivery",
+      "styles": {
+        "display": "flex",
+        "align-items": "center",
+        "background": "var(--cream)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "Delicious Fast Foodfor Every Moment",
+          "classes": [
+            "htitle"
+          ],
+          "styles": {
+            "display": "inline-block",
+            "background": "rgba(232, 40, 26, 0.14)",
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "2.4rem",
+            "font-weight": "900",
+            "line-height": "1.1",
+            "margin-bottom": "18px",
+            "border-radius": "4px",
+            "height": "7px"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "#1 Rated Fast Food Restaurant in New York",
+          "classes": [
+            "hbadge"
+          ],
+          "styles": {
+            "display": "flex",
+            "align-items": "center",
+            "justify-content": "center",
+            "gap": "8px",
+            "background": "linear-gradient(135deg, var(--primary), var(--secondary))",
+            "color": "var(--dark)",
+            "font-size": "0.76rem",
+            "font-weight": "600",
+            "margin-bottom": "22px",
+            "padding": "6px 16px 6px 6px",
+            "border-radius": "50%",
+            "box-shadow": "0 4px 20px rgba(0, 0, 0, 0.1)",
+            "width": "30px",
+            "height": "30px"
+          }
+        }
+      ],
+      "images": [
+        {
+          "src": "stores/sarab/img/banner-img.jpg",
+          "alt": "Burger"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Explore Menu",
+          "href": "#menu",
+          "classes": [
+            "btn-red"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "gap": "9px",
+            "background": "linear-gradient(135deg, var(--primary), #c01e12)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.93rem",
+            "font-weight": "600",
+            "padding": "14px 32px",
+            "border-radius": "50px",
+            "box-shadow": "0 14px 34px rgba(232, 40, 26, 0.45)"
+          }
+        },
+        {
+          "text": "Watch Our Story",
+          "href": "https://www.youtube.com/watch?v=RXv_uIN6e-Y",
+          "classes": [
+            "magnific_popup",
+            "btn-play",
+            "popup-youtube"
+          ],
+          "styles": {
+            "display": "flex",
+            "align-items": "center",
+            "justify-content": "center",
+            "gap": "12px",
+            "background": "var(--primary)",
+            "color": "var(--primary)",
+            "font-size": "0.95rem",
+            "font-weight": "600",
+            "padding": "10px 16px",
+            "border-radius": "50%",
+            "box-shadow": "0 6px 20px rgba(0, 0, 0, 0.12)",
+            "width": "48px",
+            "height": "48px"
+          }
+        }
+      ],
+      "icons": [
+        "star",
+        "utensils",
+        "play",
+        "flame",
+        "clock"
+      ],
+      "cards": [
+        {
+          "selector": ".fcard",
+          "count": 3,
+          "styles": {
+            "display": "none",
+            "align-items": "center",
+            "gap": "9px",
+            "background": "#fff",
+            "padding": "22px 18px",
+            "border-radius": "18px",
+            "box-shadow": "0 6px 30px rgba(0, 0, 0, 0.08)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "category",
+      "selector": "#category",
+      "tag": "section",
+      "classes": [],
+      "text": "What We Offer Browse by Category From sizzling burgers to exotic world cuisines - find your favourite in our menu All Items 99 items Burgers 24 items Pizza 18 items Fried Chicken 15 items Wraps 12 items Desserts 20 items",
+      "styles": {
+        "background": "var(--cream)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Browse by Category",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "What We Offer",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [
+        {
+          "src": "stores/sarab/img/category/1.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/category/2.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/category/3.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/category/4.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/category/5.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/category/6.jpg",
+          "alt": ""
+        }
+      ],
+      "buttons": [],
+      "icons": [],
+      "cards": [
+        {
+          "selector": ".catcard",
+          "count": 6,
+          "styles": {
+            "background": "#fff",
+            "padding": "22px 14px",
+            "border-radius": "15px",
+            "box-shadow": "0 14px 38px rgba(232, 40, 26, 0.14)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "about",
+      "selector": "#about",
+      "tag": "section",
+      "classes": [],
+      "text": "12+Years ofExcellence Our Story We Invite You to VisitOur Food Restaurant Founded in 2012, Sarab began as a small corner joint with a big dream - to serve food that brings people together. Today we're proud to serve thousands of happy customers every week with the same passion that started it all. 100% Fresh Ingredients We source locally and sustainably. Every ingredient is hand-picked daily for maximum freshness. Award-Winning Recipes Our signature recipes have won national culinary awards 5 ye",
+      "styles": {
+        "background": "#fff",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "We Invite You to VisitOur Food Restaurant",
+          "classes": [
+            "stitle",
+            "text-start"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        },
+        {
+          "tag": "h6",
+          "text": "100% Fresh Ingredients",
+          "classes": [],
+          "styles": {
+            "color": "var(--bs-heading-color)",
+            "font-size": "1rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h6",
+          "text": "Award-Winning Recipes",
+          "classes": [],
+          "styles": {
+            "color": "var(--bs-heading-color)",
+            "font-size": "1rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h6",
+          "text": "Lightning-Fast Delivery",
+          "classes": [],
+          "styles": {
+            "color": "var(--bs-heading-color)",
+            "font-size": "1rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "Our Story",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [
+        {
+          "src": "stores/sarab/img/about1.jpg",
+          "alt": "Restaurant"
+        },
+        {
+          "src": "stores/sarab/img/about2.jpg",
+          "alt": ""
+        }
+      ],
+      "buttons": [
+        {
+          "text": "View Full Menu",
+          "href": "#menu",
+          "classes": [
+            "btn-red"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "gap": "9px",
+            "background": "linear-gradient(135deg, var(--primary), #c01e12)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.93rem",
+            "font-weight": "600",
+            "padding": "14px 32px",
+            "border-radius": "50px",
+            "box-shadow": "0 14px 34px rgba(232, 40, 26, 0.45)"
+          }
+        }
+      ],
+      "icons": [
+        "leaf",
+        "award",
+        "shipping-fast",
+        "book-open"
+      ],
+      "cards": []
+    },
+    {
+      "name": "menu",
+      "selector": "#menu",
+      "tag": "section",
+      "classes": [],
+      "text": "What's Cooking Our Delicious Menu All Burgers Pizza Chicken Wraps Desserts Pasta Hot Burgers Classic Smash Burger Double smashed patty, cheddar, caramelized onions, pickles & special sauce $14.99 $18.99 (128) New Pizza Margherita Royale San Marzano tomatoes, buffalo mozzarella, basil & truffle oil on sourdough $19.99 $24.99 (95) Best Seller Chicken Nashville Hot Chicken Crispy fried chicken in fiery Nashville spice blend with honey drizzle $12.99 $16.99 (210) Wraps Loaded Fajita Wrap Grilled chi",
+      "styles": {
+        "background": "var(--light)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Our Delicious Menu",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "What's Cooking",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [
+        {
+          "src": "stores/sarab/img/menu/1.jpg",
+          "alt": "Smash Burger"
+        },
+        {
+          "src": "stores/sarab/img/menu/2.jpg",
+          "alt": "Pizza"
+        },
+        {
+          "src": "stores/sarab/img/menu/3.jpg",
+          "alt": "Chicken"
+        },
+        {
+          "src": "stores/sarab/img/menu/4.jpg",
+          "alt": "Wrap"
+        },
+        {
+          "src": "stores/sarab/img/menu/5.jpg",
+          "alt": "Lava Cake"
+        },
+        {
+          "src": "stores/sarab/img/menu/6.jpg",
+          "alt": "Pasta"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "All",
+          "href": "",
+          "classes": [
+            "filtbtn",
+            "active"
+          ],
+          "styles": {
+            "display": "block",
+            "background": "var(--primary)",
+            "background-color": "var(--bs-pagination-active-bg)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.84rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "3px",
+            "padding": "8px 20px",
+            "border-radius": "50px",
+            "box-shadow": "0 5px 18px rgba(232, 40, 26, 0.24)"
+          }
+        },
+        {
+          "text": "Burgers",
+          "href": "",
+          "classes": [
+            "filtbtn"
+          ],
+          "styles": {
+            "background": "var(--primary)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.84rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "3px",
+            "padding": "8px 20px",
+            "border-radius": "50px",
+            "box-shadow": "0 5px 18px rgba(232, 40, 26, 0.24)"
+          }
+        },
+        {
+          "text": "Pizza",
+          "href": "",
+          "classes": [
+            "filtbtn"
+          ],
+          "styles": {
+            "background": "var(--primary)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.84rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "3px",
+            "padding": "8px 20px",
+            "border-radius": "50px",
+            "box-shadow": "0 5px 18px rgba(232, 40, 26, 0.24)"
+          }
+        },
+        {
+          "text": "Chicken",
+          "href": "",
+          "classes": [
+            "filtbtn"
+          ],
+          "styles": {
+            "background": "var(--primary)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.84rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "3px",
+            "padding": "8px 20px",
+            "border-radius": "50px",
+            "box-shadow": "0 5px 18px rgba(232, 40, 26, 0.24)"
+          }
+        },
+        {
+          "text": "Wraps",
+          "href": "",
+          "classes": [
+            "filtbtn"
+          ],
+          "styles": {
+            "background": "var(--primary)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.84rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "3px",
+            "padding": "8px 20px",
+            "border-radius": "50px",
+            "box-shadow": "0 5px 18px rgba(232, 40, 26, 0.24)"
+          }
+        },
+        {
+          "text": "Desserts",
+          "href": "",
+          "classes": [
+            "filtbtn"
+          ],
+          "styles": {
+            "background": "var(--primary)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.84rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "3px",
+            "padding": "8px 20px",
+            "border-radius": "50px",
+            "box-shadow": "0 5px 18px rgba(232, 40, 26, 0.24)"
+          }
+        },
+        {
+          "text": "Pasta",
+          "href": "",
+          "classes": [
+            "filtbtn"
+          ],
+          "styles": {
+            "background": "var(--primary)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.84rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "3px",
+            "padding": "8px 20px",
+            "border-radius": "50px",
+            "box-shadow": "0 5px 18px rgba(232, 40, 26, 0.24)"
+          }
+        },
+        {
+          "text": "View Full Menu",
+          "href": "#",
+          "classes": [
+            "btn-red"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "gap": "9px",
+            "background": "linear-gradient(135deg, var(--primary), #c01e12)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.93rem",
+            "font-weight": "600",
+            "padding": "14px 32px",
+            "border-radius": "50px",
+            "box-shadow": "0 14px 34px rgba(232, 40, 26, 0.45)"
+          }
+        }
+      ],
+      "icons": [
+        "star",
+        "heart",
+        "plus",
+        "th-large"
+      ],
+      "cards": [
+        {
+          "selector": ".mcard",
+          "count": 6,
+          "styles": {
+            "background": "#fff",
+            "border-radius": "18px",
+            "box-shadow": "0 18px 48px rgba(0, 0, 0, 0.13)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "special",
+      "selector": "#special",
+      "tag": "section",
+      "classes": [],
+      "text": "Limited Time Offer Get 30% OffOur SignatureBurger Meal Don't miss our weekend special - grab our award-winning signature burger combo with loaded fries and a premium shake at an unbeatable price. 08Hours 45Minutes 30Seconds Grab the Deal $24.99$17.49",
+      "styles": {
+        "background": "linear-gradient(135deg, #1a0000 0%, #2d0000 100%)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Get 30% OffOur SignatureBurger Meal",
+          "classes": [
+            "sptitle"
+          ],
+          "styles": {
+            "color": "var(--secondary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "clamp(2.3rem, 5vw, 3.8rem)",
+            "font-weight": "900",
+            "line-height": "1.1",
+            "margin-bottom": ".5rem"
+          }
+        }
+      ],
+      "labels": [],
+      "images": [
+        {
+          "src": "stores/sarab/img/off-img.jpg",
+          "alt": "Special Burger"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Grab the Deal",
+          "href": "#menu",
+          "classes": [
+            "btn-red"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "gap": "9px",
+            "background": "linear-gradient(135deg, var(--primary), #c01e12)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.93rem",
+            "font-weight": "600",
+            "padding": "14px 32px",
+            "border-radius": "50px",
+            "box-shadow": "0 14px 34px rgba(232, 40, 26, 0.45)"
+          }
+        }
+      ],
+      "icons": [
+        "bolt",
+        "cart"
+      ],
+      "cards": [
+        {
+          "selector": ".cditem",
+          "count": 3,
+          "styles": {
+            "background": "rgba(255, 255, 255, 0.07)",
+            "padding": "9px",
+            "border-radius": "11px"
+          }
+        }
+      ]
+    },
+    {
+      "name": "gallery",
+      "selector": "#gallery",
+      "tag": "section",
+      "classes": [],
+      "text": "Food Showcase Let's See Our Fast Food Gourmet Burgers Wood-Fired Pizza Crispy Fried Chicken Sweet Desserts Fresh Wraps & Rolls",
+      "styles": {
+        "background": "var(--light)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Let's See Our Fast Food",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "Food Showcase",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [
+        {
+          "src": "stores/sarab/img/portfolio/work1.jpg",
+          "alt": "Burgers"
+        },
+        {
+          "src": "stores/sarab/img/portfolio/work2.jpg",
+          "alt": "Pizza"
+        },
+        {
+          "src": "stores/sarab/img/portfolio/work3.jpg",
+          "alt": "Chicken"
+        },
+        {
+          "src": "stores/sarab/img/portfolio/work4.jpg",
+          "alt": "Desserts"
+        },
+        {
+          "src": "stores/sarab/img/portfolio/work5.jpg",
+          "alt": "Wraps"
+        }
+      ],
+      "buttons": [],
+      "icons": [
+        "expand-alt"
+      ],
+      "cards": [
+        {
+          "selector": ".gitem",
+          "count": 5,
+          "styles": {
+            "border-radius": "14px",
+            "width": "100%",
+            "height": "100%",
+            "object-fit": "cover"
+          }
+        }
+      ]
+    },
+    {
+      "name": "history",
+      "selector": "#history",
+      "tag": "section",
+      "classes": [],
+      "text": "Our Journey A History of Restaurant From humble beginnings to the city's most beloved restaurant - every chapter written with passion. 2012 Evolution of Restaurants Sarab opens its first 20-seat diner on Flavor Street. Within 3 months, lines stretch around the block every evening as word of our food spreads. 2012 Evolution of Restaurants Sarab opens its first 20-seat diner on Flavor Street. Within 3 months, lines stretch around the block every evening as word of our food spreads. 2015 Fine Dinin",
+      "styles": {
+        "background": "var(--cream)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "A History of Restaurant",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "Evolution of Restaurants",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "Evolution of Restaurants",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "Fine Dining & The Concept",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "Fine Dining & The Concept",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "Modern Fast Food Origins",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "Modern Fast Food Origins",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "National Expansion",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "National Expansion",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "Our Journey",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [],
+      "buttons": [],
+      "icons": [],
+      "cards": []
+    },
+    {
+      "name": "chefs",
+      "selector": "#chefs",
+      "tag": "section",
+      "classes": [],
+      "text": "The Culinary Team Meet Our Expert Chefs Alice Mortal Head Chef 12 years experience Michael Corn Grill Master 8 years experience Faz Chowdel Pastry Chef 10 years experience William Latnum Pizza Artisan 9 years experience",
+      "styles": {
+        "background": "#fff",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Meet Our Expert Chefs",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "The Culinary Team",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [
+        {
+          "src": "stores/sarab/img/chefs/1.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/chefs/2.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/chefs/3.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/chefs/4.jpg",
+          "alt": ""
+        }
+      ],
+      "buttons": [],
+      "icons": [],
+      "cards": [
+        {
+          "selector": ".chcard",
+          "count": 4,
+          "styles": {
+            "background": "#fff",
+            "border-radius": "18px",
+            "box-shadow": "var(--shadow-lg)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "hours",
+      "selector": "#hours",
+      "tag": "section",
+      "classes": [],
+      "text": "Opening Hours We're Open For You Monday - Tuesday Closed Wednesday - Thursday 09:00 AM - 10:00 PM Friday 09:00 AM - 11:00 PM Saturday 10:00 AM - 11:30 PM Sunday 11:00 AM - 09:00 PM Order Online Get hot food delivered in 25 minutes Order Now ? Find Us Address42 Flavor Street, NY Phone+1 (800) 123-4567 Emailhello@sarabfood.com",
+      "styles": {
+        "background": "linear-gradient(135deg, var(--green), #1a4a35)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "We're Open For You",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        },
+        {
+          "tag": "h4",
+          "text": "Order Online",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.5rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        },
+        {
+          "tag": "h5",
+          "text": "Find Us",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.25rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "Opening Hours",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [],
+      "buttons": [
+        {
+          "text": "Order Now ?",
+          "href": "#menu",
+          "classes": [
+            "btnw"
+          ],
+          "styles": {
+            "display": "inline-block",
+            "background": "#fff",
+            "color": "var(--primary)",
+            "font-size": "0.88rem",
+            "font-weight": "700",
+            "padding": "11px 28px",
+            "border-radius": "50px",
+            "box-shadow": "0 10px 24px rgba(0, 0, 0, 0.2)"
+          }
+        }
+      ],
+      "icons": [
+        "calendar",
+        "truck",
+        "map-pin",
+        "phone",
+        "envelope"
+      ],
+      "cards": [
+        {
+          "selector": ".hrsrow",
+          "count": 8,
+          "styles": {
+            "display": "flex",
+            "align-items": "center",
+            "justify-content": "space-between",
+            "padding": "13px 0"
+          }
+        },
+        {
+          "selector": ".hrscard",
+          "count": 2,
+          "styles": {
+            "background": "rgba(255, 255, 255, 0.08)",
+            "padding": "28px",
+            "border-radius": "18px"
+          }
+        }
+      ]
+    },
+    {
+      "name": "testimonials",
+      "selector": "#testimonials",
+      "tag": "section",
+      "classes": [],
+      "text": "What People Say Our Customers Feedback \" Honestly the best burgers I've ever had. The smash burger is incredible - perfectly crispy edges, juicy inside, and those pickles! We come every Friday now. Monica Wilber Regular Customer \" Ordered delivery and the food arrived hot and fresh in 22 minutes. Portions are generous. Sarab has become my go-to comfort food spot without question. Cameron Fox Food Blogger \" The truffle pasta blew my mind. I didn't expect that quality from a fast food place. Great",
+      "styles": {
+        "background": "#fff",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Our Customers Feedback",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "What People Say",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [
+        {
+          "src": "stores/sarab/img/testimonial/1.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/testimonial/2.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/testimonial/3.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/testimonial/4.jpg",
+          "alt": ""
+        }
+      ],
+      "buttons": [],
+      "icons": [
+        "star"
+      ],
+      "cards": [
+        {
+          "selector": ".tescard",
+          "count": 4,
+          "styles": {
+            "background": "var(--cream)",
+            "padding": "28px",
+            "border-radius": "18px",
+            "box-shadow": "var(--shadow)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reservation",
+      "selector": "#reservation",
+      "tag": "section",
+      "classes": [],
+      "text": "Book a Table Make a Reservation Reserve your table for a memorable dining experience. We recommend booking 24 hours in advance for weekend evenings. Contact Info We're happy to help you plan the perfect dining experience. Opening HoursWed - Sun, 9 AM - 11 PM Call for Booking+1 (800) 123-4567 Group DiningSpecial menus for 10+ guests Location42 Flavor Street, NY Full Name * Phone Number * Email Address * Number of Guests * 1 Person 2 People 3 - 4 People 5 - 6 People 7 -10 People 10+ People Date * ",
+      "styles": {
+        "background": "var(--light)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Make a Reservation",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        },
+        {
+          "tag": "h4",
+          "text": "Contact Info",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.5rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "Book a Table",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [],
+      "buttons": [
+        {
+          "text": "Confirm Reservation",
+          "href": "",
+          "classes": [
+            "btn-red",
+            "w-100",
+            "justify-content-center"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "justify-content": "center",
+            "gap": "9px",
+            "background": "linear-gradient(135deg, var(--primary), #c01e12)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.93rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "0",
+            "padding": "14px 32px",
+            "border-radius": "50px",
+            "box-shadow": "0 14px 34px rgba(232, 40, 26, 0.45)",
+            "width": "100%"
+          }
+        }
+      ],
+      "icons": [
+        "clock",
+        "phone-alt",
+        "users",
+        "map-pin",
+        "calendar-check",
+        "check-circle"
+      ],
+      "cards": []
+    },
+    {
+      "name": "blog",
+      "selector": "#blog",
+      "tag": "section",
+      "classes": [],
+      "text": "News & Updates Our Latest Blog Posts 14Mar Food & Health Healthy Fast Food: A Myth or Beautiful Reality James Writer24 Comments Read More 28Feb Food Science Is Fast Food Getting Healthier? Here's What We Found Sarah Grain18 Comments Read More 05Jan Recipes Innovative Hot Chickpeas Flake Crackin' Recipe at Home Chef Marcus32 Comments Read More",
+      "styles": {
+        "background": "var(--light)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Our Latest Blog Posts",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "News & Updates",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [
+        {
+          "src": "stores/sarab/img/blog/1.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/blog/2.jpg",
+          "alt": ""
+        },
+        {
+          "src": "stores/sarab/img/blog/3.jpg",
+          "alt": ""
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Healthy Fast Food: A Myth or Beautiful Reality",
+          "href": "#",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Read More",
+          "href": "#",
+          "classes": [
+            "blmore"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "gap": "5px",
+            "color": "var(--dark)",
+            "font-size": "0.8rem",
+            "font-weight": "600"
+          }
+        },
+        {
+          "text": "Is Fast Food Getting Healthier? Here's What We Found",
+          "href": "#",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Read More",
+          "href": "#",
+          "classes": [
+            "blmore"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "gap": "5px",
+            "color": "var(--dark)",
+            "font-size": "0.8rem",
+            "font-weight": "600"
+          }
+        },
+        {
+          "text": "Innovative Hot Chickpeas Flake Crackin' Recipe at Home",
+          "href": "#",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Read More",
+          "href": "#",
+          "classes": [
+            "blmore"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "gap": "5px",
+            "color": "var(--dark)",
+            "font-size": "0.8rem",
+            "font-weight": "600"
+          }
+        }
+      ],
+      "icons": [
+        "user",
+        "comment",
+        "arrow-right"
+      ],
+      "cards": [
+        {
+          "selector": ".blcard",
+          "count": 3,
+          "styles": {
+            "background": "#fff",
+            "border-radius": "18px",
+            "box-shadow": "var(--shadow-lg)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "newsletter",
+      "selector": "#newsletter",
+      "tag": "section",
+      "classes": [],
+      "text": "Stay Connected Subscribe & Get Exclusive Deals Get 15% off your first order plus early access to new menu items Subscribe No spam, unsubscribe anytime.",
+      "styles": {
+        "background": "linear-gradient(135deg, var(--primary), #8b0000)",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Subscribe & Get Exclusive Deals",
+          "classes": [
+            "mb-3"
+          ],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "2rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": "1rem"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "Stay Connected",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [],
+      "buttons": [
+        {
+          "text": "Subscribe",
+          "href": "",
+          "classes": [
+            "nlbtn"
+          ],
+          "styles": {
+            "background": "var(--secondary)",
+            "color": "var(--dark)",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.9rem",
+            "font-weight": "700",
+            "line-height": "inherit",
+            "margin": "0",
+            "padding": "14px 26px",
+            "border-radius": "12px",
+            "box-shadow": "0 6px 18px rgba(0, 0, 0, 0.2)",
+            "width": "100%"
+          }
+        }
+      ],
+      "icons": [
+        "paper-plane",
+        "lock"
+      ],
+      "cards": []
+    },
+    {
+      "name": "contact-section",
+      "selector": "#contact-section",
+      "tag": "section",
+      "classes": [],
+      "text": "Get In Touch Contact Us Have a question, feedback, or want to plan a special event? We'd love to hear from you. Let's Talk We typically respond within 2 hours during business hours. Address42 Flavor Street, Manhattan,New York, NY 10001 Phone+1 (800) 123-4567 Emailhello@sarabfood.com Working HoursWed - Sun: 9 AM - 11 PM Your Name * Email Address * Phone Number Subject * General Inquiry Catering & Events Feedback Partnership Media & Press Message * Send Message Message sent! We'll reply within 2 h",
+      "styles": {
+        "background": "#fff",
+        "padding": "55px 0"
+      },
+      "headings": [
+        {
+          "tag": "h2",
+          "text": "Contact Us",
+          "classes": [
+            "stitle"
+          ],
+          "styles": {
+            "color": "var(--primary)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.8rem",
+            "font-weight": "900",
+            "line-height": "1.2",
+            "margin-bottom": "12px"
+          }
+        },
+        {
+          "tag": "h4",
+          "text": "Let's Talk",
+          "classes": [],
+          "styles": {
+            "color": "var(--dark)",
+            "font-family": "\"Playfair Display\", serif",
+            "font-size": "1.5rem",
+            "font-weight": "500",
+            "line-height": "1.2",
+            "margin-bottom": ".5rem"
+          }
+        }
+      ],
+      "labels": [
+        {
+          "text": "Get In Touch",
+          "classes": [
+            "slbl"
+          ],
+          "styles": {
+            "display": "block",
+            "color": "var(--primary)",
+            "font-family": "\"Dancing Script\", cursive",
+            "font-size": "1.35rem",
+            "margin-bottom": "4px"
+          }
+        }
+      ],
+      "images": [],
+      "buttons": [
+        {
+          "text": "Send Message",
+          "href": "",
+          "classes": [
+            "btn-red"
+          ],
+          "styles": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "gap": "9px",
+            "background": "linear-gradient(135deg, var(--primary), #c01e12)",
+            "color": "#fff",
+            "font-family": "\"Poppins\", sans-serif",
+            "font-size": "0.93rem",
+            "font-weight": "600",
+            "line-height": "inherit",
+            "margin": "0",
+            "padding": "14px 32px",
+            "border-radius": "50px",
+            "box-shadow": "0 14px 34px rgba(232, 40, 26, 0.45)"
+          }
+        }
+      ],
+      "icons": [
+        "map-pin",
+        "phone-alt",
+        "envelope",
+        "clock",
+        "paper-plane",
+        "check-circle"
+      ],
+      "cards": [
+        {
+          "selector": ".ctitem",
+          "count": 4,
+          "styles": {
+            "display": "flex",
+            "align-items": "flex-start",
+            "gap": "13px",
+            "margin-bottom": "20px"
+          }
+        }
+      ]
+    },
+    {
+      "name": "footer-17",
+      "selector": "footer",
+      "tag": "footer",
+      "classes": [],
+      "text": "Sarab We bring the world's finest flavors together in a fast, friendly, and affordable experience. Every meal crafted with love. Quick Links Home About Us Our Menu Reservation Blog Contact Our Menu Burgers Pizza Fried Chicken Wraps & Rolls Pasta Desserts Get In Touch Address42 Flavor Street, Manhattan, NY 10001 Phone+1 (800) 123-4567 Emailhello@sarabfood.com HoursWed - Sun: 09 AM - 11 PM © 2026 Sarab Restaurant. All Rights Reserved by Bestwpware. Made with Distributed by ThemeWagon Privacy Polic",
+      "styles": {
+        "background": "var(--dark)",
+        "padding": "68px 0 0"
+      },
+      "headings": [],
+      "labels": [],
+      "images": [],
+      "buttons": [
+        {
+          "text": "Home",
+          "href": "#hero",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "About Us",
+          "href": "#about",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Our Menu",
+          "href": "#menu",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Reservation",
+          "href": "#reservation",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Blog",
+          "href": "#blog",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Contact",
+          "href": "#contact-section",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Burgers",
+          "href": "#menu",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Pizza",
+          "href": "#menu",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Fried Chicken",
+          "href": "#menu",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Wraps & Rolls",
+          "href": "#menu",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Pasta",
+          "href": "#menu",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Desserts",
+          "href": "#menu",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Bestwpware",
+          "href": "https://bestwpware.com/",
+          "classes": [
+            "mx-0",
+            "fw-bold",
+            "text-success"
+          ],
+          "styles": {
+            "color": "rgba(var(--bs-success-rgb),var(--bs-text-opacity))",
+            "font-weight": "700"
+          }
+        },
+        {
+          "text": "ThemeWagon",
+          "href": "https://themewagon.com",
+          "classes": [
+            "mx-0",
+            "fw-bold",
+            "text-success"
+          ],
+          "styles": {
+            "color": "rgba(var(--bs-success-rgb),var(--bs-text-opacity))",
+            "font-weight": "700"
+          }
+        },
+        {
+          "text": "Privacy Policy",
+          "href": "#",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Terms",
+          "href": "#",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        },
+        {
+          "text": "Cookies",
+          "href": "#",
+          "classes": [],
+          "styles": {
+            "color": "rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1))"
+          }
+        }
+      ],
+      "icons": [
+        "chevron-right",
+        "map-pin",
+        "phone-alt",
+        "envelope",
+        "clock",
+        "heart"
+      ],
+      "cards": []
+    }
+  ]
+}

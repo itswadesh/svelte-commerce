@@ -81,7 +81,7 @@
 						<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
 							<div class="flex items-center justify-between border-b border-border px-5 py-4">
 								<div class="flex items-center space-x-3">
-									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
 										Contact Details
 									</h2>
 								</div>
@@ -166,7 +166,7 @@
 								{#if cartState.cart.shippingAddress}
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
 												Delivery Address
 											</h2>
 											{#if !addressModule.loadingForSaveToCart}
@@ -215,7 +215,7 @@
 								{:else}
 									<div class="p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+											<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: var(--font-body);">
 												Shipping Address
 											</h2>
 
@@ -254,7 +254,7 @@
 								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm transition-all duration-300">
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+											<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: var(--font-body);">
 												Billing Address
 											</h2>
 											{#if !addressModule.loadingForSaveToCart}
@@ -322,7 +322,7 @@
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+								<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: var(--font-body);">
 									Price Summary
 								</h2>
 								<div class="h-1 w-12 bg-primary"></div>

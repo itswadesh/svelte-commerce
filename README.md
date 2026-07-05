@@ -2,6 +2,8 @@
 <h2>Svelte Commerce</h2>
 </div>
 
+`now build a new theme based on {WEBSITE_NAME}`
+
 <div align="center">
 
 **The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**

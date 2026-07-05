@@ -38,7 +38,6 @@
 	let containerRef: HTMLDivElement
 	let usingFallback = $state(false) // Track if we're using fallback
 
-	//$inspect(page?.data?.store, usingFallback)
 	// Transparent placeholder
 	const transparentPlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 

@@ -27,7 +27,8 @@ const config: Config = {
 			}
 		},
 		fontFamily: {
-			sans: ['Montserrat', ...fontFamily.sans]
+			sans: ['var(--font-body)', ...fontFamily.sans],
+			serif: ['var(--font-heading)', ...fontFamily.serif]
 		},
 		extend: {
 			spacing: {
