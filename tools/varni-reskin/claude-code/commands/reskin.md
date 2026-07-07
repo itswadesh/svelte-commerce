@@ -122,6 +122,10 @@ Before calling the theme complete, run an originality check: search the codebase
 names, domains, email addresses, phone numbers, copied policy/review text, source copyright strings,
 and unlicensed asset filenames. Replace any remaining source identity or copied content.
 
+Before calling the theme complete, verify the commerce flow works without errors: PLP/category or
+`/products`, PDP/product detail, add to cart, cart page quantity/remove/subtotal behavior, checkout
+address/payment/process/success flow, and any API/localStorage state needed by those pages.
+
 Design migration safety rules:
 - The existing SvelteKit app is the logic source. Do not rewrite product listing, product detail,
   cart, checkout, auth, search, categories, account pages, API calls, routing, stores, or data
@@ -136,6 +140,9 @@ Design migration safety rules:
 - When applying the theme or building pages, run build and use Playwright/screenshots when available
   to compare home, category/product listing, product detail, cart, checkout, and login/register.
   Repair only the responsible component for each mismatch.
+- Exercise the functional shopping path in the browser or tests before reporting completion: PLP,
+  PDP, add to cart, cart, checkout address/payment/process/success. Fix console errors, navigation
+  errors, failed requests, and broken cart/checkout state before calling the theme done.
 
 After it finishes, report:
 - Where the generated theme files landed.
