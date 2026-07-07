@@ -3,6 +3,10 @@
 Build a complete, working demo e-commerce storefront for `[BRAND NAME]`, a `[PRODUCT CATEGOR]`. It should feel production-grade, not like a mockup. Buttons
 should perform real actions, with state persisted in localStorage where appropriate.
 
+Do not use exact real logos, copied logo marks, or lookalike logo artwork. Replace logo marks with
+the website name as a text wordmark. By default, rename the brand/site to `Website-$1`, where `$1`
+is the user-provided or inferred source brand/site identifier.
+
 Before coding, establish the strategy and visual system:
 
 - Write `PRODUCT.md` covering users, success criteria, brand personality, anti-references, and
@@ -37,6 +41,7 @@ Run a structured critique after the core flow exists:
 Verify at desktop, tablet, and mobile widths using measurements and DOM checks:
 
 - `scrollWidth <= clientWidth`
+- responsive layout at desktop, laptop, tablet, and mobile widths
 - computed contrast ratios
 - class/state changes after clicks
 - form validation
@@ -45,4 +50,5 @@ Verify at desktop, tablet, and mobile widths using measurements and DOM checks:
 
 Keep one consistent design system. Borrow only useful ideas from references, then rebuild them
 inside the project's own rules. Never copy a reference's colors, branding, urgency tactics, domain,
-copy, logo, or identity wholesale.
+copy, logo, or identity wholesale. Fix overflowing layouts, images, grids, absolute elements, and
+long text instead of hiding unresolved horizontal overflow.

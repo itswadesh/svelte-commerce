@@ -59,6 +59,9 @@ Add new themes as selectable implementations and resolve the active theme at run
   source logo, brand name, domain name, email addresses, phone numbers, physical address, copyright
   text, and other unique identity marks with the target store/theme identity or a clearly different
   placeholder. Do not call a theme done while it still uses a previous theme's header or footer.
+- Do not use exact real logos, copied logo marks, or lookalike logo artwork. Replace logo marks with
+  the website name as a text wordmark. By default, rename the brand/site to `Website-$1`, where `$1`
+  is the user-provided or inferred source brand/site identifier.
 - Avoid copyright and plagiarism risk. Reference sites, screenshots, static templates, and competitor
   designs are inspiration and analysis inputs only. Absorb layout ideas, interaction patterns, and
   commerce requirements, then rebuild them inside this app's own theme identity and design system.
@@ -189,6 +192,10 @@ button/icon styling away from the source design. Do not repeat that mistake.
 - Before calling a theme complete, verify the commerce flow works without errors: PLP/category or
   `/products`, PDP/product detail, add to cart, cart page quantity/remove/subtotal behavior, checkout
   address/payment/process/success flow, and any API/localStorage state needed by those pages.
+- Before calling a theme complete, verify the generated website is mobile responsive at desktop,
+  laptop, tablet, and mobile widths and has no horizontal scrollbar. Check `scrollWidth <=
+  clientWidth` and fix overflowing layouts, images, grids, absolute elements, and long text instead
+  of hiding unresolved overflow.
 
 ## Design Migration System Rules
 This work is not "convert static HTML/CSS into SvelteKit ecommerce logic." It is a design migration

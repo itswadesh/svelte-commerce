@@ -39,6 +39,9 @@ work follows this reskin:
 - Use only SvelteKit, existing Svelte components, shadcn, Tailwind, and Svelte 5 runes. Do not create
   new pages/components when an existing one should be modified or reused. Use exact design font sizes
   when specified, and show loading indicators inside clicked/async buttons.
+- Do not use exact real logos, copied logo marks, or lookalike logo artwork. Replace logo marks with
+  the website name as a text wordmark. By default, rename the brand/site to `Website-$1`, where `$1`
+  is the user-provided or inferred source brand/site identifier.
 - For new designs, apply settings colors first (`primary`, `primary foreground`, `secondary`,
   `secondary foreground`, `accent`, `accent foreground`), then build header/footer, product
   component, home/PLP/PDP in parallel, and all other pages in parallel.
@@ -90,6 +93,10 @@ work follows this reskin:
   font weight, and icon size/stroke/fill.
 - Prevent the known drift pattern: visible accent sections, CTA card colors, semantic icons,
   typography sizes, and card counts must come from the source contract, not approximation.
+- Before calling generated website work complete, verify desktop, laptop, tablet, and mobile widths
+  are responsive and do not create a horizontal scrollbar. Check `scrollWidth <= clientWidth`, then
+  fix overflowing layouts, images, grids, absolute elements, and long text instead of hiding
+  unresolved overflow.
 
 When homepage/component work follows this reskin, build in this order:
 1. Micro components first: buttons, icon buttons, badges, section labels, price text, rating rows,
