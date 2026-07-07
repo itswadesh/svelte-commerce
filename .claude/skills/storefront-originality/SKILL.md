@@ -60,6 +60,41 @@ For a complete demo ecommerce storefront, include working versions of:
 - Mobile navigation with a real drawer/menu containing the same core links as desktop.
 - Motion that respects `prefers-reduced-motion` and leaves content visible when JavaScript is absent.
 
+## Existing SvelteKit Pages
+
+When creating or applying a new theme in this project, account for the current route inventory:
+
+- `/`
+- `/[slug]`
+- `/products`
+- `/products/[slug]`
+- `/auth/change-password`
+- `/auth/forgot-password`
+- `/auth/reset-password`
+- `/auth/signup`
+- `/blog`
+- `/blog/[slug]`
+- `/checkout/address`
+- `/checkout/cart`
+- `/contact-us`
+- `/faqs`
+- `/my`
+- `/my/address`
+- `/my/addresses/[id]`
+- `/my/orders`
+- `/my/orders/[id]`
+- `/my/profile`
+- `/my/wishlist`
+- `/p/[slug]`
+- `/privacy-policy`
+- `/profile`
+- `/refund-policy`
+- `/shipping-policy`
+- `/terms-and-conditions`
+
+Do not leave major route families with old-theme chrome, broken footer links, or unstyled default
+layouts.
+
 ## Verification
 
 Before calling the work complete:

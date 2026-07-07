@@ -123,3 +123,35 @@ theme would clobber the previous theme's design doc.
 5. Before calling the theme complete, run an originality check: search the codebase for source brand
    names, domains, email addresses, phone numbers, copied policy/review text, and unlicensed asset
    filenames. Replace any remaining source identity or copied content.
+
+## Existing SvelteKit Pages To Cover
+
+When creating or applying a new theme, account for these current routes:
+
+- `/`
+- `/[slug]`
+- `/products`
+- `/products/[slug]`
+- `/auth/change-password`
+- `/auth/forgot-password`
+- `/auth/reset-password`
+- `/auth/signup`
+- `/blog`
+- `/blog/[slug]`
+- `/checkout/address`
+- `/checkout/cart`
+- `/contact-us`
+- `/faqs`
+- `/my`
+- `/my/address`
+- `/my/addresses/[id]`
+- `/my/orders`
+- `/my/orders/[id]`
+- `/my/profile`
+- `/my/wishlist`
+- `/p/[slug]`
+- `/privacy-policy`
+- `/profile`
+- `/refund-policy`
+- `/shipping-policy`
+- `/terms-and-conditions`
