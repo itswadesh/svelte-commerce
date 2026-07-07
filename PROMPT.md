@@ -49,6 +49,39 @@ project.
   store locator, gift cards, size guide, order tracking, terms, privacy, and cookie preferences.
 - Mobile nav: real drawer/menu with the same core links as desktop.
 
+## Existing SvelteKit Page Inventory
+
+When creating or applying a new theme, account for these existing routes. Do not leave major pages
+with old-theme chrome, broken footer links, or unstyled default layouts.
+
+- `/`
+- `/[slug]`
+- `/products`
+- `/products/[slug]`
+- `/auth/change-password`
+- `/auth/forgot-password`
+- `/auth/reset-password`
+- `/auth/signup`
+- `/blog`
+- `/blog/[slug]`
+- `/checkout/address`
+- `/checkout/cart`
+- `/contact-us`
+- `/faqs`
+- `/my`
+- `/my/address`
+- `/my/addresses/[id]`
+- `/my/orders`
+- `/my/orders/[id]`
+- `/my/profile`
+- `/my/wishlist`
+- `/p/[slug]`
+- `/privacy-policy`
+- `/profile`
+- `/refund-policy`
+- `/shipping-policy`
+- `/terms-and-conditions`
+
 ## Final Checks
 
 - Search for source brand names, domains, emails, phone numbers, addresses, copied policy/review

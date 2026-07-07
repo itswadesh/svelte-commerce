@@ -248,6 +248,38 @@ If a pattern appears two or more times, extract or reuse a component instead of 
 Before reporting done, verify the hierarchy still holds: primitives first, reusable components next,
 layout chrome next, page sections next, final page composition last.
 
+## Existing SvelteKit Page Inventory
+When creating or applying a new theme, account for these current routes and avoid leaving major route
+families with old-theme chrome, broken footer links, or unstyled default layouts:
+
+- `/`
+- `/[slug]`
+- `/products`
+- `/products/[slug]`
+- `/auth/change-password`
+- `/auth/forgot-password`
+- `/auth/reset-password`
+- `/auth/signup`
+- `/blog`
+- `/blog/[slug]`
+- `/checkout/address`
+- `/checkout/cart`
+- `/contact-us`
+- `/faqs`
+- `/my`
+- `/my/address`
+- `/my/addresses/[id]`
+- `/my/orders`
+- `/my/orders/[id]`
+- `/my/profile`
+- `/my/wishlist`
+- `/p/[slug]`
+- `/privacy-policy`
+- `/profile`
+- `/refund-policy`
+- `/shipping-policy`
+- `/terms-and-conditions`
+
 ## Visual Verification And Repair Loop
 Visual comparison is mandatory for applied themes and homepage/component work when a browser can run
 the app.
