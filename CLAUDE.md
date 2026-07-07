@@ -1,4 +1,22 @@
-﻿# Reskin rules (varni-reskin)
+﻿# Link Conventions
+
+Always emit clean, SEO-friendly listing URLs. Do NOT link to
+`/products?search=<term>`; use the bare slug route instead: `/<term>`.
+
+- `/products?search=pendant` → `/pendant`
+- `/products?search=gold-ring` → `/gold-ring`
+
+The bare `(www)/[slug]` route resolves the slug as a product listing (Meilisearch,
+`categories: slug`), so `/pendant` is the canonical equivalent of a term/category search.
+Apply this in `href`s, nav/menu links, category chips, search suggestions, and any generated
+markup. This is a standing rule — do not ask about it again.
+
+Keep real query params only when they carry non-term filters that the slug route reads from the
+querystring (`price`, `tags`, `originCountry`, `keywords`, `page`) — e.g. `/pendant?page=2`.
+The `products` route with its own routing/filter UI (the full catalogue page) is exempt; this rule
+targets term/category shortcut links, not that page's internal state.
+
+# Reskin rules (varni-reskin)
 
 This repo gets re-themed per client using the varni-reskin pipeline in `tools/varni-reskin/`.
 Project defaults live in `reskin.config.json` at the project root. Always let the tool read them
