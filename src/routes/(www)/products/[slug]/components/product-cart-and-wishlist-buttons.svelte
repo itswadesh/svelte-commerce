@@ -7,7 +7,6 @@
 	import { fly } from 'svelte/transition'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import { quintOut } from 'svelte/easing'
-	import { goto } from '$app/navigation'
 
 	const { showWishlist = true } = $props()
 
@@ -18,7 +17,7 @@
 
   function handleClick() {
     if (productState.cartState.showCheckout)
-      goto('/checkout/cart')
+      productState.cartState.isOpen = true
     else
       productState.handleAddToCart()
   }
@@ -68,9 +67,9 @@
 				</p>
 			</div>
 			<Button
-				href="/checkout/cart"
 				size="sm"
 				class="px-4"
+				onclick={() => (productState.cartState.isOpen = true)}
 			>
 				View Bag
 			</Button>
