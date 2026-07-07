@@ -17,6 +17,15 @@
 	let ownsHistoryEntry = false
 	let isNavigatingFromCart = false
 
+	// Auto-open the slide-out cart on any successful add/update action.
+	// `showCheckout` is flipped to true by the core store's add()/update() on a
+	// user action, but is NOT set during initial cart hydration, so watching it
+	// opens the drawer on "add to bag" without spurious opens on page load.
+	// Seed the baseline to the mount-time value so only a false→true transition
+	// that happens while this component is mounted opens the drawer (avoids a
+	// spurious open when returning to a shop page while showCheckout is still on).
+	let prevShowCheckout = !!cartState.showCheckout
+
 	function handleBrowserBack() {
 		if (!cartState.isOpen || !ownsHistoryEntry) return
 		ownsHistoryEntry = false
@@ -47,6 +56,14 @@
 		if (typeof window !== 'undefined' && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
 			history.back()
 		}
+	})
+
+	$effect(() => {
+		const showCheckout = !!cartState.showCheckout
+		if (showCheckout && !prevShowCheckout && !cartState.isOpen) {
+			cartState.isOpen = true
+		}
+		prevShowCheckout = showCheckout
 	})
 
 	function slideFadeTopRight(node: Element, params: { delay?: number; duration?: number; easing?: any; transformOrigin?: any }) {
@@ -114,7 +131,12 @@
 		>
 			<div class="relative z-50 flex h-full flex-col justify-between bg-white p-4">
 				<div class="sm:mx-3">
-					<h2 class="mb-4 mt-4 text-xl font-semibold text-gray-900">My Shopping Cart</h2>
+					<h2 class="mb-4 mt-4 text-xl font-semibold text-gray-900">
+						Your Cart
+						{#if cartState.cart?.lineItems?.length > 0}
+							<span class="font-normal text-gray-400">({cartState.cart.qty})</span>
+						{/if}
+					</h2>
 					<Button variant="ghost" size="icon" class="absolute right-4 top-4 rounded-full" aria-label="close cart" onclick={onClose}>
 						<X class="size-5" />
 					</Button>
@@ -134,12 +156,12 @@
 					<div class="space-y-1">
 						{#if cartState.cart?.lineItems?.length > 0}
 							<div class="mx-4 flex items-center justify-between">
-								<p class="text-xs font-bold text-muted sm:text-base">Total</p>
+								<p class="text-sm font-medium text-gray-700 sm:text-base">Subtotal</p>
 								<p class="text-base font-bold text-gray-900 sm:text-xl">
-									{formatPrice(cartState?.cart?.total, storeData?.currencyCode)}
+									{formatPrice(cartState?.cart?.subtotal ?? cartState?.cart?.total, storeData?.currencyCode)}
 								</p>
 							</div>
-							<p class="mx-4 text-right text-xs font-bold tracking-tighter text-gray-400">MRP includes of all taxes</p>
+							<p class="mx-4 mt-1 text-xs text-gray-400">Shipping &amp; taxes calculated at checkout.</p>
 						{:else}
 							<div class="flex min-h-[80vh] flex-col items-center justify-center gap-3 bg-white">
 								<div class="mb-6 rounded-full bg-gray-50 p-8 ring-1 ring-gray-100">
@@ -153,19 +175,24 @@
 							</div>
 						{/if}
 					</div>
-					{#if cartState?.cart?.total >= 0 && cartState.cart?.lineItems?.length > 0}
-						<div class="mx-4 mt-6 flex justify-between gap-3 pb-6 md:pb-0">
-							<Button variant="outline" disabled={!!cartState.isUpdatingCart} onclick={onContinueShopping} class="w-[48%] py-6">Continue</Button>
+					{#if cartState.cart?.lineItems?.length > 0}
+						<div class="mx-4 mt-5 pb-6 md:pb-0">
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								onclick={(e) => {
 									e.stopPropagation()
 									proceedToCart()
 								}}
-								class="w-[48%] py-6"
+								class="w-full py-6 text-base font-semibold"
 							>
-								Proceed
+								Checkout
 							</Button>
+							<button
+								class="mt-3 w-full text-center text-xs font-medium text-gray-500 hover:text-gray-900"
+								onclick={onContinueShopping}
+							>
+								Continue shopping
+							</button>
 						</div>
 					{/if}
 				</div>
