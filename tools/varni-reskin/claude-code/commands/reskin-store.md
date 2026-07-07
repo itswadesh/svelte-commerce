@@ -49,13 +49,29 @@ product-card, product-grid, footer, newsletter, or announcement:
   `themes/<store>/DESIGN.md` (one DESIGN.md per theme, kept inside the theme folder — never a shared
   root `DESIGN.md`, since each theme would overwrite the last), identify every section, create a
   plan, list assets, explain responsive behavior, and cover structure, markup, CSS, interactions,
-  breakpoints, and final optimization.
+  breakpoints, and final optimization. Include a copyright/plagiarism checklist for identity, copy,
+  images, icons, reviews, policies, and domains.
 - Use only SvelteKit, existing Svelte components, shadcn, Tailwind, and Svelte 5 runes. Do not create
   replacement pages/components when an existing one should be modified or reused. Use exact design
   font sizes when specified, and show loading indicators inside clicked/async buttons.
 - For new designs, apply settings colors first (`primary`, `primary foreground`, `secondary`,
-  `secondary foreground`, `accent`, `accent foreground`), then build header/footer, product
-  component, home/PLP/PDP in parallel, and all other pages in parallel.
+  `secondary foreground`, `accent`, `accent foreground`), then clone and build the source
+  header/footer layout, product component, home/PLP/PDP in parallel, and all other pages in parallel.
+- Header and footer are mandatory theme sections, but source brand identity must not be copied.
+  Extract and implement the source desktop/mobile header, navigation, mobile drawer/menu,
+  announcement/top bars, logo placement, cart/account/search
+  actions, footer columns, newsletter/legal rows, social/payment links, responsive breakpoints,
+  spacing, colors, borders, typography, and hover/focus states. Replace the source logo, brand name,
+  domain name, email addresses, phone numbers, physical address, copyright text, and other unique
+  identity marks with the target store/theme identity or a clearly different placeholder. Do not call
+  the theme complete while the previous theme's header, navigation, mobile nav, or footer is still
+  visible.
+- Avoid copyright and plagiarism risk. Use the source only to understand layout patterns,
+  interaction ideas, component roles, and commerce expectations. Do not copy proprietary logos,
+  brand names, domains, product names, campaign slogans, long-form copy, photography, illustrations,
+  icon sets, reviews, policies, urgency tactics, or distinctive trade dress wholesale. Rebuild the
+  result inside this project's own theme identity and design system with original target-store
+  content, licensed/local assets, API data, or clearly different placeholders.
 - Read the target HTML snippet and the existing component.
 - Use a component mapping layer before editing app files. Map static blocks to existing Svelte
   components and include confidence plus intended visual fields to apply, such as layout, image
@@ -108,13 +124,19 @@ product-card, product-grid, footer, newsletter, or announcement:
   testimonial cards, newsletter forms, and floating hero info cards. They should accept data/slots
   where appropriate instead of duplicating markup.
 - Build layout components next: header, navigation, mobile nav, footer, announcement bars,
-  containers, and section wrappers.
+  containers, and section wrappers. Clone the current source theme's header/footer layout rather
+  than reusing the previous theme chrome, but replace the source logo, names, domain, and contact
+  identity.
 - Build page sections next: hero, categories, featured products/menu, about/story, offer,
   testimonials, and newsletter.
 - Assemble page contents last. Route files should mostly compose sections and pass data; repeated UI
   belongs in reusable components.
 - If a visual pattern appears two or more times, extract or reuse a component instead of copying the
   markup into page files.
+
+Before calling the theme complete, run an originality check: search the codebase for source brand
+names, domains, email addresses, phone numbers, copied policy/review text, source copyright strings,
+and unlicensed asset filenames. Replace any remaining source identity or copied content.
 - Rewrite only the markup structure and classes to match the target design. Use token-based Tailwind
   classes (`bg-primary`, `text-foreground`, `font-heading`, `rounded`, `border-border`) unless source
   fidelity requires a local section-specific style already represented in the source CSS.

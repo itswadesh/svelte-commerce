@@ -8,6 +8,24 @@ theme would clobber the previous theme's design doc.
 
 ## Requirements
 
+- Every new theme must clone the source header and footer layout as first-class design sections, but
+  must not copy the source brand identity. Extract their desktop and mobile HTML/CSS, nav structure,
+  logo placement, announcement/top bars, menus,
+  cart/account/search actions, social/payment links, newsletter blocks, legal rows, spacing, colors,
+  borders, typography, hover/focus states, and responsive breakpoints into
+  `themes/<theme>/DESIGN.md` before building page sections. Replace the source logo, brand name,
+  domain name, email addresses, phone numbers, physical address, copyright text, and other unique
+  identity marks with the target store/theme identity or a clearly different placeholder. Do not call
+  a theme complete while the app is still using the previous theme's header, navigation, mobile nav,
+  or footer chrome.
+- Avoid copyright and plagiarism risk. References, screenshots, static templates, and competitor
+  sites may be used only to understand layout patterns, interaction ideas, component roles, and
+  commerce expectations. Rebuild the result inside this project's own theme identity and design
+  system. Do not copy proprietary logos, brand names, domains, product names, campaign slogans,
+  long-form copy, photography, illustrations, icon sets, reviews, policies, urgency tactics, or
+  distinctive trade dress wholesale. Replace them with original target-store content, licensed/local
+  assets, API data, or clearly different placeholders.
+
 ### Pixel Perfect Development
 
 - Maintain exact spacing, typography, colors, borders, shadows, and layout.
@@ -59,6 +77,11 @@ theme would clobber the previous theme's design doc.
 
 ### Planning And Output
 
+- Before writing implementation code for a new storefront/theme, create or update the theme's
+  strategy and visual system docs. `PRODUCT.md` should define users, success criteria, brand
+  personality, anti-references, and design principles. `themes/<theme>/DESIGN.md` should define
+  color tokens, type scale, spacing/radius/shadow rules, component rules, accent-color usage, and a
+  copyright/plagiarism checklist for identity, copy, images, icons, reviews, policies, and domains.
 - Identify all sections.
 - Create a development plan.
 - List required assets.
@@ -89,7 +112,14 @@ theme would clobber the previous theme's design doc.
    - secondary foreground
    - accent
    - accent foreground
-1. Start with header and footer.
+1. Start with header and footer. Clone their structure from the source theme, including
+   desktop/mobile navigation, announcement bars, logo placement, action icons, footer columns,
+   newsletter/legal rows, responsive behavior, and interaction states. Do not copy the source logo,
+   names, domain, contact details, address, or copyright identity; replace them with different
+   target-theme values.
 2. Build product component.
 3. Build home, PLP, and PDP using parallel agents.
 4. Build all other pages in parallel.
+5. Before calling the theme complete, run an originality check: search the codebase for source brand
+   names, domains, email addresses, phone numbers, copied policy/review text, and unlicensed asset
+   filenames. Replace any remaining source identity or copied content.

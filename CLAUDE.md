@@ -50,6 +50,22 @@ Add new themes as selectable implementations and resolve the active theme at run
 - Theme-specific homepage, nav, footer, component, and CSS work must be guarded by the active theme.
   A Sarab section must only render for the `sarab` theme; future themes should not inherit Sarab
   restaurant copy, images, icons, or layout by accident.
+- Every new theme must include a cloned source header, navigation/mobile navigation, and footer
+  layout, without copying the source brand identity. Treat header and footer as required sections,
+  not optional shared chrome. Extract their source
+  HTML/CSS, logo placement, menu structure, announcement/top bars, cart/account/search actions,
+  social/payment links, newsletter/legal rows, responsive breakpoints, spacing, colors, borders,
+  typography, and hover/focus states into that theme's `DESIGN.md` and implementation. Replace the
+  source logo, brand name, domain name, email addresses, phone numbers, physical address, copyright
+  text, and other unique identity marks with the target store/theme identity or a clearly different
+  placeholder. Do not call a theme done while it still uses a previous theme's header or footer.
+- Avoid copyright and plagiarism risk. Reference sites, screenshots, static templates, and competitor
+  designs are inspiration and analysis inputs only. Absorb layout ideas, interaction patterns, and
+  commerce requirements, then rebuild them inside this app's own theme identity and design system.
+  Do not copy proprietary logos, brand names, domains, product names, campaign slogans, long-form
+  copy, photography, illustrations, icon sets, reviews, policies, urgency tactics, or distinctive
+  trade dress wholesale. Use original target-store content, licensed/local assets, API data, or
+  clearly different placeholders.
 - Homepage theme copy/assets must live in the theme layer, not inline in route files. Put hero copy,
   SEO title/image, section labels/headings/body copy, decorative image paths, gallery/testimonial/team
   entries, static story/history blocks, empty-state copy, and CTA labels in the active theme config.
@@ -90,14 +106,19 @@ button/icon styling away from the source design. Do not repeat that mistake.
   DESIGN.md per theme — never a shared root `DESIGN.md`, since each theme would overwrite the last),
   identify every section, create a development plan, list required assets, explain responsive
   behavior, and cover project structure, markup, styling, interaction JavaScript, breakpoints, and
-  final optimization. Do not skip sections.
+  final optimization. Also create or update the strategy/visual-system docs before implementation:
+  `PRODUCT.md` for users, success criteria, brand personality, anti-references, and design
+  principles; `themes/<theme>/DESIGN.md` for tokens, typography, spacing/radius/shadow rules,
+  accent-color rules, component rules, and a copyright/plagiarism checklist. Do not skip sections.
 - Implement as a senior frontend developer using only SvelteKit, existing Svelte components, shadcn,
   Tailwind, and Svelte 5 runes. Never create a new page or component when an existing one should be
   modified or reused. Use exact design font sizes when specified. Buttons that trigger async/click
   actions must show loading indicators while clicked/in flight.
 - New design build sequence: first apply settings colors (`primary`, `primary foreground`,
-  `secondary`, `secondary foreground`, `accent`, `accent foreground`), then header/footer, then
-  product component, then home/PLP/PDP in parallel, then all other pages in parallel.
+  `secondary`, `secondary foreground`, `accent`, `accent foreground`), then clone and implement the
+  source header/footer layout including mobile nav and footer utility rows while replacing all source
+  identity names/logos/domains/contact details, then product component, then home/PLP/PDP in
+  parallel, then all other pages in parallel.
 - The current input design is the source of truth for that store. Any supplied HTML/CSS, screenshot,
   Figma, image, or static template must be converted into a fully working SvelteKit ecommerce
   frontend that preserves the existing app logic. Do not freeze one store's design as a global
@@ -160,6 +181,11 @@ button/icon styling away from the source design. Do not repeat that mistake.
   remain a visible green section, a source red order card must remain red, a source truck/fast-delivery
   icon must not become a cart icon, source heading/label sizes must match computed CSS, and source
   card counts must survive in the working Svelte page.
+- Before calling a theme complete, run an originality check across the codebase and generated theme
+  assets. Search for the source brand names, domains, email addresses, phone numbers, copied policy
+  or review text, source copyright strings, and unlicensed asset filenames. Replace any remaining
+  source identity or copied content with target-store content, licensed/local assets, API data, or
+  clearly different placeholders.
 
 ## Design Migration System Rules
 This work is not "convert static HTML/CSS into SvelteKit ecommerce logic." It is a design migration
@@ -209,7 +235,9 @@ pieces upward. Do not start by hardcoding full page contents.
    cards, category cards, menu cards, promo cards, testimonial cards, newsletter forms, and floating
    hero info cards. These should accept data/slots where appropriate instead of duplicating markup.
 3. Layout components: build or restyle header, navigation, mobile nav, footer, announcement bars,
-   containers, and section wrappers after the reusable pieces exist.
+   containers, and section wrappers after the reusable pieces exist. The source header and footer
+   layout must be cloned for every new theme; do not leave the prior theme's chrome in place, and do
+   not copy the source logo, names, domain, or contact identity.
 4. Page sections: compose hero, category, featured products/menu, about/story, offer, testimonial,
    and newsletter sections from the reusable components.
 5. Page contents: assemble the homepage and any other route last. Page files should mostly compose
