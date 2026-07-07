@@ -18,6 +18,9 @@ theme would clobber the previous theme's design doc.
   identity marks with the target store/theme identity or a clearly different placeholder. Do not call
   a theme complete while the app is still using the previous theme's header, navigation, mobile nav,
   or footer chrome.
+- Do not use exact real logos, copied logo marks, or lookalike logo artwork. Replace logo marks with
+  the website name as a text wordmark. By default, rename the brand/site to `Website-$1`, where `$1`
+  is the user-provided or inferred source brand/site identifier.
 - Avoid copyright and plagiarism risk. References, screenshots, static templates, and competitor
   sites may be used only to understand layout patterns, interaction ideas, component roles, and
   commerce expectations. Rebuild the result inside this project's own theme identity and design
@@ -67,6 +70,10 @@ theme would clobber the previous theme's design doc.
 - Tablet: 768px+
 - Mobile: 375px+
 - Use responsive units where appropriate.
+- The generated website must be mobile responsive across common viewport widths.
+- Do not ship horizontal scrollbars. Verify `scrollWidth <= clientWidth` at desktop, laptop, tablet,
+  and mobile widths, and fix overflowing layouts, images, grids, absolute elements, and long text
+  instead of hiding unresolved overflow.
 
 ### Animations
 
@@ -123,7 +130,9 @@ theme would clobber the previous theme's design doc.
 5. Before calling the theme complete, run an originality check: search the codebase for source brand
    names, domains, email addresses, phone numbers, copied policy/review text, and unlicensed asset
    filenames. Replace any remaining source identity or copied content.
-6. Verify the commerce flow works without errors: PLP/category or `/products`, PDP/product detail,
+6. Verify responsive behavior at desktop, laptop, tablet, and mobile widths, including no horizontal
+   overflow.
+7. Verify the commerce flow works without errors: PLP/category or `/products`, PDP/product detail,
    add to cart, cart page quantity/remove/subtotal behavior, checkout address/payment/process/success
    flow, and any API/localStorage state needed by those pages.
 

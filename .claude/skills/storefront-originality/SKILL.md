@@ -35,6 +35,9 @@ Before writing implementation code:
 - Do not copy the source logo. Change source names to something different, including the domain name,
   email addresses, phone numbers, addresses, copyright text, metadata, page titles, and footer legal
   identity.
+- Do not use exact real logos, copied logo marks, or lookalike logo artwork. Replace logo marks with
+  the website name as a text wordmark. By default, rename the brand/site to `Website-$1`, where `$1`
+  is the user-provided or inferred source brand/site identifier.
 - Use original copy, licensed/local assets, generated/owned assets, API data, or clearly different
   placeholders.
 - Clone header/footer layout and behavior when needed, but never copy the source logo, source brand
@@ -105,7 +108,9 @@ Before calling the work complete:
 3. Verify the commerce flow works without errors: PLP/category or `/products`, PDP/product detail,
    add to cart, cart page quantity/remove/subtotal behavior, checkout address/payment/process/success
    flow, and any API/localStorage state needed by those pages.
-4. Check desktop, tablet, and mobile widths for horizontal overflow.
+4. Check desktop, laptop, tablet, and mobile widths for responsive behavior and horizontal overflow.
+   Verify `scrollWidth <= clientWidth`, then fix overflowing layouts, images, grids, absolute
+   elements, and long text instead of hiding unresolved overflow.
 5. Verify forms validate, localStorage persists after reload, and add/remove/update actions really
    mutate state.
 6. Run a usability critique using Nielsen heuristics, identify P0/P1 issues, and fix them first.

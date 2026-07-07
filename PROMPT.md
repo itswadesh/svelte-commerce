@@ -25,6 +25,10 @@ project.
 ## Originality And Branding
 
 - Do not copy the source logo.
+- Do not use exact real logos, copied logo marks, or lookalike logo artwork.
+- Replace logo marks with the website name as a text wordmark.
+- By default, rename the brand/site to `Website-$1`, where `$1` is the user-provided or inferred
+  source brand/site identifier.
 - Change source names to something different, including brand name, domain name, email addresses,
   phone numbers, addresses, copyright text, metadata, page titles, and footer legal identity.
 - Use references only for layout patterns, interaction ideas, component roles, and commerce
@@ -90,7 +94,9 @@ with old-theme chrome, broken footer links, or unstyled default layouts.
 - Verify the commerce flow works without errors: PLP/category or `/products`, PDP/product detail,
   add to cart, cart page quantity/remove/subtotal behavior, checkout address/payment/process/success
   flow, and any API/localStorage state needed by those pages.
-- Check desktop, tablet, and mobile widths for horizontal overflow.
+- Check desktop, laptop, tablet, and mobile widths for responsive behavior and horizontal overflow.
+  Verify `scrollWidth <= clientWidth`, then fix overflowing layouts, images, grids, absolute
+  elements, and long text instead of hiding unresolved overflow.
 - Verify forms validate, localStorage persists after reload, and add/remove/update actions really
   mutate state.
 - Run a usability critique, prioritize P0/P1 issues, and fix them first.

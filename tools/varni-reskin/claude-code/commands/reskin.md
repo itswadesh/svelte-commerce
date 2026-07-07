@@ -37,6 +37,9 @@ work follows this reskin:
 - Use only SvelteKit, existing Svelte components, shadcn, Tailwind, and Svelte 5 runes. Do not create
   new pages/components when an existing one should be modified or reused. Use exact design font sizes
   when specified, and show loading indicators inside clicked/async buttons.
+- Do not use exact real logos, copied logo marks, or lookalike logo artwork. Replace logo marks with
+  the website name as a text wordmark. By default, rename the brand/site to `Website-$1`, where `$1`
+  is the user-provided or inferred source brand/site identifier.
 - For new designs, apply settings colors first (`primary`, `primary foreground`, `secondary`,
   `secondary foreground`, `accent`, `accent foreground`), then clone and build the source
   header/footer layout, product component, home/PLP/PDP in parallel, and all other pages in parallel.
@@ -125,6 +128,11 @@ and unlicensed asset filenames. Replace any remaining source identity or copied 
 Before calling the theme complete, verify the commerce flow works without errors: PLP/category or
 `/products`, PDP/product detail, add to cart, cart page quantity/remove/subtotal behavior, checkout
 address/payment/process/success flow, and any API/localStorage state needed by those pages.
+
+Before calling generated website work complete, verify desktop, laptop, tablet, and mobile widths are
+responsive and do not create a horizontal scrollbar. Check `scrollWidth <= clientWidth`, then fix
+overflowing layouts, images, grids, absolute elements, and long text instead of hiding unresolved
+overflow.
 
 Design migration safety rules:
 - The existing SvelteKit app is the logic source. Do not rewrite product listing, product detail,

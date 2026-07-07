@@ -14,6 +14,8 @@ argument-hint: "[source brand or site]"
 - If the source brand name is ambiguous, choose a simple descriptive suffix for `$1` from the user's request or the project context.
 - Apply the text wordmark consistently in navbars, headers, footers, favicons where practical, metadata, page titles, mock data, and visible copy touched by the task.
 - Keep the result visually polished: treat `Website-$1` as the brand, not as a placeholder label.
+- Make every generated website mobile responsive across common viewport widths.
+- Ensure pages do not create a horizontal scrollbar; fix overflowing layouts, images, grids, absolute elements, and long text instead of hiding unresolved overflow.
 
 ## Examples
 
