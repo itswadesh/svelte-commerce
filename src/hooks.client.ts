@@ -11,6 +11,12 @@ if (env.PUBLIC_SHOPIFY_STORE_DOMAIN) {
 	})
 }
 
+if (env.PUBLIC_SALEOR_API_URL) {
+  import('$lib/core/services').then(({ BaseService }) => {
+    BaseService.setCredentials(env.PUBLIC_SALEOR_API_URL)
+	})
+}
+
 if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
 	import('$lib/core/services').then(({ BaseService }) => {
 		BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)

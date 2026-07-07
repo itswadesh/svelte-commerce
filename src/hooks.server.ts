@@ -18,6 +18,11 @@ export const init = async () => {
 		)
 	}
 
+  if (env.PUBLIC_SALEOR_API_URL) {
+    const { BaseService } = await import('$lib/core/services/index.js')
+    BaseService.setCredentials(env.PUBLIC_SALEOR_API_URL)
+  }
+
 	if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
 		const { BaseService } = await import('$lib/core/services')
 		BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
