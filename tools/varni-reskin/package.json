@@ -1,0 +1,21 @@
+{
+  "name": "varni-reskin",
+  "version": "1.0.0",
+  "description": "Zero-interaction design transplant: static HTML/CSS -> svelte-commerce theme",
+  "main": "index.js",
+  "scripts": {
+    "reskin": "node bin/reskin.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "css-tree": "^3.2.1",
+    "culori": "^4.0.2"
+  },
+  "type": "module",
+  "bin": {
+    "reskin": "./bin/reskin.js"
+  }
+}

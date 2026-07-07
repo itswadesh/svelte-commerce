@@ -401,7 +401,7 @@
 
 <style>
 	:global(.font-montserrat) {
-		font-family: 'Montserrat', sans-serif;
+		font-family: var(--font-body);
 	}
 
 	.rating-bar-glow {

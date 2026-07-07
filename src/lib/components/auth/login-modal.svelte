@@ -14,13 +14,12 @@
 	import { toast } from '@misiki/kitcommerce-core'
 	import { authService, type User } from '$lib/core/services/index.js'
 
-	let { show = $bindable(false) } = $props()
+	let { show = $bindable(false), manageHistory = true } = $props()
 
 	const customPhoneSchema = z.string().refine((val) => schemas.phone.safeParse(val.replace(/\s+/g, '')).success, 'Please enter a valid phone number')
 
 	const loginModule = new LoginModule()
 	const userState = loginModule.userState
-  $inspect(page.data)
 	let resendSeconds = $state(0)
 	let otpCooldownStarted = $state(false)
 	let resendTimer: ReturnType<typeof setInterval> | undefined
@@ -160,7 +159,7 @@
 
 <Modal
 	bind:show
-	manageHistory={false}
+	{manageHistory}
 	rounded={false}
 	hideHeader
 	hideFooter

@@ -9,10 +9,17 @@
 
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
+	import LimelightProductCard from '$lib/theme/limelight/LimelightProductCard.svelte'
+	import NoorProductCard from '$lib/theme/noor/NoorProductCard.svelte'
 
 	const cartState = getCartState()
 
 	let { product, aspectRatio, hideVariations = true, hideCartControls = true }: any = $props()
+
+	// Theme-specific product card. Guarded so the default store is unaffected;
+	// only the limelight theme swaps in its bespoke presentation (logic reused
+	// via the same ProductCardRenderer inside the themed card).
+	const activeTheme = $derived(page?.data?.theme?.name || 'default')
 
 	const discount = product.mrp && product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0
 
@@ -30,6 +37,11 @@
 	})
 </script>
 
+{#if activeTheme === 'limelight'}
+	<LimelightProductCard {product} {aspectRatio} {hideCartControls} />
+{:else if activeTheme === 'noor'}
+	<NoorProductCard {product} {aspectRatio} {hideCartControls} />
+{:else}
 <ProductCardRenderer {product} {aspectRatio}>
 	{#snippet content({ aspectHeight, toggleWishlist, isWishlisted, aspectWidth, handleCardClick, changeQuantity, addToCart })}
 		<section
@@ -107,7 +119,7 @@
 			</a>
 
 			<div data-testid="product-card-info-wrapper" class="flex flex-col justify-between h-full pt-[7.5px] lg:pt-3">
-				<a href="/products/{product.slug}" class="block overflow-hidden">
+				<a href="/products/{product.slug}" class="flex-1 block overflow-hidden">
 					<span class="block w-[80%] text-xs text-gray-600 lg:text-sm" data-testid="product-title" title={product.title}>
 						{product.title}
 					</span>
@@ -160,6 +172,7 @@
 		</section>
 	{/snippet}
 </ProductCardRenderer>
+{/if}
 
 <!-- <div
       class="absolute right-1 top-1 z-20 ml-2 flex max-h-[60px] justify-between space-y-2 opacity-100 transition-opacity duration-300 group-hover:opacity-100 mobilel:right-2 mobilel:top-2 laptop:opacity-0"

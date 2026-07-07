@@ -1,0 +1,1792 @@
+{
+  "contract": "themes\\sarab\\design-contract.json",
+  "url": "http://127.0.0.1:5173/",
+  "generatedAt": "2026-07-05T05:30:23.004Z",
+  "checks": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "checks": [
+        {
+          "status": "fail",
+          "section": "topbar",
+          "message": "missing section #topbar",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "nav",
+          "message": "missing section #nav",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "heading text present: Delicious Fast Foodfor Every Moment",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "label text present: #1 Rated Fast Food Restaurant in New York",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "image count ok",
+          "details": {
+            "actual": 1
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "card count ok for .fcard",
+          "details": {
+            "actual": 3
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: star",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: utensils",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: play",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: flame",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: clock",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--cream)",
+            "actual": "rgb(255, 248, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "heading text present: Browse by Category",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "label text present: What We Offer",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "image count ok",
+          "details": {
+            "actual": 6
+          }
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "card count ok for .catcard",
+          "details": {
+            "actual": 6
+          }
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--cream)",
+            "actual": "rgb(255, 248, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "heading text present: We Invite You to VisitOur Food Restaurant",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "heading text present: 100% Fresh Ingredients",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "heading text present: Award-Winning Recipes",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "label text present: Our Story",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "image count ok",
+          "details": {
+            "actual": 2
+          }
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "icon role present: leaf",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "icon role present: award",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "about",
+          "message": "missing icon role \"shipping-fast\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "icon role present: book-open",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "#fff",
+            "actual": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "heading text present: Our Delicious Menu",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "label text present: What's Cooking",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "image count ok",
+          "details": {
+            "actual": 6
+          }
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "card count ok for .mcard",
+          "details": {
+            "actual": 6
+          }
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "icon role present: star",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "icon role present: heart",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "icon role present: plus",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "menu",
+          "message": "missing icon role \"th-large\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--light)",
+            "actual": "rgb(249, 245, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "special",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "special",
+          "message": "missing heading text \"Get 30% OffOur SignatureBurger Meal\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "special",
+          "message": "image count ok",
+          "details": {
+            "actual": 1
+          }
+        },
+        {
+          "status": "fail",
+          "section": "special",
+          "message": "card count lower than source for .cditem",
+          "details": {
+            "expectedAtLeast": 3,
+            "actual": 0
+          }
+        },
+        {
+          "status": "fail",
+          "section": "special",
+          "message": "missing icon role \"bolt\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "special",
+          "message": "icon role present: cart",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "special",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "linear-gradient(135deg, #1a0000 0%, #2d0000 100%)",
+            "actual": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(26, 0, 0) 0%, rgb(45, 0, 0) 100%) repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "gallery",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "gallery",
+          "message": "missing heading text \"Let's See Our Fast Food\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "gallery",
+          "message": "missing label text \"Food Showcase\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "gallery",
+          "message": "image count ok",
+          "details": {
+            "actual": 5
+          }
+        },
+        {
+          "status": "pass",
+          "section": "gallery",
+          "message": "card count ok for .gitem",
+          "details": {
+            "actual": 5
+          }
+        },
+        {
+          "status": "fail",
+          "section": "gallery",
+          "message": "missing icon role \"expand-alt\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "gallery",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--light)",
+            "actual": "rgb(249, 245, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "history",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "history",
+          "message": "missing heading text \"A History of Restaurant\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "history",
+          "message": "missing heading text \"Evolution of Restaurants\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "history",
+          "message": "missing heading text \"Evolution of Restaurants\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "history",
+          "message": "label text present: Our Journey",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "history",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--cream)",
+            "actual": "rgb(255, 248, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "chefs",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "chefs",
+          "message": "missing heading text \"Meet Our Expert Chefs\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "chefs",
+          "message": "missing label text \"The Culinary Team\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "chefs",
+          "message": "image count ok",
+          "details": {
+            "actual": 4
+          }
+        },
+        {
+          "status": "pass",
+          "section": "chefs",
+          "message": "card count ok for .chcard",
+          "details": {
+            "actual": 4
+          }
+        },
+        {
+          "status": "pass",
+          "section": "chefs",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "#fff",
+            "actual": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "heading text present: We're Open For You",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "heading text present: Order Online",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "heading text present: Find Us",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "label text present: Opening Hours",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "card count ok for .hrsrow",
+          "details": {
+            "actual": 8
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "card count ok for .hrscard",
+          "details": {
+            "actual": 2
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: calendar",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: truck",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: map-pin",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: phone",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: envelope",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "linear-gradient(135deg, var(--green), #1a4a35)",
+            "actual": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(45, 106, 79), rgb(26, 74, 53)) repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "testimonials",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "testimonials",
+          "message": "missing heading text \"Our Customers Feedback\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "testimonials",
+          "message": "label text present: What People Say",
+          "details": {}
+        },
+        {
+          "status": "warn",
+          "section": "testimonials",
+          "message": "image count lower than source",
+          "details": {
+            "expectedAtLeast": 4,
+            "actual": 3
+          }
+        },
+        {
+          "status": "fail",
+          "section": "testimonials",
+          "message": "card count lower than source for .tescard",
+          "details": {
+            "expectedAtLeast": 4,
+            "actual": 3
+          }
+        },
+        {
+          "status": "pass",
+          "section": "testimonials",
+          "message": "icon role present: star",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "testimonials",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "#fff",
+            "actual": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "heading text present: Make a Reservation",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "heading text present: Contact Info",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "label text present: Book a Table",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: clock",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: phone-alt",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: users",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: map-pin",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: calendar-check",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "reservation",
+          "message": "missing icon role \"check-circle\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--light)",
+            "actual": "rgb(249, 245, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "heading text present: Our Latest Blog Posts",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "label text present: News & Updates",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "image count ok",
+          "details": {
+            "actual": 3
+          }
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "card count ok for .blcard",
+          "details": {
+            "actual": 3
+          }
+        },
+        {
+          "status": "fail",
+          "section": "blog",
+          "message": "missing icon role \"user\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "blog",
+          "message": "missing icon role \"comment\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "icon role present: arrow-right",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--light)",
+            "actual": "rgb(249, 245, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "heading text present: Subscribe & Get Exclusive Deals",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "label text present: Stay Connected",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "icon role present: paper-plane",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "icon role present: lock",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "linear-gradient(135deg, var(--primary), #8b0000)",
+            "actual": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(232, 40, 26), rgb(139, 0, 0)) repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "heading text present: Contact Us",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "heading text present: Let's Talk",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "label text present: Get In Touch",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "contact-section",
+          "message": "card count lower than source for .ctitem",
+          "details": {
+            "expectedAtLeast": 4,
+            "actual": 0
+          }
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: map-pin",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: phone-alt",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: envelope",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: clock",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: paper-plane",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "contact-section",
+          "message": "missing icon role \"check-circle\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "#fff",
+            "actual": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "footer-17",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"chevron-right\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"map-pin\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"phone-alt\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"envelope\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"clock\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"heart\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "footer-17",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--dark)",
+            "actual": "rgb(26, 26, 26) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "checks": [
+        {
+          "status": "fail",
+          "section": "topbar",
+          "message": "missing section #topbar",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "nav",
+          "message": "missing section #nav",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "heading text present: Delicious Fast Foodfor Every Moment",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "label text present: #1 Rated Fast Food Restaurant in New York",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "image count ok",
+          "details": {
+            "actual": 1
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "card count ok for .fcard",
+          "details": {
+            "actual": 3
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: star",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: utensils",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: play",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: flame",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "icon role present: clock",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hero",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--cream)",
+            "actual": "rgb(255, 248, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "heading text present: Browse by Category",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "label text present: What We Offer",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "image count ok",
+          "details": {
+            "actual": 6
+          }
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "card count ok for .catcard",
+          "details": {
+            "actual": 6
+          }
+        },
+        {
+          "status": "pass",
+          "section": "category",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--cream)",
+            "actual": "rgb(255, 248, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "heading text present: We Invite You to VisitOur Food Restaurant",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "heading text present: 100% Fresh Ingredients",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "heading text present: Award-Winning Recipes",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "label text present: Our Story",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "image count ok",
+          "details": {
+            "actual": 2
+          }
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "icon role present: leaf",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "icon role present: award",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "about",
+          "message": "missing icon role \"shipping-fast\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "icon role present: book-open",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "about",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "#fff",
+            "actual": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "heading text present: Our Delicious Menu",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "label text present: What's Cooking",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "image count ok",
+          "details": {
+            "actual": 6
+          }
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "card count ok for .mcard",
+          "details": {
+            "actual": 6
+          }
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "icon role present: star",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "icon role present: heart",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "icon role present: plus",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "menu",
+          "message": "missing icon role \"th-large\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "menu",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--light)",
+            "actual": "rgb(249, 245, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "special",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "special",
+          "message": "missing heading text \"Get 30% OffOur SignatureBurger Meal\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "special",
+          "message": "image count ok",
+          "details": {
+            "actual": 1
+          }
+        },
+        {
+          "status": "fail",
+          "section": "special",
+          "message": "card count lower than source for .cditem",
+          "details": {
+            "expectedAtLeast": 3,
+            "actual": 0
+          }
+        },
+        {
+          "status": "fail",
+          "section": "special",
+          "message": "missing icon role \"bolt\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "special",
+          "message": "icon role present: cart",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "special",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "linear-gradient(135deg, #1a0000 0%, #2d0000 100%)",
+            "actual": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(26, 0, 0) 0%, rgb(45, 0, 0) 100%) repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "gallery",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "gallery",
+          "message": "missing heading text \"Let's See Our Fast Food\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "gallery",
+          "message": "missing label text \"Food Showcase\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "gallery",
+          "message": "image count ok",
+          "details": {
+            "actual": 5
+          }
+        },
+        {
+          "status": "pass",
+          "section": "gallery",
+          "message": "card count ok for .gitem",
+          "details": {
+            "actual": 5
+          }
+        },
+        {
+          "status": "fail",
+          "section": "gallery",
+          "message": "missing icon role \"expand-alt\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "gallery",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--light)",
+            "actual": "rgb(249, 245, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "history",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "history",
+          "message": "missing heading text \"A History of Restaurant\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "history",
+          "message": "missing heading text \"Evolution of Restaurants\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "history",
+          "message": "missing heading text \"Evolution of Restaurants\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "history",
+          "message": "label text present: Our Journey",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "history",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--cream)",
+            "actual": "rgb(255, 248, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "chefs",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "chefs",
+          "message": "missing heading text \"Meet Our Expert Chefs\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "chefs",
+          "message": "missing label text \"The Culinary Team\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "chefs",
+          "message": "image count ok",
+          "details": {
+            "actual": 4
+          }
+        },
+        {
+          "status": "pass",
+          "section": "chefs",
+          "message": "card count ok for .chcard",
+          "details": {
+            "actual": 4
+          }
+        },
+        {
+          "status": "pass",
+          "section": "chefs",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "#fff",
+            "actual": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "heading text present: We're Open For You",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "heading text present: Order Online",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "heading text present: Find Us",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "label text present: Opening Hours",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "card count ok for .hrsrow",
+          "details": {
+            "actual": 8
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "card count ok for .hrscard",
+          "details": {
+            "actual": 2
+          }
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: calendar",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: truck",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: map-pin",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: phone",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "icon role present: envelope",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "hours",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "linear-gradient(135deg, var(--green), #1a4a35)",
+            "actual": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(45, 106, 79), rgb(26, 74, 53)) repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "testimonials",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "testimonials",
+          "message": "missing heading text \"Our Customers Feedback\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "testimonials",
+          "message": "label text present: What People Say",
+          "details": {}
+        },
+        {
+          "status": "warn",
+          "section": "testimonials",
+          "message": "image count lower than source",
+          "details": {
+            "expectedAtLeast": 4,
+            "actual": 3
+          }
+        },
+        {
+          "status": "fail",
+          "section": "testimonials",
+          "message": "card count lower than source for .tescard",
+          "details": {
+            "expectedAtLeast": 4,
+            "actual": 3
+          }
+        },
+        {
+          "status": "pass",
+          "section": "testimonials",
+          "message": "icon role present: star",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "testimonials",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "#fff",
+            "actual": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "heading text present: Make a Reservation",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "heading text present: Contact Info",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "label text present: Book a Table",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: clock",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: phone-alt",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: users",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: map-pin",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "icon role present: calendar-check",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "reservation",
+          "message": "missing icon role \"check-circle\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "reservation",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--light)",
+            "actual": "rgb(249, 245, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "heading text present: Our Latest Blog Posts",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "label text present: News & Updates",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "image count ok",
+          "details": {
+            "actual": 3
+          }
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "card count ok for .blcard",
+          "details": {
+            "actual": 3
+          }
+        },
+        {
+          "status": "fail",
+          "section": "blog",
+          "message": "missing icon role \"user\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "blog",
+          "message": "missing icon role \"comment\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "icon role present: arrow-right",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "blog",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--light)",
+            "actual": "rgb(249, 245, 240) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "heading text present: Subscribe & Get Exclusive Deals",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "label text present: Stay Connected",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "icon role present: paper-plane",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "icon role present: lock",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "newsletter",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "linear-gradient(135deg, var(--primary), #8b0000)",
+            "actual": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(232, 40, 26), rgb(139, 0, 0)) repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "heading text present: Contact Us",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "heading text present: Let's Talk",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "label text present: Get In Touch",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "contact-section",
+          "message": "card count lower than source for .ctitem",
+          "details": {
+            "expectedAtLeast": 4,
+            "actual": 0
+          }
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: map-pin",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: phone-alt",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: envelope",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: clock",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "icon role present: paper-plane",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "contact-section",
+          "message": "missing icon role \"check-circle\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "contact-section",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "#fff",
+            "actual": "rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        },
+        {
+          "status": "pass",
+          "section": "footer-17",
+          "message": "section exists",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"chevron-right\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"map-pin\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"phone-alt\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"envelope\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"clock\"",
+          "details": {}
+        },
+        {
+          "status": "fail",
+          "section": "footer-17",
+          "message": "missing icon role \"heart\"",
+          "details": {}
+        },
+        {
+          "status": "pass",
+          "section": "footer-17",
+          "message": "style signal checked: background",
+          "details": {
+            "expected": "var(--dark)",
+            "actual": "rgb(26, 26, 26) none repeat scroll 0% 0% / auto padding-box border-box"
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "passed": 206,
+    "failed": 56,
+    "warnings": 2
+  }
+}

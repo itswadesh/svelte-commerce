@@ -7,11 +7,47 @@
 	import { getCartState } from '@misiki/kitcommerce-core/stores'
 	import { cubicOut } from 'svelte/easing'
 	import { page } from '$app/state'
+	import { onDestroy, onMount } from 'svelte'
 
 	const cartState = getCartState()
 	const storeData = $derived(page.data?.store)
 
 	const { onClose, onContinueShopping, onRemoveCartItem } = $props()
+	const modalHistoryKey = '__svelteCommerceCartSidebar'
+	let ownsHistoryEntry = false
+	let isNavigatingFromCart = false
+
+	function handleBrowserBack() {
+		if (!cartState.isOpen || !ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		cartState.isOpen = false
+		onClose?.()
+	}
+
+	onMount(() => {
+		window.addEventListener('popstate', handleBrowserBack)
+		return () => window.removeEventListener('popstate', handleBrowserBack)
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined') return
+
+		if (cartState.isOpen && !ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		} else if (!cartState.isOpen && ownsHistoryEntry) {
+			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
+			ownsHistoryEntry = false
+			if (isCurrentModalEntry && !isNavigatingFromCart) history.back()
+			isNavigatingFromCart = false
+		}
+	})
+
+	onDestroy(() => {
+		if (typeof window !== 'undefined' && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
+			history.back()
+		}
+	})
 
 	function slideFadeTopRight(node: Element, params: { delay?: number; duration?: number; easing?: any; transformOrigin?: any }) {
 		const existingTransform = getComputedStyle(node).transform.replace('none', '')
@@ -24,13 +60,24 @@
 				`transform-origin: ${params.transformOrigin || 'top right'}; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
 		}
 	}
+
+	async function proceedToCart() {
+		isNavigatingFromCart = true
+		if (typeof window !== 'undefined' && history.state?.[modalHistoryKey] === true) {
+			const nextState = { ...history.state }
+			delete nextState[modalHistoryKey]
+			history.replaceState(nextState, '', window.location.href)
+		}
+		cartState.isOpen = false
+		await goto('/checkout/cart')
+	}
 </script>
 
 <div class="relative" role="navigation">
 	<button
 		variant="ghost"
 		size="icon"
-		class="rounded-full flex px-2"
+		class="flex rounded-full px-2"
 		aria-label="Toggle Cart"
 		onclick={() => {
 			cartState.isOpen = !cartState.isOpen
@@ -39,7 +86,7 @@
 		<ShoppingBag class="h-5 w-5" />
 		{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
 			<span
-				class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary text-primary-foreground px-1.5 py-1 text-xs font-bold leading-none"
+				class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-primary-foreground"
 			>
 				{cartState.cart.qty}
 			</span>
@@ -67,16 +114,8 @@
 		>
 			<div class="relative z-50 flex h-full flex-col justify-between bg-white p-4">
 				<div class="sm:mx-3">
-					<h2 class="mb-4 mt-4 text-xl font-semibold text-gray-900">
-						My Shopping Cart
-					</h2>
-					<Button
-						variant="ghost"
-						size="icon"
-						class="absolute right-4 top-4 rounded-full"
-						aria-label="close cart"
-						onclick={onClose}
-					>
+					<h2 class="mb-4 mt-4 text-xl font-semibold text-gray-900">My Shopping Cart</h2>
+					<Button variant="ghost" size="icon" class="absolute right-4 top-4 rounded-full" aria-label="close cart" onclick={onClose}>
 						<X class="size-5" />
 					</Button>
 
@@ -100,7 +139,7 @@
 									{formatPrice(cartState?.cart?.total, storeData?.currencyCode)}
 								</p>
 							</div>
-							<p class="mx-4 text-right text-xs font-bold  tracking-tighter text-gray-400">MRP includes of all taxes</p>
+							<p class="mx-4 text-right text-xs font-bold tracking-tighter text-gray-400">MRP includes of all taxes</p>
 						{:else}
 							<div class="flex min-h-[80vh] flex-col items-center justify-center gap-3 bg-white">
 								<div class="mb-6 rounded-full bg-gray-50 p-8 ring-1 ring-gray-100">
@@ -110,34 +149,18 @@
 								<span class="max-w-xs px-2 text-center text-xs font-medium leading-relaxed text-gray-500"
 									>We didn't find any item inside cart, Go ahead, order some essentials from the menu</span
 								>
-								<Button
-									disabled={!!cartState.isUpdatingCart}
-									onclick={onContinueShopping}
-									class="mt-8 px-8"
-								>
-									Continue Shopping
-								</Button>
+								<Button disabled={!!cartState.isUpdatingCart} onclick={onContinueShopping} class="mt-8 px-8">Continue Shopping</Button>
 							</div>
 						{/if}
 					</div>
 					{#if cartState?.cart?.total >= 0 && cartState.cart?.lineItems?.length > 0}
-						<div class="mx-4 pb-6 md:pb-0 mt-6 flex justify-between gap-3">
-							<Button
-								variant="outline"
-								disabled={!!cartState.isUpdatingCart}
-								onclick={onContinueShopping}
-								class="w-[48%] py-6"
-							>
-								Continue
-							</Button>
+						<div class="mx-4 mt-6 flex justify-between gap-3 pb-6 md:pb-0">
+							<Button variant="outline" disabled={!!cartState.isUpdatingCart} onclick={onContinueShopping} class="w-[48%] py-6">Continue</Button>
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								onclick={(e) => {
 									e.stopPropagation()
-									if (cartState) {
-										cartState.isOpen = false
-									}
-									goto('/checkout/cart')
+									proceedToCart()
 								}}
 								class="w-[48%] py-6"
 							>

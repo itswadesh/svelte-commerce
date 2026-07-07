@@ -1,12 +1,11 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig, loadEnv } from 'vite'
-import { svelteInspector } from '@sveltejs/vite-plugin-svelte-inspector'
 import { PUBLIC_MEDUSA_API_PREFIX } from '@misiki/medusa-connector'
 
 export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '')
 	return {
-		plugins: [sveltekit(), svelteInspector()],
+		plugins: [sveltekit()],
 		ssr: {
 			noExternal: ['bits-ui']
 		},

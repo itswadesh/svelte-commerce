@@ -8,6 +8,7 @@
 	import { toast } from 'svelte-sonner'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
+	import { onDestroy, onMount } from 'svelte'
 
 	let { isOpen = false, productId = '', productTitle = '', onClose = () => {} } = $props()
 
@@ -18,6 +19,38 @@
 	let phone = $state('')
 	let message = $state('')
 	let loading = $state(false)
+	const modalHistoryKey = '__svelteCommerceEnquiryModal'
+	let ownsHistoryEntry = false
+
+	function handleBrowserBack() {
+		if (!isOpen || !ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		onClose()
+	}
+
+	onMount(() => {
+		window.addEventListener('popstate', handleBrowserBack)
+		return () => window.removeEventListener('popstate', handleBrowserBack)
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined') return
+
+		if (isOpen && !ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		} else if (!isOpen && ownsHistoryEntry) {
+			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
+			ownsHistoryEntry = false
+			if (isCurrentModalEntry) history.back()
+		}
+	})
+
+	onDestroy(() => {
+		if (typeof window !== 'undefined' && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
+			history.back()
+		}
+	})
 
 	const schema = {
 		name: z.string().min(2, 'First name must be at least 2 characters'),
