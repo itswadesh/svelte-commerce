@@ -87,6 +87,9 @@ with old-theme chrome, broken footer links, or unstyled default layouts.
 - Search for source brand names, domains, emails, phone numbers, addresses, copied policy/review
   text, copyright strings, and unlicensed asset filenames.
 - Verify every footer link points to a real page, never a dead `#`.
+- Verify the commerce flow works without errors: PLP/category or `/products`, PDP/product detail,
+  add to cart, cart page quantity/remove/subtotal behavior, checkout address/payment/process/success
+  flow, and any API/localStorage state needed by those pages.
 - Check desktop, tablet, and mobile widths for horizontal overflow.
 - Verify forms validate, localStorage persists after reload, and add/remove/update actions really
   mutate state.

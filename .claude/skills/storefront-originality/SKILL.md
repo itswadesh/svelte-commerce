@@ -102,10 +102,13 @@ Before calling the work complete:
 1. Run an originality search for source brand names, domains, emails, phone numbers, addresses,
    copied policy/review text, copyright strings, and unlicensed asset filenames.
 2. Verify all footer links point to real pages, never dead `#` links.
-3. Check desktop, tablet, and mobile widths for horizontal overflow.
-4. Verify forms validate, localStorage persists after reload, and add/remove/update actions really
+3. Verify the commerce flow works without errors: PLP/category or `/products`, PDP/product detail,
+   add to cart, cart page quantity/remove/subtotal behavior, checkout address/payment/process/success
+   flow, and any API/localStorage state needed by those pages.
+4. Check desktop, tablet, and mobile widths for horizontal overflow.
+5. Verify forms validate, localStorage persists after reload, and add/remove/update actions really
    mutate state.
-5. Run a usability critique using Nielsen heuristics, identify P0/P1 issues, and fix them first.
+6. Run a usability critique using Nielsen heuristics, identify P0/P1 issues, and fix them first.
 
 ## Reference Prompt
 

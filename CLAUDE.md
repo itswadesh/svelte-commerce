@@ -186,6 +186,9 @@ button/icon styling away from the source design. Do not repeat that mistake.
   or review text, source copyright strings, and unlicensed asset filenames. Replace any remaining
   source identity or copied content with target-store content, licensed/local assets, API data, or
   clearly different placeholders.
+- Before calling a theme complete, verify the commerce flow works without errors: PLP/category or
+  `/products`, PDP/product detail, add to cart, cart page quantity/remove/subtotal behavior, checkout
+  address/payment/process/success flow, and any API/localStorage state needed by those pages.
 
 ## Design Migration System Rules
 This work is not "convert static HTML/CSS into SvelteKit ecommerce logic." It is a design migration
@@ -286,6 +289,9 @@ the app.
 
 - Capture or inspect source and app renderings for the key pages that exist: home, category/product
   listing, product detail, cart, checkout, login/register, and any store-specific landing sections.
+- Exercise the functional shopping path in the browser or tests before reporting completion: PLP,
+  PDP, add to cart, cart, checkout address/payment/process/success. Fix console errors, navigation
+  errors, failed requests, and broken cart/checkout state before calling the theme done.
 - Prefer Playwright screenshots and pixel comparison when available. Generate or update a report
   that names match quality and mismatches by area, such as header height, button radius, product
   image ratio, footer background, icon placement, and spacing between cards.

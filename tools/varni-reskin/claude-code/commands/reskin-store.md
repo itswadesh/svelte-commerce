@@ -137,6 +137,10 @@ product-card, product-grid, footer, newsletter, or announcement:
 Before calling the theme complete, run an originality check: search the codebase for source brand
 names, domains, email addresses, phone numbers, copied policy/review text, source copyright strings,
 and unlicensed asset filenames. Replace any remaining source identity or copied content.
+
+Before calling the theme complete, verify the commerce flow works without errors: PLP/category or
+`/products`, PDP/product detail, add to cart, cart page quantity/remove/subtotal behavior, checkout
+address/payment/process/success flow, and any API/localStorage state needed by those pages.
 - Rewrite only the markup structure and classes to match the target design. Use token-based Tailwind
   classes (`bg-primary`, `text-foreground`, `font-heading`, `rounded`, `border-border`) unless source
   fidelity requires a local section-specific style already represented in the source CSS.
@@ -175,6 +179,10 @@ pages that exist: home, category/product listing, product detail, cart, checkout
 Generate or update a screenshot report that names mismatches by area, such as header height, button
 radius, product image ratio, footer background, icon placement, and card spacing. If visual drift is
 above threshold, repair only the responsible component, then rerun build and comparison.
+
+Exercise the functional shopping path in the browser or tests before reporting completion: PLP, PDP,
+add to cart, cart, checkout address/payment/process/success. Fix console errors, navigation errors,
+failed requests, and broken cart/checkout state before calling the theme done.
 
 Do not modify package manager lockfiles unless a dependency change is truly required and explicitly
 justified.

@@ -123,6 +123,9 @@ theme would clobber the previous theme's design doc.
 5. Before calling the theme complete, run an originality check: search the codebase for source brand
    names, domains, email addresses, phone numbers, copied policy/review text, and unlicensed asset
    filenames. Replace any remaining source identity or copied content.
+6. Verify the commerce flow works without errors: PLP/category or `/products`, PDP/product detail,
+   add to cart, cart page quantity/remove/subtotal behavior, checkout address/payment/process/success
+   flow, and any API/localStorage state needed by those pages.
 
 ## Existing SvelteKit Pages To Cover
 
