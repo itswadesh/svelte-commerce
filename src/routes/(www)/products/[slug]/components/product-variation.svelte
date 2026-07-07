@@ -2,6 +2,7 @@
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { ChartNoAxesGanttIcon } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
+	import SizeGuideDrawer from './size-guide-drawer.svelte'
 
 	const productState = useProductState()
 </script>
@@ -23,7 +24,7 @@
 						<span class="font-semibold">{productState.selectedVariant?.options?.find((opt: Record<string, any>) => option.id === opt.optionId)?.value}</span>
 					</div>
 					{#if option.type === 'Size'}
-						<Button variant="link" class="h-auto p-0">Size Guide</Button>
+						<SizeGuideDrawer />
 					{/if}
 				</div>
 
