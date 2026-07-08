@@ -100,6 +100,27 @@ required before app edits when source HTML/CSS exists. The verify command is req
 is running and before reporting the design match complete. If verification fails, treat the report as
 the repair checklist and fix the responsible section/component before claiming completion.
 
+## Source Extraction Gate
+These rules govern the source-extraction step that precedes every theme build. They are hard
+preconditions, not suggestions.
+
+- For each theme build, extract the source sections properly first. Capture the real section order,
+  section headings/eyebrows, card/tile/image counts per section, and the imagery layout before
+  implementing anything. Build the Svelte sections to those exact counts and order.
+- After extraction, replace the source's actual images with royalty-free (licensed/free-to-use)
+  images or clearly-different placeholders. Keep the layout and image slots identical, but do not
+  copy the source photography — that is a copyright/plagiarism risk.
+- If the source extraction fails — errors out, returns empty, or is clearly partial — STOP there. Do
+  not proceed to build or implement the theme on top of a failed or partial extraction, and do not
+  guess or fill in the missing sections to keep going. Output a clear note recording that extraction
+  failed and (if known) where/why (e.g. in the theme's `source-audit`/`verification` folder), so we
+  can come back later and investigate why it failed.
+- Always get fonts, font sizes, colors, and spacing correct. Treat font family, font weight, exact
+  font-size, palette/color usage, and spacing (gutters, section padding, margins, gaps, card
+  spacing) as computed contract values captured during extraction, and verify the rendered app
+  matches the source for every section at every supported breakpoint before calling it done. Do not
+  substitute lookalike fonts, guessed sizes, off-palette colors, or "close enough" spacing.
+
 ## Source Fidelity Rules For Homepage And Component Work
 These rules exist because a previous Sarab homepage pass incorrectly made the hero dark and changed
 button/icon styling away from the source design. Do not repeat that mistake.
