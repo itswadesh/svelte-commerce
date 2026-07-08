@@ -131,7 +131,7 @@
 					decoding="async"
 					data-nimg="1"
 					loading={priority ? 'eager' : 'lazy'}
-					src={getImageCDNUrl(src)}
+					src={getImageCDNUrl(src, w, h)}
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center {klass}"
