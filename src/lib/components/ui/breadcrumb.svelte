@@ -23,7 +23,7 @@
 							<div class="grid grid-cols-1">
 								<a
 									href="/{slug}"
-									class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white md:ml-2 block {i === categoryHierarchy.length - 1 ? 'truncate max-w-[500px]' : ''}"
+									class="block text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white md:ml-2 {i === categoryHierarchy.length - 1 ? 'truncate max-w-[calc(100vw-9rem)] sm:max-w-[500px] lg:max-w-[760px] xl:max-w-[980px] 2xl:max-w-[1180px]' : ''}"
 									title={name}
 								>
 									{name}
