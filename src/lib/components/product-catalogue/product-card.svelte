@@ -60,6 +60,7 @@
 						<LazyImg
 							src={product.thumbnail || product?.image_url}
 							alt="{product.title || product.name} product image"
+							sizes="(min-width: 1024px) 25vw, (min-width: 768px) 38vw, 50vw"
 							class="w-full rounded-md object-top object-contain transition-transform duration-500"
 						/>
 					{:else}
