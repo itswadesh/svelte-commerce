@@ -14,8 +14,15 @@
 		...rest
 	} = $props()
 
+	// Fallback CDN resize width for responsive (w-full) images that pass no explicit
+	// width. Without it the CDN URL omits width=/height= and serves the full-res original.
+	// Larger than lazy-img's default because the zoom view scales up to 2.5x.
+	const DEFAULT_CDN_WIDTH = 1600
+
 	const h = $derived(height === 'auto' ? '0' : +height * 2)
 	const w = $derived(width === 'auto' ? '0' : +width * 2)
+	// Width fed to the CDN URL builder: real width when given, else the fallback.
+	const cdnW = $derived(width === 'auto' ? DEFAULT_CDN_WIDTH : +width * 2)
 
 	const [aspectWidth, aspectHeight] = $derived(aspectRatio?.split(':') || ['1', '1'])
 
@@ -131,7 +138,7 @@
 					decoding="async"
 					data-nimg="1"
 					loading={priority ? 'eager' : 'lazy'}
-					src={getImageCDNUrl(src, w, h)}
+					src={getImageCDNUrl(src, cdnW, h)}
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center {klass}"
