@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { productService, type Product } from '$lib/core/services/index.js'
 	import { onMount } from 'svelte'
-	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton'
-	import { Button } from '$lib/components/ui/button'
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
+	import { Button } from '$lib/components/ui/button/index.js'
 	import { toast } from '@misiki/kitcommerce-core'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 
