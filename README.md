@@ -36,11 +36,11 @@ Turnkey integration with
 <h2 align="center"> Premium themes made using svelte-commerce </h2>
 <p align="center">
 <img height="200" src="https://github.com/user-attachments/assets/cb372959-bb44-4f28-a214-b85cd28ca2b4" hspace="10">
-<img height="200" src=".github/jws.jpg" hspace="10">
+<img height="200" src="https://github.com/user-attachments/assets/f947a3c6-938c-4528-b98a-f49f899aaf8c" hspace="10">
 <br>
 <br>
 <img height="200" src="https://github.com/user-attachments/assets/b1310c53-b4d0-4375-833f-80d37511faf2" hspace="10">
-<img height="200" src=".github/suffolk.jpg" hspace="10">
+<img height="200" src="https://github.com/user-attachments/assets/69034280-a815-4e3e-a3a1-93d98575eb95" hspace="10">
 </p>
 
 <br/>
