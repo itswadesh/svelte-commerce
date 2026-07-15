@@ -42,7 +42,7 @@ Disallow: /*/*?*ls%3d*%3fls%3d*
 Disallow: /apple-app-site-association
 Disallow: /.well-known/litekart/monorail
 Disallow: /cdn/wpm/*.js
-Sitemap: https://${domain}/sitemaps/${domain}-sitemaps/sitemap_index.xml
+Sitemap: https://${domain}/sitemap.xml
 
 # Google adsbot ignores robots.txt unless specifically named!
 User-agent: adsbot-google
@@ -80,7 +80,7 @@ Disallow: /*/*?*ls%3d*%3fls%3d*
 Disallow: /apple-app-site-association
 Disallow: /.well-known/litekart/monorail
 Disallow: /cdn/wpm/*.js
-Sitemap: https://${domain}/sitemaps/${domain}-sitemaps/sitemap_index.xml
+Sitemap: https://${domain}/sitemap.xml
 
 User-agent: AhrefsSiteAudit
 Crawl-delay: 10
@@ -121,7 +121,7 @@ Disallow: /*/*?*ls%3d*%3fls%3d*
 Disallow: /apple-app-site-association
 Disallow: /.well-known/litekart/monorail
 Disallow: /cdn/wpm/*.js
-Sitemap: https://${domain}/sitemaps/${domain}-sitemaps/sitemap_index.xml
+Sitemap: https://${domain}/sitemap.xml
 
 User-agent: MJ12bot
 Crawl-delay: 10
