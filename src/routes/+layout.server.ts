@@ -43,6 +43,7 @@ export async function load(event: any) {
 			? {
 					...data.store,
 					name: brandName,
+					slug: null,
 					logo: null,
 					email: null,
 					phone: null,

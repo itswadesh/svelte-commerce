@@ -11,7 +11,7 @@
 			name: p.name || p.title,
 			image: p.images || [p.thumbnail],
 			description: p.description || p.metaDescription || '',
-			brandName: p.brandName || page.data.store?.name || 'JewelWeSell',
+			brandName: p.brandName || page.data.store?.name || 'Fine Jewellery',
 			manufacturer: p.manufacturer || '',
 			material: p.material || '',
 			offers: {

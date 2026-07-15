@@ -30,9 +30,9 @@
 </script>
 
 <SeoHeader
-	metaTitle={data?.product?.metaTitle || `${data?.product?.title} — Buy Online at Arialshop | Free Delivery`}
+	metaTitle={data?.product?.metaTitle || `${data?.product?.title}${data?.store?.name ? ` | ${data?.store?.name}` : ''}`}
 	metaDescription={data?.product?.metaDescription ||
-		`${data?.product?.title}. ${data?.product?.description?.replace(/<[^>]*>?/gm, '').slice(0, 160)}... Discover premium quality ${data?.product?.title} at Arialshop. Enjoy free delivery on orders over ₹999 and easy 7-day returns. Shop now!`}
+		`${data?.product?.title}. ${data?.product?.description?.replace(/<[^>]*>?/gm, '').slice(0, 160)}... Discover premium quality fine jewellery with certified quality, free delivery and easy returns.`}
 	metaKeywords={data?.product?.keywords || ''}
 	image={data?.product?.thumbnail || ''}
 />

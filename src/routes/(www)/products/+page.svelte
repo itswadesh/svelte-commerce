@@ -15,10 +15,10 @@
 <SeoHeader
 	metaTitle={data.page?.metaTitle ||
 		(data.products?.categoryHierarchy?.length > 0
-			? `${data.products.categoryHierarchy[data.products.categoryHierarchy.length - 1].name} — Shop Trendy Fashion Online | Arialshop`
-			: "Women's Fashion Online — Stylish Dresses, Co-ord Sets & More | Arialshop")}
+			? `${data.products.categoryHierarchy[data.products.categoryHierarchy.length - 1].name} — Fine Diamond & Gold Jewellery${data.store?.name ? ` | ${data.store.name}` : ''}`
+			: `Fine Diamond & Gold Jewellery — Rings, Earrings, Necklaces & Bridal${data.store?.name ? ` | ${data.store.name}` : ''}`)}
 	metaDescription={data.page?.metaDescription ||
-		"Explore Arialshop's exclusive collection of women's fashion. Shop the latest trendy dresses, elegant co-ord sets, and seasonal styles at the best prices. Enjoy free delivery on orders over ₹999, easy 7-day returns, and premium quality. Refresh your wardrobe with Arialshop today!"}
+		'Explore our curated collection of fine diamond and gold jewellery — rings, earrings, necklaces, bracelets and bridal sets. Certified quality, free delivery, and easy returns.'}
 	metaKeywords={data.page?.metaKeywords ?? ''}
 	image={data.page?.logo ?? ''}
 />
