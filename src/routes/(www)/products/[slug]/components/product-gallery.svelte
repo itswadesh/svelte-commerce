@@ -186,9 +186,12 @@
 					</Carousel.Item>
 				{/each}
 			</Carousel.Content>
+			<!-- At sm/md the gallery column can sit flush with the viewport edge, so an arrow
+			     hung 1rem outside the carousel (-right-4) overflows the page by ~8px at 768.
+			     Keep the arrows inside the image until lg, where page margins absorb the overhang. -->
 			<div class="hidden sm:block">
-				<Carousel.Previous class="-left-4 size-7 [&>svg]:size-3.5" />
-				<Carousel.Next class="-right-4 size-7 [&>svg]:size-3.5" />
+				<Carousel.Previous class="left-1 lg:-left-4 size-7 [&>svg]:size-3.5" />
+				<Carousel.Next class="right-1 lg:-right-4 size-7 [&>svg]:size-3.5" />
 			</div>
 
 			<!-- Mobile Pagination Dots -->
