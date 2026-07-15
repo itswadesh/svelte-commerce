@@ -34,11 +34,15 @@ export function resolveStorefrontTheme(store: any): StorefrontTheme {
 		store?.plugins?.themeSettings?.theme ||
 		store?.plugins?.themeSettings?.activeTheme
 	const envTheme = env.PUBLIC_STOREFRONT_THEME || env.PUBLIC_THEME || env.PUBLIC_ACTIVE_THEME
-	const candidate = normalizeThemeName(adminTheme || envTheme || DEFAULT_THEME)
+	// Varni fleet override: every storefront shares ONE backend account, so the admin
+	// theme on that account would otherwise override EVERY storefront's per-deploy
+	// PUBLIC_STOREFRONT_THEME. Env must win here (env || admin), not the stock admin-first
+	// order — see storefront-manager memory dokploy-varni-deploy / varni-storefronts-pipeline.
+	const candidate = normalizeThemeName(envTheme || adminTheme || DEFAULT_THEME)
 
 	return {
 		name: candidate,
-		source: adminTheme ? 'admin' : envTheme ? 'env' : 'default',
+		source: envTheme ? 'env' : adminTheme ? 'admin' : 'default',
 		available: AVAILABLE_THEMES
 	}
 }
