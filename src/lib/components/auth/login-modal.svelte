@@ -192,8 +192,12 @@
 						<img src={page.data.store.logo} alt={page.data.store.name} class="h-9 object-contain dark:brightness-110" />
 					</div>
 				{:else}
-					<div class="mb-1 flex h-12 w-12 items-center justify-center rounded-radius bg-muted shadow-sm ring-1 ring-border">
-						<span class="text-lg font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
+					<!-- No store logo (the fleet nulls the shared account logo): show the full
+					     brand wordmark in the theme heading face instead of a bare initial tile. -->
+					<div class="mb-1 flex h-10 items-center justify-center">
+						<span class="text-2xl font-bold tracking-tight text-primary" style="font-family: var(--font-heading, inherit)">
+							{page?.data?.store?.name || 'Welcome'}
+						</span>
 					</div>
 				{/if}
 				<div class="space-y-2">
