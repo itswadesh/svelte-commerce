@@ -30,7 +30,11 @@ const STATIC_PATHS = [
 	'/terms-and-conditions'
 ]
 
-const MAX_PAGES = 60 // products API pageSize is server-fixed at 20 → covers 1200 products
+// Products API pageSize is server-fixed at 20 → covers 4000 products. Only ceil(count/pageSize)
+// pages are actually fetched, so a high cap costs nothing until the catalogue really grows.
+// (The server-side catalogue was already 1100 items on 2026-07-15 — externally the same API
+// reports ~400, so size the cap to the server-side view.)
+const MAX_PAGES = 200
 
 const xmlEscape = (s: string) =>
 	s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')
