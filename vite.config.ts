@@ -9,7 +9,7 @@ export default defineConfig(({ command, mode }) => {
 		ssr: {
 			noExternal: ['bits-ui']
 		},
-		//preview: { port: 80, strictPort: true, host: true },
+		preview: { port: 80, strictPort: true, host: true, allowedHosts: true },
 		server: {
 			allowedHosts: true, // This is required, else will "throw Blocked request. This host ("shopnx.in") is not allowed."
 			host: true,

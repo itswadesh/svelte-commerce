@@ -7,7 +7,8 @@ LABEL author="Swadesh Behera"
 WORKDIR /usr/app
 
 # Copy package.json and package-lock.json (if available) to the working directory
-COPY package*.json ./
+COPY package*.json bun.lock* ./
+COPY patches ./patches
 
 RUN npm install -g bun
 

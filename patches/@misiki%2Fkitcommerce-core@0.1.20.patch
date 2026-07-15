@@ -1,0 +1,37 @@
+diff --git a/dist/composables/product/use-product.svelte.js b/dist/composables/product/use-product.svelte.js
+index db1b61c31595da1cc1e9a6f7ce045064b583cb6d..c19d10454eb71b97a85379d9841e5c39061073da 100644
+--- a/dist/composables/product/use-product.svelte.js
++++ b/dist/composables/product/use-product.svelte.js
+@@ -294,11 +294,17 @@ class ProductState {
+     setInitialSelectedVariant = () => {
+         if (page.data?.product?.variants?.length) {
+             const variantId = page.url.searchParams.get('variant_id');
++            const variants = page.data?.product?.variants;
+             if (variantId) {
+-                this.selectedVariant = page.data?.product.variants.find((v) => v.id === variantId);
++                this.selectedVariant = variants.find((v) => v.id === variantId);
+             }
+             else {
+-                this.selectedVariant = page.data?.product?.variants?.find((v) => v.title !== 'default');
++                this.selectedVariant = variants?.find((v) => v.title !== 'default');
++            }
++            // Fallback: never leave selectedVariant undefined (e.g. a deep-linked variant_id
++            // that matches no variant), otherwise selectVariant -> findVariantWithOptionValue throws.
++            if (!this.selectedVariant) {
++                this.selectedVariant = variants?.find((v) => v.title === 'default') || variants?.[0];
+             }
+         }
+     };
+diff --git a/dist/logic/variants.helper.js b/dist/logic/variants.helper.js
+index 90d08819caafe3140a0281cbc01147272fb36891..47ba2827a2025dcd4de744032fe455d6b682073c 100644
+--- a/dist/logic/variants.helper.js
++++ b/dist/logic/variants.helper.js
+@@ -7,7 +7,7 @@
+  */
+ export const findVariantWithOptionValue = (variants, { selectedVariant, optionId, value }) => {
+     // Step 1: Take account of what previous options have been selected except the current change
+-    const selectedOptions = selectedVariant.options?.filter((option) => option.optionId !== optionId);
++    const selectedOptions = selectedVariant?.options?.filter((option) => option.optionId !== optionId);
+     selectedOptions?.push({ optionId, value });
+     // Step 2: Find the variant that has the selected options and the new option
+     let v = variants.find((variant) => {

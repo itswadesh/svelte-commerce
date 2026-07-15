@@ -2,11 +2,8 @@
 	import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { formatPrice } from '$lib/core/utils'
 	import { Check, ChevronRight, HeartIcon, LoaderCircle, ShoppingCart, MoveRight, ShoppingBag } from '@lucide/svelte'
-	import { fly } from 'svelte/transition'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
-	import { quintOut } from 'svelte/easing'
 
 	const { showWishlist = true } = $props()
 
@@ -15,11 +12,21 @@
 
 	let showEnquiryModal = $state(false)
 
-  function handleClick() {
-    if (productState.cartState.showCheckout)
+  // Adding to the bag opens the cart drawer, which shows the item, its price and the
+  // checkout path — that drawer IS the confirmation, so nothing else announces the add.
+  //
+  // The open is explicit rather than left to cart-sidebar's auto-open: that effect only
+  // fires when the cart goes from empty to non-empty, so a SECOND add would otherwise
+  // give the shopper no feedback at all.
+  async function handleClick() {
+    if (productState.cartState.showCheckout) {
       productState.cartState.isOpen = true
-    else
-      productState.handleAddToCart()
+      return
+    }
+    // handleAddToCart swallows failures (it raises its own error toast) and returns false;
+    // don't open an empty drawer over a failed add.
+    const added = await productState.handleAddToCart()
+    if (added !== false) productState.cartState.isOpen = true
   }
 </script>
 
@@ -45,37 +52,12 @@
 	{/if}
 {/snippet}
 
-{#if productState.showAddToCartMessage}
-	<!-- Added to cart message toast-like notification -->
-	<div
-		transition:fly={{ x: 50, duration: 300, easing: quintOut }}
-		class="fixed hidden md:block right-4 top-24 z-[100] w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl"
-	>
-		<div class="flex items-center gap-4">
-			<div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-100 bg-gray-50">
-				<img
-					src={productState.selectedVariant?.image || page.data?.product?.thumbnail}
-					alt="Product"
-					class="h-full w-full object-contain"
-				/>
-			</div>
-			<div class="flex flex-1 flex-col gap-1">
-				<p class="text-xs font-bold uppercase tracking-tight text-gray-900">Added to Bag</p>
-				<p class="line-clamp-1 text-[11px] text-gray-500">{page.data?.product?.title}</p>
-				<p class="text-xs font-bold text-primary">
-					{formatPrice(productState.selectedVariant?.price, page?.data?.store?.currency?.code)}
-				</p>
-			</div>
-			<Button
-				size="sm"
-				class="px-4"
-				onclick={() => (productState.cartState.isOpen = true)}
-			>
-				View Bag
-			</Button>
-		</div>
-	</div>
-{/if}
+<!--
+	Adding to the bag opens the cart sidebar (cart-sidebar.svelte opens it as soon as the
+	cart becomes non-empty), which already shows the item, its price and a checkout path.
+	The floating "Added to Bag" card that used to sit here said the same thing at the same
+	moment, so it has been removed rather than duplicating the confirmation.
+-->
 
 <div class="flex h-[4rem] items-center gap-4 lg:h-[3rem]">
 	<div class="flex-1 h-full">

@@ -5,9 +5,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 // SvelteKit writes this into `_app/version.json`; the client polls it and the
 // `updated` store flips when a new build is live, so cached mobile/PWA clients
 // can auto-refresh instead of running stale code. Displayed in the footer.
-const pad = (n: number) => String(n).padStart(2, '0')
-const now = new Date()
-const appVersion = `${now.getFullYear()}.${pad(now.getMonth() + 1)}.${pad(now.getDate())}.${pad(now.getHours())}${pad(now.getMinutes())}`
+const appVersion = 'varni-storefronts'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

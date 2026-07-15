@@ -26,11 +26,11 @@
 					<div class="flex flex-wrap items-center gap-3">
 						{#each [...values].sort() as value}
 							<Button
-								variant={productState.selectedAggregations?.[optionName] === value ? 'default' : 'plain'}
+								variant="outline"
 								disabled={!productState.isAggregationAvaliable(optionName, value)}
-								class="min-w-[3.5rem] !bg-primary px-4 py-2 {productState.selectedAggregations?.[optionName] === value
-									? 'border !border-accent !bg-transparent'
-									: '!bg-accent text-accent-foreground'}"
+								class="min-w-[3.5rem] rounded-md border px-4 py-2 text-sm font-medium transition-colors {productState.selectedAggregations?.[optionName] === value
+									? '!border-primary !bg-primary !text-primary-foreground'
+									: '!border-border !bg-background !text-foreground hover:!border-primary hover:!text-primary'}"
 								onclick={() => productState.toggleAggregation(optionName, value)}
 							>
 								{value}

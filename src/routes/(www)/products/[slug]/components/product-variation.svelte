@@ -48,12 +48,12 @@
 							</Button>
 						{:else}
 							<Button
-								variant={productState.isVariantOptionSelected(option.id, v.value) ? 'default' : 'plain'}
+								variant="outline"
 								disabled={!v.selectable}
-								class="min-w-[3.5rem] !bg-primary px-4 py-2 {
+								class="min-w-[3.5rem] rounded-md border px-4 py-2 text-sm font-medium transition-colors {
                   productState.isVariantOptionSelected(option.id, v.value)
-									? 'border !border-accent !bg-transparent'
-									: '!bg-accent text-accent-foreground'}"
+									? '!border-primary !bg-primary !text-primary-foreground'
+									: '!border-border !bg-background !text-foreground hover:!border-primary hover:!text-primary'} {!v.selectable ? 'opacity-40' : ''}"
 								onclick={() => productState.selectVariant({ option, value: v })}
 							>
 								{v.value}
