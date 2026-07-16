@@ -101,7 +101,7 @@
 	"dependencies": {
 		"@internationalized/date": "^3.7.0",
 		"@lucide/svelte": "^1.8.0",
-		"@misiki/kitcommerce-core": "^0.1.20",
+		"@misiki/kitcommerce-core": "^0.1.23",
 		"@misiki/litekart-connector": "^2.0.26",
 		"cheerio": "^1.2.0",
 		"culori": "^4.0.2",
@@ -114,6 +114,6 @@
 		"zod": "^3.24.1"
 	},
 	"patchedDependencies": {
-		"@misiki/kitcommerce-core@0.1.20": "patches/@misiki%2Fkitcommerce-core@0.1.20.patch"
+		"@misiki/kitcommerce-core@0.1.23": "patches/@misiki%2Fkitcommerce-core@0.1.23.patch"
 	}
 }
