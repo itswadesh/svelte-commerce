@@ -22,8 +22,11 @@
  * below never legitimately appear in an identifier.
  */
 
-/** Supplier account names seen on the shared catalogue. Longest first — order matters. */
-const SUPPLIER_BRANDS = ['JewelWeSells', 'JewelWeSell', 'Boris & Twins', 'Boris&Twins']
+/** Supplier account names seen on the shared catalogue. Longest first — order matters.
+ *  'BorisAndTwins' is the camel-cased variant the API returns as `product.vendor.businessName`
+ *  (seen in the homepage products feed on 2026-07-16); exact-case only, so CDN/url slugs
+ *  in lowercase are never touched. */
+const SUPPLIER_BRANDS = ['BorisAndTwins', 'JewelWeSells', 'JewelWeSell', 'Boris & Twins', 'Boris&Twins']
 
 /**
  * This storefront's brand, for use inside a load function.

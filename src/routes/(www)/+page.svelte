@@ -13,6 +13,7 @@
 	import { setCollectionState } from '$lib/core/stores/collection.svelte.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
 	import { getThemeHomepageContent } from '$lib/theme/index.js'
+	import { stripSupplierBrandFromJson } from '$lib/theme/supplier-brand.js'
 	import { themeHomepages } from '$lib/theme/homepages.js'
 	import Slider from '$lib/components/home/slider.svelte'
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
@@ -55,9 +56,23 @@
 			.slice(0, 6)
 	])
 
+	// The homepage products feed is fetched CLIENT-side through the vite /api proxy,
+	// which bypasses hooks.server's handleFetch sanitizer — so the supplier's
+	// vendor.businessName would otherwise reach the JSON-LD (brand/manufacturer).
+	// Sanitize a JSON round-trip copy here; never mutate the module's state in render.
+	const featuredProductsStructuredData = $derived.by(() => {
+		const raw = homepageModule.featuredProductsStructuredData
+		if (!raw) return raw
+		try {
+			return JSON.parse(stripSupplierBrandFromJson(JSON.stringify(raw), themeContent.brandName))
+		} catch {
+			return raw
+		}
+	})
+
 </script>
 
-<GoogleStructuredDataProductsList products={homepageModule.featuredProductsStructuredData} />
+<GoogleStructuredDataProductsList products={featuredProductsStructuredData} />
 
 <GoogleStructuredDataOrganization
 	name={brandName}
