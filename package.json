@@ -101,7 +101,7 @@
 	"dependencies": {
 		"@internationalized/date": "^3.7.0",
 		"@lucide/svelte": "^1.8.0",
-		"@misiki/kitcommerce-core": "^0.1.18",
+		"@misiki/kitcommerce-core": "^0.1.23",
 		"@misiki/litekart-connector": "^2.0.26",
 		"cheerio": "^1.2.0",
 		"culori": "^4.0.2",
