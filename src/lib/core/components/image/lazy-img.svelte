@@ -10,8 +10,9 @@
 		src = '',
 		aspectRatio = page?.data?.store?.productImageAspectRatio,
 		width = 'auto',
-		loading = 'lazy',
-		fetchpriority = 'auto',
+		priority = false,
+		loading = priority ? 'eager' : 'lazy',
+		fetchpriority = priority ? 'high' : 'auto',
 		sizes = undefined,
 		...rest
 	}: {
@@ -21,6 +22,7 @@
 		src?: string
 		aspectRatio?: string
 		width?: string | number
+		priority?: boolean
 		loading?: 'lazy' | 'eager'
 		fetchpriority?: 'auto' | 'high' | 'low'
 		sizes?: string
@@ -99,7 +101,7 @@
 	class="relative bg-transparent w-full"
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 >
-	{#if !loaded || error}
+	{#if (!loaded || error) && !priority}
 		<div class="absolute inset-0 flex items-center justify-center bg-gray-50">
 			<!-- <ImageIcon class="h-8 w-8 text-gray-400" /> -->
 		</div>
@@ -113,7 +115,7 @@
 	{/if} -->
 	{#if page?.data?.store?.plugins?.imageCdn?.active && !usingFallback}
 		<div class={klass}>
-			{#if isIntersecting}
+			{#if isIntersecting || priority}
 				<img
 					onload={() => {
 						loaded = true
@@ -142,15 +144,15 @@
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
-					class:opacity-0={!loaded}
-					class:opacity-100={loaded}
+					class:opacity-0={!(loaded || priority)}
+					class:opacity-100={loaded || priority}
 					{...rest}
 				/>
 			{/if}
 		</div>
 	{:else}
 		<div class={klass} style="width: {width}px; height: {height}px;">
-			{#if isIntersecting}
+			{#if isIntersecting || priority}
 				<img
 					onload={() => {
 						loaded = true
@@ -171,8 +173,8 @@
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
-					class:opacity-0={!loaded}
-					class:opacity-100={loaded}
+					class:opacity-0={!(loaded || priority)}
+					class:opacity-100={loaded || priority}
 					{...rest}
 				/>
 			{/if}

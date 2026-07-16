@@ -14,7 +14,7 @@
 
 	const cartState = getCartState()
 
-	let { product, aspectRatio, hideVariations = true, hideCartControls = true }: any = $props()
+	let { product, aspectRatio, hideVariations = true, hideCartControls = true, priority = false }: any = $props()
 
 	// Theme-specific product card. Guarded so the default store is unaffected;
 	// only the limelight theme swaps in its bespoke presentation (logic reused
@@ -62,6 +62,7 @@
 							alt="{product.title || product.name} product image"
 							sizes="(min-width: 1024px) 25vw, (min-width: 768px) 38vw, 50vw"
 							class="w-full rounded-md object-top object-contain transition-transform duration-500"
+							{priority}
 						/>
 					{:else}
 						<EmptyImage class="w-full object-cover" style="aspect-ratio: 3 / 4; border-radius: 8px;" />

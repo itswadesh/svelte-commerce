@@ -243,6 +243,11 @@
 		line-height: 1.15;
 		letter-spacing: 0.8px;
 	}
+
+	/* Accessibility: visible keyboard focus indicator on all interactive elements */
+	:focus-visible {
+		@apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+	}
 }
 
 @media only screen and (max-width: 980px) {

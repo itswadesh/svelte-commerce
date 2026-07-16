@@ -11,7 +11,8 @@
 
 	function openWhatsApp() {
 		const message = encodeURIComponent('Hi!')
-		const whatsappUrl = `https://wa.me/${page?.data?.store?.plugins?.whatsappChatButton?.phone}?text=${message}`
+		const phone = (page?.data?.store?.plugins?.whatsappChatButton?.phone ?? '').toString().replace(/[^\d]/g, '')
+		const whatsappUrl = `https://wa.me/${phone}?text=${message}`
 		window.open(whatsappUrl, '_blank')
 	}
 </script>

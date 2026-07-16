@@ -9,6 +9,15 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - PUBLIC_LITEKART_API_URL=https://staging.litekart.in
       - NODE_ENV=production
       - PORT=3000
+      # REQUIRED at runtime. The node server reads PUBLIC_* from the process environment,
+      # NOT from .env (that only applies under `vite dev`/`preview`). If any of the four
+      # below is missing, SSR pages fail (API URL not configured / store resolution errors)
+      # and the client can throw `undefined (reading 'env')` because the SvelteKit env
+      # bootstrap never gets injected. Your deploy platform's env overrides these — set the
+      # real production values there.
+      - PUBLIC_LITEKART_API_URL=${PUBLIC_LITEKART_API_URL:-https://staging.litekart.in}
+      - PUBLIC_LITEKART_STORE_ID=${PUBLIC_LITEKART_STORE_ID}
+      - PUBLIC_LITEKART_DOMAIN=${PUBLIC_LITEKART_DOMAIN}
+      - PUBLIC_SITEMAP_URL=${PUBLIC_SITEMAP_URL}
