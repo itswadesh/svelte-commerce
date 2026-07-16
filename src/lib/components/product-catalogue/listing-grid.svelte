@@ -65,8 +65,8 @@
 	</div>
 {:else}
 	<div class="intra-gap grid auto-rows-auto grid-cols-2 lg:grid-cols-3">
-		{#each products as product (product.id)}
-			<ProductCard {product} />
+		{#each products as product, i (product.id)}
+			<ProductCard {product} priority={i < 6} />
 		{/each}
 	</div>
 

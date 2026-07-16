@@ -8,6 +8,8 @@
 	import { GetColorName } from 'hex-color-to-color-name'
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button/index.js'
+	import { page } from '$app/state'
+	import Textbox from '../form/textbox.svelte'
 
 	type FilterProps = {
 		class?: string
@@ -311,9 +313,20 @@
 			/>
 		</div>
 
-		<!-- Price range display -->
-		<div class="mt-3 text-xs font-bold text-gray-500">
-			{filterState.priceRange}
+		<!-- Editable price bounds (kept in sync with the slider) -->
+		<div class="mt-4 grid grid-cols-2 gap-3">
+			<Textbox
+				type="number"
+				label="Min ({page.data?.store?.currency?.symbol})"
+				onchange={filterState.handleMinPriceChange}
+				bind:value={filterState.minPrice}
+			/>
+			<Textbox
+				type="number"
+				label="Max ({page.data?.store?.currency?.symbol})"
+				onchange={filterState.handleMaxPriceChange}
+				bind:value={filterState.maxPrice}
+			/>
 		</div>
 
 		<!-- Other generalized filters -->

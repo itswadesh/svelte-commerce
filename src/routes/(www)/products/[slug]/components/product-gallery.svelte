@@ -120,7 +120,7 @@
 									Video not supported
 								</video>
 							{:else}
-								<LazyImg src={img} alt="Product Image" class="w-full rounded-radius object-cover" />
+								<LazyImg src={img} alt={`${page.data?.product?.title || page.data?.product?.name || 'Product'} - Thumbnail ${idx + 1}`} class="w-full rounded-radius object-cover" />
 							{/if}
 						</div>
 					</Carousel.Item>
@@ -180,7 +180,12 @@
 									Video not supported
 								</video>
 							{:else}
-								<LazyImg src={img} alt="Product Image" class="w-full rounded-radius object-contain" />
+								<LazyImg
+									src={img}
+									alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
+									class="w-full rounded-radius object-contain"
+									priority={index === 0}
+								/>
 							{/if}
 						</div>
 					</Carousel.Item>
@@ -261,7 +266,7 @@
 										Video not supported
 									</video>
 								{:else}
-									<LazyImg src={img} alt="Product Image" class="max-h-[90vh]" />
+									<LazyImg src={img} alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`} class="max-h-[90vh]" />
 								{/if}
 							</div>
 						</Carousel.Item>
@@ -295,7 +300,7 @@
 						{:else}
 							<LazyImg
 								src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
-								alt="Thumbnail"
+								alt={`${page.data?.product?.title || page.data?.product?.name || 'Product'} - Gallery Thumbnail ${i + 1}`}
 								class="h-full w-full rounded-radius object-contain"
 							/>
 						{/if}

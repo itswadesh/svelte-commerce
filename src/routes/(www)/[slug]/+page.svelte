@@ -8,16 +8,27 @@
 	setDesktopFilterState()
 	setCategoryFilterState()
 	const data = $derived(page.data)
+
+	// The slug load returns { products } with the category under products.categoryHierarchy
+	// (there is no data.page here); the last entry is the current category.
+	const category = $derived(data?.products?.categoryHierarchy?.at(-1))
+
+	// Readable fallback derived from the URL slug (e.g. "engagement-rings" -> "Engagement Rings")
+	const slugTitle = $derived(
+		(page.params.slug || '')
+			.split(/[-_]/)
+			.filter(Boolean)
+			.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+			.join(' ')
+	)
 </script>
 
 <ListingScehma />
 <SeoHeader
-	metaTitle={(data?.page?.categories && data?.page?.categories[0]?.metaTitle) ||
-		(data?.page?.categories && data?.page?.categories[0]?.name) ||
-		'Products'}
-	metaDescription={data?.page?.categories && data?.page?.categories[0]?.metaDescription}
-	metaKeywords={data?.page?.categories && data?.page?.categories[0]?.metaKeywords}
-	image={data?.page?.categories && data?.page?.categories[0]?.banner}
+	metaTitle={category?.metaTitle || category?.name || slugTitle || 'Products'}
+	metaDescription={category?.metaDescription}
+	metaKeywords={category?.metaKeywords}
+	image={category?.banner}
 />
 
 <ListingPage />

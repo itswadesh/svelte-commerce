@@ -108,7 +108,7 @@
 	class="relative w-full overflow-hidden bg-gray-50"
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 >
-	{#if !loaded || error}
+	{#if (!loaded || error) && !priority}
 		<div class="absolute inset-0 flex items-center justify-center bg-gray-50">
 			<!-- <ImageIcon class="h-8 w-8 text-gray-400" /> -->
 		</div>
@@ -116,7 +116,7 @@
 
 	{#if page?.data?.store?.plugins?.imageCdn?.active && !usingFallback}
 		<div class={klass}>
-			{#if isIntersecting}
+			{#if isIntersecting || priority}
 				<img
 					onload={() => {
 						loaded = true
@@ -142,8 +142,8 @@
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center {klass}"
-					class:opacity-0={!loaded}
-					class:opacity-100={loaded}
+					class:opacity-0={!(loaded || priority)}
+					class:opacity-100={loaded || priority}
 					style:transform-origin="{zoomPos.x}% {zoomPos.y}%"
 					style:transform={isHovered && !isMobile ? 'scale(2.5)' : 'scale(1)'}
 					style:transition="transform 0.5s cubic-bezier(0.33, 1, 0.68, 1), transform-origin 0.15s ease-out"
@@ -153,7 +153,7 @@
 		</div>
 	{:else}
 		<div class={klass} style="width: {width}px; height: {height}px;">
-			{#if isIntersecting}
+			{#if isIntersecting || priority}
 				<img
 					onload={() => {
 						loaded = true
@@ -173,8 +173,8 @@
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center {klass}"
-					class:opacity-0={!loaded}
-					class:opacity-100={loaded}
+					class:opacity-0={!(loaded || priority)}
+					class:opacity-100={loaded || priority}
 					style:transform-origin="{zoomPos.x}% {zoomPos.y}%"
 					style:transform={isHovered && !isMobile ? 'scale(2.5)' : 'scale(1)'}
 					style:transition="transform 0.5s cubic-bezier(0.33, 1, 0.68, 1), transform-origin 0.15s ease-out"
