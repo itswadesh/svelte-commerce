@@ -8,16 +8,17 @@
 	import { fly } from 'svelte/transition'
 	import { formatPrice } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
+	import { innerWidth } from 'svelte/reactivity/window'
 
-	let { open = false, code = $bindable('') } = $props()
+	let { open = false, code = $bindable(''), class: className = '' } = $props()
 </script>
 
 <CouponDrawerRenderer bind:code>
 	{#snippet content({ show, coupons, isChecking, handleCheck, handleCouponClick, handleCopy })}
 		{#if show}
-			<Drawer.Root {open} direction={innerWidth > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
-				<Drawer.Trigger>
-					<Button variant="outline" class="group w-full justify-between !py-5 !px-6">
+			<Drawer.Root {open} direction={innerWidth.current && innerWidth.current > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
+				<Drawer.Trigger class="w-full {className ? 'h-full' : ''}">
+					<Button variant="outline" class="group w-full justify-between !py-5 !px-6 {className}">
 						Apply Promo Code
 						<span class="text-muted-foreground">
 							<ChevronRight class="h-4 w-4" />

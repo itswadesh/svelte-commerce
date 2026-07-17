@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import LazyImgWithZoom from '$lib/core/components/image/lazy-img-with-zoom.svelte'
 	import * as Carousel from '$lib/components/ui/carousel/index.js'
 	import type { CarouselAPI } from '$lib/components/ui/carousel/context.js'
 	import { Play, X } from '@lucide/svelte'
@@ -120,7 +121,10 @@
 									Video not supported
 								</video>
 							{:else}
-								<LazyImg src={img} alt={`${page.data?.product?.title || page.data?.product?.name || 'Product'} - Thumbnail ${idx + 1}`} class="w-full rounded-radius object-cover" />
+								<!-- Keyed so the thumbnail fully re-renders when a variant change swaps the image URL. -->
+								{#key img}
+									<LazyImg src={img} alt={`${page.data?.product?.title || page.data?.product?.name || 'Product'} - Thumbnail ${idx + 1}`} class="w-full rounded-radius object-cover" />
+								{/key}
 							{/if}
 						</div>
 					</Carousel.Item>
@@ -160,6 +164,7 @@
 							onclick={() => showCarousel(img)}
 							onkeydown={(e) => e.key === 'Enter' && showCarousel(img)}
 						>
+							<span class="sr-only">View full-screen gallery</span>
 							{#if youtubeId}
 								<div class="relative aspect-square w-full">
 									<iframe
@@ -180,12 +185,16 @@
 									Video not supported
 								</video>
 							{:else}
-								<LazyImg
-									src={img}
-									alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
-									class="w-full rounded-radius object-contain"
-									priority={index === 0}
-								/>
+								<!-- Keyed so the image fully re-renders when a variant change swaps the image URL.
+								     Zoom-on-hover (desktop only; the component no-ops on mobile). -->
+								{#key img}
+									<LazyImgWithZoom
+										src={img}
+										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
+										class="w-full rounded-radius object-contain"
+										priority={index === 0}
+									/>
+								{/key}
 							{/if}
 						</div>
 					</Carousel.Item>

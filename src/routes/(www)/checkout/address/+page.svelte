@@ -16,6 +16,9 @@
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
+	import AddressForm from './address-form.svelte'
+	import { authService } from '$lib/core/services/index.js'
+	import { onMount } from 'svelte'
 
 	const addressModule = new AddressModule()
 	const cartState = addressModule.cartState
@@ -23,6 +26,43 @@
 
 	const isEmailOk = $derived(addressModule.isEmailOk)
 	const isPhoneOk = $derived(addressModule.isPhoneOk)
+
+	const isGuestCheckout = $derived(!userState?.user?.role)
+	let loadingForGuestCheckout = $state(false)
+
+	// Coming back from the payment step: prefill the guest form with the saved
+	// address so it can be edited in place.
+	onMount(async () => {
+		await cartState.hasLoaded
+		if (isGuestCheckout) {
+			if (cartState.cart.shippingAddress) {
+				addressModule.currentAddress = cartState.cart.shippingAddress
+				addressModule.currentAddressType = 'shipping'
+				addressModule.isBillingAddressSameAsShipping = true
+			}
+		}
+	})
+
+	async function handleGuestSubmit(address: any) {
+		try {
+			loadingForGuestCheckout = true
+
+			await cartState.updateEmail({ email: address.email, phone: address.phone })
+			// saveAddressToCart (not handleFormSave) so the save is actually awaited.
+			await addressModule.saveAddressToCart()
+			if (!cartState.cart.shippingAddress) {
+				// A stale auth session (connect.sid) makes the API stamp user_id=0 on the
+				// address insert and 500. Guests don't need that session — drop it and retry.
+				await authService.logout().catch(() => {})
+				await addressModule.saveAddressToCart()
+			}
+			if (isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress) {
+				await addressModule.handleProceedToPayment()
+			}
+		} finally {
+			loadingForGuestCheckout = false
+		}
+	}
 </script>
 
 <svelte:head>
@@ -64,20 +104,31 @@
 					<div class="space-y-6">
 						<!-- Contact Details -->
 						{#await userState.hasLoaded then _}
-							{#if (!isPhoneOk || !isEmailOk) && !userState.user?.userId}
-								<p class="text-sm text-gray-600">
-									<Button
-										variant="link"
-										class="h-auto p-0"
-										onclick={() => {
-											showAuthModal('login')
-										}}
-									>
-										Login
-									</Button> to autofill your details
-								</p>
+							<!-- Every logged-out visitor sees the guest-checkout banner. -->
+							{#if !userState.user?.userId}
+								<div class="rounded-lg border border-blue-100 bg-blue-50 p-4">
+									<div class="flex items-start gap-3">
+										<ShoppingBag class="mt-0.5 size-5 shrink-0 text-blue-600" />
+										<div>
+											<p class="text-sm font-semibold text-blue-900">You're checking out as a guest</p>
+											<p class="mt-1 text-sm text-blue-800">
+												No account needed — just enter your details below. Optionally,
+												<button
+													class="font-bold underline hover:text-blue-900"
+													onclick={() => {
+														showAuthModal('login')
+													}}
+												>
+													log in
+												</button>
+												to use your saved addresses and speed up checkout.
+											</p>
+										</div>
+									</div>
+								</div>
 							{/if}
 						{/await}
+						{#if addressModule.isPhoneRequired || addressModule.isEmailRequired}
 						<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
 							<div class="flex items-center justify-between border-b border-border px-5 py-4">
 								<div class="flex items-center space-x-3">
@@ -160,10 +211,32 @@
 								</form>
 							{/if}
 						</div>
+						{/if}
 						<!-- Shipping Address -->
 						{#if isEmailOk && isPhoneOk}
 							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
-								{#if cartState.cart.shippingAddress}
+								{#if isGuestCheckout}
+									<!-- Guest checkout: inline address form, no login required -->
+									<div class="p-6">
+										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
+												Delivery Address
+											</h2>
+											<Button
+												variant="link"
+												onclick={() => showAuthModal('login')}
+												class="h-auto p-0"
+											>
+												Login to view your saved addresses
+											</Button>
+										</div>
+										<AddressForm
+											bind:address={addressModule.currentAddress}
+											isLoading={loadingForGuestCheckout}
+											onsave={handleGuestSubmit}
+										/>
+									</div>
+								{:else if cartState.cart.shippingAddress}
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
 											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
@@ -305,16 +378,18 @@
 									</div>
 								</div>
 							{/if}
-							<div class="flex items-center justify-start gap-2 p-4 transition-all hover:bg-gray-100">
-								<Checkbox
-									checked={addressModule.isBillingAddressSameAsShipping}
-									onCheckedChange={addressModule?.handleBillingAddressSameCheck}
-									id="isBillingAddressSameAsShipping"
-								/>
-								<label for="isBillingAddressSameAsShipping" class="cursor-pointer text-xs font-bold uppercase tracking-tight text-gray-700"
-									>Billing address same as shipping</label
-								>
-							</div>
+							{#if !isGuestCheckout}
+								<div class="flex items-center justify-start gap-2 p-4 transition-all hover:bg-gray-100">
+									<Checkbox
+										checked={addressModule.isBillingAddressSameAsShipping}
+										onCheckedChange={addressModule?.handleBillingAddressSameCheck}
+										id="isBillingAddressSameAsShipping"
+									/>
+									<label for="isBillingAddressSameAsShipping" class="cursor-pointer text-xs font-bold uppercase tracking-tight text-gray-700"
+										>Billing address same as shipping</label
+									>
+								</div>
+							{/if}
 						{/if}
 					</div>
 

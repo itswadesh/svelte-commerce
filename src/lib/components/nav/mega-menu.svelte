@@ -7,6 +7,10 @@
 	import { fade } from 'svelte/transition'
 	import { onMount } from 'svelte'
 
+	// Slim variant for the scrolled header: drops the menu list's vertical padding.
+	// (jws also dropped the list's margin and border here; this list carries neither.)
+	let { slim = false } = $props()
+
 	// Admin-configured header menu takes priority over the raw category megamenu.
 	// Menu-builder nodes keep their children under `items`; category nodes use `children`.
 	const headerMenuItems = $derived(page.data.store?.menu?.find((x: any) => x.menuId === 'header')?.items)
@@ -51,7 +55,9 @@
 					>
 						<a
 							href={category.link || '/' + category.slug}
-							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap py-3 text-sm font-semibold uppercase  text-gray-900 transition-all duration-300 hover:text-gray-900 active:scale-95
+							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap {slim
+								? 'py-1.5'
+								: 'py-3'} text-sm font-semibold uppercase  text-gray-900 transition-all duration-300 hover:text-gray-900 active:scale-95
 								{selectedCategory === category.name ? 'text-primary after:scale-x-100' : 'after:scale-x-0'}
 								after:ease-out-expo after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
 							style="font-family: var(--font-body);"
@@ -163,7 +169,7 @@
 			<!-- Only while the category megamenu is still loading; a settled-but-empty menu renders nothing. -->
 			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none" transition:fade={{ duration: 100 }}>
 				{#each Array(6) as _}
-					<li class="py-3">
+					<li class={slim ? 'py-1.5' : 'py-3'}>
 						<Skeleton class="h-5 w-24 rounded-full" />
 					</li>
 				{/each}
