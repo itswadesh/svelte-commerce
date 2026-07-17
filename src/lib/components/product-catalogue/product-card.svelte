@@ -126,18 +126,12 @@
 					</span>
 				</a>
 
+				<!-- Fleet rule (no-discount-on-card-pdp): selling price only — no MRP
+				     strikethrough, no "% OFF" badge on the product card. -->
 				<div class="flex items-center gap-2" data-testid="product-card-price-container">
 					<span data-testid="product-card-selling-price" class="text-sm font-semibold text-gray-900">
 						{formatPrice(product.price, page?.data?.store?.currency?.code)}
 					</span>
-					{#if product.mrp && product.mrp > product.price}
-						<span class="text-xs text-gray-600 line-through" data-testid="product-card-mrp">
-							{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
-						</span>
-						<span class="hidden text-xs font-bold uppercase text-green-700 md:block lg:text-sm" data-testid="product-card-discount">
-							{discount}% OFF
-						</span>
-					{/if}
 				</div>
 
 				{#if !hideCartControls}
