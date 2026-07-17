@@ -35,7 +35,7 @@
 </script>
 
 <MegaMenuRenderer>
-	{#snippet content({ menuItems, toggleMenuItemChildren, selectedCategory, openChildMenu, closeChildMenu })}
+	{#snippet content({ headerItems: menuItems, toggleMenuItemChildren, selectedCategory, openChildMenu, closeChildMenu })}
 		{@const items = headerMenuItems ?? menuItems}
 		{#if items?.length}
 			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none">
