@@ -49,6 +49,11 @@
 	})
 </script>
 
+<!-- Account pages are private; keep the whole (my) tree out of search indexes. -->
+<svelte:head>
+	<meta name="robots" content="noindex, nofollow" />
+</svelte:head>
+
 <StorePlugins />
 
 <Nav />
