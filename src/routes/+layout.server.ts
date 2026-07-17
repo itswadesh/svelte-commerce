@@ -1,5 +1,6 @@
 import { layoutServer } from '$lib/core/load-functions/index.js'
 import { getThemeHomepageContent, resolveStorefrontTheme } from '$lib/theme/index.js'
+import { stripSupplierMediaUrls } from '$lib/theme/supplier-brand.js'
 
 export async function load(event: any) {
 	const data = await layoutServer(event)
@@ -59,9 +60,12 @@ export async function load(event: any) {
 				}
 			: data?.store
 
-	return {
+	// Root-layout data (store record, nav menus) must never carry supplier-hosted
+	// media URLs — see stripSupplierMediaUrls. Catalogue payloads don't pass through
+	// here, so product imagery is unaffected.
+	return stripSupplierMediaUrls({
 		...data,
 		store,
 		theme
-	}
+	})
 }

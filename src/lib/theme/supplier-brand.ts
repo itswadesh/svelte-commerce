@@ -160,3 +160,55 @@ function scrub(value: unknown, brand: string, seen: WeakSet<object>): void {
 		}
 	}
 }
+
+/**
+ * Hosts owned by the supplier; a ROOT-LAYOUT-level URL pointing at them is always a
+ * leak. Catalogue/product payloads are NOT passed through this — only the layout data
+ * (store record, nav menus), where supplier-hosted media has no legitimate use.
+ * Seen live 2026-07-17: the shared store menu grew a "Custom Design" item whose
+ * `thumbnail` points at media.jewelwesell.com (reproduced on websites 49/54/60/67/73);
+ * themes render menu name/link only, so nulling the URL is invisible — but the domain
+ * otherwise ships to every shopper inside the SvelteKit hydration payload.
+ */
+const SUPPLIER_MEDIA_HOSTS = ['jewelwesell.com']
+
+/** Deep-null every supplier-hosted URL in a payload, IN PLACE (same rationale as
+ *  stripSupplierBrand: rebuilding the object graph drops prototypes/getters). */
+export function stripSupplierMediaUrls<T>(value: T): T {
+	scrubUrls(value, new WeakSet())
+	return value
+}
+
+function scrubUrls(value: unknown, seen: WeakSet<object>): void {
+	if (value === null || typeof value !== 'object') return
+	if (seen.has(value)) return
+	seen.add(value)
+
+	if (Array.isArray(value)) {
+		for (let i = 0; i < value.length; i++) {
+			const v = value[i]
+			if (typeof v === 'string') {
+				if (isSupplierUrl(v)) value[i] = null
+			} else {
+				scrubUrls(v, seen)
+			}
+		}
+		return
+	}
+
+	const target = value as Record<string, unknown>
+	for (const key of Object.keys(target)) {
+		const v = target[key]
+		if (typeof v === 'string') {
+			if (isSupplierUrl(v)) target[key] = null
+		} else {
+			scrubUrls(v, seen)
+		}
+	}
+}
+
+function isSupplierUrl(s: string): boolean {
+	if (!s.includes('://') && !s.startsWith('//')) return false
+	const lower = s.toLowerCase()
+	return SUPPLIER_MEDIA_HOSTS.some((h) => lower.includes(h))
+}
