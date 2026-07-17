@@ -5,10 +5,20 @@
 	import { page } from '$app/state'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import { fade } from 'svelte/transition'
+	import { onMount } from 'svelte'
 
 	// Admin-configured header menu takes priority over the raw category megamenu.
 	// Menu-builder nodes keep their children under `items`; category nodes use `children`.
 	const headerMenuItems = $derived(page.data.store?.menu?.find((x: any) => x.menuId === 'header')?.items)
+
+	// The renderer doesn't expose loading state, so settle the same megamenu promise here
+	// to tell "still loading" (skeleton) apart from "loaded but empty" (empty nav).
+	let megamenuSettled = $state(false)
+	onMount(() => {
+		Promise.resolve(page?.data?.store?.megamenu)
+			.catch(() => {})
+			.finally(() => (megamenuSettled = true))
+	})
 
 	function childrenOf(node: any) {
 		return node?.items ?? node?.children
@@ -149,7 +159,8 @@
 					</li>
 				{/each}
 			</ul>
-		{:else}
+		{:else if headerMenuItems === undefined && !megamenuSettled}
+			<!-- Only while the category megamenu is still loading; a settled-but-empty menu renders nothing. -->
 			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none" transition:fade={{ duration: 100 }}>
 				{#each Array(6) as _}
 					<li class="py-3">

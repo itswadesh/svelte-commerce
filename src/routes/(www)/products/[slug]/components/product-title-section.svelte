@@ -6,6 +6,17 @@
 
 	const { product } = $props()
 	const productState = useProductState()
+
+	// Star rating comes from the actual ratings array (the same source the reviews
+	// section renders) rather than a pre-baked product.rating scalar, so the stars
+	// always match the visible reviews.
+	const reviewCount = $derived(product?.ratings?.length ?? 0)
+	const avgRating = $derived.by(() => {
+		if (!product?.ratings?.length) return 0
+		const total = product.ratings.reduce((acc: number, cur: any) => acc + (cur?.rating || 0), 0)
+		return Math.floor((total / product.ratings.length) * 10) / 10
+	})
+	const reviewsEnabled = $derived(!!page?.data?.store?.plugins?.isProductReviewsAndRatings?.active)
 </script>
 
 <div class="relative">
@@ -46,7 +57,7 @@
 		</div>
 	{/if}
 
-		{#if product?.rating && page?.data?.store?.plugins?.enableReviews}
+		{#if reviewCount > 0}
 	<div class="intra-pt flex items-center gap-4">
 			<div class="flex items-center gap-2">
 				<div class="relative flex items-center">
@@ -57,17 +68,22 @@
 					</div>
 					<div class="absolute left-0 top-0 flex gap-0.5 overflow-hidden">
 						{#each { length: 5 } as _, i}
-							<Star class="h-4 w-4 {i < Math.floor(product.rating) ? 'fill-primary text-primary' : 'hidden'}" />
+							<Star class="h-4 w-4 {i < Math.floor(avgRating) ? 'fill-primary text-primary' : 'hidden'}" />
 						{/each}
-						{#if product.rating % 1 > 0}
+						{#if avgRating % 1 > 0}
 							<StarHalf class="h-4 w-4 fill-primary text-primary" />
 						{/if}
 					</div>
 				</div>
-				<span class="text-xs font-bold text-gray-900 dark:text-gray-100">{product.rating}</span>
+				<span class="text-xs font-bold text-gray-900 dark:text-gray-100">{avgRating}</span>
 				<span class="h-1 w-1 rounded-full bg-gray-300"></span>
+				<span class="text-xs text-gray-500">{reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}</span>
 				<Button variant="link" class="h-auto p-0 text-xs font-medium">View Reviews</Button>
 			</div>
+	</div>
+		{:else if reviewsEnabled}
+	<div class="intra-pt">
+		<span class="text-sm text-gray-400">Be the first to review</span>
 	</div>
 		{/if}
 </div>

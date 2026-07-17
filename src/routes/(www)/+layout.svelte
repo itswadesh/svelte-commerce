@@ -20,8 +20,14 @@
 </svelte:head>
 
 <div class="flex min-h-screen flex-col justify-between">
+	<a
+		href="#main"
+		class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-[9999] focus:rounded focus:bg-white focus:p-3 focus:shadow"
+	>
+		Skip to main content
+	</a>
 	<Nav storeData={data.store} />
-	<main class="inter-gap flex min-h-screen flex-1 flex-col">
+	<main id="main" class="inter-gap flex min-h-screen flex-1 flex-col">
 		{@render children()}
 	</main>
 	<Footer />
