@@ -333,10 +333,10 @@
 						</li>
 
 						<!-- MegaMenu Categories -->
-						{#if navModule.megaMenuPluginActive && navModule.megaMenu?.length}
-							{#each navModule.megaMenu as m, mx}
+						{#if navModule.megaMenuPluginActive && navModule.menuItems?.length}
+							{#each navModule.menuItems as m, mx}
 								<li>
-									{#if m?.children?.length}
+									{#if m?.items?.length}
 										<div
 											class="flex w-full items-center justify-between rounded-md px-3 py-1 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
 										>
@@ -355,7 +355,7 @@
 												size="icon"
 												aria-label="Toggle subcategory"
 												class="h-7 w-7 rounded-full p-0 hover:bg-gray-200/50"
-												onclick={() => navModule.handleToggleSubCategory(m, mx)}
+												onclick={() => navModule.handleToggleSubMenu(m, mx)}
 											>
 												<ChevronDown
 													class="h-3.5 w-3.5 shrink-0 transition-transform duration-300
@@ -378,9 +378,9 @@
 									<!-- Category Level 2 -->
 									{#if navModule.showSubCategory[mx]}
 										<ul class="ml-6 mt-1 list-none space-y-1 border-l border-gray-100 p-0 pl-3">
-											{#each m.children as c, cx}
+											{#each m.items as c, cx}
 												<li>
-													{#if c.children?.length}
+													{#if c.items?.length}
 														<div
 															class="flex w-full items-center justify-between rounded-md px-2 py-1 text-[11px] font-semibold text-gray-500 transition-all duration-200 hover:bg-gray-50 hover:text-black"
 														>
@@ -397,7 +397,7 @@
 																size="icon"
 																aria-label="Toggle subcategory"
 																class="h-6 w-6 rounded-full p-0 hover:bg-gray-200/50"
-																onclick={() => navModule.handleToggleSubCategory2(c, cx)}
+																onclick={() => navModule.handleToggleSubMenu2(c, cx)}
 															>
 																<ChevronDown
 																	class="h-3 w-3 shrink-0 transition-transform duration-300
@@ -419,7 +419,7 @@
 													<!-- Category Level 3 -->
 													{#if navModule.showSubCategory2[cx]}
 														<ul class="ml-4 mt-1 list-none space-y-1 border-l border-gray-100 p-0 pl-3">
-															{#each c.children as cc}
+															{#each c.items as cc}
 																<li>
 																	<a
 																		href={cc.link ? cc.link : cc.slug ? '/' + cc.slug : '/products'}
