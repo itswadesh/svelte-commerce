@@ -102,7 +102,8 @@
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 >
 	{#if (!loaded || error) && !priority}
-		<div class="absolute inset-0 flex items-center justify-center bg-gray-50">
+		<!-- Visible loading placeholder (skipped for priority images, which render eagerly). -->
+		<div class="absolute inset-0 flex items-center justify-center bg-gray-50 animate-pulse">
 			<!-- <ImageIcon class="h-8 w-8 text-gray-400" /> -->
 		</div>
 	{/if}

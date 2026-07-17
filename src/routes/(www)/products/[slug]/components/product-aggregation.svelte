@@ -31,7 +31,7 @@
 								class="min-w-[3.5rem] !bg-primary px-4 py-2 {productState.selectedAggregations?.[optionName] === value
 									? 'border !border-accent !bg-transparent'
 									: '!bg-accent text-accent-foreground'}"
-								onclick={() => productState.toggleAggregation(optionName, value)}
+								onclick={() => productState.toggleAggregation(optionName, value, true)}
 							>
 								{value}
 							</Button>

@@ -6,9 +6,10 @@
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import { navigating } from '$app/stores'
 	import { updated } from '$app/state'
-	import { beforeNavigate } from '$app/navigation'
+	import { afterNavigate, beforeNavigate } from '$app/navigation'
+	import { browser } from '$app/environment'
 	import { Loader } from '@lucide/svelte'
-	import { onMount, type Snippet } from 'svelte'
+	import { type Snippet } from 'svelte'
 	import type { StoreData } from '$lib/core/types/index.js'
   import { ColorPalette } from '$lib/core/components/index.js'
 
@@ -29,24 +30,27 @@
 
 	// Stale-client protection. SvelteKit's `updated` store flips to true once the
 	// deployed build (via _app/version.json polling) no longer matches the running
-	// client. We then load fresh code at the next safe moment so mobile/PWA users
-	// never keep running an old bundle:
+	// client. We then load fresh code so mobile/PWA users never keep running an
+	// old bundle:
 	//  - on the next in-app navigation (hard load instead of client-side nav)
-	//  - when the app returns to the foreground (covers webviews sitting idle)
+	//  - immediately while the tab sits idle (covers webviews in the background)
 	beforeNavigate((nav) => {
 		if (updated.current && nav.to?.url && !nav.willUnload) {
 			location.href = nav.to.url.href
 		}
 	})
 
-	onMount(() => {
-		const onVisible = () => {
-			if (document.visibilityState === 'visible' && updated.current) {
-				location.reload()
-			}
+	// Auto-update as soon as a new deployment is detected, even while the tab
+	// sits idle (e.g. inside a mobile webview) — don't wait for a navigation.
+	$effect(() => {
+		if (browser && updated.current) {
+			location.reload()
 		}
-		document.addEventListener('visibilitychange', onVisible)
-		return () => document.removeEventListener('visibilitychange', onVisible)
+	})
+
+	// Also re-check on every navigation so a stale webview updates promptly.
+	afterNavigate(() => {
+		if (browser) updated.check()
 	})
 </script>
 

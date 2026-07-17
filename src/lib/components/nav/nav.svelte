@@ -39,6 +39,7 @@
 	const navModule = new NavModule()
 	const userState = navModule.userState
 	const isHomepage = $derived(page.route?.id === '/(www)')
+	const isScrolled = $derived(navModule.scrollY > 20)
 	const sidebarHistoryKey = '__svelteCommerceMobileSidebar'
 	let ownsSidebarHistoryEntry = false
 
@@ -105,27 +106,33 @@
 				{@html helloBarPlugin?.content}
 			</div> -->
 
-			{#if navModule.helloBarPlugin?.content}
-				<div class="max-w-none bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
-					<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
-						{#if navModule.helloBarPlugin?.content}
-							<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
-						{/if}
-						{#if navModule.helloBarPlugin?.content2}
-							<li style="--index: 2;">{@html navModule.helloBarPlugin?.content2}</li>
-						{/if}
-						{#if navModule.helloBarPlugin?.content3}
-							<li style="--index: 3;">{@html navModule.helloBarPlugin?.content3}</li>
-						{/if}
-					</ul>
+			<!-- Grid-rows 1fr→0fr collapse animates to zero without a magic max-height. -->
+			<div class="grid transition-[grid-template-rows] duration-300 ease-in-out {isScrolled ? 'grid-rows-[0fr]' : 'grid-rows-[1fr]'}">
+				<div class="overflow-hidden">
+					{#if navModule.helloBarPlugin?.content}
+						<div class="max-w-none bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
+							<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
+								{#if navModule.helloBarPlugin?.content}
+									<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
+								{/if}
+								{#if navModule.helloBarPlugin?.content2}
+									<li style="--index: 2;">{@html navModule.helloBarPlugin?.content2}</li>
+								{/if}
+								{#if navModule.helloBarPlugin?.content3}
+									<li style="--index: 3;">{@html navModule.helloBarPlugin?.content3}</li>
+								{/if}
+							</ul>
+						</div>
+					{:else}
+						<div class="bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
+							{@html navModule.helloBarPlugin?.content}
+						</div>
+					{/if}
 				</div>
-			{:else}
-				<div class="bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
-					{@html navModule.helloBarPlugin?.content}
-				</div>
-			{/if}
+			</div>
 		{/if}
-		<div class="page-width flex h-16 items-center justify-between bg-white sm:h-14">
+		<!-- Fixed heights stand in for vertical padding here, so the scroll slimming transitions height instead. -->
+		<div class="page-width flex items-center justify-between bg-white transition-[height] duration-300 ease-in-out {isScrolled ? 'h-12' : 'h-16 sm:h-14'}">
 			<div class="hidden justify-center gap-3 sm:flex">
 				<Button
 					variant="ghost"
@@ -179,7 +186,7 @@
 
 			{#if navModule.megaMenuPluginActive}
 				<div class="hidden md:block">
-					<MegaMenu />
+					<MegaMenu slim={isScrolled} />
 				</div>
 			{/if}
 			<div class="flex items-center gap-2 sm:gap-2">

@@ -1,7 +1,12 @@
 <script lang="ts">
 	import LoginModal from '$lib/components/auth/login-modal.svelte'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
-	import { SeoHeader, GoogleStructuredDataBreadcrumb, GoogleStructuredDataProduct } from '$lib/core/components/index.js'
+	import {
+		SeoHeader,
+		GoogleStructuredDataBreadcrumb,
+		GoogleStructuredDataProduct,
+		GoogleStructuredVideoSchema
+	} from '$lib/core/components/index.js'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
@@ -21,30 +26,111 @@
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button/index.js'
-	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
-	const PUBLIC_LITEKART_DOMAIN = $derived(page.url.origin)
 
 	const productState = useProductState()
   const data = $derived(page.data)
   const showPincodeCheck = $derived(productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
+
+	/** Strip HTML tags and collapse whitespace; returns '' for placeholder-only values like "-". */
+	const cleanHtmlText = (value: string | null | undefined): string => {
+		const text = String(value ?? '')
+			.replace(/<[^>]*>/g, ' ')
+			.replace(/\s+/g, ' ')
+			.trim()
+		return /^[\s\-–—._,]*$/.test(text) ? '' : text
+	}
+
+	// Feed data sometimes carries placeholder descriptions ("-"); never surface them in meta tags.
+	const metaDescription = $derived.by(() => {
+		const provided = cleanHtmlText(data?.product?.metaDescription)
+		if (provided) return provided
+		const description = cleanHtmlText(data?.product?.description)
+		if (data?.product?.title && description) {
+			return `${data.product.title}. ${description.slice(0, 160)}... Discover premium quality ${data.product.title} at Arialshop. Enjoy free delivery on orders over ₹999 and easy 7-day returns. Shop now!`
+		}
+		return `Discover premium quality products at Arialshop. Enjoy free delivery on orders over ₹999 and easy 7-day returns. Shop now!`
+	})
+
+	// Video URLs mixed into the product image list (YouTube or hosted mp4/webm) get a VideoObject schema.
+	const productVideoUrls = $derived(
+		productState.productImagesArray?.filter(
+			(img: string) => img.includes('youtube.com') || img.includes('youtu.be') || img.endsWith('.mp4') || img.endsWith('.webm')
+		) || []
+	)
+
+	// GA4 view_item — fires once per product (also on client-side navigation). Reads
+	// window.gtag at call time (defined by the GoogleAnalytics loader in the root layout,
+	// driven by the store's googleTagManager plugin); safe no-op when analytics is off.
+	const trackViewItem = (p: Record<string, any>, currency?: string) => {
+		if (typeof window === 'undefined') return
+		const g = (window as any).gtag
+		if (typeof g !== 'function') return
+		try {
+			g('event', 'view_item', {
+				currency,
+				value: p?.price,
+				items: [
+					{
+						item_id: p?.sku ?? p?.id,
+						item_name: p?.title ?? p?.name,
+						item_brand: p?.brandName ?? p?.brand?.name,
+						item_category: p?.category?.name ?? p?.category,
+						price: p?.price,
+						quantity: 1,
+						...(currency ? { currency } : {})
+					}
+				]
+			})
+		} catch {
+			/* never let analytics break the app */
+		}
+	}
+
+	let lastViewedProductId = ''
+	$effect(() => {
+		const p = page.data.product
+		if (p?.id && p.id !== lastViewedProductId) {
+			lastViewedProductId = p.id
+			trackViewItem(p, page.data.store?.currency?.code)
+		}
+	})
 </script>
 
 <SeoHeader
 	metaTitle={data?.product?.metaTitle || `${data?.product?.title} — Buy Online at Arialshop | Free Delivery`}
-	metaDescription={data?.product?.metaDescription ||
-		`${data?.product?.title}. ${data?.product?.description?.replace(/<[^>]*>?/gm, '').slice(0, 160)}... Discover premium quality ${data?.product?.title} at Arialshop. Enjoy free delivery on orders over ₹999 and easy 7-day returns. Shop now!`}
+	metaDescription={metaDescription}
 	metaKeywords={data?.product?.keywords || ''}
 	image={data?.product?.thumbnail || ''}
 />
 
-<GoogleStructuredDataProduct product={productState.structuredData} />
+<GoogleStructuredDataProduct
+	product={{
+		...productState.structuredData,
+		gtin13: data?.product?.barcode,
+		weight: data?.product?.weight,
+		category: data?.product?.category?.name || data?.product?.category
+	}}
+/>
 
 <GoogleStructuredDataBreadcrumb
   breadcrumbs={data?.product?.categoryHierarchy?.map((item: any, index: number) => ({
   name: item.name,
-  item: index === data?.product?.categoryHierarchy?.length - 1 ? undefined : `https://${PUBLIC_LITEKART_DOMAIN}${item.slug}`
+  item: index === data?.product?.categoryHierarchy?.length - 1 ? undefined : `${page.url.origin}${item.slug}`
   })) || []}
 />
+
+{#if data?.product}
+	{#each productVideoUrls as videoUrl}
+		<GoogleStructuredVideoSchema
+			name={data.product.title}
+			description={cleanHtmlText(data.product.description) || data.product.title}
+			thumbnailUrl={data.product.thumbnail}
+			uploadDate={data.product.updatedAt || new Date().toISOString()}
+			embedUrl={videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? videoUrl : undefined}
+			contentUrl={videoUrl.endsWith('.mp4') || videoUrl.endsWith('.webm') ? videoUrl : undefined}
+		/>
+	{/each}
+{/if}
 
 <!-- <ProductRenderer bind:data>
 {#snippet content(productState)} -->

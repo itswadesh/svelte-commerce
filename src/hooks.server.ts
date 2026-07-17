@@ -34,6 +34,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const url = new URL(event.request.url)
 	const isLocalOrIP = isLocalOrIpAddress(url.hostname)
 
+	// The readiness probe must not depend on the store lookup below, or an upstream API blip
+	// would pull a perfectly healthy container out of the load balancer.
+	if (url.pathname === '/health') {
+		return resolve(event)
+	}
+
 	if (url.protocol === 'http:' && !isLocalOrIP) {
 		event.url.protocol = 'https:'
 	}

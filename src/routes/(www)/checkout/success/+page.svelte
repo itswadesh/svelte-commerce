@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte'
 	import { page } from '$app/state'
 	import { fade, fly } from 'svelte/transition'
+	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 
 	const userState = getUserState()
 	const cartState = getCartState()
@@ -69,6 +70,7 @@
 
 <div class="min-h-screen bg-[#fafafa] py-12 md:py-5">
 	<div class="container mx-auto max-w-3xl px-4">
+		<CheckoutHeader step={4} />
 		<div
 			in:fly={{ y: 20, duration: 600 }}
 			class="overflow-hidden rounded-2xl bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05),0_20px_40px_rgba(0,0,0,0.02)]"

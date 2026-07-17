@@ -167,11 +167,12 @@
 
 										{#if rating.images?.length}
 											<div class="flex flex-wrap gap-2 sm:gap-3">
-												{#each rating.images as img}
+												{#each rating.images as img, imgIdx}
 													<button
 														class="group relative aspect-square w-20 overflow-hidden rounded-md ring-2 ring-background transition-all hover:ring-primary sm:w-24"
+														aria-label="View review photo {imgIdx + 1} from {rating.user?.firstName || rating.name || 'customer'}"
 													>
-														<img src={img} alt="Review" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+														<img src={img} alt="" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
 														<div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10"></div>
 													</button>
 												{/each}
@@ -232,11 +233,12 @@
 
 										{#if rating.images?.length}
 											<div class="flex flex-wrap gap-2 sm:gap-3">
-												{#each rating.images as img}
+												{#each rating.images as img, imgIdx}
 													<button
 														class="group relative aspect-square w-20 overflow-hidden rounded-md ring-2 ring-background transition-all hover:ring-primary sm:w-24"
+														aria-label="View review photo {imgIdx + 1} from {rating.user?.firstName || rating.name || 'customer'}"
 													>
-														<img src={img} alt="Review" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+														<img src={img} alt="" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
 														<div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10"></div>
 													</button>
 												{/each}
@@ -316,6 +318,8 @@
 										<Button
 											variant="plain"
 											class="h-12 w-12 p-0"
+											aria-label="Rate {i + 1} {i === 0 ? 'star' : 'stars'}"
+											aria-pressed={productState.select !== null && productState.select === i + 1}
 											onclick={() => productState.onSelect(i + 1)}
 										>
 											<Star
