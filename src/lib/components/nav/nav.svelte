@@ -39,7 +39,16 @@
 	const navModule = new NavModule()
 	const userState = navModule.userState
 	const isHomepage = $derived(page.route?.id === '/(www)')
-	const isScrolled = $derived(navModule.scrollY > 20)
+	// Hysteresis: collapse and expand at different offsets. With a single threshold the
+	// header oscillates near the top — collapsing shrinks the sticky header, the browser's
+	// scroll anchoring drops scrollY back under the threshold, the header re-expands, and
+	// the cycle repeats. The gap must exceed the height lost on collapse (hello bar +
+	// row-height change ≈ 56px).
+	let isScrolled = $state(false)
+	$effect(() => {
+		if (navModule.scrollY > 90) isScrolled = true
+		else if (navModule.scrollY < 10) isScrolled = false
+	})
 	const sidebarHistoryKey = '__svelteCommerceMobileSidebar'
 	let ownsSidebarHistoryEntry = false
 
