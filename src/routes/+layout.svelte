@@ -78,17 +78,20 @@
 	data-theme-source={data?.theme?.source || 'default'}
 >
 	<main class="min-h-screen bg-background">
-		<!-- {#if !!$navigating}
-			{#await new Promise((resolve) => setTimeout(resolve, 1000)) then _}
-				<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm">
+		{#if !!$navigating}
+			<!-- Delayed spinner: fast navigations finish without a loader flash; only
+			     navigations still pending after 700ms get the overlay. -->
+			{#await new Promise((resolve) => setTimeout(resolve, 700)) then _}
+				<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm" role="status">
 					<div class="rounded-lg bg-white p-4">
 						<Loader class="animate-spin" />
+						<span class="sr-only">Loading</span>
 					</div>
 				</div>
 			{:catch}
-				<!-- Ignore any errors from the promise ->
+				<!-- Ignore any errors from the promise -->
 			{/await}
-		{/if}-->
+		{/if}
 		{@render children()}
 	</main>
 </div>
