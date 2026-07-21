@@ -3,7 +3,10 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			storeDetails?: any
+			storeNotFound?: boolean
+		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
