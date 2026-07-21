@@ -87,12 +87,7 @@
 		: undefined}
 />
 
-<GoogleStructuredDataWebsite
-	name={brandName}
-	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
-	description={themeDescription}
-	searchUrl={`https://${PUBLIC_LITEKART_DOMAIN}/search?q={search_term_string}`}
-/>
+<GoogleStructuredDataWebsite />
 
 <SeoHeader
 	metaTitle={themeContent.seoTitle || page?.metaTitle || brandName}

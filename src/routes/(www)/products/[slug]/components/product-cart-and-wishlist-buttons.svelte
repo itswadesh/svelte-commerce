@@ -16,7 +16,7 @@
 	let showEnquiryModal = $state(false)
 
   function handleClick() {
-    if (productState.cartState.showCheckout)
+    if (productState.cartState?.showCheckout)
       productState.cartState.isOpen = true
     else
       productState.handleAddToCart()
@@ -69,7 +69,9 @@
 			<Button
 				size="sm"
 				class="px-4"
-				onclick={() => (productState.cartState.isOpen = true)}
+				onclick={() => {
+					if (productState.cartState) productState.cartState.isOpen = true
+				}}
 			>
 				View Bag
 			</Button>
@@ -96,7 +98,7 @@
 			<div class="flex h-full w-full gap-2">
 				<Button
 					class="h-full flex justify-center items-center gap-2 text-base flex-1 uppercase font-semibold {productState
-						.cartState.addToCartMessage == 'Added to cart'
+						.cartState?.addToCartMessage == 'Added to cart'
 						? 'bg-green-600 hover:bg-green-700'
 						: ''}"
 					size="lg"
@@ -105,7 +107,7 @@
 				>
 					{#if !productState.isLoading && (!page.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? (productState.selectedVariant?.manageInventory && !productState.selectedVariant?.stock) : !page.data?.product.stock)}
 						Out of Stock
-					{:else if productState.cartState.showCheckout}
+					{:else if productState.cartState?.showCheckout}
 						Go to bag
 						<ChevronRight class="h-5 w-5" />
 					{:else}

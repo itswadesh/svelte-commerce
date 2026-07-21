@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { useProductState } from '$lib/core/composables/index.js'
+	import { getSettingState } from '$lib/core/stores/index.js'
 	import QrCodeDisplayer from '$lib/core/components/common/qr-code.svelte'
 	import { page } from '$app/state'
 	import { ChevronDown, ChevronUp } from '@lucide/svelte'
 
 	const productState = useProductState()
+	const settingState = getSettingState()
 	const data = $derived(page.data)
 
 	let isOpen = $state(true)
@@ -75,7 +77,7 @@
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Weight</p>
 						<p class="text-sm font-medium text-gray-900">
 							{productState.selectedVariant?.weight || data?.product?.weight}
-							{page?.data?.store.weight_unit || productState.settingState?.selectedStore?.weight_unit}
+							{page?.data?.store.weight_unit || settingState?.selectedStore?.weight_unit}
 						</p>
 					</div>
 				{/if}

@@ -6,6 +6,7 @@
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import EmptyImage from '$lib/core/components/image/empty-image.svelte'
 	import { getCartState } from '$lib/core/stores/index.js'
+	import type { CartLineItem } from '$lib/core/types/index.js'
 
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
@@ -65,7 +66,7 @@
 							{priority}
 						/>
 					{:else}
-						<EmptyImage class="w-full object-cover" style="aspect-ratio: 3 / 4; border-radius: 8px;" />
+						<EmptyImage class="w-full object-cover" />
 					{/if}
 
 					{#if product.rating || (Array.isArray(product.ratings) && product.ratings.length > 0)}
@@ -143,7 +144,7 @@
 
 				{#if !hideCartControls}
 					<div class="mt-3">
-						{#if cartState.cart?.lineItems?.some((item) => item.productId === product.id)}
+						{#if cartState?.cart?.lineItems?.some((item: CartLineItem) => item.productId === product.id)}
 							<div class="flex items-center justify-between rounded-md border border-gray-200 p-1">
 								<Button disabled={!!cartState.isUpdatingCart} variant="ghost" size="icon" onclick={() => changeQuantity(product, -1)}>
 									<Minus class="h-4 w-4" />
@@ -152,7 +153,7 @@
 									{#if cartState.isUpdatingCart}
 										<LoadingDots />
 									{:else}
-										{cartState.cart?.lineItems?.find((item) => item.productId === product.id)?.qty}
+										{cartState.cart?.lineItems?.find((item: CartLineItem) => item.productId === product.id)?.qty}
 									{/if}
 								</div>
 								<Button disabled={!!cartState.isUpdatingCart} variant="ghost" size="icon" onclick={() => changeQuantity(product, 1)}>
@@ -160,8 +161,8 @@
 								</Button>
 							</div>
 						{:else}
-							<Button disabled={!!cartState.isUpdatingCart} variant="default" class="w-full py-5" onclick={() => addToCart(product)}>
-								{#if cartState.isUpdatingCart}
+							<Button disabled={!!cartState?.isUpdatingCart} variant="default" class="w-full py-5" onclick={() => addToCart(product)}>
+								{#if cartState?.isUpdatingCart}
 									<LoadingDots />
 								{:else}
 									Quick Add

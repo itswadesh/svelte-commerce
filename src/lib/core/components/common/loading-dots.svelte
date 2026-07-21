@@ -1,6 +1,6 @@
 <!-- LoadingDots.svelte -->
-<script>
-	let visible = true
+<script lang="ts">
+	const visible = true
 </script>
 
 <span class="loading-dots" class:visible>

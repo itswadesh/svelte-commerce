@@ -211,7 +211,7 @@
 										variant="link"
 										title={formattedCategoryName}
 										class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
-										onclick={() => filterModule.handleCategoryClick(category)}
+										onclick={() => filterModule.handleCategoryClick({ slug: category.slug, name: category.name })}
 									>
 										{#if category.thumbnail}
 											<img

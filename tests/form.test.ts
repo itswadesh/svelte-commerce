@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/svelte'
-import { FormField, FormLabel, FormDescription, FormFieldErrors, FormButton } from '../index'
+import { FormField, FormLabel, FormDescription, FormFieldErrors, FormButton } from '$lib/components/ui/form'
 
 // Mock formsnap
 vi.mock('formsnap', () => ({
@@ -52,7 +52,7 @@ describe('Form Components', () => {
 			props: {
 				form: mockForm,
 				name: 'testField',
-				children: ({ value, errors }) => `Value: ${value}, Errors: ${errors.length}`
+				children: ({ value, errors }: { value: string; errors: string[] }) => `Value: ${value}, Errors: ${errors.length}`
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -93,7 +93,7 @@ describe('Form Components', () => {
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
-		expect(container.firstChild?.tagName).toBe('BUTTON')
+		expect((container.firstChild as HTMLElement | null)?.tagName).toBe('BUTTON')
 	})
 
 	// Error handling tests
@@ -103,7 +103,7 @@ describe('Form Components', () => {
 			props: {
 				form: mockForm,
 				name: 'testField',
-				children: ({ errors }) => (errors.length > 0 ? 'Has errors' : 'No errors')
+				children: ({ errors }: { errors: string[] }) => (errors.length > 0 ? 'Has errors' : 'No errors')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -115,7 +115,7 @@ describe('Form Components', () => {
 			props: {
 				form: mockForm,
 				name: 'testField',
-				children: ({ constraints }) => `Constraints: ${Object.keys(constraints).length}`
+				children: ({ constraints }: { constraints: Record<string, unknown> }) => `Constraints: ${Object.keys(constraints).length}`
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()

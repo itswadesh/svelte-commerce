@@ -1,13 +1,8 @@
 <script lang="ts">
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
-	import type { Page } from '$lib/core/types'
+	import type { PageProps } from './$types'
 
-	interface Props {
-		data: {
-			page: Page
-		}
-	}
-	let { data }: Props = $props()
+	let { data }: PageProps = $props()
 </script>
 
 <svelte:head>

@@ -91,6 +91,7 @@
 			{ title: 'Change Password', url: '/auth/change-password' }
 		]
 		if (wishlistPlugin?.active) items.push({ title: 'Wishlist', url: '/my/wishlist' })
+		return items
 	})
 
 	const activeThemeName = $derived(page.data?.theme?.name ?? 'default')

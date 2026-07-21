@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { applyAction, enhance } from '$app/forms'
 	import { onMount } from 'svelte'
 	import { goto, invalidateAll } from '$app/navigation'
@@ -6,6 +6,50 @@
 	import { countryService, zipService } from '$lib/core/services'
 	import { slide } from 'svelte/transition'
 	import { Button } from '$lib/components/ui/button'
+	import type { State } from '$lib/core/types'
+
+	// Shape of the address records this form reads and writes. It predates the connector's
+	// `Address` type (which names the fields `address_1` / `countryCode` and has no `pincode`
+	// or `_id`), so the shape actually used here is declared locally.
+	type AddressFields = {
+		_id?: string
+		id?: string
+		address?: string
+		city?: string
+		country?: string | null
+		email?: string
+		firstName?: string
+		lastName?: string
+		phone?: string
+		pincode?: string
+		state?: string | null
+		zip?: string
+	}
+
+	// Country entries as consumed by this form and by the matching form action, which reads
+	// `code` and `dialCode` back off the serialised value.
+	type CountryOption = {
+		code?: string
+		dialCode?: string
+		name?: string
+		default?: boolean
+		dafault?: boolean
+	}
+
+	type AddressType = 'shipping' | 'billing'
+
+	// Field-keyed messages produced by the zod schemas in the form action.
+	type FieldErrors = Record<string, string | string[]>
+
+	type Props = {
+		billing_address?: AddressFields
+		countries?: CountryOption[]
+		editAddress?: boolean
+		// Written back to the parent with whatever id the save action returned.
+		selectedAddress?: unknown
+		selectedBillingAddress?: unknown
+		shipping_address?: AddressFields
+	}
 
 	const IS_DEV = import.meta.env.DEV
 
@@ -16,7 +60,7 @@
 		selectedAddress = '',
 		selectedBillingAddress = '',
 		shipping_address = {}
-	} = $props()
+	}: Props = $props()
 
 	if (!shipping_address?.firstName) {
 		shipping_address = IS_DEV
@@ -41,22 +85,22 @@
 	billing_address.zip = billing_address.zip || billing_address.pincode || ''
 	billing_address.phone = billing_address.phone || page?.data?.me?.phone || ''
 
-	let err = $state(null)
+	let err = $state<unknown>(null)
 	let isSameAsBillingAddress = $state(true)
 
 	// Shipping variables
 	let loadingForShippingAddressStates = $state(false)
-	let selectedShippingAddressCountry = $state({})
-	let shippingAddressStates = $state([])
+	let selectedShippingAddressCountry = $state<CountryOption | undefined>({})
+	let shippingAddressStates = $state<State[]>([])
 	let showShippingAddressErrorMessage = $state(false)
-	let zodShippingErrors = $state(null)
+	let zodShippingErrors = $state<FieldErrors | null>(null)
 
 	// Billing variables
-	let billingAddressStates = $state([])
+	let billingAddressStates = $state<State[]>([])
 	let loadingForBillingAddressStates = $state(false)
-	let selectedBillingAddressCountry = $state({})
+	let selectedBillingAddressCountry = $state<CountryOption | undefined>({})
 	let showBillingAddressErrorMessage = $state(false)
-	let zodBillingErrors = $state(null)
+	let zodBillingErrors = $state<FieldErrors | null>(null)
 
 	onMount(async () => {
 		await invalidateAll()
@@ -112,19 +156,19 @@
 		})[0]
 	}
 
-	async function onShippingAddressCountryChange(country) {
+	async function onShippingAddressCountryChange(country: string | null | undefined) {
 		shipping_address.state = null
 		fetchShippingAddressStates(country)
 		getShippingAddressSelectedCountry()
 	}
 
-	async function onBillingAddressCountryChange(country) {
+	async function onBillingAddressCountryChange(country: string | null | undefined) {
 		billing_address.state = null
 		fetchBillingAddressStates(country)
 		getBillingAddressSelectedCountry()
 	}
 
-	async function fetchShippingAddressStates(country) {
+	async function fetchShippingAddressStates(country: string | null | undefined) {
 		try {
 			err = null
 			loadingForShippingAddressStates = true
@@ -146,7 +190,7 @@
 		}
 	}
 
-	async function fetchBillingAddressStates(country) {
+	async function fetchBillingAddressStates(country: string | null | undefined) {
 		try {
 			err = null
 			loadingForBillingAddressStates = true
@@ -168,8 +212,8 @@
 		}
 	}
 
-	async function fetchStateAndCity(zip, addresstype) {
-		if (zip.length != 6) {
+	async function fetchStateAndCity(zip: string | undefined, addresstype: AddressType) {
+		if (!zip || zip.length != 6) {
 			toast('Please enter 6 digit code', 'error')
 			return
 		}
@@ -202,10 +246,10 @@
 		}
 	}
 
-	function validatePhoneNumber(phoneNumber, addresstype) {
+	function validatePhoneNumber(phoneNumber: string | undefined, addresstype: AddressType) {
 		if (page.data.store?.storeCountry?.code === 'IN') {
 			// Remove any spaces from the phone number
-			phoneNumber = phoneNumber.replace(/\s/g, '')
+			phoneNumber = (phoneNumber ?? '').replace(/\s/g, '')
 
 			// Remove any leading '0' or '+91'
 			if (phoneNumber.startsWith('0')) {
@@ -246,7 +290,7 @@
 		method="POST"
 		use:enhance={() => {
 			return async ({ result }) => {
-				if (result?.status === 200 && result?.data) {
+				if ((result.type === 'success' || result.type === 'failure') && result.status === 200 && result.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address saved successfully', 'success')
 
@@ -265,11 +309,11 @@
 					} else if (!page?.data.me) {
 						goto(`/checkout/payment-options?address=${newAddressId}`)
 					}
-				} else if (result?.error) {
+				} else if (result.type === 'error' && result.error) {
 					shipping_address.phone = ''
-					zodShippingErrors = result?.error?.errors || null
-					zodBillingErrors = result?.error?.billing_errors || null
-					err = result?.error?.message || null
+					zodShippingErrors = result.error?.errors || null
+					zodBillingErrors = result.error?.billing_errors || null
+					err = result.error?.message || null
 					// toast(result?.error?.message, 'error')
 				}
 			}

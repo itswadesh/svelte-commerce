@@ -33,11 +33,18 @@
 		},
 	]
 
-	const categoryHierarchy = $derived(page.data.products?.categoryHierarchy)
+	const categoryHierarchy: { name: string; slug?: string }[] = $derived(page.data.products?.categoryHierarchy || [])
+
+	const breadcrumbs = $derived(
+		categoryHierarchy.map((item, index) => ({
+			name: item.name,
+			item: index === categoryHierarchy.length - 1 ? undefined : `${page.url.origin}${item.slug}`
+		}))
+	)
 </script>
 
 <GoogleStructuredDataProductsList products={mappedProducts} />
-<GoogleStructuredDataBreadcrumb {categoryHierarchy} />
+<GoogleStructuredDataBreadcrumb {breadcrumbs} />
 <GoogleStructuredFaqSchema faqs={listingFaqs} />
 <!-- <GoogleStructuredServiceSchema
 	serviceName="Luxury Custom Jewelry Design"

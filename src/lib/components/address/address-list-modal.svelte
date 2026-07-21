@@ -52,7 +52,7 @@
 								<PencilSimple class="h-4 w-4" />
 							</Button>
 							<!-- {#if addressState.cartState.cart?.shippingAddress?.id !== address.id} -->
-								<Button type="button" variant="ghost" disabled={addressState.cartState.cart?.shippingAddress?.id === address.id}  onclick={() => ondelete?.(address)} class="w-fit opacity-0 group-hover:opacity-100">
+								<Button type="button" variant="ghost" disabled={addressState.cartState?.cart?.shippingAddress?.id === address.id}  onclick={() => ondelete?.(address)} class="w-fit opacity-0 group-hover:opacity-100">
 									<Trash2 class="h-4 w-4" />
 								</Button>
 							<!-- {/if} -->

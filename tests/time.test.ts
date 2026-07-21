@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { getFormattedTimestamp, logWithTimestamp, logWithPerformance } from '../time'
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from 'vitest'
+import { getFormattedTimestamp, logWithTimestamp, logWithPerformance } from '$lib/core/utils'
 
 describe('Time Utils', () => {
-	let consoleLogSpy: vi.SpyInstance
+	let consoleLogSpy: MockInstance<typeof console.log>
 
 	beforeEach(() => {
 		consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})

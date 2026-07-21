@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach, type MockedFunction } from 'vitest'
-import { debounce } from '../debounce'
+import { debounce } from '$lib/core/utils'
 
 describe('debounce', () => {
 	let mockFn: MockedFunction<any>

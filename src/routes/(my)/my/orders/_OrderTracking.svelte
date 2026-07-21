@@ -1,8 +1,15 @@
-<script>
+<script lang="ts">
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { date } from '$lib/core/utils'
 
-	let { tracks } = $props()
+	type OrderTrack = {
+		icon?: string
+		title: string
+		comment?: string
+		time: string
+	}
+
+	let { tracks }: { tracks: OrderTrack[] } = $props()
 </script>
 
 <div>

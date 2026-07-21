@@ -9,9 +9,7 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"target": "ESNext",
-		"module": "nodenext",
-		"moduleResolution": "NodeNext"
+		"target": "ESNext"
 	},
 	"exclude": ["node_modules"]
 }

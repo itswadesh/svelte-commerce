@@ -6,11 +6,12 @@
 	import { toast } from '@misiki/kitcommerce-core'
 	import { goto } from '$app/navigation'
 	import Pagination from '$lib/components/common/pagination.svelte'
+	import type { Feedback, PaginatedResponse } from '$lib/core/types'
 
 	let productsCount = $state(0)
 	let products = $state({})
 	let loading = $state(true)
-	let reviews = $state([])
+	let reviews = $state<PaginatedResponse<Feedback> | Feedback[]>([])
 	let loadingReviews = $state(true)
 	let { data } = $props()
 
@@ -29,9 +30,9 @@
 			// Replace with actual review fetching logic
 			reviews = await reviewService.fetchReviews({
 				productId: data?.product?.id,
-				search: page.url.searchParams.get('search') || undefined,
-				sort: page.url.searchParams.get('sort') || undefined,
-				currentPage: page.url.searchParams.get('page') || 1
+				search: page.url.searchParams.get('search') || '',
+				sort: page.url.searchParams.get('sort') || '-createdAt',
+				currentPage: Number(page.url.searchParams.get('page')) || 1
 			})
 		} finally {
 			loadingReviews = false
@@ -43,7 +44,7 @@
 		fetchReviews()
 	})
 
-	function getRatingColor(rating) {
+	function getRatingColor(rating: number) {
 		if (rating >= 4) return 'text-green-500'
 		if (rating >= 3) return 'text-yellow-500'
 		return 'text-red-500'

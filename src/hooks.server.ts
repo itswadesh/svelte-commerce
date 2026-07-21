@@ -1,4 +1,4 @@
-import type { Handle, HandleFetch } from '@sveltejs/kit'
+import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { env as privateEnv } from '$env/dynamic/private'
@@ -58,11 +58,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 			let storeDetails = null
 			try {
 				storeDetails = await storeService.getStoreByIdOrDomain({ storeId, domain })
-			} catch (e: any) {
+			} catch (e) {
 				// A 404 means "no store maps to this domain" → render a proper 404 page below.
 				// Re-throw anything else (API down, network) so it surfaces as a 500 rather than a
 				// misleading "store not found".
-				if (!/not found|404/i.test(e?.message || '')) {
+				// The connector rejects with plain `{ message }` objects, not Error instances, so
+				// read the message structurally rather than via `instanceof Error`.
+				const message = (e as { message?: string } | null | undefined)?.message || ''
+				if (!/not found|404/i.test(message)) {
 					throw e
 				}
 			}
@@ -105,24 +108,30 @@ export const handleFetch: HandleFetch = async ({ request, fetch }) => {
 	return fetch(request)
 }
 
+// Shape of the errors SvelteKit hands to `handleError` (a SvelteKitError, an Error, or whatever
+// was thrown). `error` is typed `unknown`, so narrow it before reading these.
+type ThrownError = { message?: string; stack?: string; status?: number }
+
 // Simplified error handler that strips stack trace information
-export function handleError({ error, event }) {
+export const handleError: HandleServerError = ({ error }) => {
+	const err = (error ?? {}) as ThrownError
+
 	// Check if it's a SvelteKitError or similar object with stack trace
-	if (error && error.stack && error.status === 404 && !error.message.startsWith('/cdn/')) {
+	if (err.stack && err.status === 404 && !err.message?.startsWith('/cdn/')) {
 		// Create a simplified version of the error
-		const simplifiedError = error.message || 'An error occurred'
+		const simplifiedError = err.message || 'An error occurred'
 
 		console.error('Sveltekit error:', simplifiedError)
 
 		// Return the simplified error
 		return {
-			message: simplifiedError.message,
-			status: simplifiedError.status
+			message: simplifiedError,
+			status: err.status
 		}
 	}
 
 	return {
-		message: error?.message || 'An unknown error occurred',
-		status: error?.status || 500
+		message: err.message || 'An unknown error occurred',
+		status: err.status || 500
 	}
 }

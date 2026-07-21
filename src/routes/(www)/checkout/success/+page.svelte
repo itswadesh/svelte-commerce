@@ -39,6 +39,8 @@
 		}).format(date)
 	})
 	onMount(async () => {
+		if (!cartState) return
+
 		const prevCartId = localStorage.getItem('prev_cart_id')
 		if (prevCartId) {
 			if (typeof cartState.restorePrevCart === 'function') {

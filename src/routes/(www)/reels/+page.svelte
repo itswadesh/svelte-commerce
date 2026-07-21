@@ -1,27 +1,30 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import EmblaCarousel from 'embla-carousel'
+	import EmblaCarousel, { type EmblaCarouselType } from 'embla-carousel'
 	import AutoScroll from 'embla-carousel-auto-scroll'
 	import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 	import { SeoHeader } from '$lib/core/components/index.js'
+	import { reelsService } from '$lib/core/services'
+	import type { Reels } from '$lib/core/types'
+	import { error } from '@sveltejs/kit'
 
-	let reels = $state()
+	let reels = $state<Reels[]>([])
 
-	let emblaNode
-	let emblaApi
-	let videos = $state([])
+	let emblaNode: HTMLDivElement
+	let emblaApi: EmblaCarouselType | undefined
+	let videos = $state<HTMLVideoElement[]>([])
 	let currentIndex = $state(0)
 	let isPlaying = $state(true)
 	let isMuted = $state(true)
 
 	// Function to handle video playback
-	function handleVideoPlayback(index) {
+	function handleVideoPlayback(index: number) {
 		videos.forEach((video, i) => {
 			if (i === index) {
 				if (isPlaying) {
 					video.play().catch(() => {
 						// Autoplay prevented, add a play button
-						video.dataset.needsUserAction = true
+						video.dataset.needsUserAction = 'true'
 					})
 				} else {
 					video.pause()
@@ -53,7 +56,7 @@
 			reels = reelsdata.data
 		} catch (e) {
 			console.error('Error loading reels:', e)
-			throw error(400, e?.message || 'Error loading reels')
+			throw error(400, (e instanceof Error && e.message) || 'Error loading reels')
 		}
 	}
 
@@ -75,11 +78,11 @@
 		)
 
 		// Get all video elements
-		videos = emblaNode.querySelectorAll('video')
+		videos = Array.from(emblaNode.querySelectorAll('video'))
 
 		// Handle slide changes
-		emblaApi.on('select', () => {
-			currentIndex = emblaApi.selectedScrollSnap()
+		emblaApi.on('select', (api) => {
+			currentIndex = api.selectedScrollSnap()
 			handleVideoPlayback(currentIndex)
 		})
 		load()
@@ -92,9 +95,9 @@
 	})
 
 	// Handle manual play button click
-	function handlePlayClick(video) {
+	function handlePlayClick(video: HTMLVideoElement) {
 		video.play()
-		video.dataset.needsUserAction = false
+		video.dataset.needsUserAction = 'false'
 	}
 </script>
 
@@ -114,8 +117,9 @@
 							muted={isMuted}
 							playsinline
 							onclick={(e) => {
-								if (e.target.dataset.needsUserAction) {
-									handlePlayClick(e.target)
+								const target = e.target
+								if (target instanceof HTMLVideoElement && target.dataset.needsUserAction) {
+									handlePlayClick(target)
 								}
 							}}
 						>

@@ -6,6 +6,7 @@
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import EmptyImage from '$lib/core/components/image/empty-image.svelte'
 	import { getCartState } from '$lib/core/stores/index.js'
+	import type { CartLineItem } from '$lib/core/types/index.js'
 
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
@@ -17,7 +18,6 @@
 <ProductCardRenderer {product} {aspectRatio}>
 	{#snippet content({ aspectHeight, aspectWidth, handleCardClick, changeQuantity, addToCart })}
 		<button
-			variant="plain"
 			onclick={handleCardClick}
 			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
 
@@ -60,7 +60,7 @@
 						role="group"
 						aria-label="Quantity controls for {product.name}"
 					>
-						{#if cartState.cart?.lineItems?.some((item) => item.productId === product.id)}
+						{#if cartState?.cart?.lineItems?.some((item: CartLineItem) => item.productId === product.id)}
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								variant="outline"
@@ -76,7 +76,7 @@
 									<LoadingDots />
 								{:else}
 									<span role="status" aria-live="polite">
-										{cartState.cart?.lineItems?.find((item) => item.productId === product.id)?.qty}
+										{cartState.cart?.lineItems?.find((item: CartLineItem) => item.productId === product.id)?.qty}
 									</span>
 								{/if}
 							</div>
@@ -92,13 +92,13 @@
 							</Button>
 						{:else}
 							<Button
-								disabled={!!cartState.isUpdatingCart}
+								disabled={!!cartState?.isUpdatingCart}
 								variant="default"
 								size="lg"
 								class="w-full rounded-none"
 								onclick={() => addToCart(product)}
 							>
-								{#if cartState.isUpdatingCart}
+								{#if cartState?.isUpdatingCart}
 									<LoadingDots />
 								{:else}
 									Quick Add

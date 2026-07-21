@@ -1,9 +1,8 @@
-import { OrdersService } from '$lib/core/services'
-import { redirect } from '@sveltejs/kit'
+import type { PageServerLoad } from './$types'
 
-export async function load({ fetch }) {
+export const load: PageServerLoad = async ({ fetch }) => {
 	// try {
-	//     const res = await OrdersService.list(fetch)
+	//     const res = await orderService.list(fetch)
 	//     return res
 	// } catch (e) {
 	//     redirect(307, '/?show_auth=true&login=true')

@@ -29,7 +29,7 @@
 			class="block shrink-0"
 			onclick={(e) => {
 				e.stopPropagation()
-				cartState.isOpen = false
+				if (cartState) cartState.isOpen = false
 			}}
 		>
 			<!-- <div class="overflow-hidden  ring-1 ring-gray-100">
@@ -54,7 +54,7 @@
 					href="/products/{cartProduct?.slug}"
 					onclick={(e) => {
 						e.stopPropagation()
-						cartState.isOpen = false
+						if (cartState) cartState.isOpen = false
 					}}
 				>
 					<h4 class="line-clamp-2 text-base font-semibold text-gray-900">{cartProduct?.title}</h4>
@@ -85,7 +85,7 @@
 								e.stopPropagation()
 								loading = true
 
-								const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
+								const categoryNames = cartProduct?.product?.categories?.flatMap?.((c: { category?: { name?: string } }) => c.category?.name) || []
 								const productObj = {
 									...(cartProduct || {}),
 									categoryNames
@@ -95,7 +95,7 @@
 									items: [{ ...productObj }],
 									price: cartProduct.price
 								})
-								await cartState.update({
+								await cartState?.update({
 									qty: cartProduct.qty - 1,
 									lineId: cartProduct.id,
 									productId: cartProduct.productId,
@@ -127,7 +127,7 @@
 								loading = true
 								const me = userState?.user
 
-								const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
+								const categoryNames = cartProduct?.product?.categories?.flatMap?.((c: { category?: { name?: string } }) => c.category?.name) || []
 								const productObj = {
 									...(cartProduct || {}),
 									categoryNames
@@ -165,7 +165,7 @@
 							e?.preventDefault()
 							e?.stopPropagation()
 
-							const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
+							const categoryNames = cartProduct?.product?.categories?.flatMap?.((c: { category?: { name?: string } }) => c.category?.name) || []
 							const productObj = {
 								...(cartProduct || {}),
 								categoryNames

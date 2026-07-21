@@ -66,15 +66,15 @@
 							<div
 								class="relative z-10 flex w-full items-center justify-center p-0 opacity-100 duration-300 laptop:absolute laptop:bottom-0 laptop:translate-y-full laptop:transform laptop:opacity-0 laptop:transition-all laptop:group-hover:translate-y-0 laptop:group-hover:opacity-100"
 							>
-								{#if cartState.cart?.lineItems?.some((item1) => item1.productId === item.productId)}
+								{#if cartState?.cart?.lineItems?.some((item1) => item1.productId === item.productId)}
 									<div>Item already in cart</div>
 								{:else}
 									<Button
-										disabled={!!cartState.isUpdatingCart}
+										disabled={!!cartState?.isUpdatingCart}
 										variant="outline"
 										class="w-full"
 										onclick={() => {
-											cartState.add({
+											cartState?.add({
 												qty: item.qty,
 												productId: item.productId,
 												variantId: item.variantId
@@ -134,15 +134,15 @@
 									<div
 										class="relative z-10 flex w-full items-center justify-center p-0 opacity-100 duration-300 laptop:absolute laptop:bottom-0 laptop:translate-y-full laptop:transform laptop:opacity-0 laptop:transition-all laptop:group-hover:translate-y-0 laptop:group-hover:opacity-100"
 									>
-										{#if cartState.cart?.lineItems?.some((item1) => item1.productId === item.productId)}
+										{#if cartState?.cart?.lineItems?.some((item1) => item1.productId === item.productId)}
 											<div>Item already in cart</div>
 										{:else}
 											<Button
-												disabled={!!cartState.isUpdatingCart}
+												disabled={!!cartState?.isUpdatingCart}
 												variant="outline"
 												class="w-full"
 												onclick={() => {
-													cartState.add({
+													cartState?.add({
 														qty: item.qty,
 														productId: item.productId,
 														variantId: item.variantId

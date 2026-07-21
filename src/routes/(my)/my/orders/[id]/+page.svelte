@@ -90,7 +90,7 @@
 											<span class="font-bold uppercase tracking-tight">
 												{order?.shippingRate?.estimatedMaxDays
 													? date(order.createdAt + order?.shippingRate?.estimatedMaxDays * 86400000)
-													: date(new Date(Date.now() + 7 * 86400000).getTime())}
+													: date(new Date(Date.now() + 7 * 86400000).toISOString())}
 											</span>
 										</div>
 									</div>

@@ -242,7 +242,7 @@
 							<h3>{product.name || product.title}</h3>
 							<span class="menu-desc">Freshly prepared with house sauces and premium ingredients.</span>
 							<div>
-								<strong>{formatPrice(product.price, currencyCode)}</strong>
+								<strong>{formatPrice(product.price, currencyCode || '')}</strong>
 								{#if product.rating}<small><Star class="h-3 w-3 fill-current" /> ({product.rating})</small>{/if}
 								<b><Plus class="h-4 w-4" /></b>
 							</div>
