@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte'
-import CartItem from '../cart-item.svelte'
-import { mockFactories, resetMocks } from '../test-utils'
+import CartItem from '$lib/components/cart/cart-item.svelte'
+import { mockFactories, resetMocks } from './test-utils'
 
 // Mock dependencies
 const mockCartState = {

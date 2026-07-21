@@ -47,7 +47,7 @@
 			</Button>
 		</div>
 
-		{#if cartState.cart?.lineItems?.length}
+		{#if cartState?.cart?.lineItems?.length}
 			<div class="order-summary">
 				<h2>Order Summary</h2>
 				<div class="items-list">

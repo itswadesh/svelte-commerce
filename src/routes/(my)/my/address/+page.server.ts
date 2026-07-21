@@ -23,11 +23,16 @@ export async function load({ locals, url, fetch }) {
 			return { addresses, countries }
 		}
 	} catch (e) {
-		if (e.status === 401 || e.status === 403) {
+		// The connector rejects with a plain `{ message }` object rather than an Error, so both
+		// fields have to be read defensively off an `unknown`.
+		const status = typeof e === 'object' && e !== null && 'status' in e && typeof e.status === 'number' ? e.status : 500
+		const message = typeof e === 'object' && e !== null && 'message' in e && typeof e.message === 'string' ? e.message : 'Something went wrong'
+
+		if (status === 401 || status === 403) {
 			redirect(307, '/?show_auth=true&login=true')
 		}
 
-		error(e.status, e.message)
+		error(status, message)
 	} finally {
 	}
 }
@@ -159,6 +164,8 @@ const saveAddress = async ({ request, cookies, locals, fetch }) => {
 					zodAddressSchema.parse(shipping_address)
 				}
 			} catch (err) {
+				if (!(err instanceof z.ZodError)) throw err
+
 				const { fieldErrors: errors } = err.flatten()
 				const { address, city, ...rest } = shipping_address
 				error(404, {
@@ -218,6 +225,8 @@ const saveAddress = async ({ request, cookies, locals, fetch }) => {
 					zodAddressSchema.parse(shipping_address)
 				}
 			} catch (err) {
+				if (!(err instanceof z.ZodError)) throw err
+
 				const { fieldErrors: errors } = err.flatten()
 				const { address, city, ...rest } = shipping_address
 				error(404, {
@@ -267,6 +276,8 @@ const saveAddress = async ({ request, cookies, locals, fetch }) => {
 							zodAddressSchema.parse(new_billing_address)
 						}
 					} catch (err) {
+						if (!(err instanceof z.ZodError)) throw err
+
 						const { fieldErrors: errors } = err.flatten()
 						const { address, city, ...rest } = new_billing_address
 						error(404, {
@@ -356,6 +367,8 @@ const editAddress = async ({ request, cookies, locals, fetch }) => {
 				zodAddressSchema.parse(formData)
 			}
 		} catch (err) {
+			if (!(err instanceof z.ZodError)) throw err
+
 			const { fieldErrors: errors } = err.flatten()
 			const { address, city, ...rest } = formData
 			error(404, {

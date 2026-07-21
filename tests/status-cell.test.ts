@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { render } from '@testing-library/svelte'
-import StatusCell from '../status-cell.svelte'
+import StatusCell from '$lib/components/common/status-cell.svelte'
 
 describe('StatusCell', () => {
 	it('should render nothing when no value is provided', () => {

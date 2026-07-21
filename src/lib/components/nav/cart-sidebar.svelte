@@ -24,10 +24,10 @@
 	// Seed the baseline to the mount-time value so only a false→true transition
 	// that happens while this component is mounted opens the drawer (avoids a
 	// spurious open when returning to a shop page while showCheckout is still on).
-	let prevShowCheckout = !!cartState.showCheckout
+	let prevShowCheckout = !!cartState?.showCheckout
 
 	function handleBrowserBack() {
-		if (!cartState.isOpen || !ownsHistoryEntry) return
+		if (!cartState?.isOpen || !ownsHistoryEntry) return
 		ownsHistoryEntry = false
 		cartState.isOpen = false
 		onClose?.()
@@ -41,10 +41,10 @@
 	$effect(() => {
 		if (typeof window === 'undefined') return
 
-		if (cartState.isOpen && !ownsHistoryEntry) {
+		if (cartState?.isOpen && !ownsHistoryEntry) {
 			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
 			ownsHistoryEntry = true
-		} else if (!cartState.isOpen && ownsHistoryEntry) {
+		} else if (!cartState?.isOpen && ownsHistoryEntry) {
 			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
 			ownsHistoryEntry = false
 			if (isCurrentModalEntry && !isNavigatingFromCart) history.back()
@@ -59,8 +59,8 @@
 	})
 
 	$effect(() => {
-		const showCheckout = !!cartState.showCheckout
-		if (showCheckout && !prevShowCheckout && !cartState.isOpen) {
+		const showCheckout = !!cartState?.showCheckout
+		if (showCheckout && !prevShowCheckout && cartState && !cartState.isOpen) {
 			cartState.isOpen = true
 		}
 		prevShowCheckout = showCheckout
@@ -85,19 +85,17 @@
 			delete nextState[modalHistoryKey]
 			history.replaceState(nextState, '', window.location.href)
 		}
-		cartState.isOpen = false
+		if (cartState) cartState.isOpen = false
 		await goto('/checkout/cart')
 	}
 </script>
 
 <div class="relative" role="navigation">
 	<button
-		variant="ghost"
-		size="icon"
 		class="flex rounded-full px-2"
 		aria-label="Toggle Cart"
 		onclick={() => {
-			cartState.isOpen = !cartState.isOpen
+			if (cartState) cartState.isOpen = !cartState.isOpen
 		}}
 	>
 		<ShoppingBag class="h-5 w-5" />
@@ -109,7 +107,7 @@
 			</span>
 		{/if}
 	</button>
-	{#if cartState.isOpen}
+	{#if cartState?.isOpen}
 		<!-- close cart backdrop -->
 		<Button
 			variant="ghost"

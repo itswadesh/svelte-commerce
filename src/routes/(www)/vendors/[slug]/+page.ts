@@ -1,6 +1,7 @@
 import { VendorService } from '$lib/core/services'
 import type { Vendor } from '$lib/core/types'
 import { error } from '@sveltejs/kit'
+import type { PageLoad } from './$types'
 
 function transformVendorOptions(options: Vendor['options']) {
 	return options?.map((option) => {

@@ -19,12 +19,17 @@
 	let isLoading = $state(false)
 	const saveAddress = async () => {
 		try {
-			if (page.params.id == 'new') {
+			const id = page.params.id
+
+			if (id == 'new') {
 				address = await addressService.saveAddress(address)
 
 				return
 			}
-			address = await addressService.editAddress(page.params.id, address)
+
+			if (!id) return
+
+			address = await addressService.editAddress(id, address)
 		} catch (e: any) {
 			toast.error(e.message)
 		} finally {
@@ -54,8 +59,11 @@
 		}
 
 		try {
-			if (page.params.id == 'new') return
-			let res = await addressService.fetchAddress(page.params.id)
+			const id = page.params.id
+
+			if (!id || id == 'new') return
+
+			let res = await addressService.fetchAddress(id)
 
 			address = res
 		} catch (e) {}

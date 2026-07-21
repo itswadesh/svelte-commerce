@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { setCartState, setProductState, setWishlistState } from '$lib/core/stores/index.js'
-	import { type Snippet } from 'svelte'
 	import Nav from '$lib/components/nav/nav.svelte'
 	import Footer from '$lib/components/common/footer.svelte'
 	import { StorePlugins } from '$lib/core/components/index.js'
 	import { page } from '$app/state'
-	import type { StoreData } from '$lib/core/services/index.js'
+	import type { LayoutProps } from './$types'
 
-	const { children, data }: { children: Snippet; data: { store: StoreData; theme?: { name: string } } } = $props()
+	const { children }: LayoutProps = $props()
 
 	setCartState()
 	setProductState()
@@ -26,11 +25,11 @@
 	>
 		Skip to main content
 	</a>
-	<Nav storeData={data.store} />
+	<Nav />
 	<main id="main" class="inter-gap flex min-h-screen flex-1 flex-col">
 		{@render children()}
 	</main>
 	<Footer />
 </div>
 
-<StorePlugins storeData={data.store} />
+<StorePlugins />

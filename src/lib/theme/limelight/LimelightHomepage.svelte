@@ -2,18 +2,16 @@
 	import { Plus, MapPin } from '@lucide/svelte'
 	import { formatPrice } from '$lib/core/utils/index.js'
 	import LimelightProductCard from './LimelightProductCard.svelte'
+	import type { ThemeHomepageProps } from '../homepages.js'
 
 	let {
 		themeContent,
 		featuredProducts = [],
 		currencyCode
-	}: {
-		themeContent: ThemeHomepageContent
-		brandName: string
-		themeDescription: string
-		featuredProducts?: any[]
-		currencyCode?: string
-	} = $props()
+	}: Pick<
+		ThemeHomepageProps,
+		'themeContent' | 'brandName' | 'themeDescription' | 'featuredProducts' | 'currencyCode'
+	> = $props()
 
 	let subscribing = $state(false)
 

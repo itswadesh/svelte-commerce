@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { Home } from '@lucide/svelte'
+	import type { Menu } from '$lib/core/types/index.js'
 </script>
 
 <div class="mr-4 md:flex">
@@ -30,7 +31,7 @@
 			{/if} -->
 
 			<!-- Dynamic menu items with same styling -->
-			{#each page?.data?.store?.menu?.find?.((menu) => menu?.menuId === 'header')?.items || [] as item}
+			{#each page?.data?.store?.menu?.find?.((menu: Menu) => menu?.menuId === 'header')?.items || [] as item}
 				<a
 					href={item.link}
 					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all

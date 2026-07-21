@@ -31,7 +31,7 @@
       items.push({ href: '/my/wishlist', icon: Heart, label: 'Wishlist' })
     return items
   })
-	let breadcrumbItems = $state([])
+	let breadcrumbItems = $state<{ label: string; href: string }[]>([])
 	// Generate breadcrumb items based on current route
 	$effect(() => {
 		breadcrumbItems = page.url.pathname

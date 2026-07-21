@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { Package, ListTree, Tag, User, ArrowRight, Settings, Mail, Phone, Pencil } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { getUserState } from '$lib/core/stores/index.js'

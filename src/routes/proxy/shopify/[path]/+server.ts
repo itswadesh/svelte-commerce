@@ -28,7 +28,7 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
 
 	const headers = new Headers()
 	if (isAdminApiCall) headers.set('X-Shopify-Access-Token', shopifyAccessToken)
-	else headers.set('X-Shopify-Storefront-Access-Token', publicEnv.PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN)
+	else headers.set('X-Shopify-Storefront-Access-Token', publicEnv.PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN ?? '')
 
 	headers.set('Content-Type', 'application/json')
 

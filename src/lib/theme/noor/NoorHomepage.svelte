@@ -1,18 +1,16 @@
 <script lang="ts">
 	import { ChevronRight } from '@lucide/svelte'
 	import NoorProductCard from './NoorProductCard.svelte'
+	import type { ThemeHomepageProps } from '../homepages.js'
 
 	let {
 		themeContent,
 		featuredProducts = [],
 		currencyCode
-	}: {
-		themeContent: ThemeHomepageContent
-		brandName: string
-		themeDescription: string
-		featuredProducts?: any[]
-		currencyCode?: string
-	} = $props()
+	}: Pick<
+		ThemeHomepageProps,
+		'themeContent' | 'brandName' | 'themeDescription' | 'featuredProducts' | 'currencyCode'
+	> = $props()
 
 	const fallbackProducts = [
 		{ id: 'noor-mk19', slug: 'mk-19', title: 'MK-19', price: 18500, thumbnail: '/noor/product-mk19.jpg' },

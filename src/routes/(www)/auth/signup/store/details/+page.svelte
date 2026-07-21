@@ -27,7 +27,7 @@
 		if (!savedEmail) {
 			goto('/auth/signup/store')
 		}
-		email = savedEmail
+		email = savedEmail ?? ''
 	})
 
 	const schemas = {
@@ -67,7 +67,7 @@
 			})
 	}
 
-	async function handleSubmit(e) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault()
 		try {
 			isLoading = true

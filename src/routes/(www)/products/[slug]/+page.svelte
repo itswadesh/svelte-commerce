@@ -5,6 +5,6 @@
 	let { data } = $props()
 </script>
 
-<ProductStateProvider {data}>
+<ProductStateProvider>
 	<ProductDetails />
 </ProductStateProvider>

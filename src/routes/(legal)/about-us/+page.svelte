@@ -1,14 +1,9 @@
 <script lang="ts">
-	import type { Page } from '$lib/core/types'
 	import { SeoHeader } from '$lib/core/components/index.js'
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
+	import type { PageProps } from './$types'
 
-	interface Props {
-		data: {
-			page: Page
-		}
-	}
-	const { data }: Props = $props()
+	const { data }: PageProps = $props()
 </script>
 
 <SeoHeader metaTitle={data?.page?.metaTitle || 'About Us'} />

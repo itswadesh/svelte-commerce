@@ -138,17 +138,14 @@
 			<div class="organic-category-grid">
 				{#each displayCategories.slice(0, 8) as category}
 					<a href="/categories/{category.slug}" class="organic-category-card">
-						{#if category.image || category.img || category.thumbnail}
-							<img
-								src={category.image || category.img || category.thumbnail}
-								alt={category.name || category.title}
-							/>
+						{#if category.image}
+							<img src={category.image} alt={category.name} />
 						{:else}
 							<div class="organic-category-placeholder">
 								<Leaf class="h-8 w-8" />
 							</div>
 						{/if}
-						<span>{category.name || category.title}</span>
+						<span>{category.name}</span>
 					</a>
 				{/each}
 			</div>

@@ -50,22 +50,13 @@
 <div class="container mx-auto mt-2 flex h-full min-h-screen flex-row max-md:px-4 md:gap-2">
 	{#if vendors?.count >= 0}
 		<div class="hidden border-r border-input md:block">
-			<DesktopFilter
-				priceStat={vendors?.facets?.priceStat}
-				categories={vendors?.facets?.categories}
-				tags={vendors?.facets?.tags}
-				allFilters={vendors?.facets?.allFilters}
-			/>
+			<DesktopFilter />
 		</div>
 	{/if}
 
 	<div class="block md:hidden">
 		<MobileFilter
 			bind:selectedSort
-			categories={vendors?.facets?.categories}
-			priceStat={vendors?.facets?.priceStat}
-			tags={vendors?.facets?.tags}
-			allFilters={vendors?.facets?.allFilters}
 			onSortChange={(value: string) => {
 				selectedSort = value
 				selectSort(value)

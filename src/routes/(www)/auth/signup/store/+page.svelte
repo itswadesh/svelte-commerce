@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { LoaderIcon } from '@lucide/svelte'
+	import Button from '$lib/components/ui/button/button.svelte'
 	import { toast } from '@misiki/kitcommerce-core'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { z } from 'zod'
@@ -18,7 +20,7 @@
 			.max(100, 'Email must be less than 100 characters')
 	}
 
-	async function handleSubmit(e) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault()
 		try {
 			isLoading = true
@@ -29,7 +31,7 @@
 			// Check if email is available
 			const emailCheck = await userService.checkEmail(validatedEmail)
 
-			if (emailCheck?.exists) {
+			if (emailCheck && typeof emailCheck === 'object' && 'exists' in emailCheck && emailCheck.exists) {
 				toast.error('This email is already registered')
 				return
 			}

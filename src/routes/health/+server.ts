@@ -11,7 +11,7 @@ import { env } from '$env/dynamic/public'
 // the probe MUST fail — otherwise the container reports healthy, the orchestrator's start-first
 // rollout routes traffic to it, and it replaces a working container with one that fails every page.
 // Failing here makes that deploy roll back instead.
-const REQUIRED_ENV = ['PUBLIC_LITEKART_API_URL', 'PUBLIC_LITEKART_STORE_ID', 'PUBLIC_LITEKART_DOMAIN']
+const REQUIRED_ENV = ['PUBLIC_LITEKART_API_URL', 'PUBLIC_LITEKART_STORE_ID', 'PUBLIC_LITEKART_DOMAIN'] as const
 
 export const GET: RequestHandler = async () => {
 	const missing = REQUIRED_ENV.filter((key) => !env[key])

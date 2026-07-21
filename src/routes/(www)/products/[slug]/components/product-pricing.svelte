@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/core/utils'
