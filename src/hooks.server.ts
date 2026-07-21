@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit'
+import type { Handle, HandleFetch } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { env as privateEnv } from '$env/dynamic/private'
@@ -55,12 +55,24 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 		if (!url.pathname.startsWith('/api')) {
 			const storeService = new StoreService(event.fetch)
-			const storeDetails = await storeService.getStoreByIdOrDomain({ storeId, domain })
-			if (storeDetails?.id && storeIdFromCookie !== storeDetails?.id) {
-				event.cookies.set('litekart_store_id', storeDetails?.id, { path: '/' })
+			let storeDetails = null
+			try {
+				storeDetails = await storeService.getStoreByIdOrDomain({ storeId, domain })
+			} catch (e: any) {
+				// A 404 means "no store maps to this domain" → render a proper 404 page below.
+				// Re-throw anything else (API down, network) so it surfaces as a 500 rather than a
+				// misleading "store not found".
+				if (!/not found|404/i.test(e?.message || '')) {
+					throw e
+				}
+			}
+			if (storeDetails?.id) {
+				if (storeIdFromCookie !== storeDetails.id) {
+					event.cookies.set('litekart_store_id', storeDetails.id, { path: '/' })
+				}
 				event.locals.storeDetails = storeDetails
 			} else {
-				throw new Error('Hooks: Store not found.')
+				event.locals.storeNotFound = true
 			}
 		}
 	}
@@ -70,6 +82,27 @@ export const handle: Handle = async ({ event, resolve }) => {
 	})
 	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
 	return response
+}
+
+// Route server-side API calls straight to the backend (PUBLIC_LITEKART_API_URL) instead of letting
+// them hairpin through the public origin. When the storefront is behind a proxy/CDN (e.g. Cloudflare),
+// an SSR fetch to a relative `/api/...` resolves to the public hostname and goes back out through the
+// CDN from the server's own IP — which the CDN blocks (e.g. Cloudflare returns 403 for datacenter
+// traffic), breaking store resolution. Rewriting to the direct backend keeps SSR working regardless of
+// the edge, with no extra CDN round-trip. Browser fetches are unaffected (they don't go through this).
+export const handleFetch: HandleFetch = async ({ request, fetch }) => {
+	const apiBase = env.PUBLIC_LITEKART_API_URL
+	if (apiBase) {
+		const reqUrl = new URL(request.url)
+		if (reqUrl.pathname.startsWith('/api')) {
+			const target = new URL(apiBase)
+			reqUrl.protocol = target.protocol
+			reqUrl.hostname = target.hostname
+			reqUrl.port = target.port
+			return fetch(new Request(reqUrl, request))
+		}
+	}
+	return fetch(request)
 }
 
 // Simplified error handler that strips stack trace information
