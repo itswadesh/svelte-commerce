@@ -43,7 +43,7 @@
 			{/if}
 			<div class="relative w-full" {...rest}>
 				<Popover.Root bind:open>
-					<Popover.Trigger bind:ref={triggerRef} asChild>
+					<Popover.Trigger bind:ref={triggerRef}>
 						{#snippet child({ props })}
 							<Button
 								aria-label="Open Select Options"

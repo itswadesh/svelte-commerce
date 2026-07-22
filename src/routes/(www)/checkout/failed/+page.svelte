@@ -53,7 +53,7 @@
 				<div class="items-list">
 					{#each cartState.cart?.lineItems as { thumbnail, title, qty, price, variant, slug }}
 						<div class="item">
-							<a href={`/products/${slug}?variant_id=${variant.id}`} class="item-image">
+							<a href={`/products/${slug}?variant_id=${variant?.id ?? ''}`} class="item-image">
 								<img src={thumbnail || '/images/placeholder.png'} alt={title} />
 							</a>
 							<div class="item-details">

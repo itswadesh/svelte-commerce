@@ -2,10 +2,13 @@
 <script lang="ts">
 	import { getContext } from 'svelte'
 	import { cn } from '$lib/core/utils'
+	import type { createTabs } from './tabs.js'
+
+	type TabsContext = ReturnType<typeof createTabs>
 
 	export let value: string
 
-	const { content } = getContext('tabs')
+	const { content } = getContext<TabsContext>('tabs')
 
 	let className = ''
 	export { className as class }

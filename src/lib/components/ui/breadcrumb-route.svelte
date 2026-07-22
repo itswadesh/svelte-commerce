@@ -2,9 +2,14 @@
 	import { page } from '$app/state'
 	import { ChevronRight, Home } from '@lucide/svelte'
 
-	let { items: providedItems, product }: { items?: []; product?: Record<string, any> } = $props()
+	type BreadcrumbItem = {
+		label: string
+		href: string
+	}
 
-	let items = $state([])
+	let { items: providedItems, product }: { items?: BreadcrumbItem[]; product?: Record<string, any> } = $props()
+
+	let items = $state<BreadcrumbItem[]>([])
 	let isProductsPage = $derived(page.route?.id === '/(www)/products/[slug]')
 
 	$effect(() => {

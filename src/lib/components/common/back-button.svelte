@@ -12,7 +12,8 @@
 		if (to) {
 			goto(to)
 		} else {
-			goto(history.back() || '/dash')
+			history.back()
+			goto('/dash')
 		}
 	}
 </script>
