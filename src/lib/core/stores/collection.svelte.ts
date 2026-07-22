@@ -32,7 +32,8 @@ class CollectionState {
     return this.collections?.find(x => x.id === id)
   }
 
-  getOneByRank = (rank: number) => {
+  // `rank` is a varchar column on product_collections, not a number.
+  getOneByRank = (rank: string) => {
     return this.collections?.find(x => x.rank === rank)
   }
 }

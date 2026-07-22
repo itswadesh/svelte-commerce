@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { z } from 'zod'
-import { serializeNonPOJOs, getImageURL, validateData, validateFormData, generateRelativeDate } from '../validations'
+import { serializeNonPOJOs, getImageURL, validateData, validateFormData, generateRelativeDate } from '$lib/core/utils'
 
 // Mock date-fns functions
 vi.mock('date-fns', () => ({

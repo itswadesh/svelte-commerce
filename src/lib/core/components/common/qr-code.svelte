@@ -14,6 +14,11 @@
 		}
 
 		const ctx = canvas.getContext('2d')
+		if (!ctx) {
+			error = 'Canvas 2D context not available'
+			return
+		}
+
 		const img = new Image()
 
 		img.src = base64Data

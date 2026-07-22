@@ -43,7 +43,7 @@ export function createSvelteTable<TData extends RowData>(options: TableOptions<T
 	let state = $state<Partial<TableState>>(table.initialState)
 
 	function updateOptions() {
-		table.setOptions((prev) => {
+		table.setOptions((prev: TableOptionsResolved<TData>) => {
 			return mergeObjects(prev, options, {
 				state: mergeObjects(state, options.state || {}),
 

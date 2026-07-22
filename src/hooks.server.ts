@@ -1,33 +1,10 @@
 import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
-import { env as privateEnv } from '$env/dynamic/private'
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
 	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
-}
-
-export const init = async () => {
-	if (env.PUBLIC_SHOPIFY_STORE_DOMAIN) {
-		const { BaseService } = await import('$lib/core/services')
-		BaseService.setShopifyCredentials(
-			env.PUBLIC_SHOPIFY_STORE_DOMAIN,
-			privateEnv.SHOPIFY_ADMIN_ACCESS_TOKEN,
-			env.PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
-		)
-	}
-
-  if (env.PUBLIC_SALEOR_API_URL) {
-    const { BaseService } = await import('$lib/core/services/index.js')
-    BaseService.setCredentials(env.PUBLIC_SALEOR_API_URL)
-  }
-
-	if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
-		const { BaseService } = await import('$lib/core/services')
-		BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
-		BaseService.setRegionId(env.PUBLIC_MEDUSA_REGION_ID)
-	}
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
