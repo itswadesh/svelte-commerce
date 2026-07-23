@@ -70,7 +70,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 // CDN from the server's own IP — which the CDN blocks (e.g. Cloudflare returns 403 for datacenter
 // traffic), breaking store resolution. Rewriting to the direct backend keeps SSR working regardless of
 // the edge, with no extra CDN round-trip. Browser fetches are unaffected (they don't go through this).
-export const handleFetch: HandleFetch = async ({ request, fetch }) => {
+export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	const apiBase = env.PUBLIC_LITEKART_API_URL
 	if (apiBase) {
 		const reqUrl = new URL(request.url)
@@ -79,7 +79,18 @@ export const handleFetch: HandleFetch = async ({ request, fetch }) => {
 			reqUrl.protocol = target.protocol
 			reqUrl.hostname = target.hostname
 			reqUrl.port = target.port
-			return fetch(new Request(reqUrl, request))
+			const proxied = new Request(reqUrl, request)
+			// Rewriting to the API host makes this cross-origin, so SvelteKit no longer
+			// forwards the `litekart_store_id` cookie that identifies the tenant. Without it
+			// the API rejects the call with "Store ID is required" and multi-tenant SSR
+			// (e.g. *.litekart.in) renders empty. Re-attach the store id explicitly as the
+			// header the API also accepts. `handle` has already resolved it into locals (and
+			// the cookie) for this request.
+			const storeId = event.locals.storeDetails?.id || event.cookies.get('litekart_store_id')
+			if (storeId) {
+				proxied.headers.set('x-litekart-store', storeId)
+			}
+			return fetch(proxied)
 		}
 	}
 	return fetch(request)
