@@ -3,6 +3,7 @@
 	import Nav from '$lib/components/nav/nav.svelte'
 	import Footer from '$lib/components/common/footer.svelte'
 	import { StorePlugins } from '$lib/core/components/index.js'
+	import ConversationalShopping from '$lib/components/chat/conversational-shopping.svelte'
 	import { page } from '$app/state'
 	import type { LayoutProps } from './$types'
 
@@ -33,3 +34,6 @@
 </div>
 
 <StorePlugins />
+
+<!-- Self-gates on the store's admin toggle via /api/commerce-assistant/config -->
+<ConversationalShopping />
