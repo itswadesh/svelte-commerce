@@ -16,8 +16,11 @@
 			</a>
 		{/if}
 
-		<!-- Navigation menu with consistent styling -->
-		<div class="ml-6 hidden items-center space-x-6 lg:flex">
+		<!-- Navigation menu with consistent styling.
+		     Only render the header menu here when the megamenu is OFF — when it's on, <MegaMenu>
+		     already renders these same `header` menu items, which would otherwise show twice. -->
+		{#if !page?.data?.store?.plugins?.megamenu?.active}
+			<div class="ml-6 hidden items-center space-x-6 lg:flex">
 			<!-- Home link only when not on home page -->
 			<!-- {#if page?.url?.pathname !== '/'}
 				<a
@@ -38,10 +41,11 @@
 					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
 					style="font-family: var(--font-body);"
 				>
-					{item?.name}
-				</a>
-			{/each}
-		</div>
+						{item?.name}
+					</a>
+				{/each}
+			</div>
+		{/if}
 		<!-- {#if userState?.user?.role === 'ADMIN'}
 			<div class="flex flex-row gap-3">
 				{#each menuItems as item}
