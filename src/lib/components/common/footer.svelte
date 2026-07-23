@@ -186,7 +186,7 @@
 								<a target="_blank" href="https://litekart.in" class="uppercase text-xs font-bold text-foreground transition-colors hover:text-primary">
 									Powered by Litekart
 								</a>
-								<span class="ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">v{version}</span>
+								<span class="ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">{version}</span>
 							</span>
 							<TrustpilotPlugin />
 						</div>
