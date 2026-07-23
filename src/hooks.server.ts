@@ -26,6 +26,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (storeId && storeIdFromCookie !== storeId) {
 		event.cookies.set('litekart_store_id', storeId, { path: '/' })
 	} else if (!storeIdFromCookie) {
+		console.log( url.hostname,' url.hostname.............')
 		const domain = env.PUBLIC_LITEKART_DOMAIN || url.hostname
 		if (!domain) {
 			throw new Error(`Unable to retrieve hostname from URL. ${url.hostname}`)
