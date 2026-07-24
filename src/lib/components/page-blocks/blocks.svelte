@@ -12,12 +12,15 @@
 
 {#each layouts as layout, idx (idx)}
 	<section
-		class="{layout.metadata.isFullScreen ? 'px-3': 'page-width'} grid {layout.type}"
+		class="{layout.metadata.isFullScreen ? 'px-3' : 'page-width'} grid {layout.type}"
 		style="grid-template-columns: repeat({layout.columnCount}, 1fr); column-gap: {layout.columnGap}px; row-gap: {layout.rowGap}px;"
 	>
 		{#each layout.blocks as block, idx (block.id)}
 			<div
-				style="grid-column-start: {block.columnStart}; grid-column-end: {block.columnEnd}; grid-row-start: {block.rowStart}; grid-row-end: {block.rowEnd}; justify-self: {block.metadata?.align || 'center'};"
+				style="grid-column-start: {block.columnStart}; grid-column-end: {block.columnEnd}; grid-row-start: {block.rowStart}; grid-row-end: {block.rowEnd}; justify-self: {block
+					.metadata?.align || 'center'}; {block.metadata.maxHeightUnit && block.metadata.maxHeight
+					? `height: ${block.metadata.maxHeight}${block.metadata.maxHeightUnit};`
+					: ''}"
 			>
 				{#if block.type == 'RICH_TEXT'}
 					<RichTextBlock {block} />
@@ -25,14 +28,14 @@
 					<ImageBlock {block} />
 				{:else if block.type == 'BANNER'}
 					<BannerBlock {block} />
-        {:else if block.type == 'COLLECTION'}
-          <Collection {block} />
-        {:else if block.type == 'FEATURED_CATEGORIES'}
-          <FeaturedCategories {block} />
-        {:else if block.type == 'FEATURED_PRODUCTS'}
-          <FeaturedProducts {block} />
-        {:else if block.type == 'COLLECTION_CAROUSEL'}
-          <CollectionCarousel {block} />
+				{:else if block.type == 'COLLECTION'}
+					<Collection {block} />
+				{:else if block.type == 'FEATURED_CATEGORIES'}
+					<FeaturedCategories {block} />
+				{:else if block.type == 'FEATURED_PRODUCTS'}
+					<FeaturedProducts {block} />
+				{:else if block.type == 'COLLECTION_CAROUSEL'}
+					<CollectionCarousel {block} />
 				{/if}
 			</div>
 		{/each}
@@ -40,28 +43,31 @@
 {/each}
 
 <style>
-  .LAPTOP, .MOBILE, .TABLET, .DESKTOP {
-    display: none;
-  }
+	.LAPTOP,
+	.MOBILE,
+	.TABLET,
+	.DESKTOP {
+		display: none;
+	}
 
-  @media screen and (min-width: 0px) and (max-width: 600px) {
-    .MOBILE {
-      display: grid;
-    }
-  }
-  @media screen and (min-width: 601px) and (max-width: 1024px) {
-    .TABLET {
-      display: grid;
-    }
-  }
-  @media screen and (min-width: 1025px) and (max-width: 1920px) {
-    .LAPTOP {
-      display: grid;
-    }
-  }
-  @media screen and (min-width: 1921px) {
-    .DESKTOP {
-      display: grid;
-    }
-  }
+	@media screen and (min-width: 0px) and (max-width: 600px) {
+		.MOBILE {
+			display: grid;
+		}
+	}
+	@media screen and (min-width: 601px) and (max-width: 1024px) {
+		.TABLET {
+			display: grid;
+		}
+	}
+	@media screen and (min-width: 1025px) and (max-width: 1920px) {
+		.LAPTOP {
+			display: grid;
+		}
+	}
+	@media screen and (min-width: 1921px) {
+		.DESKTOP {
+			display: grid;
+		}
+	}
 </style>
