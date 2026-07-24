@@ -31,18 +31,18 @@
 
 <!-- Reviews Section -->
 {#if page.data.store?.plugins?.isProductReviewsAndRatings?.active}
-	<section class="">
+	<section class="edp-rev">
 		{#if page.data?.product?.ratings?.length}
 			<div class="intra-gap grid grid-cols-1 lg:grid-cols-12">
 				<!-- Left Column: Summary & Stats -->
 				<div class="lg:sticky lg:top-24 lg:col-span-4 lg:h-fit">
 					<div class="space-y-6 lg:space-y-8">
 						<div class="flex flex-col items-center text-center lg:items-start lg:text-left">
-							<h2 class="mb-1 text-2xl font-bold tracking-tight text-foreground lg:mb-2 lg:text-2xl">Reviews</h2>
+							<h2 class="mb-1 text-2xl font-bold tracking-tight text-foreground lg:mb-2 lg:text-2xl edp-rev-title">Reviews</h2>
 							<p class="text-sm text-muted-foreground lg:text-base">Real feedback from our community</p>
 
 							<div class="mt-6 flex items-baseline gap-2 lg:mt-8">
-								<span class="text-5xl font-black text-primary lg:text-6xl">{accRating || '0.0'}</span>
+								<span class="text-5xl font-black text-primary lg:text-6xl edp-rev-score">{accRating || '0.0'}</span>
 								<span class="text-lg font-semibold text-muted-foreground/60 lg:text-xl">/ 5.0</span>
 							</div>
 
@@ -62,7 +62,7 @@
 						</div>
 
 						<!-- Rating Distribution -->
-						<div class="rounded-md bg-muted/10 p-6 ring-1 ring-border">
+						<div class="rounded-md bg-muted/10 p-6 ring-1 ring-border edp-rev-panel">
 							<div class="space-y-4">
 								{#each [5, 4, 3, 2, 1] as stars}
 									{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars - 1).length || 0}
@@ -120,7 +120,7 @@
 						<Tabs.Content value="product" class="intra-pt space-y-4">
 							{#each page.data?.product?.ratings as rating, i}
 								<div
-									class="relative flex flex-col gap-4 rounded-md bg-background p-5 ring-1 ring-border transition-all hover:shadow-xl sm:gap-6 sm:p-6"
+									class="relative flex flex-col gap-4 rounded-md bg-background p-5 ring-1 ring-border transition-all hover:shadow-xl sm:gap-6 sm:p-6 edp-rev-card"
 									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
 								>
 									<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -186,7 +186,7 @@
 						<Tabs.Content value="brand" class="intra-pt space-y-6">
 							{#each page.data?.product?.brandReviews as rating, i}
 								<div
-									class="relative flex flex-col gap-4 rounded-md bg-background p-5 ring-1 ring-border transition-all hover:shadow-xl sm:gap-6 sm:p-6"
+									class="relative flex flex-col gap-4 rounded-md bg-background p-5 ring-1 ring-border transition-all hover:shadow-xl sm:gap-6 sm:p-6 edp-rev-card"
 									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
 								>
 									<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -406,6 +406,52 @@
 <style>
 	:global(.font-montserrat) {
 		font-family: var(--font-body);
+	}
+
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-rev) {
+		border-top: 1px solid var(--ed-line);
+		padding-top: clamp(32px, 5vw, 56px);
+		margin-top: clamp(32px, 5vw, 56px);
+	}
+
+	:global([data-theme='default'] .edp-rev-title) {
+		font-family: var(--ed-display);
+		font-weight: 500;
+		letter-spacing: -0.01em;
+		font-size: clamp(1.8rem, 3vw, 2.4rem);
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-rev-score) {
+		font-family: var(--ed-display);
+		font-weight: 500;
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-rev-panel) {
+		border-radius: var(--ed-radius);
+		background: var(--ed-surface);
+		--tw-ring-color: var(--ed-line);
+	}
+
+	:global([data-theme='default'] .edp-rev-card) {
+		border-radius: var(--ed-radius);
+		background: var(--ed-surface);
+		--tw-ring-color: var(--ed-line);
+		transition: box-shadow 0.25s ease;
+	}
+
+	:global([data-theme='default'] .edp-rev-card:hover) {
+		box-shadow:
+			0 0 0 1px var(--ed-line),
+			0 14px 40px -24px rgba(27, 26, 23, 0.3);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default'] .edp-rev-card) {
+			transition: none;
+		}
 	}
 
 	.rating-bar-glow {

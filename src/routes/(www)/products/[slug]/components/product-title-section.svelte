@@ -19,15 +19,15 @@
 	const reviewsEnabled = $derived(!!page?.data?.store?.plugins?.isProductReviewsAndRatings?.active)
 </script>
 
-<div class="relative">
+<div class="relative edp-titlewrap">
 
 		{#if product?.categories}
-		<p class="max-sm:hidden text-sm font-semibold leading-[1]">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
+		<p class="max-sm:hidden text-sm font-semibold leading-[1] edp-cat">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
 		{/if}
 
 
 	<div class="flex items-center justify-between gap-4">
-		<h1 class="text-md flex-1 font-medium tracking-tight text-gray-900 dark:text-white sm:text-xl leading-[1]">
+		<h1 class="text-md flex-1 font-medium tracking-tight text-gray-900 dark:text-white sm:text-xl leading-[1] edp-title">
 			{productState.title || product.title}
 		</h1>
 
@@ -52,13 +52,13 @@
 	</div>
 
 	{#if product.subtitle}
-		<div class="mt-3 line-clamp-3 text-xs font-medium sm:text-sm">
+		<div class="mt-3 line-clamp-3 text-xs font-medium sm:text-sm edp-subtitle">
 			{@html productState.selectedVariant?.subtitle || product.subtitle}
 		</div>
 	{/if}
 
 		{#if reviewCount > 0}
-	<div class="intra-pt flex items-center gap-4">
+	<div class="intra-pt flex items-center gap-4 edp-reviewrow">
 			<div class="flex items-center gap-2">
 				<div class="relative flex items-center">
 					<div class="flex gap-0.5">
@@ -82,8 +82,56 @@
 			</div>
 	</div>
 		{:else if reviewsEnabled}
-	<div class="intra-pt">
-		<span class="text-sm text-gray-400">Be the first to review</span>
+	<div class="intra-pt edp-reviewrow">
+		<span class="text-sm text-gray-400 edp-review-empty">Be the first to review</span>
 	</div>
 		{/if}
 </div>
+
+<style>
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-cat) {
+		margin-bottom: 12px;
+		font-family: var(--ed-body);
+		font-size: 0.72rem;
+		font-weight: 600;
+		font-style: normal;
+		letter-spacing: 0.18em;
+		line-height: 1.2;
+		text-transform: uppercase;
+		color: var(--ed-soft);
+	}
+
+	:global([data-theme='default'] .edp-title) {
+		font-family: var(--ed-display);
+		font-weight: 500;
+		letter-spacing: -0.01em;
+		font-size: clamp(1.55rem, 2.6vw, 2.3rem);
+		line-height: 1.12;
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-subtitle) {
+		margin-top: 14px;
+		color: var(--ed-soft);
+		font-size: 0.92rem;
+		line-height: 1.6;
+	}
+
+	:global([data-theme='default'] .edp-reviewrow) {
+		margin-top: 16px;
+	}
+
+	:global([data-theme='default'] .edp-reviewrow .text-gray-900) {
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-reviewrow .text-gray-500),
+	:global([data-theme='default'] .edp-review-empty) {
+		color: var(--ed-soft);
+	}
+
+	:global([data-theme='default'] .edp-reviewrow .bg-gray-300) {
+		background: var(--ed-line-strong);
+	}
+</style>

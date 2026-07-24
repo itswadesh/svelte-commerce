@@ -138,14 +138,14 @@
 	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
 </div>
 
-<div class="page-width intra-gap flex flex-col ">
+<div class="page-width intra-gap flex flex-col edp-root">
 	{#if !data?.product && !productState.isLoading}
 		<div class="flex h-96 flex-col items-center justify-center space-y-4">
-			<h2 class="page-heading">Product not found</h2>
-			<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4">Browse All Products</a>
+			<h2 class="page-heading edp-empty-title">Product not found</h2>
+			<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4 edp-empty-link">Browse All Products</a>
 		</div>
 	{:else}
-		<div class="inter-gap relative grid grid-cols-1 items-start lg:grid-cols-2">
+		<div class="inter-gap relative grid grid-cols-1 items-start lg:grid-cols-2 edp-grid">
 			<div class="col-span-1 sm:mt-0 ">
 				<ProductGallerySection />
 			</div>
@@ -154,7 +154,7 @@
         <Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
       </div>
 
-			<div class="intra-gap top-28 mx-0 lg:pl-6 flex flex-col space-y-0">
+			<div class="intra-gap top-28 mx-0 lg:pl-6 flex flex-col space-y-0 edp-buybox">
 				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
@@ -255,7 +255,7 @@
 
 <!-- Mobile cart button - Sticky Footer -->
 <div
-	class="sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 p-page shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden"
+	class="sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 p-page shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden edp-mobilebar"
 >
 	<div class="flex-1 flex flex-col intra-gap">
 		<ProductCartAndWishlistButtons showWishlist={false} />
@@ -272,3 +272,43 @@
 />
 <!-- {/snippet}
 </ProductRenderer> -->
+
+<style>
+	/* Refined Editorial — default theme only. Route component renders for all themes,
+	   so every rule is gated under [data-theme='default']. */
+	:global([data-theme='default'] .edp-grid) {
+		column-gap: clamp(28px, 5vw, 72px);
+		row-gap: 18px;
+	}
+
+	@media (min-width: 1024px) {
+		:global([data-theme='default'] .edp-buybox) {
+			padding-left: clamp(16px, 3vw, 44px);
+		}
+	}
+
+	:global([data-theme='default'] .edp-mobilebar) {
+		background: var(--ed-surface);
+		border-top: 1px solid var(--ed-line);
+		box-shadow: 0 -6px 24px -14px rgba(27, 26, 23, 0.22);
+		backdrop-filter: none;
+	}
+
+	:global([data-theme='default'] .edp-empty-title) {
+		font-family: var(--ed-display);
+		font-weight: 500;
+		letter-spacing: -0.01em;
+		font-size: clamp(1.8rem, 4vw, 2.6rem);
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-empty-link) {
+		color: var(--ed-ink);
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		font-size: 0.76rem;
+		text-decoration: none;
+		border-bottom: 1px solid var(--ed-ink);
+		padding-bottom: 2px;
+	}
+</style>

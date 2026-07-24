@@ -75,7 +75,7 @@
 	</style>
 {/if}
 
-<div class="flex flex-col-reverse gap-4 sm:flex-row">
+<div class="flex flex-col-reverse gap-4 sm:flex-row edp-gallery">
   <!-- Preview images -->
 	<div class="hidden sm:flex sm:w-24 sm:flex-col">
 		<Carousel.Root
@@ -319,3 +319,20 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	/* Refined Editorial — default theme only. Clean gallery: warm media wells,
+	   editorial radius, hairline thumbnail borders (selected keeps primary). */
+	:global([data-theme='default'] .edp-gallery .rounded-radius) {
+		border-radius: var(--ed-radius);
+	}
+
+	:global([data-theme='default'] .edp-gallery .bg-gray-50) {
+		background-color: #f0ece4;
+		border-radius: var(--ed-radius);
+	}
+
+	:global([data-theme='default'] .edp-gallery .border-muted) {
+		border-color: var(--ed-line);
+	}
+</style>

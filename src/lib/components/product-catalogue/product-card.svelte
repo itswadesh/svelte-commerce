@@ -12,6 +12,7 @@
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 	import LimelightProductCard from '$lib/theme/limelight/LimelightProductCard.svelte'
 	import NoorProductCard from '$lib/theme/noor/NoorProductCard.svelte'
+	import DefaultProductCard from '$lib/theme/default/DefaultProductCard.svelte'
 
 	const cartState = getCartState()
 
@@ -42,6 +43,8 @@
 	<LimelightProductCard {product} {aspectRatio} {hideCartControls} />
 {:else if activeTheme === 'noor'}
 	<NoorProductCard {product} {aspectRatio} {hideCartControls} />
+{:else if activeTheme === 'default'}
+	<DefaultProductCard {product} {aspectRatio} {hideCartControls} {priority} />
 {:else}
 <ProductCardRenderer {product} {aspectRatio}>
 	{#snippet content({ aspectHeight, toggleWishlist, isWishlisted, aspectWidth, handleCardClick, changeQuantity, addToCart })}

@@ -98,9 +98,21 @@
 		--sarab-light: #f8fafc;
 		--sarab-green: #047857;
 		--sarab-gold: #d97706;
-		--font-heading: 'Inter', 'Poppins', sans-serif;
-		--font-body: 'Inter', 'Poppins', sans-serif;
-		--font-primary: 'Inter', 'Poppins', sans-serif;
+		/* Refined Editorial type system — applies wherever a default-theme component uses
+		   --font-heading / --font-body (nav, footer, product cards, PLP, PDP, homepage). */
+		--font-heading: 'Bodoni Moda', 'Times New Roman', serif;
+		--font-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+		--font-primary: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+		/* Editorial surface + line tokens shared across the default-theme storefront. */
+		--ed-canvas: #f6f3ee;
+		--ed-surface: #ffffff;
+		--ed-ink: #1b1a17;
+		--ed-soft: #736c60;
+		--ed-line: rgba(27, 26, 23, 0.12);
+		--ed-line-strong: rgba(27, 26, 23, 0.2);
+		--ed-radius: 4px;
+		--ed-display: 'Bodoni Moda', 'Times New Roman', serif;
+		--ed-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
 	}
 
 	[data-theme='sarab'] {
@@ -360,4 +372,49 @@
 [data-theme='limelight'] [data-testid='product-card-selling-price'],
 [data-theme='limelight'] [data-testid='product-card-mrp'] {
 	font-weight: 400;
+}
+
+/* ── Unified editorial buttons ─────────────────────────────────────────────────
+   Every shadcn <Button> carries `.ed-btn-base`. On the default theme they all get
+   one editorial look — sharp radius, uppercase tracked label, flat (no shadow) —
+   to match the homepage / product-card / footer buttons. Variant colours
+   (bg-primary, ghost, outline…) are preserved; filled CTAs also lift on hover.
+   Unlayered so these win over Tailwind's utility layer without !important. */
+[data-theme='default'] .ed-btn-base {
+	border-radius: var(--ed-radius);
+	font-family: var(--font-body);
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	box-shadow: none;
+	transition:
+		transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+		background-color 0.25s ease,
+		color 0.25s ease,
+		border-color 0.25s ease,
+		opacity 0.25s ease;
+}
+
+/* Filled primary/secondary CTAs get the editorial hairline border + hover lift. */
+[data-theme='default'] .ed-btn-base.bg-primary {
+	border: 1px solid hsl(var(--primary));
+}
+[data-theme='default'] .ed-btn-base.bg-primary:hover,
+[data-theme='default'] .ed-btn-base.bg-secondary:hover {
+	transform: translateY(-2px);
+	opacity: 0.94;
+}
+
+/* Icon-only buttons carry no label — drop the tracking so the glyph stays centered. */
+[data-theme='default'] .ed-btn-base.w-9 {
+	letter-spacing: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-theme='default'] .ed-btn-base {
+		transition: none;
+	}
+	[data-theme='default'] .ed-btn-base:hover {
+		transform: none;
+	}
 }
