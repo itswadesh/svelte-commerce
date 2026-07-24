@@ -4,6 +4,7 @@
 	import { getThemeFontsUrl } from '$lib/theme/index.js'
 	import { setUserState } from '$lib/core/stores/index.js'
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
+	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
 	import { navigating } from '$app/stores'
 	import { updated } from '$app/state'
 	import { afterNavigate, beforeNavigate } from '$app/navigation'
@@ -69,6 +70,7 @@
 
 <ColorPalette />
 <GoogleAnalytics />
+<KlaviyoPlugin storeData={data?.store} />
 
 <!-- <ThemeProvider /> -->
 

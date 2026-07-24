@@ -12,9 +12,9 @@
 	let isOpen = $state(true)
 </script>
 
-<div class="">
-	<button class="flex w-full items-center justify-between gap-2 text-semibold font-bold pb-2 text-gray-900" onclick={() => (isOpen = !isOpen)}>
-		<span>Product Specifications</span>
+<div class="edp-spec">
+	<button class="flex w-full items-center justify-between gap-2 text-semibold font-bold pb-2 text-gray-900 intra-pt" onclick={() => (isOpen = !isOpen)}>
+		<span class="edp-acc-label">Product Specifications</span>
 
 		{#if isOpen}
 			<ChevronUp class="h-4 w-4 text-gray-800" />
@@ -99,7 +99,7 @@
 			{/each}
 
 			{#if productState.selectedVariant?.qrcode || data?.product?.qrcode}
-				<div class="mt-4 flex flex-col items-center gap-2 rounded-lg bg-gray-50 p-4">
+				<div class="mt-4 flex flex-col items-center gap-2 rounded-lg bg-gray-50 p-4 edp-spec-qr">
 					<p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Product Authenticity</p>
 					<QrCodeDisplayer base64Data={productState.selectedVariant?.qrcode || data?.product?.qrcode} />
 				</div>
@@ -107,3 +107,35 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-spec) {
+		border-top: 1px solid var(--ed-line);
+	}
+
+	:global([data-theme='default'] .edp-spec .edp-acc-label) {
+		font-family: var(--ed-body);
+		font-size: 0.78rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-spec .text-gray-400) {
+		color: var(--ed-soft);
+		letter-spacing: 0.1em;
+	}
+
+	:global([data-theme='default'] .edp-spec .text-gray-900),
+	:global([data-theme='default'] .edp-spec .text-gray-600) {
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-spec-qr) {
+		border: 1px solid var(--ed-line);
+		border-radius: var(--ed-radius);
+		background: var(--ed-canvas);
+	}
+</style>

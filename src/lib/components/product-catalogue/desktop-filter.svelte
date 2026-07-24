@@ -27,27 +27,27 @@
   }
 </script>
 
-<div class="group sticky" style={`top: ${filterState.containerTop}px;`}>
+<div class="ed-df group sticky" style={`top: ${filterState.containerTop}px;`}>
 	<div
 		bind:this={filterState.container}
 		class={cn(
-			'intra-gap flex min-w-56 flex-col overflow-y-auto !pb-20 scrollbar-none scrollbar-track-transparent scrollbar-thumb-transparent  group-hover:scrollbar-track-inherit group-hover:scrollbar-thumb-inherit',
+			'ed-df__panel intra-gap flex min-w-56 flex-col overflow-y-auto !pb-20 scrollbar-none scrollbar-track-transparent scrollbar-thumb-transparent  group-hover:scrollbar-track-inherit group-hover:scrollbar-thumb-inherit',
 			className
 		)}
 		style={`height: ${browser ? window?.innerHeight - (filterState.containerTop || 0) : 'auto'}px`}
 	>
 		<div class="flex items-center justify-between">
-			<p class="text-lg font-bold">Filters</p>
+			<p class="ed-df__title text-lg font-bold">Filters</p>
 
 			{#if filterState.anyFilterApplied}
-				<Button variant="link" size="sm" class="h-auto p-0" onclick={filterState.clearFilters}>
+				<Button variant="link" size="sm" class="ed-df__clear h-auto p-0" onclick={filterState.clearFilters}>
 					<X class="mr-1 h-3 w-3" />
 					Clear
 				</Button>
 			{/if}
 		</div>
 
-		<div class="w-full border-b border-gray-200"></div>
+		<div class="ed-df__rule w-full border-b border-gray-200"></div>
 
 		<!-- Applied filters -->
 		<!-- <div class="flex w-full max-w-56 flex-col flex-wrap intra-gap text-[11px] text-gray-600">
@@ -87,7 +87,7 @@
 						bind:value={filterState.categorySearchQuery}
 						type="text"
 						placeholder="Search categories"
-						class="w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+						class="ed-df__search w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
 						onkeydown={filterState.handleCategorySearchKeyDown}
 						autofocus
 					/>
@@ -103,7 +103,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Categories</p>
+					<p class="ed-df__label text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Categories</p>
 					<Button
 						variant="ghost"
 						size="icon"
@@ -149,11 +149,11 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
+							<span class="ed-df__cat flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
 						</Button>
 					{/each}
 					{#if filterState.filteredCategories.length > 5}
-						<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>
+						<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>
 							+ {filterState.filteredCategories.length - 5} more
 						</Button>
 					{/if}
@@ -173,17 +173,17 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
+							<span class="ed-df__cat flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
 						</Button>
 					{/each}
-					<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>Show less</Button>
+					<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>Show less</Button>
 				{/if}
 			</div>
 		{/if}
 
 		<!-- Tags List -->
 		{#if filterState.tags.length > 0}
-			<div class="w-full border-b border-gray-200"></div>
+			<div class="ed-df__rule w-full border-b border-gray-200"></div>
 
 			{#if filterState.showTagSearch}
 				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
@@ -191,7 +191,7 @@
 						bind:value={filterState.tagSearchQuery}
 						type="text"
 						placeholder="Search tags"
-						class="w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+						class="ed-df__search w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
 						onkeydown={filterState.handleTagSearchKeyDown}
 						autofocus
 					/>
@@ -207,7 +207,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
+					<p class="ed-df__label text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
 					<Button
 						class="flex w-8 items-center justify-center rounded-full text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700"
 						variant="ghost"
@@ -248,12 +248,12 @@
 							/>
 							<label
 								for={`tag-${tag.slug || tag.name}`}
-								class="flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">{tag.name}</label
+								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">{tag.name}</label
 							>
 						</div>
 					{/each}
 					{#if filterState.filteredTags.length > 5}
-						<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>
+						<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>
 							+ {filterState.filteredTags.length - 5} more
 						</Button>
 					{/if}
@@ -269,25 +269,25 @@
 							/>
 							<label
 								for={`tag-${tag.slug || tag.name}`}
-								class="flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">{tag.name}</label
+								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">{tag.name}</label
 							>
 						</div>
 					{/each}
-					<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>Show less</Button>
+					<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>Show less</Button>
 				{/if}
 			</div>
 
-			<div class="w-full border-b border-gray-200"></div>
+			<div class="ed-df__rule w-full border-b border-gray-200"></div>
 		{/if}
 
 		<!-- Price Filter -->
-		<p class="text-sm font-bold uppercase text-gray-900">Price Range</p>
+		<p class="ed-df__label text-sm font-bold uppercase text-gray-900">Price Range</p>
 
-		<div class="relative mr-5 mt-2">
+		<div class="ed-df__slider relative mr-5 mt-2">
 			<!-- Range slider track -->
-			<div class="absolute h-1 w-full rounded bg-gray-100">
+			<div class="ed-df__track absolute h-1 w-full rounded bg-gray-100">
 				<div
-					class="absolute h-1 bg-primary"
+					class="ed-df__fill absolute h-1 bg-primary"
 					style="left: {filterState.priceSliderLeftPercentage}%; right: {filterState.priceSliderRightPercentage}%"
 				></div>
 			</div>
@@ -314,7 +314,7 @@
 		</div>
 
 		<!-- Editable price bounds (kept in sync with the slider) -->
-		<div class="mt-4 grid grid-cols-2 gap-3">
+		<div class="ed-df__prices mt-4 grid grid-cols-2 gap-3">
 			<Textbox
 				type="number"
 				label="Min ({page.data?.store?.currency?.symbol})"
@@ -332,10 +332,10 @@
 		<!-- Other generalized filters -->
 		{#if filterState.processedFilters}
 			{#each Object.keys(filterState.processedFilters) as key, idx}
-				<div class="w-full border-b border-gray-200"></div>
+				<div class="ed-df__rule w-full border-b border-gray-200"></div>
 
 				<div class="intra-gap flex flex-col">
-					<p class="text-sm font-bold uppercase text-gray-900">
+					<p class="ed-df__label text-sm font-bold uppercase text-gray-900">
 						{filterState.formatFilterName(key)}
 					</p>
 
@@ -351,7 +351,7 @@
 											filterState.handleGeneralFiltersChange({ key, value, checked })
 										}}
 									/>
-									<label for={`gen-${value}`} class="flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">
+									<label for={`gen-${value}`} class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">
 										{#if value?.startsWith?.('#')}
 											<div class="flex items-center gap-2">
 												<div class="h-4 w-4 rounded-full border border-gray-200" style="background-color: {value};"></div>
@@ -367,7 +367,7 @@
 								<Button
 									variant="link"
 									size="sm"
-									class="mt-1 h-auto justify-start p-0"
+									class="ed-df__more mt-1 h-auto justify-start p-0"
 									onclick={() => {
 										filterState.showMoreGeneralFilters[idx] = true
 									}}
@@ -385,7 +385,7 @@
 											filterState.handleGeneralFiltersChange({ key, value, checked })
 										}}
 									/>
-									<label for={`gen-${value}`} class="flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">
+									<label for={`gen-${value}`} class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">
 										{#if value?.startsWith?.('#')}
 											<div class="flex items-center gap-2">
 												<div class="h-4 w-4 rounded-full border border-gray-200" style="background-color: {value};"></div>
@@ -400,7 +400,7 @@
 							<Button
 								variant="link"
 								size="sm"
-								class="mt-1 h-auto justify-start p-0"
+								class="ed-df__more mt-1 h-auto justify-start p-0"
 								onclick={() => {
 									filterState.showMoreGeneralFilters[idx] = false
 								}}
@@ -414,3 +414,160 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	/* ---- Refined Editorial · desktop filter sidebar (default theme only) ----
+	   Every rule is gated to [data-theme='default']; sarab/organic/limelight/noor
+	   keep the original Tailwind styling. */
+	:global([data-theme='default']) .ed-df__panel {
+		font-family: var(--ed-body);
+		color: var(--ed-ink);
+	}
+
+	/* Panel title + Clear */
+	:global([data-theme='default']) .ed-df__title {
+		font-family: var(--ed-body);
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .ed-df__clear) {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+		font-weight: 600;
+		letter-spacing: 0.04em;
+	}
+
+	:global([data-theme='default'] .ed-df__clear:hover) {
+		color: hsl(var(--primary));
+	}
+
+	/* Hairline group dividers */
+	:global([data-theme='default']) .ed-df__rule {
+		border-color: var(--ed-line);
+	}
+
+	/* Quiet uppercase section labels */
+	:global([data-theme='default']) .ed-df__label {
+		font-family: var(--ed-body);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--ed-soft);
+	}
+
+	/* Category links + option (tag / attribute) labels */
+	:global([data-theme='default']) .ed-df__cat,
+	:global([data-theme='default']) .ed-df__opt {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+		transition: color 0.15s ease;
+	}
+
+	:global([data-theme='default']) .ed-df__opt:hover {
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .group:hover .ed-df__cat) {
+		color: hsl(var(--primary));
+	}
+
+	/* +N more / Show less */
+	:global([data-theme='default'] .ed-df__more) {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+
+	:global([data-theme='default'] .ed-df__more:hover) {
+		color: hsl(var(--primary));
+		text-decoration: none;
+	}
+
+	/* Editorial checkboxes */
+	:global([data-theme='default'] .ed-df__panel [role='checkbox']) {
+		border-color: var(--ed-line-strong);
+		border-radius: 3px;
+		box-shadow: none;
+	}
+
+	/* Search-within inputs */
+	:global([data-theme='default']) .ed-df__search {
+		border: 1px solid var(--ed-line-strong);
+		border-radius: var(--ed-radius);
+		background: var(--ed-surface);
+		box-shadow: none;
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default']) .ed-df__search:focus {
+		outline: none;
+		border-color: hsl(var(--primary));
+		box-shadow: none;
+	}
+
+	/* Price range slider */
+	:global([data-theme='default']) .ed-df__track {
+		height: 3px;
+		background: var(--ed-line);
+	}
+
+	:global([data-theme='default']) .ed-df__fill {
+		height: 3px;
+		background: hsl(var(--primary));
+	}
+
+	:global([data-theme='default'] .ed-df__slider input[type='range']::-webkit-slider-thumb) {
+		width: 15px;
+		height: 15px;
+		border: 1px solid hsl(var(--primary));
+		background: var(--ed-surface);
+		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
+	}
+
+	:global([data-theme='default'] .ed-df__slider input[type='range']::-moz-range-thumb) {
+		width: 15px;
+		height: 15px;
+		border: 1px solid hsl(var(--primary));
+		background: var(--ed-surface);
+		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
+	}
+
+	/* Editable price bound inputs + labels */
+	:global([data-theme='default'] .ed-df__prices input) {
+		border: 1px solid var(--ed-line-strong);
+		border-radius: var(--ed-radius);
+		background: var(--ed-surface);
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default'] .ed-df__prices input:focus) {
+		outline: none;
+		border-color: hsl(var(--primary));
+	}
+
+	:global([data-theme='default'] .ed-df__prices label) {
+		font-family: var(--ed-body);
+		font-size: 0.72rem;
+		font-weight: 500;
+		letter-spacing: 0.04em;
+		color: var(--ed-soft);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default']) .ed-df__cat,
+		:global([data-theme='default']) .ed-df__opt {
+			transition: none;
+		}
+	}
+</style>

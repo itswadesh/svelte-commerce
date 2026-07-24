@@ -12,7 +12,7 @@
 
 <div class="relative">
   {#if page?.data?.store?.plugins?.socialSharingButtons}
-	  <div class="absolute right-2 top-2 z-30 rounded-full bg-white block">
+	  <div class="absolute right-2 top-2 z-30 rounded-full bg-white block edp-gallery-float">
 			<ShareButton productName={page.data?.product?.title} productImage={page.data?.product?.thumbnail} url={page?.url?.href} />
 	  </div>
 	{/if}
@@ -23,7 +23,7 @@
 
 		<Drawer.Root direction="bottom" bind:open={productState.showSimilarDrawer}>
 			{#if productState.productsOfSameCategory?.length}
-				<Drawer.Trigger class="absolute bottom-12 right-4 rounded-full bg-white p-2 sm:hidden">
+				<Drawer.Trigger class="absolute bottom-12 right-4 rounded-full bg-white p-2 sm:hidden edp-gallery-float">
 					<div class="">
 						<svg
 							class="[&>*]:stroke-[1.2]"
@@ -70,3 +70,12 @@
 		</Drawer.Root>
 	{/if}
 </div>
+
+<style>
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-gallery-float) {
+		background: var(--ed-surface);
+		border: 1px solid var(--ed-line);
+		box-shadow: 0 6px 20px -12px rgba(27, 26, 23, 0.3);
+	}
+</style>

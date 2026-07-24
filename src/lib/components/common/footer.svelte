@@ -70,8 +70,8 @@
 				{/await}
 			</div>
 		{/if}
-		<footer class="me-container">
-			<div class="w-full xl:pb-2">
+		<footer class="me-container" class:ed={activeThemeName === 'default'}>
+			<div class="ed-foot-inner w-full xl:pb-2">
 				{#if shouldCollapseOnMobile}
 					<Button
 						variant="ghost"
@@ -186,7 +186,7 @@
 								<a target="_blank" href="https://litekart.in" class="uppercase text-xs font-bold text-foreground transition-colors hover:text-primary">
 									Powered by Litekart
 								</a>
-								<span class="ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">{version}</span>
+								<span class="foot-version ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">{version}</span>
 							</span>
 							<TrustpilotPlugin />
 						</div>
@@ -212,3 +212,57 @@
 </div>
 
 <WhatsappChatButton />
+
+<style>
+	/* Refined Editorial footer — scoped to the default theme via `.ed`, so sarab/organic
+	   (which share this footer) are untouched. Fonts come from the global default-theme
+	   type system; here we set the warm surface, hairline rules, and quiet text. */
+	.ed {
+		background: var(--ed-canvas);
+		border-top: 1px solid var(--ed-line);
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+	}
+
+	/* `me-container` is undefined in this project, so the footer content ran edge-to-edge (logo /
+	   copyright clipped at the left). Constrain the inner content to the same container the
+	   editorial homepage sections use, while the .ed background still spans full width. */
+	.ed .ed-foot-inner {
+		width: min(1240px, 100% - 2 * clamp(20px, 5vw, 48px));
+		margin-inline: auto;
+	}
+
+	.ed :global(.border-t) {
+		border-top-color: var(--ed-line);
+	}
+
+	.ed :global(.border-b) {
+		border-bottom-color: var(--ed-line);
+	}
+
+	.ed :global(.text-muted-foreground) {
+		color: var(--ed-soft);
+	}
+
+	/* The brand wordmark uses white text (built for a dark footer); on the editorial warm
+	   canvas that was invisible. Recolor it to ink, keeping its gold accent. */
+	.ed :global(.text-white) {
+		color: var(--ed-ink);
+	}
+
+	.ed :global(a.hover\:text-foreground:hover),
+	.ed :global(a.hover\:text-primary:hover) {
+		color: hsl(var(--primary));
+	}
+
+	/* The build timestamp is intentionally the same colour as the footer background, so it
+	   is invisible in normal reading and only becomes legible when the visitor selects it. */
+	.ed .foot-version {
+		color: var(--ed-canvas);
+	}
+
+	.ed .foot-version::selection {
+		color: var(--ed-ink);
+		background: rgba(27, 26, 23, 0.16);
+	}
+</style>

@@ -12,6 +12,35 @@
 	let search = $state('')
 </script>
 
+<!-- Editorial search styling for the default theme only (scoped via [data-theme='default']). -->
+<style>
+	:global([data-theme='default'] .ed-search-trigger) {
+		color: var(--ed-ink);
+		transition: color 0.25s ease;
+	}
+
+	:global([data-theme='default'] .ed-search-trigger:hover) {
+		color: hsl(var(--primary));
+	}
+
+	:global([data-theme='default'] .ed-search-panel) {
+		background: var(--ed-surface);
+		border: 1px solid var(--ed-line);
+		border-radius: var(--ed-radius);
+		box-shadow: 0 30px 60px -30px rgba(27, 26, 23, 0.35);
+	}
+
+	:global([data-theme='default'] .ed-search-head) {
+		border-color: var(--ed-line);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default'] .ed-search-trigger) {
+			transition: none;
+		}
+	}
+</style>
+
 <MsSearchRenderer bind:search>
 	{#snippet content({
 		searchResults,
@@ -24,7 +53,7 @@
 		handleKeyDown,
 		handleResultClick
 	})}
-		<button class="flex rounded-full px-2" aria-label="Open search" onclick={showSearch}>
+		<button class="ed-search-trigger flex rounded-full px-2" aria-label="Open search" onclick={showSearch}>
 			<Search class="h-5 w-5" />
 		</button>
 
@@ -45,9 +74,9 @@
 					onclick={(e) => e.stopPropagation()}
 					transition:scale={{ duration: 200, start: 0.95, opacity: 0 }}
 				>
-					<div class="flex max-h-[80vh] flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-black/5">
+					<div class="ed-search-panel flex max-h-[80vh] flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-black/5">
 						<!-- Search Header -->
-						<div class="flex items-center gap-3 border-b border-gray-100 p-4">
+						<div class="ed-search-head flex items-center gap-3 border-b border-gray-100 p-4">
 							<Search class="h-5 w-5 text-gray-400" />
 							<Input
 								type="text"

@@ -9,14 +9,14 @@
 
 {#if productState.wareHousePluginEnabled && productState.warehouses?.length > 0}
 	<Sheet.Root>
-		<div class="my-5 flex flex-col gap-2">
+		<div class="my-5 flex flex-col gap-2 edp-store">
 			<div class="flex items-center gap-2">
 				<StoreIcon class="h-5 w-5" />
 
-				<span class="font-semibold">Looking to pickup this item?</span>
+				<span class="font-semibold edp-store-title">Looking to pickup this item?</span>
 			</div>
 
-			<span class="text-sm text-gray-500">
+			<span class="text-sm text-gray-500 edp-store-text">
 				You can pick up this item from our store. Please check the availability of this item at your nearest store.
 			</span>
 
@@ -78,3 +78,23 @@
 		</Sheet.Content>
 	</Sheet.Root>
 {/if}
+
+<style>
+	/* Refined Editorial — default theme only. In-flow block only (Sheet is portaled). */
+	:global([data-theme='default'] .edp-store) {
+		border-top: 1px solid var(--ed-line);
+		padding-top: 16px;
+	}
+
+	:global([data-theme='default'] .edp-store-title) {
+		font-family: var(--ed-body);
+		font-weight: 600;
+		letter-spacing: 0.01em;
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-store-text) {
+		color: var(--ed-soft);
+		line-height: 1.6;
+	}
+</style>

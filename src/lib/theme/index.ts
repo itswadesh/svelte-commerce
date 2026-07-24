@@ -13,6 +13,8 @@ const AVAILABLE_THEMES = ['default', 'sarab', 'organic', 'limelight', 'noor']
 const DEFAULT_THEME = 'default'
 
 const THEME_FONTS: Record<string, string> = {
+	default:
+		'https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap',
 	sarab:
 		'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap',
 	organic:

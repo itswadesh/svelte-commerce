@@ -114,4 +114,44 @@ export interface ThemeHomepageContent {
 		emptyTitle: string
 		emptyText: string
 	}
+	/**
+	 * Rich "Refined Editorial" homepage content for the default theme. Optional so other themes
+	 * are unaffected. Copy + decorative imagery live here (theme layer); live commerce data
+	 * (products, categories) is passed in as props and overrides the fallback tiles below.
+	 */
+	editorial?: {
+		hero: {
+			eyebrow: string
+			titleLead: string
+			titleAccent: string
+			text: string
+			primaryCta: string
+			primaryHref: string
+			secondaryCta: string
+			secondaryHref: string
+			image: string
+			imageAlt: string
+			note?: string
+		}
+		marquee?: string[]
+		categories: {
+			eyebrow: string
+			title: string
+			viewAll: string
+			viewAllHref: string
+			tiles: Array<{ label: string; href: string; image: string }>
+		}
+		featured: { eyebrow: string; title: string; viewAll: string; viewAllHref: string }
+		banner: {
+			eyebrow: string
+			title: string
+			text: string
+			cta: string
+			href: string
+			image: string
+			imageAlt: string
+		}
+		assurances: Array<{ icon: 'truck' | 'returns' | 'shield' | 'support'; title: string; text: string }>
+		newsletter: { eyebrow: string; title: string; text: string; cta: string; privacy: string }
+	}
 }

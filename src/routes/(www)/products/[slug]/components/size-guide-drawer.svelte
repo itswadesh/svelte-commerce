@@ -46,7 +46,7 @@
 
 <Drawer.Root bind:open direction={innerWidth > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
 	<Drawer.Trigger>
-		<span class="text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center gap-1">
+		<span class="text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center gap-1 edp-sizeguide">
 			<Ruler class="h-3.5 w-3.5" />
 			Size Guide
 		</span>
@@ -127,3 +127,14 @@
 		</div>
 	</Drawer.Content>
 </Drawer.Root>
+
+<style>
+	/* Refined Editorial — default theme only. Trigger only (Drawer content is portaled). */
+	:global([data-theme='default'] .edp-sizeguide) {
+		color: var(--ed-ink);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+</style>

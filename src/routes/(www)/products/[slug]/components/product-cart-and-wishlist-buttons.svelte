@@ -28,7 +28,7 @@
 		<Button
 			variant="outline"
 			size="icon"
-			class="h-full w-[4rem]"
+			class="h-full w-[4rem] edp-wish"
 			onclick={productState.handleWishlistClick}
 			aria-label="Add to wishlist"
 		>
@@ -49,7 +49,7 @@
 	<!-- Added to cart message toast-like notification -->
 	<div
 		transition:fly={{ x: 50, duration: 300, easing: quintOut }}
-		class="fixed hidden md:block right-4 top-24 z-[100] w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl"
+		class="fixed hidden md:block right-4 top-24 z-[100] w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl edp-toast"
 	>
 		<div class="flex items-center gap-4">
 			<div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-100 bg-gray-50">
@@ -90,14 +90,14 @@
 			/>
 			<Button
 				onclick={() => (showEnquiryModal = true)}
-				class="h-full w-full"
+				class="h-full w-full edp-atc"
 			>
 				{enquiryPlugin?.buttonText || 'Enquire'}
 			</Button>
 		{:else}
 			<div class="flex h-full w-full gap-2">
 				<Button
-					class="h-full flex justify-center items-center gap-2 text-base flex-1 uppercase font-semibold {productState
+					class="edp-atc h-full flex justify-center items-center gap-2 text-base flex-1 uppercase font-semibold {productState
 						.cartState?.addToCartMessage == 'Added to cart'
 						? 'bg-green-600 hover:bg-green-700'
 						: ''}"
@@ -132,3 +132,52 @@
 
 	{@render wishlistButton()}
 </div>
+
+<style>
+	/* Refined Editorial — default theme only. Primary fill CTA + bordered ghost wishlist. */
+	:global([data-theme='default'] .edp-atc) {
+		border-radius: var(--ed-radius) !important;
+		font-size: 0.82rem !important;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		transition:
+			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.25s ease,
+			background 0.25s ease;
+	}
+
+	:global([data-theme='default'] .edp-atc:hover:not(:disabled)) {
+		transform: translateY(-2px);
+	}
+
+	:global([data-theme='default'] .edp-wish) {
+		border: 1px solid var(--ed-line-strong) !important;
+		border-radius: var(--ed-radius) !important;
+		background: transparent !important;
+		transition:
+			border-color 0.2s ease,
+			background 0.2s ease;
+	}
+
+	:global([data-theme='default'] .edp-wish:hover) {
+		border-color: var(--ed-ink) !important;
+		background: rgba(27, 26, 23, 0.04) !important;
+	}
+
+	:global([data-theme='default'] .edp-toast) {
+		border: 1px solid var(--ed-line) !important;
+		border-radius: var(--ed-radius) !important;
+		background: var(--ed-surface) !important;
+		box-shadow: 0 18px 48px -20px rgba(27, 26, 23, 0.35) !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default'] .edp-atc),
+		:global([data-theme='default'] .edp-wish) {
+			transition: none;
+		}
+		:global([data-theme='default'] .edp-atc:hover:not(:disabled)) {
+			transform: none;
+		}
+	}
+</style>

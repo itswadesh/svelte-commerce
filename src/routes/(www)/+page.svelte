@@ -14,8 +14,6 @@
 	import { timestampToAgo } from '$lib/core/utils/index.js'
 	import { getThemeHomepageContent } from '$lib/theme/index.js'
 	import { themeHomepages } from '$lib/theme/homepages.js'
-	import Slider from '$lib/components/home/slider.svelte'
-	import Blocks from '$lib/components/page-blocks/blocks.svelte'
 
 	let { data } = $props()
 
@@ -40,7 +38,6 @@
 	const homepageModule = new HomepageModule()
 	const activeTheme = $derived(data?.theme?.name || 'default')
 	const ThemeHomepage = $derived(themeHomepages[activeTheme] || themeHomepages['default'])
-	const rendersApiPageAddons = $derived(activeTheme === 'default')
 	const themeContent = $derived(getThemeHomepageContent(activeTheme))
 	const brandName = $derived(themeContent.brandName || data?.store?.name || 'Store')
 	const themeDescription = $derived(themeContent.description || page?.metaDescription || '')
@@ -116,11 +113,9 @@
 	currencyCode={data?.store?.currency?.code}
 />
 
-{#if rendersApiPageAddons}
-	<Slider />
-
-	<Blocks layouts={data?.page?.layouts || []} />
-{/if}
+<!-- The default theme's editorial homepage (above) is self-contained, so the API-driven Slider/Blocks
+     addons are intentionally not rendered — they clashed with the editorial design and surfaced
+     misconfigured admin banner content. Admin homepage blocks remain editable in the admin panel. -->
 
 {#if homepageModule.showRecentOrderPopup}
 	<div transition:fly={{ x: 50, duration: 150 }} class="fixed bottom-20 right-4 z-50">

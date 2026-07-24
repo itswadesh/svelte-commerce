@@ -11,8 +11,54 @@
   const wishlistPlugin = $derived(page.data?.store?.plugins?.isWishlist)
 </script>
 
+<!-- Editorial account dropdown for the default theme only (scoped via [data-theme='default']).
+     The dropdown content renders in-place (bits-ui, no portal), so it stays under the app
+     shell's [data-theme] ancestor and these rules never touch sarab/organic. -->
+<style>
+	:global([data-theme='default'] .ed-pd-trigger) {
+		color: var(--ed-ink);
+		transition: color 0.25s ease;
+	}
+
+	:global([data-theme='default'] .ed-pd-trigger:hover) {
+		color: hsl(var(--primary));
+	}
+
+	:global([data-theme='default'] .ed-pd-menu) {
+		background: var(--ed-surface);
+		border: 1px solid var(--ed-line);
+		border-radius: var(--ed-radius);
+		box-shadow: 0 24px 48px -24px rgba(27, 26, 23, 0.28);
+	}
+
+	:global([data-theme='default'] .ed-pd-head) {
+		border-color: var(--ed-line);
+	}
+
+	:global([data-theme='default'] .ed-pd-item) {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+		border-radius: var(--ed-radius);
+	}
+
+	:global([data-theme='default'] .ed-pd-ico) {
+		background: var(--ed-canvas);
+		border-radius: var(--ed-radius);
+	}
+
+	:global([data-theme='default'] .ed-pd-sep) {
+		background: var(--ed-line);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default'] .ed-pd-trigger) {
+			transition: none;
+		}
+	}
+</style>
+
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger aria-label="User Profile" class="flex items-center justify-center rounded-full">
+	<DropdownMenu.Trigger aria-label="User Profile" class="ed-pd-trigger flex items-center justify-center rounded-full">
 		{#if userState.user?.avatar}
 			<div class="h-5 w-5 overflow-hidden rounded-full">
 				<LazyImg
@@ -28,9 +74,9 @@
 		{/if}
 	</DropdownMenu.Trigger>
 
-	<DropdownMenu.Content class="min-w-[240px] border-gray-100 bg-white p-2 shadow-2xl">
+	<DropdownMenu.Content class="ed-pd-menu min-w-[240px] border-gray-100 bg-white p-2 shadow-2xl">
 		<!-- User Header -->
-		<div class="mb-2 flex items-center gap-3 border-b border-gray-50 px-4 py-4">
+		<div class="ed-pd-head mb-2 flex items-center gap-3 border-b border-gray-50 px-4 py-4">
 			<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/5 text-primary">
 				{#if userState.user?.avatar}
 					<img src={userState.user.avatar} alt="" class="h-full w-full rounded-full object-cover" />
@@ -51,9 +97,9 @@
 		<DropdownMenu.Group>
 			<a href="/my/profile" class="block w-full">
 				<DropdownMenu.Item
-					class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
+					class="ed-pd-item flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
 				>
-					<div class="flex h-8 w-8 items-center justify-center bg-gray-50 transition-colors group-hover:bg-white">
+					<div class="ed-pd-ico flex h-8 w-8 items-center justify-center bg-gray-50 transition-colors group-hover:bg-white">
 						<UserCircle class="h-4 w-4" />
 					</div>
 					Profile Settings
@@ -61,9 +107,9 @@
 			</a>
 			<a href="/my/orders" class="block w-full">
 				<DropdownMenu.Item
-					class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
+					class="ed-pd-item flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
 				>
-					<div class="flex h-8 w-8 items-center justify-center bg-gray-50">
+					<div class="ed-pd-ico flex h-8 w-8 items-center justify-center bg-gray-50">
 						<ShoppingBag class="h-4 w-4" />
 					</div>
 					Order History
@@ -71,9 +117,9 @@
 			</a>
 			<a href="/my/addresses" class="block w-full">
 				<DropdownMenu.Item
-					class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
+					class="ed-pd-item flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
 				>
-					<div class="flex h-8 w-8 items-center justify-center bg-gray-50">
+					<div class="ed-pd-ico flex h-8 w-8 items-center justify-center bg-gray-50">
 						<MapPin class="h-4 w-4" />
 					</div>
 					My Addresses
@@ -93,7 +139,7 @@
       {/if}
 		</DropdownMenu.Group>
 
-		<div class="my-2 h-px bg-gray-50"></div>
+		<div class="ed-pd-sep my-2 h-px bg-gray-50"></div>
 
 		<DropdownMenu.Item>
 			<Button

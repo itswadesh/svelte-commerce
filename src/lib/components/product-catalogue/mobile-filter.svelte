@@ -20,7 +20,7 @@
 	}
 </script>
 
-<div class="fixed bottom-0 left-0 right-0 z-40 grid h-12 w-full grid-cols-2 border-t border-gray-200 bg-white shadow-md md:hidden">
+<div class="ed-mf__bar fixed bottom-0 left-0 right-0 z-40 grid h-12 w-full grid-cols-2 border-t border-gray-200 bg-white shadow-md md:hidden">
 	<!-- Sort by -->
 	<div class="flex items-center justify-center border-r border-gray-200">
 		<Drawer.Root direction="bottom" bind:open={filterModule.showSortByDrawer}>
@@ -104,12 +104,12 @@
 
 <!-- Fullscreen mobile filters -->
 <div
-	class="fixed inset-0 z-[1000] h-screen w-screen {filterModule.showFilter
+	class="ed-mf__panel fixed inset-0 z-[1000] h-screen w-screen {filterModule.showFilter
 		? 'translate-x-0'
 		: '-translate-x-full'} transform bg-white transition-transform"
 >
 	<div class="flex h-full flex-col">
-		<div class="flex items-center justify-between border-b border-gray-100 !p-3">
+		<div class="ed-mf__phead flex items-center justify-between border-b border-gray-100 !p-3">
 			<div class="flex w-full items-center justify-between gap-4">
 				<div class="flex items-center justify-center gap-3">
 					<Button variant="ghost" size="icon" class="rounded-full" onclick={() => (filterModule.showFilter = false)}>
@@ -119,15 +119,15 @@
 
 					{#if filterModule.anyFilterApplied}
 						<div class="h-4 w-px bg-gray-200"></div>
-						<Button variant="link" size="sm" class="h-auto p-0" onclick={filterModule.clearFilters}>Clear All</Button>
+						<Button variant="link" size="sm" class="ed-mf__clear h-auto p-0" onclick={filterModule.clearFilters}>Clear All</Button>
 					{/if}
 				</div>
 
-				<h2 class="text-xs font-bold uppercase tracking-widest text-gray-900">Filters</h2>
+				<h2 class="ed-mf__ptitle text-xs font-bold uppercase tracking-widest text-gray-900">Filters</h2>
 
 				<Button
 					variant="default"
-					class="h-9 bg-primary px-6 text-[10px] font-bold uppercase tracking-widest hover:bg-black"
+					class="ed-mf__apply h-9 bg-primary px-6 text-[10px] font-bold uppercase tracking-widest hover:bg-black"
 					onclick={filterModule.handleApply}>Apply</Button
 				>
 			</div>
@@ -137,11 +137,11 @@
 		<div class="flex flex-1 flex-col overflow-hidden">
 			<div class="flex h-full">
 				<!-- Right Panel - Menu -->
-				<div class="w-[35vw] overflow-y-auto bg-gray-50">
+				<div class="ed-mf__menu w-[35vw] overflow-y-auto bg-gray-50">
 					{#each filterModule.menuItems as item}
 						<Button
 							variant="ghost"
-							class="h-auto w-full justify-between rounded-none border-l-4 px-4 py-4 {filterModule.selectedSection === item.id
+							class="ed-mf__tab h-auto w-full justify-between rounded-none border-l-4 px-4 py-4 {filterModule.selectedSection === item.id
 								? 'border-primary bg-white text-primary hover:bg-white'
 								: 'border-transparent text-gray-500 hover:bg-gray-100'}"
 							onclick={() => (filterModule.selectedSection = item.id)}
@@ -159,14 +159,14 @@
 				</div>
 
 				<!-- Dynamic Content Based on Selection -->
-				<div class="flex-1 overflow-y-auto bg-white p-4">
+				<div class="ed-mf__content flex-1 overflow-y-auto bg-white p-4">
 					{#if filterModule.selectedSection === 'discount'}
 						<div class="space-y-6">
 							<div class="relative">
 								<input
 									type="text"
 									placeholder="Search discount..."
-									class="w-full rounded-md border-0 bg-gray-100 py-2.5 pl-4 pr-10 text-sm ring-0 transition-all focus:ring-2 focus:ring-primary"
+									class="ed-mf__search w-full rounded-md border-0 bg-gray-100 py-2.5 pl-4 pr-10 text-sm ring-0 transition-all focus:ring-2 focus:ring-primary"
 									bind:value={filterModule.searchQuery}
 								/>
 								<SearchIcon class="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -185,7 +185,7 @@
 											/>
 											<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 transition-opacity peer-checked:opacity-100"></div>
 										</div>
-										<span class="text-sm font-medium text-gray-700 transition-colors group-hover:text-primary">
+										<span class="ed-mf__opt text-sm font-medium text-gray-700 transition-colors group-hover:text-primary">
 											{option.label}
 										</span>
 									</label>
@@ -234,13 +234,13 @@
 					{:else if filterModule.selectedSection === 'price'}
 						<!-- Price Filter -->
 						<div class="w-full space-y-8">
-							<p class="text-xs font-bold uppercase tracking-widest text-gray-900">Price Range</p>
+							<p class="ed-mf__label text-xs font-bold uppercase tracking-widest text-gray-900">Price Range</p>
 
-							<div class="relative mr-5 mt-4 px-2">
+							<div class="ed-mf__slider relative mr-5 mt-4 px-2">
 								<!-- Range slider track -->
-								<div class="absolute h-1 w-full rounded bg-gray-100">
+								<div class="ed-mf__track absolute h-1 w-full rounded bg-gray-100">
 									<div
-										class="absolute h-1 bg-primary"
+										class="ed-mf__fill absolute h-1 bg-primary"
 										style="left: {filterModule.priceSliderLeftPercentage}%; right: {filterModule.priceSliderRightPercentage}%"
 									></div>
 								</div>
@@ -264,7 +264,7 @@
 								/>
 							</div>
 
-							<div class="pt-4 text-lg font-bold text-gray-900">
+							<div class="ed-mf__priceval pt-4 text-lg font-bold text-gray-900">
 								{filterModule.priceRange}
 							</div>
 						</div>
@@ -281,7 +281,7 @@
 												filterModule.handleTagChange({ tag, checked })
 											}}
 										/>
-										<label for={`m-${tag.slug || tag.name}`} class="flex-1 text-sm font-medium capitalize text-gray-700">{tag.name}</label>
+										<label for={`m-${tag.slug || tag.name}`} class="ed-mf__opt flex-1 text-sm font-medium capitalize text-gray-700">{tag.name}</label>
 									</div>
 								{/each}
 							</div>
@@ -305,7 +305,7 @@
 												checked
 											})}
 									/>
-									<label for={`m-${value}`} class="text-sm font-medium capitalize text-gray-700">
+									<label for={`m-${value}`} class="ed-mf__opt text-sm font-medium capitalize text-gray-700">
 										{#if value?.startsWith?.('#')}
 											<div class="flex items-center gap-2">
 												<div class="h-5 w-5 rounded-full border border-gray-100 shadow-sm" style="background-color: {value};"></div>
@@ -324,3 +324,150 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	/* ---- Refined Editorial · mobile filter chrome (default theme only) ----
+	   The Sort drawer is portalled to <body> (outside [data-theme]) and keeps its
+	   original clean styling. Everything below is gated to [data-theme='default'];
+	   other themes are untouched. */
+
+	/* Fixed bottom Sort / Filter bar */
+	:global([data-theme='default']) .ed-mf__bar {
+		border-top: 1px solid var(--ed-line);
+		background: var(--ed-surface);
+		box-shadow: 0 -1px 12px rgba(27, 26, 23, 0.06);
+		font-family: var(--ed-body);
+		color: var(--ed-ink);
+	}
+
+	/* Fullscreen filter panel */
+	:global([data-theme='default']) .ed-mf__panel {
+		background: var(--ed-canvas);
+		font-family: var(--ed-body);
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default']) .ed-mf__phead {
+		border-bottom: 1px solid var(--ed-line);
+		background: var(--ed-surface);
+	}
+
+	:global([data-theme='default']) .ed-mf__ptitle {
+		font-family: var(--ed-body);
+		letter-spacing: 0.18em;
+		color: var(--ed-ink);
+	}
+
+	/* Apply button — editorial primary fill */
+	:global([data-theme='default'] .ed-mf__apply) {
+		background: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+		border-radius: var(--ed-radius);
+		letter-spacing: 0.12em;
+	}
+
+	:global([data-theme='default'] .ed-mf__apply:hover) {
+		background: var(--ed-ink);
+		color: var(--ed-canvas);
+	}
+
+	:global([data-theme='default'] .ed-mf__clear) {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default'] .ed-mf__clear:hover) {
+		color: hsl(var(--primary));
+	}
+
+	/* Section tab list — warm tint, no coloured left stripe (bans a >1px accent
+	   border). Active = white surface + primary text; the 4px border stays
+	   transparent so alignment is preserved but no stripe shows. */
+	:global([data-theme='default']) .ed-mf__menu {
+		background: #efeae1;
+		border-right: 1px solid var(--ed-line);
+	}
+
+	:global([data-theme='default'] .ed-mf__tab) {
+		border-left-color: transparent !important;
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default'] .ed-mf__tab span) {
+		letter-spacing: 0.14em;
+	}
+
+	:global([data-theme='default'] .ed-mf__content) {
+		background: var(--ed-surface);
+	}
+
+	/* Search inputs */
+	:global([data-theme='default']) .ed-mf__search {
+		background: var(--ed-canvas);
+		border: 1px solid var(--ed-line-strong);
+		border-radius: var(--ed-radius);
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default']) .ed-mf__search:focus {
+		outline: none;
+		border-color: hsl(var(--primary));
+		box-shadow: none;
+	}
+
+	/* Labels + options */
+	:global([data-theme='default']) .ed-mf__label {
+		font-family: var(--ed-body);
+		letter-spacing: 0.18em;
+		color: var(--ed-soft);
+	}
+
+	:global([data-theme='default']) .ed-mf__opt {
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default']) .ed-mf__priceval {
+		font-family: var(--ed-display);
+		font-weight: 500;
+		color: var(--ed-ink);
+	}
+
+	/* Editorial checkboxes inside the panel */
+	:global([data-theme='default'] .ed-mf__content [role='checkbox']) {
+		border-color: var(--ed-line-strong);
+		border-radius: 3px;
+		box-shadow: none;
+	}
+
+	/* Price range slider */
+	:global([data-theme='default']) .ed-mf__track {
+		height: 3px;
+		background: var(--ed-line);
+	}
+
+	:global([data-theme='default']) .ed-mf__fill {
+		height: 3px;
+		background: hsl(var(--primary));
+	}
+
+	:global([data-theme='default'] .ed-mf__slider input[type='range']::-webkit-slider-thumb) {
+		border: 1px solid hsl(var(--primary));
+		background: var(--ed-surface);
+		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
+	}
+
+	:global([data-theme='default'] .ed-mf__slider input[type='range']::-moz-range-thumb) {
+		border: 1px solid hsl(var(--primary));
+		background: var(--ed-surface);
+		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default'] .ed-mf__apply) {
+			transition: none;
+		}
+	}
+</style>

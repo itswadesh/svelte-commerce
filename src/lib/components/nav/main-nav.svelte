@@ -4,6 +4,28 @@
 	import type { Menu } from '$lib/core/types/index.js'
 </script>
 
+<!-- Editorial menu links for the default theme only (scoped via [data-theme='default']).
+     Sarab/organic keep the current styling untouched. -->
+<style>
+	:global([data-theme='default'] .ed-nav-link) {
+		color: var(--ed-soft);
+		font-weight: 600;
+		font-size: 0.75rem;
+		letter-spacing: 0.18em;
+		transition: color 0.25s ease;
+	}
+
+	:global([data-theme='default'] .ed-nav-link:hover) {
+		color: var(--ed-ink);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default'] .ed-nav-link) {
+			transition: none;
+		}
+	}
+</style>
+
 <div class="mr-4 md:flex">
 	<div class="flex gap-3">
 		{#if page?.data?.store?.logo}
@@ -37,7 +59,7 @@
 			{#each page?.data?.store?.menu?.find?.((menu: Menu) => menu?.menuId === 'header')?.items || [] as item}
 				<a
 					href={item.link}
-					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
+					class="ed-nav-link relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
 					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
 					style="font-family: var(--font-body);"
 				>

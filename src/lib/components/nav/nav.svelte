@@ -3,13 +3,12 @@
 		X,
 		UserCircle,
 		ChevronLeft,
+		ChevronDown,
 		Phone,
 		Mail,
 		Menu,
-		ChevronDown,
 		Heart,
 		Home,
-		LayoutGrid,
 		Tag,
 		Layers,
 		Package,
@@ -96,6 +95,14 @@
 
 	const activeThemeName = $derived(page.data?.theme?.name ?? 'default')
 	const storeData = $derived(page?.data?.store ?? {})
+
+	// Local expansion state for the nested mobile menu — tracks which header-menu parent is
+	// open. Kept here (not the composable's category-sized showSubCategory) so it indexes by
+	// the header menu itself.
+	let mobileNestOpen = $state<boolean[]>([])
+	function toggleMobileNest(i: number) {
+		mobileNestOpen[i] = !mobileNestOpen[i]
+	}
 </script>
 
 <svelte:window bind:scrollY={navModule.scrollY} />
@@ -106,6 +113,7 @@
 	<NoorNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} pathname={page.url.pathname} />
 {:else}
 	<header
+		class:ed={activeThemeName === 'default'}
 		class="{navModule.isProductListingPage
 			? 'max-sm:border-b'
 			: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-white transition-all duration-200"
@@ -142,7 +150,7 @@
 			</div>
 		{/if}
 		<!-- Fixed heights stand in for vertical padding here, so the scroll slimming transitions height instead. -->
-		<div class="page-width flex items-center justify-between bg-white transition-[height] duration-300 ease-in-out {isScrolled ? 'h-12' : 'h-16 sm:h-14'}">
+		<div class="ed-row page-width flex items-center justify-between bg-white transition-[height] duration-300 ease-in-out {isScrolled ? 'h-12' : 'h-16 sm:h-14'}">
 			<div class="hidden justify-center gap-3 sm:flex">
 				<Button
 					variant="ghost"
@@ -168,14 +176,14 @@
 
 						<div class="flex flex-col items-start">
 							{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
-								<p class="text-base font-semibold capitalize">
+								<p class="ed-plp-title text-base font-semibold capitalize">
 									{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
 								</p>
 							{:else}
-								<p class="text-base font-semibold">Products</p>
+								<p class="ed-plp-title text-base font-semibold">Products</p>
 							{/if}
 
-							<p class="text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
+							<p class="ed-plp-count text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
 						</div>
 					</div>
 				{:else}
@@ -206,7 +214,7 @@
 					<div class="relative hidden sm:block" role="navigation">
 						<a
 							href="/my/wishlist"
-							class="flex items-center justify-center rounded-full px-2 text-gray-700 transition-colors hover:text-black"
+							class="ed-action flex items-center justify-center rounded-full px-2 text-gray-700 transition-colors hover:text-black"
 							aria-label="Wishlist"
 						>
 							<Heart class="h-5 w-5" />
@@ -236,7 +244,7 @@
 						<ProfileDropdown onSignOut={navModule.handleSignOut} />
 					{:else}
 						<AuthButton aria-label="Login" type="login">
-							<div class="flex items-center justify-center text-gray-700 transition-colors hover:text-black">
+							<div class="ed-action flex items-center justify-center text-gray-700 transition-colors hover:text-black">
 								<UserCircle class="h-5 w-5" />
 							</div>
 						</AuthButton>
@@ -249,7 +257,7 @@
 
 <!-- Sidebar -->
 {#if navModule.openSidebar}
-	<aside class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent font-sans">
+	<aside class:ed={activeThemeName === 'default'} class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent font-sans">
 		<div
 			role="button"
 			tabindex="0"
@@ -271,10 +279,10 @@
 		<div
 			in:fly={{ x: -320, duration: 300, easing: cubicOut }}
 			out:fly={{ x: -320, duration: 300, easing: cubicOut }}
-			class="relative z-[60] flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-gray-100 bg-white text-foreground shadow-2xl"
+			class="ed-drawer relative z-[60] flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-gray-100 bg-white text-foreground shadow-2xl"
 		>
 			<!-- Header -->
-			<div class="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+			<div class="ed-drawer-head flex items-center justify-between border-b border-gray-100 px-5 py-4">
 				<a href="/" class="flex items-center gap-2" onclick={() => (navModule.openSidebar = false)}>
 					{#if activeThemeName === 'noor'}
 						<img src="/noor/logo.png" class="h-8 object-contain" alt="Noor" />
@@ -298,7 +306,7 @@
 			</div>
 
 			<!-- User Profile Banner -->
-			<div class="border-b border-gray-100 bg-gray-50/50 px-5 py-4">
+			<div class="ed-drawer-user border-b border-gray-100 bg-gray-50/50 px-5 py-4">
 				{#if userState?.user?.role}
 					<div class="flex items-center gap-3">
 						<div class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary">
@@ -319,7 +327,7 @@
 					</div>
 				{:else}
 					<div class="flex flex-col gap-1.5">
-						<span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Welcome Guest</span>
+						<span class="ed-drawer-label text-[10px] font-bold uppercase tracking-wider text-gray-400">Welcome Guest</span>
 						<AuthButton aria-label="Login" type="login">
 							<div
 								class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all duration-200 hover:bg-primary/95"
@@ -336,12 +344,12 @@
 			<div class="flex-1 space-y-6 overflow-y-auto px-5 py-4">
 				<!-- Shop Section -->
 				<div>
-					<span class="mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">Shop & Explore</span>
+					<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">Shop & Explore</span>
 					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 						<li>
 							<a
 								href="/"
-								class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+								class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
 								onclick={() => (navModule.openSidebar = false)}
 							>
 								<Home class="h-4 w-4 text-gray-400" />
@@ -349,119 +357,11 @@
 							</a>
 						</li>
 
-						<!-- MegaMenu Categories -->
-						{#if navModule.megaMenuPluginActive && navModule.menuItems?.length}
-							{#each navModule.menuItems as m, mx}
-								<li>
-									{#if m?.items?.length}
-										<div
-											class="flex w-full items-center justify-between rounded-md px-3 py-1 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-										>
-											<a
-												href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
-												aria-label="Click to visit category related products"
-												class="flex flex-1 items-center gap-3 py-1"
-												onclick={() => (navModule.openSidebar = false)}
-											>
-												<LayoutGrid class="h-4 w-4 text-gray-400" />
-												<span>{m.name}</span>
-											</a>
-
-											<Button
-												variant="ghost"
-												size="icon"
-												aria-label="Toggle subcategory"
-												class="h-7 w-7 rounded-full p-0 hover:bg-gray-200/50"
-												onclick={() => navModule.handleToggleSubMenu(m, mx)}
-											>
-												<ChevronDown
-													class="h-3.5 w-3.5 shrink-0 transition-transform duration-300
-													{navModule.showSubCategory[mx] ? '-rotate-180' : ''}"
-												/>
-											</Button>
-										</div>
-									{:else}
-										<a
-											href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
-											aria-label="Click to visit category related products"
-											class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-											onclick={() => (navModule.openSidebar = false)}
-										>
-											<LayoutGrid class="h-4 w-4 text-gray-400" />
-											<span>{m.name}</span>
-										</a>
-									{/if}
-
-									<!-- Category Level 2 -->
-									{#if navModule.showSubCategory[mx]}
-										<ul class="ml-6 mt-1 list-none space-y-1 border-l border-gray-100 p-0 pl-3">
-											{#each m.items as c, cx}
-												<li>
-													{#if c.items?.length}
-														<div
-															class="flex w-full items-center justify-between rounded-md px-2 py-1 text-[11px] font-semibold text-gray-500 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-														>
-															<a
-																href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
-																class="flex-1 py-1"
-																onclick={() => (navModule.openSidebar = false)}
-															>
-																{c.name}
-															</a>
-
-															<Button
-																variant="ghost"
-																size="icon"
-																aria-label="Toggle subcategory"
-																class="h-6 w-6 rounded-full p-0 hover:bg-gray-200/50"
-																onclick={() => navModule.handleToggleSubMenu2(c, cx)}
-															>
-																<ChevronDown
-																	class="h-3 w-3 shrink-0 transition-transform duration-300
-																	{navModule.showSubCategory2[cx] ? '-rotate-180' : ''}"
-																/>
-															</Button>
-														</div>
-													{:else}
-														<a
-															href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
-															aria-label="Click to visit category related products page"
-															class="flex w-full items-center rounded-md px-2 py-1.5 text-[11px] font-semibold text-gray-500 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-															onclick={() => (navModule.openSidebar = false)}
-														>
-															{c.name}
-														</a>
-													{/if}
-
-													<!-- Category Level 3 -->
-													{#if navModule.showSubCategory2[cx]}
-														<ul class="ml-4 mt-1 list-none space-y-1 border-l border-gray-100 p-0 pl-3">
-															{#each c.items as cc}
-																<li>
-																	<a
-																		href={cc.link ? cc.link : cc.slug ? '/' + cc.slug : '/products'}
-																		aria-label="Click to visit category related products page"
-																		class="flex w-full items-center rounded-md px-2 py-1 text-[10px] font-semibold text-gray-400 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-																		onclick={() => (navModule.openSidebar = false)}
-																	>
-																		{cc.name}
-																	</a>
-																</li>
-															{/each}
-														</ul>
-													{/if}
-												</li>
-											{/each}
-										</ul>
-									{/if}
-								</li>
-							{/each}
-						{/if}
 
 						<li>
 							<a
 								href="/products"
-								class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+								class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
 								onclick={() => (navModule.openSidebar = false)}
 							>
 								<Tag class="h-4 w-4 text-gray-400" />
@@ -474,18 +374,55 @@
 				<!-- NavMenu Section -->
 				{#if navModule.navMenu?.length}
 					<div>
-						<span class="mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">Quick Links</span>
+						<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">Quick Links</span>
 						<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
-							{#each navModule.navMenu as menuItem}
+							{#each navModule.navMenu as menuItem, i}
 								<li>
-									<a
-										href={menuItem?.link}
-										class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-										onclick={() => (navModule.openSidebar = false)}
-									>
-										<Layers class="h-4 w-4 text-gray-400" />
-										<span>{menuItem.name}</span>
-									</a>
+									{#if menuItem?.items?.length}
+										<div class="flex w-full items-center justify-between">
+											<a
+												href={menuItem?.link || (menuItem?.slug ? '/' + menuItem.slug : '/products')}
+												class="ed-drawer-link flex flex-1 items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+												onclick={() => (navModule.openSidebar = false)}
+											>
+												<Layers class="h-4 w-4 text-gray-400" />
+												<span>{menuItem.name}</span>
+											</a>
+											<button
+												type="button"
+												class="grid h-8 w-8 shrink-0 place-items-center rounded-md text-gray-500 transition-colors hover:bg-gray-100"
+												aria-label="Toggle {menuItem.name}"
+												aria-expanded={mobileNestOpen[i] ? 'true' : 'false'}
+												onclick={() => toggleMobileNest(i)}
+											>
+												<ChevronDown class="h-4 w-4 transition-transform duration-300 {mobileNestOpen[i] ? '-rotate-180' : ''}" />
+											</button>
+										</div>
+										{#if mobileNestOpen[i]}
+											<ul class="m-0 ml-6 mt-1 flex list-none flex-col gap-1 border-l border-gray-100 p-0 pl-3">
+												{#each menuItem.items as child}
+													<li>
+														<a
+															href={child?.link || (child?.slug ? '/' + child.slug : '/products')}
+															class="ed-drawer-link block rounded-md px-3 py-1.5 text-[11px] font-medium text-gray-600 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+															onclick={() => (navModule.openSidebar = false)}
+														>
+															{child.name}
+														</a>
+													</li>
+												{/each}
+											</ul>
+										{/if}
+									{:else}
+										<a
+											href={menuItem?.link}
+											class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+											onclick={() => (navModule.openSidebar = false)}
+										>
+											<Layers class="h-4 w-4 text-gray-400" />
+											<span>{menuItem.name}</span>
+										</a>
+									{/if}
 								</li>
 							{/each}
 						</ul>
@@ -494,14 +431,14 @@
 
 				<!-- Account Section -->
 				<div>
-					<span class="mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">My Account</span>
+					<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">My Account</span>
 					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 						{#if menuItemsUser?.length}
 							{#each menuItemsUser as m}
 								<li>
 									<a
 										href={m.url}
-										class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+										class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
 										onclick={() => (navModule.openSidebar = false)}
 									>
 										{#if m.title === 'Profile'}
@@ -541,14 +478,14 @@
 
 			<!-- Footer Contact Box -->
 			{#if page?.data?.store?.businessEmail || page?.data?.store?.businessPhone}
-				<div class="border-t border-gray-100 bg-gray-50/50 p-5">
-					<span class="mb-2 block text-[9px] font-bold uppercase tracking-wider text-gray-400">Support Contact</span>
+				<div class="ed-drawer-foot border-t border-gray-100 bg-gray-50/50 p-5">
+					<span class="ed-drawer-label mb-2 block text-[9px] font-bold uppercase tracking-wider text-gray-400">Support Contact</span>
 					<div class="flex flex-col gap-2">
 						{#if page?.data?.store?.businessEmail}
 							<a
 								href="mailto:{page?.data?.store?.businessEmail}"
 								aria-label="Email us"
-								class="flex items-center gap-2.5 text-[11px] font-medium text-gray-600 transition-colors duration-200 hover:text-black"
+								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-gray-600 transition-colors duration-200 hover:text-black"
 							>
 								<Mail class="h-3.5 w-3.5 text-gray-400" />
 								<span class="truncate">{page?.data?.store?.businessEmail}</span>
@@ -559,7 +496,7 @@
 							<a
 								href="tel:+{page?.data?.store?.businessPhone}"
 								aria-label="Call us"
-								class="flex items-center gap-2.5 text-[11px] font-medium text-gray-600 transition-colors duration-200 hover:text-black"
+								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-gray-600 transition-colors duration-200 hover:text-black"
 							>
 								<Phone class="h-3.5 w-3.5 text-gray-400" />
 								<span>+{page?.data?.store?.businessPhone}</span>
@@ -575,6 +512,116 @@
 <AuthModal bind:show={navModule.showAuthModal} />
 
 <style>
+	/* ============================================================
+	   Refined Editorial header + drawer — default theme only.
+	   `.ed` is added via class:ed only when activeThemeName === 'default',
+	   so sarab/organic keep their existing look untouched.
+	   ============================================================ */
+	header.ed {
+		background: var(--ed-surface);
+		box-shadow: none;
+		border-bottom: 1px solid var(--ed-line);
+		font-family: var(--ed-body);
+		color: var(--ed-ink);
+	}
+
+	.ed .ed-row {
+		background: transparent;
+	}
+
+	/* Header action icons (wishlist, account) — ink, accent on hover */
+	.ed .ed-action {
+		color: var(--ed-ink);
+		transition: color 0.25s ease;
+	}
+
+	.ed .ed-action:hover {
+		color: hsl(var(--primary));
+	}
+
+	/* Mobile product-listing header */
+	.ed .ed-plp-title {
+		font-family: var(--ed-display);
+		font-weight: 500;
+		letter-spacing: -0.01em;
+		color: var(--ed-ink);
+	}
+
+	.ed .ed-plp-count {
+		color: var(--ed-soft);
+		letter-spacing: 0.02em;
+	}
+
+	/* ---------- Mobile drawer ---------- */
+	.ed .ed-drawer {
+		background: var(--ed-surface);
+		border-right-color: var(--ed-line);
+		color: var(--ed-ink);
+	}
+
+	.ed .ed-drawer-head,
+	.ed .ed-drawer-user,
+	.ed .ed-drawer-foot {
+		border-color: var(--ed-line);
+	}
+
+	.ed .ed-drawer-user,
+	.ed .ed-drawer-foot {
+		background: var(--ed-canvas);
+	}
+
+	.ed .ed-drawer-label {
+		font-family: var(--ed-body);
+		color: var(--ed-soft);
+		letter-spacing: 0.18em;
+		font-weight: 600;
+	}
+
+	.ed .ed-drawer-link {
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+		border-radius: var(--ed-radius);
+		transition:
+			background 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.ed .ed-drawer-link:hover {
+		background: var(--ed-canvas);
+		color: hsl(var(--primary));
+	}
+
+	.ed .ed-drawer-link :global(svg) {
+		color: var(--ed-soft);
+		transition: color 0.2s ease;
+	}
+
+	.ed .ed-drawer-link:hover :global(svg) {
+		color: hsl(var(--primary));
+	}
+
+	.ed .ed-contact {
+		color: var(--ed-soft);
+		transition: color 0.2s ease;
+	}
+
+	.ed .ed-contact:hover {
+		color: hsl(var(--primary));
+	}
+
+	.ed .ed-contact :global(svg) {
+		color: var(--ed-soft);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ed .ed-action,
+		.ed .ed-drawer-link,
+		.ed .ed-drawer-link :global(svg),
+		.ed .ed-contact {
+			transition: none;
+		}
+	}
+
 	.minimum-width-rem {
 		min-width: 360px;
 	}
