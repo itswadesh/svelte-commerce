@@ -87,9 +87,9 @@
 								class="ed-mm-panel mega-menu ease-out-expo absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-all duration-500"
 							>
 								<div class="flex">
-									<div class="grid max-h-[70vh] flex-1 grid-cols-4 gap-x-8 gap-y-4 overflow-y-auto p-10 scrollbar-thin">
+									<div class="grid max-h-[70vh] flex-1 grid-cols-4 gap-x-8 gap-y-2 overflow-y-auto px-10 py-7 scrollbar-thin">
 										{#each sortByRank(childrenOf(category)) as c}
-											<div class="flex flex-col gap-3">
+											<div class="flex flex-col gap-2">
 												<a
 													href={c.link || '/' + c.slug}
 													class="ed-mm-cat flex items-center gap-2 text-sm font-semibold text-gray-900 transition-all hover:translate-x-1"
@@ -111,7 +111,7 @@
 												</a>
 
 												{#if childrenOf(c)}
-													<ul class="flex flex-col gap-2.5">
+													<ul class="flex flex-col gap-1.5">
 														{#each sortByRank(childrenOf(c)) as c1}
 															<li>
 																<a
