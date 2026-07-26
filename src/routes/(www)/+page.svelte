@@ -12,7 +12,7 @@
 	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { setCollectionState } from '$lib/core/stores/collection.svelte.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
-	import { getThemeHomepageContent } from '$lib/theme/index.js'
+	import { resolveThemeContent } from '$lib/theme/index.js'
 	import { themeHomepages } from '$lib/theme/homepages.js'
 
 	let { data } = $props()
@@ -38,7 +38,9 @@
 	const homepageModule = new HomepageModule()
 	const activeTheme = $derived(data?.theme?.name || 'default')
 	const ThemeHomepage = $derived(themeHomepages[activeTheme] || themeHomepages['default'])
-	const themeContent = $derived(getThemeHomepageContent(activeTheme))
+	// Hardcoded theme content, with the store's admin-provided themeContent (store.theme.content)
+	// merged over it section by section (falls back to the theme defaults for anything unset).
+	const themeContent = $derived(resolveThemeContent(activeTheme, data?.store))
 	const brandName = $derived(themeContent.brandName || data?.store?.name || 'Store')
 	const themeDescription = $derived(themeContent.description || page?.metaDescription || '')
 
