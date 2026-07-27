@@ -13,7 +13,7 @@
 	import FooterMenu from './footer-menu.svelte'
 	import Logo from '$lib/components/common/logo.svelte'
 	import { Button } from '$lib/components/ui/button'
-	import { getThemeHomepageContent } from '$lib/theme/index.js'
+	import { resolveThemeContent } from '$lib/theme/index.js'
 	import LimelightFooter from '$lib/theme/limelight/LimelightFooter.svelte'
 	import NoorFooter from '$lib/theme/noor/NoorFooter.svelte'
 
@@ -39,7 +39,7 @@
 	let isExpanded = $state(false)
 
 	const activeThemeName = $derived(page.data?.theme?.name ?? 'default')
-	const themeContent = $derived(getThemeHomepageContent(activeThemeName))
+	const themeContent = $derived(resolveThemeContent(activeThemeName, page.data?.store))
 	const themeFooter = $derived(themeContent?.footer)
 	const themeFooterMenu = $derived(
 		(themeFooter?.columns || []).map((column) => ({
@@ -177,12 +177,16 @@
 					<div class="flex flex-col gap-6 border-t py-6 md:gap-8 md:py-8 lg:flex-row lg:items-center lg:justify-between">
 						<div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8">
 							<span class="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-								&copy; {new Date().getFullYear()}
-								{' '}
-								<a href="/" class="text-foreground transition-colors hover:text-primary">
-									{storeData?.name}
-								</a>
-								. All Rights Reserved.
+								{#if themeFooter?.copyright}
+									{themeFooter.copyright}
+								{:else}
+									&copy; {new Date().getFullYear()}
+									{' '}
+									<a href="/" class="text-foreground transition-colors hover:text-primary">
+										{storeData?.name}
+									</a>
+									. All Rights Reserved.
+								{/if}
 								<a target="_blank" href="https://litekart.in" class="uppercase text-xs font-bold text-foreground transition-colors hover:text-primary">
 									Powered by Litekart
 								</a>

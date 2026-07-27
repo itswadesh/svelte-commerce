@@ -4,12 +4,13 @@
 	import { Truck, RotateCcw, ShieldCheck, Headset, ArrowRight, ArrowUpRight } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
-	import { storeService } from '$lib/core/services'
+	import { storeService, productService } from '$lib/core/services'
 	import { getUserState } from '$lib/core/stores/index.js'
 	import { klaviyoIdentify, klaviyoSubscribe, resolveKlaviyoConfig } from '$lib/klaviyo'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { z } from 'zod'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
+	import { resolveEditorialForDevice } from '$lib/theme/homepage-content.js'
 
 	let {
 		themeContent,
@@ -32,7 +33,13 @@
 		currencyCode?: string
 	} = $props()
 
-	const ed = $derived(themeContent.editorial)
+	// Per-device content (admin cascade mobile → tablet → desktop). SSR renders the mobile
+	// base layer (Googlebot is mobile-first); the viewport picks the real layer on mount.
+	// Stores without device overrides resolve identically on every device — no flash.
+	let contentDevice = $state<'mobile' | 'tablet' | 'desktop'>('mobile')
+	const ed = $derived(resolveEditorialForDevice(themeContent, contentDevice))
+	// Admin-controlled per-section visibility (true = hidden), set on the store's Theme page.
+	const hidden = $derived(ed?.hiddenSections ?? {})
 	const productAspect = $derived(`${aspectWidth || '4'} / ${aspectHeight || '5'}`)
 
 	// Live categories take over the fallback tiles; capped at 4 for the balanced grid.
@@ -40,19 +47,63 @@
 		featuredCategories?.length
 			? featuredCategories.slice(0, 4).map((c: any) => ({
 					label: c?.name || c?.title || 'Shop',
-					href: c?.slug ? '/' + c.slug : c?.link || '/products',
+					href: c?.slug ? `/${c.slug}` : c?.link || '/products',
 					image: c?.image || c?.thumbnail || c?.img || ''
 				}))
 			: ed?.categories.tiles || []
 	)
 
-	const products = $derived((featuredProducts || []).slice(0, 8))
+	// Products section source (admin Theme page): 'featured' uses the featured feed passed in
+	// as props; 'latest' / 'popular' / 'category' fetch client-side. SSR renders the featured
+	// feed and the configured source takes over on mount.
+	let sourcedProducts = $state<any[] | null>(null)
+	let sourceToken = 0
+	$effect(() => {
+		const source = ed?.featured?.source ?? 'featured'
+		const categoryId = ed?.featured?.categoryId ?? ''
+		const token = ++sourceToken
+		if (source === 'featured' || (source === 'category' && !categoryId)) {
+			sourcedProducts = null
+			return
+		}
+		;(async () => {
+			try {
+				let res: any
+				if (source === 'category') {
+					res = await productService.listRelatedProducts({ page: 1, categoryId })
+				} else if (source === 'popular') {
+					res = await productService.list({ page: 1, sort: '-popularity' })
+				} else {
+					res = await productService.list({ page: 1, sort: '-createdAt' })
+				}
+				if (token === sourceToken) sourcedProducts = res?.data || []
+			} catch {
+				if (token === sourceToken) sourcedProducts = null
+			}
+		})()
+	})
+
+	const products = $derived(((sourcedProducts ?? featuredProducts) || []).slice(0, 8))
 
 	const assuranceIcons = { truck: Truck, returns: RotateCcw, shield: ShieldCheck, support: Headset }
 
 	let inView = $state(false)
 	onMount(() => {
 		inView = true
+		// Content-layer breakpoints (independent of the CSS layout breakpoints): they match
+		// the admin preview's simulated devices — mobile <768, tablet 768–1199, desktop ≥1200.
+		const mqTablet = window.matchMedia('(min-width: 768px)')
+		const mqDesktop = window.matchMedia('(min-width: 1200px)')
+		const pick = () => {
+			contentDevice = mqDesktop.matches ? 'desktop' : mqTablet.matches ? 'tablet' : 'mobile'
+		}
+		pick()
+		mqTablet.addEventListener('change', pick)
+		mqDesktop.addEventListener('change', pick)
+		return () => {
+			mqTablet.removeEventListener('change', pick)
+			mqDesktop.removeEventListener('change', pick)
+		}
 	})
 
 	// Newsletter: subscribe to Litekart's list AND the store's Klaviyo list (same flow as the
@@ -98,6 +149,7 @@
 {#if ed}
 	<div class="ed" class:is-in={inView}>
 		<!-- HERO -->
+		{#if !hidden.hero}
 		<section class="ed-wrap ed-hero">
 			<div class="ed-hero__body">
 				<span class="ed-eyebrow">{ed.hero.eyebrow}</span>
@@ -121,9 +173,10 @@
 				<img src={ed.hero.image} alt={ed.hero.imageAlt} loading="eager" fetchpriority="high" />
 			</div>
 		</section>
+		{/if}
 
 		<!-- MARQUEE / assurance ribbon -->
-		{#if ed.marquee?.length}
+		{#if ed.marquee?.length && !hidden.marquee}
 			<div class="ed-ribbon">
 				<div class="ed-wrap ed-ribbon__row">
 					{#each ed.marquee as item, i}
@@ -135,7 +188,7 @@
 		{/if}
 
 		<!-- CATEGORIES -->
-		{#if categoryTiles.length}
+		{#if categoryTiles.length && !hidden.categories}
 			<section class="ed-wrap ed-section">
 				<header class="ed-head">
 					<div>
@@ -169,6 +222,7 @@
 		{/if}
 
 		<!-- FEATURED PRODUCTS -->
+		{#if !hidden.featured}
 		<section class="ed-tint">
 			<div class="ed-wrap ed-section">
 				<header class="ed-head">
@@ -207,8 +261,10 @@
 				{/if}
 			</div>
 		</section>
+		{/if}
 
 		<!-- EDITORIAL BANNER -->
+		{#if !hidden.banner}
 		<section class="ed-wrap ed-banner">
 			<div class="ed-banner__media">
 				<img src={ed.banner.image} alt={ed.banner.imageAlt} loading="lazy" />
@@ -220,8 +276,10 @@
 				<a class="ed-btn ed-btn--ghost" href={ed.banner.href}>{ed.banner.cta}</a>
 			</div>
 		</section>
+		{/if}
 
 		<!-- ASSURANCES -->
+		{#if !hidden.assurances}
 		<section class="ed-wrap">
 			<div class="ed-assure">
 				{#each ed.assurances as a}
@@ -236,8 +294,10 @@
 				{/each}
 			</div>
 		</section>
+		{/if}
 
 		<!-- NEWSLETTER -->
+		{#if !hidden.newsletter}
 		<section class="ed-tint">
 			<div class="ed-wrap ed-news">
 				<span class="ed-eyebrow">{ed.newsletter.eyebrow}</span>
@@ -255,6 +315,7 @@
 				<p class="ed-news__privacy">{ed.newsletter.privacy}</p>
 			</div>
 		</section>
+		{/if}
 	</div>
 {/if}
 
@@ -268,7 +329,9 @@
 		--ed-line: rgba(27, 26, 23, 0.12);
 		--ed-radius: 4px;
 		--ed-display: 'Bodoni Moda', 'Times New Roman', serif;
-		--ed-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+		/* Follows the shell's --font-body so the store's admin-set font applies; the theme's
+		   own Hanken Grotesk is the fallback (and the [data-theme='default'] default). */
+		--ed-body: var(--font-body, 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif);
 		background: var(--ed-canvas);
 		color: var(--ed-ink);
 		font-family: var(--ed-body);

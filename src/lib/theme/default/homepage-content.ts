@@ -49,6 +49,12 @@ export const defaultContent: ThemeHomepageContent = {
   reservation: { label: "Contact", titleLead: "Get in", titleAccent: "Touch", text: "", panelTitle: "Contact Info", panelText: "", hoursLabel: "Opening Hours", phoneLabel: "Phone", groupLabel: "Group", locationLabel: "Location", hours: "", phone: "", group: "", location: "", cta: "Submit" },
   blog: { label: "Updates", titleLead: "Latest", titleAccent: "News", items: [] },
   newsletter: { label: "Stay Connected", titleLead: "Subscribe for", titleAccent: "Updates", text: "Subscribe for new arrivals, offers, and store updates.", cta: "Subscribe", privacy: "No spam, unsubscribe anytime." },
+  // Announcement bar above the nav; admin overrides merge over this (blank = keep default,
+  // hideAnnouncement: true = bar off).
+  header: {
+    announcement: "Free shipping on your first order · Easy 7-day returns",
+    announcementHref: "/products"
+  },
   footer: {
     columns: [
       {

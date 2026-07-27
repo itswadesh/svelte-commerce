@@ -13,6 +13,8 @@
 	import { type Snippet } from 'svelte'
 	import type { StoreData } from '$lib/core/types/index.js'
   import { ColorPalette } from '$lib/core/components/index.js'
+  import StoreFont from '$lib/components/common/store-font.svelte'
+  import StorePalette from '$lib/components/common/store-palette.svelte'
 
 	interface LayoutData {
 		store: StoreData
@@ -69,6 +71,8 @@
 </svelte:head>
 
 <ColorPalette />
+<StorePalette />
+<StoreFont />
 <GoogleAnalytics />
 <KlaviyoPlugin storeData={data?.store} />
 

@@ -88,6 +88,9 @@ export interface ThemeHomepageContent {
 		columns?: Array<{ title: string; links?: Array<{ label: string; href: string }>; text?: string[] }>
 		copyright?: string
 	}
+	/** Admin-editable header chrome: announcement bar above the nav (empty = no bar,
+	 *  hideAnnouncement: true switches an otherwise-defaulted bar off). */
+	header?: { announcement?: string; announcementHref?: string; hideAnnouncement?: boolean }
 	contact: {
 		label: string
 		titleLead: string
@@ -141,7 +144,16 @@ export interface ThemeHomepageContent {
 			viewAllHref: string
 			tiles: Array<{ label: string; href: string; image: string }>
 		}
-		featured: { eyebrow: string; title: string; viewAll: string; viewAllHref: string }
+		featured: {
+			eyebrow: string
+			title: string
+			viewAll: string
+			viewAllHref: string
+			/** Product source for the grid; 'featured' (default) uses the featured-products feed. */
+			source?: 'featured' | 'latest' | 'popular' | 'category'
+			/** Category id when source === 'category'. */
+			categoryId?: string
+		}
 		banner: {
 			eyebrow: string
 			title: string
@@ -153,5 +165,15 @@ export interface ThemeHomepageContent {
 		}
 		assurances: Array<{ icon: 'truck' | 'returns' | 'shield' | 'support'; title: string; text: string }>
 		newsletter: { eyebrow: string; title: string; text: string; cta: string; privacy: string }
+		/** Admin-controlled per-section visibility (true = hide the section on the homepage). */
+		hiddenSections?: Record<string, boolean>
 	}
+	/**
+	 * Per-device content overrides set by the admin Theme page, cascading
+	 * mobile → tablet → desktop: `editorial` is the mobile/base layer, tablet deep-merges
+	 * over it, desktop deep-merges over tablet. Absent/blank fields inherit the previous
+	 * layer. Shapes mirror `editorial` (partial).
+	 */
+	editorialTablet?: Record<string, unknown>
+	editorialDesktop?: Record<string, unknown>
 }

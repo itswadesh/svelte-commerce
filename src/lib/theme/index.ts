@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/public'
-export { getThemeHomepageContent, type ThemeHomepageContent } from './homepage-content.js'
+export { getThemeHomepageContent, resolveThemeContent, type ThemeHomepageContent } from './homepage-content.js'
 
 export type StorefrontThemeName = 'default' | 'sarab' | 'organic' | 'limelight' | string
 
@@ -28,8 +28,12 @@ export function getThemeFontsUrl(theme: string): string | null {
 }
 
 export function resolveStorefrontTheme(store: any): StorefrontTheme {
+	// `store.theme` is now a first-class object `{ name, content }`; older data may still be a
+	// plain string. Read the name from either shape.
+	const themeField = store?.theme
+	const themeFieldName = typeof themeField === 'string' ? themeField : themeField?.name
 	const adminTheme =
-		store?.theme ||
+		themeFieldName ||
 		store?.activeTheme ||
 		store?.themeName ||
 		store?.settings?.theme ||
