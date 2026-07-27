@@ -39,7 +39,7 @@
 									v.value
 								)
 									? 'edp-on ring-2 ring-primary ring-offset-2'
-									: ''} {!v.selectable ? 'opacity-40' : ''}"
+									: ''} {!v?.selectable ? 'opacity-40' : ''}"
 								onclick={() => productState.selectVariant({ option, value: v })}
 								title={v.value}
 							>
@@ -49,7 +49,7 @@
 						{:else}
 							<Button
 								variant={productState.isVariantOptionSelected(option.id, v.value) ? 'default' : 'plain'}
-								disabled={!v.selectable}
+								disabled={!v?.selectable}
 								class="edp-pill min-w-[3.5rem] !bg-primary px-4 py-2 {
                   productState.isVariantOptionSelected(option.id, v.value)
 									? 'edp-on border !border-accent !bg-transparent'
