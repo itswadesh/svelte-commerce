@@ -32,6 +32,7 @@
 	import { onDestroy, onMount } from 'svelte'
 	import NoorNav from '$lib/theme/noor/NoorNav.svelte'
 	import LimelightNav from '$lib/theme/limelight/LimelightNav.svelte'
+	import { resolveThemeContent } from '$lib/theme/index.js'
 
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
@@ -95,6 +96,21 @@
 
 	const activeThemeName = $derived(page.data?.theme?.name ?? 'default')
 	const storeData = $derived(page?.data?.store ?? {})
+	// Admin-editable announcement bar (theme content). Fills the hello-bar slot unless the
+	// hello-bar plugin is active AND actually has content (an active-but-empty plugin should
+	// not suppress it), so the two never stack.
+	const themeHeader = $derived(resolveThemeContent(activeThemeName, page.data?.store)?.header)
+	const themeAnnouncement = $derived(
+		themeHeader?.hideAnnouncement === true ? '' : themeHeader?.announcement || ''
+	)
+	const helloBarHasContent = $derived(
+		!!(
+			navModule.helloBarPlugin?.active &&
+			(navModule.helloBarPlugin?.content ||
+				navModule.helloBarPlugin?.content2 ||
+				navModule.helloBarPlugin?.content3)
+		)
+	)
 
 	// Local expansion state for the nested mobile menu — tracks which header-menu parent is
 	// open. Kept here (not the composable's category-sized showSubCategory) so it indexes by
@@ -118,8 +134,27 @@
 			? 'max-sm:border-b'
 			: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-white transition-all duration-200"
 	>
-		<!-- Hello bar -->
-		{#if navModule.helloBarPlugin?.active && isHomepage}
+		<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
+		     content wins -->
+		{#if !helloBarHasContent && themeAnnouncement && isHomepage}
+			<div class="grid transition-[grid-template-rows] duration-300 ease-in-out {isScrolled ? 'grid-rows-[0fr]' : 'grid-rows-[1fr]'}">
+				<div class="overflow-hidden">
+					<div
+						class="max-w-none bg-primary px-4 py-2.5 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-primary-foreground"
+					>
+						{#if themeHeader?.announcementHref}
+							<a href={themeHeader.announcementHref} class="transition-opacity hover:opacity-80">{themeAnnouncement}</a>
+						{:else}
+							{themeAnnouncement}
+						{/if}
+					</div>
+				</div>
+			</div>
+		{/if}
+
+		<!-- Hello bar (only when the plugin actually has content — an active-but-empty
+		     plugin used to render a stray empty dark band) -->
+		{#if helloBarHasContent && isHomepage}
 			<!-- <div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
 				{@html helloBarPlugin?.content}
 			</div> -->
