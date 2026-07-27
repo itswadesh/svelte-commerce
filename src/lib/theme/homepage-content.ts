@@ -80,5 +80,10 @@ export function resolveThemeContent(
 			return base
 		}
 	}
-	return deepMerge(base, override)
+	// Legacy top-level overrides first, then the admin's per-theme namespace
+	// (theme.content[themeName]) on top — namespacing keeps each theme's content isolated.
+	let merged = deepMerge(base, override)
+	const namespaced = isPlainObject(override) ? (override as Record<string, unknown>)[themeName] : undefined
+	if (namespaced) merged = deepMerge(merged, namespaced)
+	return merged
 }
