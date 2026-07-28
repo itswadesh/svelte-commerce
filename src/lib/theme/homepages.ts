@@ -2,11 +2,11 @@ import type { Component } from 'svelte'
 import type { HomepageModule } from '$lib/core/composables/index.js'
 import type { Banner, Category, Product } from '$lib/core/types/index.js'
 import type { ThemeHomepageContent } from './types.js'
+import type { PageSection } from './default/page-inheritance.js'
 import DefaultHomepage from './default/DefaultHomepage.svelte'
-import SarabHomepage from './sarab/SarabHomepage.svelte'
+import WineHomepage from './wine/WineHomepage.svelte'
 import OrganicHomepage from './organic/OrganicHomepage.svelte'
-import LimelightHomepage from './limelight/LimelightHomepage.svelte'
-import NoorHomepage from './noor/NoorHomepage.svelte'
+import LimeHomepage from './lime/LimeHomepage.svelte'
 
 /**
  * The prop contract every theme homepage is rendered with by `src/routes/(www)/+page.svelte`.
@@ -32,13 +32,20 @@ export interface ThemeHomepageProps {
 	loading?: boolean
 	desktopBanners?: Banner[]
 	mobileBanners?: Banner[]
+	/** The admin `home` page's banner sections — see ./default/page-inheritance.ts. */
+	pageSections?: PageSection[]
 	currencyCode?: string
 }
 
+/**
+ * Themes whose homepage is still a bespoke component.
+ *
+ * A theme that ships a `layout` from the API is rendered by `ThemeSections` instead and needs no
+ * entry here — `noor` was the first to move. This registry shrinks as themes migrate.
+ */
 export const themeHomepages: Record<string, Component<ThemeHomepageProps>> = {
 	default: DefaultHomepage,
-	sarab: SarabHomepage,
+	wine: WineHomepage,
 	organic: OrganicHomepage,
-	limelight: LimelightHomepage,
-	noor: NoorHomepage
+	lime: LimeHomepage
 }

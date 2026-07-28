@@ -2,7 +2,7 @@
 	import { formatPrice } from '$lib/core/utils'
 
 	/**
-	 * Limelight price primitive.
+	 * Lime price primitive.
 	 * Plum selling price with an optional struck-through MRP, matching the
 	 * quiet, un-bold luxury treatment of the source product listings.
 	 */
@@ -38,7 +38,7 @@
 	}
 
 	.ll-price-now {
-		color: var(--limelight-plum, #460032);
+		color: var(--lime-plum, #460032);
 		font-family: var(--font-body);
 		font-weight: 500;
 		letter-spacing: 0.02em;

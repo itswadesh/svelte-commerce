@@ -1,15 +1,17 @@
 import { defaultContent } from './default/homepage-content.js'
-import { sarabContent } from './sarab/homepage-content.js'
-import { organicContent } from './organic/homepage-content.js'
-import { limelightContent } from './limelight/homepage-content.js'
-import { noorContent } from './noor/homepage-content.js'
 import type { ThemeHomepageContent } from './types.js'
+
+/**
+ * Theme content lives in the API (kitcommerce-api `src/lib/themes`), which serves each store
+ * its theme's defaults already merged with that store's overrides as `themeContent` on the
+ * public store payload — see `resolveThemeContent` below.
+ *
+ * The default theme's content stays here as the last-resort shape: if the payload ever lacks
+ * `themeContent` (an API older than that field, or a store that failed to load), the storefront
+ * still renders a complete page instead of throwing on missing sections.
+ */
 const CONTENT_BY_THEME: Record<string, ThemeHomepageContent> = {
-	default: defaultContent,
-	sarab: sarabContent,
-	organic: organicContent,
-	limelight: limelightContent,
-	noor: noorContent
+	default: defaultContent
 }
 export type { ThemeHomepageContent } from './types.js'
 export function getThemeHomepageContent(themeName = 'default') {
@@ -68,8 +70,14 @@ export function resolveEditorialForDevice(
 
 export function resolveThemeContent(
 	themeName = 'default',
-	store?: { theme?: { content?: unknown } | null } | null
+	store?: { theme?: { content?: unknown } | null; themeContent?: unknown } | null
 ): ThemeHomepageContent {
+	// The API owns theme content: `themeContent` on the public store payload is the theme's
+	// defaults already merged with this store's overrides, so use it as-is. The local modules
+	// below are only a fallback for an API that predates that field.
+	const fromApi = store?.themeContent
+	if (isPlainObject(fromApi)) return fromApi as ThemeHomepageContent
+
 	const base = getThemeHomepageContent(themeName)
 	let override: unknown = store?.theme?.content
 	// jsonb serves this as an object, but tolerate a JSON string too.

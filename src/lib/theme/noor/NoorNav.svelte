@@ -11,6 +11,7 @@
 		wishlistState,
 		userState,
 		storeData,
+		themeContent,
 		pathname = ''
 	}: {
 		navModule: any
@@ -18,13 +19,19 @@
 		wishlistState?: any
 		userState?: any
 		storeData?: any
+		themeContent?: any
 		pathname?: string
 	} = $props()
 
-	const navItems = ['Unstitched', 'Luxury Pret', 'Pret', 'New Arrivals', 'Formals', 'Ready to Wear', 'Sale']
+	// Header chrome is store-editable theme content.
+	const navLinks = $derived(themeContent?.nav?.links ?? [])
+	const announcement = $derived(themeContent?.nav?.announcement ?? '')
+	const brandName = $derived(storeData?.name || themeContent?.brandName || 'Store')
 </script>
 
-<section class="noor-announcement">Free shipping across India on orders above Rs. 1,000</section>
+{#if announcement}
+	<section class="noor-announcement">{announcement}</section>
+{/if}
 
 <header class="noor-header shadow-xs">
 	<div class="noor-header-main">
@@ -38,8 +45,12 @@
 			<Menu class="h-5 w-5" />
 		</button>
 
-		<a href="/" class="noor-logo" aria-label="Noor home">
-			<img src="/noor/logo.png" alt={storeData?.name || 'Noor'} />
+		<a href="/" class="noor-logo" aria-label="{brandName} home">
+			{#if storeData?.logo}
+				<img src={storeData.logo} alt={brandName} />
+			{:else}
+				<span class="noor-wordmark">{brandName}</span>
+			{/if}
 		</a>
 
 		<div class="noor-actions">
@@ -82,9 +93,9 @@
 		</div>
 	</div>
 
-	<nav class="noor-nav" aria-label="Noor categories">
-		{#each navItems as item}
-			<a href="/categories/{item.toLowerCase().replaceAll(' ', '-')}">{item}</a>
+	<nav class="noor-nav" aria-label="{brandName} categories">
+		{#each navLinks as item}
+			<a href={item.href}>{item.label}</a>
 		{/each}
 	</nav>
 </header>
@@ -131,6 +142,21 @@
 		display: block;
 		width: 120px;
 		height: auto;
+	}
+
+	/* Shown when the store has not uploaded a logo. */
+	.noor-wordmark {
+		display: block;
+		max-width: 200px;
+		color: var(--ink, #151515);
+		font-family: var(--font-heading);
+		font-size: 22px;
+		line-height: 1.1;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.noor-mobile-trigger {
@@ -196,6 +222,11 @@
 
 		.noor-logo img {
 			width: 98px;
+		}
+
+		.noor-wordmark {
+			max-width: 150px;
+			font-size: 17px;
 		}
 
 		.noor-actions {

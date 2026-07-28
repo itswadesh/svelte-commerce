@@ -5,17 +5,22 @@
 
 	let {
 		footer,
-		description = ''
+		description = '',
+		brandName = ''
 	}: {
 		footer?: ThemeFooter
 		description?: string
+		brandName?: string
 	} = $props()
 </script>
 
 <footer class="noor-footer">
 	<div class="noor-footer-brand">
 		{#if footer?.logo}
-			<img src={footer.logo} alt={footer.logoAlt || 'Noor'} />
+			<img src={footer.logo} alt={footer.logoAlt || brandName} />
+		{:else if brandName}
+			<!-- No uploaded logo: the brand name carries the mark, same as the header. -->
+			<p class="noor-footer-wordmark">{brandName}</p>
 		{/if}
 		{#if description}
 			<p>{description}</p>
@@ -54,6 +59,16 @@
 		width: 118px;
 		height: auto;
 		margin-bottom: 18px;
+	}
+
+	.noor-footer-wordmark {
+		margin: 0 0 18px;
+		color: var(--ink);
+		font-family: var(--font-heading);
+		font-size: 20px;
+		line-height: 1.1;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
 	}
 
 	.noor-footer p {

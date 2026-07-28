@@ -2,6 +2,7 @@
 	import { Heart, Minus, Plus, ShoppingCart, Truck, Shield, Leaf, Star, Tag, ArrowRight } from '@lucide/svelte'
 	import { formatPrice } from '$lib/core/utils/index.js'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
+	import { themeImage } from '../placeholder.js'
 
 	let {
 		themeContent,
@@ -33,49 +34,62 @@
 		currencyCode?: string
 	} = $props()
 
-	const stats = [
-		{ value: '14k+', label: 'Product Varieties' },
-		{ value: '50k+', label: 'Happy Customers' },
-		{ value: '1.2k+', label: 'Stores Nationwide' },
-		{ value: '99%', label: 'Satisfaction Rate' }
-	]
+	// Content-declared icons, resolved to components here so the copy stays editable.
+	const ICONS: Record<string, any> = {
+		leaf: Leaf,
+		shield: Shield,
+		truck: Truck,
+		star: Star,
+		award: Star,
+		zap: Truck
+	}
 
-	const features = [
-		{ icon: Leaf, title: 'Fresh from Farm', text: 'Directly sourced from organic farms daily' },
-		{ icon: Shield, title: '100% Organic', text: 'Certified organic products guaranteed' },
-		{ icon: Truck, title: 'Free Delivery', text: 'Free delivery on orders above $50' }
-	]
+	const stats = $derived(themeContent.hero.stats ?? [])
+	const features = $derived(themeContent.about.features ?? [])
+	const trustBadges = $derived(themeContent.trust?.items ?? [])
+	const promoBanners = $derived(themeContent.promoBanners ?? [])
+	// The promo grid's asymmetric layout lives in these three classes (grid-area only).
+	const PROMO_VARIANTS = ['organic-promo-sale', 'organic-promo-combo', 'organic-promo-coupon']
+	const appDownload = $derived(themeContent.appDownload)
+	const labels = $derived(themeContent.labels ?? {})
 
-	const trustBadges = [
-		{ icon: Truck, title: 'Free Delivery', text: 'On orders over $50' },
-		{ icon: Shield, title: 'Secure Payment', text: '100% secure checkout' },
-		{ icon: Star, title: 'Quality Guarantee', text: 'Fresh or money back' },
-		{ icon: Leaf, title: '100% Organic', text: 'Certified products' }
-	]
-
-	const fallbackCategories = [
-		{ name: 'Fruits & Veges', slug: 'fruits-veges', image: '/organic/category-thumb-1.jpg' },
-		{ name: 'Breads & Sweets', slug: 'breads-sweets', image: '/organic/category-thumb-2.jpg' },
-		{ name: 'Fruits & Veges', slug: 'fresh-produce', image: '/organic/category-thumb-3.jpg' },
-		{ name: 'Beverages', slug: 'beverages', image: '/organic/category-thumb-4.jpg' },
-		{ name: 'Meat Products', slug: 'meat-products', image: '/organic/category-thumb-5.jpg' },
-		{ name: 'Breads', slug: 'breads', image: '/organic/category-thumb-6.jpg' },
-		{ name: 'Fruits & Veges', slug: 'organic-fruits', image: '/organic/category-thumb-7.jpg' },
-		{ name: 'Breads & Sweets', slug: 'sweet-bakery', image: '/organic/category-thumb-8.jpg' }
-	]
-
-	const displayCategories = fallbackCategories
+	// The live catalogue wins; the theme's tiles only stand in for a store with no categories.
+	const displayCategories = $derived(
+		featuredCategories?.length
+			? featuredCategories.map((category: any) => ({
+					title: category?.name || category?.title || '',
+					href: category?.slug ? '/' + category.slug : category?.link || '/products',
+					image: category?.image || category?.thumbnail || category?.img || '',
+					imageAlt: ''
+				}))
+			: (themeContent.tiles?.categories ?? [])
+	)
 	const displayProducts = $derived(featuredProducts)
+
+	/** Real rating out of 5, or 0 when the product carries none. */
+	function ratingOf(product: any) {
+		const value = Number(product?.rating ?? product?.ratings?.average ?? 0)
+		return Number.isFinite(value) ? Math.max(0, Math.min(5, value)) : 0
+	}
+
+	function ratingCountOf(product: any) {
+		return Number(product?.ratingCount ?? product?.ratings?.count ?? 0) || 0
+	}
 </script>
 
 <!-- Hero Section -->
-<section class="organic-hero">
+<section
+	class="organic-hero"
+	style={themeContent.hero.backgroundImage
+		? `background-image: url('${themeContent.hero.backgroundImage}')`
+		: undefined}
+>
 	<div class="organic-container organic-hero-shell">
 		<div class="organic-hero-inner">
 			<div class="organic-hero-content">
 				<h1>
-					<span class="organic-text-primary">Organic</span>
-					Foods at your <span>Doorsteps</span>
+					<span class="organic-text-primary">{themeContent.hero.titleLead}</span>
+					{themeContent.hero.titleAccent} <span>{themeContent.hero.titleRest}</span>
 				</h1>
 				<p>{themeContent.hero.text}</p>
 				<div class="organic-hero-actions">
@@ -98,7 +112,7 @@
 		<div class="organic-stats-grid">
 			{#each stats as stat}
 				<div class="organic-stat-item">
-					<strong>{stat.value}</strong>
+					<strong>{stat.value}{stat.suffix ?? ''}</strong>
 					<span>{stat.label}</span>
 				</div>
 			{/each}
@@ -111,9 +125,10 @@
 	<div class="organic-container">
 		<div class="organic-features-grid">
 			{#each features as feature}
+				{@const FeatureIcon = ICONS[feature.icon] ?? Leaf}
 				<div class="organic-feature-card">
 					<div class="organic-feature-icon">
-						<feature.icon class="h-6 w-6" />
+						<FeatureIcon class="h-6 w-6" />
 					</div>
 					<h3>{feature.title}</h3>
 					<p>{feature.text}</p>
@@ -129,23 +144,23 @@
 		<div class="organic-container">
 			<div class="organic-section-header">
 				<div>
-					<h2>Category</h2>
+					<h2>{themeContent.category.titleLead} {themeContent.category.titleAccent}</h2>
 				</div>
-				<a href="/categories" class="organic-view-all">
-					View All <ArrowRight class="h-4 w-4" />
+				<a href="/products" class="organic-view-all">
+					{labels.viewAll} <ArrowRight class="h-4 w-4" />
 				</a>
 			</div>
 			<div class="organic-category-grid">
 				{#each displayCategories.slice(0, 8) as category}
-					<a href="/categories/{category.slug}" class="organic-category-card">
+					<a href={category.href} class="organic-category-card">
 						{#if category.image}
-							<img src={category.image} alt={category.name} />
+							<img src={themeImage(category.image, category.title)} alt={category.imageAlt || category.title} />
 						{:else}
 							<div class="organic-category-placeholder">
 								<Leaf class="h-8 w-8" />
 							</div>
 						{/if}
-						<span>{category.name}</span>
+						<span>{category.title}</span>
 					</a>
 				{/each}
 			</div>
@@ -158,15 +173,16 @@
 	<div class="organic-container">
 		<div class="organic-section-header">
 			<div>
-				<h2>Best selling products</h2>
+				<h2>{themeContent.menu.titleLead} {themeContent.menu.titleAccent}</h2>
 			</div>
 			<a href="/products" class="organic-view-all">
-				View All <ArrowRight class="h-4 w-4" />
+				{labels.viewAll} <ArrowRight class="h-4 w-4" />
 			</a>
 		</div>
 		{#if displayProducts.length > 0}
 			<div class="organic-product-grid">
 				{#each displayProducts.slice(0, 10) as product}
+					{@const rating = ratingOf(product)}
 					<a href="/products/{product.slug}" class="organic-product-card">
 						<div class="organic-product-img" style="aspect-ratio:{aspectWidth}/{aspectHeight};">
 							{#if product.image || product.img || product.thumbnail}
@@ -178,17 +194,21 @@
 							{#if product.discount}
 								<span class="organic-discount-badge">
 									<Tag class="h-3 w-3" />
-									{product.discount}% OFF
+									{product.discount}{themeContent.menu.discountSuffix}
 								</span>
 							{/if}
 						</div>
 						<div class="organic-product-info">
-							<div class="organic-product-rating">
-								<span>★ ★ ★ ★ ★</span>
-								<small>({product.ratingCount || 222})</small>
-							</div>
+							{#if rating > 0}
+								<div class="organic-product-rating">
+									<span>{"★".repeat(Math.round(rating))}{"☆".repeat(5 - Math.round(rating))}</span>
+									{#if ratingCountOf(product)}
+										<small>({ratingCountOf(product)})</small>
+									{/if}
+								</div>
+							{/if}
 							<h3>{product.name || product.title}</h3>
-							<span class="organic-product-meta">1 Unit</span>
+							<span class="organic-product-meta">{labels.unit}</span>
 							<div class="organic-product-price">
 								{#if product.mrp && product.mrp > product.price}
 									<span class="organic-price-old">{formatPrice(product.mrp, currencyCode || '')}</span>
@@ -204,7 +224,7 @@
 							</div>
 							<button class="organic-add-to-cart">
 								<ShoppingCart class="h-4 w-4" />
-								Add to Cart
+								{labels.addToCart}
 							</button>
 							<Heart class="h-5 w-5 organic-heart" />
 						</div>
@@ -225,42 +245,39 @@
 <section class="organic-section">
 	<div class="organic-container">
 		<div class="organic-promo-grid">
-			<div class="organic-promo-card organic-promo-sale">
-				<div>
-					<span>Items on SALE</span>
-					<h3>Discounts up to 30%</h3>
-					<a href="/products?sort=discount">Shop Now <ArrowRight class="h-4 w-4" /></a>
+			{#each promoBanners as banner, index}
+				{@const variant = PROMO_VARIANTS[index] ?? ''}
+				<div
+					class="organic-promo-card {variant}"
+					style={banner.image ? `background-image: url('${banner.image}')` : undefined}
+				>
+					<div>
+						<span>{banner.eyebrow}</span>
+						<h3>{banner.title}</h3>
+						<a href={banner.href}>{banner.cta} <ArrowRight class="h-4 w-4" /></a>
+					</div>
 				</div>
-			</div>
-			<div class="organic-promo-card organic-promo-combo">
-				<div>
-					<span>Combo Offers</span>
-					<h3>Discounts up to 50%</h3>
-					<a href="/products">Shop Now <ArrowRight class="h-4 w-4" /></a>
-				</div>
-			</div>
-			<div class="organic-promo-card organic-promo-coupon">
-				<div>
-					<span>Discount Coupons</span>
-					<h3>Discounts up to 40%</h3>
-					<a href="/products">Shop Now <ArrowRight class="h-4 w-4" /></a>
-				</div>
-			</div>
+			{/each}
 		</div>
 	</div>
 </section>
 
 <!-- Newsletter Section -->
-<section class="organic-newsletter">
+<section
+	class="organic-newsletter"
+	style={themeContent.newsletter.backgroundImage
+		? `background-image: url('${themeContent.newsletter.backgroundImage}')`
+		: undefined}
+>
 	<div class="organic-container">
 		<div class="organic-newsletter-inner">
 			<div class="organic-newsletter-content">
 				<span class="organic-section-label">{themeContent.newsletter.label}</span>
-				<h2>Get <span class="organic-text-secondary">25% Discount</span> on your first purchase</h2>
+				<h2>{themeContent.newsletter.titleLead} <span class="organic-text-secondary">{themeContent.newsletter.titleAccent}</span> {themeContent.newsletter.titleRest}</h2>
 				<p>{themeContent.newsletter.text}</p>
 			</div>
 			<form class="organic-newsletter-form" onsubmit={(e) => e.preventDefault()}>
-				<input type="email" placeholder="Enter your email address" />
+				<input type="email" placeholder={themeContent.newsletter.placeholder} />
 				<button type="submit">{themeContent.newsletter.cta}</button>
 			</form>
 		</div>
@@ -271,14 +288,15 @@
 	<div class="organic-container">
 		<div class="organic-app-inner">
 			<div class="organic-app-content">
-				<h2>Download Organic App</h2>
-				<p>Shop faster from your phone and get fresh grocery offers first.</p>
+				<h2>{appDownload?.title}</h2>
+				<p>{appDownload?.text}</p>
 				<div class="organic-app-buttons">
-					<img src="/organic/img-app-store.png" alt="Download on the App Store" />
-					<img src="/organic/img-google-play.png" alt="Get it on Google Play" />
+					{#each appDownload?.links ?? [] as link}
+						<a class="organic-app-link" href={link.href}>{link.label}</a>
+					{/each}
 				</div>
 			</div>
-			<img class="organic-app-phone" src="/organic/banner-onlineapp.png" alt="Organic mobile app" />
+			<img class="organic-app-phone" src={themeImage(appDownload?.image, 'organic-app')} alt={appDownload?.imageAlt} />
 		</div>
 	</div>
 </section>
@@ -288,9 +306,10 @@
 	<div class="organic-container">
 		<div class="organic-trust-grid">
 			{#each trustBadges as badge}
+{@const BadgeIcon = ICONS[badge.icon ?? "leaf"] ?? Leaf}
 				<div class="organic-trust-item">
 					<div class="organic-trust-icon">
-						<badge.icon class="h-6 w-6" />
+						<BadgeIcon class="h-6 w-6" />
 					</div>
 					<div>
 						<strong>{badge.title}</strong>
@@ -309,15 +328,34 @@
 	}
 
 	.organic-hero {
+		position: relative;
 		padding: 0;
 		background: #f8f8f8;
+		background-size: cover;
+		background-position: center;
+	}
+
+	/* The hero copy is dark on a light design. A real photograph behind it would swallow that
+	   copy, so a light wash sits over the left half where the text column is. */
+	.organic-hero::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to right, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.82) 34%, rgba(255, 255, 255, 0) 66%);
+		pointer-events: none;
+	}
+
+	.organic-hero > * {
+		position: relative;
 	}
 
 	.organic-hero-shell {
 		min-height: clamp(520px, 58vw, 760px);
 		display: flex;
 		align-items: center;
-		background: url('/organic/banner-1.jpg') center / cover no-repeat;
+		/* Artwork is optional and arrives as an inline background-image from theme content;
+		   the tint below is what shows when a store has not set one. */
+		background: hsl(var(--primary) / 0.12) center / cover no-repeat;
 	}
 
 	.organic-hero-inner {
@@ -761,17 +799,20 @@
 
 	.organic-promo-sale {
 		grid-area: 1 / 1 / 3 / 8;
-		background: url('/organic/banner-ad-1.jpg') center / cover no-repeat;
+		/* Light copy sits on this band, so it needs a dark base when no image is set. */
+		background: hsl(var(--secondary)) center / cover no-repeat;
 	}
 
 	.organic-promo-combo {
 		grid-area: 1 / 8 / 2 / 13;
-		background: url('/organic/banner-ad-2.jpg') center / cover no-repeat;
+		/* Light copy sits on this band, so it needs a dark base when no image is set. */
+		background: hsl(var(--secondary)) center / cover no-repeat;
 	}
 
 	.organic-promo-coupon {
 		grid-area: 2 / 8 / 3 / 13;
-		background: url('/organic/banner-ad-3.jpg') center / cover no-repeat;
+		/* Light copy sits on this band, so it needs a dark base when no image is set. */
+		background: hsl(var(--secondary)) center / cover no-repeat;
 	}
 
 	.organic-promo-card span {
@@ -813,7 +854,8 @@
 		min-height: 320px;
 		padding: clamp(32px, 6vw, 72px);
 		border-radius: 16px;
-		background: url('/organic/banner-newsletter.jpg') center / cover no-repeat;
+		/* Light copy sits on this band, so it needs a dark base when no image is set. */
+		background: hsl(var(--secondary)) center / cover no-repeat;
 	}
 
 	.organic-newsletter-content h2 {
@@ -903,9 +945,22 @@
 		gap: 12px;
 	}
 
-	.organic-app-buttons img {
-		width: auto;
+	/* Text CTAs, not third-party store badge artwork. */
+	.organic-app-link {
+		display: inline-flex;
+		align-items: center;
 		height: 42px;
+		padding: 0 20px;
+		border: 1px solid rgb(0 0 0 / 0.25);
+		border-radius: 999px;
+		color: inherit;
+		font-size: 14px;
+		font-weight: 600;
+		white-space: nowrap;
+	}
+
+	.organic-app-link:hover {
+		background: rgb(0 0 0 / 0.06);
 	}
 
 	.organic-app-phone {

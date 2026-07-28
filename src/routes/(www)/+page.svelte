@@ -14,6 +14,8 @@
 	import { timestampToAgo } from '$lib/core/utils/index.js'
 	import { resolveThemeContent } from '$lib/theme/index.js'
 	import { themeHomepages } from '$lib/theme/homepages.js'
+	import ThemeSections from '$lib/theme/ThemeSections.svelte'
+	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 
 	let { data } = $props()
 
@@ -41,11 +43,28 @@
 	// Hardcoded theme content, with the store's admin-provided themeContent (store.theme.content)
 	// merged over it section by section (falls back to the theme defaults for anything unset).
 	const themeContent = $derived(resolveThemeContent(activeTheme, data?.store))
-	const brandName = $derived(themeContent.brandName || data?.store?.name || 'Store')
+	// The store's own name wins; a theme's brandName is demo copy for previewing the theme.
+	const brandName = $derived(data?.store?.name || themeContent.brandName || 'Store')
 	const themeDescription = $derived(themeContent.description || page?.metaDescription || '')
 
 	const featuredCategories = $derived(homepageModule.featuredCategories || [])
 	const featuredProducts = $derived(homepageModule.featuredProducts || [])
+
+	// Section-driven themes ship their homepage as data (`themeLayout` from the API) and are
+	// rendered with the shared section library. Themes that still have a bespoke component fall
+	// back to it, so both kinds work side by side while themes are migrated.
+	const themeLayout = $derived(data?.store?.themeLayout)
+	const sectionContext = $derived({
+		content: themeContent,
+		brandName,
+		currencyCode: data?.store?.currency?.code,
+		aspectWidth,
+		aspectHeight,
+		featuredProducts,
+		featuredCategories,
+		loading: homepageModule.loading,
+		ProductCard
+	})
 	const filterButtons = $derived([
 		'All',
 		...featuredCategories
@@ -95,29 +114,36 @@
 	image={themeContent.seoImage || page?.logo || data?.store?.logo}
 />
 
-<svelte:component
-	this={ThemeHomepage}
-	{themeContent}
-	{brandName}
-	{themeDescription}
-	storeLogo={data?.store?.logo}
-	storeName={data?.store?.name}
-	storeDescription={data?.store?.description}
-	{aspectWidth}
-	{aspectHeight}
-	{featuredCategories}
-	{featuredProducts}
-	{filterButtons}
-	{homepageModule}
-	loading={homepageModule.loading}
-	desktopBanners={page?.desktopBanners}
-	mobileBanners={page?.mobileBanners}
-	currencyCode={data?.store?.currency?.code}
-/>
+{#if themeLayout?.sections?.length}
+	<ThemeSections layout={themeLayout} ctx={sectionContext} />
+{:else}
+	<svelte:component
+		this={ThemeHomepage}
+		{themeContent}
+		{brandName}
+		{themeDescription}
+		storeLogo={data?.store?.logo}
+		storeName={data?.store?.name}
+		storeDescription={data?.store?.description}
+		{aspectWidth}
+		{aspectHeight}
+		{featuredCategories}
+		{featuredProducts}
+		{filterButtons}
+		{homepageModule}
+		loading={homepageModule.loading}
+		desktopBanners={page?.desktopBanners}
+		mobileBanners={page?.mobileBanners}
+		pageSections={page?.sections}
+		currencyCode={data?.store?.currency?.code}
+	/>
+{/if}
 
-<!-- The default theme's editorial homepage (above) is self-contained, so the API-driven Slider/Blocks
-     addons are intentionally not rendered — they clashed with the editorial design and surfaced
-     misconfigured admin banner content. Admin homepage blocks remain editable in the admin panel. -->
+<!-- The theme owns the homepage design, so the admin `home` page record never replaces a section.
+     The editorial theme inherits two things from it and only when the merchant has filled them in:
+     the banner slider (into the hero) and the banner sections (as tile bands) — see
+     $lib/theme/default/page-inheritance.ts. Both are switchable per device on the admin Theme page.
+     The typed block designer (page.layouts) still has no storefront renderer. -->
 
 {#if homepageModule.showRecentOrderPopup}
 	<div transition:fly={{ x: 50, duration: 150 }} class="fixed bottom-20 right-4 z-50">

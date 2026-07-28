@@ -11,6 +11,12 @@
 	import { z } from 'zod'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
 	import { resolveEditorialForDevice } from '$lib/theme/homepage-content.js'
+	import {
+		resolveHeroSlides,
+		resolvePageBands,
+		type PageBanner,
+		type PageSection
+	} from './page-inheritance.js'
 
 	let {
 		themeContent,
@@ -20,7 +26,10 @@
 		aspectHeight,
 		featuredProducts,
 		featuredCategories,
-		loading = false
+		loading = false,
+		desktopBanners = [],
+		mobileBanners = [],
+		pageSections = []
 	}: {
 		themeContent: ThemeHomepageContent
 		brandName: string
@@ -31,6 +40,10 @@
 		featuredCategories: any[]
 		loading?: boolean
 		currencyCode?: string
+		/** Merchant content from the admin `home` page — see ./page-inheritance.ts. */
+		desktopBanners?: PageBanner[]
+		mobileBanners?: PageBanner[]
+		pageSections?: PageSection[]
 	} = $props()
 
 	// Per-device content (admin cascade mobile → tablet → desktop). SSR renders the mobile
@@ -86,6 +99,38 @@
 	const products = $derived(((sourcedProducts ?? featuredProducts) || []).slice(0, 8))
 
 	const assuranceIcons = { truck: Truck, returns: RotateCcw, shield: ShieldCheck, support: Headset }
+
+	// --- Home-page inheritance (admin Pages → this theme). Empty unless the merchant has
+	// curated banners/sections, so a store that hasn't touched Pages renders exactly as before.
+	const homePage = $derived({ desktopBanners, mobileBanners, sections: pageSections })
+	const heroSlides = $derived(
+		hidden.heroSlider ? [] : resolveHeroSlides(homePage, contentDevice)
+	)
+	const pageBands = $derived(hidden.pageSections ? [] : resolvePageBands(homePage, contentDevice))
+
+	// Hero slider: native scroll-snap so touch swiping is free; the dots and autoplay drive it
+	// with scrollTo and read the position back on scroll.
+	let heroTrack = $state<HTMLElement | null>(null)
+	let heroIndex = $state(0)
+	let heroPaused = $state(false)
+	const slideTo = (index: number) => {
+		if (!heroTrack) return
+		heroTrack.scrollTo({ left: heroTrack.clientWidth * index, behavior: 'smooth' })
+	}
+	const onHeroScroll = () => {
+		if (!heroTrack) return
+		heroIndex = Math.round(heroTrack.scrollLeft / Math.max(1, heroTrack.clientWidth))
+	}
+	$effect(() => {
+		if (heroSlides.length < 2 || heroPaused) return
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+		const timer = setInterval(() => {
+			if (!heroTrack) return
+			const width = Math.max(1, heroTrack.clientWidth)
+			slideTo((Math.round(heroTrack.scrollLeft / width) + 1) % heroSlides.length)
+		}, 6000)
+		return () => clearInterval(timer)
+	})
 
 	let inView = $state(false)
 	onMount(() => {
@@ -148,6 +193,53 @@
 
 {#if ed}
 	<div class="ed" class:is-in={inView}>
+		<!-- HOME PAGE SLIDER — the merchant's own banners, full-bleed above the hero. These are
+		     authored as wide strips (the admin asks for 1500x380 / 360x190), so they get their own
+		     band rather than the hero's portrait media slot, which would crop them to pieces. -->
+		{#if heroSlides.length}
+			<div
+				class="ed-slider"
+				role="group"
+				aria-roledescription="carousel"
+				aria-label="Featured banners"
+				onmouseenter={() => (heroPaused = true)}
+				onmouseleave={() => (heroPaused = false)}
+				onfocusin={() => (heroPaused = true)}
+				onfocusout={() => (heroPaused = false)}
+			>
+				<div class="ed-slider__track" bind:this={heroTrack} onscroll={onHeroScroll}>
+					{#each heroSlides as slide, i}
+						<svelte:element
+							this={slide.link ? 'a' : 'div'}
+							class="ed-slide"
+							href={slide.link || undefined}
+							aria-label={slide.title || undefined}
+						>
+							<img
+								src={slide.url}
+								alt={slide.title || 'Featured banner'}
+								loading={i === 0 ? 'eager' : 'lazy'}
+								fetchpriority={i === 0 ? 'high' : 'auto'}
+							/>
+						</svelte:element>
+					{/each}
+				</div>
+				{#if heroSlides.length > 1}
+					<div class="ed-slider__dots">
+						{#each heroSlides as _, i}
+							<button
+								type="button"
+								class="ed-dot"
+								aria-current={heroIndex === i}
+								aria-label="Go to slide {i + 1}"
+								onclick={() => slideTo(i)}
+							></button>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		{/if}
+
 		<!-- HERO -->
 		{#if !hidden.hero}
 		<section class="ed-wrap ed-hero">
@@ -170,7 +262,12 @@
 				{/if}
 			</div>
 			<div class="ed-hero__media">
-				<img src={ed.hero.image} alt={ed.hero.imageAlt} loading="eager" fetchpriority="high" />
+				<img
+					src={ed.hero.image}
+					alt={ed.hero.imageAlt}
+					loading={heroSlides.length ? 'lazy' : 'eager'}
+					fetchpriority={heroSlides.length ? 'auto' : 'high'}
+				/>
 			</div>
 		</section>
 		{/if}
@@ -261,6 +358,41 @@
 				{/if}
 			</div>
 		</section>
+		{/if}
+
+		<!-- HOME PAGE GRIDS — the merchant's own banner sections, in the theme's tile styling -->
+		{#if pageBands.length}
+			<section class="ed-wrap ed-section ed-bands">
+				{#each pageBands as band}
+					<div class="ed-band">
+						{#if band.title}
+							<header class="ed-head">
+								<h2 class="ed-display ed-head__title">{band.title}</h2>
+							</header>
+						{/if}
+						<div
+							class="ed-band__grid"
+							class:ed-band__grid--carousel={band.carousel}
+							style="--ed-band-cols: {band.columns}; --ed-band-aspect: {band.aspect}"
+						>
+							{#each band.items as item}
+								<svelte:element
+									this={item.link ? 'a' : 'div'}
+									class="ed-band__item"
+									href={item.link || undefined}
+								>
+									<div class="ed-band__media">
+										<img src={item.url} alt={item.title || band.title || 'Banner'} loading="lazy" />
+									</div>
+									{#if item.title}
+										<span class="ed-band__label">{item.title}</span>
+									{/if}
+								</svelte:element>
+							{/each}
+						</div>
+					</div>
+				{/each}
+			</section>
 		{/if}
 
 		<!-- EDITORIAL BANNER -->
@@ -425,6 +557,69 @@
 		display: block;
 	}
 
+	/* ---------- HOME PAGE SLIDER (merchant banners from the admin Home page) ---------- */
+	/* Full-bleed strip at the banner proportions the admin asks merchants to upload, so
+	   artwork with baked-in text survives instead of being cropped to the middle third. */
+	.ed-slider {
+		position: relative;
+		aspect-ratio: 1500 / 380;
+		background: #eae5dd;
+	}
+
+	.ed-slider__track {
+		display: flex;
+		height: 100%;
+		overflow-x: auto;
+		overscroll-behavior-x: contain;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	.ed-slider__track::-webkit-scrollbar {
+		display: none;
+	}
+
+	.ed-slide {
+		flex: 0 0 100%;
+		height: 100%;
+		scroll-snap-align: start;
+	}
+
+	.ed-slide img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.ed-slider__dots {
+		position: absolute;
+		inset: auto 0 16px;
+		display: flex;
+		justify-content: center;
+		gap: 8px;
+	}
+
+	.ed-dot {
+		width: 7px;
+		height: 7px;
+		padding: 0;
+		border: 0;
+		border-radius: 99px;
+		cursor: pointer;
+		background: rgb(255 255 255 / 0.6);
+		box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12);
+		transition:
+			width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+			background 0.35s ease;
+	}
+
+	.ed-dot[aria-current='true'] {
+		width: 22px;
+		background: #fff;
+	}
+
 	/* ---------- BUTTONS / LINKS ---------- */
 	.ed-btn {
 		display: inline-flex;
@@ -585,6 +780,68 @@
 	.ed-cat:hover :global(.ed-cat__icon) {
 		transform: translate(3px, -3px);
 		color: hsl(var(--primary));
+	}
+
+	/* ---------- HOME PAGE GRIDS (merchant sections from the admin Home page) ---------- */
+	.ed-bands {
+		display: grid;
+		gap: clamp(36px, 5vw, 64px);
+	}
+
+	.ed-band__grid {
+		display: grid;
+		grid-template-columns: repeat(var(--ed-band-cols, 2), minmax(0, 1fr));
+		gap: clamp(10px, 1.4vw, 18px);
+	}
+
+	/* Horizontal scroll row: the tiles keep their grid width so both layouts read alike. */
+	.ed-band__grid--carousel {
+		display: flex;
+		overflow-x: auto;
+		overscroll-behavior-x: contain;
+		scroll-snap-type: x proximity;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	.ed-band__grid--carousel::-webkit-scrollbar {
+		display: none;
+	}
+
+	.ed-band__grid--carousel .ed-band__item {
+		flex: 0 0 calc((100% - (var(--ed-band-cols, 2) - 1) * 14px) / var(--ed-band-cols, 2));
+		scroll-snap-align: start;
+	}
+
+	.ed-band__item {
+		display: block;
+		color: var(--ed-ink);
+	}
+
+	.ed-band__media {
+		overflow: hidden;
+		border-radius: var(--ed-radius);
+		aspect-ratio: var(--ed-band-aspect, 1 / 1);
+		background: #eae5dd;
+	}
+
+	.ed-band__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	a.ed-band__item:hover .ed-band__media img {
+		transform: scale(1.05);
+	}
+
+	.ed-band__label {
+		display: block;
+		margin-top: 12px;
+		font-size: 0.9rem;
+		font-weight: 600;
 	}
 
 	/* ---------- PRODUCTS ---------- */
@@ -868,6 +1125,10 @@
 			order: 1;
 			aspect-ratio: 16 / 11;
 		}
+		/* Mobile banners are uploaded at 360x190 — see the admin's Home page upload hints. */
+		.ed-slider {
+			aspect-ratio: 360 / 190;
+		}
 		.ed-cats {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
@@ -910,10 +1171,16 @@
 		}
 		.ed-cat__media img,
 		.ed-cat__placeholder,
+		.ed-band__media img,
+		.ed-dot,
 		.ed-btn,
 		.ed-news__form button,
 		.ed-link :global(.ed-link__icon) {
 			transition: none;
+		}
+		.ed-slider__track,
+		.ed-band__grid--carousel {
+			scroll-behavior: auto;
 		}
 	}
 </style>

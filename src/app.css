@@ -3,21 +3,14 @@
 @tailwind utilities;
 
 @layer base {
-	@font-face {
-		font-family: 'Queens';
-		src: url('/limelight/fonts/Queens_W-Regular.woff2') format('woff2');
-		font-weight: 400 700;
-		font-style: normal;
-		font-display: swap;
-	}
-
-	@font-face {
-		font-family: 'YsabeauInfant';
-		src: url('/limelight/fonts/YsabeauInfant-Regular.ttf') format('truetype');
-		font-weight: 400 700;
-		font-style: normal;
-		font-display: swap;
-	}
+	/*
+	 * The Lime theme names 'Queens' and 'YsabeauInfant' in its font stacks, but the licensed
+	 * font files were never added to static/lime/fonts/, so the @font-face rules that used to
+	 * live here 404'd on every page load of every theme. They are removed until the real files are
+	 * available; the stacks below fall back to serif / Inter in the meantime. To restore the
+	 * intended type, drop the licensed files into static/lime/fonts/ and re-add the two
+	 * @font-face blocks.
+	 */
 
 	:root {
 		--background: 0 0% 93.3%;
@@ -52,16 +45,16 @@
 		--sidebar-accent-foreground: 0 0% 0%;
 		--sidebar-primary-foreground: 0 0% 100%;
 
-		--sarab-red: #e8281a;
-		--sarab-red-dark: #c01e12;
-		--sarab-dark: #1a1a1a;
-		--sarab-cream: #fff8f0;
-		--sarab-cream2: #fef0dc;
-		--sarab-light: #f9f5f0;
-		--sarab-green: #2d6a4f;
-		--sarab-gold: #f6a623;
-		--sarab-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
-		--sarab-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.18);
+		--wine-red: #e8281a;
+		--wine-red-dark: #c01e12;
+		--wine-dark: #1a1a1a;
+		--wine-cream: #fff8f0;
+		--wine-cream2: #fef0dc;
+		--wine-light: #f9f5f0;
+		--wine-green: #2d6a4f;
+		--wine-gold: #f6a623;
+		--wine-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+		--wine-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.18);
 
 		--font-heading: 'Playfair Display', serif;
 		--font-body: 'Poppins', sans-serif;
@@ -90,14 +83,14 @@
 		--input: 214 32% 91%;
 		--ring: 222 47% 11%;
 		--radius: 8px;
-		--sarab-red: hsl(var(--primary));
-		--sarab-red-dark: #020617;
-		--sarab-dark: #111827;
-		--sarab-cream: #f8fafc;
-		--sarab-cream2: #eef2f7;
-		--sarab-light: #f8fafc;
-		--sarab-green: #047857;
-		--sarab-gold: #d97706;
+		--wine-red: hsl(var(--primary));
+		--wine-red-dark: #020617;
+		--wine-dark: #111827;
+		--wine-cream: #f8fafc;
+		--wine-cream2: #eef2f7;
+		--wine-light: #f8fafc;
+		--wine-green: #047857;
+		--wine-gold: #d97706;
 		/* Refined Editorial type system — applies wherever a default-theme component uses
 		   --font-heading / --font-body (nav, footer, product cards, PLP, PDP, homepage). */
 		--font-heading: 'Bodoni Moda', 'Times New Roman', serif;
@@ -115,7 +108,7 @@
 		--ed-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
 	}
 
-	[data-theme='sarab'] {
+	[data-theme='wine'] {
 		--background: 0 0% 93.3%;
 		--foreground: 0 0% 0%;
 		--primary: 4.1 81.7% 50.6%;
@@ -130,14 +123,14 @@
 		--input: 0 0% 93.3%;
 		--ring: 4.1 81.7% 50.6%;
 		--radius: 0px;
-		--sarab-red: #e8281a;
-		--sarab-red-dark: #c01e12;
-		--sarab-dark: #1a1a1a;
-		--sarab-cream: #fff8f0;
-		--sarab-cream2: #fef0dc;
-		--sarab-light: #f9f5f0;
-		--sarab-green: #2d6a4f;
-		--sarab-gold: #f6a623;
+		--wine-red: #e8281a;
+		--wine-red-dark: #c01e12;
+		--wine-dark: #1a1a1a;
+		--wine-cream: #fff8f0;
+		--wine-cream2: #fef0dc;
+		--wine-light: #f9f5f0;
+		--wine-green: #2d6a4f;
+		--wine-gold: #f6a623;
 		--font-heading: 'Playfair Display', serif;
 		--font-body: 'Poppins', sans-serif;
 		--font-primary: 'Poppins', sans-serif;
@@ -166,7 +159,7 @@
 		--heading-font: 'Inter', sans-serif;
 	}
 
-	[data-theme='limelight'] {
+	[data-theme='lime'] {
 		--background: 0 0% 100%;
 		--foreground: 317 100% 14%;
 		--primary: 317 100% 14%;
@@ -186,10 +179,10 @@
 		--font-heading: 'Queens', serif;
 		--font-body: 'YsabeauInfant', 'Inter', sans-serif;
 		--font-primary: 'YsabeauInfant', 'Inter', sans-serif;
-		--limelight-plum: #460032;
-		--limelight-wine: #6f1648;
-		--limelight-blush: #f5f5f5;
-		--limelight-line: #d9c6ba;
+		--lime-plum: #460032;
+		--lime-wine: #6f1648;
+		--lime-blush: #f5f5f5;
+		--lime-line: #d9c6ba;
 	}
 
 	[data-theme='noor'] {
@@ -237,7 +230,7 @@
 		font-family: var(--font-body);
 	}
 
-	body:has([data-theme='limelight']) {
+	body:has([data-theme='lime']) {
 		--font-heading: 'Queens', serif;
 		--font-body: 'YsabeauInfant', 'Inter', sans-serif;
 		--font-primary: 'YsabeauInfant', 'Inter', sans-serif;
@@ -334,43 +327,43 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Limelight theme — PLP / PDP page fidelity
+ * Lime theme — PLP / PDP page fidelity
  *
  * The shared listing and product-detail routes are already token-driven,
- * so under data-theme="limelight" they inherit plum primary, square
+ * so under data-theme="lime" they inherit plum primary, square
  * corners (--radius: 0) and serif headings for free. These rules add the
  * finer parts of the source visual contract that tokens alone don't cover:
  * REGULAR-weight serif headings (the source never uses bold), quiet plum
- * accents, and square media. Everything is scoped to the limelight theme
+ * accents, and square media. Everything is scoped to the lime theme
  * so the default store and other themes are completely untouched.
  * ------------------------------------------------------------------ */
-[data-theme='limelight'] h1,
-[data-theme='limelight'] h2,
-[data-theme='limelight'] h3,
-[data-theme='limelight'] h4,
-[data-theme='limelight'] h5,
-[data-theme='limelight'] h6 {
+[data-theme='lime'] h1,
+[data-theme='lime'] h2,
+[data-theme='lime'] h3,
+[data-theme='lime'] h4,
+[data-theme='lime'] h5,
+[data-theme='lime'] h6 {
 	font-weight: 400;
 	letter-spacing: 0.01em;
-	color: var(--limelight-plum, #460032);
+	color: var(--lime-plum, #460032);
 }
 
 /* PLP listing title + any shared page heading: regular-weight plum serif */
-[data-theme='limelight'] .page-heading {
+[data-theme='lime'] .page-heading {
 	font-family: var(--font-heading);
 	font-weight: 400;
 	letter-spacing: 0.01em;
-	color: var(--limelight-plum, #460032);
+	color: var(--lime-plum, #460032);
 }
 
 /* PDP: keep product imagery + thumbnails square, matching the source */
-[data-theme='limelight'] .page-width img {
+[data-theme='lime'] .page-width img {
 	border-radius: 0;
 }
 
 /* Quiet, un-bold price/labels in the plum tone across the catalogue */
-[data-theme='limelight'] [data-testid='product-card-selling-price'],
-[data-theme='limelight'] [data-testid='product-card-mrp'] {
+[data-theme='lime'] [data-testid='product-card-selling-price'],
+[data-theme='lime'] [data-testid='product-card-mrp'] {
 	font-weight: 400;
 }
 

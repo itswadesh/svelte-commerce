@@ -2,7 +2,7 @@
 	import type { Snippet } from 'svelte'
 
 	/**
-	 * Limelight section heading — regular-weight serif in plum, with an
+	 * Lime section heading — regular-weight serif in plum, with an
 	 * optional subheading. Mirrors the source "Shop by Category" treatment:
 	 * centered by default, 24px serif title, 16px body-tone subtitle.
 	 */
@@ -33,7 +33,7 @@
 <style>
 	.ll-heading-title {
 		margin: 0;
-		color: var(--limelight-plum, #460032);
+		color: var(--lime-plum, #460032);
 		font-family: var(--font-heading);
 		font-size: 24px;
 		font-weight: 400;

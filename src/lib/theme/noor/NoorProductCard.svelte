@@ -4,12 +4,18 @@
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/core/utils'
 
-	let { product, aspectRatio, hideCartControls = false }: any = $props()
+	let { product, aspectRatio, hideCartControls = false, themeContent }: any = $props()
+
+	// Store-editable microcopy; the literals are only the fallback when no content is passed.
+	const labels = $derived(themeContent?.labels ?? {})
 
 	const currencyCode = $derived(page?.data?.store?.currency?.code || '')
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
-	const title = $derived(product?.title || product?.name || 'Product')
-	const image = $derived(product?.thumbnail || product?.image_url || product?.image || '/noor/product-mk19.jpg')
+	const title = $derived(
+		product?.title || product?.name || labels.productFallbackTitle || 'Product'
+	)
+	// No stand-in product photo: a product without an image simply shows none.
+	const image = $derived(product?.thumbnail || product?.image_url || product?.image || '')
 	const discount = $derived(product?.mrp && product?.mrp > product?.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0)
 </script>
 
@@ -17,7 +23,9 @@
 	{#snippet content({ toggleWishlist, isWishlisted, addToCart })}
 		<article class="noor-card" data-testid="product-card-{product.id}">
 			<a class="noor-card-media" href="/products/{product.slug}" aria-label="View {title}">
-				<img src={image} alt={title} loading="lazy" />
+				{#if image}
+					<img src={image} alt={title} loading="lazy" />
+				{/if}
 				{#if discount > 0}
 					<span class="noor-sale">-{discount}%</span>
 				{/if}
@@ -26,7 +34,9 @@
 						type="button"
 						class="noor-wish"
 						class:is-active={isWishlisted}
-						aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+						aria-label={isWishlisted
+							? labels.removeFromWishlist || 'Remove from wishlist'
+							: labels.addToWishlist || 'Add to wishlist'}
 						onclick={(e) => {
 							e.preventDefault()
 							e.stopPropagation()
@@ -43,7 +53,7 @@
 					{#if product?.price}
 						{formatPrice(product.price, currencyCode)}
 					{:else}
-						Price on request
+						{labels.priceOnRequest || 'Price on request'}
 					{/if}
 					{#if product?.mrp && product.mrp > product.price}
 						<span>{formatPrice(product.mrp, currencyCode)}</span>
@@ -53,7 +63,7 @@
 			{#if !hideCartControls}
 				<button class="noor-add" type="button" onclick={() => addToCart(product)}>
 					<ShoppingBag class="h-4 w-4" />
-					Add to Cart
+					{labels.addToCart || 'Add to Cart'}
 				</button>
 			{/if}
 		</article>

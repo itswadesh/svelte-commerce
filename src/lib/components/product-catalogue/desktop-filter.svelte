@@ -417,7 +417,7 @@
 
 <style>
 	/* ---- Refined Editorial · desktop filter sidebar (default theme only) ----
-	   Every rule is gated to [data-theme='default']; sarab/organic/limelight/noor
+	   Every rule is gated to [data-theme='default']; wine/organic/lime/noor
 	   keep the original Tailwind styling. */
 	:global([data-theme='default']) .ed-df__panel {
 		font-family: var(--ed-body);

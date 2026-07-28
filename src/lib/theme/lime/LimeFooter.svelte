@@ -6,7 +6,7 @@
 
 	type ThemeFooter = NonNullable<ThemeHomepageContent['footer']>
 
-	let { footer, brandName = 'Store' }: { footer?: ThemeFooter; brandName?: string } = $props()
+	let { footer, brandName = '' }: { footer?: ThemeFooter; brandName?: string } = $props()
 
 	// Footer columns are open on desktop, tap-to-expand accordions on mobile.
 	// onMount (client-only, always in a valid context) sets up the media query;
@@ -23,13 +23,16 @@
 	})
 </script>
 
-<footer class="limelight-footer">
+<footer class="lime-footer">
 	{#if footer?.logo}
 		<img src={footer.logo} alt={footer.logoAlt || brandName} />
+	{:else if brandName}
+		<!-- No uploaded logo: the brand name carries the mark, same as the header. -->
+		<p class="lime-footer-wordmark">{brandName}</p>
 	{/if}
 
 	{#if footer?.assistance}
-		<div class="limelight-assistance">
+		<div class="lime-assistance">
 			<span>{footer.assistance.label}</span>
 			{#each footer.assistance.links as link}
 				<a href={link.href}>{link.label}</a>
@@ -37,10 +40,10 @@
 		</div>
 	{/if}
 
-	<div class="limelight-footer-grid">
+	<div class="lime-footer-grid">
 		{#each footer?.columns || [] as column}
-			<details class="limelight-footer-col" open={footerColsOpen}>
-				<summary><h3>{column.title}</h3><Plus class="limelight-foot-plus" /></summary>
+			<details class="lime-footer-col" open={footerColsOpen}>
+				<summary><h3>{column.title}</h3><Plus class="lime-foot-plus" /></summary>
 				{#each column.links || [] as link}
 					<a href={link.href}>{link.label}</a>
 				{/each}
@@ -52,14 +55,14 @@
 	</div>
 
 	{#if footer?.copyright}
-		<p class="limelight-copyright">{footer.copyright}</p>
+		<p class="lime-copyright">{footer.copyright}</p>
 	{/if}
 
-	<p class="limelight-version">v{version}</p>
+	<p class="lime-version">v{version}</p>
 </footer>
 
 <style>
-	.limelight-footer {
+	.lime-footer {
 		padding: 55px 40px 30px;
 		background: linear-gradient(127deg, #2a7b9b 0%, #806363 0%, #57033c 19%, #460032 100%);
 		color: #fff;
@@ -67,17 +70,25 @@
 		font-family: var(--font-body);
 	}
 
-	.limelight-footer a {
+	.lime-footer a {
 		color: inherit;
 	}
 
-	.limelight-footer > img {
+	.lime-footer > img {
 		width: 521px;
 		max-width: 80%;
 		margin: 0 auto 48px;
 	}
 
-	.limelight-assistance {
+	.lime-footer-wordmark {
+		margin: 0 auto 48px;
+		font-family: var(--font-heading);
+		font-size: 34px;
+		line-height: 1.1;
+		letter-spacing: 0.04em;
+	}
+
+	.lime-assistance {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -86,19 +97,19 @@
 		text-transform: uppercase;
 	}
 
-	.limelight-assistance span {
+	.lime-assistance span {
 		font-family: var(--font-heading);
 		font-size: 20px;
 	}
 
-	.limelight-assistance a {
+	.lime-assistance a {
 		min-width: 190px;
 		border: 1px solid rgb(255 255 255 / 0.9);
 		padding: 8px 18px;
 		font-size: 14px;
 	}
 
-	.limelight-footer-grid {
+	.lime-footer-grid {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 		width: min(1120px, 100%);
@@ -107,7 +118,7 @@
 		text-align: left;
 	}
 
-	.limelight-footer-grid h3 {
+	.lime-footer-grid h3 {
 		margin: 0 0 22px;
 		color: #fff;
 		font-family: var(--font-heading);
@@ -115,30 +126,30 @@
 		font-weight: 400;
 	}
 
-	.limelight-footer-col summary {
+	.lime-footer-col summary {
 		list-style: none;
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
 	}
 
-	.limelight-footer-col summary::-webkit-details-marker {
+	.lime-footer-col summary::-webkit-details-marker {
 		display: none;
 	}
 
-	.limelight-foot-plus {
+	.lime-foot-plus {
 		display: none;
 	}
 
 	@media (min-width: 901px) {
-		.limelight-footer-col summary {
+		.lime-footer-col summary {
 			pointer-events: none;
 			cursor: default;
 		}
 	}
 
-	.limelight-footer-grid a,
-	.limelight-footer-grid p {
+	.lime-footer-grid a,
+	.lime-footer-grid p {
 		display: block;
 		margin: 0 0 10px;
 		color: #fff;
@@ -146,13 +157,13 @@
 		line-height: 25px;
 	}
 
-	.limelight-copyright {
+	.lime-copyright {
 		margin: 60px 0 0;
 		color: #fff;
 		font-size: 13px;
 	}
 
-	.limelight-version {
+	.lime-version {
 		margin: 8px 0 0;
 		color: rgb(255 255 255 / 0.55);
 		font-size: 11px;
@@ -160,47 +171,47 @@
 	}
 
 	@media (max-width: 900px) {
-		.limelight-footer {
+		.lime-footer {
 			padding: 42px 24px 28px;
 		}
 
-		.limelight-assistance {
+		.lime-assistance {
 			flex-wrap: wrap;
 			gap: 12px;
 			margin-bottom: 36px;
 		}
 
-		.limelight-assistance span {
+		.lime-assistance span {
 			width: 100%;
 		}
 
-		.limelight-assistance a {
+		.lime-assistance a {
 			flex: 1;
 			min-width: 0;
 			text-align: center;
 		}
 
-		.limelight-footer-grid {
+		.lime-footer-grid {
 			grid-template-columns: 1fr;
 			gap: 0;
 			text-align: left;
 		}
 
-		.limelight-footer-col {
+		.lime-footer-col {
 			border-top: 1px solid rgb(255 255 255 / 0.22);
 		}
 
-		.limelight-footer-col summary {
+		.lime-footer-col summary {
 			align-items: center;
 			padding: 15px 0;
 			cursor: pointer;
 		}
 
-		.limelight-footer-col summary h3 {
+		.lime-footer-col summary h3 {
 			margin: 0;
 		}
 
-		.limelight-foot-plus {
+		.lime-foot-plus {
 			display: block;
 			width: 18px;
 			height: 18px;
@@ -209,17 +220,17 @@
 			transition: transform 0.2s ease;
 		}
 
-		.limelight-footer-col[open] .limelight-foot-plus {
+		.lime-footer-col[open] .lime-foot-plus {
 			transform: rotate(45deg);
 		}
 
-		.limelight-footer-col > a,
-		.limelight-footer-col > p {
+		.lime-footer-col > a,
+		.lime-footer-col > p {
 			margin: 0 0 12px;
 		}
 
-		.limelight-footer-col > a:last-child,
-		.limelight-footer-col > p:last-child {
+		.lime-footer-col > a:last-child,
+		.lime-footer-col > p:last-child {
 			margin-bottom: 16px;
 		}
 	}
