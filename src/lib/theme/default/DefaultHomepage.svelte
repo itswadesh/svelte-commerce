@@ -63,7 +63,7 @@
 					href: c?.slug ? `/${c.slug}` : c?.link || '/products',
 					image: c?.image || c?.thumbnail || c?.img || ''
 				}))
-			: ed?.categories.tiles || []
+			: [] || []
 	)
 
 	// Products section source (admin Theme page): 'featured' uses the featured feed passed in
