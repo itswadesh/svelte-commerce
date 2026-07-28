@@ -46,7 +46,10 @@ export interface HomePageRecord {
 export type ContentDevice = 'mobile' | 'tablet' | 'desktop'
 
 export interface HeroSlide {
+	/** Desktop artwork (1500x380). */
 	url: string
+	/** Mobile artwork (360x190); equal to `url` when the store only uploaded one set. */
+	mobileUrl: string
 	link: string
 	title: string
 }
@@ -78,20 +81,34 @@ export function bannerAspect(raw: unknown, fallback = '1 / 1'): string {
 }
 
 /**
- * The hero slider's slides for a device. Mobile prefers `mobileBanners`, everything else
- * `desktopBanners`; either falls back to the other list, because most stores fill in only one
- * and a hero with no image at all would be worse than a slightly-wrong crop.
+ * The hero slider's slides, each carrying BOTH artworks so the markup can hand the choice to
+ * the browser (`<picture>` + a media query) instead of picking in JS. That matters: picking by
+ * device in JS means SSR emits one set and hydration swaps to the other, so the browser
+ * downloads both — a phone would pay for the 1500px desktop banner it never shows.
+ *
+ * The two lists are paired by index off whichever is longer, and each side falls back to the
+ * other when a store uploaded only one set (most do) — a hero with no image at all would be
+ * worse than a slightly-wrong crop.
  */
-export function resolveHeroSlides(page: HomePageRecord | null | undefined, device: ContentDevice): HeroSlide[] {
+export function resolveHeroSlides(page: HomePageRecord | null | undefined): HeroSlide[] {
 	const mobile = (page?.mobileBanners ?? []).filter(hasUrl)
 	const desktop = (page?.desktopBanners ?? []).filter(hasUrl)
-	const preferred = device === 'mobile' ? mobile : desktop
-	const chosen = preferred.length ? preferred : device === 'mobile' ? desktop : mobile
-	return chosen.map((banner) => ({
-		url: banner.url,
-		link: banner.link?.trim() || '',
-		title: banner.title?.trim() || ''
-	}))
+	const count = Math.max(mobile.length, desktop.length)
+	const slides: HeroSlide[] = []
+	for (let i = 0; i < count; i++) {
+		const d = desktop[i]
+		const m = mobile[i]
+		const url = d?.url ?? m?.url
+		const mobileUrl = m?.url ?? d?.url
+		if (!url || !mobileUrl) continue
+		slides.push({
+			url,
+			mobileUrl,
+			link: d?.link?.trim() || m?.link?.trim() || '',
+			title: d?.title?.trim() || m?.title?.trim() || ''
+		})
+	}
+	return slides
 }
 
 /**
