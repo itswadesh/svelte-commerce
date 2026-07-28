@@ -37,6 +37,7 @@
 		featuredCategories,
 		loading = false,
 		desktopBanners = [],
+		tabletBanners = [],
 		mobileBanners = [],
 		pageSections = []
 	}: {
@@ -51,6 +52,7 @@
 		currencyCode?: string
 		/** Merchant content from the admin `home` page — see ./page-inheritance.ts. */
 		desktopBanners?: PageBanner[]
+		tabletBanners?: PageBanner[]
 		mobileBanners?: PageBanner[]
 		pageSections?: PageSection[]
 	} = $props()
@@ -111,7 +113,7 @@
 
 	// --- Home-page inheritance (admin Pages → this theme). Empty unless the merchant has
 	// curated banners/sections, so a store that hasn't touched Pages renders exactly as before.
-	const homePage = $derived({ desktopBanners, mobileBanners, sections: pageSections })
+	const homePage = $derived({ desktopBanners, tabletBanners, mobileBanners, sections: pageSections })
 	// Device-independent: each slide carries both artworks and <picture> picks per viewport,
 	// so this never re-resolves (and never double-downloads) when contentDevice changes.
 	const heroSlides = $derived(hidden.heroSlider ? [] : resolveHeroSlides(homePage))
@@ -286,10 +288,14 @@
 							aria-label={slide.title || undefined}
 						>
 							<picture>
+								<!-- Breakpoints match the .ed-slider aspect tiers below (and the admin's
+								     upload hints), so each device fetches only its own artwork. A tier is
+								     omitted when it resolved to the same file, to avoid a pointless source. -->
 								{#if slide.mobileUrl !== slide.url}
-									<!-- Matches the breakpoint where .ed-slider switches to the 360x190 strip,
-									     so phones fetch only the mobile artwork. -->
-									<source media="(max-width: 900px)" srcset={slide.mobileUrl} />
+									<source media="(max-width: 767px)" srcset={slide.mobileUrl} />
+								{/if}
+								{#if slide.tabletUrl !== slide.url}
+									<source media="(max-width: 1199px)" srcset={slide.tabletUrl} />
 								{/if}
 								<img
 									src={slide.url}
@@ -654,11 +660,35 @@
 
 	/* ---------- HOME PAGE SLIDER (merchant banners from the admin Home page) ---------- */
 	/* Full-bleed strip at the banner proportions the admin asks merchants to upload, so
-	   artwork with baked-in text survives instead of being cropped to the middle third. */
+	   artwork with baked-in text survives instead of being cropped to the middle third.
+	   The three tiers below mirror BANNER_SIZES and the <picture> breakpoints — change one
+	   and you must change all three. */
 	.ed-slider {
 		position: relative;
 		aspect-ratio: 1500 / 380;
 		background: #eae5dd;
+	}
+
+	/* Tablet artwork: 1024x320 */
+	@media (max-width: 1199px) {
+		.ed-slider {
+			aspect-ratio: 1024 / 320;
+		}
+	}
+
+	/* Mobile artwork: 360x190 */
+	@media (max-width: 767px) {
+		.ed-slider {
+			aspect-ratio: 360 / 190;
+		}
+	}
+
+	/* Arrows are pointer affordances: touch devices swipe the track natively, and on a phone
+	   they would just cover the artwork. */
+	@media (hover: none), (max-width: 767px) {
+		.ed-slider__arrow {
+			display: none;
+		}
 	}
 
 	.ed-slider__track {
@@ -1259,14 +1289,6 @@
 		.ed-hero__media {
 			order: 1;
 			aspect-ratio: 16 / 11;
-		}
-		/* Mobile banners are uploaded at 360x190 — see the admin's Home page upload hints. */
-		.ed-slider {
-			aspect-ratio: 360 / 190;
-		}
-		/* Touch swipes the track natively; arrows would just cover the artwork. */
-		.ed-slider__arrow {
-			display: none;
 		}
 		.ed-cats {
 			grid-template-columns: repeat(2, minmax(0, 1fr));

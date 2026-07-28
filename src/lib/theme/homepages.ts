@@ -31,6 +31,7 @@ export interface ThemeHomepageProps {
 	homepageModule: HomepageModule
 	loading?: boolean
 	desktopBanners?: Banner[]
+	tabletBanners?: Banner[]
 	mobileBanners?: Banner[]
 	/** The admin `home` page's banner sections — see ./default/page-inheritance.ts. */
 	pageSections?: PageSection[]
