@@ -13,7 +13,7 @@
 
 <!-- Editorial account dropdown for the default theme only (scoped via [data-theme='default']).
      The dropdown content renders in-place (bits-ui, no portal), so it stays under the app
-     shell's [data-theme] ancestor and these rules never touch sarab/organic. -->
+     shell's [data-theme] ancestor and these rules never touch wine/organic. -->
 <style>
 	:global([data-theme='default'] .ed-pd-trigger) {
 		color: var(--ed-ink);

@@ -5,17 +5,20 @@
 	import { LlImage, LlPrice, LlRating, LlButton } from './ui/index.js'
 
 	/**
-	 * Limelight product card.
+	 * Lime product card.
 	 *
 	 * Presentation only — all commerce behaviour (navigation, wishlist toggle,
 	 * add-to-cart, quantity) is delegated to the shared ProductCardRenderer so
 	 * this card stays in lock-step with the rest of the store's logic.
 	 *
-	 * Visual contract (from themes/limelight/DESIGN.md + the source demand grid):
+	 * Visual contract (from themes/lime/DESIGN.md + the source demand grid):
 	 * square blush imagery, centered regular-weight serif title in plum, quiet
 	 * price, thin line wishlist icon, square "Add to Bag" outline button.
 	 */
-	let { product, aspectRatio, hideCartControls = false }: any = $props()
+	let { product, aspectRatio, hideCartControls = false, themeContent }: any = $props()
+
+	// Store-editable microcopy; falls back to the theme's own wording when not supplied.
+	const labels = $derived(themeContent?.labels ?? {})
 
 	const currencyCode = $derived(page?.data?.store?.currency?.code || '')
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
@@ -40,7 +43,9 @@
 						type="button"
 						class="ll-card-wish"
 						class:is-active={isWishlisted}
-						aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+						aria-label={isWishlisted
+							? labels.removeFromWishlist || 'Remove from wishlist'
+							: labels.addToWishlist || 'Add to wishlist'}
 						onclick={(e) => {
 							e.preventDefault()
 							e.stopPropagation()
@@ -64,7 +69,9 @@
 
 			{#if !hideCartControls}
 				<div class="ll-card-actions">
-					<LlButton variant="outline" full onclick={() => addToCart(product)}>Add to Bag</LlButton>
+					<LlButton variant="outline" full onclick={() => addToCart(product)}>
+						{labels.addToBag || 'Add to Bag'}
+					</LlButton>
 				</div>
 			{/if}
 		</article>
@@ -77,7 +84,7 @@
 		display: flex;
 		flex-direction: column;
 		background: #fff;
-		color: var(--limelight-plum, #460032);
+		color: var(--lime-plum, #460032);
 	}
 
 	.ll-card-media {
@@ -108,11 +115,11 @@
 		width: 17px;
 		height: 17px;
 		stroke-width: 1.4;
-		color: var(--limelight-plum, #460032);
+		color: var(--lime-plum, #460032);
 	}
 
 	.ll-card-wish.is-active :global(.ll-card-wish-icon) {
-		fill: var(--limelight-plum, #460032);
+		fill: var(--lime-plum, #460032);
 	}
 
 	.ll-card-body {
@@ -124,7 +131,7 @@
 
 	.ll-card-title {
 		margin: 0;
-		color: var(--limelight-plum, #460032);
+		color: var(--lime-plum, #460032);
 		font-family: var(--font-heading);
 		font-size: 16px;
 		font-weight: 400;

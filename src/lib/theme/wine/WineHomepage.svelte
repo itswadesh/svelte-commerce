@@ -26,9 +26,11 @@
 		Utensils,
 		Zap
 	} from '@lucide/svelte'
+	import { untrack } from 'svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { formatPrice } from '$lib/core/utils/index.js'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
+	import { themeImage } from '../placeholder.js'
 
 	let {
 		themeContent,
@@ -50,17 +52,26 @@
 		currencyCode?: string
 	} = $props()
 
-	let cdH = $state('08')
-	let cdM = $state('45')
-	let cdS = $state('30')
+	const pad = (value: number) => String(Math.floor(value)).padStart(2, '0')
+
+	const countdown = $derived(themeContent.special.countdown)
+	const countdownDuration = $derived(themeContent.special.countdown?.durationSeconds ?? 0)
+	const reservationForm = $derived(themeContent.reservation.form)
+	const contactForm = $derived(themeContent.contact.form)
+
+	const seedSeconds = untrack(() => themeContent.special.countdown?.durationSeconds ?? 0)
+
+	let cdH = $state(pad(seedSeconds / 3600))
+	let cdM = $state(pad((seedSeconds % 3600) / 60))
+	let cdS = $state(pad(seedSeconds % 60))
 
 	$effect(() => {
-		const end = Date.now() + (8 * 3600 + 45 * 60 + 30) * 1000
+		const end = Date.now() + countdownDuration * 1000
 		const tick = setInterval(() => {
 			const diff = Math.max(0, end - Date.now())
-			cdH = String(Math.floor(diff / 3600000)).padStart(2, '0')
-			cdM = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0')
-			cdS = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0')
+			cdH = pad(diff / 3600000)
+			cdM = pad((diff % 3600000) / 60000)
+			cdS = pad((diff % 60000) / 1000)
 			if (diff === 0) clearInterval(tick)
 		}, 1000)
 
@@ -68,11 +79,11 @@
 	})
 </script>
 
-<section class="sarab-hero" id="hero">
+<section class="wine-hero" id="hero">
 	<div class="hero-shape hero-shape-one"></div>
 	<div class="hero-shape hero-shape-two"></div>
 	<div class="hero-bg-text">{themeContent.hero.bgText}</div>
-	<div class="sarab-container hero-grid">
+	<div class="wine-container hero-grid">
 		<div class="hero-copy">
 			<div class="hero-badge">
 				<span class="hero-badge-icon"><Star class="h-4 w-4" /></span>
@@ -83,7 +94,7 @@
 				{themeContent.hero.text}
 			</p>
 			<div class="hero-actions">
-				<a href="/products" class="sarab-button primary">
+				<a href="/products" class="wine-button primary">
 					<Utensils class="h-4 w-4" />
 					{themeContent.hero.primaryCta}
 				</a>
@@ -102,7 +113,7 @@
 
 		<div class="hero-plate" aria-label={themeContent.hero.imageAlt}>
 			<div class="plate-ring">
-				<img src={themeContent.hero.image} alt={themeContent.hero.imageAlt} />
+				<img src={themeImage(themeContent.hero.image, 'wine-hero')} alt={themeContent.hero.imageAlt} />
 			</div>
 			{#each themeContent.hero.floatingCards as card, index}
 				<div class="floating-card fc{index + 1}">
@@ -128,8 +139,8 @@
 	</div>
 </div>
 
-<section class="sarab-section category-section" id="category">
-	<div class="sarab-container">
+<section class="wine-section category-section" id="category">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.category.label}</span>
 			<h2>{themeContent.category.titleLead} <span>{themeContent.category.titleAccent}</span></h2>
@@ -148,10 +159,10 @@
 				{#each featuredCategories.slice(0, 6) as cat}
 					<a href="/categories/{cat.slug || cat._id}" class="category-card">
 						{#if cat.image || cat.img}
-							<img src={cat.image || cat.img} alt={cat.name} />
+							<img src={themeImage(cat.image || cat.img, cat.name)} alt={cat.name} />
 						{/if}
 						<strong>{cat.name}</strong>
-						<span>View items</span>
+						<span>{themeContent.category.cardCta}</span>
 					</a>
 				{/each}
 			</div>
@@ -164,13 +175,13 @@
 	</div>
 </section>
 
-<section class="sarab-section" id="about">
-	<div class="sarab-container story-grid">
+<section class="wine-section" id="about">
+	<div class="wine-container story-grid">
 		<div class="story-visual">
 			<div class="story-photo">
-				<img src={themeContent.about.primaryImage} alt={themeContent.about.primaryImageAlt} />
+				<img src={themeImage(themeContent.about.primaryImage, 'wine-about-1')} alt={themeContent.about.primaryImageAlt} />
 			</div>
-			<img class="story-photo-small" src={themeContent.about.secondaryImage} alt={themeContent.about.secondaryImageAlt} />
+			<img class="story-photo-small" src={themeImage(themeContent.about.secondaryImage, 'wine-about-2')} alt={themeContent.about.secondaryImageAlt} />
 			<div class="experience-badge"><strong>{themeContent.about.experienceValue}</strong><span>{themeContent.about.experienceText}</span></div>
 		</div>
 		<div>
@@ -192,7 +203,7 @@
 					</div>
 				{/each}
 			</div>
-			<a href="/products" class="sarab-button primary">
+			<a href="/products" class="wine-button primary">
 				<BookOpen class="h-4 w-4" />
 				{themeContent.about.cta}
 			</a>
@@ -200,8 +211,8 @@
 	</div>
 </section>
 
-<section class="sarab-section menu-section" id="menu">
-	<div class="sarab-container">
+<section class="wine-section menu-section" id="menu">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.menu.label}</span>
 			<h2>{themeContent.menu.titleLead} <span>{themeContent.menu.titleAccent}</span></h2>
@@ -233,14 +244,14 @@
 								alt={product.name || product.title}
 							/>
 							{#if product.mrp && product.price && product.mrp > product.price}
-								<em>{Math.round(((product.mrp - product.price) / product.mrp) * 100)}% off</em>
+								<em>{Math.round(((product.mrp - product.price) / product.mrp) * 100)}{themeContent.menu.discountSuffix}</em>
 							{/if}
 							<span class="menu-heart"><Heart class="h-4 w-4" /></span>
 						</div>
 						<div class="menu-content">
-							<p>{product.category?.name || 'Menu'}</p>
+							<p>{product.category?.name || themeContent.menu.categoryFallback}</p>
 							<h3>{product.name || product.title}</h3>
-							<span class="menu-desc">Freshly prepared with house sauces and premium ingredients.</span>
+							<span class="menu-desc">{themeContent.menu.cardDescription}</span>
 							<div>
 								<strong>{formatPrice(product.price, currencyCode || '')}</strong>
 								{#if product.rating}<small><Star class="h-3 w-3 fill-current" /> ({product.rating})</small>{/if}
@@ -258,7 +269,7 @@
 		{/if}
 
 		<div class="center-action">
-			<a href="/products" class="sarab-button primary">
+			<a href="/products" class="wine-button primary">
 				<Utensils class="h-4 w-4" />
 				{themeContent.menu.cta}
 			</a>
@@ -268,7 +279,7 @@
 
 <section class="special-section" id="special">
 	<div class="special-bg"></div>
-	<div class="sarab-container offer-grid">
+	<div class="wine-container offer-grid">
 		<div>
 			<span class="special-tag">{themeContent.special.label}</span>
 			<h2>{themeContent.special.titleLead} <span>{themeContent.special.titleAccent}</span></h2>
@@ -276,25 +287,25 @@
 				{themeContent.special.text}
 			</p>
 			<div class="countdown" aria-label="Offer countdown">
-				<div><strong>{cdH}</strong><span>Hours</span></div>
-				<div><strong>{cdM}</strong><span>Minutes</span></div>
-				<div><strong>{cdS}</strong><span>Seconds</span></div>
+				<div><strong>{cdH}</strong><span>{countdown?.hoursLabel}</span></div>
+				<div><strong>{cdM}</strong><span>{countdown?.minutesLabel}</span></div>
+				<div><strong>{cdS}</strong><span>{countdown?.secondsLabel}</span></div>
 			</div>
-			<a href="/products" class="sarab-button primary">
+			<a href="/products" class="wine-button primary">
 				<ShoppingCart class="h-4 w-4" />
 				{themeContent.special.cta}
 			</a>
 		</div>
 		<div class="special-image">
 			<div class="special-glow"></div>
-			<img src={themeContent.special.image} alt={themeContent.special.imageAlt} />
+			<img src={themeImage(themeContent.special.image, 'wine-offer')} alt={themeContent.special.imageAlt} />
 			<div class="price-badge"><span>{themeContent.special.oldPrice}</span><strong>{themeContent.special.price}</strong></div>
 		</div>
 	</div>
 </section>
 
-<section class="sarab-section gallery-section" id="gallery">
-	<div class="sarab-container">
+<section class="wine-section gallery-section" id="gallery">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.gallery.label}</span>
 			<h2>{themeContent.gallery.titleLead} <span>{themeContent.gallery.titleAccent}</span></h2>
@@ -303,7 +314,7 @@
 		<div class="gallery-grid">
 			{#each themeContent.gallery.items as item}
 				<a href="/products" class="gallery-item">
-					<img src={item.image} alt={item.title} />
+					<img src={themeImage(item.image, item.title)} alt={item.title} />
 					<span><Search class="h-4 w-4" /> {item.title}</span>
 				</a>
 			{/each}
@@ -311,8 +322,8 @@
 	</div>
 </section>
 
-<section class="sarab-section history-section" id="history">
-	<div class="sarab-container">
+<section class="wine-section history-section" id="history">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.history.label}</span>
 			<h2>{themeContent.history.titleLead} <span>{themeContent.history.titleAccent}</span></h2>
@@ -330,8 +341,8 @@
 	</div>
 </section>
 
-<section class="sarab-section chefs-section" id="chefs">
-	<div class="sarab-container">
+<section class="wine-section chefs-section" id="chefs">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.chefs.label}</span>
 			<h2>{themeContent.chefs.titleLead} <span>{themeContent.chefs.titleAccent}</span></h2>
@@ -340,7 +351,7 @@
 		<div class="chef-grid">
 			{#each themeContent.chefs.items as chef}
 				<div class="chef-card">
-					<img src={chef.image} alt={chef.name} />
+					<img src={themeImage(chef.image, chef.name)} alt={chef.name} />
 					<div>
 						<h3>{chef.name}</h3>
 						<span>{chef.role}</span>
@@ -353,7 +364,7 @@
 
 <section class="hours-section" id="hours">
 	<div class="hours-bg"></div>
-	<div class="sarab-container">
+	<div class="wine-container">
 		<div class="section-heading hours-heading">
 			<span class="script-label">{themeContent.hours.label}</span>
 			<h2>{themeContent.hours.titleLead} <span>{themeContent.hours.titleAccent}</span></h2>
@@ -376,16 +387,16 @@
 			</div>
 			<div class="hours-card">
 				<h3><MapPin class="h-4 w-4" />{themeContent.hours.locationTitle}</h3>
-				<div class="hours-row"><span><MapPin class="h-4 w-4" />Address</span><strong>{themeContent.hours.address}</strong></div>
-				<div class="hours-row"><span><Phone class="h-4 w-4" />Phone</span><strong>{themeContent.hours.phone}</strong></div>
-				<div class="hours-row"><span><Mail class="h-4 w-4" />Email</span><strong>{themeContent.hours.email}</strong></div>
+				<div class="hours-row"><span><MapPin class="h-4 w-4" />{themeContent.hours.addressLabel}</span><strong>{themeContent.hours.address}</strong></div>
+				<div class="hours-row"><span><Phone class="h-4 w-4" />{themeContent.hours.phoneLabel}</span><strong>{themeContent.hours.phone}</strong></div>
+				<div class="hours-row"><span><Mail class="h-4 w-4" />{themeContent.hours.emailLabel}</span><strong>{themeContent.hours.email}</strong></div>
 			</div>
 		</div>
 	</div>
 </section>
 
-<section class="sarab-section testimonials-section" id="testimonials">
-	<div class="sarab-container">
+<section class="wine-section testimonials-section" id="testimonials">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.testimonials.label}</span>
 			<h2>{themeContent.testimonials.titleLead} <span>{themeContent.testimonials.titleAccent}</span></h2>
@@ -398,7 +409,7 @@
 					<div class="stars"><Star class="h-4 w-4 fill-current" /><Star class="h-4 w-4 fill-current" /><Star class="h-4 w-4 fill-current" /><Star class="h-4 w-4 fill-current" /><Star class="h-4 w-4 fill-current" /></div>
 					<p>{testimonial.text}</p>
 					<div class="testimonial-author">
-						<img src={testimonial.image} alt={testimonial.name} />
+						<img src={themeImage(testimonial.image, testimonial.name)} alt={testimonial.name} />
 						<div><strong>{testimonial.name}</strong><span>{testimonial.role}</span></div>
 					</div>
 				</div>
@@ -407,8 +418,8 @@
 	</div>
 </section>
 
-<section class="sarab-section reservation-section" id="reservation">
-	<div class="sarab-container">
+<section class="wine-section reservation-section" id="reservation">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.reservation.label}</span>
 			<h2>{themeContent.reservation.titleLead} <span>{themeContent.reservation.titleAccent}</span></h2>
@@ -425,21 +436,21 @@
 				<div><MapPin class="h-5 w-5" /><span><strong>{themeContent.reservation.locationLabel}</strong>{themeContent.reservation.location}</span></div>
 			</div>
 			<form class="source-form" onsubmit={(event) => event.preventDefault()}>
-				<label>Full Name *<input type="text" placeholder="John Doe" /></label>
-				<label>Phone Number *<input type="tel" placeholder="+1 (800) 000-0000" /></label>
-				<label>Email Address *<input type="email" placeholder="you@email.com" /></label>
-				<label>Number of Guests *<select><option>2 People</option><option>3 - 4 People</option><option>5 - 6 People</option></select></label>
-				<label>Date *<input type="date" /></label>
-				<label>Time *<select><option>07:00 PM</option><option>08:00 PM</option><option>09:00 PM</option></select></label>
-				<label class="full">Special Requests<textarea rows="3" placeholder="Allergies, dietary needs, special occasions..."></textarea></label>
-				<button type="submit" class="sarab-button primary full"><CalendarCheck class="h-4 w-4" />{themeContent.reservation.cta}</button>
+				<label>{reservationForm?.nameLabel}<input type="text" placeholder={reservationForm?.namePlaceholder} /></label>
+				<label>{reservationForm?.phoneLabel}<input type="tel" placeholder={reservationForm?.phonePlaceholder} /></label>
+				<label>{reservationForm?.emailLabel}<input type="email" placeholder={reservationForm?.emailPlaceholder} /></label>
+				<label>{reservationForm?.guestsLabel}<select>{#each reservationForm?.guestsOptions ?? [] as guests}<option>{guests}</option>{/each}</select></label>
+				<label>{reservationForm?.dateLabel}<input type="date" /></label>
+				<label>{reservationForm?.timeLabel}<select>{#each reservationForm?.timeOptions ?? [] as time}<option>{time}</option>{/each}</select></label>
+				<label class="full">{reservationForm?.requestsLabel}<textarea rows="3" placeholder={reservationForm?.requestsPlaceholder}></textarea></label>
+				<button type="submit" class="wine-button primary full"><CalendarCheck class="h-4 w-4" />{themeContent.reservation.cta}</button>
 			</form>
 		</div>
 	</div>
 </section>
 
-<section class="sarab-section blog-section" id="blog">
-	<div class="sarab-container">
+<section class="wine-section blog-section" id="blog">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.blog.label}</span>
 			<h2>{themeContent.blog.titleLead} <span>{themeContent.blog.titleAccent}</span></h2>
@@ -449,14 +460,19 @@
 			{#each themeContent.blog.items as blog}
 				<article class="blog-card">
 					<div class="blog-image">
-						<img src={blog.image} alt={blog.title} />
+						<img src={themeImage(blog.image, blog.title)} alt={blog.title} />
 						<div><strong>{blog.date}</strong><span>{blog.month}</span></div>
 					</div>
 					<div class="blog-body">
 						<span>{blog.tag}</span>
 						<h3><a href="/blog">{blog.title}</a></h3>
-						<p><span><ChefHat class="h-3 w-3" />Chef Marcus</span><span><Mail class="h-3 w-3" />24 Comments</span></p>
-						<a href="/blog">Read More <ArrowRight class="h-4 w-4" /></a>
+						{#if blog.author || blog.comments}
+							<p>
+								{#if blog.author}<span><ChefHat class="h-3 w-3" />{blog.author}</span>{/if}
+								{#if blog.comments}<span><Mail class="h-3 w-3" />{blog.comments}</span>{/if}
+							</p>
+						{/if}
+						<a href="/blog">{themeContent.blog.readMore} <ArrowRight class="h-4 w-4" /></a>
 					</div>
 				</article>
 			{/each}
@@ -466,12 +482,12 @@
 
 <section class="newsletter" id="newsletter">
 	<div class="newsletter-bg"></div>
-	<div class="sarab-container newsletter-inner">
+	<div class="wine-container newsletter-inner">
 		<span class="script-label light">{themeContent.newsletter.label}</span>
 		<h2>{themeContent.newsletter.titleLead} <span>{themeContent.newsletter.titleAccent}</span></h2>
 		<p>{themeContent.newsletter.text}</p>
 		<form onsubmit={(event) => event.preventDefault()}>
-			<input type="email" placeholder="Enter your email address..." aria-label="Email address" />
+			<input type="email" placeholder={themeContent.newsletter.placeholder} aria-label="Email address" />
 			<button type="submit">
 				<Send class="h-4 w-4" />
 				{themeContent.newsletter.cta}
@@ -481,8 +497,8 @@
 	</div>
 </section>
 
-<section class="sarab-section contact-section" id="contact-section">
-	<div class="sarab-container">
+<section class="wine-section contact-section" id="contact-section">
+	<div class="wine-container">
 		<div class="section-heading">
 			<span class="script-label">{themeContent.contact.label}</span>
 			<h2>{themeContent.contact.titleLead} <span>{themeContent.contact.titleAccent}</span></h2>
@@ -499,12 +515,12 @@
 				<div><Clock class="h-5 w-5" /><span><strong>{themeContent.contact.hoursLabel}</strong>{themeContent.contact.hours}</span></div>
 			</div>
 			<form class="source-form" onsubmit={(event) => event.preventDefault()}>
-				<label>Your Name *<input type="text" placeholder="John Doe" /></label>
-				<label>Email Address *<input type="email" placeholder="you@email.com" /></label>
-				<label>Phone Number<input type="tel" placeholder="+1 (800) 000-0000" /></label>
-				<label>Subject *<select><option>General Inquiry</option><option>Catering & Events</option><option>Feedback</option></select></label>
-				<label class="full">Message *<textarea rows="5" placeholder="Write your message here..."></textarea></label>
-				<button type="submit" class="sarab-button primary"><Send class="h-4 w-4" />{themeContent.contact.cta}</button>
+				<label>{contactForm?.nameLabel}<input type="text" placeholder={contactForm?.namePlaceholder} /></label>
+				<label>{contactForm?.emailLabel}<input type="email" placeholder={contactForm?.emailPlaceholder} /></label>
+				<label>{contactForm?.phoneLabel}<input type="tel" placeholder={contactForm?.phonePlaceholder} /></label>
+				<label>{contactForm?.subjectLabel}<select>{#each contactForm?.subjectOptions ?? [] as subject}<option>{subject}</option>{/each}</select></label>
+				<label class="full">{contactForm?.messageLabel}<textarea rows="5" placeholder={contactForm?.messagePlaceholder}></textarea></label>
+				<button type="submit" class="wine-button primary"><Send class="h-4 w-4" />{themeContent.contact.cta}</button>
 			</form>
 		</div>
 	</div>
@@ -536,19 +552,19 @@
 		line-height: 1.6;
 	}
 
-	.sarab-container {
+	.wine-container {
 		width: min(1180px, calc(100% - 32px));
 		margin: 0 auto;
 	}
 
-	.sarab-hero {
+	.wine-hero {
 		position: relative;
 		min-height: 92vh;
 		display: flex;
 		align-items: center;
 		overflow: hidden;
-		background: var(--sarab-cream);
-		color: var(--sarab-dark);
+		background: var(--wine-cream);
+		color: var(--wine-dark);
 	}
 
 	.hero-bg-text {
@@ -589,7 +605,7 @@
 		animation: hero-float 10s ease-in-out infinite reverse;
 	}
 
-	.sarab-hero > .sarab-container {
+	.wine-hero > .wine-container {
 		position: relative;
 		z-index: 1;
 	}
@@ -609,7 +625,7 @@
 
 	.eyebrow {
 		margin-bottom: 14px;
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-size: 0.73rem;
 		font-weight: 700;
 		letter-spacing: 0.26em;
@@ -629,7 +645,7 @@
 
 	.hero-copy h1 {
 		max-width: 680px;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-family: var(--font-heading);
 		font-size: clamp(2.7rem, 6vw, 4.8rem);
 		font-weight: 900;
@@ -641,7 +657,7 @@
 		position: relative;
 		z-index: 0;
 		display: inline-block;
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.hero-copy h1 span::before {
@@ -673,12 +689,12 @@
 		height: 30px;
 		place-items: center;
 		border-radius: 50%;
-		background: linear-gradient(135deg, var(--sarab-red), var(--sarab-gold));
+		background: linear-gradient(135deg, var(--wine-red), var(--wine-gold));
 		color: #ffffff;
 	}
 
 	.hero-badge span:last-child {
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-size: 0.76rem;
 		font-weight: 600;
 	}
@@ -699,7 +715,7 @@
 		margin-top: 32px;
 	}
 
-	.sarab-button {
+	.wine-button {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -718,17 +734,17 @@
 			background 180ms ease;
 	}
 
-	.sarab-button:hover {
+	.wine-button:hover {
 		transform: translateY(-2px);
 	}
 
-	.sarab-button.primary {
-		background: linear-gradient(135deg, var(--sarab-red), var(--sarab-red-dark));
+	.wine-button.primary {
+		background: linear-gradient(135deg, var(--wine-red), var(--wine-red-dark));
 		color: #ffffff;
 		box-shadow: 0 8px 24px rgba(232, 40, 26, 0.35);
 	}
 
-	.sarab-button.primary:hover {
+	.wine-button.primary:hover {
 		box-shadow: 0 14px 34px rgba(232, 40, 26, 0.45);
 	}
 
@@ -737,7 +753,7 @@
 		align-items: center;
 		gap: 12px;
 		padding: 10px 16px;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-size: 0.9rem;
 		font-weight: 600;
 		transition:
@@ -752,7 +768,7 @@
 		place-items: center;
 		border-radius: 50%;
 		background: #ffffff;
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 		transition:
 			background 180ms ease,
@@ -761,12 +777,12 @@
 	}
 
 	.story-button:hover {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.story-button:hover span {
 		transform: scale(1.1);
-		background: var(--sarab-red);
+		background: var(--wine-red);
 		color: #ffffff;
 	}
 
@@ -785,7 +801,7 @@
 
 	.hero-stats strong,
 	.countdown strong {
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-family: var(--font-heading);
 		font-size: 1.9rem;
 		font-weight: 900;
@@ -793,7 +809,7 @@
 	}
 
 	.hero-stats em {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-style: normal;
 	}
 
@@ -842,7 +858,7 @@
 		font-family: var(--font-heading);
 		font-size: clamp(6rem, 18vw, 10rem);
 		font-weight: 900;
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.floating-card {
@@ -852,10 +868,10 @@
 		gap: 9px;
 		min-width: 138px;
 		background: #ffffff;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		padding: 10px 15px;
 		border-radius: 11px;
-		box-shadow: var(--sarab-shadow);
+		box-shadow: var(--wine-shadow);
 	}
 
 	.floating-card.fc1 {
@@ -900,29 +916,29 @@
 
 	.floating-card .floating-icon.r {
 		background: rgba(232, 40, 26, 0.11);
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.floating-card .floating-icon.y {
 		background: rgba(246, 166, 35, 0.14);
-		color: var(--sarab-gold);
+		color: var(--wine-gold);
 	}
 
 	.floating-card .floating-icon.g {
 		background: rgba(45, 106, 79, 0.11);
-		color: var(--sarab-green);
+		color: var(--wine-green);
 	}
 
 	.floating-card strong {
 		display: block;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-size: 0.92rem;
 		line-height: 1;
 	}
 
 	.ticker {
 		overflow: hidden;
-		background: var(--sarab-red);
+		background: var(--wine-red);
 		padding: 16px 0;
 	}
 
@@ -945,13 +961,13 @@
 		white-space: nowrap;
 	}
 
-	.sarab-section {
+	.wine-section {
 		padding: clamp(72px, 9vw, 112px) 0;
 		background: #ffffff;
 	}
 
-	.sarab-section.warm {
-		background: var(--sarab-light);
+	.wine-section.warm {
+		background: var(--wine-light);
 	}
 
 	.section-heading {
@@ -963,7 +979,7 @@
 	.section-heading h2,
 	.story-grid h2,
 	.newsletter h2 {
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-family: var(--font-heading);
 		font-size: clamp(1.9rem, 4vw, 2.7rem);
 		font-weight: 900;
@@ -989,7 +1005,7 @@
 	.menu-card {
 		overflow: hidden;
 		background: #ffffff;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 		transition:
 			transform 180ms ease,
@@ -999,7 +1015,7 @@
 	.category-tile:hover,
 	.menu-card:hover {
 		transform: translateY(-4px);
-		box-shadow: var(--sarab-shadow);
+		box-shadow: var(--wine-shadow);
 	}
 
 	.category-tile {
@@ -1039,7 +1055,7 @@
 	}
 
 	.category-tile.fallback {
-		background: var(--sarab-dark);
+		background: var(--wine-dark);
 	}
 
 	.category-tile.fallback strong {
@@ -1059,8 +1075,8 @@
 		width: min(100%, 420px);
 		height: 440px;
 		overflow: hidden;
-		background: var(--sarab-dark);
-		box-shadow: var(--sarab-shadow-lg);
+		background: var(--wine-dark);
+		box-shadow: var(--wine-shadow-lg);
 	}
 
 	.story-photo img,
@@ -1077,7 +1093,7 @@
 		width: 180px;
 		height: 180px;
 		border: 10px solid #ffffff;
-		box-shadow: var(--sarab-shadow-lg);
+		box-shadow: var(--wine-shadow-lg);
 	}
 
 	.experience-badge {
@@ -1090,10 +1106,10 @@
 		place-items: center;
 		align-content: center;
 		gap: 8px;
-		background: var(--sarab-red);
+		background: var(--wine-red);
 		color: #ffffff;
 		text-align: center;
-		box-shadow: var(--sarab-shadow-lg);
+		box-shadow: var(--wine-shadow-lg);
 	}
 
 	.experience-badge strong {
@@ -1132,22 +1148,22 @@
 
 	.feature-icon.r {
 		background: rgba(232, 40, 26, 0.11);
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.feature-icon.y {
 		background: rgba(246, 166, 35, 0.14);
-		color: var(--sarab-gold);
+		color: var(--wine-gold);
 	}
 
 	.feature-icon.g {
 		background: rgba(45, 106, 79, 0.11);
-		color: var(--sarab-green);
+		color: var(--wine-green);
 	}
 
 	.feature-list strong {
 		display: block;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-size: 1rem;
 	}
 
@@ -1165,7 +1181,7 @@
 	.menu-image {
 		position: relative;
 		overflow: hidden;
-		background: var(--sarab-cream);
+		background: var(--wine-cream);
 		aspect-ratio: 1;
 	}
 
@@ -1185,7 +1201,7 @@
 		position: absolute;
 		left: 12px;
 		top: 12px;
-		background: var(--sarab-red);
+		background: var(--wine-red);
 		color: #ffffff;
 		padding: 6px 9px;
 		font-size: 0.7rem;
@@ -1195,7 +1211,7 @@
 	}
 
 	.menu-image.placeholder {
-		background: var(--sarab-cream);
+		background: var(--wine-cream);
 	}
 
 	.menu-image.placeholder img {
@@ -1216,12 +1232,12 @@
 	}
 
 	.menu-content p {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.menu-content h3 {
 		min-height: 2.5em;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-size: 1.05rem;
 		line-height: 1.25;
 	}
@@ -1234,7 +1250,7 @@
 	}
 
 	.menu-content strong {
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-size: 1.08rem;
 	}
 
@@ -1253,7 +1269,7 @@
 		padding: clamp(72px, 9vw, 112px) 0;
 		background:
 			radial-gradient(circle at 75% 40%, rgba(232, 40, 26, 0.18), transparent 34%),
-			var(--sarab-dark);
+			var(--wine-dark);
 		color: #ffffff;
 	}
 
@@ -1286,14 +1302,14 @@
 	}
 
 	.countdown strong {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.offer-price {
 		position: relative;
 		overflow: hidden;
 		min-height: 320px;
-		background: var(--sarab-dark);
+		background: var(--wine-dark);
 		border: 1px solid rgba(255, 255, 255, 0.12);
 		text-align: center;
 	}
@@ -1340,8 +1356,8 @@
 		max-width: 720px;
 		margin: 0 auto;
 		padding: clamp(28px, 5vw, 48px);
-		background: var(--sarab-light);
-		box-shadow: var(--sarab-shadow);
+		background: var(--wine-light);
+		box-shadow: var(--wine-shadow);
 	}
 
 	.testimonial-card p {
@@ -1356,7 +1372,7 @@
 
 	.testimonial-card strong {
 		display: block;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 	}
 
 	.testimonial-dots {
@@ -1377,11 +1393,11 @@
 
 	.testimonial-dots button.active {
 		width: 30px;
-		background: var(--sarab-red);
+		background: var(--wine-red);
 	}
 
 	.newsletter {
-		background: var(--sarab-red);
+		background: var(--wine-red);
 		text-align: center;
 	}
 
@@ -1399,7 +1415,7 @@
 		max-width: 620px;
 		margin: 30px auto 0;
 		background: #ffffff;
-		box-shadow: var(--sarab-shadow-lg);
+		box-shadow: var(--wine-shadow-lg);
 	}
 
 	.newsletter input {
@@ -1407,7 +1423,7 @@
 		flex: 1;
 		border: 0;
 		padding: 18px 22px;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		outline: none;
 	}
 
@@ -1417,7 +1433,7 @@
 		justify-content: center;
 		gap: 9px;
 		border: 0;
-		background: var(--sarab-dark);
+		background: var(--wine-dark);
 		color: #ffffff;
 		padding: 0 26px;
 		font-size: 0.82rem;
@@ -1429,7 +1445,7 @@
 	.script-label {
 		display: block;
 		margin-bottom: 4px;
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-family: 'Dancing Script', cursive;
 		font-size: 1.35rem;
 		letter-spacing: 0;
@@ -1445,7 +1461,7 @@
 	.special-section h2 span,
 	.hours-section h2 span,
 	.newsletter h2 span {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.section-line {
@@ -1453,7 +1469,7 @@
 		height: 4px;
 		margin: 0 auto 12px;
 		border-radius: 4px;
-		background: linear-gradient(90deg, var(--sarab-red), var(--sarab-gold));
+		background: linear-gradient(90deg, var(--wine-red), var(--wine-gold));
 	}
 
 	.section-line.left {
@@ -1461,7 +1477,7 @@
 	}
 
 	.category-section {
-		background: var(--sarab-cream);
+		background: var(--wine-cream);
 	}
 
 	.category-card {
@@ -1471,7 +1487,7 @@
 		border-radius: 15px;
 		background: #ffffff;
 		box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		text-align: center;
 		transition:
 			transform 240ms ease,
@@ -1482,7 +1498,7 @@
 	.category-card:hover,
 	.category-card.active {
 		transform: translateY(-7px);
-		border-color: var(--sarab-red);
+		border-color: var(--wine-red);
 		box-shadow: 0 14px 38px rgba(232, 40, 26, 0.14);
 	}
 
@@ -1502,7 +1518,7 @@
 	.category-card strong {
 		display: block;
 		margin-bottom: 3px;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-size: 0.86rem;
 		font-weight: 600;
 	}
@@ -1561,14 +1577,14 @@
 
 	.filter-row button.active,
 	.filter-row button:hover {
-		border-color: var(--sarab-red);
-		background: var(--sarab-red);
+		border-color: var(--wine-red);
+		background: var(--wine-red);
 		color: #ffffff;
 		box-shadow: 0 5px 18px rgba(232, 40, 26, 0.24);
 	}
 
 	.menu-section {
-		background: var(--sarab-light);
+		background: var(--wine-light);
 	}
 
 	.menu-grid {
@@ -1589,7 +1605,7 @@
 	.menu-image {
 		height: 215px;
 		aspect-ratio: auto;
-		background: var(--sarab-cream2);
+		background: var(--wine-cream2);
 	}
 
 	.menu-image > span.menu-heart {
@@ -1612,19 +1628,19 @@
 		align-items: center;
 		gap: 4px;
 		border-radius: 7px;
-		background: var(--sarab-green);
+		background: var(--wine-green);
 		padding: 3px 11px;
 		font-size: 0.7rem;
 		font-weight: 700;
 	}
 
 	.menu-image > em.hot {
-		background: var(--sarab-gold);
-		color: var(--sarab-dark);
+		background: var(--wine-gold);
+		color: var(--wine-dark);
 	}
 
 	.menu-content p {
-		color: var(--sarab-gold);
+		color: var(--wine-gold);
 		font-size: 0.7rem;
 		letter-spacing: 1px;
 	}
@@ -1650,7 +1666,7 @@
 	}
 
 	.menu-content strong {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-family: var(--font-heading);
 		font-size: 1.25rem;
 		font-weight: 800;
@@ -1668,7 +1684,7 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 4px;
-		color: var(--sarab-gold);
+		color: var(--wine-gold);
 	}
 
 	.menu-content b {
@@ -1677,7 +1693,7 @@
 		height: 36px;
 		place-items: center;
 		border-radius: 50%;
-		background: linear-gradient(135deg, var(--sarab-red), var(--sarab-red-dark));
+		background: linear-gradient(135deg, var(--wine-red), var(--wine-red-dark));
 		color: #ffffff;
 		box-shadow: 0 4px 11px rgba(232, 40, 26, 0.28);
 	}
@@ -1698,7 +1714,7 @@
 		background-size: 40px 40px;
 	}
 
-	.special-section .sarab-container {
+	.special-section .wine-container {
 		position: relative;
 		z-index: 1;
 	}
@@ -1708,8 +1724,8 @@
 		margin-bottom: 14px;
 		padding: 4px 15px;
 		border-radius: 6px;
-		background: var(--sarab-gold);
-		color: var(--sarab-dark);
+		background: var(--wine-gold);
+		color: var(--wine-dark);
 		font-size: 0.76rem;
 		font-weight: 700;
 		letter-spacing: 2px;
@@ -1779,7 +1795,7 @@
 		place-items: center;
 		align-content: center;
 		border-radius: 50%;
-		background: var(--sarab-red);
+		background: var(--wine-red);
 		box-shadow: 0 8px 24px rgba(232, 40, 26, 0.5);
 		color: #ffffff;
 	}
@@ -1797,7 +1813,7 @@
 	.gallery-section,
 	.blog-section,
 	.reservation-section {
-		background: var(--sarab-light);
+		background: var(--wine-light);
 	}
 
 	.gallery-grid {
@@ -1847,7 +1863,7 @@
 	}
 
 	.history-section {
-		background: var(--sarab-cream);
+		background: var(--wine-cream);
 	}
 
 	.timeline {
@@ -1865,7 +1881,7 @@
 		bottom: 0;
 		left: 50%;
 		width: 2px;
-		background: linear-gradient(to bottom, var(--sarab-red), var(--sarab-gold));
+		background: linear-gradient(to bottom, var(--wine-red), var(--wine-gold));
 	}
 
 	.timeline-item {
@@ -1893,14 +1909,14 @@
 		width: 18px;
 		height: 18px;
 		margin: auto;
-		border: 4px solid var(--sarab-cream);
+		border: 4px solid var(--wine-cream);
 		border-radius: 50%;
-		background: var(--sarab-red);
-		box-shadow: 0 0 0 2px var(--sarab-gold);
+		background: var(--wine-red);
+		box-shadow: 0 0 0 2px var(--wine-gold);
 	}
 
 	.timeline-item strong {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-family: var(--font-heading);
 		font-size: 2.4rem;
 	}
@@ -1939,7 +1955,7 @@
 	.blog-card:hover,
 	.testimonial-card:hover {
 		transform: translateY(-7px);
-		box-shadow: var(--sarab-shadow-lg);
+		box-shadow: var(--wine-shadow-lg);
 	}
 
 	.chef-card img {
@@ -1958,7 +1974,7 @@
 	}
 
 	.chef-card span {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-size: 0.78rem;
 		font-weight: 600;
 	}
@@ -1967,7 +1983,7 @@
 		position: relative;
 		overflow: hidden;
 		padding: clamp(72px, 9vw, 112px) 0;
-		background: linear-gradient(135deg, var(--sarab-green), #1a4a35);
+		background: linear-gradient(135deg, var(--wine-green), #1a4a35);
 		color: #ffffff;
 	}
 
@@ -1984,7 +2000,7 @@
 		);
 	}
 
-	.hours-section > .sarab-container {
+	.hours-section > .wine-container {
 		position: relative;
 		z-index: 1;
 	}
@@ -2009,7 +2025,7 @@
 	}
 
 	.hours-section h2 span {
-		color: var(--sarab-gold);
+		color: var(--wine-gold);
 	}
 
 	.hours-card {
@@ -2035,7 +2051,7 @@
 
 	.hours-card h3 svg,
 	.hours-row svg {
-		color: var(--sarab-gold);
+		color: var(--wine-gold);
 	}
 
 	.hours-row {
@@ -2090,7 +2106,7 @@
 		min-height: 100%;
 		padding: 28px;
 		border-radius: 18px;
-		background: var(--sarab-red);
+		background: var(--wine-red);
 		box-shadow: 0 18px 48px rgba(232, 40, 26, 0.4);
 		text-align: center;
 	}
@@ -2122,7 +2138,7 @@
 		border-radius: 50px;
 		background: #ffffff;
 		padding: 0 28px;
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-size: 0.88rem;
 		font-weight: 700;
 		transition: transform 180ms ease, box-shadow 180ms ease;
@@ -2157,7 +2173,7 @@
 		display: flex;
 		gap: 3px;
 		margin-bottom: 12px;
-		color: var(--sarab-gold);
+		color: var(--wine-gold);
 	}
 
 	.testimonial-author {
@@ -2170,7 +2186,7 @@
 	.testimonial-author img {
 		width: 46px;
 		height: 46px;
-		border: 3px solid var(--sarab-red);
+		border: 3px solid var(--wine-red);
 		border-radius: 50%;
 		object-fit: cover;
 	}
@@ -2186,7 +2202,7 @@
 		height: 100%;
 		padding: 36px;
 		border-radius: 18px;
-		background: var(--sarab-dark);
+		background: var(--wine-dark);
 		color: #ffffff;
 	}
 
@@ -2206,7 +2222,7 @@
 		align-items: center;
 		gap: 13px;
 		margin-bottom: 16px;
-		color: var(--sarab-red);
+		color: var(--wine-red);
 	}
 
 	.contact-panel div > svg {
@@ -2244,7 +2260,7 @@
 	.source-form label {
 		display: grid;
 		gap: 5px;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		font-size: 0.83rem;
 		font-weight: 600;
 	}
@@ -2260,7 +2276,7 @@
 		border: 2px solid #eeeeee;
 		border-radius: 9px;
 		background: #ffffff;
-		color: var(--sarab-dark);
+		color: var(--wine-dark);
 		padding: 11px 15px;
 		font-family: var(--font-body);
 		font-size: 0.88rem;
@@ -2271,7 +2287,7 @@
 	.source-form input:focus,
 	.source-form select:focus,
 	.source-form textarea:focus {
-		border-color: var(--sarab-red);
+		border-color: var(--wine-red);
 	}
 
 	.blog-grid {
@@ -2302,7 +2318,7 @@
 		display: grid;
 		padding: 5px 11px;
 		border-radius: 9px;
-		background: var(--sarab-red);
+		background: var(--wine-red);
 		color: #ffffff;
 		text-align: center;
 		line-height: 1.2;
@@ -2323,7 +2339,7 @@
 	}
 
 	.blog-body > span {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-size: 0.7rem;
 		font-weight: 600;
 		letter-spacing: 0.8px;
@@ -2352,7 +2368,7 @@
 	}
 
 	.blog-body a {
-		color: var(--sarab-red);
+		color: var(--wine-red);
 		font-size: 0.8rem;
 		font-weight: 600;
 	}
@@ -2361,7 +2377,7 @@
 		position: relative;
 		overflow: hidden;
 		padding: 80px 0;
-		background: linear-gradient(135deg, var(--sarab-red), #8b0000);
+		background: linear-gradient(135deg, var(--wine-red), #8b0000);
 	}
 
 	.newsletter-bg {
@@ -2396,8 +2412,8 @@
 	.newsletter button {
 		min-height: 50px;
 		border-radius: 50px;
-		background: var(--sarab-gold);
-		color: var(--sarab-dark);
+		background: var(--wine-gold);
+		color: var(--wine-dark);
 		font-size: 0.9rem;
 		font-weight: 700;
 		letter-spacing: 0;
@@ -2465,7 +2481,7 @@
 	}
 
 	@media (max-width: 640px) {
-		.sarab-hero {
+		.wine-hero {
 			min-height: auto;
 			padding: 72px 0;
 		}

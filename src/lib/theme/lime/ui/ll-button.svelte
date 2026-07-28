@@ -3,7 +3,7 @@
 	import { Loader2 } from '@lucide/svelte'
 
 	/**
-	 * Limelight button — square (no radius), uppercase, thin outline.
+	 * Lime button — square (no radius), uppercase, thin outline.
 	 * `filled` = plum background / white text; `outline` = plum text on white
 	 * with a 1px current-color border, matching the source CTA buttons.
 	 * Shows an inline spinner while `loading`, per the project's async-button rule.
@@ -65,7 +65,7 @@
 		gap: 8px;
 		min-width: 118px;
 		padding: 11px 22px;
-		border: 1px solid var(--limelight-plum, #460032);
+		border: 1px solid var(--lime-plum, #460032);
 		border-radius: 0;
 		font-family: var(--font-body);
 		font-size: 12px;
@@ -81,22 +81,22 @@
 	}
 
 	.ll-btn--filled {
-		background: var(--limelight-plum, #460032);
+		background: var(--lime-plum, #460032);
 		color: #fff;
 	}
 
 	.ll-btn--filled:hover {
-		background: var(--limelight-wine, #6f1648);
-		border-color: var(--limelight-wine, #6f1648);
+		background: var(--lime-wine, #6f1648);
+		border-color: var(--lime-wine, #6f1648);
 	}
 
 	.ll-btn--outline {
 		background: #fff;
-		color: var(--limelight-plum, #460032);
+		color: var(--lime-plum, #460032);
 	}
 
 	.ll-btn--outline:hover {
-		background: var(--limelight-plum, #460032);
+		background: var(--lime-plum, #460032);
 		color: #fff;
 	}
 

@@ -31,7 +31,7 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { onDestroy, onMount } from 'svelte'
 	import NoorNav from '$lib/theme/noor/NoorNav.svelte'
-	import LimelightNav from '$lib/theme/limelight/LimelightNav.svelte'
+	import LimeNav from '$lib/theme/lime/LimeNav.svelte'
 	import { resolveThemeContent } from '$lib/theme/index.js'
 
 	const wishlistState = getWishlistState()
@@ -99,7 +99,8 @@
 	// Admin-editable announcement bar (theme content). Fills the hello-bar slot unless the
 	// hello-bar plugin is active AND actually has content (an active-but-empty plugin should
 	// not suppress it), so the two never stack.
-	const themeHeader = $derived(resolveThemeContent(activeThemeName, page.data?.store)?.header)
+	const themeContent = $derived(resolveThemeContent(activeThemeName, page.data?.store))
+	const themeHeader = $derived(themeContent?.header)
 	const themeAnnouncement = $derived(
 		themeHeader?.hideAnnouncement === true ? '' : themeHeader?.announcement || ''
 	)
@@ -123,10 +124,10 @@
 
 <svelte:window bind:scrollY={navModule.scrollY} />
 
-{#if activeThemeName === 'limelight'}
-	<LimelightNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} pathname={page.url.pathname} />
+{#if activeThemeName === 'lime'}
+	<LimeNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} {themeContent} pathname={page.url.pathname} />
 {:else if activeThemeName === 'noor'}
-	<NoorNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} pathname={page.url.pathname} />
+	<NoorNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} {themeContent} pathname={page.url.pathname} />
 {:else}
 	<header
 		class:ed={activeThemeName === 'default'}
@@ -319,9 +320,7 @@
 			<!-- Header -->
 			<div class="ed-drawer-head flex items-center justify-between border-b border-gray-100 px-5 py-4">
 				<a href="/" class="flex items-center gap-2" onclick={() => (navModule.openSidebar = false)}>
-					{#if activeThemeName === 'noor'}
-						<img src="/noor/logo.png" class="h-8 object-contain" alt="Noor" />
-					{:else if page?.data?.store?.logo}
+					{#if page?.data?.store?.logo}
 						<img src={page?.data?.store?.logo} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
 						<span class="text-base font-black uppercase tracking-wider text-black">
@@ -550,7 +549,7 @@
 	/* ============================================================
 	   Refined Editorial header + drawer — default theme only.
 	   `.ed` is added via class:ed only when activeThemeName === 'default',
-	   so sarab/organic keep their existing look untouched.
+	   so wine/organic keep their existing look untouched.
 	   ============================================================ */
 	header.ed {
 		background: var(--ed-surface);

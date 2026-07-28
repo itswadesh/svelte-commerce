@@ -11,6 +11,7 @@
 		wishlistState,
 		userState,
 		storeData,
+		themeContent,
 		pathname = ''
 	}: {
 		navModule: any
@@ -18,22 +19,28 @@
 		wishlistState?: any
 		userState?: any
 		storeData?: any
+		themeContent?: any
 		pathname?: string
 	} = $props()
 
-	const limelightNavItems = ['Rings', 'Earrings', 'Pendants', 'Bracelets', 'Solitaire', 'Necklaces', 'New', 'Everyday Shine', 'Navarambh', 'More Jewellery']
+	// Header chrome is store-editable theme content; the literals below are only the
+	// fallback for a store whose theme content has not been resolved yet.
+	const navLinks = $derived(themeContent?.nav?.links ?? [])
+	const storeCtaLabel = $derived(themeContent?.nav?.ctaLabel ?? 'Find a Store')
+	const storeCtaHref = $derived(themeContent?.nav?.ctaHref ?? '/store-locator')
+	const brandName = $derived(storeData?.name || themeContent?.brandName || 'Store')
 </script>
 
-<section class="limelight-topbar">
-	<a class="limelight-find-store" href="/store-locator">
+<section class="lime-topbar">
+	<a class="lime-find-store" href={storeCtaHref}>
 		<MapPin class="h-4 w-4" />
-		<span>Find a Store</span>
+		<span>{storeCtaLabel}</span>
 	</a>
 </section>
 
-<header class="limelight-header shadow-xs">
+<header class="lime-header shadow-xs">
 	<button
-		class="limelight-mobile-trigger"
+		class="lime-mobile-trigger"
 		onclick={() => {
 			navModule.openSidebar = true
 		}}
@@ -42,17 +49,21 @@
 		<Menu class="h-5 w-5" />
 	</button>
 
-	<a class="limelight-logo" href="/">
-		<img src="/limelight/logo.png" alt={storeData?.name || 'Limelight Diamonds'} />
+	<a class="lime-logo" href="/">
+		{#if storeData?.logo}
+			<img src={storeData.logo} alt={brandName} />
+		{:else}
+			<span class="lime-wordmark">{brandName}</span>
+		{/if}
 	</a>
 
-	<nav class="limelight-nav" aria-label="Main navigation">
-		{#each limelightNavItems as item}
-			<a href="/search?q={encodeURIComponent(item)}">{item}</a>
+	<nav class="lime-nav" aria-label="Main navigation">
+		{#each navLinks as item}
+			<a href={item.href}>{item.label}</a>
 		{/each}
 	</nav>
 
-	<div class="limelight-actions">
+	<div class="lime-actions">
 		<MsSearch />
 
 		{#if wishlistPlugin?.active}
@@ -70,7 +81,7 @@
 			</div>
 		{/if}
 
-		<div class="limelight-account flex items-center">
+		<div class="lime-account flex items-center">
 			{#if userState?.user?.role}
 				<ProfileDropdown onSignOut={navModule.handleSignOut} />
 			{:else}
@@ -93,7 +104,7 @@
 </header>
 
 <style>
-	.limelight-topbar {
+	.lime-topbar {
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
@@ -105,34 +116,34 @@
 		font-family: var(--font-body);
 	}
 
-	.limelight-header a {
+	.lime-header a {
 		color: inherit;
 	}
 
-	.limelight-find-store {
+	.lime-find-store {
 		display: inline-flex;
 		align-items: center;
 		gap: 7px;
 		padding: 7px 16px;
 		border-radius: 999px;
-		background: var(--limelight-plum, #460032);
+		background: var(--lime-plum, #460032);
 		color: #fff;
 		font-size: 14px;
 		line-height: 1;
 		white-space: nowrap;
 	}
 
-	.limelight-find-store:hover {
-		background: var(--limelight-wine, #6f1648);
+	.lime-find-store:hover {
+		background: var(--lime-wine, #6f1648);
 	}
 
-	.limelight-find-store :global(svg) {
+	.lime-find-store :global(svg) {
 		width: 15px;
 		height: 15px;
 		stroke-width: 1.75;
 	}
 
-	.limelight-header {
+	.lime-header {
 		position: sticky;
 		top: 0;
 		z-index: 20;
@@ -142,17 +153,31 @@
 		height: 82px;
 		padding: 12px 40px;
 		background: #fff;
-		color: var(--limelight-plum, #460032);
+		color: var(--lime-plum, #460032);
 		font-family: var(--font-body);
 	}
 
-	.limelight-logo img {
+	.lime-logo img {
 		width: 200px;
 		height: auto;
 		display: block;
 	}
 
-	.limelight-nav {
+	/* Shown when the store has not uploaded a logo. */
+	.lime-wordmark {
+		display: block;
+		max-width: 200px;
+		color: var(--lime-plum, #460032);
+		font-family: var(--font-heading);
+		font-size: 26px;
+		line-height: 1.1;
+		letter-spacing: 0.02em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.lime-nav {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -165,68 +190,73 @@
 		white-space: nowrap;
 	}
 
-	.limelight-actions {
+	.lime-actions {
 		display: flex;
 		justify-content: flex-end;
 		gap: 17px;
 		align-items: center;
 	}
 
-	.limelight-actions :global(svg),
-	.limelight-mobile-trigger :global(svg) {
+	.lime-actions :global(svg),
+	.lime-mobile-trigger :global(svg) {
 		width: 18px;
 		height: 18px;
 		stroke-width: 1.5;
 	}
 
-	.limelight-mobile-trigger {
+	.lime-mobile-trigger {
 		display: none;
 	}
 
 	@media (max-width: 1200px) {
-		.limelight-header {
+		.lime-header {
 			grid-template-columns: 170px minmax(0, 1fr) 132px;
 			padding: 12px 24px;
 		}
 
-		.limelight-logo img {
+		.lime-logo img {
 			width: 170px;
 		}
 
-		.limelight-nav {
+		.lime-wordmark {
+			max-width: 170px;
+			font-size: 22px;
+		}
+
+		.lime-nav {
 			gap: 12px;
 			font-size: 11px;
 		}
 	}
 
 	@media (max-width: 900px) {
-		.limelight-topbar {
+		.lime-topbar {
 			height: auto;
 			padding: 6px 14px;
 			font-size: 12px;
 		}
 
-		.limelight-find-store {
+		.lime-find-store {
 			padding: 6px 12px;
 			font-size: 12px;
 		}
 
-		.limelight-find-store :global(svg) {
+		.lime-find-store :global(svg) {
 			width: 13px;
 			height: 13px;
 		}
 
-		.limelight-account {
+		.lime-account {
 			display: none;
 		}
 
-		.limelight-header {
+		.lime-header {
 			grid-template-columns: 1fr auto 1fr;
 			height: 52px;
 			padding: 8px 14px;
 		}
 
-		.limelight-mobile-trigger {
+		.lime-mobile-trigger {
 			display: flex;
 			justify-self: start;
 			background: transparent;
@@ -235,19 +265,24 @@
 			cursor: pointer;
 		}
 
-		.limelight-logo {
+		.lime-logo {
 			justify-self: center;
 		}
 
-		.limelight-logo img {
+		.lime-logo img {
 			width: 126px;
 		}
 
-		.limelight-nav {
+		.lime-wordmark {
+			max-width: 126px;
+			font-size: 18px;
+		}
+
+		.lime-nav {
 			display: none;
 		}
 
-		.limelight-actions {
+		.lime-actions {
 			justify-self: end;
 			gap: 12px;
 		}

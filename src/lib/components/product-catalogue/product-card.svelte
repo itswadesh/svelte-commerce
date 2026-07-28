@@ -10,7 +10,7 @@
 
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
-	import LimelightProductCard from '$lib/theme/limelight/LimelightProductCard.svelte'
+	import LimeProductCard from '$lib/theme/lime/LimeProductCard.svelte'
 	import NoorProductCard from '$lib/theme/noor/NoorProductCard.svelte'
 	import DefaultProductCard from '$lib/theme/default/DefaultProductCard.svelte'
 
@@ -19,7 +19,7 @@
 	let { product, aspectRatio, hideVariations = true, hideCartControls = true, priority = false }: any = $props()
 
 	// Theme-specific product card. Guarded so the default store is unaffected;
-	// only the limelight theme swaps in its bespoke presentation (logic reused
+	// only the lime theme swaps in its bespoke presentation (logic reused
 	// via the same ProductCardRenderer inside the themed card).
 	const activeTheme = $derived(page?.data?.theme?.name || 'default')
 
@@ -39,8 +39,8 @@
 	})
 </script>
 
-{#if activeTheme === 'limelight'}
-	<LimelightProductCard {product} {aspectRatio} {hideCartControls} />
+{#if activeTheme === 'lime'}
+	<LimeProductCard {product} {aspectRatio} {hideCartControls} />
 {:else if activeTheme === 'noor'}
 	<NoorProductCard {product} {aspectRatio} {hideCartControls} />
 {:else if activeTheme === 'default'}

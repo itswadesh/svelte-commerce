@@ -31,6 +31,17 @@
 
 	const themeFontsUrl = $derived(getThemeFontsUrl(data?.theme?.name || 'default'))
 
+	// Themes built on the section library keep their look in the API and ship it on the store
+	// payload. Inlining it here means the theme's CSS is already in the SSR head — no extra
+	// request and nothing cross-origin blocking first paint, which a linked API stylesheet would.
+	// The tag name is split on purpose: Svelte's preprocessor treats any literal `<style>` in the
+	// file as this component's own stylesheet, even inside a string, and tries to compile it.
+	const STYLE_OPEN = '<sty' + 'le id="theme-css">'
+	const STYLE_CLOSE = '</sty' + 'le>'
+	const themeStyleTag = $derived(
+		data?.store?.themeCss ? STYLE_OPEN + data.store.themeCss + STYLE_CLOSE : ''
+	)
+
 	// Stale-client protection. SvelteKit's `updated` store flips to true once the
 	// deployed build (via _app/version.json polling) no longer matches the running
 	// client. We then load fresh code so mobile/PWA users never keep running an
@@ -64,6 +75,9 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 		<link rel="preload" as="style" href={themeFontsUrl} />
 		<link href={themeFontsUrl} rel="stylesheet" />
+	{/if}
+	{#if themeStyleTag}
+		{@html themeStyleTag}
 	{/if}
 	{#if data?.store?.plugins?.headerScripts?.active}
 		{@html data?.store?.plugins?.headerScripts?.html}

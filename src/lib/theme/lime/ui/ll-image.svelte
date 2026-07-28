@@ -3,7 +3,7 @@
 	import EmptyImage from '$lib/core/components/image/empty-image.svelte'
 
 	/**
-	 * Limelight image frame — square, no-radius, blush (#f5f5f5) backdrop,
+	 * Lime image frame — square, no-radius, blush (#f5f5f5) backdrop,
 	 * matching the source product/category imagery. Falls back to the shared
 	 * empty-image placeholder when no source is provided.
 	 */
@@ -34,7 +34,7 @@
 		width: 100%;
 		overflow: hidden;
 		border-radius: 0;
-		background: var(--limelight-blush, #f5f5f5);
+		background: var(--lime-blush, #f5f5f5);
 	}
 
 	.ll-image :global(.ll-image-img) {

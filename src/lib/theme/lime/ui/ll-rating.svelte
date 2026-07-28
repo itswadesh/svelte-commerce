@@ -2,7 +2,7 @@
 	import { Star } from '@lucide/svelte'
 
 	/**
-	 * Limelight rating primitive — a quiet 5-star row.
+	 * Lime rating primitive — a quiet 5-star row.
 	 * Renders filled / half / empty stars in the plum brand tone.
 	 */
 	let {
@@ -55,18 +55,18 @@
 	}
 
 	.ll-star--full :global(svg) {
-		fill: var(--limelight-plum, #460032);
-		color: var(--limelight-plum, #460032);
+		fill: var(--lime-plum, #460032);
+		color: var(--lime-plum, #460032);
 	}
 
 	.ll-star--half :global(svg) {
-		fill: color-mix(in srgb, var(--limelight-plum, #460032) 45%, transparent);
-		color: var(--limelight-plum, #460032);
+		fill: color-mix(in srgb, var(--lime-plum, #460032) 45%, transparent);
+		color: var(--lime-plum, #460032);
 	}
 
 	.ll-star--empty :global(svg) {
 		fill: transparent;
-		color: var(--limelight-line, #d9c6ba);
+		color: var(--lime-line, #d9c6ba);
 	}
 
 	.ll-rating-count {

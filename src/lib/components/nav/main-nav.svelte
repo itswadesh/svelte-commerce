@@ -5,7 +5,7 @@
 </script>
 
 <!-- Editorial menu links for the default theme only (scoped via [data-theme='default']).
-     Sarab/organic keep the current styling untouched. -->
+     Wine/organic keep the current styling untouched. -->
 <style>
 	:global([data-theme='default'] .ed-nav-link) {
 		color: var(--ed-soft);

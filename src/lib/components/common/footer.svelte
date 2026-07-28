@@ -14,7 +14,7 @@
 	import Logo from '$lib/components/common/logo.svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { resolveThemeContent } from '$lib/theme/index.js'
-	import LimelightFooter from '$lib/theme/limelight/LimelightFooter.svelte'
+	import LimeFooter from '$lib/theme/lime/LimeFooter.svelte'
 	import NoorFooter from '$lib/theme/noor/NoorFooter.svelte'
 
 	let paymentMethodCards = [
@@ -56,10 +56,18 @@
 </script>
 
 <div class="mt-5">
-	{#if activeThemeName === 'limelight'}
-		<LimelightFooter footer={themeFooter} brandName={themeContent.brandName} />
+	{#if activeThemeName === 'lime'}
+		<!-- The store's own name wins over the theme's demo brand name. -->
+		<LimeFooter
+			footer={themeFooter}
+			brandName={storeData?.name || themeContent.brandName}
+		/>
 	{:else if activeThemeName === 'noor'}
-		<NoorFooter footer={themeFooter} description={themeContent.description} />
+		<NoorFooter
+			footer={themeFooter}
+			description={themeContent.description}
+			brandName={storeData?.name || themeContent.brandName}
+		/>
 	{:else}
 		{#if footerSettings?.active}
 			<div class="w-full pb-4">
@@ -218,7 +226,7 @@
 <WhatsappChatButton />
 
 <style>
-	/* Refined Editorial footer — scoped to the default theme via `.ed`, so sarab/organic
+	/* Refined Editorial footer — scoped to the default theme via `.ed`, so wine/organic
 	   (which share this footer) are untouched. Fonts come from the global default-theme
 	   type system; here we set the warm surface, hairline rules, and quiet text. */
 	.ed {
