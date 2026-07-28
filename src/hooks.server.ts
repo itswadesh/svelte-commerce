@@ -1,6 +1,7 @@
 import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
+import { getStore } from '@misiki/kitcommerce-core/utils'
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
@@ -35,7 +36,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			const storeService = new StoreService(event.fetch)
 			let storeDetails = null
 			try {
-				storeDetails = await storeService.getStoreByIdOrDomain({ storeId, domain })
+				storeDetails = await getStore({ storeId, domain }, storeService)
 			} catch (e) {
 				// A 404 means "no store maps to this domain" → render a proper 404 page below.
 				// Re-throw anything else (API down, network) so it surfaces as a 500 rather than a
