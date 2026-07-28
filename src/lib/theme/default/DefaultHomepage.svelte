@@ -1,7 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { page } from '$app/state'
-	import { Truck, RotateCcw, ShieldCheck, Headset, ArrowRight, ArrowUpRight } from '@lucide/svelte'
+	import {
+		Truck,
+		RotateCcw,
+		ShieldCheck,
+		Headset,
+		ArrowRight,
+		ArrowUpRight,
+		ChevronLeft,
+		ChevronRight
+	} from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import { storeService, productService } from '$lib/core/services'
@@ -103,33 +112,93 @@
 	// --- Home-page inheritance (admin Pages → this theme). Empty unless the merchant has
 	// curated banners/sections, so a store that hasn't touched Pages renders exactly as before.
 	const homePage = $derived({ desktopBanners, mobileBanners, sections: pageSections })
-	const heroSlides = $derived(
-		hidden.heroSlider ? [] : resolveHeroSlides(homePage, contentDevice)
-	)
+	// Device-independent: each slide carries both artworks and <picture> picks per viewport,
+	// so this never re-resolves (and never double-downloads) when contentDevice changes.
+	const heroSlides = $derived(hidden.heroSlider ? [] : resolveHeroSlides(homePage))
 	const pageBands = $derived(hidden.pageSections ? [] : resolvePageBands(homePage, contentDevice))
 
-	// Hero slider: native scroll-snap so touch swiping is free; the dots and autoplay drive it
-	// with scrollTo and read the position back on scroll.
+	// Hero slider: native scroll-snap so touch swiping is free; the arrows, dots and autoplay
+	// drive it with scrollTo and read the position back on scroll.
 	let heroTrack = $state<HTMLElement | null>(null)
 	let heroIndex = $state(0)
 	let heroPaused = $state(false)
-	const slideTo = (index: number) => {
-		if (!heroTrack) return
-		heroTrack.scrollTo({ left: heroTrack.clientWidth * index, behavior: 'smooth' })
+	/** Read the live position rather than trusting heroIndex, which lags during the slide. */
+	const currentSlide = () =>
+		heroTrack ? Math.round(heroTrack.scrollLeft / Math.max(1, heroTrack.clientWidth)) : 0
+
+	// The slide is tweened frame by frame rather than with scrollTo({behavior:'smooth'}),
+	// because Chrome silently downgrades that to an instant jump when the OS has
+	// "reduce motion" enabled — which killed the animation outright on such machines. Writing
+	// scrollLeft ourselves is not subject to that veto, and keeps the track a real scroller so
+	// touch swiping still works natively.
+	const SLIDE_MS = 600
+	const easeOutCubic = (p: number) => 1 - (1 - p) ** 3
+	let slideFrame = 0
+	const cancelSlide = () => {
+		if (slideFrame) cancelAnimationFrame(slideFrame)
+		slideFrame = 0
+		if (heroTrack) heroTrack.style.scrollSnapType = ''
 	}
+	const slideTo = (index: number) => {
+		const track = heroTrack
+		if (!track) return
+		cancelSlide()
+		const from = track.scrollLeft
+		const to = track.clientWidth * index
+		if (Math.abs(to - from) < 1) return
+		// A background tab produces no animation frames, so a tween there would stall midway and
+		// leave snapping disabled. Jump instead — nobody is watching.
+		if (document.hidden) {
+			track.scrollLeft = to
+			return
+		}
+		// Mandatory snapping fights a frame-by-frame scrollLeft tween, so it is suspended for
+		// the duration and restored at the end.
+		track.style.scrollSnapType = 'none'
+		const startedAt = performance.now()
+		const tick = (now: number) => {
+			const p = Math.min(1, (now - startedAt) / SLIDE_MS)
+			track.scrollLeft = from + (to - from) * easeOutCubic(p)
+			if (p < 1) {
+				slideFrame = requestAnimationFrame(tick)
+			} else {
+				slideFrame = 0
+				track.style.scrollSnapType = ''
+			}
+		}
+		slideFrame = requestAnimationFrame(tick)
+	}
+	/** Step by ±1 with wraparound — shared by the arrows and autoplay. */
+	const stepSlide = (delta: number) =>
+		slideTo((currentSlide() + delta + heroSlides.length) % heroSlides.length)
 	const onHeroScroll = () => {
 		if (!heroTrack) return
-		heroIndex = Math.round(heroTrack.scrollLeft / Math.max(1, heroTrack.clientWidth))
+		heroIndex = currentSlide()
 	}
+	// Autoplay. Hovering or focusing the slider flips heroPaused, which tears this effect down
+	// and clears the timer, so the next slide never fires while the pointer is over it.
+	// A hidden tab is skipped rather than silently queueing advances nobody can see.
 	$effect(() => {
 		if (heroSlides.length < 2 || heroPaused) return
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 		const timer = setInterval(() => {
-			if (!heroTrack) return
-			const width = Math.max(1, heroTrack.clientWidth)
-			slideTo((Math.round(heroTrack.scrollLeft / width) + 1) % heroSlides.length)
+			if (!document.hidden) stepSlide(1)
 		}, 6000)
 		return () => clearInterval(timer)
+	})
+	// A tab hidden mid-slide would freeze the tween (no frames) and leave snapping off, so
+	// finish immediately on the way out. Also stops any in-flight tween on unmount.
+	$effect(() => {
+		const onHide = () => {
+			if (!document.hidden || !slideFrame || !heroTrack) return
+			const track = heroTrack
+			cancelSlide()
+			track.scrollLeft = track.clientWidth * Math.round(track.scrollLeft / Math.max(1, track.clientWidth))
+		}
+		document.addEventListener('visibilitychange', onHide)
+		return () => {
+			document.removeEventListener('visibilitychange', onHide)
+			cancelSlide()
+		}
 	})
 
 	let inView = $state(false)
@@ -206,6 +275,7 @@
 				onmouseleave={() => (heroPaused = false)}
 				onfocusin={() => (heroPaused = true)}
 				onfocusout={() => (heroPaused = false)}
+				onpointerdown={cancelSlide}
 			>
 				<div class="ed-slider__track" bind:this={heroTrack} onscroll={onHeroScroll}>
 					{#each heroSlides as slide, i}
@@ -215,16 +285,41 @@
 							href={slide.link || undefined}
 							aria-label={slide.title || undefined}
 						>
-							<img
-								src={slide.url}
-								alt={slide.title || 'Featured banner'}
-								loading={i === 0 ? 'eager' : 'lazy'}
-								fetchpriority={i === 0 ? 'high' : 'auto'}
-							/>
+							<picture>
+								{#if slide.mobileUrl !== slide.url}
+									<!-- Matches the breakpoint where .ed-slider switches to the 360x190 strip,
+									     so phones fetch only the mobile artwork. -->
+									<source media="(max-width: 900px)" srcset={slide.mobileUrl} />
+								{/if}
+								<img
+									src={slide.url}
+									alt={slide.title || 'Featured banner'}
+									loading={i === 0 ? 'eager' : 'lazy'}
+									fetchpriority={i === 0 ? 'high' : 'auto'}
+								/>
+							</picture>
 						</svelte:element>
 					{/each}
 				</div>
 				{#if heroSlides.length > 1}
+					<!-- Arrows are pointer affordances: on touch the track swipes natively, so they
+					     are hidden below the mobile breakpoint where they would cover the artwork. -->
+					<button
+						type="button"
+						class="ed-slider__arrow ed-slider__arrow--prev"
+						aria-label="Previous slide"
+						onclick={() => stepSlide(-1)}
+					>
+						<ChevronLeft class="ed-slider__arrow-icon" />
+					</button>
+					<button
+						type="button"
+						class="ed-slider__arrow ed-slider__arrow--next"
+						aria-label="Next slide"
+						onclick={() => stepSlide(1)}
+					>
+						<ChevronRight class="ed-slider__arrow-icon" />
+					</button>
 					<div class="ed-slider__dots">
 						{#each heroSlides as _, i}
 							<button
@@ -586,11 +681,51 @@
 		scroll-snap-align: start;
 	}
 
+	.ed-slide picture,
 	.ed-slide img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
+	}
+
+	.ed-slider__arrow {
+		position: absolute;
+		top: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		padding: 0;
+		border: 0;
+		border-radius: 50%;
+		cursor: pointer;
+		color: var(--ed-ink);
+		background: rgb(255 255 255 / 0.82);
+		box-shadow: 0 2px 10px rgb(0 0 0 / 0.14);
+		transform: translateY(-50%);
+		transition:
+			background 0.25s ease,
+			box-shadow 0.25s ease;
+	}
+
+	.ed-slider__arrow:hover {
+		background: #fff;
+		box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
+	}
+
+	.ed-slider__arrow--prev {
+		left: clamp(12px, 2vw, 28px);
+	}
+
+	.ed-slider__arrow--next {
+		right: clamp(12px, 2vw, 28px);
+	}
+
+	.ed-slider :global(.ed-slider__arrow-icon) {
+		width: 20px;
+		height: 20px;
 	}
 
 	.ed-slider__dots {
@@ -1129,6 +1264,10 @@
 		.ed-slider {
 			aspect-ratio: 360 / 190;
 		}
+		/* Touch swipes the track natively; arrows would just cover the artwork. */
+		.ed-slider__arrow {
+			display: none;
+		}
 		.ed-cats {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
@@ -1173,12 +1312,16 @@
 		.ed-cat__placeholder,
 		.ed-band__media img,
 		.ed-dot,
+		.ed-slider__arrow,
 		.ed-btn,
 		.ed-news__form button,
 		.ed-link :global(.ed-link__icon) {
 			transition: none;
 		}
-		.ed-slider__track,
+		/* The hero slider deliberately keeps gliding here: its slide is the point of the
+		   component, and it is driven by a scrollLeft tween rather than CSS scrolling, so this
+		   block does not reach it. Only the band carousel, which has no scripted scrolling,
+		   is reset. */
 		.ed-band__grid--carousel {
 			scroll-behavior: auto;
 		}
