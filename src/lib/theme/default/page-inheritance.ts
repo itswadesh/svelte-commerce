@@ -39,16 +39,41 @@ export interface PageSection {
 /** The `home` page record as served by GET /api/pages/home. */
 export interface HomePageRecord {
 	desktopBanners?: PageBanner[] | null
+	tabletBanners?: PageBanner[] | null
 	mobileBanners?: PageBanner[] | null
 	sections?: PageSection[] | null
 }
 
 export type ContentDevice = 'mobile' | 'tablet' | 'desktop'
 
+/**
+ * Recommended upload sizes per tier, surfaced in the admin's Pages editor. The storefront's
+ * `<picture>` breakpoints and the slider's aspect ratios are derived from these, so changing
+ * one means changing all three.
+ */
+export const BANNER_SIZES = {
+	mobile: { w: 360, h: 190, maxWidth: 767 },
+	tablet: { w: 1024, h: 320, maxWidth: 1199 },
+	desktop: { w: 1500, h: 380, maxWidth: null }
+} as const
+
+/**
+ * Which sets a device will accept, best first. A store that uploads only one set still gets a
+ * banner everywhere; a store that skips the middle tier serves mobile artwork to tablets, as
+ * that crops far better on a narrow-ish screen than a 1500px desktop strip would.
+ */
+const FALLBACK_ORDER: Record<ContentDevice, ContentDevice[]> = {
+	mobile: ['mobile', 'tablet', 'desktop'],
+	tablet: ['tablet', 'mobile', 'desktop'],
+	desktop: ['desktop', 'tablet', 'mobile']
+}
+
 export interface HeroSlide {
 	/** Desktop artwork (1500x380). */
 	url: string
-	/** Mobile artwork (360x190); equal to `url` when the store only uploaded one set. */
+	/** Tablet artwork (1024x320); falls back through the cascade when not uploaded. */
+	tabletUrl: string
+	/** Mobile artwork (360x190); falls back through the cascade when not uploaded. */
 	mobileUrl: string
 	link: string
 	title: string
@@ -81,31 +106,39 @@ export function bannerAspect(raw: unknown, fallback = '1 / 1'): string {
 }
 
 /**
- * The hero slider's slides, each carrying BOTH artworks so the markup can hand the choice to
- * the browser (`<picture>` + a media query) instead of picking in JS. That matters: picking by
- * device in JS means SSR emits one set and hydration swaps to the other, so the browser
+ * The hero slider's slides, each carrying all three artworks so the markup can hand the choice
+ * to the browser (`<picture>` + media queries) instead of picking in JS. That matters: picking
+ * by device in JS means SSR emits one set and hydration swaps to the other, so the browser
  * downloads both — a phone would pay for the 1500px desktop banner it never shows.
  *
- * The two lists are paired by index off whichever is longer, and each side falls back to the
- * other when a store uploaded only one set (most do) — a hero with no image at all would be
- * worse than a slightly-wrong crop.
+ * Slides are paired by index off the longest set, and every tier resolves through
+ * FALLBACK_ORDER, so a store that uploaded one set gets a banner on every device and one that
+ * skipped tablets serves them the mobile artwork.
  */
 export function resolveHeroSlides(page: HomePageRecord | null | undefined): HeroSlide[] {
-	const mobile = (page?.mobileBanners ?? []).filter(hasUrl)
-	const desktop = (page?.desktopBanners ?? []).filter(hasUrl)
-	const count = Math.max(mobile.length, desktop.length)
+	const sets: Record<ContentDevice, Array<PageBanner & { url: string }>> = {
+		mobile: (page?.mobileBanners ?? []).filter(hasUrl),
+		tablet: (page?.tabletBanners ?? []).filter(hasUrl),
+		desktop: (page?.desktopBanners ?? []).filter(hasUrl)
+	}
+	const count = Math.max(sets.mobile.length, sets.tablet.length, sets.desktop.length)
+	/** The banner a device should use at slide `i`, walking its fallback chain. */
+	const pick = (device: ContentDevice, i: number) =>
+		FALLBACK_ORDER[device].map((tier) => sets[tier][i]).find(Boolean)
+
 	const slides: HeroSlide[] = []
 	for (let i = 0; i < count; i++) {
-		const d = desktop[i]
-		const m = mobile[i]
-		const url = d?.url ?? m?.url
-		const mobileUrl = m?.url ?? d?.url
-		if (!url || !mobileUrl) continue
+		const desktop = pick('desktop', i)
+		const tablet = pick('tablet', i)
+		const mobile = pick('mobile', i)
+		if (!desktop || !tablet || !mobile) continue
 		slides.push({
-			url,
-			mobileUrl,
-			link: d?.link?.trim() || m?.link?.trim() || '',
-			title: d?.title?.trim() || m?.title?.trim() || ''
+			url: desktop.url,
+			tabletUrl: tablet.url,
+			mobileUrl: mobile.url,
+			// Link/title follow the same precedence, so whichever tier the merchant filled in wins.
+			link: desktop.link?.trim() || tablet.link?.trim() || mobile.link?.trim() || '',
+			title: desktop.title?.trim() || tablet.title?.trim() || mobile.title?.trim() || ''
 		})
 	}
 	return slides

@@ -32,6 +32,7 @@
 		metaKeywords?: string
 		logo?: string
 		desktopBanners?: any[]
+		tabletBanners?: any[]
 		mobileBanners?: any[]
 		sections?: any[]
 	}
@@ -133,6 +134,7 @@
 		{homepageModule}
 		loading={homepageModule.loading}
 		desktopBanners={page?.desktopBanners}
+		tabletBanners={page?.tabletBanners}
 		mobileBanners={page?.mobileBanners}
 		pageSections={page?.sections}
 		currencyCode={data?.store?.currency?.code}
