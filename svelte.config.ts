@@ -42,6 +42,9 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
+		alias: {
+			'kitcommerce.config': './kitcommerce.config.ts'
+		},
 		adapter: adapter(),
 		csrf: {
 			trustedOrigins: ['*']

@@ -46,7 +46,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
-		"@misiki/medusa-connector": "^2.1.0",
+		"@misiki/medusa-connector": "^2.1.1",
 		"@playwright/test": "^1.50.1",
 		"@sveltejs/adapter-auto": "^4.0.0",
 		"@sveltejs/adapter-vercel": "^5.6.1",
