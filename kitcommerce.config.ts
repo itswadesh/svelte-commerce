@@ -1,4 +1,4 @@
-export * as services from "@misiki/medusa-connector"
+export * as services from "@misiki/litekart-connector"
 
 export default {
 }
