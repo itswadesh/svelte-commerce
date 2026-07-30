@@ -212,7 +212,10 @@
 						loginModule.identifier = phone
 					}
 					const success = await loginModule.handleSubmit(e)
-					if (success) show = false
+					if (success) {
+					  loginModule.removeUrlParams()
+            show = false
+          }
 				}}
 				class="flex flex-col space-y-5 max-sm:pt-2"
 			>
