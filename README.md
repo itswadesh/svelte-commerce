@@ -4,14 +4,81 @@
 
 `now build a new theme based on {WEBSITE_NAME}`
 
-<div align="center">
+<div >
 
 **The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
 Turnkey integration with
 
-- [litekart.in](https://litekart.in/)
-- [shopify.com](https://www.shopify.com)
-- [medusajs.com](https://medusajs.com/)
+## Backend support
+
+Svelte Commerce talks to any backend through a connector package. Switch backends by
+changing a single export in `src/lib/services/index.ts`:
+
+```ts
+// pick exactly one
+export * from '@misiki/litekart-connector'
+// export * from '@misiki/medusa-connector'
+// export * from '@misiki/vendure-connector'
+// export * from '@misiki/saleor-connector'
+```
+
+| Capability | Litekart | Medusa | Vendure | Saleor |
+| --- | :---: | :---: | :---: | :---: |
+| Product listing / search | ✅ | ✅ | ✅ | ✅ |
+| Product detail page | ✅ | ✅ | ✅ | ✅ |
+| Categories / collections | ✅ | ✅ | ✅ | ❓ |
+| Cart | ✅ | ✅ | ✅ | ✅ |
+| Checkout | ✅ | ✅ | ✅ | ✅ |
+| Payment methods | ✅ | ✅ | ✅ | ✅ |
+| Order placement | ✅ | ✅ | ✅ | ✅ |
+| Order history / detail | ✅ | ❓ | ❌ | ❓ |
+| Auth / registration | ✅ | ❓ | ✅ | ❓ |
+| Addresses | ✅ | ❓ | ✅ | ❓ |
+| Customer profile | ✅ | ❓ | ❌ | ❓ |
+| Wishlist | ✅ | ❓ | ❌ | ❓ |
+| Reviews | ✅ | ❓ | ❌ | ❓ |
+| Coupons / promotions | ✅ | ❓ | ❌ | ❓ |
+| Multi-currency / regions | ✅ | ❓ | ❌ | ❓ |
+| Faceted search (Meilisearch) | ✅ | ❓ | ❌ | ❓ |
+| CMS pages, blog, banners, FAQ | ✅ | ❓ | ❌ | ❌ |
+| Multi-vendor / marketplace | ✅ | ❌ | ❌ | ❌ |
+
+✅ supported &nbsp;·&nbsp; ❌ not implemented yet &nbsp;·&nbsp; ❓ untested
+
+> Litekart is the reference implementation and is the most complete. The Medusa, Vendure
+> and Saleor connectors cover the core commerce path — browse, product, cart, checkout,
+> order — and are actively being extended. PRs welcome.
+
+### Required backend settings
+
+Each backend needs a few settings changed before the storefront will work end to end.
+
+**Vendure**
+
+- `authOptions.requireVerification` → `false`
+- `isPhoneMandatory` → `false`
+- `isEmailMandatory` → `false`
+
+**Saleor**
+
+- Require email confirmation for user registration → `false`
+- `isPhoneMandatory` → `false`
+- Allow unpaid orders in **order settings** → enabled
+- Allow unpaid orders in **channel settings** → enabled
+
+**Medusa**
+
+- Set a publishable API key and add your storefront origin to the Store CORS config.
+
+### Demos
+
+| Backend | Demo |
+| --- | --- |
+| Litekart | https://litekart.in |
+| Medusa | _add URL_ |
+| Vendure | _add URL_ |
+| Saleor | _add URL_ |
+  
 </div>
 
 <div align="center">
