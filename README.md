@@ -85,31 +85,31 @@ Each backend needs a few settings changed before the storefront will work end to
 
 <div align="center">
   <br>
-    <img width="400" src="https://github.com/user-attachments/assets/9e2c6455-6cfc-4df6-b813-c5a52a862b2f" >
+    <img width="400" src="./.github/assets/5.gif" >
 </div>
 
 <div align="center">
   <br>
-    <img width="400" src="https://github.com/user-attachments/assets/3d63e9b7-4744-4fc8-ba52-eceeb7edbdaa" >
-    <img width="400" src="https://github.com/user-attachments/assets/a2b44ac9-1f0c-4e68-9506-6e3316b78902" hspace="5">
+    <img width="400" src="./.github/assets/6.gif" >
+    <img width="400" src="./.github/assets/7.gif" hspace="5">
 </div>
 
 <br>
 <p align="center">
-<img height="400" src="https://github.com/user-attachments/assets/d8be1287-3631-4634-82b3-dd3fbf8e1273" hspace="10">
-<img height="400" src="https://github.com/user-attachments/assets/0b2a90f2-e7a5-4977-9327-43d6055ef583" hspace="10">
-<img height="400" src="https://github.com/user-attachments/assets/55d4acf6-7c24-4150-9149-d6de30441680" hspace="10">
+<img height="400" src="./.github/assets/8.jpg" hspace="10">
+<img height="400" src="./.github/assets/9.jpg" hspace="10">
+<img height="400" src="./.github/assets/10.jpg" hspace="10">
 </p>
 
 <br/>
 <h2 align="center"> Premium themes made using svelte-commerce </h2>
 <p align="center">
-<img height="200" src="https://github.com/user-attachments/assets/cb372959-bb44-4f28-a214-b85cd28ca2b4" hspace="10">
-<img height="200" src="https://github.com/user-attachments/assets/f947a3c6-938c-4528-b98a-f49f899aaf8c" hspace="10">
+<img height="200" src="./.github/assets/1.jpg" hspace="10">
+<img height="200" src="./.github/assets/2.jpg" hspace="10">
 <br>
 <br>
-<img height="200" src="https://github.com/user-attachments/assets/b1310c53-b4d0-4375-833f-80d37511faf2" hspace="10">
-<img height="200" src="https://github.com/user-attachments/assets/69034280-a815-4e3e-a3a1-93d98575eb95" hspace="10">
+<img height="200" src="./.github/assets/3.jpg" hspace="10">
+<img height="200" src="./.github/assets/4.jpg" hspace="10">
 </p>
 
 <br/>
