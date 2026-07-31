@@ -6,7 +6,7 @@
 
 <div >
 
-**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
+**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payme[...]
 Turnkey integration with
 
 ## Backend support
@@ -20,6 +20,8 @@ export * from '@misiki/litekart-connector'
 // export * from '@misiki/medusa-connector'
 // export * from '@misiki/vendure-connector'
 // export * from '@misiki/saleor-connector'
+// export * from '@misiki/shopify-connector'
+// export * from '@misiki/woocommerce-connector'
 ```
 
 | Capability | Litekart | Medusa | Vendure | Saleor |
@@ -43,7 +45,7 @@ export * from '@misiki/litekart-connector'
 | CMS pages, blog, banners, FAQ | ✅ | ❓ | ❌ | ❌ |
 | Multi-vendor / marketplace | ✅ | ❌ | ❌ | ❌ |
 
-✅ supported &nbsp;·&nbsp; ❌ not implemented yet &nbsp;·&nbsp; ❓ untested
+✅ supported · ❌ not implemented yet · ❓ untested
 
 > Litekart is the reference implementation and is the most complete. The Medusa, Vendure
 > and Saleor connectors cover the core commerce path — browse, product, cart, checkout,
@@ -161,7 +163,7 @@ Reach out to me with queries!
 
 - Svelte Commerce is a PWA storefront for your existing eCommerce based on Sveltekit.
 - It is possible to connect with any eCommerce backend that provides an API
-- We are working on adaptors of Medusajs, Shopify
+- We are working on adaptors of Medusajs, Shopify, and WooCommerce
 
 ## Features
 
@@ -206,6 +208,8 @@ There are 3 places to configure
    This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are
    - `export * from '@misiki/litekart-connector'`
    - `export * from '@misiki/medusa-connector'`
+   - `export * from '@misiki/shopify-connector'`
+   - `export * from '@misiki/woocommerce-connector'`
 
 ## Deployment
 
@@ -215,7 +219,7 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=arialshop.com)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=ari[...]
 
 The following envirnoment variable is mandatory
 
@@ -236,9 +240,9 @@ docker run -d -p 3000:3000 ghcr.io/itswadesh/svelte-commerce:latest
 
 ## Features
 
-<!-- If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list of the [active issues](https://github.com/itswadesh/svelte-commerce/issues) or contact me directly via hi@litekart.in -->
+<!-- If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list[...]
 
-Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted Filters, Open Source
+Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted[...]
 
 ## Updates
 
