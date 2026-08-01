@@ -11,7 +11,17 @@ export const GET: RequestHandler = async ({ fetch, cookies }) => {
   let sitemapPath = data?.sitemap
 
   if (!sitemapPath) {
-    return new Response('Sitemap not found, you can generate sitemap through the admin dashboard by going into Settings > Sitemaps.', { status: 404 })
+    const xmlError = `<?xml version="1.0" encoding="UTF-8"?>
+      <error>
+        <message>Sitemap not found. Generate one via Settings > Sitemaps in the admin dashboard.</message>
+      </error>`
+
+    return new Response(xmlError, {
+      status: 404,
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8'
+      }
+    })
   }
 
   // Extract path starting from /sitemaps/ onwards (excluding host and bucket prefixes)
