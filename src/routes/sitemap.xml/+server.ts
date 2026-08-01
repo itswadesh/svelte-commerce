@@ -10,6 +10,10 @@ export const GET: RequestHandler = async ({ fetch, cookies }) => {
   const data = (await storeService.get(`/api/stores/${storeId}`)) as { sitemap: string }
   let sitemapPath = data?.sitemap
 
+  if (!sitemapPath) {
+    return new Response('Sitemap not found, you can generate sitemap through the admin dashboard by going into Settings > Sitemaps.', { status: 404 })
+  }
+
   // Extract path starting from /sitemaps/ onwards (excluding host and bucket prefixes)
   const match = sitemapPath.match(/\/sitemaps\/.*/)
   if (match) {
