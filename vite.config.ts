@@ -18,7 +18,7 @@ export default defineConfig(({ command, mode }) => {
 					target: env.PUBLIC_MEDUSA_API_URL || 'http://localhost:9000', // Backend server URL
 					changeOrigin: true, // Required for CORS
 					secure: false, // Disable SSL verification if needed
-					rewrite: (path) => path.replace(PUBLIC_MEDUSA_API_PREFIX, '') // Remove prefix
+					rewrite: (path) => path.replace(/^\/medusa/, '')
 				},
 				'/api': {
 					target: env.PUBLIC_LITEKART_API_URL || 'http://localhost:7000', // Backend server URL
