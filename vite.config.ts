@@ -31,8 +31,7 @@ export default defineConfig(({ command, mode }) => {
 					changeOrigin: true, // Required for CORS
 					secure: false, // Disable SSL verification if needed
 					rewrite: (path) => path.replace(/^\/static/, 'static') // Remove `/static` prefix
-				},
-				'/sitemaps': env.PUBLIC_SITEMAP_URL || `https://${env.S3_BUCKET_NAME}.s3.${env.S3_REGION}.amazonaws.com`
+				}
 			}
 		}
 	}
