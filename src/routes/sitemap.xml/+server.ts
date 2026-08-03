@@ -3,7 +3,23 @@ import { env as privateEnv } from '$env/dynamic/private'
 import type { RequestHandler } from '@sveltejs/kit'
 import { StoreService } from '@misiki/litekart-connector'
 
-export const GET: RequestHandler = async ({ fetch, cookies }) => {
+async function medusaSitemap(baseUrl: string) {
+  const { generateSitemap } = await import('@misiki/medusa-connector')
+  const xml = await generateSitemap({
+    baseUrl,
+    productPath: '/products/',
+    categoryPath: '/',
+    pagePath: '/'
+  });
+  return new Response(xml, {
+    headers: { 'Content-Type': 'application/xml' }
+  });
+}
+
+export const GET: RequestHandler = async ({ url, fetch, cookies }) => {
+  if (env.PUBLIC_MEDUSA_API_URL) {
+    return medusaSitemap(url.origin)
+  }
   const storeId = cookies.get('litekart_store_id') || ''
 
   const storeService = new StoreService(fetch)
