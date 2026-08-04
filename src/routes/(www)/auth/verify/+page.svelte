@@ -1,14 +1,50 @@
 <script lang="ts">
 	import { AuthButton } from '$lib/core/components/index.js'
 	import { Button } from '$lib/components/ui/button/index.js'
-	let { data } = $props()
+	import { onMount } from 'svelte'
+	import { page } from '$app/state'
+	import { authService } from '@misiki/kitcommerce-core/services'
+	import { LoaderCircle } from '@lucide/svelte'
+	import { getUserState } from '@misiki/kitcommerce-core/stores'
+	import { goto } from '$app/navigation'
+
+  let status = $state<"loading" | "success" | "failed">("loading")
+  const userState = getUserState()
+
+  onMount(async () => {
+	  try {
+      status = "loading"
+	  	const email = page.url.searchParams.get('email')
+	  	const token = page.url.searchParams.get('token')
+	  	if (!email || !token) {
+	  		throw Error('Invalid email or token')
+	  	}
+	  	await authService.verifyEmail(email, token)
+      if (!userState.user?.role) {
+        const { sid, me } = userState.retrieveUserId()
+			  if (sid) {
+				  userState.user = me
+			  } else {
+				  userState.user = null
+				}
+      }
+      status = "success"
+	  } catch (e) {
+      console.error(e)
+      status = "failed"
+	  }
+  })
 </script>
 
 <svelte:head>
 	<title>Email Verification Successful</title>
 </svelte:head>
 
-{#if data.status === 'success'}
+{#if status === 'loading'}
+	<div class="flex min-h-[70vh] items-center justify-center px-4">
+    <LoaderCircle class="animate-spin" />
+  </div>
+{:else if status === 'success'}
 	<div class="flex min-h-[70vh] items-center justify-center px-4">
 		<div class="w-full max-w-md space-y-6 text-center">
 			<div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 p-3">
@@ -23,9 +59,7 @@
 			</div>
 
 			<div class="pt-4">
-				<AuthButton type="login" extraqueries={{ redirect: '/' }}>
-					<Button variant="default" class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600">Log in</Button>
-				</AuthButton>
+				<Button onclick={() => goto('/')} variant="default" class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600">Continue Shopping</Button>
 			</div>
 		</div>
 	</div>
@@ -44,9 +78,7 @@
 			</div>
 
 			<div class="pt-4">
-				<AuthButton type="login" extraqueries={{ redirect: '/' }}>
-					<Button variant="default" class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600">Log in</Button>
-				</AuthButton>
+			  <Button onclick={() => goto('/')} variant="default" class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600">Log in</Button>
 			</div>
 		</div>
 	</div>

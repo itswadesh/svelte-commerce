@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { AuthButton } from '$lib/core/components/index.js'
 </script>
@@ -53,13 +54,12 @@
 			</p>
 
 			<div class="space-y-2">
-				<AuthButton type="login" extraqueries={{ redirect: '/' }}>
 					<button
+            onclick={() => goto('/')}
 						class="inline-block w-full rounded-lg bg-gray-900 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600"
 					>
-						Continue to Login
+						Continue Shopping
 					</button>
-				</AuthButton>
 				<!-- <a
 					href="/"
 					class="inline-block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-center text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
