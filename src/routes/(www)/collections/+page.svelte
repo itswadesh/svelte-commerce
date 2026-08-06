@@ -48,21 +48,28 @@
 <SeoHeader metaTitle={page.params.slug || 'Collections'} />
 
 <div class="container mx-auto mt-2 flex h-full min-h-screen flex-row max-md:px-4 md:gap-2">
-	{#if collections?.count >= 0}
+	<!-- These render only when the route actually supplies product facets. DesktopFilterState
+	     reads `page.data.products.facets` directly — NOT the props that used to be passed here,
+	     which it does not even declare — so on this route `filterState.tags` was undefined and
+	     `.length` threw during SSR, 500ing the whole page. The old guard, `collections?.count >= 0`,
+	     was true for the empty result the component initialises with (count: 0), so it never gated
+	     anything. Guarding on the source the state actually reads keeps the filters working
+	     wherever products ARE loaded. -->
+	{#if page.data?.products?.facets}
 		<div class="hidden border-r border-input md:block">
 			<DesktopFilter />
 		</div>
-	{/if}
 
-	<div class="block md:hidden">
-		<MobileFilter
-			bind:selectedSort
-			onSortChange={(value: string) => {
-				selectedSort = value
-				selectSort(value)
-			}}
-		/>
-	</div>
+		<div class="block md:hidden">
+			<MobileFilter
+				bind:selectedSort
+				onSortChange={(value: string) => {
+					selectedSort = value
+					selectSort(value)
+				}}
+			/>
+		</div>
+	{/if}
 
 	<div class="flex-1">
 		<div class="mb-4 flex flex-col items-start gap-2">
