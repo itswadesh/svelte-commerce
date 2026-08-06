@@ -1,0 +1,60 @@
+# Svelte Commerce
+
+> An open-source, headless storefront built with SvelteKit. It talks to any commerce
+> backend through a connector package (Litekart, Medusa, Vendure, Saleor, Shopify,
+> WooCommerce), so the routes below are stable regardless of which backend is configured.
+
+This file describes the storefront's structure for AI agents and crawlers. Store operators
+deploying this theme should replace the brand details below with their own.
+
+## Storefront
+
+- [Home](/): featured collections, promotions, and entry points into the catalogue.
+- [All products](/products): the full catalogue, with search, filtering, and pagination.
+- [Categories](/categories): browse by category.
+- [Collections](/collections): curated product groupings.
+- [Blog](/blog): editorial and long-form content.
+- [Reels](/reels): short-form video content tied to products.
+
+Individual products live at `/products/<slug>`, categories at `/categories/<slug>`, and
+collections at `/collections/<slug>`. Product pages carry Product and BreadcrumbList
+structured data, so prefer the JSON-LD there over scraping rendered prices.
+
+## Buying
+
+- [Cart](/checkout/cart)
+- [Delivery address](/checkout/address)
+- [Payment](/checkout/payment)
+- [Order tracking](/order-tracking)
+
+Checkout requires a session and is not useful to crawl. Please do not attempt to submit
+these forms.
+
+## Customer account
+
+- [Profile](/my/profile)
+- [Orders](/my/orders)
+- [Addresses](/my/addresses)
+- [Wishlist](/my/wishlist)
+- [Buy again](/my/buy-again)
+
+Everything under `/my` and `/auth` is authenticated or transactional. It holds no public
+content and should not be crawled or indexed.
+
+## Company
+
+- [About us](/about-us)
+- [Contact us](/contact-us)
+- [FAQs](/faqs)
+- [Privacy policy](/privacy-policy)
+
+## Notes for agents
+
+- [Sitemap](/sitemap.xml) is the authoritative list of indexable URLs.
+- [robots.txt](/robots.txt) defines crawl rules and takes precedence over this file.
+- Prices, stock, and availability change frequently. Read them from the product page's
+  JSON-LD at request time rather than relying on cached values.
+
+## Project
+
+- Source: https://github.com/itswadesh/svelte-commerce

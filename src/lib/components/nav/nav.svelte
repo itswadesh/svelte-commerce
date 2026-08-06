@@ -19,6 +19,7 @@
 	import MainNav from './main-nav.svelte'
 	import MegaMenu from './mega-menu.svelte'
 	import { page } from '$app/state'
+	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 	import MsSearch from './ms-search.svelte'
 	import AuthModal from '$lib/components/auth/auth-modal.svelte'
 	import { AuthButton } from '$lib/core/components/index.js'
@@ -321,7 +322,9 @@
 			<div class="ed-drawer-head flex items-center justify-between border-b border-gray-100 px-5 py-4">
 				<a href="/" class="flex items-center gap-2" onclick={() => (navModule.openSidebar = false)}>
 					{#if page?.data?.store?.logo}
-						<img src={page?.data?.store?.logo} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
+						<!-- Through the CDN: store logos are uploaded at full resolution and this renders
+					     32px tall. Served raw it can be the heaviest above-the-fold asset on a store. -->
+					<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
 						<span class="text-base font-black uppercase tracking-wider text-black">
 							{page?.data?.store?.name || 'Svelte Commerce'}

@@ -46,6 +46,12 @@ const config = {
 			'kitcommerce.config': './kitcommerce.config.ts'
 		},
 		adapter: adapter(),
+		// Inline route/layout CSS into the HTML instead of emitting render-blocking <link> tags.
+		// On a production storefront running this theme, the layout stylesheet alone cost 950ms on
+		// the FCP critical path (Lighthouse, Moto G Power / Slow 4G); inlining puts those bytes in a
+		// document already in flight. Value is in UTF-16 code units, per stylesheet — anything
+		// larger than this stays a linked file.
+		inlineStyleThreshold: 262144,
 		csrf: {
 			trustedOrigins: ['*']
 		},
