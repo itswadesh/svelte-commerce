@@ -66,9 +66,30 @@
 	afterNavigate(() => {
 		if (browser) updated.check()
 	})
+
+	// Origin serving product imagery — usually the LCP element and always a different host from
+	// the document, so without a preconnect the browser pays DNS + TCP + TLS before the fetch can
+	// even start (~100ms measured on a production storefront). Derived at runtime rather than
+	// hardcoded so it follows whatever store/CDN this theme is deployed against. The Cloudflare
+	// provider falls back to the image's own origin when no explicit CDN prefix is configured, so
+	// fall back to a known store asset in that case.
+	const imageCdnOrigin = $derived.by(() => {
+		const cdn = data?.store?.plugins?.imageCdn
+		if (!cdn?.active) return ''
+		try {
+			return new URL(cdn.url || data?.store?.logo || data?.store?.favicon).origin
+		} catch {
+			return ''
+		}
+	})
 </script>
 
 <svelte:head>
+	<!-- No `crossorigin` here on purpose: the product <img> tags are non-CORS and would not reuse
+	     a connection opened in the CORS pool. -->
+	{#if imageCdnOrigin}
+		<link rel="preconnect" href={imageCdnOrigin} />
+	{/if}
 	<link rel="icon" href={data?.store?.favicon || '/favicon.png'} />
 	{#if themeFontsUrl}
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
