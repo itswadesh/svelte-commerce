@@ -79,7 +79,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	const response = await resolve(event, {
-		filterSerializedResponseHeaders: (name) => name === 'content-type'
+		filterSerializedResponseHeaders: (name) => name === 'content-type',
+		// SvelteKit emits a `Link: rel=modulepreload` header for EVERY client chunk (107 on the jws
+		// PDP). The browser starts all of them before the parser reaches the LCP <img>, saturating the
+		// connection and delaying the LCP image request by seconds. resolve_opts.preload is the only
+		// filter Kit exposes; its default (`type === 'js' || type === 'css'`) lets everything through.
+		// Measured on jws, Pixel 5 / 4x CPU / Slow 4G: LCP-TTFB 4952ms -> 1668ms, with all app JS
+		// still finishing within 216ms of before. Dropping js entirely reaches 763ms but delays
+		// hydration by 1.1s, which is the worse trade.
+		preload: ({ type, path }) => type === 'css' || path.includes('/entry/') || path.includes('/nodes/')
 	})
 	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
 
