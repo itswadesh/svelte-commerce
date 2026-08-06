@@ -2,6 +2,7 @@
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button/index.js'
+	import { sortByNumericValue } from '$lib/core/utils/index.js'
 
 	const productState = useProductState()
 </script>
@@ -24,7 +25,7 @@
 					</div>
 
 					<div class="flex flex-wrap items-center gap-3">
-						{#each [...values].sort() as value}
+						{#each sortByNumericValue(values as string[]) as value}
 							<Button
 								variant={productState.selectedAggregations?.[optionName] === value ? 'default' : 'plain'}
 								disabled={!productState.isAggregationAvaliable(optionName, value)}

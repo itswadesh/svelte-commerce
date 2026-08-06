@@ -9,13 +9,20 @@
 	}
 
 	let { noOfPage = $bindable(), paginateProducts }: Props = $props()
+
+	// ponytail: interim guard, not the fix. The listing API returns zero results past page 50,
+	// so offering page 51+ lands shoppers on a false "No products match your search". Capping
+	// here (the one component every listing paginates through) stops that, but the rest of a
+	// large catalogue stays unreachable until the API ceiling is raised or paging goes cursor-based.
+	const LAST_REACHABLE_PAGE = 50
+	const cappedNoOfPage = $derived(Math.min(noOfPage ?? 0, LAST_REACHABLE_PAGE))
 </script>
 
 <PaginationRenderer bind:noOfPage {paginateProducts}>
 	{#snippet content({ pageSize, currentPage, goToPreviousPage, goToNextPage, goToPage, count })}
-		{#if count && noOfPage > 1}
+		{#if count && cappedNoOfPage > 1}
 			<div class="mt-5 flex flex-col items-center gap-6 border-gray-200 pt-5">
-				<Pagination.Root {count} perPage={pageSize}>
+				<Pagination.Root count={Math.min(count, LAST_REACHABLE_PAGE * (pageSize || 1))} perPage={pageSize}>
 					{#snippet children({ pages })}
 						<Pagination.Content class="gap-1">
 							<Pagination.Item>
@@ -56,7 +63,7 @@
 							<Pagination.Item>
 								<Pagination.NextButton
 									onclick={goToNextPage}
-									disabled={currentPage >= noOfPage}
+									disabled={currentPage >= cappedNoOfPage}
 									class="h-10 px-4"
 								/>
 							</Pagination.Item>
