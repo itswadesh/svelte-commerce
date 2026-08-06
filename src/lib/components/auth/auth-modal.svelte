@@ -134,7 +134,9 @@
 	})
 </script>
 
-<main>
+<!-- Not <main>: mounted on every page alongside each layout's real <main>,
+	 which is what axe reports as landmark-no-duplicate-main site-wide. -->
+<div>
 	{#if type === 'signup'}
 		<SignupModal bind:show manageHistory={false} />
 	{:else if type === 'login'}
@@ -142,4 +144,4 @@
 	{:else if type === 'forgot-password'}
 		<ForgotPasswordModal bind:show manageHistory={false} />
 	{/if}
-</main>
+</div>

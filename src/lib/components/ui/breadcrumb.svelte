@@ -2,6 +2,12 @@
 	import { ChevronRight, Home } from '@lucide/svelte'
 	let { categoryHierarchy }: { categoryHierarchy?: Record<string, any>[] } = $props()
 
+	// Categories with a blank name or slug render as an empty, dead breadcrumb link, and
+	// reach the BreadcrumbList schema as positions with no name.
+	const crumbs = $derived(
+		(categoryHierarchy || []).filter((c) => String(c?.name ?? '').trim() && String(c?.slug ?? '').trim())
+	)
+
 	// let items = $state([])
 	// let isProductsPage = $derived(page.route?.id === '/(www)/products/[slug]')
 </script>
@@ -16,7 +22,7 @@
 				</a>
 			</div>
 			<ol class="inline-flex items-center space-x-1 md:space-x-2">
-				{#each categoryHierarchy as { slug, name }, i}
+				{#each crumbs as { slug, name }, i}
 					<li class="flex-shrink-0">
 						<div class="flex items-center">
 							<ChevronRight class="h-4 min-h-4 w-4 min-w-4 text-gray-400 flex-shrink-0" />

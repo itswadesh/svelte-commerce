@@ -138,11 +138,8 @@
 									total: cartProduct?.price * (cartProduct?.qty + 1),
 									qty: cartProduct?.qty + 1,
 									vendorBusinessName: cartProduct?.vendor?.businessName,
-									user: {
-										id: me?._id || me?.id,
-										name: me?.firstName + ' ' + me?.lastName,
-										email: me?.email
-									}
+									// Only the pseudonymous id: name and email are PII and must not reach GA4.
+									user: { id: me?._id || me?.id }
 								}
 								fireGTagEvent('add_to_cart', dataToFire)
 								await cartState?.update({

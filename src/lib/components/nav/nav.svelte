@@ -219,7 +219,7 @@
 								<p class="ed-plp-title text-base font-semibold">Products</p>
 							{/if}
 
-							<p class="ed-plp-count text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
+							<p class="ed-plp-count text-xs text-gray-500">{(navModule.productsCount ?? 0).toLocaleString('en-US')} products</p>
 						</div>
 					</div>
 				{:else}
