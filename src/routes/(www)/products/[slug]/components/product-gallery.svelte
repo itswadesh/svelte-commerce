@@ -123,7 +123,15 @@
 							{:else}
 								<!-- Keyed so the thumbnail fully re-renders when a variant change swaps the image URL. -->
 								{#key img}
-									<LazyImg src={img} alt={`${page.data?.product?.title || page.data?.product?.name || 'Product'} - Thumbnail ${idx + 1}`} class="w-full rounded-radius object-cover" />
+									<!-- The rail is `sm:w-24` and hidden below sm, so 96px is the real rendered
+									     width. Without `sizes` LazyImg emits no srcset and every thumbnail pulls
+									     the 1280px render. -->
+									<LazyImg
+										src={img}
+										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product'} - Thumbnail ${idx + 1}`}
+										class="w-full rounded-radius object-cover"
+										sizes="96px"
+									/>
 								{/key}
 							{/if}
 						</div>
@@ -307,10 +315,12 @@
 								Video not supported
 							</video>
 						{:else}
+							<!-- Lightbox rail buttons are h-24 (96px) with a square-ish aspect ratio. -->
 							<LazyImg
 								src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
 								alt={`${page.data?.product?.title || page.data?.product?.name || 'Product'} - Gallery Thumbnail ${i + 1}`}
 								class="h-full w-full rounded-radius object-contain"
+								sizes="96px"
 							/>
 						{/if}
 					</Button>

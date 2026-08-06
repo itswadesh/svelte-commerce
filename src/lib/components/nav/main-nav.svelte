@@ -2,6 +2,7 @@
 	import { page } from '$app/state'
 	import { Home } from '@lucide/svelte'
 	import type { Menu } from '$lib/core/types/index.js'
+	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 </script>
 
 <!-- Editorial menu links for the default theme only (scoped via [data-theme='default']).
@@ -30,7 +31,8 @@
 	<div class="flex gap-3">
 		{#if page?.data?.store?.logo}
 			<a href="/">
-				<img src={page?.data?.store?.logo} class="h-10 object-contain" alt="Arialshop — Women's Fashion Online" />
+				<!-- Renders 40px tall; serve a sized, format=auto asset rather than the raw upload. -->
+			<img src={getImageCDNUrl(page?.data?.store?.logo, 300, 0)} class="h-10 object-contain" alt="{page?.data?.store?.name || 'Store'} logo" />
 			</a>
 		{:else}
 			<a href="/" class="flex items-center space-x-2">

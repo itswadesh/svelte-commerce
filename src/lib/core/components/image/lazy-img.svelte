@@ -117,6 +117,11 @@
 	{#if page?.data?.store?.plugins?.imageCdn?.active && !usingFallback}
 		<div class={klass}>
 			{#if isIntersecting || priority}
+				<!-- srcset/sizes are declared BEFORE src on purpose. This <img> is created by the
+				     client (behind the IntersectionObserver gate), not by the HTML parser, so Svelte
+				     applies attributes in source order and setting src first starts a load for the
+				     full-width candidate before srcset is ever considered — a 96px thumbnail ends up
+				     fetching the 1280px render despite carrying a correct srcset. -->
 				<img
 					onload={() => {
 						loaded = true
@@ -139,9 +144,9 @@
 	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 					data-nimg="1"
 					{loading}
-					src={getImageCDNUrl(src, cdnW, h)}
 					srcset={cdnSrcset}
 					{sizes}
+					src={getImageCDNUrl(src, cdnW, h)}
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
