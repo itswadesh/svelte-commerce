@@ -114,6 +114,10 @@
 	{#if page?.data?.store?.plugins?.imageCdn?.active && !usingFallback}
 		<div class={klass}>
 			{#if isIntersecting}
+				<!-- srcset/sizes are declared before src on purpose. This <img> is created by the
+				     client (IntersectionObserver gate), not the HTML parser, so Svelte applies
+				     attributes in source order — src first starts a load for the full-width
+				     candidate before srcset is considered. -->
 				<img
 					onload={() => {
 						loaded = true
@@ -136,9 +140,9 @@
 	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 					data-nimg="1"
 					{loading}
-					src={getImageCDNUrl(src, cdnW, h)}
 					srcset={cdnSrcset}
 					{sizes}
+					src={getImageCDNUrl(src, cdnW, h)}
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"

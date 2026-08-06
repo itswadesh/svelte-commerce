@@ -20,6 +20,7 @@
 	import MainNav from './main-nav.svelte'
 	import MegaMenu from './mega-menu.svelte'
 	import { page } from '$app/state'
+	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 	import MsSearch from './ms-search.svelte'
 	import AuthModal from '$lib/components/auth/auth-modal.svelte'
 	import { AuthButton } from '$lib/core/components/index.js'
@@ -262,7 +263,7 @@
 					{#if activeThemeName === 'noor'}
 						<img src="/noor/logo.png" class="h-8 object-contain" alt="Noor" />
 					{:else if page?.data?.store?.logo}
-						<img src={page?.data?.store?.logo} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
+						<img src={getImageCDNUrl(page?.data?.store?.logo, 0, 96)} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
 						<span class="text-base font-black uppercase tracking-wider text-black">
 							{page?.data?.store?.name || 'Svelte Commerce'}

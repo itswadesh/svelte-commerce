@@ -120,7 +120,7 @@
 									Video not supported
 								</video>
 							{:else}
-								<LazyImg src={img} alt="Product Image" class="w-full rounded-radius object-cover" />
+								<LazyImg src={img} alt="Product Image" class="w-full rounded-radius object-cover" sizes="96px" />
 							{/if}
 						</div>
 					</Carousel.Item>
@@ -300,6 +300,7 @@
 								src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
 								alt="Thumbnail"
 								class="h-full w-full rounded-radius object-contain"
+								sizes="96px"
 							/>
 						{/if}
 					</Button>

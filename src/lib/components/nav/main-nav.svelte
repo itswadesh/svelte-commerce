@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 	import { Home } from '@lucide/svelte'
 </script>
 
@@ -7,7 +8,7 @@
 	<div class="flex gap-3">
 		{#if page?.data?.store?.logo}
 			<a href="/">
-				<img src={page?.data?.store?.logo} class="h-10 object-contain" alt={page?.data?.store?.name || 'Fine Jewellery'} />
+				<img src={getImageCDNUrl(page?.data?.store?.logo, 0, 120)} class="h-10 object-contain" alt={page?.data?.store?.name || 'Fine Jewellery'} />
 			</a>
 		{:else}
 			<a href="/" class="flex items-center space-x-2">
