@@ -2,8 +2,6 @@
 <h2>Svelte Commerce</h2>
 </div>
 
-`now build a new theme based on {WEBSITE_NAME}`
-
 <div >
 
 **The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payme[...]
@@ -237,13 +235,3 @@ We also support docker images, use the following command to pull the latest dock
 ```sh
 docker run -d -p 3000:3000 ghcr.io/itswadesh/svelte-commerce:latest
 ```
-
-## Features
-
-<!-- If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list[...]
-
-Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted[...]
-
-## Updates
-
-Please refer to [CHANGELOG.md](CHANGELOG.md) for updates
