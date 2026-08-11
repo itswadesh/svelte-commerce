@@ -4,44 +4,44 @@
 
 <div >
 
-**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payme[...]
-Turnkey integration with
+**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with third-party payment gateways and analytics tools.**
 
 ## Backend support
 
 Svelte Commerce talks to any backend through a connector package. Switch backends by
-changing a single export in `src/lib/services/index.ts`:
+changing a single export in `kitcommerce.config.ts`:
 
 ```ts
 // pick exactly one
-export * from '@misiki/litekart-connector'
-// export * from '@misiki/medusa-connector'
-// export * from '@misiki/vendure-connector'
-// export * from '@misiki/saleor-connector'
-// export * from '@misiki/shopify-connector'
-// export * from '@misiki/woocommerce-connector'
+export * as services from "@misiki/shopify-connector"
+// export * as services from "@misiki/litekart-connector"
+// export * as services from '@misiki/medusa-connector'
+// export * as services from '@misiki/vendure-connector'
+// export * as services from '@misiki/saleor-connector'
+// export * as services from '@misiki/commercetools-connector'
+// export * as services from '@misiki/woocommerce-connector'
 ```
 
-| Capability | Litekart | Medusa | Vendure | Saleor |
-| --- | :---: | :---: | :---: | :---: |
-| Product listing / search | ✅ | ✅ | ✅ | ✅ |
-| Product detail page | ✅ | ✅ | ✅ | ✅ |
-| Categories / collections | ✅ | ✅ | ✅ | ❓ |
-| Cart | ✅ | ✅ | ✅ | ✅ |
-| Checkout | ✅ | ✅ | ✅ | ✅ |
-| Payment methods | ✅ | ✅ | ✅ | ✅ |
-| Order placement | ✅ | ✅ | ✅ | ✅ |
-| Order history / detail | ✅ | ❓ | ❌ | ❓ |
-| Auth / registration | ✅ | ❓ | ✅ | ❓ |
-| Addresses | ✅ | ❓ | ✅ | ❓ |
-| Customer profile | ✅ | ❓ | ❌ | ❓ |
-| Wishlist | ✅ | ❓ | ❌ | ❓ |
-| Reviews | ✅ | ❓ | ❌ | ❓ |
-| Coupons / promotions | ✅ | ❓ | ❌ | ❓ |
-| Multi-currency / regions | ✅ | ❓ | ❌ | ❓ |
-| Faceted search (Meilisearch) | ✅ | ❓ | ❌ | ❓ |
-| CMS pages, blog, banners, FAQ | ✅ | ❓ | ❌ | ❌ |
-| Multi-vendor / marketplace | ✅ | ❌ | ❌ | ❌ |
+| Capability                    | Litekart | Shopify | Medusa | Vendure | Saleor | WooCommerce |
+| ----------------------------- | :------: | :-----: | :----: | :-----: | :----: | :---------: |
+| Product listing / search      |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Product detail page           |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Categories / collections      |    ✅    |    ✅   |   ✅   |   ✅    |   ❓   |      ✅     |
+| Cart                          |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Checkout                      |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Payment methods               |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Order placement               |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Order history / detail        |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Auth / registration           |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Addresses                     |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Customer profile              |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
+| Wishlist                      |    ✅    |    ❓   |   ❓   |   ❌    |   ❓   |      ❓     |
+| Reviews                       |    ✅    |    ❓   |   ❓   |   ❌    |   ❓   |      ❓     |
+| Coupons / promotions          |    ✅    |    ❓   |   ❓   |   ❌    |   ❓   |      ❓     |
+| Multi-currency / regions      |    ✅    |    ✅   |   ❓   |   ❌    |   ❓   |      ❓     |
+| Faceted search (Meilisearch)  |    ✅    |    ✅   |   ✅   |   ❌    |   ✅   |      ✅     |
+| CMS pages, blog, banners, FAQ |    ✅    |    ❓   |   ❓   |   ❌    |   ❌   |      ❓     |
+| Multi-vendor / marketplace    |    ✅    |    ✅   |   ❌   |   ❌    |   ❌   |      ❓     |
 
 ✅ supported · ❌ not implemented yet · ❓ untested
 
@@ -72,13 +72,13 @@ Each backend needs a few settings changed before the storefront will work end to
 
 ### Demos
 
-| Backend | Demo |
-| --- | --- |
-| Litekart | https://litekart.in |
-| Medusa | _add URL_ |
-| Vendure | _add URL_ |
-| Saleor | _add URL_ |
-  
+| Backend  | Demo                |
+| :------- | :------------------ |
+| Litekart | https://arialshop.com/ |
+| Medusa   | _add URL_           |
+| Vendure  | _add URL_           |
+| Saleor   | _add URL_           |
+
 </div>
 
 <div align="center">
@@ -152,25 +152,23 @@ Reach out to me with queries!
 <p>
 <img hspace="10" alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
 <img hspace="10" alt="LRNR" src=".github/lrnr.svg" class="h-8 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
-<img hspace="10" alt="Tesoro" src="https://litekart.in/_app/immutable/assets/tesoro.CSdX56Wq.png" class="h-8 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
-<img hspace="10" alt="Secretgreen" src="https://litekart.in/_app/immutable/assets/secretgreen.BzzbCiSU.jpg" class="h-8 px-2 dark:brightness-0 dark:invert"  height="32" style="object-fit: contain;">
 </p>
 <br/>
 
 ## What is it?
 
-- Svelte Commerce is a PWA storefront for your existing eCommerce based on Sveltekit.
-- It is possible to connect with any eCommerce backend that provides an API
-- We are working on adaptors of Medusajs, Shopify, and WooCommerce
+- Svelte Commerce is a PWA storefront for your existing eCommerce based on SvelteKit.
+- It is possible to connect with any eCommerce backend that provides an API.
+- We are working on adapters for Medusa, Shopify, and WooCommerce.
 
 ## Features
 
-- 👨🏻‍💻 Its both SSR and SPA
+- 👨🏻‍💻 It's both SSR and SPA
 - 🚀 Superfast
-- 🔗 It is possible to connect with any eCommerce backend if the backend has Rest API
+- 🔗 It is possible to connect with any eCommerce backend if the backend has a REST API
 - 🔓 Svelte Commerce is free and open source. Download and modify it the way you want
-- 🛒 Most of the essential features for ecommerce are already integrated
-- 💰 No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
+- 🛒 Most of the essential features for eCommerce are already integrated
+- 💰 No need to make a big leap or invest a huge amount. Just take this open source project and attach it to your existing backend.
 
 ## Get Started
 
@@ -181,33 +179,23 @@ npm i
 npm run dev
 ```
 
-Thats all !
+That's all!
 
-Open http://localhost:3000 on chrome. Your app should be live with awesome svelte-commerce up and running
-
-## Development
-
-run `npm link` inside `litekart-utils` repo
-run `npm link @misiki/litekart-utils` inside this repo
-run `npm link` inside `litekart-connector` repo
-run `npm link @misiki/litekart-connector` inside this repo
+Open http://localhost:3000 on Chrome. Your app should be live with awesome svelte-commerce up and running
 
 ## Configuration
 
-There are 3 places to configure
+There is 1 place to configure
 
-1. `src/lib/config/`
-   All non secret and application wide configs are stored here. If required, change according to your requirement.
-
-2. `.env`
-   All secrets stored here
-
-3. `src/lib/services/index.ts`
-   This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are
-   - `export * from '@misiki/litekart-connector'`
-   - `export * from '@misiki/medusa-connector'`
-   - `export * from '@misiki/shopify-connector'`
-   - `export * from '@misiki/woocommerce-connector'`
+1. `kitcommerce.config.ts`
+   This is used to define which service to use. Only 1 of the listed services can be active at a time. Valid values are:
+   - `export * as services from "@misiki/shopify-connector"`
+   - `export * as services from "@misiki/litekart-connector"`
+   - `export * as services from '@misiki/medusa-connector'`
+   - `export * as services from '@misiki/vendure-connector'`
+   - `export * as services from '@misiki/saleor-connector'`
+   - `export * as services from '@misiki/commercetools-connector'`
+   - `export * as services from '@misiki/woocommerce-connector'`
 
 ## Deployment
 
@@ -217,9 +205,9 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=ari[...]
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN)
 
-The following envirnoment variable is mandatory
+The following environment variables are mandatory:
 
 ```
 PUBLIC_LITEKART_DOMAIN=arialshop.com
