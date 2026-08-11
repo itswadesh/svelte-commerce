@@ -271,7 +271,10 @@
 </div>
 
 {#if data?.store?.plugins?.googleReviewsOptIn?.active && firstOrder}
-	{@html `<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
+	<!-- The `<\/script>` escapes are load-bearing: Vite's dep scanner extracts <script>…</script> by
+	regex across the whole file, so an unescaped closing tag in here makes it parse this markup as JS
+	and fail with `Expected "}" but found "{"` on the ${…} interpolations. -->
+	{@html `<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer><\/script>
   <script>
     window.renderOptIn = function() {
       window.gapi.load('surveyoptin', function() {
@@ -288,7 +291,7 @@
           });
       });
     }
-  </script>`}
+  <\/script>`}
 {/if}
 
 <style>
