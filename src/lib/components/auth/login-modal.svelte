@@ -96,8 +96,9 @@
 
 	onMount(() => {
 		if (dev) {
-			// Purge any dev-session mock cookies to avoid remote API validation errors
-			if (document.cookie.includes('connect.sid=dev-session')) {
+			// Purge any dev-session mock cookies to avoid remote API validation errors.
+			// Keyed off `me`, since a real connect.sid is httpOnly and unreadable here.
+			if (document.cookie.includes('dev_user')) {
 				document.cookie = 'connect.sid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
 				document.cookie = 'me=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
 			}
@@ -126,6 +127,8 @@
 				if (args.otp === '1111') {
 					const mockUser = {
 						id: 'dev_user',
+						// UserState gates on me.userId, so the mock must carry one too
+						userId: 'dev_user',
 						phone: args.phone,
 						firstName: 'Dev',
 						lastName: 'User',
