@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Canonical from '$lib/components/seo/canonical.svelte'
 	import Product from '$lib/components/product-catalogue/product-card.svelte'
 	import { chatService, reviewService, ReviewService, vendorService, VendorService } from '$lib/core/services'
 	import { Skeleton } from '$lib/components/ui/skeleton'
@@ -240,3 +241,5 @@
 		<Pagination noOfPage={products.noOfPage} />
 	{/if}
 </div>
+
+<Canonical />

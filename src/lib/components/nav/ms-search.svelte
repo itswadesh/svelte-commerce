@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { ArrowUpRight, Search, X } from '@lucide/svelte'
 	import { Input } from '$lib/components/ui/input/index.js'
-	import { MsSearchRenderer } from '$lib/core/composables/index.js'
+	// Local renderer: Enter goes to the clean slug route and `loading` tracks every query.
+	import MsSearchRenderer from './ms-search-renderer.svelte'
 	import { fade, scale } from 'svelte/transition'
 	import Button from '../ui/button/button.svelte'
 	import { priceRoundUp } from '@misiki/kitcommerce-core/utils'
@@ -147,13 +148,20 @@
 										</li>
 									{/each}
 								</ul>
-							{:else}
+							{:else if search.trim()}
 								<div class="flex flex-col items-center justify-center py-16 text-center">
 									<div class="mb-4 rounded-full bg-gray-50 p-4">
 										<Search class="h-8 w-8 text-gray-300" />
 									</div>
 									<p class="text-lg font-medium text-gray-900">No products found</p>
 									<p class="text-sm text-gray-500">We couldn't find any results matching "{search}".</p>
+								</div>
+							{:else}
+								<div class="flex flex-col items-center justify-center py-16 text-center">
+									<div class="mb-4 rounded-full bg-gray-50 p-4">
+										<Search class="h-8 w-8 text-gray-300" />
+									</div>
+									<p class="text-sm text-gray-500">Start typing to search products.</p>
 								</div>
 							{/if}
 						</div>

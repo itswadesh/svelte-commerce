@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SeoHeader } from '$lib/core/components/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
 	import type { PageProps } from './$types'
 
@@ -22,4 +22,4 @@
 	</div>
 </section>
 
-<Blocks layouts={data.page.layouts}/>
+<Blocks layouts={data?.page?.layouts}/>

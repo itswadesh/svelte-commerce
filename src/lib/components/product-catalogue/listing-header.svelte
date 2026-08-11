@@ -9,7 +9,11 @@
 	const data = $derived(page.data)
 </script>
 
-<div class="ed-lh hidden items-center justify-between lg:flex">
+<!-- Ungated on purpose: this block used to be `hidden lg:flex`, which is display:none — it took the
+     page's only <h1> out of the accessibility tree entirely below 1024px, so every mobile PLP
+     (/products, /[slug], /categories/[slug]) shipped zero h1. Only the sort control is hidden on
+     small screens now; mobile sorts from the fixed bar in mobile-filter.svelte. -->
+<div class="ed-lh flex flex-wrap items-center justify-between gap-y-2">
 	<div class="ed-lh__group intra-gap flex items-center">
 		<h1 class="page-heading ed-lh__title">
 			{#if page.url.searchParams.get('search')}
@@ -28,7 +32,7 @@
 		</div>
 	</div>
 	{#if data.products.data.length}
-		<div class="ed-lh__sort flex items-center gap-2">
+		<div class="ed-lh__sort hidden items-center gap-2 lg:flex">
 			<span class="ed-lh__sortlabel text-[10px] font-bold uppercase tracking-widest text-gray-400">Sort by</span>
 			<Select class="!mb-0 ed-lh__select" id="sort-by" value={selectedSort} data={sortOptions} optionSelected={(value: string) => selectSort(value)} />
 		</div>

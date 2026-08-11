@@ -22,7 +22,9 @@
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 	import MsSearch from './ms-search.svelte'
 	import AuthModal from '$lib/components/auth/auth-modal.svelte'
-	import { AuthButton } from '$lib/core/components/index.js'
+	// Local shadow of the vendored AuthButton — the packaged one is a <div role="button"> with
+	// no tabindex/key handler, so the auth modal was unreachable by keyboard. See the component.
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { cubicOut } from 'svelte/easing'
 	import { NavModule } from '$lib/core/composables/index.js'
@@ -134,7 +136,7 @@
 		class:ed={activeThemeName === 'default'}
 		class="{navModule.isProductListingPage
 			? 'max-sm:border-b'
-			: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-white transition-all duration-200"
+			: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-background transition-all duration-200"
 	>
 		<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
 		     content wins -->
@@ -187,7 +189,7 @@
 			</div>
 		{/if}
 		<!-- Fixed heights stand in for vertical padding here, so the scroll slimming transitions height instead. -->
-		<div class="ed-row page-width flex items-center justify-between bg-white transition-[height] duration-300 ease-in-out {isScrolled ? 'h-12' : 'h-16 sm:h-14'}">
+		<div class="ed-row page-width flex items-center justify-between bg-background transition-[height] duration-300 ease-in-out {isScrolled ? 'h-12' : 'h-16 sm:h-14'}">
 			<div class="hidden justify-center gap-3 sm:flex">
 				<Button
 					variant="ghost"
@@ -198,7 +200,7 @@
 						navModule.openSidebar = true
 					}}
 				>
-					<Menu class="text-black" />
+					<Menu class="text-foreground" />
 				</Button>
 				<MainNav />
 			</div>
@@ -220,7 +222,7 @@
 								<p class="ed-plp-title text-base font-semibold">Products</p>
 							{/if}
 
-							<p class="ed-plp-count text-xs text-gray-500">{(navModule.productsCount ?? 0).toLocaleString('en-US')} products</p>
+							<p class="ed-plp-count text-xs text-muted-foreground">{(navModule.productsCount ?? 0).toLocaleString('en-US')} products</p>
 						</div>
 					</div>
 				{:else}
@@ -233,7 +235,7 @@
 							navModule.openSidebar = true
 						}}
 					>
-						<Menu class="text-black" />
+						<Menu class="text-foreground" />
 					</Button>
 					<MainNav />
 				{/if}
@@ -251,7 +253,7 @@
 					<div class="relative hidden sm:block" role="navigation">
 						<a
 							href="/my/wishlist"
-							class="ed-action flex items-center justify-center rounded-full px-2 text-gray-700 transition-colors hover:text-black"
+							class="ed-action flex items-center justify-center rounded-full px-2 text-muted-foreground transition-colors hover:text-foreground"
 							aria-label="Wishlist"
 						>
 							<Heart class="h-5 w-5" />
@@ -281,7 +283,7 @@
 						<ProfileDropdown onSignOut={navModule.handleSignOut} />
 					{:else}
 						<AuthButton aria-label="Login" type="login">
-							<div class="ed-action flex items-center justify-center text-gray-700 transition-colors hover:text-black">
+							<div class="ed-action flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground">
 								<UserCircle class="h-5 w-5" />
 							</div>
 						</AuthButton>
@@ -316,17 +318,17 @@
 		<div
 			in:fly={{ x: -320, duration: 300, easing: cubicOut }}
 			out:fly={{ x: -320, duration: 300, easing: cubicOut }}
-			class="ed-drawer relative z-[60] flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-gray-100 bg-white text-foreground shadow-2xl"
+			class="ed-drawer relative z-[60] flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-border bg-background text-foreground shadow-2xl"
 		>
 			<!-- Header -->
-			<div class="ed-drawer-head flex items-center justify-between border-b border-gray-100 px-5 py-4">
+			<div class="ed-drawer-head flex items-center justify-between border-b border-border px-5 py-4">
 				<a href="/" class="flex items-center gap-2" onclick={() => (navModule.openSidebar = false)}>
 					{#if page?.data?.store?.logo}
 						<!-- Through the CDN: store logos are uploaded at full resolution and this renders
 					     32px tall. Served raw it can be the heaviest above-the-fold asset on a store. -->
 					<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
-						<span class="text-base font-black uppercase tracking-wider text-black">
+						<span class="text-base font-black uppercase tracking-wider text-foreground">
 							{page?.data?.store?.name || 'Svelte Commerce'}
 						</span>
 					{/if}
@@ -335,7 +337,7 @@
 					variant="ghost"
 					size="icon"
 					aria-label="Close sidebar"
-					class="h-8 w-8 rounded-full bg-gray-50 text-foreground hover:bg-gray-100"
+					class="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/70"
 					onclick={() => (navModule.openSidebar = false)}
 				>
 					<X class="h-4 w-4" />
@@ -343,7 +345,7 @@
 			</div>
 
 			<!-- User Profile Banner -->
-			<div class="ed-drawer-user border-b border-gray-100 bg-gray-50/50 px-5 py-4">
+			<div class="ed-drawer-user border-b border-border bg-muted/50 px-5 py-4">
 				{#if userState?.user?.role}
 					<div class="flex items-center gap-3">
 						<div class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary">
@@ -354,17 +356,17 @@
 							{/if}
 						</div>
 						<div class="overflow-hidden">
-							<p class="truncate text-xs font-bold text-gray-900">
+							<p class="truncate text-xs font-bold text-foreground">
 								{userState.user?.firstName || userState.user?.name || 'My Account'}
 							</p>
-							<p class="truncate text-[10px] font-medium text-gray-500">
+							<p class="truncate text-[10px] font-medium text-muted-foreground">
 								{userState.user?.email || ''}
 							</p>
 						</div>
 					</div>
 				{:else}
 					<div class="flex flex-col gap-1.5">
-						<span class="ed-drawer-label text-[10px] font-bold uppercase tracking-wider text-gray-400">Welcome Guest</span>
+						<span class="ed-drawer-label text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Welcome Guest</span>
 						<AuthButton aria-label="Login" type="login">
 							<div
 								class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all duration-200 hover:bg-primary/95"
@@ -381,15 +383,15 @@
 			<div class="flex-1 space-y-6 overflow-y-auto px-5 py-4">
 				<!-- Shop Section -->
 				<div>
-					<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">Shop & Explore</span>
+					<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Shop & Explore</span>
 					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 						<li>
 							<a
 								href="/"
-								class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+								class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 								onclick={() => (navModule.openSidebar = false)}
 							>
-								<Home class="h-4 w-4 text-gray-400" />
+								<Home class="h-4 w-4 text-muted-foreground" />
 								<span>Home</span>
 							</a>
 						</li>
@@ -398,10 +400,10 @@
 						<li>
 							<a
 								href="/products"
-								class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+								class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 								onclick={() => (navModule.openSidebar = false)}
 							>
-								<Tag class="h-4 w-4 text-gray-400" />
+								<Tag class="h-4 w-4 text-muted-foreground" />
 								<span>All Products</span>
 							</a>
 						</li>
@@ -411,7 +413,7 @@
 				<!-- NavMenu Section -->
 				{#if navModule.navMenu?.length}
 					<div>
-						<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">Quick Links</span>
+						<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Quick Links</span>
 						<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 							{#each navModule.navMenu as menuItem, i}
 								<li>
@@ -419,15 +421,15 @@
 										<div class="flex w-full items-center justify-between">
 											<a
 												href={menuItem?.link || (menuItem?.slug ? '/' + menuItem.slug : '/products')}
-												class="ed-drawer-link flex flex-1 items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+												class="ed-drawer-link flex flex-1 items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 												onclick={() => (navModule.openSidebar = false)}
 											>
-												<Layers class="h-4 w-4 text-gray-400" />
+												<Layers class="h-4 w-4 text-muted-foreground" />
 												<span>{menuItem.name}</span>
 											</a>
 											<button
 												type="button"
-												class="grid h-8 w-8 shrink-0 place-items-center rounded-md text-gray-500 transition-colors hover:bg-gray-100"
+												class="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted"
 												aria-label="Toggle {menuItem.name}"
 												aria-expanded={mobileNestOpen[i] ? 'true' : 'false'}
 												onclick={() => toggleMobileNest(i)}
@@ -436,12 +438,12 @@
 											</button>
 										</div>
 										{#if mobileNestOpen[i]}
-											<ul class="m-0 ml-6 mt-1 flex list-none flex-col gap-1 border-l border-gray-100 p-0 pl-3">
+											<ul class="m-0 ml-6 mt-1 flex list-none flex-col gap-1 border-l border-border p-0 pl-3">
 												{#each menuItem.items as child}
 													<li>
 														<a
 															href={child?.link || (child?.slug ? '/' + child.slug : '/products')}
-															class="ed-drawer-link block rounded-md px-3 py-1.5 text-[11px] font-medium text-gray-600 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+															class="ed-drawer-link block rounded-md px-3 py-1.5 text-[11px] font-medium text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 															onclick={() => (navModule.openSidebar = false)}
 														>
 															{child.name}
@@ -453,10 +455,10 @@
 									{:else}
 										<a
 											href={menuItem?.link}
-											class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+											class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 											onclick={() => (navModule.openSidebar = false)}
 										>
-											<Layers class="h-4 w-4 text-gray-400" />
+											<Layers class="h-4 w-4 text-muted-foreground" />
 											<span>{menuItem.name}</span>
 										</a>
 									{/if}
@@ -468,26 +470,26 @@
 
 				<!-- Account Section -->
 				<div>
-					<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">My Account</span>
+					<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">My Account</span>
 					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 						{#if menuItemsUser?.length}
 							{#each menuItemsUser as m}
 								<li>
 									<a
 										href={m.url}
-										class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+										class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 										onclick={() => (navModule.openSidebar = false)}
 									>
 										{#if m.title === 'Profile'}
-											<UserCircle class="h-4 w-4 text-gray-400" />
+											<UserCircle class="h-4 w-4 text-muted-foreground" />
 										{:else if m.title === 'Orders'}
-											<Package class="h-4 w-4 text-gray-400" />
+											<Package class="h-4 w-4 text-muted-foreground" />
 										{:else if m.title === 'Addresses'}
-											<MapPin class="h-4 w-4 text-gray-400" />
+											<MapPin class="h-4 w-4 text-muted-foreground" />
 										{:else if m.title === 'Change Password'}
-											<KeyRound class="h-4 w-4 text-gray-400" />
+											<KeyRound class="h-4 w-4 text-muted-foreground" />
 										{:else if m.title === 'Wishlist'}
-											<Heart class="h-4 w-4 text-gray-400" />
+											<Heart class="h-4 w-4 text-muted-foreground" />
 										{/if}
 										<span>{m.title}</span>
 									</a>
@@ -498,13 +500,13 @@
 						{#if userState?.user?.role}
 							<li>
 								<button
-									class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-red-600 transition-all duration-200 hover:bg-red-50 hover:text-red-700"
+									class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-destructive transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
 									onclick={() => {
 										navModule.openSidebar = false
 										navModule.handleSignOut()
 									}}
 								>
-									<LogOut class="h-4 w-4 text-red-400" />
+									<LogOut class="h-4 w-4 text-destructive/70" />
 									<span>Sign Out</span>
 								</button>
 							</li>
@@ -515,16 +517,16 @@
 
 			<!-- Footer Contact Box -->
 			{#if page?.data?.store?.businessEmail || page?.data?.store?.businessPhone}
-				<div class="ed-drawer-foot border-t border-gray-100 bg-gray-50/50 p-5">
-					<span class="ed-drawer-label mb-2 block text-[9px] font-bold uppercase tracking-wider text-gray-400">Support Contact</span>
+				<div class="ed-drawer-foot border-t border-border bg-muted/50 p-5">
+					<span class="ed-drawer-label mb-2 block text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Support Contact</span>
 					<div class="flex flex-col gap-2">
 						{#if page?.data?.store?.businessEmail}
 							<a
 								href="mailto:{page?.data?.store?.businessEmail}"
 								aria-label="Email us"
-								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-gray-600 transition-colors duration-200 hover:text-black"
+								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
 							>
-								<Mail class="h-3.5 w-3.5 text-gray-400" />
+								<Mail class="h-3.5 w-3.5 text-muted-foreground" />
 								<span class="truncate">{page?.data?.store?.businessEmail}</span>
 							</a>
 						{/if}
@@ -533,9 +535,9 @@
 							<a
 								href="tel:+{page?.data?.store?.businessPhone}"
 								aria-label="Call us"
-								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-gray-600 transition-colors duration-200 hover:text-black"
+								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
 							>
-								<Phone class="h-3.5 w-3.5 text-gray-400" />
+								<Phone class="h-3.5 w-3.5 text-muted-foreground" />
 								<span>+{page?.data?.store?.businessPhone}</span>
 							</a>
 						{/if}
@@ -656,16 +658,6 @@
 		.ed .ed-drawer-link :global(svg),
 		.ed .ed-contact {
 			transition: none;
-		}
-	}
-
-	.minimum-width-rem {
-		min-width: 360px;
-	}
-
-	@media screen and (max-width: 350px) {
-		.minimum-width-rem {
-			min-width: 300px;
 		}
 	}
 

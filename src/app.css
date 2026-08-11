@@ -27,8 +27,11 @@
 		--card-foreground: 0 0% 0%;
 		--popover: 0 0% 100%;
 		--popover-foreground: 0 0% 0%;
-		--border: 0 0% 93.3%;
-		--input: 0 0% 93.3%;
+		/* Must stay distinct from --background: `* { border-color: hsl(var(--border)) }` below
+		   means an identical value makes every divider, card outline and form-field border
+		   invisible (WCAG 1.4.11). This is also the fallback any unrecognised theme name gets. */
+		--border: 0 0% 85%;
+		--input: 0 0% 80%;
 		--ring: 4.1 81.7% 50.6%;
 		--radius: 0px;
 		--success: 142 65% 36%;
@@ -63,9 +66,12 @@
 		--container-width: 720px;
 		--transition-duration: 0.3s;
 		--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-	}
 
-	.dark {
+		/* One container contract per theme. `.page-width` (header + PLP shell), the footer inner
+		   and each theme homepage's own wrapper all read these, so the logo, hero, page body and
+		   footer sit on the same rail instead of four different max-widths and gutter scales. */
+		--container-max: 1240px;
+		--container-gutter: clamp(16px, 4vw, 32px);
 	}
 
 	[data-theme='default'] {
@@ -105,7 +111,15 @@
 		--ed-line-strong: rgba(27, 26, 23, 0.2);
 		--ed-radius: 4px;
 		--ed-display: 'Bodoni Moda', 'Times New Roman', serif;
-		--ed-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+		/* Follows the shell's --font-body so the store's admin-set font applies; the theme's own
+		   Hanken Grotesk is the fallback. (This block is the ONE definition of the --ed-* set —
+		   DefaultHomepage used to restate it locally with slightly different contents.) */
+		--ed-body: var(--font-body, 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif);
+		--container-max: 1240px;
+		--container-gutter: clamp(20px, 5vw, 48px);
+		/* Editorial alias — kept so existing `var(--ed-gutter)` rules keep working, but it is
+		   the shared container gutter now, not a second source of truth. */
+		--ed-gutter: var(--container-gutter);
 	}
 
 	[data-theme='wine'] {
@@ -119,10 +133,13 @@
 		--accent-foreground: 0 0% 100%;
 		--muted: 0 0% 80%;
 		--muted-foreground: 0 0% 21.2%;
-		--border: 0 0% 93.3%;
-		--input: 0 0% 93.3%;
+		/* Distinct from --background (0 0% 93.3%) — see the :root note above. */
+		--border: 0 0% 85%;
+		--input: 0 0% 80%;
 		--ring: 4.1 81.7% 50.6%;
 		--radius: 0px;
+		--container-max: 1180px;
+		--container-gutter: clamp(16px, 4vw, 32px);
 		--wine-red: #e8281a;
 		--wine-red-dark: #c01e12;
 		--wine-dark: #1a1a1a;
@@ -147,12 +164,15 @@
 		--accent-foreground: 0 0% 100%;
 		--muted: 0 0% 95%;
 		--muted-foreground: 0 0% 45%;
-		--border: 0 0% 97%;
-		--input: 0 0% 97%;
+		/* Was 0 0% 97% against a white background — ~1.05:1, effectively invisible. */
+		--border: 0 0% 90%;
+		--input: 0 0% 86%;
 		--ring: 104 38% 51%;
 		--card: 0 0% 100%;
 		--card-foreground: 0 0% 13.3%;
 		--radius: 16px;
+		--container-max: 1600px;
+		--container-gutter: clamp(16px, 4vw, 32px);
 		--font-heading: 'Inter', sans-serif;
 		--font-body: 'Nunito', sans-serif;
 		--font-primary: 'Nunito', sans-serif;
@@ -176,6 +196,8 @@
 		--card: 0 0% 100%;
 		--card-foreground: 317 100% 14%;
 		--radius: 0px;
+		--container-max: 1360px;
+		--container-gutter: clamp(14px, 4vw, 40px);
 		--font-heading: 'Queens', serif;
 		--font-body: 'YsabeauInfant', 'Inter', sans-serif;
 		--font-primary: 'YsabeauInfant', 'Inter', sans-serif;
@@ -202,6 +224,8 @@
 		--card: 0 0% 100%;
 		--card-foreground: 0 0% 8%;
 		--radius: 0px;
+		--container-max: 1240px;
+		--container-gutter: clamp(16px, 4vw, 32px);
 		--font-heading: 'Cinzel', 'Times New Roman', serif;
 		--font-body: 'Montserrat', 'Inter', sans-serif;
 		--font-primary: 'Montserrat', 'Inter', sans-serif;
@@ -285,45 +309,12 @@
 	@apply text-xl font-bold text-foreground sm:text-xl;
 }
 
+/* The single container rail — see --container-max / --container-gutter in :root. Was
+   `mx-page lg:container lg:mx-auto`, i.e. 8px gutters below lg then a hard jump to Tailwind's
+   container (2rem padding, 1024/1280/1400px), which never lined up with any theme homepage. */
 .page-width {
-	@apply mx-page lg:container lg:mx-auto;
-}
-
-[data-reveal] {
-	opacity: 0;
-	transform: translateY(34px);
-	transition:
-		opacity 0.8s var(--ease),
-		transform 0.8s var(--ease);
-}
-
-[data-reveal].in {
-	opacity: 1;
-	transform: none;
-}
-
-[data-reveal].d1 {
-	transition-delay: 0.08s;
-}
-
-[data-reveal].d2 {
-	transition-delay: 0.16s;
-}
-
-[data-reveal].d3 {
-	transition-delay: 0.24s;
-}
-
-[data-reveal].d4 {
-	transition-delay: 0.32s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	[data-reveal] {
-		opacity: 1;
-		transform: none;
-		transition: none;
-	}
+	width: min(var(--container-max, 1240px), 100% - 2 * var(--container-gutter, 16px));
+	margin-inline: auto;
 }
 
 /* ------------------------------------------------------------------ *

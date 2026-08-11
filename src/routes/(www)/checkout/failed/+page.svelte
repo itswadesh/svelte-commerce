@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { getCartState, getProductState } from '$lib/core/stores/index.js'
-	import { SeoHeader } from '$lib/core/components/index.js'
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { formatPrice } from '$lib/core/utils/index.js'
 	import { ArrowLeft, AlertCircle, RefreshCw } from '@lucide/svelte'
@@ -16,10 +15,11 @@
 	}
 </script>
 
-<SeoHeader
-	metaTitle="Payment Not Completed"
-	metaDescription="We weren't able to process your payment. Your order has not been placed and you have not been charged."
-/>
+<!-- No SeoHeader here: a checkout failure page must not emit a canonical URL or share cards.
+     The checkout layout already marks the whole tree noindex, nofollow. -->
+<svelte:head>
+	<title>Payment Not Completed</title>
+</svelte:head>
 
 <div class="payment-failed-container">
 	<div class="payment-failed-card">

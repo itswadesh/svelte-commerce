@@ -16,7 +16,7 @@
 	<nav class="flex overflow-x-auto scrollbar-none whitespace-nowrap sm:py-1" aria-label="Breadcrumb">
 		<div class="inline-flex items-center space-x-1 text-sm md:space-x-2">
 			<div class="inline-flex flex-shrink-0 items-center">
-				<a href="/" class="inline-flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+				<a href="/" class="inline-flex items-center text-muted-foreground hover:text-foreground">
 					<Home class="mr-2 h-4 w-4 max-sm:hidden flex-shrink-0" />
 					Home
 				</a>
@@ -25,11 +25,11 @@
 				{#each crumbs as { slug, name }, i}
 					<li class="flex-shrink-0">
 						<div class="flex items-center">
-							<ChevronRight class="h-4 min-h-4 w-4 min-w-4 text-gray-400 flex-shrink-0" />
+							<ChevronRight class="h-4 min-h-4 w-4 min-w-4 text-muted-foreground flex-shrink-0" />
 							<div class="grid grid-cols-1">
 								<a
 									href="/{slug}"
-									class="block text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white md:ml-2 {i === categoryHierarchy.length - 1 ? 'truncate max-w-[calc(100vw-9rem)] sm:max-w-[500px] lg:max-w-[760px] xl:max-w-[980px] 2xl:max-w-[1180px]' : ''}"
+									class="block text-muted-foreground hover:text-foreground md:ml-2 {i === categoryHierarchy.length - 1 ? 'truncate max-w-[calc(100vw-9rem)] sm:max-w-[500px] lg:max-w-[760px] xl:max-w-[980px] 2xl:max-w-[1180px]' : ''}"
 									title={name}
 								>
 									{name}

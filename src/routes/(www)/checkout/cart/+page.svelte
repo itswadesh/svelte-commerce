@@ -15,9 +15,34 @@
 	import { tweened } from 'svelte/motion'
 	import { cubicOut } from 'svelte/easing'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
+	import { toast } from 'svelte-sonner'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
+
+	// Keyed by line id, matching the store: cart.svelte.js resolves `lineId = cart_item?.id` and
+	// flips `updatingItem[lineId]` around each mutation. Wrapped in a typed accessor because the
+	// connector's CartLineItem type resolves without its own fields in this file — the same drift
+	// that makes `item.qty`, `item.price` and `item.mrp` error throughout.
+	// `any` on purpose: the connector's CartLineItem type resolves without its own fields in this
+	// file, so a structural type here is rejected as having "no properties in common" with it.
+	const isUpdating = (item: any) => !!cartState.updatingItem[item?.id]
+
+	// Removing a line is one tap with no dialog, so offer an undo instead of a blocking confirm.
+	function removeItem(e: Event, item: any) {
+		cartModule.removeItem(e, item)
+		toast('Removed from your bag', {
+			action: {
+				label: 'Undo',
+				onClick: () =>
+					cartState?.add({
+						qty: item.qty,
+						productId: item.productId,
+						variantId: item.variantId
+					})
+			}
+		})
+	}
 
 	const totalSavings = $derived(
 		(cartState.cart?.lineItems || []).reduce((acc, item) => acc + Math.max(0, (item.mrp || item.price) - item.price) * item.qty, 0) +
@@ -40,13 +65,14 @@
 			variant="ghost"
 			size="icon"
 			onclick={(e) => cartModule.decreaseQty(e, item)}
+			disabled={isUpdating(item) || item.qty <= 1}
 			class="flex h-7 w-7 items-center justify-center"
 			aria-label="Decrease quantity"
 		>
 			<Minus class="size-3 text-gray-900" />
 		</Button>
 		<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-xs font-bold text-gray-900">
-			{#if cartState.updatingItem[item.id]}
+			{#if isUpdating(item)}
 				<LoadingDots />
 			{:else}
 				{item.qty}
@@ -57,6 +83,7 @@
 			size="icon"
 			class="flex h-7 w-7 items-center justify-center"
 			aria-label="Increase quantity"
+			disabled={isUpdating(item)}
 			onclick={(e) => cartModule.increaseQty(e, item)}
 		>
 			<Plus class="size-3 text-gray-900" />
@@ -101,7 +128,9 @@
 				<LoaderCircle class="animate-spin" />
 			</div>
 		{:then _}
-			{#if cartState.cart?.lineItems?.length === 0}
+			<!-- `=== 0` missed a null/undefined cart (e.g. login before anything is added) and fell
+			     through to the item branch, which then crashed. -->
+			{#if !cartState.cart?.lineItems?.length}
 				<div class="flex h-[60vh] flex-col items-center justify-center text-center">
 					<div class="mb-6 rounded-full bg-gray-50 p-8 ring-1 ring-gray-100">
 						<ShoppingBag class="h-12 w-12 text-gray-300" />
@@ -229,7 +258,7 @@
 													<Minus class="size-4" />
 												</button>
 												<span class="border-x px-4 py-1">
-													{#if cartState.updatingItem[item.id]}
+													{#if isUpdating(item)}
 														<LoadingDots />
 													{:else}
 														{item.qty}
@@ -279,7 +308,7 @@
 							</div>
 						{/each} -->
 
-							{#each cartState.cart.lineItems || [] as item}
+							{#each cartState.cart?.lineItems || [] as item}
 								<div class="group relative flex">
 									{#if cartModule.partialCheckoutEnabled}
 										<label
@@ -371,7 +400,8 @@
 															size="icon"
 															class="h-auto w-auto p-1.5 text-gray-400"
 															aria-label="Remove item"
-															onclick={(e) => cartModule.removeItem(e, item)}
+															disabled={isUpdating(item)}
+															onclick={(e) => removeItem(e, item)}
 														>
 															<Trash class="size-3.5 text-destructive" />
 														</Button>
@@ -387,13 +417,14 @@
 														variant="ghost"
 														size="icon"
 														onclick={(e) => cartModule.decreaseQty(e, item)}
+														disabled={isUpdating(item) || item.qty <= 1}
 														class="flex h-7 w-7 items-center justify-center rounded-full"
 														aria-label="Decrease quantity"
 													>
 														<Minus class="size-3 text-gray-900" />
 													</Button>
 													<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-xs font-bold text-gray-900">
-														{#if cartState.updatingItem[item.id]}
+														{#if isUpdating(item)}
 															<LoadingDots />
 														{:else}
 															{item.qty}
@@ -404,6 +435,7 @@
 														size="icon"
 														class="flex h-7 w-7 items-center justify-center rounded-full"
 														aria-label="Increase quantity"
+														disabled={isUpdating(item)}
 														onclick={(e) => cartModule.increaseQty(e, item)}
 													>
 														<Plus class="size-3 text-gray-900" />
@@ -415,7 +447,8 @@
 														size="icon"
 														class="h-auto w-auto p-1.5 text-gray-400"
 														aria-label="Remove item"
-														onclick={(e) => cartModule.removeItem(e, item)}
+														disabled={isUpdating(item)}
+														onclick={(e) => removeItem(e, item)}
 													>
 														<Trash class="size-3.5 text-destructive" />
 													</Button>
@@ -449,7 +482,8 @@
                         size="icon"
                         class="h-auto w-auto p-1.5 text-gray-400 self-end mb-1.5"
                         aria-label="Remove item"
-                        onclick={(e) => cartModule.removeItem(e, item)}
+                        disabled={isUpdating(item)}
+                        onclick={(e) => removeItem(e, item)}
                       >
                         <Trash class="size-3.5" />
                       </Button>
@@ -463,12 +497,12 @@
 					<!-- Right Column - Order Summary -->
 					<div class="flex flex-col gap-3">
 						<!-- coupon applied-->
-						{#if cartState.cart.couponCode}
+						{#if cartState.cart?.couponCode}
 							<div class="flex items-center justify-between px-1 text-sm sm:text-base">
 								<p class="font-medium">Coupon Applied</p>
 								<div class="flex items-center gap-2 rounded-radius bg-gray-100 p-2 px-3">
 									<p class="text-sm font-medium text-gray-600">
-										{cartState.cart.couponCode}
+										{cartState.cart?.couponCode}
 									</p>
 									<Button variant="ghost" size="icon" class="h-auto w-auto p-1 text-destructive" onclick={() => cartState.removeCoupon()}>
 										<X class="size-4" />
@@ -494,24 +528,24 @@
 										<div class="space-y-3 border-b border-border pb-6">
 											<div class="flex justify-between text-sm">
 												<span class="font-medium text-gray-500">Subtotal</span>
-												<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
+												<span class="font-bold text-gray-900">{formatPrice(cartState.cart?.subtotal, page?.data?.store?.currency?.code)}</span>
 											</div>
-											{#if cartState.cart.discountAmount > 0}
+											{#if cartState.cart?.discountAmount > 0}
 												<div class="flex justify-between text-sm">
 													<span class="font-medium text-gray-500">Discount</span>
 													<span class="font-bold uppercase tracking-tight text-orange-600"
-														>- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span
+														>- {formatPrice(cartState.cart?.discountAmount, page?.data?.store?.currency?.code)}</span
 													>
 												</div>
 											{/if}
 											<div class="flex flex-col gap-1">
 												<div class="flex justify-between text-sm">
 													<span class="font-medium text-gray-500">Shipping</span>
-													{#if !cartState.cart.shippingAddress}
+													{#if !cartState.cart?.shippingAddress}
 														<span class="text-[10px] font-bold uppercase tracking-tighter text-gray-400"> Address required </span>
-													{:else if cartState.cart.shippingCharges}
+													{:else if cartState.cart?.shippingCharges}
 														<span class="font-bold text-gray-900"
-															>{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span
+															>{formatPrice(cartState.cart?.shippingCharges, page?.data?.store?.currency?.code)}</span
 														>
 													{:else}
 														<span
@@ -525,7 +559,7 @@
 
 										<div class="flex items-center justify-between pt-2">
 											<span class="text-sm font-bold uppercase text-gray-900">Total</span>
-											<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
+											<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart?.total, page?.data?.store?.currency?.code)}</span>
 										</div>
 
 										<!-- {#if totalSavings > 0}

@@ -6,6 +6,7 @@
 	import type { HTMLAttributes } from 'svelte/elements'
 	import { ModalRenderer } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button'
+	import { dialog } from '$lib/actions/dialog.js'
 
 	type ModalProps = {
 		confirmButtonText?: string
@@ -51,6 +52,7 @@
 	}: ModalProps & WithElementRef<HTMLAttributes<HTMLDivElement>> = $props()
 
 	const modalHistoryKey = '__svelteCommerceModal'
+	const titleId = $props.id()
 	let ownsHistoryEntry = false
 
 	function handleBrowserBack() {
@@ -87,9 +89,17 @@
 <ModalRenderer bind:show {disableSubmitButton} {submit} {close}>
 	{#snippet content({ handleSubmit, handleClose })}
 		{#if show}
-			<section
+			<!-- role/aria-modal + use:dialog: focus moves in on open, Tab stays inside, Escape closes
+			     and focus returns to whatever opened the modal. Backs login/signup/forgot-password. -->
+			<div
 				style="z-index: {zIndex};"
 				transition:fade={{ duration: 100 }}
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={hideHeader ? undefined : titleId}
+				aria-label={hideHeader ? title : undefined}
+				tabindex="-1"
+				use:dialog={handleClose}
 				class="frosted-black fixed inset-0 h-screen w-full items-center justify-center
       {show ? 'flex' : 'hidden'}"
 			>
@@ -102,7 +112,7 @@
 					<div class="{hAuto ? '' : useMaxHeight ? 'max-h-[80vh] ' : 'h-[80vh]'} overflow-y-auto">
 						{#if !hideHeader}
 							<Card.Header style="z-index: {zIndex};" class="sticky top-0 flex w-full flex-row items-center justify-between gap-4 border-b p-4 px-6">
-								<h2 class="text-lg capitalize sm:text-xl">
+								<h2 id={titleId} class="text-lg capitalize sm:text-xl">
 									{title}
 								</h2>
 
@@ -145,7 +155,7 @@
 						</form>
 					</div>
 				</Card.Root>
-			</section>
+			</div>
 		{/if}
 	{/snippet}
 </ModalRenderer>

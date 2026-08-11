@@ -28,12 +28,16 @@
 					{/if}
 				</div>
 
-				<div class="flex flex-wrap items-center gap-3">
+				<!-- role="group" + aria-label ties the swatches/pills to "Size"/"Colour", and aria-pressed
+				     is the only thing that tells AT which one is currently selected — the selected state
+				     was otherwise a class swap (ring / edp-on) and invisible to screen readers. -->
+				<div class="flex flex-wrap items-center gap-3" role="group" aria-label={option.title}>
 					{#each option.values || [] as v}
 						{#if option.type === 'Color'}
 							<Button
 								variant="outline"
 								size="icon"
+								aria-pressed={productState.isVariantOptionSelected(option.id, v.value)}
 								class="edp-swatch group relative h-10 w-10 rounded-full p-0.5 {productState.isVariantOptionSelected(
 									option.id,
 									v.value
@@ -49,6 +53,7 @@
 						{:else}
 							<Button
 								variant={productState.isVariantOptionSelected(option.id, v.value) ? 'default' : 'plain'}
+								aria-pressed={productState.isVariantOptionSelected(option.id, v.value)}
 								disabled={!v?.selectable}
 								class="edp-pill min-w-[3.5rem] !bg-primary px-4 py-2 {
                   productState.isVariantOptionSelected(option.id, v.value)

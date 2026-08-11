@@ -2,11 +2,12 @@
 	import LoginModal from '$lib/components/auth/login-modal.svelte'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import {
-		SeoHeader,
 		GoogleStructuredDataBreadcrumb,
-		GoogleStructuredDataProduct,
 		GoogleStructuredVideoSchema
 	} from '$lib/core/components/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import StructuredData from '$lib/components/seo/structured-data.svelte'
+	import { availabilityUrl } from '$lib/components/seo/schema.js'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
@@ -40,15 +41,25 @@
 		return /^[\s\-–—._,]*$/.test(text) ? '' : text
 	}
 
+	const storeName = $derived(data?.store?.name || '')
+
+	// This is a white-label template: the merchant's own name comes from store settings, and no
+	// delivery/returns promise is made on their behalf unless their own copy says so.
+	const metaTitle = $derived(
+		data?.product?.metaTitle || [data?.product?.title, storeName].filter(Boolean).join(' | ')
+	)
+
 	// Feed data sometimes carries placeholder descriptions ("-"); never surface them in meta tags.
+	// When a product has no copy of its own, fall through to SeoHeader's store-level default
+	// rather than repeating one boilerplate sentence across the whole catalogue.
 	const metaDescription = $derived.by(() => {
 		const provided = cleanHtmlText(data?.product?.metaDescription)
 		if (provided) return provided
 		const description = cleanHtmlText(data?.product?.description)
 		if (data?.product?.title && description) {
-			return `${data.product.title}. ${description.slice(0, 160)}... Discover premium quality ${data.product.title} at Arialshop. Enjoy free delivery on orders over ₹999 and easy 7-day returns. Shop now!`
+			return `${data.product.title}. ${description}`.slice(0, 300).trim()
 		}
-		return `Discover premium quality products at Arialshop. Enjoy free delivery on orders over ₹999 and easy 7-day returns. Shop now!`
+		return ''
 	})
 
 	// Video URLs mixed into the product image list (YouTube or hosted mp4/webm) get a VideoObject schema.
@@ -94,30 +105,126 @@
 			trackViewItem(p, page.data.store?.currency?.code)
 		}
 	})
+
+	const priceValidUntil = new Date(Date.now() + 100 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+
+	// Product JSON-LD, built here from SSR load data.
+	//
+	// `productState.structuredData` is assembled inside a `$effect` in the core composable, and
+	// `$effect` never runs during SSR — so the server-rendered ld+json was an empty husk for every
+	// product (no name, no price, no availability) for every non-JS crawler. A `$derived` off
+	// `data.product` is server-visible. It also lets the fields the page already has actually
+	// reach the markup: gtin13 (barcode), weight, category and the real customer reviews.
+	const productSchema = $derived.by(() => {
+		const p = data?.product
+		if (!p) return ''
+
+		const images = p.images
+			? String(p.images)
+					.split(',')
+					.map((i: string) => i.trim())
+					.filter(Boolean)
+			: [p.thumbnail].filter(Boolean)
+
+		const ratings: any[] = p.ratings ?? []
+		const scored = ratings.filter((r: any) => Number(r?.rating) > 0)
+		const reviewCount = Number(p.reviewCount) || scored.length
+		const ratingValue =
+			Number(p.rating) ||
+			(scored.length
+				? Math.round((scored.reduce((a: number, r: any) => a + Number(r.rating), 0) / scored.length) * 10) / 10
+				: 0)
+
+		const description = cleanHtmlText(p.description)
+		const brandName = p.brandName || storeName
+		const category = p.category?.name || (typeof p.category === 'string' ? p.category : '')
+		const weightUnit = data?.store?.weight_unit
+
+		return {
+			'@context': 'https://schema.org/',
+			'@type': 'Product',
+			name: p.title,
+			image: images,
+			...(description ? { description } : {}),
+			...(p.sku ? { sku: p.sku } : {}),
+			...(p.barcode ? { gtin13: String(p.barcode) } : {}),
+			...(category ? { category } : {}),
+			...(p.weight
+				? {
+						weight: {
+							'@type': 'QuantitativeValue',
+							value: p.weight,
+							...(weightUnit ? { unitText: weightUnit } : {})
+						}
+					}
+				: {}),
+			...(brandName ? { brand: { '@type': 'Brand', name: brandName } } : {}),
+			// Never fabricate stars: an aggregateRating is emitted only when there is a real one.
+			...(reviewCount > 0 && ratingValue > 0
+				? {
+						aggregateRating: {
+							'@type': 'AggregateRating',
+							ratingValue,
+							reviewCount,
+							ratingCount: reviewCount
+						}
+					}
+				: {}),
+			...(scored.length
+				? {
+						review: scored.map((r: any) => ({
+							'@type': 'Review',
+							...(r?.name ? { author: { '@type': 'Person', name: r.name } } : {}),
+							...(r?.createdAt ? { datePublished: r.createdAt } : {}),
+							...(cleanHtmlText(r?.review) ? { reviewBody: cleanHtmlText(r.review) } : {}),
+							reviewRating: {
+								'@type': 'Rating',
+								ratingValue: Number(r.rating),
+								bestRating: 5,
+								worstRating: 1
+							}
+						}))
+					}
+				: {}),
+			offers: {
+				'@type': 'Offer',
+				url: page.url.href,
+				priceCurrency: data?.store?.currency?.code,
+				price: p.price,
+				availability: availabilityUrl(p.stock),
+				priceValidUntil,
+				// Emitted only when the API carries them — a type-only husk with none of the
+				// required properties is a validation error, not a partial win.
+				...(p.shippingDetails
+					? { shippingDetails: { '@type': 'OfferShippingDetails', ...p.shippingDetails } }
+					: {}),
+				...(p.hasMerchantReturnPolicy
+					? {
+							hasMerchantReturnPolicy: {
+								'@type': 'MerchantReturnPolicy',
+								...p.hasMerchantReturnPolicy
+							}
+						}
+					: {})
+			}
+		}
+	})
 </script>
 
 <SeoHeader
-	metaTitle={data?.product?.metaTitle || `${data?.product?.title} — Buy Online at Arialshop | Free Delivery`}
+	{metaTitle}
 	metaDescription={metaDescription}
 	metaKeywords={data?.product?.keywords || ''}
 	image={data?.product?.thumbnail || ''}
 />
 
-<GoogleStructuredDataProduct
-	product={{
-		...productState.structuredData,
-		gtin13: data?.product?.barcode,
-		weight: data?.product?.weight,
-		category: data?.product?.category?.name || data?.product?.category
-	}}
-/>
+<StructuredData schema={productSchema} />
 
-<GoogleStructuredDataBreadcrumb
-  breadcrumbs={data?.product?.categoryHierarchy?.map((item: any, index: number) => ({
-  name: item.name,
-  item: index === data?.product?.categoryHierarchy?.length - 1 ? undefined : `${page.url.origin}${item.slug}`
-  })) || []}
-/>
+<!-- Hand the raw hierarchy over: the core component maps `${origin}/${slug}` for every crumb,
+     including the leaf. Pre-mapping into `breadcrumbs` here previously produced
+     `https://example.compendant` (no separator) and dropped the last crumb entirely, so
+     single-category products emitted no BreadcrumbList at all. -->
+<GoogleStructuredDataBreadcrumb categoryHierarchy={data?.product?.categoryHierarchy || []} />
 
 {#if data?.product}
 	{#each productVideoUrls as videoUrl}

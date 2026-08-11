@@ -91,6 +91,14 @@
 		<link rel="preconnect" href={imageCdnOrigin} />
 	{/if}
 	<link rel="icon" href={data?.store?.favicon || '/favicon.png'} />
+	<!-- No canonical here. A layout-level default cannot know whether the page below it already
+	     emitted one, and the listing routes now pass an explicit `canonicalUrl` that preserves
+	     ?page=N — so a default emitted here would ship a second, *conflicting* <link rel=canonical>
+	     on every paginated listing and Google would discard both. Canonicals are owned per page:
+	     SeoHeader routes get theirs from SeoHeader, the handful of hand-rolled <title> routes
+	     render <Canonical /> ($lib/components/seo/canonical.svelte).
+	     No default <meta name="description"> here either — the root head renders *before* the
+	     page's, so a generic one would shadow the per-page description on every SeoHeader route. -->
 	{#if themeFontsUrl}
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -118,7 +126,9 @@
 	data-theme={data?.theme?.name || 'default'}
 	data-theme-source={data?.theme?.source || 'default'}
 >
-	<main class="min-h-screen bg-background">
+	<!-- Background/min-height wrapper only. NOT a <main>: every group layout renders its own
+	     <main>, and nesting them ships duplicate main landmarks on all 55 routes. -->
+	<div class="min-h-screen bg-background">
 		{#if !!$navigating}
 			<!-- Delayed spinner: fast navigations finish without a loader flash; only
 			     navigations still pending after 700ms get the overlay. -->
@@ -134,6 +144,6 @@
 			{/await}
 		{/if}
 		{@render children()}
-	</main>
+	</div>
 </div>
 <Toaster position="top-center" />

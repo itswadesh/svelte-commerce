@@ -8,12 +8,14 @@
 	import { cubicOut } from 'svelte/easing'
 	import { page } from '$app/state'
 	import { onDestroy, onMount } from 'svelte'
+	import { dialog } from '$lib/actions/dialog.js'
 
 	const cartState = getCartState()
 	const storeData = $derived(page.data?.store)
 
 	const { onClose, onContinueShopping, onRemoveCartItem } = $props()
 	const modalHistoryKey = '__svelteCommerceCartSidebar'
+	const titleId = $props.id()
 	let ownsHistoryEntry = false
 	let isNavigatingFromCart = false
 
@@ -90,10 +92,13 @@
 	}
 </script>
 
-<div class="relative" role="navigation">
+<!-- No role="navigation": a single toggle button is not a navigation landmark, and an unnamed
+     one just adds noise to the screen-reader landmark list. -->
+<div class="relative">
 	<button
 		class="flex rounded-full px-2"
-		aria-label="Toggle Cart"
+		aria-label="Cart, {cartState?.cart?.qty ?? 0} items"
+		aria-expanded={!!cartState?.isOpen}
 		onclick={() => {
 			if (cartState) cartState.isOpen = !cartState.isOpen
 		}}
@@ -126,10 +131,15 @@
 		<div
 			class="shadow-3xl ease-out-expo fixed right-0 top-0 z-[10000000] h-screen w-full overflow-y-auto bg-white transition-all duration-500 sm:w-[37.5%]"
 			transition:slideFadeTopRight={{ duration: 500 }}
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby={titleId}
+			tabindex="-1"
+			use:dialog={onClose}
 		>
 			<div class="relative z-50 flex h-full flex-col justify-between bg-white p-4">
 				<div class="sm:mx-3">
-					<h2 class="mb-4 mt-4 text-xl font-semibold text-gray-900">
+					<h2 id={titleId} class="mb-4 mt-4 text-xl font-semibold text-gray-900">
 						Your Cart
 						{#if cartState.cart?.lineItems?.length > 0}
 							<span class="font-normal text-gray-400">({cartState.cart.qty})</span>

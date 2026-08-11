@@ -7,6 +7,7 @@ import DefaultHomepage from './default/DefaultHomepage.svelte'
 import WineHomepage from './wine/WineHomepage.svelte'
 import OrganicHomepage from './organic/OrganicHomepage.svelte'
 import LimeHomepage from './lime/LimeHomepage.svelte'
+import NoorHomepage from './noor/NoorHomepage.svelte'
 
 /**
  * The prop contract every theme homepage is rendered with by `src/routes/(www)/+page.svelte`.
@@ -39,14 +40,19 @@ export interface ThemeHomepageProps {
 }
 
 /**
- * Themes whose homepage is still a bespoke component.
+ * The homepage every theme in `AVAILABLE_THEMES` (src/lib/theme/index.ts) falls back to.
  *
- * A theme that ships a `layout` from the API is rendered by `ThemeSections` instead and needs no
- * entry here — `noor` was the first to move. This registry shrinks as themes migrate.
+ * A theme that ships a `layout` from the API is rendered by `ThemeSections` instead — `noor` was
+ * the first to move — but it still needs an entry here, because the homepage route resolves
+ * `themeHomepages[activeTheme] || themeHomepages['default']` whenever `store.themeLayout` is
+ * absent. Without one, a noor store with no layout payload rendered the DEFAULT theme's
+ * editorial homepage between the noor header and the noor footer. Every entry in
+ * AVAILABLE_THEMES must appear here so no theme can ever fail open onto another theme's design.
  */
 export const themeHomepages: Record<string, Component<ThemeHomepageProps>> = {
 	default: DefaultHomepage,
 	wine: WineHomepage,
 	organic: OrganicHomepage,
-	lime: LimeHomepage
+	lime: LimeHomepage,
+	noor: NoorHomepage
 }

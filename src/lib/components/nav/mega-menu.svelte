@@ -44,6 +44,12 @@
 		{#if items?.length}
 			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none">
 				{#each items as category, index}
+					<!-- onmousemove alone left the whole subcategory tree unreachable by keyboard (and by
+					     touch — mousemove doesn't fire on tap). focusin/focusout drive the same open/close
+					     for keyboard, Escape backs out; the panel's own :focus-within rule is in <style>. -->
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<!-- Escape is handled on the <li> on purpose: focus can be on any link inside the open
+					     panel, not just the trigger, and the panel is what needs closing. -->
 					<li
 						class="hoverable"
 						onmousemove={() => {
@@ -52,8 +58,19 @@
 						onmouseleave={() => {
 							//closeChildMenu(index, true)
 						}}
+						onfocusin={() => {
+							openChildMenu(category.name, index)
+						}}
+						onfocusout={(e) => {
+							if (!e.currentTarget.contains(e.relatedTarget as Node | null)) closeChildMenu(index, true)
+						}}
+						onkeydown={(e) => {
+							if (e.key === 'Escape') closeChildMenu(index, true)
+						}}
 					>
 						<a
+							aria-haspopup={childrenOf(category)?.length ? 'true' : undefined}
+							aria-expanded={childrenOf(category)?.length ? !!toggleMenuItemChildren[index] : undefined}
 							href={category.link || '/' + category.slug}
 							class="ed-mm-link relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap {slim
 								? 'py-1.5'
@@ -239,7 +256,10 @@
 		z-index: 9999;
 	}
 
-	.hoverable:hover .mega-menu {
+	/* :focus-within as well as :hover — otherwise the panel that focusin renders stays
+	   visibility:hidden and the keyboard path is still dead. */
+	.hoverable:hover .mega-menu,
+	.hoverable:focus-within .mega-menu {
 		visibility: visible;
 		opacity: 1;
 		transform: translate(-50%, 0);

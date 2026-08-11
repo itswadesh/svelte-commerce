@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { SeoHeader } from '$lib/core/components/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import StructuredData from '$lib/components/seo/structured-data.svelte'
 
 	const blog = $derived(page.data.blog)
 	const store = $derived(page.data.store)
@@ -23,32 +24,36 @@
 
 	const blogImage = $derived(blog?.banner || blog?.imageUrl || blog?.thumbnail || '')
 
-	// BlogPosting/Article structured data — only include fields that actually exist.
-	const articleJsonLd = $derived(
-		JSON.stringify({
-			'@context': 'https://schema.org',
-			'@type': 'BlogPosting',
-			headline: blog?.title,
-			mainEntityOfPage: { '@type': 'WebPage', '@id': page.url.origin + page.url.pathname },
-			...(metaDescription ? { description: metaDescription } : {}),
-			...(blogImage ? { image: [blogImage] } : {}),
-			...(blog?.createdAt ? { datePublished: blog.createdAt } : {}),
-			...(blog?.updatedAt ? { dateModified: blog.updatedAt } : {}),
-			author: { '@type': 'Organization', name: store?.name || 'Litekart' },
-			publisher: {
-				'@type': 'Organization',
-				name: store?.name || 'Litekart',
-				...(store?.logo ? { logo: { '@type': 'ImageObject', url: store.logo } } : {})
-			}
-		})
-	)
+	// BlogPosting/Article structured data — only include fields that actually exist, and mirror
+	// what the page visibly renders (byline author, published-at date) so the markup cannot
+	// disagree with the content.
+	const publishedAt = $derived(blog?.publishedAt || blog?.createdAt)
+
+	const articleJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BlogPosting',
+		headline: blog?.title,
+		mainEntityOfPage: { '@type': 'WebPage', '@id': page.url.origin + page.url.pathname },
+		...(metaDescription ? { description: metaDescription } : {}),
+		...(blogImage ? { image: [blogImage] } : {}),
+		...(publishedAt ? { datePublished: publishedAt } : {}),
+		...(blog?.updatedAt ? { dateModified: blog.updatedAt } : {}),
+		author: blog?.author
+			? { '@type': 'Person', name: blog.author }
+			: { '@type': 'Organization', name: store?.name },
+		publisher: {
+			'@type': 'Organization',
+			name: store?.name,
+			...(store?.logo ? { logo: { '@type': 'ImageObject', url: store.logo } } : {})
+		}
+	})
 </script>
 
 <SeoHeader metaTitle={blog?.metaTitle || blog?.title || 'Blog'} {metaDescription} image={blogImage} />
 
-<svelte:head>
-	{@html `<script type="application/ld+json">${articleJsonLd}</script>`}
-</svelte:head>
+<!-- Emitted through the shared escaping emitter: JSON.stringify does not escape `<`, so a post
+     whose title or body closes a script tag would break out of the JSON-LD block. -->
+<StructuredData schema={articleJsonLd} />
 
 <div class="mx-auto max-w-4xl px-4 py-8">
 	{#if blog}

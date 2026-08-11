@@ -40,6 +40,13 @@
 
 	const h = $derived(height === 'auto' ? '0' : +height * 2)
 	const w = $derived(width === 'auto' ? '0' : +width * 2)
+	// Intrinsic-size ATTRIBUTES, as opposed to the CDN resize hints above. Omitted entirely when
+	// the caller sizes the image responsively (`auto`, the default used by every product card):
+	// `width="0" height="0"` is what Lighthouse, axe and crawlers read as the real intrinsic
+	// size, and browsers that infer a ratio from the pair get 0/0 — defeating the very CLS
+	// protection the surrounding aspect-ratio box exists to provide.
+	const attrW = $derived(width === 'auto' ? undefined : +w)
+	const attrH = $derived(height === 'auto' ? undefined : +h)
 	// Width fed to the CDN URL builder: real width when given, else the fallback.
 	const cdnW = $derived(width === 'auto' ? DEFAULT_CDN_WIDTH : +width * 2)
 	// Device-responsive srcset (width descriptors) built from the CDN. Only emitted when a
@@ -147,8 +154,8 @@
 					srcset={cdnSrcset}
 					{sizes}
 					src={getImageCDNUrl(src, cdnW, h)}
-					height={+h}
-					width={+w}
+					height={attrH}
+					width={attrW}
 					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
 					class:opacity-0={!(loaded || priority)}
 					class:opacity-100={loaded || priority}
@@ -157,7 +164,14 @@
 			{/if}
 		</div>
 	{:else}
-		<div class={klass} style="width: {width}px; height: {height}px;">
+		<!-- Guarded the same way the CDN branch's wrapper is: with the `auto` defaults this used
+		     to emit the literal `style="width: autopx; height: autopx;"`, which the CSS parser
+		     silently drops. `klass` stays on this wrapper — callers such as the lime theme's
+		     ll-image rely on it to size the box that holds the <img>. -->
+		<div
+			class={klass}
+			style="{width !== 'auto' ? `width: ${width}px;` : ''} {height !== 'auto' ? `height: ${height}px;` : ''}"
+		>
 			{#if isIntersecting || priority}
 				<img
 					onload={() => {
@@ -176,8 +190,8 @@
 					decoding="async"
 					data-nimg="1"
 	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
-					height={+h}
-					width={+w}
+					height={attrH}
+					width={attrW}
 					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
 					class:opacity-0={!(loaded || priority)}
 					class:opacity-100={loaded || priority}

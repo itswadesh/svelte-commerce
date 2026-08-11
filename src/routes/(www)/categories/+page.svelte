@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Canonical from '$lib/components/seo/canonical.svelte'
+	import EmptyImage from '$lib/core/components/image/empty-image.svelte'
 	import { ChevronRight } from '@lucide/svelte'
 
 	let { data } = $props()
@@ -13,12 +15,24 @@
 	<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
 		{#each data.categories as category}
 			<a
-				href="/categories/{category.slug}"
+				href="/{category.slug}"
 				class="group flex flex-col overflow-hidden rounded-lg border bg-white transition-all hover:border-primary hover:shadow-lg"
 			>
 				<!-- Image Container -->
-				<div class="relative aspect-square overflow-hidden bg-gray-100">
-					<img src={category.img} alt={category.name} class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+				<div class="relative aspect-square overflow-hidden bg-muted">
+					{#if category.img}
+						<img
+							src={category.img}
+							alt={category.name}
+							loading="lazy"
+							decoding="async"
+							class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+						/>
+					{:else}
+						<!-- `+page.server.ts` blanks the core loader's guessed litekart.in S3 URLs, so a
+						     category with no thumbnail of its own lands here rather than on a broken image. -->
+						<EmptyImage class="h-full w-full" />
+					{/if}
 				</div>
 
 				<!-- Category Info -->
@@ -42,3 +56,5 @@
 		{/each}
 	</div>
 </div>
+
+<Canonical />

@@ -14,6 +14,21 @@
 	let { children }: { children: Snippet } = $props()
 	let isMobileMenuOpen = $state(false)
 
+	// The sidebar is a slide-in drawer below `md` and always-visible above it. `inert` is an HTML
+	// attribute and cannot be media-queried, so the breakpoint has to be readable here. Matches the
+	// Tailwind `md` breakpoint used on the <aside> below. Defaults to true so the nav is never
+	// inert during SSR or before the listener attaches.
+	let isDesktop = $state(true)
+	$effect(() => {
+		const mq = window.matchMedia('(min-width: 768px)')
+		const sync = () => {
+			isDesktop = mq.matches
+		}
+		sync()
+		mq.addEventListener('change', sync)
+		return () => mq.removeEventListener('change', sync)
+	})
+
   const wishlistPlugin = $derived(page.data?.store?.plugins?.isWishlist)
 	setWishlistState()
 	setCartState()
@@ -79,9 +94,16 @@
 			: '-translate-x-full md:shadow-none'}"
 		class:md:relative={true}
 	>
-		{#if isMobileMenuOpen || !isMobileMenuOpen}
-			<nav class="relative top-[5rem] space-y-2 p-6 pt-10 md:top-0 md:pt-12">
-				{#each menuItems as { href, icon: Icon, label }, i}
+		<!-- Off-screen is not hidden: while closed on mobile this panel stayed in the tab order, so a
+		     keyboard user walked through every account link with focus parked outside the viewport.
+		     `inert` (no-op above the md breakpoint, where the sidebar is always visible) removes it
+		     from focus and the accessibility tree without touching the slide transition.
+		     The old `{#if isMobileMenuOpen || !isMobileMenuOpen}` guard was always true. -->
+		<nav
+			inert={!isMobileMenuOpen && !isDesktop}
+			class="relative top-[5rem] space-y-2 p-6 pt-10 md:top-0 md:pt-12"
+		>
+			{#each menuItems as { href, icon: Icon, label }, i}
 					{@const isActive = page.url.pathname === href || (page.url.pathname.startsWith(href) && href !== '/my')}
 					<Button
 						{href}
@@ -89,16 +111,15 @@
 						class="w-full justify-start"
 						onclick={() => (isMobileMenuOpen = false)}
 					>
-						<Icon class="mr-4 h-5 w-5" />
-						{label}
-					</Button>
-				{/each}
-			</nav>
-		{/if}
+					<Icon class="mr-4 h-5 w-5" />
+					{label}
+				</Button>
+			{/each}
+		</nav>
 	</aside>
 
 	<!-- Main content -->
-	<main class="flex-1 overflow-y-auto px-2 md:px-6">
+	<main id="main" class="flex-1 overflow-y-auto px-2 md:px-6">
 		<div class="mb-4 block flex justify-start items-center max-md:flex max-md:gap-2">
 			<!-- Mobile menu button -->
 			<Button

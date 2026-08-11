@@ -14,9 +14,10 @@
 </script>
 
 <CouponDrawerRenderer bind:code>
-	{#snippet content({ show, coupons, isChecking, handleCheck, handleCouponClick, handleCopy })}
-		{#if show}
-			<Drawer.Root {open} direction={innerWidth.current && innerWidth.current > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
+	<!-- The code input is always available: unlisted codes (email, influencer, support) have no
+	     entry point otherwise. Only the public coupon list is gated on there being coupons. -->
+	{#snippet content({ coupons, isChecking, handleCheck, handleCouponClick, handleCopy })}
+		<Drawer.Root {open} direction={innerWidth.current && innerWidth.current > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
 				<Drawer.Trigger class="w-full {className ? 'h-full' : ''}">
 					<Button variant="outline" class="group w-full justify-between !py-5 !px-6 {className}">
 						Apply Promo Code
@@ -45,7 +46,7 @@
 							</div>
 						</div>
 						<div class="grid max-h-[80vh] grid-cols-1 gap-4 overflow-y-auto p-4 max-sm:max-h-[60vh]">
-							{#each coupons as coupon}
+							{#each coupons || [] as coupon}
 								<div class="relative rounded-lg border p-4 transition-colors hover:bg-muted/50">
 									<button onclick={() => handleCopy(coupon.code)} class="absolute right-4 top-4 text-muted-foreground hover:text-foreground">
 										<Copy class="h-4 w-4" />
@@ -79,6 +80,5 @@
 					</div>
 				</Drawer.Content>
 			</Drawer.Root>
-		{/if}
 	{/snippet}
 </CouponDrawerRenderer>

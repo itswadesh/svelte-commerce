@@ -102,7 +102,7 @@
 	<meta name="description" content="Complete your store setup at {page?.data?.store?.name} and start selling online." />
 </svelte:head>
 
-<main
+<div
 	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800"
 	role="main"
 >
@@ -230,4 +230,4 @@
 			</div>
 		</div>
 	</div>
-</main>
+</div>

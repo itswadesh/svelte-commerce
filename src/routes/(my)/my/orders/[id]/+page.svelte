@@ -164,7 +164,7 @@
 																<Button
 																	variant="ghost"
 																	size="sm"
-																	href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
+																	href="/products/{item?.slug}#review"
 																	class="h-8 gap-2 text-xs font-bold"
 																>
 																	Rate & Review

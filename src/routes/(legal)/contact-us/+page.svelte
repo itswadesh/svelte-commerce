@@ -3,9 +3,10 @@
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
 	import { Textarea } from '$lib/components/ui/textarea'
-	import { Check, AlertCircle, Mail, MessageSquare, Phone, MapPin, Send, Clock, ArrowRight } from '@lucide/svelte'
+	import { Check, AlertCircle, Mail, Phone, MapPin, Send } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { ContactUsRenderer } from '$lib/core/composables/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import { fade, fly } from 'svelte/transition'
 
 	let info = $state({
@@ -14,25 +15,38 @@
 		message: ''
 	})
 
-	const contactMethods = [
-		{
-			icon: Mail,
-			title: 'Email',
-			value: page?.data?.store?.businessEmail || 'support@sveltecommerce.com',
-			description: 'Our team will respond within 24 hours.'
-		},
-		{
-			icon: MessageSquare,
-			title: 'Live Chat',
-			value: 'Available 9am - 6pm',
-			description: 'Average response time: 5 minutes.'
+	const store = $derived(page?.data?.store)
+
+	// Only real, store-configured contact details — no template fallback address and no
+	// invented live-chat SLA. Anything the store record does not carry simply is not shown.
+	const contactMethods = $derived.by(() => {
+		const methods: Array<{ icon: any; title: string; value: string; description: string }> = []
+
+		const email = store?.contact?.email || store?.businessEmail
+		if (email) {
+			methods.push({ icon: Mail, title: 'Email', value: email, description: 'Our team will respond within 24 hours.' })
 		}
-	]
+
+		const phone = store?.contact?.phone
+		if (phone) {
+			methods.push({ icon: Phone, title: 'Phone', value: phone, description: 'Call us for order and delivery queries.' })
+		}
+
+		const address = [store?.address?.street, store?.address?.city, store?.address?.state, store?.address?.pincode, store?.address?.country]
+			.filter(Boolean)
+			.join(', ')
+		if (address) {
+			methods.push({ icon: MapPin, title: 'Address', value: address, description: 'Registered business address.' })
+		}
+
+		return methods
+	})
 </script>
 
-<svelte:head>
-	<title>Contact Us | Svelte Commerce</title>
-</svelte:head>
+<SeoHeader
+	metaTitle={store?.name ? `Contact Us | ${store.name}` : 'Contact Us'}
+	metaDescription={`Get in touch with ${store?.name || 'us'} about orders, delivery, returns and product questions.`}
+/>
 
 <div class="min-h-screen bg-[#fafafa] py-12 md:py-24">
 	<div class="container mx-auto max-w-6xl px-4">
@@ -51,29 +65,33 @@
 						</div>
 
 						<!-- Contact Methods Grid -->
-						<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
-							{#each contactMethods as method}
-								<div class="group flex items-start gap-5 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
-									<div
-										class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition-colors group-hover:bg-primary group-hover:text-white"
-									>
-										<method.icon class="h-6 w-6" />
+						{#if contactMethods.length}
+							<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
+								{#each contactMethods as method}
+									<div class="group flex items-start gap-5 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+										<div
+											class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition-colors group-hover:bg-primary group-hover:text-white"
+										>
+											<method.icon class="h-6 w-6" />
+										</div>
+										<div>
+											<h3 class="font-bold text-gray-900">{method.title}</h3>
+											<p class="mt-1 font-medium text-primary">{method.value}</p>
+											<p class="mt-1 text-sm text-gray-400">{method.description}</p>
+										</div>
 									</div>
-									<div>
-										<h3 class="font-bold text-gray-900">{method.title}</h3>
-										<p class="mt-1 font-medium text-primary">{method.value}</p>
-										<p class="mt-1 text-sm text-gray-400">{method.description}</p>
-									</div>
-								</div>
-							{/each}
-						</div>
+								{/each}
+							</div>
+						{/if}
 
 						<!-- Socials or Additional Info -->
-						<div class="mt-10 border-t border-gray-100 pt-10">
-							<div class="prose-lg text-sm leading-relaxed text-gray-400 prose-p:my-0 prose-li:my-0">
-								{@html page?.data?.page?.content}
+						{#if page?.data?.page?.content}
+							<div class="mt-10 border-t border-gray-100 pt-10">
+								<div class="prose-lg text-sm leading-relaxed text-gray-400 prose-p:my-0 prose-li:my-0">
+									{@html page.data.page.content}
+								</div>
 							</div>
-						</div>
+						{/if}
 					</div>
 
 					<!-- Right Column: Form -->

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Canonical from '$lib/components/seo/canonical.svelte'
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
 	import type { PageProps } from './$types'
 
@@ -23,4 +24,6 @@
 	</div>
 </section>
 
-<Blocks layouts={data.page.layouts}/>
+<Blocks layouts={data?.page?.layouts}/>
+
+<Canonical />

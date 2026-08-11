@@ -36,6 +36,13 @@
 		...props
 	}: $$Props = $props()
 
+	// One id shared by the <Label for> and the <Input id> so the field actually has an accessible
+	// name. Prefer a caller-supplied id, then `name` (call sites that already hand-roll an outer
+	// <label for="identifier"> pass name="identifier", so those associate for free), then an
+	// SSR-stable generated one.
+	const uid = $props.id()
+	const inputId = $derived(props.id ?? props.name ?? uid)
+
 	// Expose validation state
 	//export { isValid as valid }
 </script>
@@ -43,26 +50,41 @@
 <FormTextboxRenderer {error} {schema} {validityChange} {initialType} {validateOnChange}>
 	{#snippet content({ showPassword, type, touched, validationError, isValid, handleInput, togglePassword })}
 		<div class="mb-3 space-y-2">
-			<Label class="block text-sm font-medium">
-				{label}
-				{#if optional}<span class="text-xs text-muted-foreground">(Optional)</span>{/if}
-			</Label>
+			{#if label}
+				<Label for={inputId} class="block text-sm font-medium">
+					{label}
+					{#if optional}<span class="text-xs text-muted-foreground">(Optional)</span>{/if}
+				</Label>
+			{/if}
 			<div class="relative">
+				<!-- Both handlers must run. The markup used to end in a second `{...props}` spread, which
+				     let a caller's `oninput` silently replace the schema validation; dropping that spread
+				     reversed the bug and killed the caller's handler instead (login-modal's phone-number
+				     sanitiser). Chaining keeps validation and the caller's handler alive together. -->
 				<Input
 					{...props}
+					id={inputId}
 					{type}
 					bind:value
-					oninput={handleInput}
+					oninput={(e) => {
+						handleInput(e)
+						props.oninput?.(e as Parameters<NonNullable<typeof props.oninput>>[0])
+					}}
 					class={cn(
 						className,
 						'w-full',
 						touched ? (isValid ? 'border-green-500 focus:border-green-500' : 'border-red-500 focus:border-red-500') : 'border-gray-200'
 					)}
-					{...props}
 				/>
 
 				{#if initialType === 'password'}
-					<button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 transform" onclick={togglePassword}>
+					<button
+						type="button"
+						class="absolute right-3 top-1/2 -translate-y-1/2 transform"
+						aria-label={showPassword ? 'Hide password' : 'Show password'}
+						aria-controls={inputId}
+						onclick={togglePassword}
+					>
 						{#if showPassword}
 							<EyeOff class="h-4 w-4 text-gray-500 hover:text-gray-700" />
 						{:else}

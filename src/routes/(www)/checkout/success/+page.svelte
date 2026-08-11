@@ -67,7 +67,8 @@
 </script>
 
 <svelte:head>
-	<title>Success | Order #{orderNo || ''}</title>
+	<!-- Order number stays out of the title so it cannot leak through referrers or screenshots. -->
+	<title>Order Confirmed</title>
 </svelte:head>
 
 <div class="min-h-screen bg-[#fafafa] py-12 md:py-5">
@@ -88,13 +89,18 @@
 					</div>
 				</div>
 				<h1 class="mb-3 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Thank you for your order</h1>
-				<p class="mx-auto max-w-lg text-lg text-gray-500 text-sm">We've received your order and we'll notify you as soon as it's on its way.</p>
-
-				<!--{#if orderNo}
-					<div class="mt-6 inline-flex items-center rounded-full border border-gray-100 bg-gray-50 px-4 py-1.5 text-sm font-medium text-gray-600">
-						Order #{orderNo}
-					</div>
-				{/if}-->
+				{#if firstOrder}
+					<p class="mx-auto max-w-lg text-lg text-gray-500 text-sm">We've received your order and we'll notify you as soon as it's on its way.</p>
+				{:else}
+					<p class="mx-auto max-w-lg text-lg text-gray-500 text-sm">
+						Your payment went through. We're still confirming the order details — they'll appear in your account shortly.
+					</p>
+					{#if orderNo}
+						<div class="mt-6 inline-flex items-center rounded-full border border-gray-100 bg-gray-50 px-4 py-1.5 text-sm font-medium text-gray-600">
+							Order #{orderNo}
+						</div>
+					{/if}
+				{/if}
 			</div>
 
 			<!-- Order Progress -->
@@ -128,12 +134,14 @@
 				</div>
 			</div>
 
+			<!-- The order lookup can fail after a real payment; never render empty detail blocks. -->
+			{#if firstOrder}
 			<!-- Items List -->
 			<div class="border-b border-muted/30 pb-6 p-2 md:p-12">
 				<h2 class="mb-6 text-lg font-bold text-gray-900">Order Summary</h2>
 				<div class="divide-y divide-gray-100">
 					{#each orders as { lineItems }}
-						{#each lineItems as item}
+						{#each lineItems || [] as item}
 							<div class="group flex  items-start gap-6 py-6 first:pt-0 last:pb-0">
 								<div
 									class="relative flex-shrink-0 overflow-hidden transition-all duration-300"
@@ -201,11 +209,35 @@
 					<div class="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-2">
 						<Mail class="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
 						<p class="text-sm leading-relaxed text-gray-700">
-							Confirmation sent to <span class="font-bold text-gray-700">{useremail}</span>. We'll email you again when your items ship.
+							{#if useremail}
+								Confirmation sent to <span class="font-bold text-gray-700">{useremail}</span>. We'll email you again when your items ship.
+							{:else}
+								We'll email you a confirmation and let you know again when your items ship.
+							{/if}
 						</p>
 					</div>
 				</div>
 			</div>
+			{:else}
+				<div class="border-b border-muted/30 p-6 md:p-12">
+					<div class="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-4">
+						<Package class="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+						<div class="text-sm leading-relaxed text-gray-700">
+							<p class="font-bold text-gray-900">Order details aren't available yet</p>
+							<p class="mt-1">
+								We couldn't load the details for this order right now. Your payment is safe and nothing needs to be paid again.
+								{#if orderNo}
+									Quote order <span class="font-bold text-gray-900">#{orderNo}</span> if you need to get in touch.
+								{/if}
+							</p>
+							<p class="mt-2">
+								Check <a href="/my/orders" class="font-semibold text-primary underline-offset-4 hover:underline">your orders</a> in a few minutes, or
+								<a href="/contact-us" class="font-semibold text-primary underline-offset-4 hover:underline">contact us</a>.
+							</p>
+						</div>
+					</div>
+				</div>
+			{/if}
 
 			<!-- Action Buttons -->
 			<div class="bg-white p-8 md:p-12">
@@ -238,7 +270,7 @@
 	</div>
 </div>
 
-{#if data?.store?.plugins?.googleReviewsOptIn?.active}
+{#if data?.store?.plugins?.googleReviewsOptIn?.active && firstOrder}
 	{@html `<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
   <script>
     window.renderOptIn = function() {

@@ -157,7 +157,7 @@
 		{:else if featuredCategories.length > 0}
 			<div class="category-grid">
 				{#each featuredCategories.slice(0, 6) as cat}
-					<a href="/categories/{cat.slug || cat._id}" class="category-card">
+					<a href="/{cat.slug || cat._id}" class="category-card">
 						{#if cat.image || cat.img}
 							<img src={themeImage(cat.image || cat.img, cat.name)} alt={cat.name} />
 						{/if}

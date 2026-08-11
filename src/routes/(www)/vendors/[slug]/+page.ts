@@ -1,43 +1,10 @@
-import { VendorService } from '$lib/core/services'
-import type { Vendor } from '$lib/core/types'
-import { error } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit'
 import type { PageLoad } from './$types'
 
-function transformVendorOptions(options: Vendor['options']) {
-	return options?.map((option) => {
-		const added = new Set<string>([])
-
-		option.values = option?.values
-			?.map((v) => {
-				if (added.has(v.value)) {
-					return null as any
-				}
-
-				added.add(v.value)
-				return v
-			})
-			?.filter((v) => v)
-
-		return option
-	})
-}
-
-export const load: PageLoad = async ({ fetch, params }) => {
-	const slug = params.slug
-	try {
-		const vendor = await VendorService.getOne(slug)
-
-		if (vendor.options?.length) {
-			vendor.options = transformVendorOptions(vendor.options)
-		}
-
-		let brandratings = await VendorService.getAllVendorRatings(slug)
-		let allratings = brandratings.data
-		return {
-			vendor: vendor as Vendor,
-			allratings
-		}
-	} catch (e) {
-		error(404, 'Vendor not found')
-	}
+// `/vendors/<slug>` shipped a loader with a 0-byte `+page.svelte`, so a successful load rendered
+// an empty document with a 200 — worse than a 404, because it gets indexed as thin content.
+// `/store/<slug>` is the route that actually renders a vendor storefront (products, ratings,
+// chat), so this permanently redirects there rather than duplicating it.
+export const load: PageLoad = ({ params }) => {
+	redirect(301, `/store/${params.slug}`)
 }

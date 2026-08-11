@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { page } from '$app/state'
 	import { Heart } from '@lucide/svelte'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
@@ -30,19 +31,26 @@
 				? product.ratings.length
 				: 0
 	)
+
+	// The store's configured product image ratio, as a CSS value ('3:4' → '3 / 4'). Without
+	// this LlImage fell back to its own 1/1 default, so a store set to 3:4 or 16:9 got
+	// centre-cropped square cards on lime only.
+	const mediaRatio = $derived(toCssRatio(aspectRatio || page?.data?.store?.productImageAspectRatio, '1:1'))
 </script>
 
 <ProductCardRenderer {product} {aspectRatio}>
-	{#snippet content({ toggleWishlist, isWishlisted, addToCart })}
+	{#snippet content({ toggleWishlist, isWishlisted, addToCart, loadingForCart, loadingForWishlist })}
 		<article class="ll-card" data-testid="product-card-{product.id}">
 			<a class="ll-card-media" href="/products/{product.slug}" aria-label="View {product.title || product.name}">
-				<LlImage src={product.thumbnail || product?.image_url} alt={product.title || product.name} />
+				<LlImage src={product.thumbnail || product?.image_url} alt={product.title || product.name} ratio={mediaRatio} />
 
 				{#if wishlistPlugin?.active}
 					<button
 						type="button"
 						class="ll-card-wish"
 						class:is-active={isWishlisted}
+						disabled={loadingForWishlist}
+						aria-busy={loadingForWishlist}
 						aria-label={isWishlisted
 							? labels.removeFromWishlist || 'Remove from wishlist'
 							: labels.addToWishlist || 'Add to wishlist'}
@@ -69,7 +77,9 @@
 
 			{#if !hideCartControls}
 				<div class="ll-card-actions">
-					<LlButton variant="outline" full onclick={() => addToCart(product)}>
+					<!-- LlButton already renders an inline spinner for `loading`; without it the
+					     button stayed clickable in flight and a second tap added the item twice. -->
+					<LlButton variant="outline" full loading={loadingForCart} disabled={loadingForCart} onclick={() => addToCart(product)}>
 						{labels.addToBag || 'Add to Bag'}
 					</LlButton>
 				</div>
@@ -109,6 +119,11 @@
 
 	.ll-card-wish:hover {
 		background: #fff;
+	}
+
+	.ll-card-wish:disabled {
+		cursor: default;
+		opacity: 0.55;
 	}
 
 	.ll-card-wish :global(.ll-card-wish-icon) {

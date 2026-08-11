@@ -7,7 +7,7 @@
 	import { userService } from '$lib/core/services/index.js'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import { AuthButton } from '$lib/core/components/index.js'
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 
 	let email = $state('')
 	let isLoading = $state(false)
@@ -52,7 +52,7 @@
 	<meta name="description" content="Start your online business with {page?.data?.store?.name}. Create your store and reach customers worldwide." />
 </svelte:head>
 
-<main
+<div
 	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800"
 	role="main"
 >
@@ -146,11 +146,11 @@
 			<div class="text-center text-xs text-gray-500">
 				<p>By creating a store, you agree to our</p>
 				<div class="space-x-1">
-					<a href="/terms" class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-300">Terms of Service</a>
+					<a href="/terms-and-conditions" class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-300">Terms of Service</a>
 					<span>and</span>
-					<a href="/privacy" class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-300">Privacy Policy</a>
+					<a href="/privacy-policy" class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-300">Privacy Policy</a>
 				</div>
 			</div>
 		</div>
 	</div>
-</main>
+</div>

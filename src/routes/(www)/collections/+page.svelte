@@ -2,125 +2,87 @@
 	import { page } from '$app/state'
 	import Select from '$lib/components/form/select.svelte'
 	import { goto } from '$app/navigation'
-	import CollectionCard from '$lib/components/product-catalogue/product-card.svelte'
-	import DesktopFilter from '$lib/components/product-catalogue/desktop-filter.svelte'
-	import MobileFilter from '$lib/components/product-catalogue/mobile-filter.svelte'
-	import { searchService } from '$lib/core/services'
-	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
+	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import Pagination from '$lib/components/common/pagination.svelte'
-	import type { ProductSearchResult } from '$lib/core/types'
-	import { SeoHeader } from '$lib/core/components/index.js'
-	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 
-	setDesktopFilterState()
-	setCategoryFilterState()
+	// The route's +page.ts (wwwCollectonsLoad) already fetches the collection list server-side.
+	// This page used to ignore it and re-run a *product* search in an $effect, which never runs
+	// during SSR — so crawlers were served "0 Collections found" above an empty grid.
+	const collections = $derived(page.data?.data || [])
+	const count = $derived(page.data?.count ?? 0)
+	const noOfPage = $derived(page.data?.noOfPage)
 
-	let collections: ProductSearchResult = $state(searchService.emptyResult())
-	let selectedSort = $state(page.url.searchParams.get('sort') || 'recommended')
-	let loading = $state(false)
+	let selectedSort = $state(page.url.searchParams.get('sort') || '-createdAt')
 
-	$effect(() => {
-		const search = page.url.searchParams.get('search')
-		searchCollections(search || '')
-	})
-
-	const searchCollections = async (query: string) => {
-		try {
-			loading = true
-
-			// For the collections page, we use a simple query search or grab data from the URL
-			const result = await searchService.searchWithQuery(query)
-
-			collections = result
-		} catch (error) {
-			console.error('Error searching collections:', error)
-			collections = searchService.emptyResult()
-		} finally {
-			loading = false
-		}
-	}
+	const storeName = $derived(page.data?.store?.name)
 
 	const selectSort = (value: string) => {
-		goto(`/${page.params.slug || 'collections'}?sort=${value}`)
+		goto(`/collections?sort=${value}`)
 	}
 </script>
 
-<SeoHeader metaTitle={page.params.slug || 'Collections'} />
+<SeoHeader
+	metaTitle={storeName ? `Collections | ${storeName}` : 'Collections'}
+	metaDescription="Browse every curated product collection in the store."
+/>
 
-<div class="container mx-auto mt-2 flex h-full min-h-screen flex-row max-md:px-4 md:gap-2">
-	<!-- These render only when the route actually supplies product facets. DesktopFilterState
-	     reads `page.data.products.facets` directly — NOT the props that used to be passed here,
-	     which it does not even declare — so on this route `filterState.tags` was undefined and
-	     `.length` threw during SSR, 500ing the whole page. The old guard, `collections?.count >= 0`,
-	     was true for the empty result the component initialises with (count: 0), so it never gated
-	     anything. Guarding on the source the state actually reads keeps the filters working
-	     wherever products ARE loaded. -->
-	{#if page.data?.products?.facets}
-		<div class="hidden border-r border-input md:block">
-			<DesktopFilter />
-		</div>
-
-		<div class="block md:hidden">
-			<MobileFilter
-				bind:selectedSort
-				onSortChange={(value: string) => {
-					selectedSort = value
-					selectSort(value)
-				}}
-			/>
-		</div>
-	{/if}
-
+<div class="container mx-auto mt-2 flex h-full min-h-screen flex-col max-md:px-4 md:gap-2">
 	<div class="flex-1">
 		<div class="mb-4 flex flex-col items-start gap-2">
-			<h1 class="text-2xl font-bold capitalize">
-				{page.params.slug || page.url.searchParams.get('search') || 'All Collections'}
-			</h1>
-			<span class="text-sm text-gray-400">{collections?.count} Collections found</span>
+			<h1 class="text-2xl font-bold">All Collections</h1>
+			<span class="text-sm text-muted-foreground">{count} {count === 1 ? 'Collection' : 'Collections'} found</span>
 		</div>
 
 		<div class="hidden flex-row items-center gap-2 md:flex">
-			<span class="text-sm font-normal text-gray-400">Sort by:</span>
+			<span class="text-sm font-normal text-muted-foreground">Sort by:</span>
 			<Select
 				class="!mb-0"
 				id="sort-by"
 				value={selectedSort}
 				data={[
-					{ value: 'recommended', name: 'Recommended' },
-					{ value: 'updatedAt', name: "What's New" },
-					{ value: 'price-low-to-high', name: 'Price: Low to High' },
-					{ value: 'price-high-to-low', name: 'Price: High to Low' },
-					{ value: 'asc', name: 'Name: A-Z' },
-					{ value: 'desc', name: 'Name: Z-A' },
-					{ value: 'discount', name: 'Discount: High to Low' },
-					{ value: 'rating', name: 'Rating: High to Low' }
+					{ value: '-createdAt', name: "What's New" },
+					{ value: 'createdAt', name: 'Oldest First' },
+					{ value: 'name', name: 'Name: A-Z' },
+					{ value: '-name', name: 'Name: Z-A' }
 				]}
-				optionSelected={(value: string) => selectSort(value)}
+				optionSelected={(value: string) => {
+					selectedSort = value
+					selectSort(value)
+				}}
 			/>
 		</div>
 
-		{#if loading}
-			<ul class="mt-2 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-				{#each { length: 8 } as _}
-					<li class="w-full">
-						<Skeleton class="size-full min-h-56" />
+		{#if !collections.length}
+			<div class="flex h-96 items-center justify-center">
+				<p class="text-sm text-muted-foreground">No collections found</p>
+			</div>
+		{:else}
+			<ul class="mt-4 grid grid-cols-2 gap-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+				{#each collections as collection, i}
+					<li>
+						<a href="/collections/{collection.slug || collection.id}" class="group flex flex-col gap-2">
+							<div class="aspect-square overflow-hidden rounded-md border border-border bg-muted">
+								<LazyImg
+									src={collection.img || collection.images?.[0]}
+									alt={collection.name}
+									width={400}
+									height={400}
+									class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+									priority={i < 4}
+								/>
+							</div>
+							<h2 class="text-sm font-medium text-foreground group-hover:underline">{collection.title || collection.name}</h2>
+							{#if collection.subTitle}
+								<p class="text-xs text-muted-foreground">{collection.subTitle}</p>
+							{/if}
+						</a>
 					</li>
 				{/each}
 			</ul>
-		{:else}
-			{#if !collections?.data?.length}
-				<div class="flex h-96 items-center justify-center">
-					<p class="text-sm text-muted-foreground">No collections found</p>
-				</div>
-			{:else}
-				<div class="mt-4 grid grid-cols-2 gap-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
-					{#each collections?.data as product, i}
-						<CollectionCard {product} priority={i < 4} />
-					{/each}
-				</div>
-			{/if}
+
 			<div class="mt-20">
-				<Pagination noOfPage={collections?.totalPages} />
+				<Pagination {noOfPage} />
 			</div>
 		{/if}
 	</div>
