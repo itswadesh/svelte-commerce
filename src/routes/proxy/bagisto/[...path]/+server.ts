@@ -35,7 +35,6 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
 			fetchOptions.duplex = 'half';
 		}
 
-    console.log("Fetchng ---", targetUrl)
 		const response = await fetch(targetUrl, fetchOptions);
 
 		const responseHeaders = new Headers(response.headers);

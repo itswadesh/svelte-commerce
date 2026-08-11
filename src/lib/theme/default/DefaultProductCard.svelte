@@ -25,13 +25,16 @@
 			data-productid="product-card-{product.id}"
 			class="dpc group"
 		>
+			<!-- Same URL as the title link below. This used to append `?variant_id=`, often empty, so
+			     one product had two crawlable URLs and the image and title on a single card pointed
+			     at different ones. -->
 			<a
 				data-testid="product-card-link"
 				class="dpc__media-link"
-				href="/products/{product.slug}?variant_id={product?.variants?.[0]?.id || ''}"
-				aria-label="View details of {product.name}"
+				href="/products/{product.slug}"
+				aria-label="View details of {product.title || product.name}"
 			>
-				<figure title={product.name} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: {aspectRatio || '1 / 1'};">
+				<figure title={product.title || product.name} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: {aspectRatio || '1 / 1'};">
 					{#if product.thumbnail || product?.image_url}
 						<LazyImg
 							src={product.thumbnail || product?.image_url}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import { AuthButton } from '$lib/core/components/index.js'
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 </script>
 
 <svelte:head>
@@ -9,7 +9,7 @@
 	<meta name="description" content="Thank you for signing up! Please verify your email to complete registration." />
 </svelte:head>
 
-<main class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800">
+<div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800">
 	<div class="w-full max-w-md space-y-8 rounded-lg bg-white/80 p-8 text-center shadow-xl backdrop-blur-sm dark:bg-gray-800/90">
 		<div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
 			<svg
@@ -69,4 +69,4 @@
 			</div>
 		</div>
 	</div>
-</main>
+</div>

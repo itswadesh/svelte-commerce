@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { ShoppingBag, Home, ArrowLeft } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 </script>
+
+<!-- Without this the error page inherited no <title> and emitted no robots directive, so a 404
+     was indexable and took its name in search results from its own URL. -->
+<SeoHeader metaTitle={`Error ${page.status}`} noindex={true} />
 
 <div class="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
 	<div class="text-center">

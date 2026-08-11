@@ -3,12 +3,10 @@
 	import { fly } from 'svelte/transition'
 	import { X } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
-	import {
-		GoogleStructuredDataOrganization,
-		GoogleStructuredDataProductsList,
-		GoogleStructuredDataWebsite,
-		SeoHeader
-	} from '$lib/core/components/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import StructuredData from '$lib/components/seo/structured-data.svelte'
+	import ProductListSchema from '$lib/components/seo/product-list-schema.svelte'
+	import { cleanSchemaText } from '$lib/components/seo/schema.js'
 	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { setCollectionState } from '$lib/core/stores/collection.svelte.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
@@ -19,7 +17,9 @@
 
 	let { data } = $props()
 
-	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
+	// `url.origin` already carries the scheme — prefixing it with another `https://` produced
+	// `https://https://example.com` and broke the WebSite -> Organization @id join.
+	const origin = $derived(sveltePage.url.origin)
 	const [aspectWidth, aspectHeight] = $derived(
 		data?.store?.productImageAspectRatio?.split(':') || ['1', '1']
 	)
@@ -48,8 +48,15 @@
 	const brandName = $derived(data?.store?.name || themeContent.brandName || 'Store')
 	const themeDescription = $derived(themeContent.description || page?.metaDescription || '')
 
-	const featuredCategories = $derived(homepageModule.featuredCategories || [])
-	const featuredProducts = $derived(homepageModule.featuredProducts || [])
+	// Server data first, module second. `+page.ts` fetches both so they are in the SSR HTML;
+	// HomepageModule then populates its own copies on the client and takes over once it has them
+	// (it owns the load-more accumulator, so its list grows past this first page).
+	const featuredCategories = $derived(
+		homepageModule.featuredCategories?.length ? homepageModule.featuredCategories : (data?.featuredCategories ?? [])
+	)
+	const featuredProducts = $derived(
+		homepageModule.featuredProducts?.length ? homepageModule.featuredProducts : (data?.featuredProducts ?? [])
+	)
 
 	// Section-driven themes ship their homepage as data (`themeLayout` from the API) and are
 	// rendered with the shared section library. Themes that still have a bespoke component fall
@@ -74,39 +81,95 @@
 			.slice(0, 6)
 	])
 
+	// Organization JSON-LD, built here rather than via GoogleStructuredDataOrganization, whose
+	// prop defaults hardcode `@type: ['Organization','JewelryStore']` and `priceRange: '$$$'` —
+	// wrong for every non-jewellery store deployed from this white-label template, and not
+	// overridable by passing `undefined` (that just re-selects the default).
+	const organizationSchema = $derived.by(() => {
+		const store = data?.store
+		const social = store?.socialSharing?.active
+			? (Object.values(store?.socialSharing || {}).filter(
+					(link: any) => typeof link === 'string' && link.startsWith('http')
+				) as string[])
+			: []
+		if (!social.length) {
+			const plugin = store?.plugins?.socialSharingButtons || {}
+			for (const key in plugin) {
+				if (key !== 'active' && plugin[key]) social.push(plugin[key])
+			}
+		}
+
+		const description = cleanSchemaText(themeDescription || store?.description)
+		const logo = data?.store?.logo
+
+		return {
+			'@context': 'https://schema.org',
+			// The store declares its own entity type; anything else would be a guess.
+			'@type': store?.schemaType || 'Organization',
+			'@id': `${origin}/#organization`,
+			name: brandName,
+			url: origin,
+			...(logo ? { logo, image: logo } : {}),
+			...(description ? { description } : {}),
+			...(store?.priceRange ? { priceRange: store.priceRange } : {}),
+			address: store?.address
+				? {
+						'@type': 'PostalAddress',
+						streetAddress: store?.address?.street,
+						addressLocality: store?.address?.city,
+						addressRegion: store?.address?.state,
+						postalCode: store?.address?.pincode,
+						addressCountry: store?.address?.country
+					}
+				: {
+						'@type': 'PostalAddress',
+						streetAddress: store?.address_1,
+						addressLocality: store?.city,
+						addressRegion: store?.state,
+						postalCode: store?.zip,
+						addressCountry: store?.country?.iso2
+					},
+			contactPoint: {
+				'@type': 'ContactPoint',
+				telephone: store?.contact?.phone || store?.businessPhone,
+				email: store?.contact?.email || store?.businessEmail,
+				contactType: 'customer service'
+			},
+			sameAs: social
+		}
+	})
+
+	// WebSite JSON-LD. The core component's SearchAction points at `/products?search=`, which
+	// this site's own robots.txt disallows (`Disallow: /*?*search=`) and the project's link
+	// convention forbids; the canonical term route is the bare slug.
+	const websiteSchema = $derived.by(() => {
+		const description = cleanSchemaText(data?.store?.description)
+		return {
+			'@context': 'https://schema.org',
+			'@type': 'WebSite',
+			name: data?.store?.name,
+			...(description ? { description } : {}),
+			url: origin,
+			publisher: { '@id': `${origin}/#organization` },
+			potentialAction: {
+				'@type': 'SearchAction',
+				target: {
+					'@type': 'EntryPoint',
+					urlTemplate: `${origin}/{search_term_string}`
+				},
+				'query-input': 'required name=search_term_string'
+			}
+		}
+	})
 </script>
 
-<GoogleStructuredDataProductsList products={homepageModule.featuredProductsStructuredData} />
+<!-- Server-rendered: `+page.ts` loads featuredProducts, so this ItemList is populated in the SSR
+     HTML rather than appearing only after hydration. -->
+<ProductListSchema products={featuredProducts} />
 
-<GoogleStructuredDataOrganization
-	name={brandName}
-	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
-	logo={data?.store?.logo}
-	description={themeDescription}
-	sameAs={data?.store?.socialSharing?.active
-		? (Object.values(data?.store?.socialSharing || {}).filter(
-				(link: any) => typeof link === 'string' && link.startsWith('http')
-			) as string[])
-		: []}
-	address={data?.store?.address
-		? {
-				streetAddress: data?.store?.address?.street,
-				addressLocality: data?.store?.address?.city,
-				addressRegion: data?.store?.address?.state,
-				postalCode: data?.store?.address?.pincode,
-				addressCountry: data?.store?.address?.country
-			}
-		: undefined}
-	contactPoint={data?.store?.contact?.phone
-		? {
-				telephone: data?.store?.contact?.phone,
-				email: data?.store?.contact?.email,
-				contactType: 'customer service'
-			}
-		: undefined}
-/>
+<StructuredData schema={organizationSchema} />
 
-<GoogleStructuredDataWebsite />
+<StructuredData schema={websiteSchema} />
 
 <SeoHeader
 	metaTitle={themeContent.seoTitle || page?.metaTitle || brandName}

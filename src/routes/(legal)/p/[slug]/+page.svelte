@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SeoHeader } from '$lib/core/components/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 
 	let { data } = $props()
 

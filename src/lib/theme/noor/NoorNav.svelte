@@ -3,7 +3,7 @@
 	import MsSearch from '$lib/components/nav/ms-search.svelte'
 	import CartSidebar from '$lib/components/nav/cart-sidebar.svelte'
 	import ProfileDropdown from '$lib/components/nav/profile-dropdown.svelte'
-	import { AuthButton } from '$lib/core/components/index.js'
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 
 	let {
 		navModule,

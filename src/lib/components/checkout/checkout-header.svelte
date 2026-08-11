@@ -6,8 +6,10 @@
 	let { step = 1 } = $props()
 </script>
 
-<div class="mb-8 hidden sm:block">
-	<div class="flex items-center justify-center space-x-4 md:space-x-8">
+<!-- Shown on mobile too: it is the only step context and the only way back to cart/address there.
+     Below sm only the current step keeps its label so all four steps still fit. -->
+<div class="mb-8">
+	<div class="flex items-center justify-center space-x-2 sm:space-x-4 md:space-x-8">
 		<!-- Step 1: Cart -->
 		<Button
 			variant="plain"
@@ -26,10 +28,10 @@
 			>
 				1
 			</div>
-			<span class="ml-2 text-xs font-bold uppercase tracking-widest">Cart</span>
+			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 1 ? '' : 'hidden sm:inline'}">Cart</span>
 		</Button>
 
-		<div class="h-px w-8 bg-gray-200 md:w-16"></div>
+		<div class="h-px w-4 bg-gray-200 sm:w-8 md:w-16"></div>
 
 		<!-- Step 2: Address -->
 		<Button
@@ -49,10 +51,10 @@
 			>
 				2
 			</div>
-			<span class="ml-2 text-xs font-bold uppercase tracking-widest">Address</span>
+			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 2 ? '' : 'hidden sm:inline'}">Address</span>
 		</Button>
 
-		<div class="h-px w-8 bg-gray-200 md:w-16"></div>
+		<div class="h-px w-4 bg-gray-200 sm:w-8 md:w-16"></div>
 
 		<!-- Step 3: Payment -->
 		<Button
@@ -71,10 +73,10 @@
 			>
 				3
 			</div>
-			<span class="ml-2 text-xs font-bold uppercase tracking-widest">Payment</span>
+			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 3 ? '' : 'hidden sm:inline'}">Payment</span>
 		</Button>
 
-		<div class="h-px w-8 bg-gray-200 md:w-16"></div>
+		<div class="h-px w-4 bg-gray-200 sm:w-8 md:w-16"></div>
 
 		<!-- Step 4: Placed -->
 		<Button
@@ -93,7 +95,7 @@
 			>
 				4
 			</div>
-			<span class="ml-2 text-xs font-bold uppercase tracking-widest">Placed</span>
+			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 4 ? '' : 'hidden sm:inline'}">Placed</span>
 		</Button>
 	</div>
 </div>

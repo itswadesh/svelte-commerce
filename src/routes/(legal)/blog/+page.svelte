@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { SeoHeader } from '$lib/core/components/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 
 	const posts = $derived(page.data.blogs)
 

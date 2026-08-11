@@ -66,11 +66,23 @@ export const defaultContent: ThemeHomepageContent = {
         ]
       },
       {
+        // Dedicated routes, not the /p/<slug> CMS variant: /p/return-policy never existed
+        // and the other two duplicated a self-canonical page.
         title: "Support",
         links: [
-          { label: "Contact Us", href: "/p/contact-us" },
-          { label: "Shipping Policy", href: "/p/shipping-policy" },
-          { label: "Return Policy", href: "/p/return-policy" }
+          { label: "Contact Us", href: "/contact-us" },
+          { label: "Shipping Policy", href: "/shipping-policy" },
+          { label: "Refund Policy", href: "/refund-policy" },
+          { label: "FAQs", href: "/faqs" }
+        ]
+      },
+      {
+        title: "Company",
+        links: [
+          { label: "About Us", href: "/about-us" },
+          { label: "Blog", href: "/blog" },
+          { label: "Privacy Policy", href: "/privacy-policy" },
+          { label: "Terms & Conditions", href: "/terms-and-conditions" }
         ]
       }
     ]

@@ -18,8 +18,38 @@
 	} from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { date, formatPrice } from '$lib/core/utils'
-	import { MyOrdersRenderer } from '$lib/core/composables/index.js'
+	import { orderService } from '$lib/core/services/index.js'
+	import Pagination from '$lib/components/common/pagination.svelte'
 	import { fade, fly } from 'svelte/transition'
+
+	// Fetched here rather than through MyOrdersRenderer: that renderer swallows failures (leaving
+	// `orders.data` undefined for the {#each}) and always requests page 1.
+	let loading = $state(true)
+	let error = $state('')
+	let orders = $state<any>({})
+
+	const currentPage = $derived(+(page.url.searchParams.get('page') || '1'))
+	const noOfPage = $derived(Math.ceil((orders?.count || 0) / (orders?.pageSize || 20)))
+
+	async function loadOrders() {
+		try {
+			loading = true
+			error = ''
+			orders = await orderService.list({ page: currentPage, q: '', sort: 'createdAt' })
+		} catch (e: any) {
+			console.error(e)
+			orders = {}
+			error = e?.message || 'We could not load your orders right now.'
+		} finally {
+			loading = false
+		}
+	}
+
+	$effect(() => {
+		// Re-fetch whenever ?page= changes.
+		currentPage
+		loadOrders()
+	})
 
 	const getStatusStyles = (status: string) => {
 		switch (status?.toLowerCase()) {
@@ -52,8 +82,6 @@
 	<title>My Orders | Svelte Commerce</title>
 </svelte:head>
 
-<MyOrdersRenderer>
-	{#snippet content({ loading, orders })}
 		<div class="mx-auto max-w-6xl px-0 md:py-8 md:py-12">
 			<!-- Header -->
 			<div class="mb-7">
@@ -65,7 +93,18 @@
 				<div class="flex min-h-[400px] items-center justify-center">
 					<LoaderCircle class="h-8 w-8 animate-spin text-primary" />
 				</div>
-			{:else if orders.data?.length === 0}
+			{:else if error}
+				<div in:fade class="flex flex-col items-center justify-center py-20 text-center">
+					<div class="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm">
+						<AlertCircle class="h-10 w-10 text-destructive" />
+					</div>
+					<h2 class="text-2xl font-bold text-gray-900">We couldn't load your orders</h2>
+					<p class="mt-2 max-w-xs text-gray-500">{error}</p>
+					<div class="mt-8">
+						<Button onclick={loadOrders} class="h-12 px-8">Try again</Button>
+					</div>
+				</div>
+			{:else if !orders?.data?.length}
 				<div in:fade class="flex flex-col items-center justify-center py-20 text-center">
 					<div class="relative mb-6">
 						<div class="absolute inset-0 scale-150 animate-pulse rounded-full bg-gray-50"></div>
@@ -84,7 +123,7 @@
 				</div>
 			{:else}
 				<div class="space-y-8">
-					{#each orders.data as order, i}
+					{#each orders?.data || [] as order, i}
 						{@const status = getStatusStyles(order.status)}
 						{@const payment = getPaymentStatusStyles(order.paymentStatus)}
 
@@ -206,10 +245,10 @@
 						</div>
 					{/each}
 				</div>
+
+				<Pagination {noOfPage} />
 			{/if}
 		</div>
-	{/snippet}
-</MyOrdersRenderer>
 
 <style>
 	:global(body) {

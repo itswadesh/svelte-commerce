@@ -78,7 +78,8 @@
 				{/await}
 			</div>
 		{/if}
-		<footer class="me-container" class:ed={activeThemeName === 'default'}>
+		<!-- `me-container` was an undefined class; the real gutters live on .ed-foot-inner below. -->
+		<footer class:ed={activeThemeName === 'default'}>
 			<div class="ed-foot-inner w-full xl:pb-2">
 				{#if shouldCollapseOnMobile}
 					<Button
@@ -94,7 +95,10 @@
 				<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
 					<div class="flex flex-col gap-8 py-8 md:gap-12 md:py-12 lg:flex-row lg:justify-between">
 						<div class="flex max-w-xs flex-col gap-3 sm:gap-4">
-							<Logo variant="light" />
+							<!-- No `variant="light"`: this footer has no dark background on any theme that
+							     uses it, so white text was invisible on wine/organic (only the default
+							     theme recolored it back). Logo's default renders text-foreground. -->
+							<Logo />
 
 							{#if footerDescription}
 								<div class="prose prose-sm text-muted-foreground">
@@ -198,7 +202,10 @@
 								<a target="_blank" href="https://litekart.in" class="uppercase text-xs font-bold text-foreground transition-colors hover:text-primary">
 									Powered by Litekart
 								</a>
-								<span class="foot-version ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">{version}</span>
+								<!-- Support-only build stamp. It used to be painted the footer background colour
+								     (1:1 contrast — a WCAG 1.4.3 failure that still reached the a11y tree);
+								     sr-only removes it from view entirely with the same practical effect. -->
+								<span class="foot-version sr-only">{version}</span>
 							</span>
 							<TrustpilotPlugin />
 						</div>
@@ -236,11 +243,12 @@
 		font-family: var(--ed-body);
 	}
 
-	/* `me-container` is undefined in this project, so the footer content ran edge-to-edge (logo /
-	   copyright clipped at the left). Constrain the inner content to the same container the
-	   editorial homepage sections use, while the .ed background still spans full width. */
-	.ed .ed-foot-inner {
-		width: min(1240px, 100% - 2 * clamp(20px, 5vw, 48px));
+	/* Gutters for EVERY theme that uses this footer (was scoped to `.ed`, so wine/organic still
+	   ran edge-to-edge and clipped the logo / copyright on narrow screens). Reads the shared
+	   container tokens from app.css, so the footer sits on the same rail as the header and the
+	   theme homepage; the .ed background below still spans full width. */
+	.ed-foot-inner {
+		width: min(var(--container-max, 1240px), 100% - 2 * var(--container-gutter, 16px));
 		margin-inline: auto;
 	}
 
@@ -256,25 +264,9 @@
 		color: var(--ed-soft);
 	}
 
-	/* The brand wordmark uses white text (built for a dark footer); on the editorial warm
-	   canvas that was invisible. Recolor it to ink, keeping its gold accent. */
-	.ed :global(.text-white) {
-		color: var(--ed-ink);
-	}
-
 	.ed :global(a.hover\:text-foreground:hover),
 	.ed :global(a.hover\:text-primary:hover) {
 		color: hsl(var(--primary));
 	}
 
-	/* The build timestamp is intentionally the same colour as the footer background, so it
-	   is invisible in normal reading and only becomes legible when the visitor selects it. */
-	.ed .foot-version {
-		color: var(--ed-canvas);
-	}
-
-	.ed .foot-version::selection {
-		color: var(--ed-ink);
-		background: rgba(27, 26, 23, 0.16);
-	}
 </style>

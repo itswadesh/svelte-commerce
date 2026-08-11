@@ -9,7 +9,9 @@
 		ArrowRight,
 		ArrowUpRight,
 		ChevronLeft,
-		ChevronRight
+		ChevronRight,
+		Pause,
+		Play
 	} from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
@@ -177,11 +179,19 @@
 		if (!heroTrack) return
 		heroIndex = currentSlide()
 	}
+	// Content that moves automatically for more than five seconds needs a real pause control
+	// (WCAG 2.2.2) — hover/focus is not one on touch, where most of the traffic is — and must
+	// not start at all for a visitor who asked for reduced motion. `autoplay` drives both: it
+	// starts off when the media query matches, and the toggle beside the dots flips it.
+	let autoplay = $state(true)
+	onMount(() => {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) autoplay = false
+	})
 	// Autoplay. Hovering or focusing the slider flips heroPaused, which tears this effect down
 	// and clears the timer, so the next slide never fires while the pointer is over it.
 	// A hidden tab is skipped rather than silently queueing advances nobody can see.
 	$effect(() => {
-		if (heroSlides.length < 2 || heroPaused) return
+		if (heroSlides.length < 2 || heroPaused || !autoplay) return
 		const timer = setInterval(() => {
 			if (!document.hidden) stepSlide(1)
 		}, 6000)
@@ -336,6 +346,19 @@
 								onclick={() => slideTo(i)}
 							></button>
 						{/each}
+						<button
+							type="button"
+							class="ed-slider__playpause"
+							aria-pressed={!autoplay}
+							aria-label={autoplay ? 'Pause automatic slideshow' : 'Start automatic slideshow'}
+							onclick={() => (autoplay = !autoplay)}
+						>
+							{#if autoplay}
+								<Pause class="ed-slider__playpause-icon" />
+							{:else}
+								<Play class="ed-slider__playpause-icon" />
+							{/if}
+						</button>
 					</div>
 				{/if}
 			</div>
@@ -553,26 +576,20 @@
 {/if}
 
 <style>
+	/* The --ed-* token set (canvas / surface / ink / soft / line / radius / display / body) is
+	   declared once, on [data-theme='default'] in src/app.css, and inherited here — this block
+	   used to restate it with drifting contents (it omitted --ed-line-strong and added its own
+	   --ed-gutter), so the homepage could sit on a stale palette. */
 	.ed {
-		--ed-gutter: clamp(20px, 5vw, 48px);
-		--ed-canvas: #f6f3ee;
-		--ed-surface: #ffffff;
-		--ed-ink: #1b1a17;
-		--ed-soft: #736c60;
-		--ed-line: rgba(27, 26, 23, 0.12);
-		--ed-radius: 4px;
-		--ed-display: 'Bodoni Moda', 'Times New Roman', serif;
-		/* Follows the shell's --font-body so the store's admin-set font applies; the theme's
-		   own Hanken Grotesk is the fallback (and the [data-theme='default'] default). */
-		--ed-body: var(--font-body, 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif);
 		background: var(--ed-canvas);
 		color: var(--ed-ink);
 		font-family: var(--ed-body);
 		-webkit-font-smoothing: antialiased;
 	}
 
+	/* Same container rail as the header (.page-width) and footer (.ed-foot-inner). */
 	.ed-wrap {
-		width: min(1240px, 100% - 2 * var(--ed-gutter));
+		width: min(var(--container-max, 1240px), 100% - 2 * var(--container-gutter, 32px));
 		margin-inline: auto;
 	}
 
@@ -762,8 +779,30 @@
 		position: absolute;
 		inset: auto 0 16px;
 		display: flex;
+		align-items: center;
 		justify-content: center;
 		gap: 8px;
+	}
+
+	/* Pause/play sits with the dots so the control is where the motion is. */
+	.ed-slider__playpause {
+		display: grid;
+		place-items: center;
+		width: 20px;
+		height: 20px;
+		margin-left: 4px;
+		padding: 0;
+		border: 0;
+		border-radius: 99px;
+		cursor: pointer;
+		color: var(--ed-ink);
+		background: rgb(255 255 255 / 0.85);
+		box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12);
+	}
+
+	.ed-slider :global(.ed-slider__playpause-icon) {
+		width: 11px;
+		height: 11px;
 	}
 
 	.ed-dot {

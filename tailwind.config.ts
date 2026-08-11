@@ -3,9 +3,11 @@ import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 
 const config: Config = {
+	// Kept as `class` (never `media`) on purpose: the app ships `dark:` utilities but no dark
+	// token set and never adds the class, so `media` would flip them on for every visitor whose
+	// OS is in dark mode. The `dark` safelist entry is gone — nothing needs it emitted.
 	darkMode: ['class'],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
-	safelist: ['dark'],
 	theme: {
 		screens: {
 			mobiles: '322px',
@@ -17,7 +19,10 @@ const config: Config = {
 			sm: '640px',
 			md: '768px',
 			lg: '1024px',
-			xl: '1280px'
+			xl: '1280px',
+			// `theme.screens` replaces Tailwind's defaults, so `2xl:` emitted nothing until now
+			// (breadcrumb.svelte relies on it, and container.screens below already assumes it).
+			'2xl': '1536px'
 		},
 		container: {
 			center: true,
@@ -86,12 +91,17 @@ const config: Config = {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			// The whole radius scale is derived from the active theme's --radius, so a square
+			// theme (wine / lime / noor declare `--radius: 0px`) stays square on cards, badges,
+			// dialogs, selects, alerts and skeletons too — previously only `rounded-radius`
+			// (buttons + inputs) read the token and everything else was fixed pixels.
+			// max(0px, …) keeps the smaller steps legal when --radius is 0.
 			borderRadius: {
-				xl: '24px',
-				lg: '8px',
-				md: '4px',
-				sm: '2px',
-        radius: 'var(--radius)'
+				xl: 'calc(var(--radius) + 4px)',
+				lg: 'var(--radius)',
+				md: 'max(0px, calc(var(--radius) - 2px))',
+				sm: 'max(0px, calc(var(--radius) - 4px))',
+				radius: 'var(--radius)'
 			},
 			keyframes: {
 				'accordion-down': {
@@ -117,9 +127,17 @@ const config: Config = {
 				shimmer: 'shimmer 1s infinite'
 			},
 			boxShadow: {
+				// `shadow-xs` is a Tailwind v4 name; on v3 it resolved to nothing, so all three
+				// sticky headers (nav, LimeNav, NoorNav) rendered flat. Defining it here fixes
+				// every call site at once. Value = v4's shadow-xs (== v3's shadow-sm).
+				xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
 				'z-1': '0 2px 4px rgba(0, 0, 0, 0.1)',
 				'z-2': '0 4px 8px rgba(0, 0, 0, 0.1)',
 				'z-10': '0 6px 12px rgba(0, 0, 0, 0.15)'
+			},
+			// Same story for `backdrop-blur-xs` (nav drawer scrim). v4 name, v3 engine.
+			backdropBlur: {
+				xs: '4px'
 			},
 			fontSize: {
 				xxs: '10px'

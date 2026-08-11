@@ -7,7 +7,9 @@
 	import { page } from '$app/state'
 	import Label from '../ui/label/label.svelte'
 	import { AddressSchema } from '$lib/core/components/index.js'
-	import { AddressFormRenderer } from '$lib/core/composables/index.js'
+	// Local shadow of the vendored renderer — it never passed `isSaving` through, never awaited
+	// `onsave` and closed the dialog even when the save failed. See the file header.
+	import AddressFormRenderer from './address-form-renderer.svelte'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 
 	let {
@@ -35,7 +37,7 @@
 			<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
 				<DialogHeader>
 					<div class="flex items-center gap-2">
-						<Button variant="ghost" size="icon" onclick={handleBack}>
+						<Button variant="ghost" size="icon" aria-label="Back to address list" onclick={handleBack}>
 							<ArrowLeft class="h-4 w-4" />
 						</Button>
 						<DialogTitle>{isEdit ? 'Edit Address' : 'Add New Address'}</DialogTitle>
@@ -98,7 +100,7 @@
 					</div>
 					<br />
 					<div class="flex flex-col gap-2">
-						<Button type="submit" class="w-full">
+						<Button type="submit" class="w-full" disabled={isSaving}>
 							{#if isSaving}
 								<LoadingDots />
 							{:else}

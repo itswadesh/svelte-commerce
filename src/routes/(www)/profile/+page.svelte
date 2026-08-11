@@ -4,14 +4,14 @@
 	import { goto } from '$app/navigation'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { toast } from '@misiki/kitcommerce-core'
-	import { Save, ArrowLeft, InfoIcon, Loader, FileChartColumnIncreasing } from '@lucide/svelte'
-	import { browser } from '$app/environment'
+	import { Save, ArrowLeft, InfoIcon, Loader, FileChartColumnIncreasing, AlertCircle } from '@lucide/svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { z } from 'zod'
 
 	let user: any = $state({})
 	let isLoading = $state(false)
 	let detailsChanged = $state(false)
+	let loadError = $state('')
 
 	const schemas = {
 		firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -23,34 +23,32 @@
 			.min(9, 'Please enter a valid phone number')
 	}
 
-	const mount = async () => {
-		if (browser) {
-			document.onkeydown = function (e) {
-				e = e || window.event
-				if (e.ctrlKey || e.metaKey) {
-					// Check for both Ctrl and Command key
-					var c = e.which || e.keyCode // Get key code
-					switch (c) {
-						case 83: // Block Ctrl/Cmd + S
-							e.preventDefault()
-							e.stopPropagation()
-							handleUpdate()
-							break
-					}
-				}
-			}
-		}
+	const loadUser = async () => {
 		try {
 			user = await userService.getMe()
-		} catch (e) {
+		} catch (e: any) {
+			loadError = e?.message || 'Could not load your profile. Please sign in and try again.'
 		}
 	}
 
 	$effect(() => {
-		mount()
+		loadUser()
 	})
 
-	// onMount()
+	// Ctrl/Cmd+S saves the profile — scoped to this page. Assigning document.onkeydown
+	// leaked the handler across every later client-side navigation, so register and
+	// tear down properly instead.
+	$effect(() => {
+		const onKeydown = (e: KeyboardEvent) => {
+			if ((e.ctrlKey || e.metaKey) && e.key?.toLowerCase() === 's') {
+				e.preventDefault()
+				e.stopPropagation()
+				handleUpdate()
+			}
+		}
+		document.addEventListener('keydown', onKeydown)
+		return () => document.removeEventListener('keydown', onKeydown)
+	})
 
 	const handleUpdate = async () => {
 		try {
@@ -83,6 +81,13 @@
 		<div class="space-y-2 text-center">
 			<p class="text-gray-500 dark:text-gray-400">Update Profile Details</p>
 		</div>
+
+		{#if loadError}
+			<div class="flex items-center gap-2 rounded-md bg-destructive/10 p-3 text-sm text-destructive" role="alert">
+				<AlertCircle class="h-4 w-4 shrink-0" />
+				<span>{loadError}</span>
+			</div>
+		{/if}
 		<form onsubmit={handleUpdate} class="grid grid-cols-2 gap-4" oninput={handleDetailsChange}>
 			<!-- Image Upload - occupies the full width of the first row -->
 			<div class="col-span-2">

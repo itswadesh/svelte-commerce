@@ -1,52 +1,28 @@
 <script lang="ts">
-  import { GoogleStructuredDataProductsList, GoogleStructuredServiceSchema, GoogleStructuredDataBreadcrumb,GoogleStructuredVideoSchema, GoogleStructuredFaqSchema } from '@misiki/kitcommerce-core/components'
+	import { GoogleStructuredDataBreadcrumb } from '@misiki/kitcommerce-core/components'
+	import ProductListSchema from '$lib/components/seo/product-list-schema.svelte'
 
 	import { page } from '$app/state'
 
-	const { products = [] } = $props()
+	// Both call sites render this bare (`<ListingScehma />`), so a `products` prop defaulted to
+	// `[]` and no listing page on the site ever emitted ItemList markup. Read the SSR data
+	// directly — the same source listing-grid.svelte renders — and keep the prop as an override.
+	const { products }: { products?: any[] } = $props()
 
-	const mappedProducts = $derived(
-		products?.map((p: any) => ({
-			url: `${page.url.origin}/products/${p.slug}`,
-			name: p.name || p.title,
-			image: p.images || [p.thumbnail],
-			description: p.description || p.metaDescription || '',
-			brandName: p.brandName || page.data.store?.name || 'JewelWeSell',
-			manufacturer: p.manufacturer || '',
-			material: p.material || '',
-			offers: {
-				url: `${page.url.origin}/products/${p.slug}`,
-				priceCurrency: page.data.store?.currency?.code || 'USD',
-				price: p.price,
-				availability: p.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-				shippingDetails: p.shippingDetails,
-				hasMerchantReturnPolicy: p.hasMerchantReturnPolicy
-			}
-		}))
-	)
+	const listedProducts = $derived(products ?? page.data.products?.data ?? [])
 
-	const listingFaqs = [
-		{
-			question: 'What is your return policy?',
-			answer:
-				'We offer an easy 7-day return policy on all our products. Items must be in their original condition.'
-		},
-	]
-
-	const categoryHierarchy: { name: string; slug?: string }[] = $derived(page.data.products?.categoryHierarchy || [])
-
-	const breadcrumbs = $derived(
-		categoryHierarchy.map((item, index) => ({
-			name: item.name,
-			item: index === categoryHierarchy.length - 1 ? undefined : `${page.url.origin}${item.slug}`
-		}))
+	const categoryHierarchy: { name: string; slug?: string }[] = $derived(
+		page.data.products?.categoryHierarchy || []
 	)
 </script>
 
-<GoogleStructuredDataProductsList products={mappedProducts} />
-<GoogleStructuredDataBreadcrumb {breadcrumbs} />
-<GoogleStructuredFaqSchema faqs={listingFaqs} />
-<!-- <GoogleStructuredServiceSchema
-	serviceName="Luxury Custom Jewelry Design"
-	serviceDescription="Experience the art of bespoke jewelry design. From engagement rings to statement pieces, we bring your vision to life with unparalleled craftsmanship."
-/> -->
+<ProductListSchema products={listedProducts} />
+
+<!-- Hand the raw hierarchy over: the core component maps `${origin}/${slug}` for every crumb,
+     including the leaf. Pre-mapping into `breadcrumbs` here previously produced
+     `https://example.compendant` (no separator) and dropped the last crumb entirely, so
+     single-level categories emitted no BreadcrumbList at all. -->
+<GoogleStructuredDataBreadcrumb {categoryHierarchy} />
+
+<!-- No FAQPage here: this page renders no Q&A, and structured data that describes content the
+     page does not show is a manual-action trigger. Real FAQ markup lives on /faqs. -->

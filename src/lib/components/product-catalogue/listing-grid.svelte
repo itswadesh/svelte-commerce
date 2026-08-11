@@ -13,18 +13,63 @@
 		return `${page.url.pathname}?${params.toString()}`
 	})
 
-	let products = $state<any[]>([])
-	let currentPage = $state(1)
+	// Seeded from the SSR payload, NOT from the $effect below: effects never run on the server, so
+	// starting this at [] meant the server rendered an empty grid — no product cards and no product
+	// links — on /products and every /[slug] category, for every crawler that does not execute JS.
+	let products = $state<any[]>(data.products?.data ?? [])
+	let currentPage = $state(Number(page.url.searchParams.get('page') ?? 1))
 	let loadingMore = $state(false)
+	let loadFailed = $state(false)
 	let previousListingQueryKey = ''
 
 	const hasMore = $derived(currentPage < (data.products?.totalPages ?? 0))
 
+	// Mobile is the viewport Googlebot renders, and the desktop pagination is display:none there.
+	// Giving the infinite-scroll trigger a real href keeps page 2+ reachable without JS.
+	const nextPageHref = $derived.by(() => {
+		const url = new URL(page.url)
+		url.searchParams.set('page', String(currentPage + 1))
+		return url.pathname + url.search
+	})
+
+	// Infinitely-scrolled pages live in component state, so opening a PDP and pressing back used to
+	// remount this with only the first 20 items while SvelteKit restored the old scroll position.
+	// Park the accumulated list against the listing key so a remount can pick it back up.
+	const SCROLL_CACHE_KEY = 'listing-infinite-scroll'
+
+	function readScrollCache(key: string) {
+		try {
+			const cached = JSON.parse(sessionStorage.getItem(SCROLL_CACHE_KEY) || 'null')
+			return cached?.key === key && Array.isArray(cached.products) ? cached : null
+		} catch {
+			return null
+		}
+	}
+
+	function writeScrollCache(key: string) {
+		try {
+			sessionStorage.setItem(SCROLL_CACHE_KEY, JSON.stringify({ key, currentPage, products }))
+		} catch {
+			// Quota exceeded or storage blocked — accumulation just won't survive a back-navigation.
+		}
+	}
+
 	$effect(() => {
-		if (listingQueryKey !== previousListingQueryKey) {
-			previousListingQueryKey = listingQueryKey
+		if (listingQueryKey === previousListingQueryKey) return
+
+		const isMount = previousListingQueryKey === ''
+		previousListingQueryKey = listingQueryKey
+		loadFailed = false
+
+		const urlPage = Number(page.url.searchParams.get('page') ?? 1)
+		const cached = isMount ? readScrollCache(listingQueryKey) : null
+
+		if (cached && cached.currentPage > urlPage) {
+			products = cached.products
+			currentPage = cached.currentPage
+		} else {
 			products = data.products?.data ?? []
-			currentPage = Number(page.url.searchParams.get('page') ?? 1)
+			currentPage = urlPage
 		}
 	})
 
@@ -32,12 +77,19 @@
 		if (loadingMore || !hasMore) return
 
 		loadingMore = true
+		loadFailed = false
 		try {
 			const nextUrl = new URL(page.url)
 			nextUrl.searchParams.set('page', String(currentPage + 1))
 			const result = await searchService.searchWithUrl(nextUrl, page.params.slug)
 			products = [...products, ...result.data]
 			currentPage += 1
+			writeScrollCache(listingQueryKey)
+		} catch (e) {
+			// The observer only fires on an intersection *transition*, so a swallowed failure left
+			// the sentinel already intersecting and the list silently stopped loading forever.
+			console.error('Failed to load more products:', e)
+			loadFailed = true
 		} finally {
 			loadingMore = false
 		}
@@ -78,7 +130,17 @@
 					<Skeleton class="h-2 w-20 bg-gray-200 dark:bg-gray-700" />
 				</div>
 			{:else}
-				<span class="ed-more text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">Loading more</span>
+				<a
+					href={nextPageHref}
+					rel="next"
+					onclick={(e) => {
+						e.preventDefault()
+						loadNextPage()
+					}}
+					class="text-xs font-semibold uppercase tracking-[0.16em] {loadFailed ? 'ed-empty__link text-primary underline underline-offset-4' : 'ed-more text-gray-400'}"
+				>
+					{loadFailed ? 'Retry' : 'Load more'}
+				</a>
 			{/if}
 		</div>
 	{:else if products.length > 0}

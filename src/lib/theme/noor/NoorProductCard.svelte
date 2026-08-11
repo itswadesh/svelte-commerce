@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { page } from '$app/state'
-	import { Heart, ShoppingBag } from '@lucide/svelte'
+	import { Heart, Loader2, ShoppingBag } from '@lucide/svelte'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/core/utils'
 
@@ -17,11 +18,16 @@
 	// No stand-in product photo: a product without an image simply shows none.
 	const image = $derived(product?.thumbnail || product?.image_url || product?.image || '')
 	const discount = $derived(product?.mrp && product?.mrp > product?.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0)
+
+	// The store's configured product image ratio, as a CSS value ('3:4' → '3 / 4'). The card
+	// took the `aspectRatio` prop but then hardcoded 3/4 in its stylesheet, so a store set to
+	// 1:1 or 16:9 still got 3:4 cards on noor only.
+	const mediaRatio = $derived(toCssRatio(aspectRatio || page?.data?.store?.productImageAspectRatio, '3:4'))
 </script>
 
 <ProductCardRenderer {product} {aspectRatio}>
-	{#snippet content({ toggleWishlist, isWishlisted, addToCart })}
-		<article class="noor-card" data-testid="product-card-{product.id}">
+	{#snippet content({ toggleWishlist, isWishlisted, addToCart, loadingForCart, loadingForWishlist })}
+		<article class="noor-card" data-testid="product-card-{product.id}" style="--noor-media-ratio: {mediaRatio};">
 			<a class="noor-card-media" href="/products/{product.slug}" aria-label="View {title}">
 				{#if image}
 					<img src={image} alt={title} loading="lazy" />
@@ -34,6 +40,8 @@
 						type="button"
 						class="noor-wish"
 						class:is-active={isWishlisted}
+						disabled={loadingForWishlist}
+						aria-busy={loadingForWishlist}
 						aria-label={isWishlisted
 							? labels.removeFromWishlist || 'Remove from wishlist'
 							: labels.addToWishlist || 'Add to wishlist'}
@@ -61,8 +69,20 @@
 				</p>
 			</a>
 			{#if !hideCartControls}
-				<button class="noor-add" type="button" onclick={() => addToCart(product)}>
-					<ShoppingBag class="h-4 w-4" />
+				<!-- Disabled + spinner while the add is in flight; without it the button gave no
+				     feedback and an impatient second tap added the item twice. -->
+				<button
+					class="noor-add"
+					type="button"
+					disabled={loadingForCart}
+					aria-busy={loadingForCart}
+					onclick={() => addToCart(product)}
+				>
+					{#if loadingForCart}
+						<Loader2 class="noor-add-spin h-4 w-4" />
+					{:else}
+						<ShoppingBag class="h-4 w-4" />
+					{/if}
 					{labels.addToCart || 'Add to Cart'}
 				</button>
 			{/if}
@@ -90,7 +110,9 @@
 	.noor-card-media img {
 		display: block;
 		width: 100%;
-		aspect-ratio: 3 / 4;
+		/* Driven by the store's productImageAspectRatio (see mediaRatio above); 3/4 is only
+		   the fallback when the store has not configured one. */
+		aspect-ratio: var(--noor-media-ratio, 3 / 4);
 		object-fit: cover;
 		object-position: top center;
 		transition: transform 0.45s ease;
@@ -133,6 +155,26 @@
 
 	.noor-wish.is-active :global(svg) {
 		fill: currentColor;
+	}
+
+	.noor-wish:disabled {
+		cursor: default;
+		opacity: 0.6;
+	}
+
+	/* No opacity here — .noor-add's opacity is the hover-reveal animation. */
+	.noor-add:disabled {
+		cursor: default;
+	}
+
+	.noor-add :global(.noor-add-spin) {
+		animation: noor-spin 0.7s linear infinite;
+	}
+
+	@keyframes noor-spin {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	.noor-card-body {

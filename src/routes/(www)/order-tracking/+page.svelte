@@ -180,7 +180,7 @@
 												{#if item?.status === 'delivered'}
 													<div class="mt-2 xl:mt-0 xl:w-1/3">
 														<a
-															href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
+															href="/products/{item?.slug}#review"
 															aria-label="Click to visit rate & review product"
 															class="max-w-max whitespace-nowrap font-semibold text-indigo-500 hover:underline focus:outline-none"
 														>

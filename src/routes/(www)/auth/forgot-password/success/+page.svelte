@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { Mail } from '@lucide/svelte'
-	import { AuthButton } from '$lib/core/components/index.js'
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 </script>
 
 <svelte:head>

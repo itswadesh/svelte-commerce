@@ -18,6 +18,7 @@
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import AddressForm from './address-form.svelte'
 	import { authService } from '$lib/core/services/index.js'
+	import { toast } from '@misiki/kitcommerce-core'
 	import { onMount } from 'svelte'
 
 	const addressModule = new AddressModule()
@@ -26,6 +27,29 @@
 
 	const isEmailOk = $derived(addressModule.isEmailOk)
 	const isPhoneOk = $derived(addressModule.isPhoneOk)
+
+	// `saveContactInfo` runs its zod `.parse()` calls BEFORE opening its own try block, so an
+	// invalid or missing email/phone throws straight out of the handler: no toast, no inline
+	// error, the button just does nothing and the shopper is stuck at the first step of checkout.
+	async function saveContactInfo(e: Event) {
+		try {
+			await addressModule.saveContactInfo(e)
+		} catch (err: any) {
+			toast.error(err?.issues?.[0]?.message || err?.message || 'Please check your email and phone number')
+		}
+	}
+
+	// Two problems with the raw handler: a saved address disappeared on a single tap with no
+	// confirmation, and it filters the address out of the list OUTSIDE its try/catch — so a failed
+	// delete still removed it from the UI and it reappeared on the next reload. `paginateAddress`
+	// merges the server list back in (deduped by id), which self-corrects: a delete that failed
+	// puts the row back, one that succeeded leaves it gone.
+	async function deleteAddress(address: any) {
+		const where = [address?.address_1, address?.city].filter(Boolean).join(', ')
+		if (!confirm(`Delete this address?${where ? `\n\n${where}` : ''}`)) return
+		await addressModule.handleDeleteAddress(address)
+		await addressModule.paginateAddress(1)
+	}
 
 	const isGuestCheckout = $derived(!userState?.user?.role)
 	let loadingForGuestCheckout = $state(false)
@@ -161,7 +185,7 @@
 									</div>
 								</div>
 							{:else if !isEmailOk || !isPhoneOk || addressModule.editEmail}
-								<form class="space-y-4 p-5 transition-all duration-500" onsubmit={addressModule.saveContactInfo}>
+								<form class="space-y-4 p-5 transition-all duration-500" onsubmit={saveContactInfo}>
 									<div class="space-y-1">
 										<label for="email" class="block text-sm font-medium text-gray-700">
 											Email address {#if !addressModule.isEmailRequired}<span class="text-gray-400">(optional)</span>{/if}
@@ -485,7 +509,7 @@
 	onaddnew={addressModule.handleAddNewAddressFromModal}
 	onedit={addressModule.handleEditAddress}
 	onselect={addressModule.handleSelectAddress}
-	ondelete={addressModule.handleDeleteAddress}
+	ondelete={deleteAddress}
 />
 
 <!-- Shipping & Biling address -->
@@ -496,5 +520,5 @@
 	onback={addressModule.handleFormBack}
 	onclose={addressModule.handleFormClose}
 	onsave={addressModule.handleFormSave}
-	ondelete={addressModule.handleDeleteAddress}
+	ondelete={deleteAddress}
 />

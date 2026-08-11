@@ -63,6 +63,13 @@
 
 
 	<section class="lime-hero" aria-label="{brandName} hero">
+		<!-- The source hero is artwork only, so the page's top-level heading is visually hidden
+		     rather than drawn over it. Without it this homepage had no h1 at all and its value
+		     proposition existed only inside a JPEG. Copy comes from the theme layer. -->
+		<h1 class="lime-hero-title sr-only">
+			{[themeContent.hero?.titleLead, themeContent.hero?.titleAccent].filter(Boolean).join(' ') ||
+				brandName}
+		</h1>
 		<img src={themeImage(themeContent.hero.image, 'lime-hero')} alt={themeContent.hero.imageAlt} />
 	</section>
 
@@ -130,7 +137,7 @@
 	{#if trust?.items?.length}
 		<section class="lime-trust">
 			{#if trust.title}
-				<h3 class="lime-trust-heading">{trust.title}</h3>
+				<h2 class="lime-trust-heading">{trust.title}</h2>
 			{/if}
 			<div class="lime-trust-grid">
 				{#each trust.items as item, index}
@@ -147,23 +154,26 @@
 	<section class="lime-story">
 		<img src={themeImage(themeContent.about.primaryImage, 'lime-story')} alt={themeContent.about.primaryImageAlt} />
 		<div>
-			<h3>{themeContent.about.label}</h3>
+			<h2>{themeContent.about.label}</h2>
 			<p>{themeContent.about.text}</p>
-			<a href="/pages/about-us">{themeContent.about.cta}</a>
+			<a href="/about-us">{themeContent.about.cta}</a>
 		</div>
 	</section>
 
 	<section class="lime-store">
 		<div>
-			<h3>{themeContent.special.titleLead} {themeContent.special.titleAccent}</h3>
+			<h2>{themeContent.special.titleLead} {themeContent.special.titleAccent}</h2>
 			<p>{themeContent.special.text}</p>
-			<a href="/store-locator"><MapPin class="h-4 w-4" />{themeContent.special.cta}</a>
+			<!-- Was /store-locator, which is not a route — the [slug] catch-all answered it 200, so
+			     it was a soft-404. Retargeted at /contact-us (real route, carries the store's
+			     address/phone) rather than deleted, so the section keeps its source CTA. -->
+			<a href="/contact-us"><MapPin class="h-4 w-4" />{themeContent.special.cta}</a>
 		</div>
 		<img src={themeImage(themeContent.special.image, 'lime-store')} alt={themeContent.special.imageAlt} />
 	</section>
 
 	<section class="lime-faq">
-		<h3>{faq?.label}</h3>
+		<h2>{faq?.label}</h2>
 		<div class="lime-faq-list">
 			{#each faq?.items ?? [] as item, index}
 				<details open={index === 0}>
@@ -268,7 +278,7 @@
 	.lime-story,
 	.lime-store,
 	.lime-faq {
-		width: min(1360px, calc(100% - 80px));
+		width: min(var(--container-max, 1360px), 100% - 2 * var(--container-gutter, 40px));
 		margin: 0 auto;
 	}
 
@@ -459,9 +469,9 @@
 		height: 443px;
 	}
 
-	.lime-story h3,
-	.lime-store h3,
-	.lime-faq h3 {
+	.lime-story h2,
+	.lime-store h2,
+	.lime-faq h2 {
 		margin: 0 0 18px;
 		color: var(--plum);
 		font-family: var(--font-heading);
@@ -495,7 +505,7 @@
 		padding: 76px 0 70px;
 	}
 
-	.lime-faq > h3 {
+	.lime-faq > h2 {
 		font-weight: 500;
 	}
 
@@ -573,7 +583,9 @@
 		.lime-story,
 		.lime-store,
 		.lime-faq {
-			width: calc(100% - 28px);
+			/* The shared gutter token already narrows to 14px on small viewports (clamp), so the
+			   mobile override only needs to drop the desktop max-width. */
+			width: calc(100% - 2 * var(--container-gutter, 14px));
 		}
 
 		.lime-collage,

@@ -8,7 +8,7 @@
 	const userState = getUserState()
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import { AuthButton } from '$lib/core/components/index.js'
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 	const IS_DEV = import.meta.env.DEV
 
 	let firstName = $state(IS_DEV ? 'Swadesh' : '')
@@ -65,7 +65,7 @@
 		e.preventDefault()
 		try {
 			isLoading = true
-			await userState.signup({
+			const ok = await userState.signup({
 				firstName,
 				lastName,
 				email,
@@ -73,6 +73,8 @@
 				password,
 				origin: page.url.origin
 			})
+			// signup() swallows its own errors and returns false, so never claim success on a falsy result.
+			if (!ok) return
 			toast.success('Account created successfully')
 			goto(`/auth/signup/success?email=${encodeURIComponent(email)}`)
 		} catch (e: any) {
@@ -88,7 +90,7 @@
 	<meta name="description" content="Create your account at {page?.data?.store?.name} to start shopping and discover amazing products." />
 </svelte:head>
 
-<main class="flex min-h-screen items-center justify-center border bg-gray-50 p-3 dark:bg-gray-950 sm:p-4">
+<div class="flex min-h-screen items-center justify-center border bg-gray-50 p-3 dark:bg-gray-950 sm:p-4">
 	<div class="w-full max-w-[420px] space-y-4 rounded-radius border bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6">
 		<div class="space-y-1 text-center">
 			<h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white">Create account</h2>
@@ -209,4 +211,4 @@
 			</div>
 		{/if}
 	</div>
-</main>
+</div>

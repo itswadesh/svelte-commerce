@@ -3,7 +3,7 @@
 	import EmblaCarousel, { type EmblaCarouselType } from 'embla-carousel'
 	import AutoScroll from 'embla-carousel-auto-scroll'
 	import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
-	import { SeoHeader } from '$lib/core/components/index.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import { reelsService } from '$lib/core/services'
 	import type { Reels } from '$lib/core/types'
 	import { error } from '@sveltejs/kit'

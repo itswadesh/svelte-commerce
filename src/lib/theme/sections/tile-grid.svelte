@@ -47,7 +47,9 @@
 				<span>{tile.title}</span>
 			{/if}
 			{#if caption === 'below' && tile.title}
-				<figcaption>{tile.title}</figcaption>
+				<!-- <span>, not <figcaption>: there is no <figure> ancestor in the linked branch, and a
+				     parentless figcaption maps to nothing. The un-linked branch below keeps its figure. -->
+				<span>{tile.title}</span>
 			{/if}
 		</a>
 	{:else}

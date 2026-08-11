@@ -102,11 +102,16 @@
 	</div>
 </div>
 
-<!-- Fullscreen mobile filters -->
+<!-- Fullscreen mobile filters.
+     The panel is only translated off-screen when closed, so without `inert` every control inside
+     (close/clear/apply, both search boxes, the category buttons, the price sliders and every facet
+     checkbox) stays focusable and in the accessibility tree on top of the listing. -->
 <div
 	class="ed-mf__panel fixed inset-0 z-[1000] h-screen w-screen {filterModule.showFilter
 		? 'translate-x-0'
 		: '-translate-x-full'} transform bg-white transition-transform"
+	inert={!filterModule.showFilter}
+	aria-hidden={!filterModule.showFilter}
 >
 	<div class="flex h-full flex-col">
 		<div class="ed-mf__phead flex items-center justify-between border-b border-gray-100 !p-3">
@@ -330,6 +335,17 @@
 	   The Sort drawer is portalled to <body> (outside [data-theme]) and keeps its
 	   original clean styling. Everything below is gated to [data-theme='default'];
 	   other themes are untouched. */
+
+	/* The bar below is `fixed` and 48px tall, so it covers the last 48px of the listing on every
+	   theme. The default theme paid for that with padding on .ed-plp, but the base .ed-plp rule is
+	   `display: contents` (no box, no padding), so wine/organic/lime/noor got their last card row
+	   and the footer's first line covered. Charge it to the PLP row instead — that one is a real
+	   box on every theme — and only while the bar is on screen (<md). */
+	@media (max-width: 767px) {
+		:global(.ed-plp__row) {
+			padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
+		}
+	}
 
 	/* Fixed bottom Sort / Filter bar */
 	:global([data-theme='default']) .ed-mf__bar {

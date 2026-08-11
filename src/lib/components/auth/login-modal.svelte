@@ -7,8 +7,9 @@
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '../common/modal.svelte'
 	import { page } from '$app/state'
+	import { goto } from '$app/navigation'
 	import { dev } from '$app/environment'
-	import { AuthButton } from '$lib/core/components/index.js'
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 	import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
 	import { z } from 'zod'
 	import { toast } from '@misiki/kitcommerce-core'
@@ -147,10 +148,22 @@
 
 	let verifiedOtp = $state('')
 
+	// userState.verifyOtp ends in a hardcoded `goto('/')` for the USER role and never reads
+	// `?redirect=`, so every shopper who logged in by phone — including from the "log in to use
+	// your saved addresses" prompt at checkout, and anyone bounced off /my/* — was dumped on the
+	// homepage and had to find their way back. The password path already honours `redirect`; this
+	// re-applies it for OTP. Issuing the second goto as soon as verification resolves supersedes
+	// the in-flight one rather than landing on the homepage first.
+	async function verifyOtpThenRedirect() {
+		const redirectTo = new URLSearchParams(window.location.search).get('redirect')
+		await loginModule.handleVerifyOtp()
+		if (redirectTo && userState.user) goto(decodeURIComponent(redirectTo))
+	}
+
 	$effect(() => {
 		if (loginModule.otp.length === 4 && loginModule.otp !== verifiedOtp && !loginModule.isLoading && !userState.loading) {
 			verifiedOtp = loginModule.otp
-			loginModule.handleVerifyOtp()
+			verifyOtpThenRedirect()
 		} else if (loginModule.otp.length !== 4) {
 			verifiedOtp = ''
 		}

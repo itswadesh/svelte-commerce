@@ -87,6 +87,7 @@
 								{/if}
 							</div>
 						</div>
+					</div>
 
 						<!-- Mobile View -->
 						<div class="block gap-2 p-5 md:hidden lg:gap-5">
@@ -157,7 +158,6 @@
 								</div>
 							</div>
 						</div>
-					</div>
 				{/each}
 			{:else}
 				<p>No orders found</p>

@@ -14,7 +14,7 @@
 
 <Nav />
 
-<main class="min-h-screen">
+<main id="main" class="min-h-screen">
 	{@render children()}
 </main>
 <Footer />

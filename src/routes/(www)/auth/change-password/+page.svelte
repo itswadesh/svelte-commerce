@@ -21,7 +21,15 @@
 			<p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Please enter your old password and choose a new one</p>
 		</div>
 
-		<form class="space-y-4" onsubmit={changePasswordModule.handleSubmit}>
+		<form
+			class="space-y-4"
+			onsubmit={(e) => {
+				// The composable's handler takes no event, so stop the native GET submit here —
+				// otherwise the passwords end up in the URL, history and referrer.
+				e.preventDefault()
+				changePasswordModule.handleSubmit()
+			}}
+		>
 			<div>
 				<label for="old" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Old Password</label>
 				<div class="relative">
