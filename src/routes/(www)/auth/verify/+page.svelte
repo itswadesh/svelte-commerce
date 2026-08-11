@@ -21,8 +21,8 @@
 	  	}
 	  	await authService.verifyEmail(email, token)
       if (!userState.user?.role) {
-        const { sid, me } = userState.retrieveUserId()
-			  if (sid) {
+        const { me } = userState.retrieveUserId()
+			  if (me?.userId) {
 				  userState.user = me
 			  } else {
 				  userState.user = null
