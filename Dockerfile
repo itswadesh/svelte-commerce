@@ -17,7 +17,7 @@ RUN bun i
 # Copy the rest of your application's source code to the working directory
 COPY . .
 
-# Feeds kit.version.name (see svelte.config.ts), shown in the footer. `.git` is copied in, so the
+# Feeds kit.version.name (see svelte.config.js), shown in the footer. `.git` is copied in, so the
 # config can read the commit timestamp; GIT_SHA remains a stable last-resort fallback for per-deploy
 # version detection if git is ever unavailable.
 ARG GIT_SHA
@@ -25,7 +25,7 @@ ENV GIT_SHA=${GIT_SHA}
 
 # Build. BUILD_TIME is computed ONCE here and exported into the single build process, so both the
 # client and server passes read the identical `yyyy-mm-dd hh:mm:ss` value — a per-pass `new Date()`
-# would desync the `__sveltekit_<hash>` global and break every page in prod (see svelte.config.ts).
+# would desync the `__sveltekit_<hash>` global and break every page in prod (see svelte.config.js).
 RUN BUILD_TIME="$(date -u +'%Y-%m-%d %H:%M:%S')" bun run build
 
 # Expose the port that your application runs on

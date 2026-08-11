@@ -14,14 +14,19 @@ import { execSync } from 'node:child_process'
 // both passes AND changes on every real deploy (keeping the client's redeploy check — the `updated`
 // store polled below — working). Docker builds that .dockerignore `.git` can't run git, so they pass
 // a pre-rendered `BUILD_TIME` string instead (computed ONCE per build; see the Dockerfile).
-function pad(n: number): string {
+/** @param {number} n */
+function pad(n) {
 	return String(n).padStart(2, '0')
 }
-function formatUTC(epochSeconds: number): string {
+/** @param {number} epochSeconds */
+function formatUTC(epochSeconds) {
 	const d = new Date(epochSeconds * 1000)
 	return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`
 }
-function resolveVersion(): string {
+// Kept as `.js`, not `.ts`: SvelteKit/vite-plugin-svelte load this file with a bare Node `import()`,
+// which can't strip types before Node 22.18 — a `.ts` config crashes `npm run dev` with
+// ERR_UNKNOWN_FILE_EXTENSION on Node 20/22.
+function resolveVersion() {
 	// A `yyyy-mm-dd hh:mm:ss` string baked once per build (Docker path). Must be identical in both passes.
 	if (process.env.BUILD_TIME) return process.env.BUILD_TIME
 	try {
