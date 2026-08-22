@@ -1,6 +1,7 @@
 import {
 	AuthService as SaleorAuthService,
 	BlogService as SaleorBlogService,
+	PageService as SaleorPageService,
 	CouponService as SaleorCouponService,
 	WishlistService as SaleorWishlistService,
 	MeilisearchService as SaleorMeilisearchService,
@@ -35,6 +36,20 @@ export class StoreService extends SaleorStoreService {
 }
 
 export const storeService = new StoreService()
+
+// The connector's PageService serves static dummy pages but throws for ids it doesn't have
+// (e.g. 'home', requested by the homepage load on every visit) — resolve those to empty instead.
+export class PageService extends SaleorPageService {
+	async getOne(id: string): ReturnType<SaleorPageService['getOne']> {
+		try {
+			return await super.getOne(id)
+		} catch {
+			return {} as unknown as Awaited<ReturnType<SaleorPageService['getOne']>>
+		}
+	}
+}
+
+export const pageService = new PageService()
 
 // The nav (use-nav composable) reads `response.data` and filters on `menuId === 'header'`; serve
 // the static store config's menus instead of the Litekart-only `/api/menu`.
