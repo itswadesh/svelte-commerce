@@ -106,7 +106,7 @@ needs no override:
 | Service              | Behaviour in Saleor mode                                                       |
 | -------------------- | ------------------------------------------------------------------------------ |
 | `StoreService`       | Returns the static store config (defaults + `kitcommerce.config.ts` export)   |
-| `PageService`        | Connector-native static dummy pages (no override needed)                       |
+| `PageService`        | Connector-native static dummy pages; unknown ids resolve to empty              |
 | `MenuService`        | Serves header/footer menus from the static store config (`menu` array)        |
 | `MeilisearchService` | Autocomplete returns empty suggestions — no Litekart Meilisearch proxy         |
 | `ProfileService`     | Delegates to Saleor-native `me` / `accountUpdate` (profile page)              |
