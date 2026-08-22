@@ -32,6 +32,21 @@ npm uninstall @misiki/litekart-connector
 npm i @misiki/medusa-connector   # or vendure, saleor, ...
 ```
 
+That is the only change needed. `@misiki/kitcommerce-core` imports `@misiki/litekart-connector` by
+name — it is a peerDependency of that package — so two shims redirect that one specifier onto the
+connector you installed: a resolver plugin in `vite.config.ts` for the runtime/bundling layer, and
+an ambient declaration written by `sync-connector-types.js` (run by `npm run check`) for the type
+layer. Both read `package.json`, so installing your connector is all it takes; neither does anything
+when Litekart is the installed connector.
+
+**There are 26 connectors.** The table below covers the six most-used ones; see
+**[CONNECTORS.md](./CONNECTORS.md)** for the full list — Magento, PrestaShop, Shopware, Spree,
+commercetools, Sylius, Bagisto, CS-Cart, OpenCart, nopCommerce, Spryker, OroCommerce, Virto,
+Broadleaf, Swell, Sharetribe, EverShop, Shuup, X-Cart, Django Oscar — with per-platform coverage
+measured from source, the known gaps, and **an open request for help from the people who build
+these platforms**. Every endpoint was verified against each platform's authoritative spec or
+source, but none have been run against a live production store yet. That is where we need you.
+
 | Capability                    | Litekart | Shopify | Medusa | Vendure | Saleor | WooCommerce |
 | ----------------------------- | :------: | :-----: | :----: | :-----: | :----: | :---------: |
 | Product listing / search      |    ✅    |    ✅   |   ✅   |   ✅    |   ✅   |      ✅     |
@@ -58,6 +73,11 @@ npm i @misiki/medusa-connector   # or vendure, saleor, ...
 > Litekart is the reference implementation and is the most complete. The Medusa, Vendure
 > and Saleor connectors cover the core commerce path — browse, product, cart, checkout,
 > order — and are actively being extended. PRs welcome.
+
+> **Maintainers of these platforms:** we would rather ask than guess. The fastest way to help is
+> a sandbox instance we can point a storefront at, or ten minutes telling us our endpoint idioms
+> are wrong. Specific open questions per platform are in
+> [CONNECTORS.md](./CONNECTORS.md#per-platform-notes-and-what-wed-like-to-ask-you).
 
 ### Required backend settings
 
