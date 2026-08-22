@@ -27,10 +27,13 @@ how the integration works, and its current limits.
    }
    ```
 
-3. Install and run:
+3. Install and run. `@misiki/medusa-connector` is an optional dependency — it is deliberately
+   not listed in `package.json`, so a Litekart-only install (and its Docker build) never
+   pulls it in. Add it explicitly for Medusa mode, in local dev and in any image you build:
 
    ```sh
    npm i
+   npm i @misiki/medusa-connector
    npm run dev
    ```
 
