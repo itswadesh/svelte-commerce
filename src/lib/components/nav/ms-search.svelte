@@ -54,9 +54,14 @@
 		handleKeyDown,
 		handleResultClick
 	})}
-		<button class="ed-search-trigger flex rounded-full px-2" aria-label="Open search" onclick={showSearch}>
-			<Search class="h-5 w-5" />
-		</button>
+		<!-- `plugins.search.active === false` means the store has no search backend (e.g. the
+		     non-Litekart connectors serve empty autocomplete) — hide the trigger entirely.
+		     `undefined` keeps the icon for stores that predate the plugin toggle. -->
+		{#if searchPlugin?.active !== false}
+			<button class="ed-search-trigger flex rounded-full px-2" aria-label="Open search" onclick={showSearch}>
+				<Search class="h-5 w-5" />
+			</button>
+		{/if}
 
 		{#if expandSearch && showSearchResults}
 			<!-- Search Trigger Button -->
