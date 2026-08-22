@@ -8,8 +8,9 @@
 
 ## Backend support
 
-Svelte Commerce talks to any backend through a connector package. Switch backends by
-changing a single export in `kitcommerce.config.ts`:
+Svelte Commerce talks to any backend through a connector package. Nothing in the app
+imports a connector by name — every service resolves through `$lib/core/services`, which follows
+whatever `kitcommerce.config.ts` exports. So switching backends is one export change:
 
 ```ts
 // pick exactly one
@@ -20,6 +21,15 @@ export * as services from "@misiki/shopify-connector"
 // export * as services from '@misiki/saleor-connector'
 // export * as services from '@misiki/commercetools-connector'
 // export * as services from '@misiki/woocommerce-connector'
+```
+
+`package.json` ships `@misiki/litekart-connector` as the stock connector. Replace it with the one
+you picked above so `npm i` — and any Docker build, which installs from `package.json` alone —
+resolves the connector your storefront actually talks to:
+
+```sh
+npm uninstall @misiki/litekart-connector
+npm i @misiki/medusa-connector   # or vendure, saleor, ...
 ```
 
 | Capability                    | Litekart | Shopify | Medusa | Vendure | Saleor | WooCommerce |
@@ -193,7 +203,9 @@ Open http://localhost:3000 on Chrome. Your app should be live with awesome svelt
 There is 1 place to configure
 
 1. `kitcommerce.config.ts`
-   This is used to define which service to use. Only 1 of the listed services can be active at a time. Valid values are:
+   This is used to define which service to use. Only 1 of the listed services can be active at a
+   time — install that connector in `package.json` in place of `@misiki/litekart-connector`. Valid
+   values are:
    - `export * as services from "@misiki/shopify-connector"`
    - `export * as services from "@misiki/litekart-connector"`
    - `export * as services from '@misiki/medusa-connector'`

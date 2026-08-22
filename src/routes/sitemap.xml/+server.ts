@@ -1,7 +1,11 @@
 import { env } from '$env/dynamic/public'
 import { env as privateEnv } from '$env/dynamic/private'
 import type { RequestHandler } from '@sveltejs/kit'
-import { StoreService } from '@misiki/litekart-connector'
+// Resolve StoreService through the services barrel, never a connector package by name: the
+// active connector is whichever one kitcommerce.config.ts exports, and naming
+// @misiki/litekart-connector here would break the build for anyone who swapped it for their
+// own backend's connector.
+import { StoreService } from '$lib/core/services'
 
 export const GET: RequestHandler = async ({ fetch, cookies }) => {
   const storeId = cookies.get('litekart_store_id') || ''
