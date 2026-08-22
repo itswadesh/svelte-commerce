@@ -11,10 +11,22 @@ import { env } from '$env/dynamic/public'
 // the probe MUST fail — otherwise the container reports healthy, the orchestrator's start-first
 // rollout routes traffic to it, and it replaces a working container with one that fails every page.
 // Failing here makes that deploy roll back instead.
-const REQUIRED_ENV = ['PUBLIC_LITEKART_API_URL', 'PUBLIC_LITEKART_STORE_ID', 'PUBLIC_LITEKART_DOMAIN'] as const
+//
+// Which env is required depends on the active connector (kitcommerce.config.ts). The override
+// modules in src/lib/core/connectors export a `connectorName` marker; the raw litekart connector
+// has none and needs the Litekart trio.
+const CONNECTOR_REQUIRED_ENV: Record<string, readonly string[]> = {
+	vendure: ['PUBLIC_VENDURE_API_URL'],
+	medusa: ['PUBLIC_MEDUSA_API_URL'],
+	saleor: ['PUBLIC_SALEOR_API_URL']
+}
+const LITEKART_REQUIRED_ENV = ['PUBLIC_LITEKART_API_URL', 'PUBLIC_LITEKART_STORE_ID', 'PUBLIC_LITEKART_DOMAIN'] as const
 
 export const GET: RequestHandler = async () => {
-	const missing = REQUIRED_ENV.filter((key) => !env[key])
+	const { services } = await import('kitcommerce.config')
+	const connectorName = (services as { connectorName?: string }).connectorName
+	const required = (connectorName && CONNECTOR_REQUIRED_ENV[connectorName]) || LITEKART_REQUIRED_ENV
+	const missing = required.filter((key) => !env[key as `PUBLIC_${string}`])
 	if (missing.length > 0) {
 		return new Response(`misconfigured: missing required env ${missing.join(', ')}`, {
 			status: 503,

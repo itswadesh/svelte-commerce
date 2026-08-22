@@ -5,6 +5,8 @@
 // so no manual headers are required (mirrors @misiki/litekart-connector's
 // BaseService, which is itself a thin fetch wrapper).
 
+import { services } from 'kitcommerce.config'
+
 export interface DeliveryFeasibility {
 	eligible: boolean
 	estimatedShipDate?: string
@@ -90,6 +92,12 @@ export class AssistantService {
 
 	async getConfig(): Promise<{ enabled: boolean; currency: string; maxRecommendations: number }> {
 		try {
+			// The assistant backend only exists behind the Litekart API. The non-Litekart override
+			// modules (src/lib/core/connectors) export a `connectorName` marker — when one is active,
+			// stay disabled without firing the doomed `/api/commerce-assistant/*` request.
+			if ((services as { connectorName?: string }).connectorName) {
+				return { enabled: false, currency: 'INR', maxRecommendations: 5 }
+			}
 			const res = await this.fetchFn(`${BASE}/config`, { headers: { accept: 'application/json' } })
 			if (!res.ok) return { enabled: false, currency: 'INR', maxRecommendations: 5 }
 			return (await res.json()) as { enabled: boolean; currency: string; maxRecommendations: number }

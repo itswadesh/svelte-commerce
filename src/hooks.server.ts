@@ -2,31 +2,9 @@ import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
+import { initActiveConnector } from '$lib/core/connectors/init'
 
-export const init = async () => {
-  if (env.PUBLIC_MEDUSA_API_URL) {
-    const services = await import('@misiki/kitcommerce-core/services')
-    if (!services.BaseService)
-      throw new Error("PUBLIC_MEDUSA_API_URL is set but medusaa-connector is not being used")
-    services.BaseService.PUBLISHABLE_KEY = env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY
-    services.BaseService.BASE_URL = env.PUBLIC_MEDUSA_API_URL
-    services.BaseService.REGION_ID = env.PUBLIC_MEDUSA_REGION_ID
-  }
-
-  if (env.PUBLIC_SALEOR_API_URL) {
-    const services = await import('@misiki/kitcommerce-core/services')
-    if (!services.BaseService)
-      throw new Error("PUBLIC_SALEOR_API_URL is set but saleor-connector is not being used")
-    services.BaseService.SALEOR_API_URL = env.PUBLIC_SALEOR_API_URL
-  }
-
-    if (env.PUBLIC_VENDURE_API_URL) {
-    const services = await import('@misiki/kitcommerce-core/services')
-    if (!services.BaseService)
-      throw new Error("PUBLIC_VENDURE_API_URL is set but vendure-connector is not being used")
-    services.BaseService._baseUrl = env.PUBLIC_VENDURE_API_URL
-  }
-}
+export const init = initActiveConnector
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
@@ -60,7 +38,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 			const storeService = new StoreService(event.fetch)
 			let storeDetails = null
 			try {
-				storeDetails = await getStore({ storeId, domain }, storeService)
+				// getStore's declared params require storeId, but it resolves by domain alone at
+				// runtime — storeId is always undefined on this branch (the guard above handles it).
+				storeDetails = await getStore({ storeId: storeId as unknown as string, domain }, storeService)
 			} catch (e) {
 				// A 404 means "no store maps to this domain" → render a proper 404 page below.
 				// Re-throw anything else (API down, network) so it surfaces as a 500 rather than a

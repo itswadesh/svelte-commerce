@@ -56,8 +56,9 @@ Each backend needs a few settings changed before the storefront will work end to
 **Vendure**
 
 - `authOptions.requireVerification` → `false`
-- `isPhoneMandatory` → `false`
-- `isEmailMandatory` → `false`
+
+See [VENDURE.md](./VENDURE.md) for the full Vendure setup guide (env, store identity,
+architecture, limitations, troubleshooting).
 
 **Saleor**
 
@@ -66,9 +67,13 @@ Each backend needs a few settings changed before the storefront will work end to
 - Allow unpaid orders in **order settings** → enabled
 - Allow unpaid orders in **channel settings** → enabled
 
+See [SALEOR.md](./SALEOR.md) for the full Saleor setup guide.
+
 **Medusa**
 
 - Set a publishable API key and add your storefront origin to the Store CORS config.
+
+See [MEDUSA.md](./MEDUSA.md) for the full Medusa setup guide.
 
 ### Demos
 
