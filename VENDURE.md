@@ -24,10 +24,13 @@ This storefront can run against a [Vendure](https://vendure.io) backend only. Co
    }
    ```
 
-3. Install and run:
+3. Install and run. `@misiki/vendure-connector` is an optional dependency — it is deliberately
+   not listed in `package.json`, so a Litekart-only install (and its Docker build) never
+   pulls it in. Add it explicitly for Vendure mode, in local dev and in any image you build:
 
    ```sh
    npm i
+   npm i @misiki/vendure-connector
    npm run dev
    ```
 
