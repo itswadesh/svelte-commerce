@@ -1,0 +1,77 @@
+# Svelte Commerce
+
+> Svelte Commerce is a production-ready open-source headless ecommerce storefront built with
+> SvelteKit and TypeScript. It connects to commerce backends through APIs, letting developers build
+> fast, SEO-friendly storefronts independently of their ecommerce backend — and customize the
+> storefront by prompting, because the commerce layer sits behind a single service import.
+
+- Entity: Svelte Commerce
+- Type: Open-source software
+- Category: Headless ecommerce storefront
+- Framework: SvelteKit 2 (Svelte 5)
+- Language: TypeScript
+- Styling: Tailwind CSS, shadcn components
+- Architecture: Headless, backend-agnostic via interchangeable connector packages
+- License: MIT
+- Repository: https://github.com/itswadesh/svelte-commerce
+- Website: https://svelte-commerce.pages.dev
+
+## What it does
+
+Svelte Commerce renders the shopper-facing storefront — catalogue, search, product detail, cart,
+checkout, orders and account — and reads all commerce data from an existing backend over that
+platform's API. It does not store products, process payments or provide an admin; those remain
+with the backend.
+
+## How backends are swapped
+
+Every backend is a connector package implementing one shared service interface. Application code
+imports commerce services only from `$lib/core/services` and never names a backend, so changing
+platform is a single export change in `kitcommerce.config.ts` plus the matching package install.
+
+## Supported backends
+
+26 connectors. Coverage is the number of storefront services wired to a real endpoint.
+
+Env wiring ships with the repo: Vendure (39/43), Litekart (39/43), Medusa (31/43), Saleor (28/43).
+
+Connector published, env branch added by the user: Broadleaf (28/43), Shopware (28/43),
+Virto Commerce (28/43), WooCommerce (27/43), Magento (26/43), Spree (26/43), X-Cart (26/43),
+EverShop (25/43), Spryker (25/43), nopCommerce (24/43), PrestaShop (24/43), Sylius (24/43),
+Swell (23/43), Bagisto (22/43), commercetools (21/43), OroCommerce (21/43), Sharetribe (21/43),
+CS-Cart (20/43), Shuup (19/43), Shopify (16/27), Django Oscar (15/43), OpenCart (9/43).
+
+## Features
+
+- Server-side rendering with client-side navigation after first paint
+- Installable PWA
+- Product catalogue, category and collection pages
+- Search with faceted filtering
+- Product detail with variants and options
+- Cart, coupons and checkout (address, shipping, payment method, success)
+- Authentication: email and OTP login, signup, password reset
+- Account: orders, order detail, addresses, profile, wishlist
+- Switchable themes resolved at runtime
+- SEO: dynamic metadata, canonical URLs, product structured data, sitemap, robots
+- Typed end to end; `npm run check` verifies the whole app
+
+## Maturity
+
+The storefront runs in production on Litekart. Each connector is written against its platform's
+authoritative API specification — OpenAPI document, GraphQL schema or published contract — and
+type-checks against it, but the connectors have not all been verified against live production
+stores. Per-platform gaps and open questions are published in the capability matrix.
+
+## Key pages
+
+- Homepage: https://svelte-commerce.pages.dev/
+- Features: https://svelte-commerce.pages.dev/features/
+- Integrations: https://svelte-commerce.pages.dev/integrations/
+- Headless ecommerce explained: https://svelte-commerce.pages.dev/headless-ecommerce/
+- SvelteKit ecommerce: https://svelte-commerce.pages.dev/sveltekit-ecommerce/
+- Svelte ecommerce: https://svelte-commerce.pages.dev/svelte-ecommerce/
+- Comparison: https://svelte-commerce.pages.dev/comparison/
+- Themes: https://svelte-commerce.pages.dev/themes/
+- Docs: https://svelte-commerce.pages.dev/docs/
+- Capability matrix: https://github.com/itswadesh/svelte-commerce/blob/main/docs/CONNECTORS.md
+- Extended version of this file: https://svelte-commerce.pages.dev/llms-full.txt

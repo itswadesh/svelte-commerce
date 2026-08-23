@@ -4,10 +4,10 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		<title>Svelte Commerce — The Storefront You Rebuild by Prompting</title>
+		<title>Svelte Commerce — Production-Ready Open-Source Headless Commerce Storefront</title>
 		<meta
 			name="description"
-			content="An open-source SvelteKit storefront architected so AI coding agents can safely restyle and extend it. Connects to Shopify, WooCommerce, Vendure, Saleor, Medusa and 21 more backends. MIT licensed."
+			content="A production-ready open-source headless commerce storefront built with SvelteKit. Customize it yourself just by prompting. 26 backends, one line to switch."
 		/>
 		<link rel="canonical" href="https://svelte-commerce.pages.dev/" />
 		<meta name="robots" content="index, follow, max-image-preview:large" />
@@ -17,10 +17,10 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Svelte Commerce" />
 		<meta property="og:url" content="https://svelte-commerce.pages.dev/" />
-		<meta property="og:title" content="Svelte Commerce — The Storefront You Rebuild by Prompting" />
+		<meta property="og:title" content="Svelte Commerce — Production-Ready Open-Source Headless Commerce Storefront" />
 		<meta
 			property="og:description"
-			content="Open-source SvelteKit storefront built to be modified by AI coding agents. 26 commerce backends, one line to switch. MIT licensed."
+			content="Production-ready, SEO-first and backend-agnostic. Customize it yourself just by prompting. MIT licensed."
 		/>
 		<meta property="og:image" content="https://svelte-commerce.pages.dev/assets/1.jpg" />
 		<meta property="og:image:width" content="1898" />
@@ -29,30 +29,87 @@
 		<meta name="twitter:creator" content="@itswadesh" />
 
 		<link rel="icon" href="assets/favicon.png" type="image/png" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-			rel="stylesheet"
-		/>
+		<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/space-grotesk-var.woff2" />
+		<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/inter-var.woff2" />
 
 		<script type="application/ld+json">
 			{
 				"@context": "https://schema.org",
 				"@graph": [
 					{
+						"@type": "WebSite",
+						"@id": "https://svelte-commerce.pages.dev/#website",
+						"url": "https://svelte-commerce.pages.dev/",
+						"name": "Svelte Commerce",
+						"description": "Svelte Commerce is an open-source headless ecommerce storefront built with SvelteKit and TypeScript. It connects to commerce backends through APIs, allowing developers to build fast, SEO-friendly storefronts independently of their ecommerce backend.",
+						"inLanguage": "en",
+						"publisher": {
+							"@id": "https://svelte-commerce.pages.dev/#org"
+						}
+					},
+					{
+						"@type": "Organization",
+						"@id": "https://svelte-commerce.pages.dev/#org",
+						"name": "Svelte Commerce",
+						"url": "https://svelte-commerce.pages.dev/",
+						"logo": "https://svelte-commerce.pages.dev/assets/favicon.png",
+						"sameAs": ["https://github.com/itswadesh/svelte-commerce", "https://discord.gg/GgdAeccwDR", "https://twitter.com/itswadesh"]
+					},
+					{
 						"@type": "SoftwareApplication",
 						"name": "Svelte Commerce",
 						"applicationCategory": "DeveloperApplication",
 						"applicationSubCategory": "Headless ecommerce storefront",
 						"operatingSystem": "Cross-platform (Node.js)",
-						"description": "An open-source, MIT-licensed headless ecommerce storefront built with SvelteKit and architected so AI coding agents can safely modify it. Commerce logic sits behind a single service barrel and the backend is one interchangeable connector package, so restyling and extending the storefront never touches the commerce layer. It connects to 26 backends including Shopify, WooCommerce, Vendure, Saleor and Medusa.",
+						"description": "Svelte Commerce is an open-source headless ecommerce storefront built with SvelteKit and TypeScript. It connects to commerce backends through APIs, allowing developers to build fast, SEO-friendly storefronts independently of their ecommerce backend.",
 						"url": "https://svelte-commerce.pages.dev/",
 						"codeRepository": "https://github.com/itswadesh/svelte-commerce",
 						"programmingLanguage": ["TypeScript", "Svelte"],
 						"license": "https://opensource.org/licenses/MIT",
 						"isAccessibleForFree": true,
-						"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+						"offers": {
+							"@type": "Offer",
+							"price": "0",
+							"priceCurrency": "USD"
+						},
+						"alternateName": ["SvelteKit ecommerce storefront", "Svelte ecommerce frontend", "headless SvelteKit commerce"],
+						"featureList": [
+							"Server-side rendering",
+							"SPA navigation",
+							"PWA",
+							"Product catalogue",
+							"Product detail pages",
+							"Categories and collections",
+							"Search with faceted filtering",
+							"Cart",
+							"Checkout",
+							"Authentication",
+							"Product structured data",
+							"Canonical URLs",
+							"Sitemap",
+							"Switchable themes",
+							"26 backend connectors"
+						],
+						"softwareVersion": "4.0.0",
+						"author": {
+							"@type": "Person",
+							"name": "Swadesh Behera",
+							"url": "https://github.com/itswadesh"
+						},
+						"@id": "https://svelte-commerce.pages.dev/#app"
+					},
+					{
+						"@type": "SoftwareSourceCode",
+						"@id": "https://svelte-commerce.pages.dev/#source",
+						"name": "Svelte Commerce",
+						"description": "Svelte Commerce is an open-source headless ecommerce storefront built with SvelteKit and TypeScript. It connects to commerce backends through APIs, allowing developers to build fast, SEO-friendly storefronts independently of their ecommerce backend.",
+						"codeRepository": "https://github.com/itswadesh/svelte-commerce",
+						"programmingLanguage": ["TypeScript", "Svelte"],
+						"runtimePlatform": "Node.js",
+						"license": "https://opensource.org/licenses/MIT",
+						"targetProduct": {
+							"@id": "https://svelte-commerce.pages.dev/#app"
+						}
 					},
 					{
 						"@type": "FAQPage",
@@ -111,1113 +168,8 @@
 			}
 		</script>
 
-		<style>
-			*,
-			*::before,
-			*::after {
-				box-sizing: border-box;
-			}
-
-			:root {
-				--bg: #08090b;
-				--bg-1: #0c0e12;
-				--bg-2: #111419;
-				--line: #1c2027;
-				--line-2: #2a303a;
-				--fg: #f6f7f9;
-				--fg-2: #99a1ad;
-				--fg-3: #626a76;
-				--accent: #ff4d1c;
-				--accent-2: #ffab2e;
-				--accent-soft: rgba(255, 77, 28, 0.12);
-				--add: #4ade80;
-				--del: #f87171;
-				--r: 12px;
-				--r-lg: 18px;
-				--maxw: 1140px;
-				--gut: 24px;
-				--display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-				--sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-				--mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-			}
-
-			html {
-				scroll-behavior: smooth;
-				-webkit-text-size-adjust: 100%;
-			}
-			@media (prefers-reduced-motion: reduce) {
-				html {
-					scroll-behavior: auto;
-				}
-				*,
-				*::before,
-				*::after {
-					animation-duration: 0.001ms !important;
-					transition-duration: 0.001ms !important;
-				}
-			}
-
-			body {
-				margin: 0;
-				background: var(--bg);
-				color: var(--fg);
-				font-family: var(--sans);
-				font-size: 16px;
-				line-height: 1.62;
-				font-weight: 400;
-				-webkit-font-smoothing: antialiased;
-				overflow-x: hidden;
-			}
-
-			/* ---------- primitives ---------- */
-			.wrap {
-				width: 100%;
-				max-width: var(--maxw);
-				margin-inline: auto;
-				padding-inline: var(--gut);
-			}
-			section {
-				position: relative;
-				padding-block: clamp(64px, 9vw, 120px);
-				scroll-margin-top: 64px;
-			}
-			.rule {
-				border: 0;
-				border-top: 1px solid var(--line);
-				margin: 0;
-			}
-			/* grid/flex children default to min-width:auto, which stops <pre> from scrolling
-			   inside its own box and pushes the page wider than the viewport on phones */
-			.split > *,
-			.loop > article,
-			.bento > *,
-			.tiers > *,
-			.gallery > *,
-			.phones > *,
-			.win,
-			.win-body,
-			.prompt,
-			.agent-line {
-				min-width: 0;
-			}
-			.diff,
-			.code-block,
-			.win-body pre {
-				max-width: 100%;
-			}
-			.agent-line span {
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-
-			h1,
-			h2,
-			h3,
-			h4 {
-				font-family: var(--display);
-				font-weight: 600;
-				line-height: 1.08;
-				letter-spacing: -0.028em;
-				margin: 0;
-				text-wrap: balance;
-			}
-			h1 {
-				font-size: clamp(2.4rem, 6.4vw, 4.4rem);
-				font-weight: 700;
-				letter-spacing: -0.04em;
-			}
-			h2 {
-				font-size: clamp(1.85rem, 3.7vw, 2.75rem);
-			}
-			h3 {
-				font-size: 1.0625rem;
-				letter-spacing: -0.015em;
-			}
-			p {
-				margin: 0;
-				color: var(--fg-2);
-				text-wrap: pretty;
-			}
-			.measure {
-				max-width: 60ch;
-			}
-			a {
-				color: inherit;
-				text-decoration: none;
-			}
-			strong {
-				color: var(--fg);
-				font-weight: 600;
-			}
-			:focus-visible {
-				outline: 2px solid var(--accent);
-				outline-offset: 3px;
-				border-radius: 4px;
-			}
-
-			.eyebrow {
-				display: inline-flex;
-				align-items: center;
-				gap: 8px;
-				font-family: var(--mono);
-				font-size: 0.7rem;
-				letter-spacing: 0.14em;
-				text-transform: uppercase;
-				color: var(--accent);
-				margin-bottom: 18px;
-			}
-			.eyebrow::before {
-				content: '';
-				width: 5px;
-				height: 5px;
-				border-radius: 50%;
-				background: var(--accent);
-				box-shadow: 0 0 12px var(--accent);
-			}
-
-			.lede {
-				font-size: clamp(1.05rem, 1.9vw, 1.24rem);
-				line-height: 1.55;
-				color: var(--fg-2);
-			}
-
-			/* ---------- buttons ---------- */
-			.btn {
-				display: inline-flex;
-				align-items: center;
-				gap: 9px;
-				height: 46px;
-				padding-inline: 22px;
-				border-radius: 999px;
-				border: 1px solid var(--line-2);
-				font-weight: 550;
-				font-size: 0.94rem;
-				letter-spacing: -0.01em;
-				color: var(--fg);
-				background: var(--bg-2);
-				transition:
-					border-color 0.18s ease,
-					background 0.18s ease,
-					transform 0.18s ease;
-				white-space: nowrap;
-			}
-			.btn:hover {
-				border-color: var(--fg-3);
-				transform: translateY(-1px);
-			}
-			.btn-primary {
-				background: linear-gradient(180deg, #ff6a3d, var(--accent));
-				border-color: transparent;
-				color: #fff;
-				font-weight: 600;
-				box-shadow:
-					0 1px 0 rgba(255, 255, 255, 0.22) inset,
-					0 10px 30px -10px rgba(255, 77, 28, 0.7);
-			}
-			.btn-primary:hover {
-				filter: brightness(1.06);
-			}
-			.btns {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px;
-			}
-
-			/* very narrow phones: tighten the gutter so the header CTA still fits */
-			@media (max-width: 380px) {
-				:root {
-					--gut: 16px;
-				}
-				.btn {
-					height: 42px;
-					padding-inline: 16px;
-					font-size: 0.88rem;
-				}
-			}
-
-			/* ---------- ticker ---------- */
-			.ticker {
-				border-bottom: 1px solid var(--line);
-				background: var(--bg-1);
-				padding-block: 22px;
-				overflow: hidden;
-			}
-			.tk-head {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				gap: 10px;
-				font-family: var(--mono);
-				font-size: 0.66rem;
-				letter-spacing: 0.16em;
-				text-transform: uppercase;
-				color: var(--fg-3);
-				margin-bottom: 18px;
-			}
-			.tk-live {
-				width: 6px;
-				height: 6px;
-				border-radius: 50%;
-				background: var(--accent);
-				box-shadow: 0 0 10px var(--accent);
-				animation: tk-pulse 2.2s ease-in-out infinite;
-			}
-			@keyframes tk-pulse {
-				50% {
-					opacity: 0.35;
-				}
-			}
-			.tk-rail {
-				display: flex;
-				width: max-content;
-				/* fade both ends so items enter and leave instead of popping */
-				mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-			}
-			.tk-track {
-				display: flex;
-				align-items: center;
-				list-style: none;
-				margin: 0;
-				padding: 0;
-				animation: tk-scroll 64s linear infinite;
-			}
-			.ticker:hover .tk-track {
-				animation-play-state: paused;
-			}
-			@keyframes tk-scroll {
-				to {
-					transform: translateX(-100%);
-				}
-			}
-			.tk-item {
-				display: inline-flex;
-				align-items: center;
-				gap: 9px;
-				white-space: nowrap;
-				font-size: 0.92rem;
-				font-weight: 500;
-				color: var(--fg-3);
-				padding-inline: 22px;
-				transition: color 0.2s ease;
-			}
-			/* ticker separator */
-			.tk-item::after {
-				content: '';
-				width: 3px;
-				height: 3px;
-				border-radius: 50%;
-				background: var(--line-2);
-				margin-left: 22px;
-			}
-			.tk-item:hover {
-				color: var(--fg);
-			}
-			.tk-mark {
-				width: 19px;
-				height: 19px;
-				flex: none;
-				fill: currentColor;
-			}
-			.tk-mono {
-				width: 19px;
-				height: 19px;
-				flex: none;
-				display: grid;
-				place-items: center;
-				border: 1px solid currentColor;
-				border-radius: 5px;
-				font-family: var(--mono);
-				font-size: 0.55rem;
-				opacity: 0.8;
-			}
-			@media (prefers-reduced-motion: reduce) {
-				.tk-rail {
-					width: auto;
-					flex-wrap: wrap;
-					justify-content: center;
-					mask-image: none;
-				}
-				.tk-track {
-					animation: none;
-					flex-wrap: wrap;
-					justify-content: center;
-					row-gap: 12px;
-				}
-				.tk-track[aria-hidden='true'] {
-					display: none;
-				}
-			}
-
-			/* ---------- coverage ---------- */
-			.cv-group + .cv-group {
-				margin-top: 44px;
-			}
-			.cv-head {
-				display: flex;
-				align-items: baseline;
-				gap: 14px;
-				flex-wrap: wrap;
-				padding-bottom: 12px;
-				margin-bottom: 8px;
-				border-bottom: 1px solid var(--line);
-			}
-			.cv-head h3 {
-				font-size: 0.98rem;
-			}
-			.cv-head span {
-				font-family: var(--mono);
-				font-size: 0.7rem;
-				color: var(--fg-3);
-			}
-			.cv-list {
-				list-style: none;
-				margin: 0;
-				padding: 0;
-			}
-			.cv-row {
-				display: grid;
-				grid-template-columns: minmax(150px, 1.1fr) minmax(80px, 1.5fr) 62px;
-				align-items: center;
-				gap: 16px;
-				padding: 11px 0;
-				border-bottom: 1px solid var(--line);
-			}
-			.cv-row:last-child {
-				border-bottom: 0;
-			}
-			.cv-id {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				min-width: 0;
-			}
-			.cv-name {
-				font-weight: 500;
-				font-size: 0.94rem;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-			.cv-mark {
-				width: 17px;
-				height: 17px;
-				flex: none;
-				fill: var(--fg-3);
-			}
-			.cv-mono {
-				width: 17px;
-				height: 17px;
-				flex: none;
-				display: grid;
-				place-items: center;
-				border: 1px solid var(--line-2);
-				border-radius: 4px;
-				font-family: var(--mono);
-				font-size: 0.5rem;
-				color: var(--fg-3);
-			}
-			.cv-meter {
-				height: 6px;
-				border-radius: 999px;
-				background: var(--bg-2);
-				overflow: hidden;
-				min-width: 0;
-			}
-			.cv-fill {
-				display: block;
-				height: 100%;
-				border-radius: inherit;
-				background: linear-gradient(90deg, var(--accent), var(--accent-2));
-			}
-			.cv-num {
-				font-family: var(--mono);
-				font-size: 0.78rem;
-				color: var(--fg-2);
-				text-align: right;
-				font-variant-numeric: tabular-nums;
-			}
-			.cv-num i {
-				font-style: normal;
-				color: var(--fg-3);
-			}
-			.cv-note {
-				grid-column: 1 / -1;
-				font-size: 0.78rem;
-				color: var(--fg-3);
-				margin-top: -2px;
-			}
-			.cv-note:empty {
-				display: none;
-			}
-			/* de-emphasise the manual-setup group so tier one reads first — opacity, not grey:
-			   these are supported too, they just need the env branch added */
-			.cv-group + .cv-group .cv-fill {
-				opacity: 0.5;
-			}
-			/* narrow phones: name + score on one line, the bar spanning underneath */
-			@media (max-width: 480px) {
-				.cv-row {
-					grid-template-columns: minmax(0, 1fr) 56px;
-					gap: 8px 10px;
-				}
-				.cv-meter {
-					grid-column: 1 / -1;
-					order: 3;
-				}
-				.cv-note {
-					order: 4;
-				}
-			}
-			@media (min-width: 900px) {
-				.cv-row {
-					grid-template-columns: minmax(160px, 0.9fr) minmax(120px, 1.4fr) 62px minmax(200px, 1.3fr);
-				}
-				.cv-note {
-					grid-column: auto;
-					margin-top: 0;
-					text-align: right;
-				}
-			}
-
-			/* ---------- header ---------- */
-			header {
-				position: sticky;
-				top: 0;
-				z-index: 50;
-				background: rgba(8, 9, 11, 0.72);
-				backdrop-filter: blur(14px) saturate(150%);
-				border-bottom: 1px solid var(--line);
-			}
-			.nav {
-				display: flex;
-				align-items: center;
-				gap: 28px;
-				height: 62px;
-			}
-			.logo {
-				display: inline-flex;
-				align-items: center;
-				gap: 9px;
-				font-family: var(--display);
-				font-weight: 700;
-				letter-spacing: -0.03em;
-				font-size: 1.02rem;
-				margin-right: auto;
-			}
-			.logo-mark {
-				width: 22px;
-				height: 22px;
-				border-radius: 6px;
-				background: linear-gradient(140deg, var(--accent-2), var(--accent));
-				display: grid;
-				place-items: center;
-				font-size: 0.68rem;
-				color: #1a0c05;
-				font-weight: 700;
-			}
-			.nav-links {
-				display: flex;
-				gap: 26px;
-				list-style: none;
-				margin: 0;
-				padding: 0;
-				font-size: 0.9rem;
-			}
-			.nav-links a {
-				color: var(--fg-2);
-				transition: color 0.15s ease;
-			}
-			.nav-links a:hover {
-				color: var(--fg);
-			}
-			@media (max-width: 860px) {
-				.nav-links {
-					display: none;
-				}
-			}
-
-			/* ---------- hero ---------- */
-			.hero {
-				padding-top: clamp(56px, 8vw, 92px);
-				padding-bottom: clamp(48px, 6vw, 72px);
-				overflow: hidden;
-			}
-			.hero::before {
-				content: '';
-				position: absolute;
-				inset: -240px 0 auto 0;
-				height: 620px;
-				background:
-					radial-gradient(60% 60% at 50% 40%, rgba(255, 77, 28, 0.17), transparent 70%),
-					radial-gradient(40% 50% at 78% 28%, rgba(255, 171, 46, 0.09), transparent 70%);
-				pointer-events: none;
-			}
-			.hero::after {
-				content: '';
-				position: absolute;
-				inset: 0;
-				background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
-				background-size: 64px 64px;
-				mask-image: radial-gradient(70% 55% at 50% 0%, #000, transparent 75%);
-				opacity: 0.5;
-				pointer-events: none;
-			}
-			.hero .wrap {
-				position: relative;
-				z-index: 1;
-			}
-
-			.pill {
-				display: inline-flex;
-				align-items: center;
-				gap: 10px;
-				height: 32px;
-				padding-inline: 6px 14px;
-				border: 1px solid var(--line-2);
-				border-radius: 999px;
-				background: var(--bg-1);
-				font-size: 0.8rem;
-				color: var(--fg-2);
-				margin-bottom: 26px;
-			}
-			.pill b {
-				display: inline-flex;
-				align-items: center;
-				height: 22px;
-				padding-inline: 9px;
-				border-radius: 999px;
-				background: var(--accent-soft);
-				color: var(--accent);
-				font-family: var(--mono);
-				font-size: 0.66rem;
-				letter-spacing: 0.08em;
-				text-transform: uppercase;
-				font-weight: 500;
-			}
-
-			.hero h1 .grad {
-				background: linear-gradient(96deg, var(--accent-2) 4%, var(--accent) 52%, #ff7a52 96%);
-				-webkit-background-clip: text;
-				background-clip: text;
-				color: transparent;
-			}
-			.hero .lede {
-				margin-top: 22px;
-				max-width: 56ch;
-			}
-			.hero .btns {
-				margin-top: 32px;
-			}
-			.hero-note {
-				margin-top: 16px;
-				font-size: 0.83rem;
-				color: var(--fg-3);
-				font-family: var(--mono);
-			}
-
-			/* ---------- window / code panel ---------- */
-			.win {
-				border: 1px solid var(--line-2);
-				border-radius: var(--r-lg);
-				background: var(--bg-1);
-				overflow: hidden;
-				box-shadow:
-					0 1px 0 rgba(255, 255, 255, 0.04) inset,
-					0 40px 80px -40px rgba(0, 0, 0, 0.9);
-			}
-			.win-bar {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				height: 40px;
-				padding-inline: 14px;
-				border-bottom: 1px solid var(--line);
-				background: var(--bg-2);
-			}
-			.dot {
-				width: 9px;
-				height: 9px;
-				border-radius: 50%;
-				background: var(--line-2);
-			}
-			.win-title {
-				margin-left: 8px;
-				font-family: var(--mono);
-				font-size: 0.72rem;
-				color: var(--fg-3);
-			}
-			.win-body {
-				padding: 20px;
-			}
-
-			.prompt {
-				display: flex;
-				gap: 12px;
-				align-items: flex-start;
-				padding: 14px 16px;
-				border: 1px solid var(--line-2);
-				border-radius: var(--r);
-				background: var(--bg-2);
-			}
-			.prompt .chev {
-				color: var(--accent);
-				font-family: var(--mono);
-				font-weight: 500;
-				line-height: 1.5;
-			}
-			.prompt p {
-				color: var(--fg);
-				font-size: 0.95rem;
-				line-height: 1.5;
-			}
-			.caret {
-				display: inline-block;
-				width: 8px;
-				height: 1.05em;
-				vertical-align: -0.18em;
-				margin-left: 3px;
-				background: var(--accent);
-				animation: blink 1.15s steps(2, start) infinite;
-			}
-			@keyframes blink {
-				50% {
-					opacity: 0;
-				}
-			}
-
-			.agent-out {
-				margin-top: 16px;
-				display: grid;
-				gap: 10px;
-			}
-			.agent-line {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				font-family: var(--mono);
-				font-size: 0.78rem;
-				color: var(--fg-2);
-			}
-			.tick {
-				width: 16px;
-				height: 16px;
-				flex: none;
-				border-radius: 50%;
-				background: rgba(74, 222, 128, 0.14);
-				color: var(--add);
-				display: grid;
-				place-items: center;
-				font-size: 0.62rem;
-			}
-			.path {
-				color: var(--fg);
-			}
-
-			pre {
-				margin: 0;
-				overflow-x: auto;
-				max-width: 100%;
-				font-family: var(--mono);
-				font-size: 0.8rem;
-				line-height: 1.75;
-				tab-size: 2;
-			}
-			code {
-				font-family: var(--mono);
-			}
-			.code-block {
-				border: 1px solid var(--line);
-				border-radius: var(--r);
-				background: #06070a;
-				padding: 16px 18px;
-				overflow-x: auto;
-			}
-			.diff {
-				margin-top: 14px;
-				border: 1px solid var(--line);
-				border-radius: var(--r);
-				background: #06070a;
-				padding: 14px 16px;
-				overflow-x: auto;
-			}
-			.diff .add {
-				color: var(--add);
-			}
-			.diff .del {
-				color: var(--del);
-			}
-			.c-key {
-				color: #ff9e64;
-			}
-			.c-str {
-				color: #8ce99a;
-			}
-			.c-cmt {
-				color: var(--fg-3);
-			}
-			.c-fn {
-				color: #74c0fc;
-			}
-			p code,
-			li code,
-			td code,
-			dd code {
-				font-size: 0.86em;
-				padding: 2px 6px;
-				border-radius: 5px;
-				background: var(--bg-2);
-				border: 1px solid var(--line);
-				color: #ffc9a8;
-			}
-
-			/* ---------- stat strip ---------- */
-			.strip {
-				border-block: 1px solid var(--line);
-				background: var(--bg-1);
-			}
-			.strip-in {
-				display: grid;
-				grid-template-columns: repeat(4, 1fr);
-				gap: 1px;
-				background: var(--line);
-			}
-			.strip-in > div {
-				background: var(--bg-1);
-				padding: 26px var(--gut);
-			}
-			.strip b {
-				display: block;
-				font-family: var(--display);
-				font-size: clamp(1.5rem, 2.6vw, 2rem);
-				font-weight: 600;
-				letter-spacing: -0.03em;
-				font-variant-numeric: tabular-nums;
-			}
-			.strip span {
-				font-size: 0.82rem;
-				color: var(--fg-3);
-			}
-			@media (max-width: 720px) {
-				.strip-in {
-					grid-template-columns: repeat(2, 1fr);
-				}
-			}
-
-			/* ---------- section head ---------- */
-			.head {
-				max-width: 62ch;
-				margin-bottom: 44px;
-			}
-			.head p {
-				margin-top: 16px;
-				font-size: 1.03rem;
-			}
-
-			/* ---------- steps ---------- */
-			.loop {
-				display: grid;
-				gap: 18px;
-				grid-template-columns: repeat(3, 1fr);
-				counter-reset: st;
-			}
-			.loop > article {
-				counter-increment: st;
-				display: flex;
-				flex-direction: column;
-				border: 1px solid var(--line);
-				border-radius: var(--r-lg);
-				background: linear-gradient(180deg, var(--bg-1), var(--bg));
-				padding: 24px;
-				min-width: 0;
-				position: relative;
-			}
-			.loop > article::before {
-				content: '0' counter(st);
-				font-family: var(--mono);
-				font-size: 0.7rem;
-				color: var(--accent);
-				letter-spacing: 0.1em;
-			}
-			.loop h3 {
-				margin: 12px 0 8px;
-			}
-			.loop p {
-				font-size: 0.92rem;
-			}
-			.loop .code-block {
-				margin-top: auto;
-				font-size: 0.74rem;
-			}
-			.loop p {
-				margin-bottom: 18px;
-			}
-			@media (max-width: 900px) {
-				.loop {
-					grid-template-columns: 1fr;
-				}
-			}
-
-			/* ---------- bento ---------- */
-			.bento {
-				display: grid;
-				grid-template-columns: repeat(6, 1fr);
-				gap: 16px;
-			}
-			.tile {
-				grid-column: span 2;
-				min-width: 0;
-				border: 1px solid var(--line);
-				border-radius: var(--r-lg);
-				background: var(--bg-1);
-				padding: 26px;
-				transition:
-					border-color 0.2s ease,
-					transform 0.2s ease;
-			}
-			.tile:hover {
-				border-color: var(--line-2);
-				transform: translateY(-2px);
-			}
-			.tile.wide {
-				grid-column: span 3;
-			}
-			.tile.full {
-				grid-column: span 6;
-			}
-			.tile h3 {
-				margin-bottom: 8px;
-			}
-			.tile p {
-				font-size: 0.92rem;
-			}
-			.tile .code-block {
-				margin-top: 18px;
-			}
-			.ico {
-				width: 34px;
-				height: 34px;
-				border-radius: 9px;
-				display: grid;
-				place-items: center;
-				background: var(--accent-soft);
-				border: 1px solid rgba(255, 77, 28, 0.22);
-				margin-bottom: 16px;
-			}
-			.ico svg {
-				width: 17px;
-				height: 17px;
-				stroke: var(--accent);
-				fill: none;
-				stroke-width: 1.7;
-				stroke-linecap: round;
-				stroke-linejoin: round;
-			}
-			@media (max-width: 980px) {
-				.bento {
-					grid-template-columns: repeat(2, 1fr);
-				}
-				.tile,
-				.tile.wide,
-				.tile.full {
-					grid-column: span 1;
-				}
-				.tile.full {
-					grid-column: span 2;
-				}
-			}
-			@media (max-width: 620px) {
-				.bento {
-					grid-template-columns: 1fr;
-				}
-				.tile.full {
-					grid-column: span 1;
-				}
-			}
-
-			/* ---------- split ---------- */
-			.split {
-				display: grid;
-				grid-template-columns: 1fr 1.15fr;
-				gap: clamp(28px, 5vw, 64px);
-				align-items: center;
-			}
-			@media (max-width: 900px) {
-				.split {
-					grid-template-columns: 1fr;
-				}
-			}
-
-			/* ---------- backends ---------- */
-			.callout {
-				margin-top: 26px;
-				display: flex;
-				gap: 14px;
-				padding: 18px 20px;
-				border: 1px solid var(--line);
-				border-left: 2px solid var(--accent);
-				border-radius: 0 var(--r) var(--r) 0;
-				background: var(--bg-1);
-			}
-			.callout p {
-				font-size: 0.9rem;
-			}
-			.callout a {
-				color: var(--accent);
-				text-decoration: underline;
-				text-underline-offset: 3px;
-			}
-
-			/* ---------- shots ---------- */
-			.gallery {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 18px;
-			}
-			.gallery figure {
-				margin: 0;
-				min-width: 0;
-				border: 1px solid var(--line-2);
-				border-radius: var(--r-lg);
-				overflow: hidden;
-				background: var(--bg-1);
-			}
-			.gallery img {
-				display: block;
-				width: 100%;
-				height: auto;
-			}
-			.phones {
-				display: grid;
-				grid-template-columns: repeat(3, minmax(0, 220px));
-				gap: 20px;
-				justify-content: center;
-			}
-			.phones figure {
-				margin: 0;
-				min-width: 0;
-				border: 1px solid var(--line-2);
-				border-radius: 22px;
-				overflow: hidden;
-				background: var(--bg-1);
-				box-shadow: 0 40px 70px -40px rgba(0, 0, 0, 0.95);
-			}
-			.phones img {
-				display: block;
-				width: 100%;
-				height: auto;
-			}
-			@media (max-width: 760px) {
-				.gallery,
-				.phones {
-					grid-template-columns: repeat(2, minmax(0, 1fr));
-				}
-				.phones figure:last-child {
-					display: none;
-				}
-			}
-
-			/* ---------- faq ---------- */
-			.faq {
-				display: grid;
-				gap: 10px;
-				max-width: 820px;
-			}
-			.faq details {
-				border: 1px solid var(--line);
-				border-radius: var(--r);
-				background: var(--bg-1);
-				padding: 16px 20px;
-			}
-			.faq summary {
-				cursor: pointer;
-				font-weight: 550;
-				font-size: 0.97rem;
-				list-style: none;
-				display: flex;
-				justify-content: space-between;
-				gap: 16px;
-			}
-			.faq summary::-webkit-details-marker {
-				display: none;
-			}
-			.faq summary::after {
-				content: '＋';
-				color: var(--fg-3);
-				flex: none;
-			}
-			.faq details[open] summary::after {
-				content: '−';
-			}
-			.faq details p {
-				margin-top: 12px;
-				font-size: 0.93rem;
-			}
-
-			/* ---------- cta / footer ---------- */
-			.cta {
-				position: relative;
-				overflow: hidden;
-				border-top: 1px solid var(--line);
-			}
-			.cta::before {
-				content: '';
-				position: absolute;
-				inset: auto 0 -320px 0;
-				height: 560px;
-				background: radial-gradient(50% 60% at 50% 100%, rgba(255, 77, 28, 0.2), transparent 70%);
-				pointer-events: none;
-			}
-			.cta .wrap {
-				position: relative;
-				text-align: center;
-			}
-			.cta p {
-				margin: 18px auto 0;
-				max-width: 48ch;
-			}
-			.cta .btns {
-				justify-content: center;
-				margin-top: 30px;
-			}
-
-			footer {
-				border-top: 1px solid var(--line);
-				padding-block: 40px;
-			}
-			.foot {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 20px;
-				align-items: center;
-				justify-content: space-between;
-			}
-			.foot nav {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 22px;
-				font-size: 0.88rem;
-			}
-			.foot nav a {
-				color: var(--fg-2);
-			}
-			.foot nav a:hover {
-				color: var(--fg);
-			}
-			.foot small {
-				color: var(--fg-3);
-				font-size: 0.82rem;
-			}
-			.sr {
-				position: absolute;
-				width: 1px;
-				height: 1px;
-				overflow: hidden;
-				clip: rect(0 0 0 0);
-				white-space: nowrap;
-			}
-		</style>
+		<style>@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('assets/fonts/inter-var.woff2') format('woff2')}@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url('assets/fonts/space-grotesk-var.woff2') format('woff2')}@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('assets/fonts/jetbrains-mono-var.woff2') format('woff2')}*,*::before,*::after{box-sizing:border-box}:root{--bg:#08090b;--bg-1:#0c0e12;--bg-2:#111419;--line:#1c2027;--line-2:#2a303a;--fg:#f6f7f9;--fg-2:#99a1ad;--fg-3:#8b95a4;--accent:#ff4d1c;--accent-2:#ffab2e;--accent-soft:rgba(255,77,28,0.12);--add:#4ade80;--del:#f87171;--r:12px;--r-lg:18px;--maxw:1140px;--gut:24px;--display:'Space Grotesk','Inter',system-ui,sans-serif;--sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace}html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:0.001ms !important;transition-duration:0.001ms !important}}body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.62;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}.wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gut)}section{position:relative;padding-block:clamp(64px,9vw,120px);scroll-margin-top:64px}.rule{border:0;border-top:1px solid var(--line);margin:0}.split > *,.loop > article,.bento > *,.tiers > *,.gallery > *,.phones > *,.win,.win-body,.prompt,.agent-line{min-width:0}.diff,.code-block,.win-body pre{max-width:100%}.agent-line span{overflow:hidden;text-overflow:ellipsis}h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.08;letter-spacing:-0.028em;margin:0;text-wrap:balance}h1{font-size:clamp(1.75rem,3.5vw,2.85rem);font-weight:700;letter-spacing:-0.032em;line-height:1.1}h2{font-size:clamp(1.85rem,3.7vw,2.75rem)}h3{font-size:1.0625rem;letter-spacing:-0.015em}p{margin:0;color:var(--fg-2);text-wrap:pretty}.measure{max-width:60ch}a{color:inherit;text-decoration:none}strong{color:var(--fg);font-weight:600}:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}.eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}.lede{font-size:clamp(1.05rem,1.9vw,1.24rem);line-height:1.55;color:var(--fg-2)}.btn{display:inline-flex;align-items:center;gap:9px;height:46px;padding-inline:22px;border-radius:999px;border:1px solid var(--line-2);font-weight:550;font-size:0.94rem;letter-spacing:-0.01em;color:var(--fg);background:var(--bg-2);transition:border-color 0.18s ease,background 0.18s ease,transform 0.18s ease;white-space:nowrap}.btn:hover{border-color:var(--fg-3);transform:translateY(-1px)}.btn-primary{background:linear-gradient(180deg,#ff6a3d,var(--accent));border-color:transparent;color:#fff;font-weight:600;box-shadow:0 1px 0 rgba(255,255,255,0.22) inset,0 10px 30px -10px rgba(255,77,28,0.7)}.btn-primary:hover{filter:brightness(1.06)}.btns{display:flex;flex-wrap:wrap;gap:12px}@media (max-width:380px){:root{--gut:16px}.btn{height:42px;padding-inline:16px;font-size:0.88rem}}.ticker{border-bottom:1px solid var(--line);background:var(--bg-1);padding-block:22px;overflow:hidden}.tk-head{display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--mono);font-size:0.66rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--fg-3);margin-bottom:18px}.tk-live{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:tk-pulse 2.2s ease-in-out infinite}@keyframes tk-pulse{50%{opacity:0.35}}.tk-rail{display:flex;width:max-content;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}.tk-track{display:flex;align-items:center;list-style:none;margin:0;padding:0;animation:tk-scroll 64s linear infinite}.ticker:hover .tk-track{animation-play-state:paused}@keyframes tk-scroll{to{transform:translateX(-100%)}}.tk-item{display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-size:0.92rem;font-weight:500;color:var(--fg-3);padding-inline:22px;transition:color 0.2s ease}.tk-item::after{content:'';width:3px;height:3px;border-radius:50%;background:var(--line-2);margin-left:22px}.tk-item:hover{color:var(--fg)}.tk-mark{width:19px;height:19px;flex:none;fill:currentColor}.tk-mono{width:19px;height:19px;flex:none;display:grid;place-items:center;border:1px solid currentColor;border-radius:5px;font-family:var(--mono);font-size:0.55rem;opacity:0.8}@media (prefers-reduced-motion:reduce){.tk-rail{width:auto;flex-wrap:wrap;justify-content:center;mask-image:none}.tk-track{animation:none;flex-wrap:wrap;justify-content:center;row-gap:12px}.tk-track[aria-hidden='true']{display:none}}.cv-group + .cv-group{margin-top:44px}.cv-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding-bottom:12px;margin-bottom:8px;border-bottom:1px solid var(--line)}.cv-head h3{font-size:0.98rem}.cv-head span{font-family:var(--mono);font-size:0.7rem;color:var(--fg-3)}.cv-list{list-style:none;margin:0;padding:0}.cv-row{display:grid;grid-template-columns:minmax(150px,1.1fr) minmax(80px,1.5fr) 62px;align-items:center;gap:16px;padding:11px 0;border-bottom:1px solid var(--line)}.cv-row:last-child{border-bottom:0}.cv-id{display:flex;align-items:center;gap:10px;min-width:0}.cv-name{font-weight:500;font-size:0.94rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cv-mark{width:17px;height:17px;flex:none;fill:var(--fg-3)}.cv-mono{width:17px;height:17px;flex:none;display:grid;place-items:center;border:1px solid var(--line-2);border-radius:4px;font-family:var(--mono);font-size:0.5rem;color:var(--fg-3)}.cv-meter{height:6px;border-radius:999px;background:var(--bg-2);overflow:hidden;min-width:0}.cv-fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent),var(--accent-2))}.cv-num{font-family:var(--mono);font-size:0.78rem;color:var(--fg-2);text-align:right;font-variant-numeric:tabular-nums}.cv-num i{font-style:normal;color:var(--fg-3)}.cv-note{grid-column:1 / -1;font-size:0.78rem;color:var(--fg-3);margin-top:-2px}.cv-note:empty{display:none}.cv-group + .cv-group .cv-fill{opacity:0.5}@media (max-width:480px){.cv-row{grid-template-columns:minmax(0,1fr) 56px;gap:8px 10px}.cv-meter{grid-column:1 / -1;order:3}.cv-note{order:4}}@media (min-width:900px){.cv-row{grid-template-columns:minmax(160px,0.9fr) minmax(120px,1.4fr) 62px minmax(200px,1.3fr)}.cv-note{grid-column:auto;margin-top:0;text-align:right}}header{position:sticky;top:0;z-index:50;background:rgba(8,9,11,0.94);border-bottom:1px solid var(--line)}.nav{display:flex;align-items:center;gap:28px;height:62px}.logo{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;letter-spacing:-0.03em;font-size:1.02rem;margin-right:auto}.logo-mark{width:22px;height:22px;border-radius:6px;background:linear-gradient(140deg,var(--accent-2),var(--accent));display:grid;place-items:center;font-size:0.68rem;color:#1a0c05;font-weight:700}.nav-links{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:0.9rem}.nav-links a{color:var(--fg-2);transition:color 0.15s ease}.nav-links a:hover{color:var(--fg)}@media (max-width:860px){.nav-links{display:none}}.hero{padding-top:clamp(56px,8vw,92px);padding-bottom:clamp(48px,6vw,72px);overflow:hidden}.hero::before{content:'';position:absolute;inset:-240px 0 auto 0;height:620px;background:radial-gradient(60% 60% at 50% 40%,rgba(255,77,28,0.17),transparent 70%),radial-gradient(40% 50% at 78% 28%,rgba(255,171,46,0.09),transparent 70%);pointer-events:none}.hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(70% 55% at 50% 0%,#000,transparent 75%);opacity:0.5;pointer-events:none}.hero .wrap{position:relative;z-index:1}.pill{display:inline-flex;align-items:center;gap:10px;height:32px;padding-inline:6px 14px;border:1px solid var(--line-2);border-radius:999px;background:var(--bg-1);font-size:0.8rem;color:var(--fg-2);margin-bottom:26px}.pill b{display:inline-flex;align-items:center;height:22px;padding-inline:9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-family:var(--mono);font-size:0.66rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:500}.hero h1 .grad{background:linear-gradient(96deg,var(--accent-2) 4%,var(--accent) 52%,#ff7a52 96%);-webkit-background-clip:text;background-clip:text;color:transparent}.hero .lede{margin-top:22px;max-width:56ch}.hero .btns{margin-top:32px}.hero-note{margin-top:16px;font-size:0.83rem;color:var(--fg-3);font-family:var(--mono)}.win{border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--bg-1);overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,0.04) inset,0 40px 80px -40px rgba(0,0,0,0.9)}.win-bar{display:flex;align-items:center;gap:8px;height:40px;padding-inline:14px;border-bottom:1px solid var(--line);background:var(--bg-2)}.dot{width:9px;height:9px;border-radius:50%;background:var(--line-2)}.win-title{margin-left:8px;font-family:var(--mono);font-size:0.72rem;color:var(--fg-3)}.win-body{padding:20px}.prompt{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--bg-2)}.prompt .chev{color:var(--accent);font-family:var(--mono);font-weight:500;line-height:1.5}.prompt p{color:var(--fg);font-size:0.95rem;line-height:1.5}.caret{display:inline-block;width:8px;height:1.05em;vertical-align:-0.18em;margin-left:3px;background:var(--accent);animation:blink 1.15s steps(2,start) infinite}@keyframes blink{50%{opacity:0}}.agent-out{margin-top:16px;display:grid;gap:10px}.agent-line{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:0.78rem;color:var(--fg-2)}.tick{width:16px;height:16px;flex:none;border-radius:50%;background:rgba(74,222,128,0.14);color:var(--add);display:grid;place-items:center;font-size:0.62rem}.path{color:var(--fg)}pre{margin:0;overflow-x:auto;max-width:100%;font-family:var(--mono);font-size:0.8rem;line-height:1.75;tab-size:2}code{font-family:var(--mono)}.code-block{border:1px solid var(--line);border-radius:var(--r);background:#06070a;padding:16px 18px;overflow-x:auto}.diff{margin-top:14px;border:1px solid var(--line);border-radius:var(--r);background:#06070a;padding:14px 16px;overflow-x:auto}.diff .add{color:var(--add)}.diff .del{color:var(--del)}.c-key{color:#ff9e64}.c-str{color:#8ce99a}.c-cmt{color:var(--fg-3)}.c-fn{color:#74c0fc}p code,li code,td code,dd code{font-size:0.86em;padding:2px 6px;border-radius:5px;background:var(--bg-2);border:1px solid var(--line);color:#ffc9a8}.strip{border-block:1px solid var(--line);background:var(--bg-1)}.strip-in{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}.strip-in > div{background:var(--bg-1);padding:26px var(--gut)}.strip b{display:block;font-family:var(--display);font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}.strip span{font-size:0.82rem;color:var(--fg-3)}@media (max-width:720px){.strip-in{grid-template-columns:repeat(2,1fr)}}.head{max-width:62ch;margin-bottom:44px}.head p{margin-top:16px;font-size:1.03rem}.loop{display:grid;gap:18px;grid-template-columns:repeat(3,1fr);counter-reset:st}.loop > article{counter-increment:st;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r-lg);background:linear-gradient(180deg,var(--bg-1),var(--bg));padding:24px;min-width:0;position:relative}.loop > article::before{content:'0' counter(st);font-family:var(--mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.1em}.loop h3{margin:12px 0 8px}.loop p{font-size:0.92rem}.loop .code-block{margin-top:auto;font-size:0.74rem}.loop p{margin-bottom:18px}@media (max-width:900px){.loop{grid-template-columns:1fr}}.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}.tile{grid-column:span 2;min-width:0;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--bg-1);padding:26px;transition:border-color 0.2s ease,transform 0.2s ease}.tile:hover{border-color:var(--line-2);transform:translateY(-2px)}.tile.wide{grid-column:span 3}.tile.full{grid-column:span 6}.tile h3{margin-bottom:8px}.tile p{font-size:0.92rem}.tile .code-block{margin-top:18px}.ico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--accent-soft);border:1px solid rgba(255,77,28,0.22);margin-bottom:16px}.ico svg{width:17px;height:17px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}@media (max-width:980px){.bento{grid-template-columns:repeat(2,1fr)}.tile,.tile.wide,.tile.full{grid-column:span 1}.tile.full{grid-column:span 2}}@media (max-width:620px){.bento{grid-template-columns:1fr}.tile.full{grid-column:span 1}}.split{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(28px,5vw,64px);align-items:center}@media (max-width:900px){.split{grid-template-columns:1fr}}.callout{margin-top:26px;display:flex;gap:14px;padding:18px 20px;border:1px solid var(--line);border-left:2px solid var(--accent);border-radius:0 var(--r) var(--r) 0;background:var(--bg-1)}.callout p{font-size:0.9rem}.callout a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.gallery figure{margin:0;min-width:0;border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden;background:var(--bg-1)}.gallery img{display:block;width:100%;height:auto}.phones{display:grid;grid-template-columns:repeat(3,minmax(0,220px));gap:20px;justify-content:center}.phones figure{margin:0;min-width:0;border:1px solid var(--line-2);border-radius:22px;overflow:hidden;background:var(--bg-1);box-shadow:0 40px 70px -40px rgba(0,0,0,0.95)}.phones img{display:block;width:100%;height:auto}@media (max-width:760px){.gallery,.phones{grid-template-columns:repeat(2,minmax(0,1fr))}.phones figure:last-child{display:none}}.faq{display:grid;gap:10px;max-width:820px}.faq details{border:1px solid var(--line);border-radius:var(--r);background:var(--bg-1);padding:16px 20px}.faq summary{cursor:pointer;font-weight:550;font-size:0.97rem;list-style:none;display:flex;justify-content:space-between;gap:16px}.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:'＋';color:var(--fg-3);flex:none}.faq details[open] summary::after{content:'−'}.faq details p{margin-top:12px;font-size:0.93rem}.cta{position:relative;overflow:hidden;border-top:1px solid var(--line)}.cta::before{content:'';position:absolute;inset:auto 0 -320px 0;height:560px;background:radial-gradient(50% 60% at 50% 100%,rgba(255,77,28,0.2),transparent 70%);pointer-events:none}.cta .wrap{position:relative;text-align:center}.cta p{margin:18px auto 0;max-width:48ch}.cta .btns{justify-content:center;margin-top:30px}footer{border-top:1px solid var(--line);padding-block:40px}.foot{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}.foot nav{display:flex;flex-wrap:wrap;gap:22px;font-size:0.88rem}.foot nav a{color:var(--fg-2)}.foot nav a:hover{color:var(--fg)}.foot small{color:var(--fg-3);font-size:0.82rem}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.page-hero{padding-block:clamp(40px,6vw,72px) clamp(28px,4vw,44px);position:relative}.page-hero::before{content:'';position:absolute;inset:-200px 0 auto 0;height:420px;background:radial-gradient(50% 60% at 30% 40%,rgba(255,77,28,0.1),transparent 70%);pointer-events:none}.page-hero .wrap{position:relative}.page-hero h1{font-size:clamp(2rem,4.6vw,3.1rem)}.page-hero .lede{margin-top:18px}.crumbs{display:flex;gap:9px;align-items:center;font-family:var(--mono);font-size:0.72rem;color:var(--fg-3);margin-bottom:20px}.crumbs a:hover{color:var(--fg)}.notes{list-style:none;margin:0;padding:0;max-width:72ch}.notes li{position:relative;padding:12px 0 12px 26px;border-bottom:1px solid var(--line);color:var(--fg-2);font-size:0.94rem}.notes li:last-child{border-bottom:0}.notes li::before{content:'';position:absolute;left:2px;top:21px;width:5px;height:5px;border-radius:50%;background:var(--accent)}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{display:inline-flex;align-items:center;font-size:0.84rem;padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg-1);color:var(--fg-2);transition:border-color 0.18s ease,color 0.18s ease}a.chip:hover{border-color:var(--line-2);color:var(--fg)}.chip .n{font-family:var(--mono);font-size:0.7rem;color:var(--fg-3);margin-left:7px}.chip code{background:none;border:0;padding:0;color:inherit;font-size:0.82rem}.tile h3 a:hover,.cv-name a:hover{color:var(--accent)}.cv-name a{text-decoration:none}.foot-grid{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:32px;padding-bottom:34px;border-bottom:1px solid var(--line)}.foot-grid > *{min-width:0}.foot-grid .foot-h{font-family:var(--mono);font-size:0.68rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--fg-3);margin:0 0 14px}.foot-grid > div > a{display:block;font-size:0.88rem;color:var(--fg-2);padding:4px 0}.foot-grid > div > a:hover{color:var(--fg)}.foot-blurb{margin-top:14px;font-size:0.86rem;max-width:34ch}.foot-legal{margin-top:26px;font-size:0.8rem;color:var(--fg-3);max-width:80ch}.foot-legal a{color:var(--fg-2);text-decoration:underline;text-underline-offset:2px}@media (max-width:900px){.foot-grid{grid-template-columns:repeat(2,1fr)}.foot-grid > div:first-child{grid-column:1 / -1}}@media (max-width:520px){.foot-grid{grid-template-columns:1fr}}.page-hero + section{padding-top:clamp(28px,4vw,52px)}.page-hero ~ section .head h2,.split .head h2{font-size:clamp(1.35rem,2.2vw,1.85rem)}.page-hero ~ section .head{margin-bottom:32px}body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-image:url('assets/noise.png');background-size:128px 128px;opacity:0.05}main,footer{position:relative;z-index:1}header{z-index:50}.tile,.win,.cv-group,.callout,.faq details,.tk-item,.chip{position:relative}.tile,.win{background-image:linear-gradient(180deg,rgba(255,255,255,0.028),transparent 42%);box-shadow:0 1px 0 rgba(255,255,255,0.045) inset,0 24px 48px -32px rgba(0,0,0,0.9)}.strip,.ticker{background-image:linear-gradient(180deg,rgba(255,255,255,0.02),transparent 60%)}.rule{border-top-color:transparent;height:1px;background:linear-gradient(90deg,transparent,var(--line-2) 18%,var(--line-2) 82%,transparent)}@media (prefers-reduced-motion:no-preference){.tile{transition:border-color 0.22s ease,transform 0.22s ease,box-shadow 0.22s ease}.tile:hover{box-shadow:0 1px 0 rgba(255,255,255,0.07) inset,0 30px 60px -30px rgba(0,0,0,0.95)}}.hero--compact{padding-top:clamp(32px,4.5vw,60px);padding-bottom:clamp(36px,4.5vw,56px)}.ticker{padding-block:16px}.tk-head{margin-bottom:13px}.btn-gh{gap:8px;padding-inline:14px 8px}.btn-gh > span:first-of-type{font-weight:550}.gh-star{display:inline-flex;align-items:center;gap:5px;height:28px;padding-inline:9px;border-radius:999px;background:var(--bg);border:1px solid var(--line-2);font-family:var(--mono);font-size:0.76rem;color:var(--accent-2);font-variant-numeric:tabular-nums}.gh-star svg{opacity:0.9}@media (max-width:560px){.btn-gh > span:first-of-type{display:none}}.lh-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.lh-grid > *{min-width:0}.lh-gauge{position:relative;display:grid;place-items:center;padding:26px 12px 20px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--bg-1)}.lh-gauge svg{width:104px;height:104px;transform:rotate(-90deg);overflow:visible}.lh-track{fill:none;stroke:rgba(12,206,107,0.16);stroke-width:7}.lh-arc{fill:none;stroke:#0cce6b;stroke-width:7;stroke-linecap:round;filter:drop-shadow(0 0 7px rgba(12,206,107,0.5))}.lh-gauge b{position:absolute;top:26px;height:104px;display:grid;place-items:center;font-family:var(--display);font-size:1.85rem;font-weight:600;letter-spacing:-0.03em;color:#0cce6b;font-variant-numeric:tabular-nums}.lh-gauge span{margin-top:14px;font-size:0.82rem;color:var(--fg-2);text-align:center}.lh-method{margin-top:18px;font-family:var(--mono);font-size:0.72rem;color:var(--fg-3);max-width:none}@media (max-width:620px){.lh-grid{grid-template-columns:repeat(2,1fr)}.lh-gauge svg{width:88px;height:88px}.lh-gauge b{height:88px;font-size:1.6rem}}.btn-gh{gap:8px;padding-inline:14px 8px}.btn-gh > span:first-of-type{font-weight:550}.gh-star{display:inline-flex;align-items:center;gap:5px;height:28px;padding-inline:9px;border-radius:999px;background:var(--bg);border:1px solid var(--line-2);font-family:var(--mono);font-size:0.76rem;color:var(--accent-2);font-variant-numeric:tabular-nums}.gh-star svg{opacity:0.9}@media (max-width:560px){.btn-gh > span:first-of-type{display:none}}.lh-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.lh-grid > *{min-width:0}.lh-card{border:1px solid rgba(74,222,128,0.28);border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(74,222,128,0.07),var(--bg-1));padding:22px;text-align:center}.lh-card b{display:block;font-family:var(--display);font-size:clamp(2rem,4vw,2.8rem);font-weight:700;letter-spacing:-0.03em;color:var(--add);font-variant-numeric:tabular-nums;line-height:1}.lh-card span{display:block;margin-top:8px;font-size:0.8rem;color:var(--fg-2)}.lh-method{margin-top:16px;font-family:var(--mono);font-size:0.72rem;color:var(--fg-3);max-width:none}@media (max-width:620px){.lh-grid{grid-template-columns:repeat(2,1fr)}}.ticker--attrs .tk-item{font-family:var(--mono);font-size:0.76rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-2);padding-inline:18px}.ticker--attrs .tk-item::after{margin-left:18px;background:var(--accent);opacity:0.5}.ticker--attrs .tk-track{animation-duration:42s}.metrics{list-style:none;margin:14px 0 0;padding:0}.metrics li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-size:0.9rem}.metrics li:last-child{border-bottom:0}.metrics span{color:var(--fg-3)}.metrics b{font-family:var(--mono);font-size:0.82rem;color:var(--fg);text-align:right;font-variant-numeric:tabular-nums}.flow{display:flex;align-items:stretch;gap:12px;flex-wrap:wrap}.flow-node{flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:var(--r);background:var(--bg-1);padding:16px 18px}.flow-node b{display:block;font-family:var(--display);font-size:0.96rem;letter-spacing:-0.015em}.flow-node span{display:block;margin-top:4px;font-size:0.78rem;color:var(--fg-3)}.flow-node--accent{border-color:rgba(255,77,28,0.45);background:linear-gradient(180deg,rgba(255,77,28,0.09),var(--bg-1))}.flow-node--accent b{color:var(--accent)}.flow-stack{flex:1.3 1 200px;min-width:0;display:grid;gap:8px}.flow-arrow{align-self:center;width:22px;height:1px;background:var(--line-2);position:relative;flex:none}.flow-arrow::after{content:'';position:absolute;right:0;top:-3px;border:3.5px solid transparent;border-left-color:var(--line-2)}@media (max-width:800px){.flow{flex-direction:column}.flow-arrow{width:1px;height:18px;margin-left:22px}.flow-arrow::after{right:-3px;top:auto;bottom:0;border-left-color:transparent;border-top-color:var(--line-2)}}.tree{text-align:center}.tree-root{display:inline-block;padding:12px 26px;border-radius:999px;border:1px solid rgba(255,77,28,0.45);background:linear-gradient(180deg,rgba(255,77,28,0.1),var(--bg-1));font-family:var(--display);font-weight:600;color:var(--accent)}.tree-bar{width:1px;height:26px;background:var(--line-2);margin:0 auto}.tree-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}.tree-branch{min-width:0;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--bg-1);padding:18px;display:grid;gap:7px}.tree-node{font-family:var(--display);font-weight:600;font-size:0.95rem;padding-bottom:10px;margin-bottom:3px;border-bottom:1px solid var(--line)}.tree-node--accent{color:var(--accent)}.tree-leaf{font-size:0.85rem;color:var(--fg-2);font-family:var(--mono)}.tree-leaf--more{color:var(--fg-3)}@media (max-width:760px){.tree-row{grid-template-columns:1fr}}.cta-kicker{margin-top:26px;font-family:var(--mono);font-size:0.74rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg-3)}.phones figcaption{padding:10px 14px 14px;font-size:0.78rem;color:var(--fg-3);text-align:center}@media (max-width:400px){.nav{gap:10px}.logo{font-size:0.94rem}.btn-gh{padding-inline:10px 6px}.gh-star{height:24px;padding-inline:7px;font-size:0.7rem}.gh-star svg{display:none}}.ticker--attrs{padding-block:11px;border-bottom:0}.ticker--platforms{padding-block:12px 14px;background:var(--bg)}.ticker--platforms .tk-head{margin-bottom:10px}.ticker--platforms .tk-track{animation-duration:70s}.h1-sub{display:block;font-size:0.6em;margin-top:0.42em;letter-spacing:-0.02em}</style>
 	</head>
-
 	<body>
 		<header>
 			<div class="wrap nav">
@@ -1226,80 +178,44 @@
 					Svelte&nbsp;Commerce
 				</a>
 				<ul class="nav-links">
-					<li><a href="#loop">Workflow</a></li>
-					<li><a href="#architecture">Architecture</a></li>
-					<li><a href="#backends">Backends</a></li>
-					<li><a href="#start">Quick start</a></li>
+					<li><a href="features/">Features</a></li>
+					<li><a href="integrations/">Integrations</a></li>
+					<li><a href="themes/">Themes</a></li>
+					<li><a href="docs/">Docs</a></li>
+					<li><a href="comparison/">Compare</a></li>
 				</ul>
-				<a class="btn" href="https://github.com/itswadesh/svelte-commerce">GitHub</a>
+				<a class="btn btn-gh" href="https://github.com/itswadesh/svelte-commerce" aria-label="Svelte Commerce on GitHub, 1806 stars"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>GitHub</span><span class="gh-star"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>1.8k</span></a>
 			</div>
 		</header>
 
+
 		<main>
-			<!-- ================= HERO ================= -->
-			<section class="hero">
-				<div class="wrap">
-					<div class="split">
-						<div>
-							<span class="pill"><b>v4</b> SvelteKit 2 · Svelte 5 runes · MIT</span>
-							<h1>The storefront you rebuild by <span class="grad">prompting</span>.</h1>
-							<p class="lede">
-								A production ecommerce frontend with the commerce logic sealed behind one import — so an AI agent can restyle every page, ship a new
-								theme, or swap the entire backend without ever touching checkout.
-							</p>
-							<div class="btns">
-								<a class="btn btn-primary" href="#start">Clone and prompt →</a>
-								<a class="btn" href="https://arialshop.com/">See it live</a>
-							</div>
-							<p class="hero-note">26 backends · one-line switch · no vendor lock</p>
-						</div>
-
-						<!-- prompt → agent panel -->
-						<div class="win" role="img" aria-label="Example: a developer prompt, the files an AI agent edits, and the type check that verifies it">
-							<div class="win-bar">
-								<span class="dot"></span><span class="dot"></span><span class="dot"></span>
-								<span class="win-title">svelte-commerce — agent session</span>
-							</div>
-							<div class="win-body">
-								<div class="prompt">
-									<span class="chev">›</span>
-									<p>Make the product gallery sticky on desktop and add a loading spinner to add-to-cart<span class="caret"></span></p>
-								</div>
-
-								<div class="agent-out">
-									<div class="agent-line">
-										<span class="tick" aria-hidden="true">✓</span>
-										<span>edited <span class="path">product/gallery.svelte</span></span>
-									</div>
-									<div class="agent-line">
-										<span class="tick" aria-hidden="true">✓</span>
-										<span>edited <span class="path">buttons/add-to-cart.svelte</span></span>
-									</div>
-									<div class="agent-line">
-										<span class="tick" aria-hidden="true">✓</span>
-										<span><span class="path">npm run check</span> — 0 errors</span>
-									</div>
-								</div>
-
-								<div class="diff">
-									<pre><code><span class="c-cmt">// buttons/add-to-cart.svelte</span>
-<span class="del">- &lt;button onclick={add}&gt;Add to cart&lt;/button&gt;</span>
-<span class="add">+ &lt;button onclick={add} disabled={loading}&gt;</span>
-<span class="add">+   {#if loading}&lt;Spinner /&gt;{:else}Add to cart{/if}</span>
-<span class="add">+ &lt;/button&gt;</span></code></pre>
-								</div>
-
-								<p style="margin-top: 14px; font-size: 0.78rem; color: var(--fg-3)">
-									Cart, pricing and checkout logic untouched — they live behind <code>$lib/core/services</code>.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
 			<!-- ================= TICKER ================= -->
-			<div class="ticker">
+			<div class="ticker ticker--attrs">
+				<div class="tk-rail">
+					<ul class="tk-track">
+						<li class="tk-item">Open Source</li>
+						<li class="tk-item">SvelteKit</li>
+						<li class="tk-item">Headless</li>
+						<li class="tk-item">TypeScript</li>
+						<li class="tk-item">Production Ready</li>
+						<li class="tk-item">MIT</li>
+						<li class="tk-item">SSR + PWA</li>
+						<li class="tk-item">26 Backends</li>
+					</ul>
+					<ul class="tk-track" aria-hidden="true">
+						<li class="tk-item">Open Source</li>
+						<li class="tk-item">SvelteKit</li>
+						<li class="tk-item">Headless</li>
+						<li class="tk-item">TypeScript</li>
+						<li class="tk-item">Production Ready</li>
+						<li class="tk-item">MIT</li>
+						<li class="tk-item">SSR + PWA</li>
+						<li class="tk-item">26 Backends</li>
+					</ul>
+				</div>
+			</div>
+			<div class="ticker ticker--platforms">
 				<p class="tk-head"><span class="tk-live" aria-hidden="true"></span>One storefront · 26 commerce backends</p>
 				<div class="tk-rail">
 					<ul class="tk-track">
@@ -1419,467 +335,288 @@
 						<li class="tk-item"><span class="tk-mono" aria-hidden="true">OP</span><span>OpenCart</span></li>
 					</ul>
 				</div>
+			
 			</div>
+
+			<!-- ================= HERO ================= -->
+			<section class="hero hero--compact">
+				<div class="wrap">
+					<div class="split">
+						<div>
+							<span class="pill"><b>v4</b> SvelteKit 2 · Svelte 5 runes · MIT</span>
+							<h1>The production-ready open-source headless commerce storefront of 2026. <span class="h1-sub grad">Customize it yourself, just by prompting.</span></h1>
+							<p class="lede">
+								The commerce logic is sealed behind one import, so you can restyle every page, ship a new theme or swap the entire backend —
+								without ever touching checkout.
+							</p>
+							<div class="btns">
+								<a class="btn btn-primary" href="#start">Clone and prompt →</a>
+								<a class="btn" href="https://arialshop.com/">See it live</a>
+							</div>
+							<p class="hero-note">26 backends · one-line switch · no vendor lock</p>
+						</div>
+
+						<div class="win" role="img" aria-label="Example: a developer prompt, the files an AI agent edits, and the type check that verifies it">
+							<div class="win-bar">
+								<span class="dot"></span><span class="dot"></span><span class="dot"></span>
+								<span class="win-title">svelte-commerce — agent session</span>
+							</div>
+							<div class="win-body">
+								<div class="prompt">
+									<span class="chev">›</span>
+									<p>Make the product gallery sticky on desktop and add a loading spinner to add-to-cart<span class="caret"></span></p>
+								</div>
+								<div class="agent-out">
+									<div class="agent-line"><span class="tick" aria-hidden="true">✓</span><span>edited <span class="path">product/gallery.svelte</span></span></div>
+									<div class="agent-line"><span class="tick" aria-hidden="true">✓</span><span>edited <span class="path">buttons/add-to-cart.svelte</span></span></div>
+									<div class="agent-line"><span class="tick" aria-hidden="true">✓</span><span><span class="path">npm run check</span> — 0 errors</span></div>
+								</div>
+								<div class="diff">
+									<pre><code><span class="c-cmt">// buttons/add-to-cart.svelte</span>
+<span class="del">- &lt;button onclick={add}&gt;Add to cart&lt;/button&gt;</span>
+<span class="add">+ &lt;button onclick={add} disabled={loading}&gt;</span>
+<span class="add">+   {#if loading}&lt;Spinner /&gt;{:else}Add to cart{/if}</span>
+<span class="add">+ &lt;/button&gt;</span></code></pre>
+								</div>
+								<p style="margin-top: 14px; font-size: 0.78rem; color: var(--fg-3)">
+									Cart, pricing and checkout logic untouched — they live behind <code>$lib/core/services</code>.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 
 			<!-- ================= STATS ================= -->
 			<div class="strip">
 				<div class="wrap" style="padding-inline: 0">
 					<div class="strip-in">
 						<div><b>26</b><span>backend connectors</span></div>
-						<div><b>1</b><span>line to switch backend</span></div>
-						<div><b>0</b><span>commerce code to rewrite</span></div>
-						<div><b>MIT</b><span>free, including checkout</span></div>
+						<div><b>1,806</b><span>GitHub stars</span></div>
+						<div><b>94/100</b><span>Lighthouse perf / SEO</span></div>
+						<div><b>MIT</b><span>open source, checkout included</span></div>
 					</div>
 				</div>
 			</div>
-
-			<!-- ================= THE LOOP ================= -->
-			<section id="loop">
-				<div class="wrap">
-					<div class="head">
-						<span class="eyebrow">The workflow</span>
-						<h2>Describe it. Ship it. Verify it.</h2>
-						<p>
-							Vibe coding falls apart when a styling prompt silently breaks a payment call. This codebase is arranged so the two can't touch — and so
-							the agent can prove its own work before you look.
-						</p>
-					</div>
-
-					<div class="loop">
-						<article>
-							<h3>Prompt the surface</h3>
-							<p>Ask for the change in plain language. Components are small, typed, and named for what a shopper sees.</p>
-							<div class="code-block">
-								<pre><code><span class="c-cmt">›</span> Turn the PLP into a
-  3-up grid with hover
-  quick-add</code></pre>
-							</div>
-						</article>
-						<article>
-							<h3>The agent edits UI only</h3>
-							<p>Markup, classes and theme tokens. Commerce calls stay behind the service barrel, so there is nothing to accidentally rewrite.</p>
-							<div class="code-block">
-								<pre><code><span class="c-key">import</span> { ProductService }
-  <span class="c-key">from</span> <span class="c-str">'$lib/core/services'</span>
-<span class="c-cmt">// ↑ never a backend name</span></code></pre>
-							</div>
-						</article>
-						<article>
-							<h3>Types close the loop</h3>
-							<p>One command type-checks the whole app. The agent runs it, reads the errors, and fixes itself before handing back.</p>
-							<div class="code-block">
-								<pre><code><span class="c-fn">npm</span> run check
-<span class="c-cmt">✓ 0 errors</span></code></pre>
-							</div>
-						</article>
-					</div>
-				</div>
-			</section>
-
-			<hr class="rule" />
-
-			<!-- ================= ARCHITECTURE ================= -->
-			<section id="architecture">
-				<div class="wrap">
-					<div class="head">
-						<span class="eyebrow">Why it survives editing</span>
-						<h2>Five seams that keep agents in their lane.</h2>
-						<p>None of this is AI-specific — it is just strict separation. It happens to be exactly what makes a codebase safe to hand to a model.</p>
-					</div>
-
-					<div class="bento">
-						<div class="tile wide">
-							<div class="ico" aria-hidden="true">
-								<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" /></svg>
-							</div>
-							<h3>One import for all commerce</h3>
-							<p>
-								Every page reaches products, cart, checkout and auth through a single barrel. No component knows which platform is behind it, so UI
-								work physically cannot reach the integration.
-							</p>
-							<div class="code-block">
-								<pre><code><span class="c-key">import</span> { CartService, ProductService }
-  <span class="c-key">from</span> <span class="c-str">'$lib/core/services'</span></code></pre>
-							</div>
-						</div>
-
-						<div class="tile wide">
-							<div class="ico" aria-hidden="true">
-								<svg viewBox="0 0 24 24">
-									<path d="M12 3v18M3 12h18" />
-									<circle cx="12" cy="12" r="9" />
-								</svg>
-							</div>
-							<h3>The backend is one line</h3>
-							<p>
-								Swap Shopify for Vendure by changing an export and installing the matching connector. Every connector implements the same service
-								surface, so the storefront is unchanged.
-							</p>
-							<div class="code-block">
-								<pre><code><span class="c-cmt">// kitcommerce.config.ts</span>
-<span class="c-key">export</span> * <span class="c-key">as</span> services <span class="c-key">from</span> <span class="c-str">'@misiki/vendure-connector'</span></code></pre>
-							</div>
-						</div>
-
-						<div class="tile">
-							<div class="ico" aria-hidden="true">
-								<svg viewBox="0 0 24 24">
-									<path d="M4 5h16v14H4z" />
-									<path d="M4 10h16" />
-								</svg>
-							</div>
-							<h3>Themes are data</h3>
-							<p>
-								Copy, imagery and section content live in the theme layer — not inline in routes. A redesign adds a theme instead of forking pages.
-							</p>
-						</div>
-
-						<div class="tile">
-							<div class="ico" aria-hidden="true">
-								<svg viewBox="0 0 24 24"><path d="m5 13 4 4 10-10" /></svg>
-							</div>
-							<h3>Typed end to end</h3>
-							<p>TypeScript across routes, services and connectors gives an agent a real pass/fail signal instead of a guess.</p>
-						</div>
-
-						<div class="tile">
-							<div class="ico" aria-hidden="true">
-								<svg viewBox="0 0 24 24">
-									<path d="M12 3 3 8l9 5 9-5-9-5Z" />
-									<path d="m3 16 9 5 9-5" />
-								</svg>
-							</div>
-							<h3>Vocabulary models know</h3>
-							<p>Svelte 5 runes, Tailwind utilities and shadcn primitives — conventions with enormous training coverage.</p>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<hr class="rule" />
-
-			<!-- ================= BACKENDS ================= -->
-			<section id="backends">
-				<div class="wrap">
-					<div class="head">
-						<span class="eyebrow">Compatibility</span>
-						<h2>Bring the backend you already run.</h2>
-						<p>
-							Twenty-six connectors, each written against its platform's authoritative API contract — OpenAPI document, GraphQL schema or published
-							spec.
-						</p>
-					</div>
-
-					<div class="cv-group">
-						<div class="cv-head">
-							<h3>Wiring ships with the repo</h3>
-							<span>clone, set one env var, run</span>
-						</div>
-						<ul class="cv-list">
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">VN</span><span class="cv-name">Vendure</span></div>
-								<div class="cv-meter" role="img" aria-label="39 of 43 services wired, 91 percent">
-									<span class="cv-fill" style="width: 91%"></span>
-								</div>
-								<span class="cv-num">39<i>/43</i></span>
-								<p class="cv-note">GraphQL Shop API covers nearly the whole surface</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">LK</span><span class="cv-name">Litekart</span></div>
-								<div class="cv-meter" role="img" aria-label="39 of 43 services wired, 91 percent">
-									<span class="cv-fill" style="width: 91%"></span>
-								</div>
-								<span class="cv-num">39<i>/43</i></span>
-								<p class="cv-note">Reference implementation · powers the live demo</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id">
-									<svg class="cv-mark" viewBox="0 0 24 24" aria-hidden="true">
-										<path
-											d="M20.325 3.8958 14.8913.7692a5.7283 5.7283 0 0 0-5.7342 0L3.6983 3.8958C1.9455 4.9213.8437 6.8223.8437 8.8484v6.2783c0 2.051 1.1018 3.927 2.8546 4.9526l5.4337 3.1515a5.7283 5.7283 0 0 0 5.7343 0l5.4338-3.1515c1.7778-1.0256 2.8545-2.9015 2.8545-4.9526V8.8484c.0501-2.026-1.0517-3.927-2.8296-4.9526Zm-8.3133 13.6821c-3.08 0-5.584-2.5013-5.584-5.5778 0-3.0767 2.504-5.578 5.584-5.578 3.08 0 5.609 2.5013 5.609 5.578 0 3.0765-2.504 5.5778-5.609 5.5778z"
-										/></svg
-									><span class="cv-name">Medusa</span>
-								</div>
-								<div class="cv-meter" role="img" aria-label="31 of 43 services wired, 72 percent">
-									<span class="cv-fill" style="width: 72%"></span>
-								</div>
-								<span class="cv-num">31<i>/43</i></span>
-								<p class="cv-note">Store API for catalogue, cart and checkout</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">SL</span><span class="cv-name">Saleor</span></div>
-								<div class="cv-meter" role="img" aria-label="28 of 43 services wired, 65 percent">
-									<span class="cv-fill" style="width: 65%"></span>
-								</div>
-								<span class="cv-num">28<i>/43</i></span>
-								<p class="cv-note">Core commerce path over GraphQL</p>
-							</li>
-						</ul>
-					</div>
-					<div class="cv-group">
-						<div class="cv-head">
-							<h3>Add the env branch yourself</h3>
-							<span>a few lines in init.ts — see the per-platform guide</span>
-						</div>
-						<ul class="cv-list">
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">BL</span><span class="cv-name">Broadleaf</span></div>
-								<div class="cv-meter" role="img" aria-label="28 of 43 services wired, 65 percent">
-									<span class="cv-fill" style="width: 65%"></span>
-								</div>
-								<span class="cv-num">28<i>/43</i></span>
-								<p class="cv-note">Wired against Broadleaf Microservices</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id">
-									<svg class="cv-mark" viewBox="0 0 24 24" aria-hidden="true">
-										<path
-											d="M23.9477 10.8913a.1735.1735 0 00-.061-.1178c-2.5032-2.078-4.5288-2.9261-6.9905-2.9261-1.3127 0-2.32.2638-2.9916.7827-.5822.4492-.8896 1.0772-.8896 1.812 0 2.0605 2.5184 3.0003 5.4358 4.0883 1.5023.5604 3.057 1.1404 4.483 1.9319a.1626.1626 0 00.0828.0218.187.187 0 00.0589-.011c.0458-.0174.085-.0523.1025-.1002.545-1.3955.822-2.8673.822-4.374a13.082 13.082 0 00-.0523-1.1076zm-4.81 10.4791c-1.0423-.785-2.5795-1.3824-4.2061-2.0125-1.9362-.7501-4.132-1.6027-5.7803-2.913-1.8665-1.4871-2.7757-3.3623-2.7757-5.7324 0-2.1281.883-3.9466 2.5533-5.2614 1.873-1.474 4.7119-2.2546 8.2071-2.2546.966 0 1.8883.0589 2.743.1766a.1696.1696 0 00.1788-.098.17.17 0 00-.0414-.2007C17.814 1.0924 14.9664.0022 12.001.0022c-3.2052 0-6.2186 1.2472-8.4862 3.5148C1.2494 5.7825 0 8.796 0 11.999c0 3.2051 1.2472 6.2185 3.5149 8.484 2.2654 2.2654 5.2788 3.5148 8.4862 3.5148 2.5903 0 5.0564-.8133 7.1344-2.3505a.1714.1714 0 00.0697-.1374.1735.1735 0 00-.0676-.1395Z"
-										/></svg
-									><span class="cv-name">Shopware</span>
-								</div>
-								<div class="cv-meter" role="img" aria-label="28 of 43 services wired, 65 percent">
-									<span class="cv-fill" style="width: 65%"></span>
-								</div>
-								<span class="cv-num">28<i>/43</i></span>
-								<p class="cv-note">Session rides the sw-context-token header</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">VC</span><span class="cv-name">Virto Commerce</span></div>
-								<div class="cv-meter" role="img" aria-label="28 of 43 services wired, 65 percent">
-									<span class="cv-fill" style="width: 65%"></span>
-								</div>
-								<span class="cv-num">28<i>/43</i></span>
-								<p class="cv-note"></p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id">
-									<svg class="cv-mark" viewBox="0 0 24 24" aria-hidden="true">
-										<path
-											d="M.754 9.58a.754.754 0 00-.754.758v2.525c0 .42.339.758.758.758h3.135l1.431.799-.326-.799h2.373a.757.757 0 00.758-.758v-2.525a.757.757 0 00-.758-.758H.754zm2.709.445h.03c.065.001.124.023.179.067a.26.26 0 01.103.19.29.29 0 01-.033.16c-.13.239-.236.64-.322 1.199-.083.541-.114.965-.094 1.267a.392.392 0 01-.039.219.213.213 0 01-.176.12c-.086.006-.177-.034-.263-.124-.31-.316-.555-.788-.735-1.416-.216.425-.375.744-.478.957-.196.376-.363.568-.502.578-.09.007-.166-.069-.233-.228-.17-.436-.352-1.277-.548-2.524a.297.297 0 01.054-.222c.047-.064.116-.095.21-.102.169-.013.265.065.288.238.103.695.217 1.284.336 1.766l.727-1.387c.066-.126.15-.192.25-.199.146-.01.237.083.273.28.083.441.188.817.315 1.136.086-.844.233-1.453.44-1.828a.255.255 0 01.218-.147zm1.293.36c.056 0 .116.006.18.02.232.05.411.177.53.386.107.18.161.395.161.654 0 .343-.087.654-.26.94-.2.332-.459.5-.781.5a.88.88 0 01-.18-.022.763.763 0 01-.531-.384 1.287 1.287 0 01-.158-.659c0-.342.085-.655.258-.937.202-.333.462-.498.78-.498zm2.084 0c.056 0 .116.006.18.02.236.05.411.177.53.386.107.18.16.395.16.654 0 .343-.086.654-.259.94-.2.332-.459.5-.781.5a.88.88 0 01-.18-.022.763.763 0 01-.531-.384 1.287 1.287 0 01-.16-.659c0-.342.087-.655.26-.937.202-.333.462-.498.78-.498zm4.437.047c-.305 0-.546.102-.718.304-.173.203-.256.49-.256.856 0 .395.086.697.256.906.17.21.418.316.744.316.315 0 .559-.107.728-.316.17-.21.256-.504.256-.883s-.087-.673-.26-.879c-.176-.202-.424-.304-.75-.304zm-1.466.002a1.13 1.13 0 00-.84.326c-.223.22-.332.499-.332.838 0 .362.108.658.328.88.22.223.505.336.861.336.103 0 .22-.016.346-.052v-.54c-.117.034-.216.051-.303.051a.545.545 0 01-.422-.177c-.106-.12-.16-.278-.16-.48 0-.19.053-.348.156-.468a.498.498 0 01.397-.181c.103 0 .212.015.332.049v-.537a1.394 1.394 0 00-.363-.045zm12.414 0a1.135 1.135 0 00-.84.326c-.223.22-.332.499-.332.838 0 .362.108.658.328.88.22.223.506.336.861.336.103 0 .22-.016.346-.052v-.54c-.116.034-.216.051-.303.051a.545.545 0 01-.422-.177c-.106-.12-.16-.278-.16-.48 0-.19.053-.348.156-.468a.498.498 0 01.397-.181c.103 0 .212.015.332.049v-.537a1.394 1.394 0 00-.363-.045zm-9.598.06l-.29 2.264h.579l.156-1.559.395 1.559h.412l.379-1.555.164 1.555h.603l-.304-2.264h-.791l-.12.508c-.03.13-.06.264-.087.4l-.067.352a29.97 29.97 0 00-.258-1.26h-.771zm2.768 0l-.29 2.264h.579l.156-1.559.396 1.559h.412l.375-1.555.165 1.555h.603l-.305-2.264h-.789l-.119.508c-.03.13-.06.264-.086.4l-.066.352c-.063-.352-.15-.771-.26-1.26h-.771zm3.988 0v2.264h.611v-1.031h.012l.494 1.03h.645l-.489-1.019a.61.61 0 00.37-.552.598.598 0 00-.25-.506c-.167-.123-.394-.186-.68-.186h-.713zm3.377 0v2.264H24v-.483h-.63v-.414h.54v-.468h-.54v-.416h.626v-.483H22.76zm-4.793.004v2.264h1.24v-.483h-.627v-.416h.541v-.468h-.54v-.415h.622v-.482h-1.236zm2.025.432c.146.003.25.025.313.072.063.046.091.12.091.227 0 .156-.135.236-.404.24v-.54zm-15.22.011c-.104 0-.205.069-.301.211a1.078 1.078 0 00-.2.639c0 .096.02.2.06.303.049.13.117.198.196.215.083.016.173-.02.27-.106.123-.11.205-.273.252-.492.016-.077.023-.16.023-.246 0-.097-.02-.2-.06-.303-.05-.13-.116-.198-.196-.215a.246.246 0 00-.045-.006zm2.083 0c-.103 0-.204.069-.3.211a1.078 1.078 0 00-.2.639c0 .096.02.2.06.303.049.13.117.198.196.215.083.016.173-.02.27-.106.123-.11.205-.273.252-.492.013-.077.023-.16.023-.246 0-.097-.02-.2-.06-.303-.05-.13-.116-.198-.196-.215a.246.246 0 00-.045-.006zm4.428.006c.233 0 .354.218.354.66-.004.273-.038.46-.098.553a.293.293 0 01-.262.139.266.266 0 01-.242-.139c-.056-.093-.084-.28-.084-.562 0-.436.11-.65.332-.65Z"
-										/></svg
-									><span class="cv-name">WooCommerce</span>
-								</div>
-								<div class="cv-meter" role="img" aria-label="27 of 43 services wired, 63 percent">
-									<span class="cv-fill" style="width: 63%"></span>
-								</div>
-								<span class="cv-num">27<i>/43</i></span>
-								<p class="cv-note">Store API for cart · auth needs a JWT plugin</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">MG</span><span class="cv-name">Magento</span></div>
-								<div class="cv-meter" role="img" aria-label="26 of 43 services wired, 60 percent">
-									<span class="cv-fill" style="width: 60%"></span>
-								</div>
-								<span class="cv-num">26<i>/43</i></span>
-								<p class="cv-note">Customer token auth · no REST for reviews</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">SP</span><span class="cv-name">Spree</span></div>
-								<div class="cv-meter" role="img" aria-label="26 of 43 services wired, 60 percent">
-									<span class="cv-fill" style="width: 60%"></span>
-								</div>
-								<span class="cv-num">26<i>/43</i></span>
-								<p class="cv-note">JSON:API with relationship resolution</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">XC</span><span class="cv-name">X-Cart</span></div>
-								<div class="cv-meter" role="img" aria-label="26 of 43 services wired, 60 percent">
-									<span class="cv-fill" style="width: 60%"></span>
-								</div>
-								<span class="cv-num">26<i>/43</i></span>
-								<p class="cv-note"></p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">ES</span><span class="cv-name">EverShop</span></div>
-								<div class="cv-meter" role="img" aria-label="25 of 43 services wired, 58 percent">
-									<span class="cv-fill" style="width: 58%"></span>
-								</div>
-								<span class="cv-num">25<i>/43</i></span>
-								<p class="cv-note"></p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">SK</span><span class="cv-name">Spryker</span></div>
-								<div class="cv-meter" role="img" aria-label="25 of 43 services wired, 58 percent">
-									<span class="cv-fill" style="width: 58%"></span>
-								</div>
-								<span class="cv-num">25<i>/43</i></span>
-								<p class="cv-note">JSON:API with relationship resolution</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">NC</span><span class="cv-name">nopCommerce</span></div>
-								<div class="cv-meter" role="img" aria-label="24 of 43 services wired, 56 percent">
-									<span class="cv-fill" style="width: 56%"></span>
-								</div>
-								<span class="cv-num">24<i>/43</i></span>
-								<p class="cv-note">Targets the API-Frontend plugin contract</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id">
-									<svg class="cv-mark" viewBox="0 0 24 24" aria-hidden="true">
-										<path
-											d="M11.558 1.034C5.174 1.034 0 6.21 0 12.592c0 1.258.201 2.47.574 3.597l.002-.007a12.415 12.415 0 01.53-1.787l.011-.03c.085-.222.179-.442.277-.66l.084-.181c.08-.171.165-.34.253-.507.036-.068.07-.136.108-.203.02-.038.044-.073.064-.11.094-.166.19-.332.29-.493l.075-.114c.125-.195.256-.386.393-.573l.035-.05c.144-.193.295-.38.451-.563l.1-.118c.155-.177.315-.35.481-.517l.099-.097a10.321 10.321 0 01.546-.503c.74-2.48 3.005-4.285 5.686-4.285 1.079 0 2.152.31 3.071.873a6.017 6.017 0 012.211 2.407l.007.015.04.074v.003l.004.002a9.925 9.925 0 011.567 1.198c.04.037.081.071.12.109.002 0 .006.005.007.006l-.002-.006-.001-.004v-.003l.042-.084c.377-2.384 1.43-4.102 2.67-4.102.934 0 1.762.975 2.276 2.476l.005.016.001.002c.145.158.287.331.424.521l.007.01.021.067-.02-.078c-1.542-4.569-5.863-7.857-10.952-7.857zM9.927 5.477C7.586 5.52 5.34 7.132 4.574 9.365l-.012.034a10.14 10.14 0 011.315-.895c2.806-1.656 6.479-1.646 9.278.016-.895-1.653-2.631-2.819-4.5-3.004a5.14 5.14 0 00-.728-.039zm9.834.5a1.36 1.36 0 00-.39.067c-1.265.562-1.719 2.073-2.031 3.303l-.016.072c.365-.62.808-1.215 1.396-1.642.835-.687 2.105-.655 2.916.053.308.326.141.008.031-.22-.342-.75-1.025-1.653-1.906-1.634zM21.67 7.98zm-9.32.335l-1.07 3.27-.002.005-.006.002-4.498 1.112h-.009l4.456 1.087c.105.11.227.205.36.28h.002c.042.024.085.045.129.065l.01.005c.041.018.083.033.126.047l.021.008c.04.013.08.023.12.032l.033.008a1.677 1.677 0 00.318.033 1.546 1.546 0 001.43-.948c.08-.186.123-.39.123-.604v-.011l-.001-.012c-.001-.054-.004-.107-.01-.16l-.001-.002a1.506 1.506 0 00-.026-.153l-.001-.004a1.511 1.511 0 00-.096-.288v-.003a1.521 1.521 0 00-.348-.49v-.003zm3.148.626c.048 1.008.036 2.046-.1 3.057-.17 2.018-1.19 3.798-1.972 5.616l-.03.08-.035.086c1.51-1.522 3.17-3.04 3.969-5.082.383-.636.118-1.342-.115-1.976-.17-.877-1.069-1.278-1.717-1.781zm6.172.572l-.588 2.688a1.764 1.764 0 00-.047.2c-.002.02-.007.04-.01.06a1.76 1.76 0 00-.016.222l-.002.031h.003c0 .628.297 1.136.663 1.137a.41.41 0 00.182-.045l.027-.015a.537.537 0 00.07-.047c.013-.01.024-.022.036-.033a.752.752 0 00.137-.168l.03-.054a1.23 1.23 0 00.052-.108l.017-.04c.02-.053.038-.108.053-.166l.002-.002.001-.003.404-.451-.407-.456v.001l-.02-.063zm-4.381.856c.69 1.716.85 3.707.091 5.43-.49 1.368-1.587 2.463-1.874 3.905.73.115 1.468.176 2.21.186 2.166.029 4.332-.42 6.284-1.365-2.04-2.869-4.121-5.755-6.711-8.156zm-4.948.977a.583.583 0 110 1.166.583.583 0 010-1.166zm9.352.37c.138 0 .249.19.249.426s-.111.426-.249.426c-.137 0-.248-.19-.248-.426 0-.235.11-.426.248-.426zm-4.044.184c-.016.112-.033.209-.05.29l-.006.023c-.01.05-.022.094-.033.128-.48 1.417-1.275 2.52-2.36 3.697-.147.16-.301.32-.459.484a58.883 58.883 0 01-1.196 1.205c-.112.11-.259.261-.425.436-.103.287-.22.61-.318.95-.044-.016-.086-.031-.131-.049-2.108-.815-3.519-1.904-3.519-1.904s1.086 1.414 2.915 2.74c.177.129.351.24.522.339-.075 1.194.452 2.34 2.83 2.682a4.81 4.81 0 001.228.008l-.01-.029a.062.062 0 00-.004-.01s-.167-.133-.379-.377a3.842 3.842 0 01-.584-.897 3.382 3.382 0 01-.266-.862 3.176 3.176 0 01-.006-.972c.017-.12.04-.241.072-.366.093-.374.255-.772.507-1.192l.002-.003.241-.404c1.103-1.86 1.797-3.275 1.506-5.441a8.943 8.943 0 00-.078-.476zm4.668.576zm.013.203l.003.036v.01c0 .013-.003.025-.003.038 0-.014.003-.028.003-.043 0-.014-.002-.026-.003-.04zm-.012.275v.001l-.002.01-.002.014.004-.025zm1.353 5.928c-2.553 1.138-5.44 1.44-8.192 1.007-.14 1.108.384 2.218 1.214 2.93l.012.01c2.703-.433 4.975-2.168 6.966-3.946z"
-										/></svg
-									><span class="cv-name">PrestaShop</span>
-								</div>
-								<div class="cv-meter" role="img" aria-label="24 of 43 services wired, 56 percent">
-									<span class="cv-fill" style="width: 56%"></span>
-								</div>
-								<span class="cv-num">24<i>/43</i></span>
-								<p class="cv-note">Webservice API · no customer login</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">SY</span><span class="cv-name">Sylius</span></div>
-								<div class="cv-meter" role="img" aria-label="24 of 43 services wired, 56 percent">
-									<span class="cv-fill" style="width: 56%"></span>
-								</div>
-								<span class="cv-num">24<i>/43</i></span>
-								<p class="cv-note"></p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">SW</span><span class="cv-name">Swell</span></div>
-								<div class="cv-meter" role="img" aria-label="23 of 43 services wired, 53 percent">
-									<span class="cv-fill" style="width: 53%"></span>
-								</div>
-								<span class="cv-num">23<i>/43</i></span>
-								<p class="cv-note"></p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">BG</span><span class="cv-name">Bagisto</span></div>
-								<div class="cv-meter" role="img" aria-label="22 of 43 services wired, 51 percent">
-									<span class="cv-fill" style="width: 51%"></span>
-								</div>
-								<span class="cv-num">22<i>/43</i></span>
-								<p class="cv-note">Ships a /proxy/bagisto/* route</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">CT</span><span class="cv-name">commercetools</span></div>
-								<div class="cv-meter" role="img" aria-label="21 of 43 services wired, 49 percent">
-									<span class="cv-fill" style="width: 49%"></span>
-								</div>
-								<span class="cv-num">21<i>/43</i></span>
-								<p class="cv-note">Modelled on /me endpoints and version actions</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">OC</span><span class="cv-name">OroCommerce</span></div>
-								<div class="cv-meter" role="img" aria-label="21 of 43 services wired, 49 percent">
-									<span class="cv-fill" style="width: 49%"></span>
-								</div>
-								<span class="cv-num">21<i>/43</i></span>
-								<p class="cv-note">JSON:API with relationship resolution</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">ST</span><span class="cv-name">Sharetribe</span></div>
-								<div class="cv-meter" role="img" aria-label="21 of 43 services wired, 49 percent">
-									<span class="cv-fill" style="width: 49%"></span>
-								</div>
-								<span class="cv-num">21<i>/43</i></span>
-								<p class="cv-note">Marketplace · no cart or category tree</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">CS</span><span class="cv-name">CS-Cart</span></div>
-								<div class="cv-meter" role="img" aria-label="20 of 43 services wired, 47 percent">
-									<span class="cv-fill" style="width: 47%"></span>
-								</div>
-								<span class="cv-num">20<i>/43</i></span>
-								<p class="cv-note"></p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">SH</span><span class="cv-name">Shuup</span></div>
-								<div class="cv-meter" role="img" aria-label="19 of 43 services wired, 44 percent">
-									<span class="cv-fill" style="width: 44%"></span>
-								</div>
-								<span class="cv-num">19<i>/43</i></span>
-								<p class="cv-note"></p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id">
-									<svg class="cv-mark" viewBox="0 0 24 24" aria-hidden="true">
-										<path
-											d="M15.337 23.979l7.216-1.561s-2.604-17.613-2.625-17.73c-.018-.116-.114-.192-.211-.192s-1.929-.136-1.929-.136-1.275-1.274-1.439-1.411c-.045-.037-.075-.057-.121-.074l-.914 21.104h.023zM11.71 11.305s-.81-.424-1.774-.424c-1.447 0-1.504.906-1.504 1.141 0 1.232 3.24 1.715 3.24 4.629 0 2.295-1.44 3.76-3.406 3.76-2.354 0-3.54-1.465-3.54-1.465l.646-2.086s1.245 1.066 2.28 1.066c.675 0 .975-.545.975-.932 0-1.619-2.654-1.694-2.654-4.359-.034-2.237 1.571-4.416 4.827-4.416 1.257 0 1.875.361 1.875.361l-.945 2.715-.02.01zM11.17.83c.136 0 .271.038.405.135-.984.465-2.064 1.639-2.508 3.992-.656.213-1.293.405-1.889.578C7.697 3.75 8.951.84 11.17.84V.83zm1.235 2.949v.135c-.754.232-1.583.484-2.394.736.466-1.777 1.333-2.645 2.085-2.971.193.501.309 1.176.309 2.1zm.539-2.234c.694.074 1.141.867 1.429 1.755-.349.114-.735.231-1.158.366v-.252c0-.752-.096-1.371-.271-1.871v.002zm2.992 1.289c-.02 0-.06.021-.078.021s-.289.075-.714.21c-.423-1.233-1.176-2.37-2.508-2.37h-.115C12.135.209 11.669 0 11.265 0 8.159 0 6.675 3.877 6.21 5.846c-1.194.365-2.063.636-2.16.674-.675.213-.694.232-.772.87-.075.462-1.83 14.063-1.83 14.063L15.009 24l.927-21.166z"
-										/></svg
-									><span class="cv-name">Shopify</span>
-								</div>
-								<div class="cv-meter" role="img" aria-label="16 of 27 services wired, 59 percent">
-									<span class="cv-fill" style="width: 59%"></span>
-								</div>
-								<span class="cv-num">16<i>/27</i></span>
-								<p class="cv-note">Scored out of 27 — smaller service surface</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">DO</span><span class="cv-name">Django Oscar</span></div>
-								<div class="cv-meter" role="img" aria-label="15 of 43 services wired, 35 percent">
-									<span class="cv-fill" style="width: 35%"></span>
-								</div>
-								<span class="cv-num">15<i>/43</i></span>
-								<p class="cv-note">Wired against django-oscar-api</p>
-							</li>
-							<li class="cv-row">
-								<div class="cv-id"><span class="cv-mono" aria-hidden="true">OP</span><span class="cv-name">OpenCart</span></div>
-								<div class="cv-meter" role="img" aria-label="9 of 43 services wired, 21 percent">
-									<span class="cv-fill" style="width: 21%"></span>
-								</div>
-								<span class="cv-num">9<i>/43</i></span>
-								<p class="cv-note">Core exposes no storefront catalogue API</p>
-							</li>
-						</ul>
-					</div>
-
-					<div class="callout">
-						<p>
-							<strong>Straight answer on maturity:</strong> connectors are written from published specs and type-check against them, but they have not
-							all been run against live production stores. Gaps and open questions are listed per platform.
-							<a href="https://github.com/itswadesh/svelte-commerce/blob/main/docs/CONNECTORS.md">Read the matrix →</a>
-						</p>
-					</div>
-				</div>
-			</section>
-
-			<hr class="rule" />
 
 			<!-- ================= SHOTS ================= -->
 			<section>
 				<div class="wrap">
 					<div class="head">
-						<span class="eyebrow">Not a scaffold</span>
-						<h2>The whole shopping path already works.</h2>
-						<p>
-							Catalogue, search and filters, product detail, cart, coupons, checkout, orders, wishlist, addresses and account — server-rendered first,
-							installable as a PWA.
-						</p>
+						<span class="eyebrow">Live storefront</span>
+						<h2>Not a starter. A shop.</h2>
+						<p>Catalogue, search and filters, product detail, cart, coupons, checkout, orders and account — all built, all wired to your backend, all server-rendered first.</p>
+					</div>
+					<div class="phones">
+						<figure><img src="assets/8.jpg" alt="Product listing page with filters, rendered by Svelte Commerce on a phone" width="1240" height="2772" loading="lazy" decoding="async" /><figcaption>Collection &amp; filters</figcaption></figure>
+						<figure><img src="assets/9.jpg" alt="Product detail page with gallery and variants on a phone" width="1240" height="2772" loading="lazy" decoding="async" /><figcaption>Product detail</figcaption></figure>
+						<figure><img src="assets/10.jpg" alt="Cart and checkout flow on a phone" width="1240" height="2772" loading="lazy" decoding="async" /><figcaption>Cart &amp; checkout</figcaption></figure>
+					</div>
+					<div class="btns" style="margin-top:30px">
+						<a class="btn btn-primary" href="https://arialshop.com/">Open the live demo →</a>
+					</div>
+				</div>
+			</section>
+
+			<!-- ================= AUDIT ================= -->
+			<section id="performance">
+				<div class="wrap">
+					<div class="head">
+						<span class="eyebrow">Measured, not claimed</span>
+						<h2>Numbers you can reproduce.</h2>
+						<p>Lighthouse, median of three runs. Methodology and raw reports are in the repo — clone it and run the audit yourself.</p>
 					</div>
 
-					<div class="phones">
-						<figure>
-							<img
-								src="assets/8.jpg"
-								alt="Product listing page rendered by Svelte Commerce on a phone"
-								width="1240"
-								height="2772"
-								loading="lazy"
-								decoding="async"
-							/>
-						</figure>
-						<figure>
-							<img
-								src="assets/9.jpg"
-								alt="Product detail page rendered by Svelte Commerce on a phone"
-								width="1240"
-								height="2772"
-								loading="lazy"
-								decoding="async"
-							/>
-						</figure>
-						<figure>
-							<img
-								src="assets/10.jpg"
-								alt="Cart and checkout flow rendered by Svelte Commerce on a phone"
-								width="1240"
-								height="2772"
-								loading="lazy"
-								decoding="async"
-							/>
-						</figure>
+					<div class="lh-grid">
+						<div class="lh-gauge">
+							<svg viewBox="0 0 100 100" role="img" aria-label="Performance score 94 out of 100"><circle class="lh-track" cx="50" cy="50" r="42" /><circle class="lh-arc" cx="50" cy="50" r="42" stroke-dasharray="248.06 263.89" /></svg>
+							<b>94</b><span>Performance</span>
+						</div>
+						<div class="lh-gauge">
+							<svg viewBox="0 0 100 100" role="img" aria-label="Accessibility score 100 out of 100"><circle class="lh-track" cx="50" cy="50" r="42" /><circle class="lh-arc" cx="50" cy="50" r="42" stroke-dasharray="263.89 263.89" /></svg>
+							<b>100</b><span>Accessibility</span>
+						</div>
+						<div class="lh-gauge">
+							<svg viewBox="0 0 100 100" role="img" aria-label="Best Practices score 100 out of 100"><circle class="lh-track" cx="50" cy="50" r="42" /><circle class="lh-arc" cx="50" cy="50" r="42" stroke-dasharray="263.89 263.89" /></svg>
+							<b>100</b><span>Best Practices</span>
+						</div>
+						<div class="lh-gauge">
+							<svg viewBox="0 0 100 100" role="img" aria-label="SEO score 100 out of 100"><circle class="lh-track" cx="50" cy="50" r="42" /><circle class="lh-arc" cx="50" cy="50" r="42" stroke-dasharray="263.89 263.89" /></svg>
+							<b>100</b><span>SEO</span>
+						</div>
+					</div>
+					<p class="lh-method">Lighthouse 13.4.1 · mobile · simulated throttling · median of 3 · 23 Aug 2026</p>
+
+					<div class="bento" style="margin-top:36px">
+						<div class="tile wide">
+							<h3>Core Web Vitals</h3>
+							<ul class="metrics">
+								<li><span>LCP</span><b>2.4 s</b></li>
+								<li><span>CLS</span><b>0.006</b></li>
+								<li><span>TBT</span><b>80–250 ms</b></li>
+								<li><span>Page weight</span><b>52 KB HTML · 20 KB CSS · 0 KB JS</b></li>
+							</ul>
+							<p class="cv-note" style="text-align:left;margin-top:12px">Same run as the gauges above. No client-side JavaScript on this page.</p>
+						</div>
+						<div class="tile wide">
+							<h3>SEO, verifiable in the source</h3>
+							<ul class="metrics">
+								<li><span>Rendering</span><b>SSR, then SPA</b></li>
+								<li><span>Structured data</span><b>Product schema</b></li>
+								<li><span>Canonical URLs</span><b><code>canonical.svelte</code></b></li>
+								<li><span>Metadata</span><b><code>seo-header.svelte</code></b></li>
+								<li><span>Sitemap &amp; robots</span><b>route-generated</b></li>
+							</ul>
+							<p class="cv-note" style="text-align:left;margin-top:12px">Category routes generate metadata and canonicals per page and handle pagination indexation deliberately.</p>
+						</div>
+					</div>
+
+					<div class="callout">
+						<p><strong>Not yet measured:</strong> catalogue-scale and concurrency benchmarks — throughput, backend response under load and caching behaviour. Rather than publish estimates next to measured numbers, those stay off this page until there is a reproducible run. <a href="https://github.com/itswadesh/svelte-commerce/blob/main/docs/CONNECTORS.md">Methodology and raw reports →</a></p>
+					</div>
+				</div>
+			</section>
+
+			<!-- ================= WHY ================= -->
+			<section id="why">
+				<div class="wrap">
+					<div class="head">
+						<span class="eyebrow">Why Svelte Commerce</span>
+						<h2>Why not build another storefront from scratch?</h2>
+						<p>The hard parts of a storefront are not the product grid. They are cart edge cases, checkout state and account flows — and they are already done here.</p>
+					</div>
+					<div class="bento">
+						<div class="tile">
+							<h3>SvelteKit-native</h3>
+							<p>Real routes, load functions, hooks, streaming and per-route rendering — built on the framework, not around it.</p>
+						</div>
+						<div class="tile">
+							<h3>Backend-agnostic</h3>
+							<p>One shared service interface, 26 connectors. Your storefront is never welded to one commerce engine.</p>
+						</div>
+						<div class="tile">
+							<h3>SEO-first</h3>
+							<p>Server rendering, canonical URLs, product structured data, dynamic metadata and a sitemap route out of the box.</p>
+						</div>
+						<div class="tile">
+							<h3>Performance-first</h3>
+							<p>Minimal client JavaScript, fast client-side navigation after first paint, installable as a PWA.</p>
+						</div>
+						<div class="tile">
+							<h3>Themeable</h3>
+							<p>Themes are selectable implementations resolved at runtime — many storefront experiences on one commerce foundation.</p>
+						</div>
+						<div class="tile">
+							<h3>Yours to own</h3>
+							<p>MIT, checkout included. No open-core tier, no paid unlock, no hosting you cannot leave.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ================= THE LOOP ================= -->
+			<section id="loop">
+				<div class="wrap">
+					<div class="head">
+						<span class="eyebrow">How it fits</span>
+						<h2>Keep your commerce backend. Replace the front.</h2>
+						<p>Svelte Commerce sits between the shopper and the systems you already run. Nothing about your catalogue, orders or payments moves.</p>
+					</div>
+					<div class="flow" role="img" aria-label="Request flow: customer to Svelte Commerce, which calls the commerce API, search and payments, producing an order">
+						<div class="flow-node"><b>Customer</b><span>browser / PWA</span></div>
+						<div class="flow-arrow" aria-hidden="true"></div>
+						<div class="flow-node flow-node--accent"><b>Svelte Commerce</b><span>SSR storefront</span></div>
+						<div class="flow-arrow" aria-hidden="true"></div>
+						<div class="flow-stack">
+							<div class="flow-node"><b>Commerce API</b><span>products · cart · orders</span></div>
+							<div class="flow-node"><b>Search</b><span>catalogue queries</span></div>
+							<div class="flow-node"><b>Payments</b><span>gateway of record</span></div>
+						</div>
+						<div class="flow-arrow" aria-hidden="true"></div>
+						<div class="flow-node"><b>Order</b><span>in your backend</span></div>
+					</div>
+					<p class="cv-note" style="text-align:left;margin-top:18px">The storefront holds no products, takes no payments and stores no customer records. It renders and calls.</p>
+				</div>
+			</section>
+
+			<!-- ================= ARCHITECTURE ================= -->
+			<section id="architecture">
+				<div class="wrap">
+					<div class="head">
+						<span class="eyebrow">Architecture</span>
+						<h2>One interface, many implementations.</h2>
+						<p>Every page imports commerce from a single barrel. Which platform answers is decided by one export — so no component ever names a backend.</p>
+					</div>
+
+					<div class="tree" role="img" aria-label="Svelte Commerce resolves commerce, search and payments through a service layer; commerce fans out to Litekart, Vendure, Medusa, Saleor, Shopify, WooCommerce and 20 more connectors">
+						<div class="tree-root">Svelte Commerce</div>
+						<div class="tree-bar" aria-hidden="true"></div>
+						<div class="tree-row">
+							<div class="tree-branch">
+								<div class="tree-node tree-node--accent">Commerce API</div>
+								<div class="tree-leaf">Litekart</div>
+								<div class="tree-leaf">Vendure</div>
+								<div class="tree-leaf">Medusa</div>
+								<div class="tree-leaf">Saleor</div>
+								<div class="tree-leaf">Shopify</div>
+								<div class="tree-leaf tree-leaf--more">+ 21 more</div>
+							</div>
+							<div class="tree-branch">
+								<div class="tree-node">Search</div>
+								<div class="tree-leaf">Meilisearch</div>
+								<div class="tree-leaf">Platform-native</div>
+							</div>
+							<div class="tree-branch">
+								<div class="tree-node">Payments</div>
+								<div class="tree-leaf">Backend gateway</div>
+								<div class="tree-leaf">COD</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="bento" style="margin-top:36px">
+						<div class="tile wide">
+							<h3>The single import</h3>
+							<p>Every route reaches commerce the same way, whatever is behind it.</p>
+							<div class="code-block"><pre><code><span class="c-key">import</span> { CartService, ProductService }
+  <span class="c-key">from</span> <span class="c-str">'$lib/core/services'</span></code></pre></div>
+						</div>
+						<div class="tile wide">
+							<h3>The single switch</h3>
+							<p>One line selects the implementation. The storefront code is unchanged.</p>
+							<div class="code-block"><pre><code><span class="c-cmt">// kitcommerce.config.ts</span>
+<span class="c-key">export</span> * <span class="c-key">as</span> services <span class="c-key">from</span> <span class="c-str">'@misiki/vendure-connector'</span></code></pre></div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ================= BACKENDS ================= -->
+			<section id="backends">
+				<div class="wrap">
+					<div class="head">
+						<span class="eyebrow">Integrations</span>
+						<h2>Bring your own commerce backend.</h2>
+						<p>You are not required to adopt ours. Twenty-six connectors, each written against its platform's authoritative API contract, all implementing the same service surface.</p>
+					</div>
+				</div>
+				<div class="wrap" style="margin-top:14px">
+					<div class="cv-group">
+						<div class="cv-head"><h3>Wiring ships with the repo</h3><span>clone, set one env var, run</span></div>
+						<ul class="cv-list">
+							<li class="cv-row"><div class="cv-id"><span class="cv-mono" aria-hidden="true">VN</span><span class="cv-name"><a href="integrations/vendure/">Vendure</a></span></div><div class="cv-meter" role="img" aria-label="39 of 43 services wired, 91 percent"><span class="cv-fill" style="width:91%"></span></div><span class="cv-num">39<i>/43</i></span><p class="cv-note">GraphQL Shop API covers nearly the whole surface</p></li>
+							<li class="cv-row"><div class="cv-id"><span class="cv-mono" aria-hidden="true">LK</span><span class="cv-name"><a href="integrations/litekart/">Litekart</a></span></div><div class="cv-meter" role="img" aria-label="39 of 43 services wired, 91 percent"><span class="cv-fill" style="width:91%"></span></div><span class="cv-num">39<i>/43</i></span><p class="cv-note">Reference implementation · powers the live demo</p></li>
+							<li class="cv-row"><div class="cv-id"><span class="cv-mono" aria-hidden="true">ME</span><span class="cv-name"><a href="integrations/medusa/">Medusa</a></span></div><div class="cv-meter" role="img" aria-label="31 of 43 services wired, 72 percent"><span class="cv-fill" style="width:72%"></span></div><span class="cv-num">31<i>/43</i></span><p class="cv-note">Store API for catalogue, cart and checkout</p></li>
+							<li class="cv-row"><div class="cv-id"><span class="cv-mono" aria-hidden="true">SA</span><span class="cv-name"><a href="integrations/saleor/">Saleor</a></span></div><div class="cv-meter" role="img" aria-label="28 of 43 services wired, 65 percent"><span class="cv-fill" style="width:65%"></span></div><span class="cv-num">28<i>/43</i></span><p class="cv-note">Core commerce path over GraphQL</p></li>
+						</ul>
+					</div>
+					<div class="cv-group">
+						<div class="cv-head"><h3>Add the env branch yourself</h3><span>22 more connectors</span></div>
+						<p class="measure" style="padding-top:14px">Broadleaf, Shopware, Virto Commerce, WooCommerce, Magento, Spree, X-Cart, EverShop, Spryker, nopCommerce, PrestaShop, Sylius, Swell, Bagisto, commercetools, OroCommerce, Sharetribe, CS-Cart, Shuup, Shopify, Django Oscar and OpenCart — each with a setup page and its own coverage score.</p>
+						<div class="btns" style="margin-top:20px"><a class="btn" href="integrations/">See all 26 integrations →</a></div>
+					</div>
+					<div class="callout">
+						<p>Connectors are written from published API specs and type-check against them, but have not all been run against live production stores. <a href="https://github.com/itswadesh/svelte-commerce/blob/main/docs/CONNECTORS.md">Per-platform gaps and open questions →</a></p>
 					</div>
 				</div>
 			</section>
@@ -1889,39 +626,17 @@
 				<div class="wrap">
 					<div class="head">
 						<span class="eyebrow">Themes</span>
-						<h2>One prompt away from a different store.</h2>
-						<p>Themes coexist as selectable implementations and resolve at runtime, so a new look never inherits the last one's layout or copy.</p>
+						<h2>One engine. Many storefronts.</h2>
+						<p>Same commerce foundation, different brand experience. A theme owns copy, imagery and section composition; the cart underneath is identical, so a redesign never risks checkout.</p>
 					</div>
-
 					<div class="gallery">
-						<figure>
-							<img src="assets/1.jpg" alt="Svelte Commerce storefront theme" width="1898" height="1080" loading="lazy" decoding="async" />
-						</figure>
-						<figure>
-							<img
-								src="assets/2.jpg"
-								alt="A second Svelte Commerce theme with a different layout"
-								width="1905"
-								height="1080"
-								loading="lazy"
-								decoding="async"
-							/>
-						</figure>
-						<figure>
-							<img
-								src="assets/3.jpg"
-								alt="A third Svelte Commerce theme with a category landing layout"
-								width="1899"
-								height="1080"
-								loading="lazy"
-								decoding="async"
-							/>
-						</figure>
+						<figure><img src="assets/1.jpg" alt="A Svelte Commerce storefront theme" width="1898" height="1080" loading="lazy" decoding="async" /></figure>
+						<figure><img src="assets/2.jpg" alt="A second Svelte Commerce theme with a different layout" width="1905" height="1080" loading="lazy" decoding="async" /></figure>
+						<figure><img src="assets/3.jpg" alt="A Svelte Commerce theme with a category landing layout" width="1899" height="1080" loading="lazy" decoding="async" /></figure>
 					</div>
+					<div class="btns" style="margin-top:28px"><a class="btn" href="themes/">How theming works →</a></div>
 				</div>
 			</section>
-
-			<hr class="rule" />
 
 			<!-- ================= QUICK START ================= -->
 			<section id="start">
@@ -1929,21 +644,15 @@
 					<div class="split">
 						<div>
 							<span class="eyebrow">Quick start</span>
-							<h2>Four commands to a running store.</h2>
-							<p class="measure" style="margin-top: 16px">
-								The example environment points at a public demo API, so a fresh clone is already a working storefront — then open your editor and
-								start prompting.
-							</p>
-							<div class="btns" style="margin-top: 28px">
-								<a class="btn btn-primary" href="https://github.com/itswadesh/svelte-commerce">Get the code</a>
-								<a class="btn" href="https://github.com/itswadesh/svelte-commerce/blob/main/docs/README.md">Docs</a>
+							<h2>Running in minutes.</h2>
+							<p class="measure" style="margin-top:16px">The example environment points at a public demo API, so a fresh clone is already a working storefront.</p>
+							<div class="btns" style="margin-top:28px">
+								<a class="btn btn-primary" href="https://arialshop.com/">Open demo</a>
+								<a class="btn" href="https://github.com/itswadesh/svelte-commerce">View on GitHub</a>
 							</div>
 						</div>
 						<div class="win">
-							<div class="win-bar">
-								<span class="dot"></span><span class="dot"></span><span class="dot"></span>
-								<span class="win-title">terminal</span>
-							</div>
+							<div class="win-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="win-title">terminal</span></div>
 							<div class="win-body">
 								<pre><code><span class="c-cmt">$</span> git clone https://github.com/itswadesh/svelte-commerce.git
 <span class="c-cmt">$</span> cd svelte-commerce
@@ -1957,46 +666,53 @@
 				</div>
 			</section>
 
-			<hr class="rule" />
-
 			<!-- ================= FAQ ================= -->
-			<section>
+			<section id="faq">
 				<div class="wrap">
 					<div class="head">
 						<span class="eyebrow">FAQ</span>
-						<h2>Questions</h2>
+						<h2>Objections, answered.</h2>
 					</div>
-
 					<div class="faq">
 						<details>
-							<summary>What actually makes it agent-friendly?</summary>
-							<p>
-								Separation, not magic. Commerce is reachable only through <code>$lib/core/services</code>, so a styling edit has no path to checkout.
-								Theme content lives in theme files rather than inline in routes. And <code>npm run check</code> type-checks everything, giving an
-								agent a real pass/fail loop instead of a guess.
-							</p>
+							<summary>Is it really open source?</summary>
+							<p>Yes — MIT licensed, checkout included. There is no open-core tier, no paid unlock and no feature held back behind a licence key. Fork it and ship it commercially.</p>
 						</details>
 						<details>
-							<summary>Do I have to migrate my products?</summary>
-							<p>No. Svelte Commerce reads from your existing backend over its API. Products, orders and customers stay exactly where they are.</p>
+							<summary>Is it production ready?</summary>
+							<p>The storefront runs a real shop in production today on Litekart, and v4 ships the complete path: catalogue, search, cart, coupons, checkout, orders and account. The honest caveat is per connector — they are written from published API specs and type-check against them, but have not all been run against live production stores.</p>
 						</details>
 						<details>
-							<summary>Can I use it with Shopify?</summary>
-							<p>
-								Yes, through <code>@misiki/shopify-connector</code> (16 of 27 services wired). You add the environment branch yourself — built-in
-								wiring ships for Litekart, Vendure, Medusa and Saleor.
-							</p>
+							<summary>Which backend does it require?</summary>
+							<p>None in particular. Litekart is the stock choice because it is the reference implementation, but the backend is one export in <code>kitcommerce.config.ts</code>.</p>
 						</details>
 						<details>
-							<summary>What if my platform isn't one of the 26?</summary>
-							<p>
-								Write a connector. It is a set of services extending a shared <code>BaseService</code>, matching the method signatures in the Litekart
-								reference connector. Connector repos are standalone and independently buildable.
-							</p>
+							<summary>Can I use my existing commerce API?</summary>
+							<p>That is the design. If your platform is one of the 26, install its connector. If it is not, a connector is a set of services extending a shared <code>BaseService</code>, matching the signatures in the Litekart reference.</p>
 						</details>
 						<details>
-							<summary>Is it really free for commercial use?</summary>
-							<p>Yes — MIT licensed, checkout included. There is no open-core tier and no paid unlock.</p>
+							<summary>Is it SEO-friendly?</summary>
+							<p>Server-rendered first paint, canonical URLs, product structured data, per-route dynamic metadata, a sitemap route and robots. Category routes handle pagination indexation deliberately rather than dumping everything onto one canonical.</p>
+						</details>
+						<details>
+							<summary>Can I create my own theme?</summary>
+							<p>Yes. Themes are selectable implementations resolved at runtime from store settings or <code>PUBLIC_STOREFRONT_THEME</code>. A new theme is additive — it cannot regress the one you are running.</p>
+						</details>
+						<details>
+							<summary>Can I use it commercially?</summary>
+							<p>Yes, without restriction or attribution requirements beyond the MIT licence text.</p>
+						</details>
+						<details>
+							<summary>How is it different from a Next.js commerce starter?</summary>
+							<p>Two things: the shopping path is finished rather than scaffolded, and the backend is an interchangeable package rather than an integration threaded through the components. The same storefront runs on 26 platforms.</p>
+						</details>
+						<details>
+							<summary>How is it different from Medusa, Vendure or Hydrogen storefronts?</summary>
+							<p>Those are first-party frontends for one backend, which is exactly what makes them good — and what makes them a dead end if you change platform. This is the storefront layer deliberately kept portable across all of them.</p>
+						</details>
+						<details>
+							<summary>Does it support large catalogues?</summary>
+							<p>Listing, filtering and pagination are server-driven and delegate to the backend, so catalogue size is bounded by your platform rather than the storefront. Concurrency and catalogue-scale benchmarks have not been run yet, and are not claimed on this page.</p>
 						</details>
 					</div>
 				</div>
@@ -2005,26 +721,59 @@
 			<!-- ================= CTA ================= -->
 			<section class="cta">
 				<div class="wrap">
-					<h2>Point it at your backend.<br />Then just describe the store you want.</h2>
-					<p>Clone it, set one environment variable, and let your agent do the rest.</p>
+					<h2>The production ready storefront<br /><span class="grad">you customize for yourself by prompting.</span></h2>
+					<p>Describe the change you want. The commerce layer stays sealed behind one import, so restyling never reaches checkout.</p>
 					<div class="btns">
-						<a class="btn btn-primary" href="https://github.com/itswadesh/svelte-commerce">Star on GitHub</a>
-						<a class="btn" href="https://discord.gg/GgdAeccwDR">Join the Discord</a>
+						<a class="btn btn-primary" href="#start">Get started</a>
+						<a class="btn" href="https://github.com/itswadesh/svelte-commerce">View on GitHub</a>
 					</div>
+					<p class="cta-kicker">Open source · Built with SvelteKit · Designed for modern commerce</p>
 				</div>
 			</section>
 		</main>
 
 		<footer>
-			<div class="wrap foot">
-				<nav aria-label="Footer">
-					<a href="https://github.com/itswadesh/svelte-commerce">GitHub</a>
-					<a href="https://github.com/itswadesh/svelte-commerce/blob/main/docs/README.md">Docs</a>
-					<a href="https://github.com/itswadesh/svelte-commerce/blob/main/docs/CONNECTORS.md">Connectors</a>
-					<a href="https://github.com/itswadesh/svelte-commerce/discussions">Discussions</a>
-					<a href="https://discord.gg/GgdAeccwDR">Discord</a>
-				</nav>
-				<small>MIT licensed · built with SvelteKit by <a href="https://github.com/itswadesh" style="color: var(--fg-2)">Swadesh Behera</a></small>
+			<div class="wrap">
+				<div class="foot-grid">
+					<div>
+						<a class="logo" href="./"><span class="logo-mark" aria-hidden="true">SC</span> Svelte&nbsp;Commerce</a>
+						<p class="foot-blurb">Open-source headless ecommerce storefront for SvelteKit. 26 commerce backends, one line to switch.</p>
+					</div>
+					<div>
+						<h2 class="foot-h">Product</h2>
+						<a href="features/">Features</a>
+						<a href="themes/">Themes</a>
+						<a href="examples/">Examples</a>
+						<a href="comparison/">Comparison</a>
+					</div>
+					<div>
+						<h2 class="foot-h">Integrations</h2>
+						<a href="integrations/vendure/">Vendure</a>
+						<a href="integrations/litekart/">Litekart</a>
+						<a href="integrations/medusa/">Medusa</a>
+						<a href="integrations/saleor/">Saleor</a>
+						<a href="integrations/shopify/">Shopify</a>
+						<a href="integrations/woocommerce/">WooCommerce</a>
+					</div>
+					<div>
+						<h2 class="foot-h">Learn</h2>
+						<a href="docs/">Docs</a>
+						<a href="headless-ecommerce/">Headless ecommerce</a>
+						<a href="sveltekit-ecommerce/">SvelteKit ecommerce</a>
+						<a href="svelte-ecommerce/">Svelte ecommerce</a>
+						<a href="blog/">Blog</a>
+					</div>
+					<div>
+						<h2 class="foot-h">Community</h2>
+						<a href="https://github.com/itswadesh/svelte-commerce">GitHub</a>
+						<a href="https://github.com/itswadesh/svelte-commerce/discussions">Discussions</a>
+						<a href="https://discord.gg/GgdAeccwDR">Discord</a>
+					</div>
+				</div>
+				<p class="foot-legal">
+					MIT licensed · built with SvelteKit by <a href="https://github.com/itswadesh">Swadesh Behera</a>. Platform names and marks belong to their
+					respective owners and are used here to describe compatibility.
+				</p>
 			</div>
 		</footer>
 	</body>
