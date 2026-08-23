@@ -1,0 +1,147 @@
+# Svelte Commerce — full reference
+
+> Svelte Commerce is a production-ready open-source headless ecommerce storefront built with
+> SvelteKit and TypeScript. It connects to commerce backends through APIs, letting developers build
+> fast, SEO-friendly storefronts independently of their ecommerce backend — and customize the
+> storefront by prompting, because the commerce layer sits behind a single service import.
+
+License: MIT · Repository: https://github.com/itswadesh/svelte-commerce
+Website: https://svelte-commerce.pages.dev
+
+--------------------------------------------------------------------------------
+## 1. Definition
+
+Svelte Commerce is a storefront application, not a commerce platform. It renders every
+shopper-facing page and reads live commerce data from an existing backend over that platform's
+API. Products, inventory, orders, payments and administration stay with the backend.
+
+Common descriptions that all refer to this same entity:
+open-source headless ecommerce storefront · SvelteKit ecommerce storefront · headless SvelteKit
+commerce · Svelte ecommerce frontend · headless ecommerce frontend · open-source Svelte ecommerce.
+
+--------------------------------------------------------------------------------
+## 2. Architecture
+
+Three properties define the design.
+
+2.1 One import for all commerce
+Every route and component imports commerce services from `$lib/core/services`. No component names
+a backend package. UI work therefore has no path to the integration layer.
+
+    import { CartService, ProductService } from '$lib/core/services'
+
+2.2 The backend is one export
+`kitcommerce.config.ts` contains the single line that selects the backend. Each connector
+implements the same service surface, so the storefront code is unchanged across platforms.
+
+    export * as services from '@misiki/vendure-connector'
+
+Some backends resolve through an override module in `src/lib/core/connectors/` instead of the raw
+connector, because those connectors still call Litekart REST endpoints for store and page
+metadata. The override re-exports the connector and serves those parts from static config.
+
+2.3 Themes are data
+A theme owns copy, imagery and section composition, held in the theme layer rather than inline in
+routes. The active theme resolves at runtime: the store record first, then the
+`PUBLIC_STOREFRONT_THEME` environment variable, then the default. Adding a theme cannot change
+the one already running.
+
+--------------------------------------------------------------------------------
+## 3. Stack
+
+- SvelteKit 2, Svelte 5 (runes)
+- TypeScript throughout routes, services and connectors
+- Tailwind CSS with shadcn component primitives
+- Vite build; adapters for Node, Netlify and Vercel; published Docker image
+- `npm run check` type-checks the entire application in one command
+
+--------------------------------------------------------------------------------
+## 4. Supported backends and coverage
+
+Coverage = storefront services wired to a real platform endpoint, out of the service surface.
+Shopify is scored out of 27 rather than 43 because its targeted API surface is smaller.
+
+Wiring ships with the repo (env handling and, where needed, an override module):
+  Vendure         39/43   GraphQL Shop API covers nearly the whole surface
+  Litekart        39/43   Reference implementation; the only fully API-served backend
+  Medusa          31/43   Store API for catalogue, cart and checkout
+  Saleor          28/43   Core commerce path over GraphQL
+
+Connector published; the user adds the env branch in src/lib/core/connectors/init.ts:
+  Broadleaf       28/43   Wired against Broadleaf Microservices, not the legacy monolith
+  Shopware        28/43   Session rides the sw-context-token header
+  Virto Commerce  28/43
+  WooCommerce     27/43   Store API for cart; auth throws without a JWT plugin
+  Magento         26/43   Customer token auth; no REST surface for reviews or wishlist
+  Spree           26/43   JSON:API with relationship resolution
+  X-Cart          26/43
+  EverShop        25/43
+  Spryker         25/43   JSON:API with relationship resolution
+  nopCommerce     24/43   Targets the API-Frontend plugin contract, not core
+  PrestaShop      24/43   Webservice API; no customer login, no cart-to-order flow
+  Sylius          24/43
+  Swell           23/43
+  Bagisto         22/43
+  commercetools   21/43   Modelled on /me endpoints and version-based concurrency
+  OroCommerce     21/43   JSON:API with relationship resolution
+  Sharetribe      21/43   Marketplace; listing maps to Product, transaction to Order
+  CS-Cart         20/43
+  Shuup           19/43
+  Shopify         16/27   Smaller targeted service surface
+  Django Oscar    15/43   Wired against django-oscar-api, separate from Oscar core
+  OpenCart         9/43   Core exposes no storefront catalogue API
+
+--------------------------------------------------------------------------------
+## 5. Feature inventory
+
+Catalogue: listing pages, category routes, collections, faceted filters, sorting, pagination.
+Search: query pages and autocomplete where the backend provides it.
+Product: detail pages with gallery, variants, options, stock state, related items, reviews.
+Cart: line items, quantity, removal, subtotals, coupon drawer.
+Checkout: address, shipping selection, payment method, processing, success page.
+Account: orders and order detail, addresses, profile, wishlist.
+Auth: email and OTP login, signup, forgot password, reset password, change password.
+Content: blog, FAQs, contact, and policy pages (privacy, refund, shipping, terms).
+Platform: SSR plus SPA navigation, installable PWA, switchable themes, responsive layouts.
+SEO: dynamic metadata, canonical URLs, product structured data, sitemap route, robots.
+
+--------------------------------------------------------------------------------
+## 6. Getting started
+
+    git clone https://github.com/itswadesh/svelte-commerce.git
+    cd svelte-commerce
+    cp .env.example .env
+    npm install && npm run dev
+
+The example environment points at a public demo API, so a fresh clone is a working storefront.
+The dev server runs on http://localhost:5173.
+
+To change backend: install the connector, change the export in `kitcommerce.config.ts`, and set
+that backend's PUBLIC_* environment variables.
+
+--------------------------------------------------------------------------------
+## 7. Maturity and limitations
+
+- The storefront runs in production on Litekart.
+- Connectors are written from each platform's authoritative API specification and type-check
+  against it, but they have not all been run against live production stores.
+- Only four backends ship with environment wiring; the other 22 need a short branch added.
+- Where a platform has no real endpoint for a service, that service throws rather than
+  fabricating a result. Auth in particular never mints a session it cannot verify.
+- Per-platform gaps and open questions for platform maintainers are published in
+  https://github.com/itswadesh/svelte-commerce/blob/main/docs/CONNECTORS.md
+
+--------------------------------------------------------------------------------
+## 8. When it is the wrong choice
+
+- No frontend engineering capacity: a hosted platform theme is a better fit.
+- The storefront is not a differentiator and the platform theme already suits it.
+- You need an admin, inventory system or payment processing — those are backend concerns.
+
+--------------------------------------------------------------------------------
+## 9. Canonical positioning sentence
+
+Svelte Commerce is a production-ready open-source headless ecommerce storefront built with
+SvelteKit and TypeScript. It connects to commerce backends through APIs, allowing developers to
+build fast, SEO-friendly storefronts independently of their ecommerce backend — and customize the
+storefront by prompting, because the commerce layer sits behind a single service import.
