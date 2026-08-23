@@ -63,7 +63,7 @@ gap, and the one thing platform maintainers can fix that we cannot.
 | [Shopware](https://www.shopware.com) | `@misiki/shopware-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | coupon |
 | [Virto Commerce](https://virtocommerce.com) | `@misiki/virto-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | — |
 | [WooCommerce](https://woocommerce.com) | `@misiki/woocommerce-connector` | **27/43** | ✅ | ✅ | ✅ | ⛔ | auth, wishlist |
-| [Magento Open Source](https://business.adobe.com/products/magento/open-source.html) | `@misiki/magento-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | review, wishlist |
+| [Magento Open Source](https://business.adobe.com/products/commerce/magento/open-source.html) | `@misiki/magento-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | review, wishlist |
 | [Spree Commerce](https://spreecommerce.org) | `@misiki/spree-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | review |
 | [X-Cart](https://www.x-cart.com) | `@misiki/x-cart-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | vendor |
 | [EverShop](https://evershop.io) | `@misiki/evershop-connector` | **25/43** | ✅ | ✅ | ✅ | ✅ | review, vendor, wishlist |
@@ -77,7 +77,7 @@ gap, and the one thing platform maintainers can fix that we cannot.
 | [OroCommerce](https://oroinc.com) | `@misiki/orocommerce-connector` | **21/43** | ✅ | ✅ | ✅ | ✅ | currency, review, vendor, wishlist |
 | [Sharetribe](https://www.sharetribe.com) | `@misiki/sharetribe-connector` | **21/43** | — | ✅ | ✅ | ✅ | address, cart, country, coupon, state, wishlist |
 | [CS-Cart](https://www.cs-cart.com) | `@misiki/cs-cart-connector` | **20/43** | ✅ | ✅ | ✅ | ⛔ | address, auth, country, coupon, currency, state, wishlist |
-| [Shuup](https://www.shuup.com) | `@misiki/shuup-connector` | **19/43** | ✅ | ✅ | ✅ | ✅ | country, coupon, page, review, state, wishlist |
+| [Shuup](https://github.com/shuup/shuup) | `@misiki/shuup-connector` | **19/43** | ✅ | ✅ | ✅ | ✅ | country, coupon, page, review, state, wishlist |
 | [Shopify](https://www.shopify.com) | `@misiki/shopify-connector` | **16/27** | ✅ | ✅ | ✅ | ✅ | country, page, profile, review, vendor, wishlist |
 | [Django Oscar](https://github.com/django-oscar/django-oscar) | `@misiki/oscar-connector` | **15/43** | ✅ | ✅ | ✅ | ✅ | coupon, currency, page, payment-method, review, search, state, vendor, wishlist |
 | [OpenCart](https://www.opencart.com) | `@misiki/opencart-connector` | **9/43** | ✅ | ✅ | ✅ | ⛔ | address, auth, category, coupon, page, profile, search, user, vendor, wishlist |
@@ -259,27 +259,29 @@ Reach out to me with queries!
 - It is possible to connect with any eCommerce backend that provides an API.
 - We are working on adapters for Medusa, Shopify, and WooCommerce.
 
-## Features
-
-- 👨🏻‍💻 It's both SSR and SPA
-- 🚀 Superfast
-- 🔗 It is possible to connect with any eCommerce backend if the backend has a REST API
-- 🔓 Svelte Commerce is free and open source. Download and modify it the way you want
-- 🛒 Most of the essential features for eCommerce are already integrated
-- 💰 No need to make a big leap or invest a huge amount. Just take this open source project and attach it to your existing backend.
-
 ## Get Started
 
-```
+```sh
 git clone https://github.com/itswadesh/svelte-commerce.git
 cd svelte-commerce
-npm i
+cp .env.example .env
+npm install
 npm run dev
 ```
 
-That's all!
+`.env.example` points at the public Litekart demo API, so the storefront works straight away. Edit
+`.env` to point at your own backend, and see [Configuration](#configuration) to switch connectors.
 
-Open http://localhost:3000 on Chrome. Your app should be live with awesome svelte-commerce up and running
+Open http://localhost:5173 — your storefront should be up and running.
+
+Other useful scripts:
+
+```sh
+npm run build     # production build
+npm run preview   # preview the production build locally
+npm start         # run the built app with the Node adapter
+npm run check     # sync connector types + svelte-check
+```
 
 ## Configuration
 
@@ -306,15 +308,6 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 </a>
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN)
-
-The following environment variables are mandatory:
-
-```
-PUBLIC_LITEKART_DOMAIN=arialshop.com
-PUBLIC_LITEKART_API_URL=https://api.litekart.in
-```
-
-You can replace the env variable with your store domain
 
 ### Docker
 
