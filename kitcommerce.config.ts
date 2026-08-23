@@ -6,9 +6,9 @@
 export * as services from '@misiki/litekart-connector'
 // Medusa, Vendure and Saleor go through the override modules below rather than the raw connector
 // package: those connectors still call Litekart REST endpoints for store/page metadata, which
-// fails with no Litekart API behind them (see VENDURE.md / MEDUSA.md / SALEOR.md). The override
-// re-exports its connector and serves the Litekart-only bits statically. Each also needs its
-// PUBLIC_<CONNECTOR>_* env set in .env.
+// fails with no Litekart API behind them (see docs/VENDURE.md, docs/MEDUSA.md and
+// docs/SALEOR.md). The override re-exports its connector and serves the Litekart-only bits
+// statically. Each also needs its PUBLIC_<CONNECTOR>_* env set in .env.
 // export * as services from './src/lib/core/connectors/vendure'
 // export * as services from './src/lib/core/connectors/medusa'
 // export * as services from './src/lib/core/connectors/saleor'
