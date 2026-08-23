@@ -39,13 +39,82 @@ an ambient declaration written by `sync-connector-types.js` (run by `npm run che
 layer. Both read `package.json`, so installing your connector is all it takes; neither does anything
 when Litekart is the installed connector.
 
-**There are 26 connectors.** The table below covers the six most-used ones; see
-**[CONNECTORS.md](./CONNECTORS.md)** for the full list — Magento, PrestaShop, Shopware, Spree,
-commercetools, Sylius, Bagisto, CS-Cart, OpenCart, nopCommerce, Spryker, OroCommerce, Virto,
-Broadleaf, Swell, Sharetribe, EverShop, Shuup, X-Cart, Django Oscar — with per-platform coverage
-measured from source, the known gaps, and **an open request for help from the people who build
-these platforms**. Every endpoint was verified against each platform's authoritative spec or
-source, but none have been run against a live production store yet. That is where we need you.
+## All 26 connectors — and a request to the people who build these platforms
+
+Each connector maps one platform's API onto a shared 43-service surface (`product`, `cart`,
+`checkout`, `order`, `auth`, `address`, …). Coverage below is **measured, not asserted**: a script
+traces which services actually reach the HTTP layer, following each connector's own request helpers.
+
+Every endpoint was written by reading the platform's **authoritative source** — the OpenAPI spec,
+the RAML, the router registration, or the controller code itself. We did not guess routes, and
+where a route could not be verified we left an explicit placeholder rather than ship a
+plausible-looking path that 404s in a merchant's store.
+
+**But none of these have been run against a live production instance.** That is the single biggest
+gap, and the one thing platform maintainers can fix that we cannot.
+
+| Platform | npm package | Coverage | Cart | Checkout | Order | Auth | Help wanted with |
+| :--- | :--- | :--- | :-: | :-: | :-: | :-: | :--- |
+| [Litekart](https://litekart.in) | `@misiki/litekart-connector` | **39/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [Vendure](https://www.vendure.io) | `@misiki/vendure-connector` | **39/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [Medusa](https://medusajs.com) | `@misiki/medusa-connector` | **31/43** | — | ✅ | ✅ | ⛔ | address, auth, cart, category, payment-method, product, search, user |
+| [Broadleaf Commerce](https://www.broadleafcommerce.com) | `@misiki/broadleaf-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [Saleor](https://saleor.io) | `@misiki/saleor-connector` | **28/43** | — | — | — | ⛔ | address, auth, cart, category, checkout, coupon, order, page, payment-method, search, user |
+| [Shopware](https://www.shopware.com) | `@misiki/shopware-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | coupon |
+| [Virto Commerce](https://virtocommerce.com) | `@misiki/virto-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [WooCommerce](https://woocommerce.com) | `@misiki/woocommerce-connector` | **27/43** | ✅ | ✅ | ✅ | ⛔ | auth, wishlist |
+| [Magento Open Source](https://business.adobe.com/products/magento/open-source.html) | `@misiki/magento-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | review, wishlist |
+| [Spree Commerce](https://spreecommerce.org) | `@misiki/spree-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | review |
+| [X-Cart](https://www.x-cart.com) | `@misiki/x-cart-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | vendor |
+| [EverShop](https://evershop.io) | `@misiki/evershop-connector` | **25/43** | ✅ | ✅ | ✅ | ✅ | review, vendor, wishlist |
+| [Spryker](https://spryker.com) | `@misiki/spryker-connector` | **25/43** | ✅ | ✅ | ✅ | ✅ | coupon |
+| [nopCommerce](https://www.nopcommerce.com) | `@misiki/nopcommerce-connector` | **24/43** | ✅ | ✅ | ✅ | ✅ | coupon, currency |
+| [PrestaShop](https://prestashop.com) | `@misiki/prestashop-connector` | **24/43** | ✅ | ✅ | ✅ | ⛔ | auth, payment-method, review, wishlist |
+| [Sylius](https://sylius.com) | `@misiki/sylius-connector` | **24/43** | ✅ | ✅ | ✅ | ✅ | page, vendor, wishlist |
+| [Swell](https://www.swell.is) | `@misiki/swell-connector` | **23/43** | ✅ | ✅ | ✅ | ✅ | review, state, vendor, wishlist |
+| [Bagisto](https://bagisto.com) | `@misiki/bagisto-connector` | **22/43** | ✅ | ✅ | ✅ | ✅ | coupon, page, payment-method, vendor |
+| [commercetools](https://commercetools.com) | `@misiki/commercetools-connector` | **21/43** | ✅ | ✅ | ✅ | ✅ | country, currency, page, vendor |
+| [OroCommerce](https://oroinc.com) | `@misiki/orocommerce-connector` | **21/43** | ✅ | ✅ | ✅ | ✅ | currency, review, vendor, wishlist |
+| [Sharetribe](https://www.sharetribe.com) | `@misiki/sharetribe-connector` | **21/43** | — | ✅ | ✅ | ✅ | address, cart, country, coupon, state, wishlist |
+| [CS-Cart](https://www.cs-cart.com) | `@misiki/cs-cart-connector` | **20/43** | ✅ | ✅ | ✅ | ⛔ | address, auth, country, coupon, currency, state, wishlist |
+| [Shuup](https://www.shuup.com) | `@misiki/shuup-connector` | **19/43** | ✅ | ✅ | ✅ | ✅ | country, coupon, page, review, state, wishlist |
+| [Shopify](https://www.shopify.com) | `@misiki/shopify-connector` | **16/27** | ✅ | ✅ | ✅ | ✅ | country, page, profile, review, vendor, wishlist |
+| [Django Oscar](https://github.com/django-oscar/django-oscar) | `@misiki/oscar-connector` | **15/43** | ✅ | ✅ | ✅ | ✅ | coupon, currency, page, payment-method, review, search, state, vendor, wishlist |
+| [OpenCart](https://www.opencart.com) | `@misiki/opencart-connector` | **9/43** | ✅ | ✅ | ✅ | ⛔ | address, auth, category, coupon, page, profile, search, user, vendor, wishlist |
+
+✅ wired · ⛔ throws `NotSupportedError` — the platform has no real endpoint, and a stub that
+mints a session for any password is an auth bypass, not a placeholder · — not yet wired
+
+**A low number is often the correct answer, not a to-do.** OpenCart core ships exactly ten API
+controllers — cart, coupon, currency, customer, login, order, payment, reward, shipping, voucher —
+and no product, category or search controller at all. Its 9/43 is the honest ceiling for that API.
+Services excluded from "help wanted" are Litekart-native concepts (`reels`, `deals`, `chat`,
+`gallery`, `popularity`, `banner`, …) that have no equivalent on any third-party platform.
+
+### 📣 How you can help
+
+If you build or maintain one of these platforms, in priority order:
+
+1. **A sandbox or demo instance we can point a storefront at.** Even short-lived. Worth more than
+   any code review — it turns "verified against the spec" into "verified against reality".
+2. **Ten minutes telling us our idioms are wrong.** We picked one way to do pagination, filtering,
+   sorting and session handling per platform. If it is not how you would do it, saying so saves us
+   a wrong assumption baked into every service.
+3. **Answers on the gaps above.** Most are "does this platform have X at all?" — instant for you,
+   guesswork for us.
+4. **A pointer to the right docs.** Three URLs we were given were dead (`spree.readthedocs.io`,
+   `api.sylius.com`, django-oscar-api's route page) and we fell back to reading source.
+
+Per-platform open questions are in **[CONNECTORS.md](./CONNECTORS.md#per-platform-notes-and-what-wed-like-to-ask-you)** —
+e.g. does Shopware's Store API have standalone voucher lookup? Is REST planned for
+`Magento_Review`/`Magento_Wishlist`, which ship no `webapi.xml`? Is `listing → Product` the mapping
+Sharetribe would recommend?
+
+Open an issue or PR on the connector repo under [github.com/misiki-in](https://github.com/misiki-in),
+or start a [discussion](https://github.com/itswadesh/svelte-commerce/discussions/new/choose).
+We will credit you in the connector README.
+
+### Storefront capability matrix
 
 | Capability                    | Litekart | Shopify | Medusa | Vendure | Saleor | WooCommerce |
 | ----------------------------- | :------: | :-----: | :----: | :-----: | :----: | :---------: |
@@ -182,12 +251,6 @@ Reach out to me with queries!
 <div align="">
 
 </div>
-<br/>
-<h2 class="text-center text-sm font-semibold text-gray-600">TRUSTED BY TEAMS AROUND THE WORLD</h2> 
-<p>
-<img hspace="10" alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
-<img hspace="10" alt="LRNR" src=".github/lrnr.svg" class="h-8 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
-</p>
 <br/>
 
 ## What is it?
