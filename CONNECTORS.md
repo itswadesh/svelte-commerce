@@ -75,7 +75,7 @@ bypass, not a placeholder.
 | [Shopware](https://www.shopware.com) | `@misiki/shopware-connector` | 0.4.0 | **28/43** | ✅ | ✅ | ✅ | coupon |
 | [Virto Commerce](https://virtocommerce.com) | `@misiki/virto-connector` | 0.4.0 | **28/43** | ✅ | ✅ | ✅ | — |
 | [WooCommerce](https://woocommerce.com) | `@misiki/woocommerce-connector` | 0.4.0 | **27/43** | ✅ | ✅ | ⛔ | auth (no core endpoint), wishlist |
-| [Magento](https://business.adobe.com/products/magento/open-source.html) | `@misiki/magento-connector` | 0.4.0 | **26/43** | ✅ | ✅ | ✅ | review, wishlist |
+| [Magento](https://business.adobe.com/products/commerce/magento/open-source.html) | `@misiki/magento-connector` | 0.4.0 | **26/43** | ✅ | ✅ | ✅ | review, wishlist |
 | [Spree](https://spreecommerce.org) | `@misiki/spree-connector` | 0.4.0 | **26/43** | ✅ | ✅ | ✅ | review |
 | [X-Cart](https://www.x-cart.com) | `@misiki/x-cart-connector` | 0.5.0 | **26/43** | ✅ | ✅ | ✅ | vendor |
 | [EverShop](https://evershop.io) | `@misiki/evershop-connector` | 0.4.0 | **25/43** | ✅ | ✅ | ✅ | review, wishlist, vendor |
@@ -89,7 +89,7 @@ bypass, not a placeholder.
 | [OroCommerce](https://oroinc.com) | `@misiki/orocommerce-connector` | 0.4.0 | **21/43** | ✅ | ✅ | ✅ | review, wishlist, currency, vendor |
 | [Sharetribe](https://www.sharetribe.com) | `@misiki/sharetribe-connector` | 0.4.0 | **21/43** | — | ✅ | ✅ | cart, coupon, address, country, state, wishlist |
 | [CS-Cart](https://www.cs-cart.com) | `@misiki/cs-cart-connector` | 0.4.0 | **20/43** | ✅ | ✅ | ⛔ | auth, address, country, state, currency, coupon, wishlist |
-| [Shuup](https://www.shuup.com) | `@misiki/shuup-connector` | 0.5.0 | **19/43** | ✅ | ✅ | ✅ | coupon, review, page, country, state, wishlist |
+| [Shuup](https://github.com/shuup/shuup) | `@misiki/shuup-connector` | 0.5.0 | **19/43** | ✅ | ✅ | ✅ | coupon, review, page, country, state, wishlist |
 | [Shopify](https://www.shopify.com) | `@misiki/shopify-connector` | 1.1.0 | **16/27** | ✅ | ✅ | ✅ | review, wishlist, vendor, page, profile, country |
 | [Django Oscar](https://github.com/django-oscar/django-oscar) | `@misiki/oscar-connector` | 0.5.0 | **15/43** | ✅ | ✅ | ✅ | coupon, review, search, page, payment-method, currency, state, wishlist, vendor |
 | [OpenCart](https://www.opencart.com) | `@misiki/opencart-connector` | 0.5.0 | **9/43** | ✅ | ✅ | ⛔ | catalogue, search, auth, address, user, profile, coupon, page, wishlist, vendor |
