@@ -105,7 +105,7 @@ If you build or maintain one of these platforms, in priority order:
 4. **A pointer to the right docs.** Three URLs we were given were dead (`spree.readthedocs.io`,
    `api.sylius.com`, django-oscar-api's route page) and we fell back to reading source.
 
-Per-platform open questions are in **[CONNECTORS.md](./CONNECTORS.md#per-platform-notes-and-what-wed-like-to-ask-you)** —
+Per-platform open questions are in **[CONNECTORS.md](./docs/CONNECTORS.md#per-platform-notes-and-what-wed-like-to-ask-you)** —
 e.g. does Shopware's Store API have standalone voucher lookup? Is REST planned for
 `Magento_Review`/`Magento_Wishlist`, which ship no `webapi.xml`? Is `listing → Product` the mapping
 Sharetribe would recommend?
@@ -146,7 +146,7 @@ We will credit you in the connector README.
 > **Maintainers of these platforms:** we would rather ask than guess. The fastest way to help is
 > a sandbox instance we can point a storefront at, or ten minutes telling us our endpoint idioms
 > are wrong. Specific open questions per platform are in
-> [CONNECTORS.md](./CONNECTORS.md#per-platform-notes-and-what-wed-like-to-ask-you).
+> [CONNECTORS.md](./docs/CONNECTORS.md#per-platform-notes-and-what-wed-like-to-ask-you).
 
 ### Required backend settings
 
@@ -156,7 +156,7 @@ Each backend needs a few settings changed before the storefront will work end to
 
 - `authOptions.requireVerification` → `false`
 
-See [VENDURE.md](./VENDURE.md) for the full Vendure setup guide (env, store identity,
+See [VENDURE.md](./docs/VENDURE.md) for the full Vendure setup guide (env, store identity,
 architecture, limitations, troubleshooting).
 
 **Saleor**
@@ -166,13 +166,13 @@ architecture, limitations, troubleshooting).
 - Allow unpaid orders in **order settings** → enabled
 - Allow unpaid orders in **channel settings** → enabled
 
-See [SALEOR.md](./SALEOR.md) for the full Saleor setup guide.
+See [SALEOR.md](./docs/SALEOR.md) for the full Saleor setup guide.
 
 **Medusa**
 
 - Set a publishable API key and add your storefront origin to the Store CORS config.
 
-See [MEDUSA.md](./MEDUSA.md) for the full Medusa setup guide.
+See [MEDUSA.md](./docs/MEDUSA.md) for the full Medusa setup guide.
 
 ### Demos
 
@@ -298,6 +298,17 @@ There is 1 place to configure
    - `export * as services from '@misiki/saleor-connector'`
    - `export * as services from '@misiki/commercetools-connector'`
    - `export * as services from '@misiki/woocommerce-connector'`
+
+## Documentation
+
+Full docs live in [`docs/`](./docs/README.md), including a setup guide for every one of the 26
+supported backends:
+
+- [docs/README.md](./docs/README.md) — index of all 26 platform guides, with coverage and wiring status
+- [CONNECTORS.md](./docs/CONNECTORS.md) — the capability matrix and open questions for platform maintainers
+- Most complete: [LITEKART.md](./docs/LITEKART.md) · [VENDURE.md](./docs/VENDURE.md) · [MEDUSA.md](./docs/MEDUSA.md) · [SALEOR.md](./docs/SALEOR.md)
+- Also supported: [SHOPIFY.md](./docs/SHOPIFY.md) · [WOOCOMMERCE.md](./docs/WOOCOMMERCE.md) · [MAGENTO.md](./docs/MAGENTO.md) · [SHOPWARE.md](./docs/SHOPWARE.md) · [COMMERCETOOLS.md](./docs/COMMERCETOOLS.md) · [and 17 more](./docs/README.md#backends)
+- [CHANGELOG.md](./docs/CHANGELOG.md) — release history
 
 ## Deployment
 
