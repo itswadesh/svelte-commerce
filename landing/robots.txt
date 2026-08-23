@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-# Machine-readable project summaries for answer engines:
-#   /llms.txt       concise entity definition
-#   /llms-full.txt  full reference
-
-Sitemap: https://svelte-commerce.pages.dev/sitemap.xml
