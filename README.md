@@ -1,10 +1,18 @@
 <div align="center">
 <h2>Svelte Commerce</h2>
+<h3>The production-ready open-source headless commerce storefront</h3>
+
+**[Website](https://sc.misiki.tech)** ·
+**[Live demo](https://arialshop.com)** ·
+**[Integrations](https://sc.misiki.tech/integrations/)** ·
+**[Themes](https://sc.misiki.tech/themes/)** ·
+**[Docs](./docs/README.md)**
+
 </div>
 
 <div >
 
-**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with third-party payment gateways and analytics tools.**
+**Svelte Commerce is a production-ready open-source headless ecommerce storefront built with SvelteKit and TypeScript. It connects to commerce backends through APIs, so you can build fast, SEO-friendly storefronts independently of your ecommerce backend — Shopify, WooCommerce, Vendure, Saleor, Medusa and 21 more.**
 
 ## Backend support
 
