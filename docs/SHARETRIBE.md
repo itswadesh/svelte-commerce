@@ -41,10 +41,20 @@ A marketplace, not a webshop. The mapping is `listing` to `Product` and `transac
    export * as services from '@misiki/sharetribe-connector'
    ```
 
-3. Give the connector its base URL. There is no `PUBLIC_SHARETRIBE_API_URL` handling in
-   `src/lib/core/connectors/init.ts` yet — that file only branches on the Medusa, Saleor and
-   Vendure env vars. Add a branch for this connector following those, setting whichever
-   statics `@misiki/sharetribe-connector` exposes on its `BaseService`.
+3. Give the connector its base URL in `.env`:
+
+   ```env
+   PUBLIC_SHARETRIBE_API_URL=https://your-store.example.com
+   ```
+
+   `src/lib/core/connectors/init.ts` carries a row for every backend this storefront supports and
+   applies that row at boot, in both hooks — the server one covers SSR, the client one covers the
+   browser, which must reach the same URL in production. Boot fails naming the variable if it is
+   missing, rather than letting every call fall through to a relative path.
+
+   The rest of this connector's credentials are read from the same prefix when you set them:
+   `PUBLIC_SHARETRIBE_API_KEY`, `PUBLIC_SHARETRIBE_API_SECRET`, `PUBLIC_SHARETRIBE_ACCESS_TOKEN`, `PUBLIC_SHARETRIBE_ACCESS_KEY`, `PUBLIC_SHARETRIBE_STORE_ID`, `PUBLIC_SHARETRIBE_CHANNEL_ID`, `PUBLIC_SHARETRIBE_CLIENT_ID`, `PUBLIC_SHARETRIBE_ASSET_URL`. Unset ones are not passed, so they never overwrite a value the connector already
+   holds.
 
 4. You do not need an override module. `@misiki/sharetribe-connector` carries its own
    `setStaticStore`, `serveRestLocally` and `connectorName`, and

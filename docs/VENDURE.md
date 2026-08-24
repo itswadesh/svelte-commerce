@@ -111,20 +111,20 @@ the connector a local resolver for the REST paths this repo can serve, and keeps
 net (`blockRestFallbacks`) in case a service still reaches for one. The behaviour below is the
 connector's:
 
-| Service              | Behaviour in Vendure mode                                                      |
-| -------------------- | ------------------------------------------------------------------------------ |
+| Service              | Behaviour in Vendure mode                                                                                                                                                                                               |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `StoreService`       | Returns the static store config (defaults + `kitcommerce.config.ts` export). That config defaults `isEmailMandatory` to true — an order cannot reach ArrangingPayment without a customer, and a customer needs an email |
-| `PageService`        | Resolves empty pages/lists — no CMS backend                                    |
-| `MenuService`        | Serves header/footer menus from the static store config (`menu` array)         |
-| `MeilisearchService` | Autocomplete returns empty suggestions — no Meilisearch behind Vendure         |
-| `ProfileService`     | Delegates to Vendure-native `activeCustomer` / `updateCustomer` (profile page) |
-| `BlogService`        | Empty lists — no CMS backend (blog routes render their empty state)            |
-| `WishlistService`    | Empty state; toggling shows "Wishlist is not available on this store"          |
-| `CouponService`      | Empty coupon list (the cart's coupon drawer shows none)                        |
-| `CategoryService`    | `get('/api/categories/all')` → Vendure collections (`fetchAllCategories`)      |
-| `OrderService`       | `listOrdersByParent` / `getOrder` / `fetchOrder` → `orderByCode`; `list` → `activeCustomer.orders` |
-| `CheckoutService`    | Attaches the customer before payment and carries the order code out as `order_no` |
-| everything else      | Unchanged: Vendure GraphQL via `<base URL>/shop-api`                           |
+| `PageService`        | Resolves empty pages/lists — no CMS backend                                                                                                                                                                             |
+| `MenuService`        | Serves header/footer menus from the static store config (`menu` array)                                                                                                                                                  |
+| `MeilisearchService` | Autocomplete returns empty suggestions — no Meilisearch behind Vendure                                                                                                                                                  |
+| `ProfileService`     | Delegates to Vendure-native `activeCustomer` / `updateCustomer` (profile page)                                                                                                                                          |
+| `BlogService`        | Empty lists — no CMS backend (blog routes render their empty state)                                                                                                                                                     |
+| `WishlistService`    | Empty state; toggling shows "Wishlist is not available on this store"                                                                                                                                                   |
+| `CouponService`      | Empty coupon list (the cart's coupon drawer shows none)                                                                                                                                                                 |
+| `CategoryService`    | `get('/api/categories/all')` → Vendure collections (`fetchAllCategories`)                                                                                                                                               |
+| `OrderService`       | `listOrdersByParent` / `getOrder` / `fetchOrder` → `orderByCode`; `list` → `activeCustomer.orders`                                                                                                                      |
+| `CheckoutService`    | Attaches the customer before payment and carries the order code out as `order_no`                                                                                                                                       |
+| everything else      | Unchanged: Vendure GraphQL via `<base URL>/shop-api`                                                                                                                                                                    |
 
 The Conversational Shopping assistant (`/api/commerce-assistant/*`) is Litekart-only; its widget
 detects the active connector and stays hidden in Vendure mode without firing requests.

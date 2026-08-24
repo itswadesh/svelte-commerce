@@ -41,10 +41,19 @@ Scored out of 27 rather than 43: several storefront services have no equivalent 
    export * as services from '@misiki/shopify-connector'
    ```
 
-3. Give the connector its base URL. There is no `PUBLIC_SHOPIFY_API_URL` handling in
-   `src/lib/core/connectors/init.ts` yet — that file only branches on the Medusa, Saleor and
-   Vendure env vars. Add a branch for this connector following those, setting whichever
-   statics `@misiki/shopify-connector` exposes on its `BaseService`.
+3. Give the connector its store and tokens in `.env`:
+
+   ```env
+   PUBLIC_SHOPIFY_API_URL=your-store.myshopify.com
+   PUBLIC_SHOPIFY_ACCESS_TOKEN=shpat_...
+   PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN=...
+   ```
+
+   `src/lib/core/connectors/init.ts` carries a row for every backend this storefront supports and
+   applies that row at boot, in both hooks — the server one covers SSR, the client one covers the
+   browser. Shopify is keyed on a store domain rather than a URL, so the row strips any
+   `https://` you include before handing it to `setShopifyCredentials`.
+   `PUBLIC_SHOPIFY_PROXY_URL` is read too, for stores fronted by a proxy.
 
 4. You do not need an override module. `@misiki/shopify-connector` carries its own
    `setStaticStore`, `serveRestLocally` and `connectorName`, and

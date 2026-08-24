@@ -41,10 +41,20 @@ Wired against **Broadleaf Microservices** (41 OpenAPI 3.0.3 documents), not the 
    export * as services from '@misiki/broadleaf-connector'
    ```
 
-3. Give the connector its base URL. There is no `PUBLIC_BROADLEAF_API_URL` handling in
-   `src/lib/core/connectors/init.ts` yet — that file only branches on the Medusa, Saleor and
-   Vendure env vars. Add a branch for this connector following those, setting whichever
-   statics `@misiki/broadleaf-connector` exposes on its `BaseService`.
+3. Give the connector its base URL in `.env`:
+
+   ```env
+   PUBLIC_BROADLEAF_API_URL=https://your-store.example.com
+   ```
+
+   `src/lib/core/connectors/init.ts` carries a row for every backend this storefront supports and
+   applies that row at boot, in both hooks — the server one covers SSR, the client one covers the
+   browser, which must reach the same URL in production. Boot fails naming the variable if it is
+   missing, rather than letting every call fall through to a relative path.
+
+   The rest of this connector's credentials are read from the same prefix when you set them:
+   `PUBLIC_BROADLEAF_API_KEY`, `PUBLIC_BROADLEAF_API_SECRET`, `PUBLIC_BROADLEAF_ACCESS_TOKEN`, `PUBLIC_BROADLEAF_ACCESS_KEY`, `PUBLIC_BROADLEAF_STORE_ID`, `PUBLIC_BROADLEAF_CHANNEL_ID`. Unset ones are not passed, so they never overwrite a value the connector already
+   holds.
 
 4. You do not need an override module. `@misiki/broadleaf-connector` carries its own
    `setStaticStore`, `serveRestLocally` and `connectorName`, and

@@ -109,18 +109,18 @@ the connector a local resolver for the REST paths this repo can serve, and keeps
 prototype-level net (`blockRestFallbacks`) in case a service still reaches for one. The behaviour
 below is the connector's:
 
-| Service              | Behaviour in Medusa mode                                                    |
-| -------------------- | --------------------------------------------------------------------------- |
+| Service              | Behaviour in Medusa mode                                                                                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `StoreService`       | Returns the static store config (defaults + `kitcommerce.config.ts` export). That config defaults `isEmailMandatory` to true — Medusa needs `cart.email` to complete an order |
-| `PageService`        | Resolves empty pages/lists — no CMS backend                                 |
-| `MenuService`        | Serves header/footer menus from the static store config (`menu` array)      |
-| `MeilisearchService` | Autocomplete returns empty suggestions — no Litekart Meilisearch proxy      |
-| `ProfileService`     | Delegates to Medusa-native `getMe` / `updateProfile` (profile page)         |
-| `BlogService`        | Empty lists — no CMS backend (blog routes render their empty state)         |
-| `WishlistService`    | Empty state; toggling shows "Wishlist is not available on this store"       |
-| `CouponService`      | Empty coupon list (the cart's coupon drawer shows none)                     |
-| `CategoryService`    | `get('/api/categories/all')` → Medusa product categories (`fetchAllCategories`) |
-| everything else      | Unchanged: Medusa Store API via `PUBLIC_MEDUSA_API_URL`                     |
+| `PageService`        | Resolves empty pages/lists — no CMS backend                                                                                                                                   |
+| `MenuService`        | Serves header/footer menus from the static store config (`menu` array)                                                                                                        |
+| `MeilisearchService` | Autocomplete returns empty suggestions — no Litekart Meilisearch proxy                                                                                                        |
+| `ProfileService`     | Delegates to Medusa-native `getMe` / `updateProfile` (profile page)                                                                                                           |
+| `BlogService`        | Empty lists — no CMS backend (blog routes render their empty state)                                                                                                           |
+| `WishlistService`    | Empty state; toggling shows "Wishlist is not available on this store"                                                                                                         |
+| `CouponService`      | Empty coupon list (the cart's coupon drawer shows none)                                                                                                                       |
+| `CategoryService`    | `get('/api/categories/all')` → Medusa product categories (`fetchAllCategories`)                                                                                               |
+| everything else      | Unchanged: Medusa Store API via `PUBLIC_MEDUSA_API_URL`                                                                                                                       |
 
 The Conversational Shopping assistant (`/api/commerce-assistant/*`) is Litekart-only; its widget
 detects the active connector and stays hidden in Medusa mode without firing requests.
