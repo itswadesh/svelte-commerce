@@ -1,5 +1,6 @@
 import {
 	BaseService as VendureBaseService,
+	PaymentMethodService as VendurePaymentMethodService,
 	BlogService as VendureBlogService,
 	CouponService as VendureCouponService,
 	WishlistService as VendureWishlistService,
@@ -11,6 +12,7 @@ import {
 import { staticStoreConfig } from './static-store'
 import { blockLitekartRest, serveLitekartRestLocally } from './no-litekart-rest'
 import { localStoreData } from './local-store-data'
+import { withLocalPaymentIcons } from './payment-icons'
 
 // Vendure-only connector: the stock @misiki/vendure-connector still calls Litekart REST endpoints
 // (`/api/stores/public-details`, `/api/pages/*`, `/api/menu`, `/api/ms-autocomplete/*`,
@@ -146,3 +148,13 @@ export class CouponService extends VendureCouponService {
 }
 
 export const couponService = new CouponService()
+
+// The connector points payment icons at `/static/payment/<code>`, which only a Litekart API serves.
+// Repoint them at the copies this storefront ships — see payment-icons.ts.
+export class PaymentMethodService extends VendurePaymentMethodService {
+	async list(params: Parameters<VendurePaymentMethodService['list']>[0]): ReturnType<VendurePaymentMethodService['list']> {
+		return withLocalPaymentIcons(await super.list(params)) as Awaited<ReturnType<VendurePaymentMethodService['list']>>
+	}
+}
+
+export const paymentMethodService = new PaymentMethodService()
