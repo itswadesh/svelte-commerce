@@ -9,6 +9,7 @@
         "@lucide/svelte": "^1.8.0",
         "@misiki/kitcommerce-core": "^0.1.33",
         "@misiki/litekart-connector": "^2.0.26",
+        "@misiki/vendure-connector": "^2.0.38",
         "cheerio": "^1.2.0",
         "culori": "^4.0.2",
         "fuse.js": "^7.1.0",
@@ -268,6 +269,8 @@
     "@misiki/kitcommerce-core": ["@misiki/kitcommerce-core@0.1.33", "", { "dependencies": { "@stripe/stripe-js": "^9.0.0", "bits-ui": "^2.16.3", "clsx": "^2.1.1", "date-fns": "^4.4.0", "embla-carousel-svelte": "^8.6.0", "fuse.js": "^7.1.0", "jsdom": "^29.0.2", "svelte-sonner": "^1.1.0", "tailwind-merge": "^3.5.0", "zod": "^3.24.1" }, "peerDependencies": { "@misiki/litekart-connector": "^2.0.28", "@sveltejs/kit": "^2.50.2", "svelte": "^5.0.0" } }, "sha512-ophkoL/vnnq05HtSexQIZJ1rzO+BdeQCTDPMPl2VhrbXk6+nWUsAVMM+ymUQ1gmRoiG/FSkrcZHYhOAoN64shA=="],
 
     "@misiki/litekart-connector": ["@misiki/litekart-connector@2.0.29", "", {}, "sha512-ADY5L+hvWpZndbMb5G8rkly25hA5/oCawh+V+EeoViqeAH2sgfhFh21AYjwuC4HG8M01vji3JtJu7OVE2Shr4g=="],
+
+    "@misiki/vendure-connector": ["@misiki/vendure-connector@2.0.38", "", {}, "sha512-1wzdypLn/WhDB27hk3fUXMBjASyPf5Wv/er2Erhe52NuEzJtAcRL5pFfroAWEjTgutJ8QbYoh4GNW1lnkhg7Ew=="],
 
     "@nodelib/fs.scandir": ["@nodelib/fs.scandir@2.1.5", "", { "dependencies": { "@nodelib/fs.stat": "2.0.5", "run-parallel": "^1.1.9" } }, "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="],
 

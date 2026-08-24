@@ -143,6 +143,7 @@
 		"@lucide/svelte": "^1.8.0",
 		"@misiki/kitcommerce-core": "^0.1.33",
 		"@misiki/litekart-connector": "^2.0.26",
+		"@misiki/vendure-connector": "^2.0.38",
 		"cheerio": "^1.2.0",
 		"culori": "^4.0.2",
 		"fuse.js": "^7.1.0",

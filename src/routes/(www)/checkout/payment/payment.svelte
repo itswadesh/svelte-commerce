@@ -8,6 +8,7 @@
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
+	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
 
 	const { paymentModule, onreview } = $props()
 
@@ -123,11 +124,9 @@
 											</div>
 
 											<div class="flex items-center gap-3">
-												{#if method?.img}
-													<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-white p-1 shadow-sm">
-														<img src={method.img} alt={method?.name} class="h-full w-full object-contain" />
-													</div>
-												{/if}
+												<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-white p-1 shadow-sm">
+													<img src={method?.img || localPaymentIcon(method)} alt={method?.name} class="h-full w-full object-contain" />
+												</div>
 												<div class="flex flex-col">
 													<span class="text-sm font-bold uppercase tracking-tight text-gray-900">{method?.name}</span>
 													{#if method?.description}

@@ -20,6 +20,10 @@ const listShape = (data: unknown[]) => ({
 
 /** Path prefix → what to serve for it, given the merged static store config. */
 const LOCAL_SOURCES: Array<{ prefix: string; from: (store: Record<string, any>) => unknown }> = [
+	// The store record itself: name, logo, currency, menus, plugin toggles, theme variables. The
+	// connector asks for this before anything else can render, so it must resolve even when the
+	// installed connector is too old to accept the injected provider.
+	{ prefix: '/api/stores/public-details', from: (store) => store },
 	// The nav reads `response.data` and filters on `menuId`.
 	{ prefix: '/api/menu', from: (store) => ({ data: store.menu ?? [] }) },
 	{ prefix: '/api/countries/all', from: (store) => listShape(store.countries ?? []) },
