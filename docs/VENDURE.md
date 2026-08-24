@@ -100,13 +100,16 @@ concrete service classes and never `BaseService`, so the latter import is always
 
 ### Why an override layer
 
-`@misiki/vendure-connector` only routes its GraphQL helper through the Vendure base URL. Its REST
-helpers still call Litekart API endpoints (`/api/stores/public-details`, `/api/pages/*`) with
-relative URLs — without a Litekart API those requests hit the app's own origin and fail, and the
-store lookup failure is fatal (hooks and the root layout both require store details).
+`@misiki/vendure-connector` used to route only its GraphQL helper through the Vendure base URL. Its
+REST helpers still called Litekart API endpoints (`/api/stores/public-details`, `/api/pages/*`)
+with relative URLs — without a Litekart API those requests hit the app's own origin and fail, and
+the store lookup failure is fatal (hooks and the root layout both require store details).
 
-`src/lib/core/connectors/vendure.ts` re-exports the whole connector and replaces the
-Litekart-REST-dependent services with static implementations:
+From 2.0.39 the connector answers them itself, so `src/lib/core/connectors/vendure.ts` is down to
+what only this storefront can know: it registers the store record through `setStaticStore`, hands
+the connector a local resolver for the REST paths this repo can serve, and keeps a prototype-level
+net (`blockRestFallbacks`) in case a service still reaches for one. The behaviour below is the
+connector's:
 
 | Service              | Behaviour in Vendure mode                                                      |
 | -------------------- | ------------------------------------------------------------------------------ |
@@ -164,10 +167,13 @@ implemented for Vendure yet. Concretely:
   — thrown by the hooks `init` when that env var is set while a different connector (e.g. the
   litekart default) is exported from `kitcommerce.config.ts`. Switch the export to
   `./src/lib/core/connectors/vendure`, or remove the env var if you meant to run Litekart.
-- **`http proxy error: api/... ECONNREFUSED` in dev** — something is calling a Litekart REST
-  endpoint with a relative URL; Vite proxies `/api` to `PUBLIC_LITEKART_API_URL || localhost:7000`.
-  In Vendure mode that service needs a static override in
-  `src/lib/core/connectors/vendure.ts`.
+- **`[vendure] no native implementation for \`get /api/...\`` in the console** — the connector's
+  REST guard caught an inherited Litekart path and answered it empty rather than requesting it.
+  Each path is reported once. Harmless if that feature has no Vendure equivalent; if it does,
+  implement it in the connector's matching service.
+- **`http proxy error: api/... ECONNREFUSED` in dev** — a Litekart REST path was requested from
+  outside the connector, so neither its guard nor `blockRestFallbacks` saw it; Vite proxies
+  `/api` to `PUBLIC_LITEKART_API_URL || localhost:7000`.
 - **Store shows "Test" / wrong branding** — set identity overrides in the
   `kitcommerce.config.ts` default export.
 - **Auth/cart works in dev but not deployed** — almost always Vendure CORS: allow the storefront

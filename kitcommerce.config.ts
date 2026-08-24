@@ -3,11 +3,14 @@
 // module in src/lib/core/connectors is all it takes to run the same storefront on another backend.
 // Swap the connector package in package.json to match, so installs and Docker builds resolve it.
 //
-// Each module re-exports its @misiki/*-connector and exports a `connectorName` marker. The
-// Medusa, Vendure and Saleor connectors still call Litekart REST endpoints for store/page
-// metadata, which fails with no Litekart API behind them (see docs/MEDUSA.md, docs/VENDURE.md and
-// docs/SALEOR.md), so their modules serve those Litekart-only bits statically. Each also needs its
-// PUBLIC_<CONNECTOR>_* env set in .env.
+// Each module re-exports its @misiki/*-connector and exports a `connectorName` marker. The three
+// backends below need a PUBLIC_<CONNECTOR>_* env set in .env too; `src/lib/core/connectors/init.ts`
+// fails at boot naming the variable when one is missing or set against the wrong connector.
+//
+// Every other backend is switched by pointing this line straight at its package —
+// `export * as services from '@misiki/bagisto-connector'` — with no module of its own here. Each
+// connector now carries its own `setStaticStore`, `serveRestLocally` and `connectorName`, and
+// init.ts registers the first two on whatever is active. See docs/<CONNECTOR>.md.
 
 export * as services from './src/lib/core/connectors/litekart'
 // export * as services from './src/lib/core/connectors/vendure'

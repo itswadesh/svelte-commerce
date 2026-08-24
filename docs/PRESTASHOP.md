@@ -46,13 +46,17 @@ The webservice API is the constraint: no customer login, and no cart-to-order ch
    Vendure env vars. Add a branch for this connector following those, setting whichever
    statics `@misiki/prestashop-connector` exposes on its `BaseService`.
 
-4. Decide whether you need an override module. Connectors written against a non-Litekart
-   backend generally still call Litekart REST endpoints (`/api/stores/public-details`,
-   `/api/pages/*`) for store identity and CMS pages, and a store-lookup failure is fatal —
-   hooks and the root layout both require store details. If you hit that, copy
-   `src/lib/core/connectors/medusa.ts` as a starting point: it re-exports the whole connector
-   and replaces the Litekart-dependent services with static implementations. See
-   [MEDUSA.md](./MEDUSA.md#why-an-override-layer) for the rationale and a worked service table.
+4. You do not need an override module. `@misiki/prestashop-connector` carries its own
+   `setStaticStore`, `serveRestLocally` and `connectorName`, and
+   `src/lib/core/connectors/init.ts` registers the first two on whatever connector is active. So
+   store identity resolves from your config rather than `/api/stores/public-details`, and any
+   Litekart REST path the connector still inherits is answered from local data or resolved empty
+   instead of being requested — see the connector's own `rest-guard.ts`. Point
+   `kitcommerce.config.ts` straight at the package, as in step 2.
+
+   A module under `src/lib/core/connectors/` is worth adding only to override a service the
+   connector already implements. `src/lib/core/connectors/vendure.ts` is the smallest example of
+   one.
 
 ## Store identity
 
@@ -98,9 +102,14 @@ Answers are very welcome — see the request in
 
 - **Store shows "Test" / wrong branding** — set identity overrides in the
   `kitcommerce.config.ts` default export.
-- **`http proxy error: api/... ECONNREFUSED` in dev** — something is calling a Litekart REST
-  endpoint with a relative URL. Vite proxies `/api` to `PUBLIC_LITEKART_API_URL` or
-  `localhost:7000`; that service needs a static override (step 4 above).
+- **`[prestashop] no native implementation for \`get /api/...\`` in the console** — the connector's
+  REST guard caught an inherited Litekart path and answered it empty rather than requesting it.
+  Each path is reported once. Harmless if that feature has no prestashop equivalent; if it does,
+  implement it in the connector's matching service.
+- **`http proxy error: api/... ECONNREFUSED` in dev** — a Litekart REST path was requested from
+  outside the connector, so the guard never saw it (the guard covers everything routed through
+  the connector's `BaseService`). Vite proxies `/api` to `PUBLIC_LITEKART_API_URL` or
+  `localhost:7000`.
 - **Build fails on `@misiki/litekart-connector`** — `@misiki/kitcommerce-core` declares it as
   a peer. `vite.config.ts` redirects that specifier to whichever `@misiki/*-connector` is
   installed, so make sure exactly one is listed in `package.json`.
