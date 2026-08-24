@@ -99,12 +99,15 @@ At boot, `init` in both hooks (via `src/lib/core/connectors/init.ts`) applies th
 
 ### Why an override layer
 
-`@misiki/medusa-connector` still calls Litekart API endpoints (`/api/stores/public-details`,
+`@misiki/medusa-connector` used to call Litekart API endpoints (`/api/stores/public-details`,
 `/api/pages/*`) for store/page metadata — without a Litekart API those requests fail, and the
 store lookup failure is fatal (hooks and the root layout both require store details).
 
-`src/lib/core/connectors/medusa.ts` re-exports the whole connector and replaces the
-Litekart-REST-dependent services with static implementations:
+From 2.1.6 the connector answers them itself, so `src/lib/core/connectors/medusa.ts` is down to
+what only this storefront can know: it registers the store record through `setStaticStore`, hands
+the connector a local resolver for the REST paths this repo can serve, and keeps a
+prototype-level net (`blockRestFallbacks`) in case a service still reaches for one. The behaviour
+below is the connector's:
 
 | Service              | Behaviour in Medusa mode                                                    |
 | -------------------- | --------------------------------------------------------------------------- |
@@ -151,9 +154,13 @@ See the connector capability matrix in `README.md` for what's implemented for Me
   — thrown by the hooks `init` when that env var is set while a different connector (e.g. the
   litekart default) is exported from `kitcommerce.config.ts`. Switch the export to
   `./src/lib/core/connectors/medusa`, or remove the env var if you meant to run another backend.
-- **`http proxy error: api/... ECONNREFUSED` in dev** — something is calling a Litekart REST
-  endpoint with a relative URL; Vite proxies `/api` to `PUBLIC_LITEKART_API_URL || localhost:7000`.
-  In Medusa mode that service needs a static override in `src/lib/core/connectors/medusa.ts`.
+- **`[medusa] no native implementation for \`get /api/...\`` in the console** — the connector's
+  REST guard caught an inherited Litekart path and answered it empty rather than requesting it.
+  Each path is reported once. Harmless if that feature has no Medusa equivalent; if it does,
+  implement it in the connector's matching service.
+- **`http proxy error: api/... ECONNREFUSED` in dev** — a Litekart REST path was requested from
+  outside the connector, so neither its guard nor `blockRestFallbacks` saw it; Vite proxies
+  `/api` to `PUBLIC_LITEKART_API_URL || localhost:7000`.
 - **Store shows "Test" / wrong branding** — set identity overrides in the
   `kitcommerce.config.ts` default export.
 - **Auth/cart works in dev but not deployed** — check the publishable API key and that the

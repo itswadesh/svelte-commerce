@@ -6,7 +6,7 @@ import { localStoreData } from './local-store-data'
 // Vendure-only connector. Everything the backend itself can answer for — orders, the customer guard,
 // the order number carried out of checkout, categories, collections, profile, and honest empty states
 // for what Vendure does not have (CMS pages, blog, wishlist, coupon lists, Meilisearch) — lives in
-// @misiki/vendure-connector (>= 2.0.37). What remains here is what only this storefront can answer.
+// @misiki/vendure-connector (>= 2.0.39). What remains here is what only this storefront can answer.
 export * from '@misiki/vendure-connector'
 
 // Lets the hooks `init` verify the selected connector matches the PUBLIC_VENDURE_* env.
