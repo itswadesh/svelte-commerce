@@ -9,8 +9,8 @@
 // docs/SALEOR.md), so their modules serve those Litekart-only bits statically. Each also needs its
 // PUBLIC_<CONNECTOR>_* env set in .env.
 
-// export * as services from './src/lib/core/connectors/litekart'
-export * as services from './src/lib/core/connectors/vendure'
+export * as services from './src/lib/core/connectors/litekart'
+// export * as services from './src/lib/core/connectors/vendure'
 // export * as services from './src/lib/core/connectors/medusa'
 // export * as services from './src/lib/core/connectors/saleor'
 
