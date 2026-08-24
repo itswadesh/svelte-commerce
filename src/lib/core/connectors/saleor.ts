@@ -1,6 +1,8 @@
 import {
+	BaseService as SaleorBaseService,
 	AuthService as SaleorAuthService,
 	BlogService as SaleorBlogService,
+	CategoryService as SaleorCategoryService,
 	PageService as SaleorPageService,
 	CouponService as SaleorCouponService,
 	WishlistService as SaleorWishlistService,
@@ -11,6 +13,8 @@ import {
 	UserService as SaleorUserService
 } from '@misiki/saleor-connector'
 import { staticStoreConfig } from './static-store'
+import { blockLitekartRest, serveLitekartRestLocally } from './no-litekart-rest'
+import { localStoreData } from './local-store-data'
 
 // Saleor-only connector: like the vendure connector, @misiki/saleor-connector still calls Litekart
 // REST endpoints (`/api/stores/public-details`, `/api/menu`, `/api/ms-autocomplete/*`,
@@ -24,6 +28,13 @@ export * from '@misiki/saleor-connector'
 
 // Lets the hooks `init` verify the selected connector matches the PUBLIC_SALEOR_* env.
 export const connectorName = 'saleor'
+
+// Nothing in Saleor mode may fall through to a Litekart REST path: that API is not installed and
+// not running. Reads return empty, writes fail loudly, and each unimplemented path is reported
+// once — see no-litekart-rest.ts.
+// Local data first — menus, countries, currencies, plugin toggles — then the guard.
+serveLitekartRestLocally(localStoreData)
+blockLitekartRest(SaleorBaseService, 'saleor')
 
 // Store identity overrides (name, logo, currency, menus, plugins…) belong in
 // kitcommerce.config.ts's default export — see staticStoreConfig.
@@ -149,3 +160,22 @@ export class CouponService extends SaleorCouponService {
 }
 
 export const couponService = new CouponService()
+
+// `use-category-filters` in @misiki/kitcommerce-core fetches the category tree by raw Litekart REST
+// path rather than a typed method — `categoryService.get('/api/categories/all')`. With no Litekart
+// API behind Saleor that URL stays relative, so Vite proxies it to
+// PUBLIC_LITEKART_API_URL || localhost:7000 and dev logs
+// `http proxy error: api/categories/all ... ECONNREFUSED` (nothing renders the category tree).
+// Route that one path to the connector's own Saleor-native category query; `fetchAllCategories`
+// already returns the `{ data }` shape the composable reads. Any other URL falls through
+// unchanged, so services that legitimately call `get()` are untouched.
+export class CategoryService extends SaleorCategoryService {
+	async get<T>(url: string): Promise<T> {
+		if (typeof url === 'string' && url.startsWith('/api/categories/all')) {
+			return (await this.fetchAllCategories()) as T
+		}
+		return super.get<T>(url)
+	}
+}
+
+export const categoryService = new CategoryService()

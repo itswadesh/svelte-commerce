@@ -23,7 +23,7 @@
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-<div class="min-h-screen py-8">
+<div class="min-h-screen py-8 max-sm:pb-[calc(9rem_+_env(safe-area-inset-bottom))]">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={3} />
 
@@ -35,8 +35,9 @@
 		</div>
 
 		<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
-			<!-- Left Column -->
-			<div class="flex flex-col gap-4">
+			<!-- Left Column. `min-w-0` keeps a wide min-content child from stretching the column past
+			     the viewport and scrolling the page sideways on a phone. -->
+			<div class="flex min-w-0 flex-col gap-4">
 				<!-- Items -->
 				<div class="rounded-lg border border-border bg-background p-6 shadow-sm">
 					<div class="flex items-center justify-between border-b border-border pb-3">
@@ -225,6 +226,7 @@
 							onclick={onsubmit}
 							disabled={paymentModule.checkoutDisabled}
 							loading={paymentModule.paymentLoader}
+							total={formatPrice(cartState.cart.total, currencyCode)}
 						/>
 					</div>
 				</div>

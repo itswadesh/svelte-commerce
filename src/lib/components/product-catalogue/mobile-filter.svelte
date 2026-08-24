@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Drawer from '$lib/components/ui/drawer/index.js'
 	import { GetColorName } from 'hex-color-to-color-name'
-	import { ArrowDownNarrowWide, Filter, SearchIcon, X } from '@lucide/svelte'
+	import { ArrowDownNarrowWide, ChevronRight, Filter, SearchIcon, X } from '@lucide/svelte'
 	import { fly } from 'svelte/transition'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
@@ -12,6 +12,28 @@
 	let { selectedSort = $bindable(), onSortChange = (value: string) => {} } = $props()
 
 	const filterModule = getDesktopFilterState()
+
+	// A backend that cannot filter by price reports no range at all (Vendure returns
+	// `priceStat: { min: undefined, max: undefined }`), which rendered a dead slider with blank
+	// Min/Max boxes. Drop the tab entirely in that case — the composable already does the same for
+	// Tags when a store has none — and keep the slider maths off a zero-width range.
+	const priceFilterSupported = $derived(
+		Number.isFinite(filterModule.minPossiblePrice) &&
+			Number.isFinite(filterModule.maxPossiblePrice) &&
+			filterModule.maxPossiblePrice > filterModule.minPossiblePrice
+	)
+
+	const menuItems = $derived(
+		priceFilterSupported ? filterModule.menuItems : filterModule.menuItems.filter((item: any) => item.id !== 'price')
+	)
+
+	// The dropped tab must not stay selected: `selectedSection` is seeded from the composable's own
+	// list, which always includes price.
+	$effect(() => {
+		if (!priceFilterSupported && filterModule.selectedSection === 'price') {
+			filterModule.selectedSection = menuItems[0]?.id ?? ''
+		}
+	})
 
 	function formatCategoryName(input: string) {
 		const x = filterModule.formatFilterOptionName(input)
@@ -143,7 +165,7 @@
 			<div class="flex h-full">
 				<!-- Right Panel - Menu -->
 				<div class="ed-mf__menu w-[35vw] overflow-y-auto bg-gray-50">
-					{#each filterModule.menuItems as item}
+					{#each menuItems as item}
 						<Button
 							variant="ghost"
 							class="ed-mf__tab h-auto w-full justify-between rounded-none border-l-4 px-4 py-4 {filterModule.selectedSection === item.id
@@ -209,25 +231,30 @@
 							<SearchIcon class="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 						</div>
 						{#if filterModule.filteredCategories?.length > 0}
-							<div class="space-y-4">
+							<!-- One full-width row per category. The Button base is `inline-flex justify-center
+							     whitespace-nowrap`, which centred each name, shrank the row to the text and
+							     truncated anything long — in a narrow drawer panel that reads as a ragged list
+							     with ~26px tap targets. These rows are left-aligned, wrap, and are touch-sized. -->
+							<div class="-mx-1 divide-y divide-border">
 								{#each filterModule.filteredCategories as category}
 									{@const formattedCategoryName = filterModule.formatFilterOptionName(category.name)}
 									<Button
-										variant="link"
+										variant="ghost"
 										title={formattedCategoryName}
-										class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
+										class="group h-auto min-h-11 w-full justify-start gap-3 whitespace-normal rounded-none px-1 py-3 text-left font-normal hover:bg-transparent"
 										onclick={() => filterModule.handleCategoryClick({ slug: category.slug, name: category.name })}
 									>
 										{#if category.thumbnail}
 											<img
 												src={category.thumbnail}
 												alt={formattedCategoryName}
-												class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
+												class="size-9 shrink-0 rounded object-cover transition-opacity group-hover:opacity-80"
 											/>
 										{/if}
-										<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary"
+										<span class="min-w-0 flex-1 text-sm capitalize text-gray-700 transition-colors group-hover:text-primary"
 											>{formatCategoryName(category.name)}</span
 										>
+										<ChevronRight class="size-4 shrink-0 text-gray-300 transition-colors group-hover:text-primary" />
 									</Button>
 								{/each}
 							</div>

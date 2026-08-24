@@ -25,11 +25,15 @@ Everything else falls back to static theme content for those. See
 ## Setup
 
 Litekart is the default, so there is nothing to install or switch. `kitcommerce.config.ts` ships
-with:
+with the Litekart connector module selected:
 
 ```ts
-export * as services from '@misiki/litekart-connector'
+export * as services from './src/lib/core/connectors/litekart'
 ```
+
+That module is a plain re-export of `@misiki/litekart-connector` — Litekart is the one backend
+that needs no service overrides — so every backend is selected the same way: one path under
+`src/lib/core/connectors`.
 
 Set the env in `.env`:
 
@@ -47,9 +51,9 @@ PUBLIC_LITEKART_DOMAIN=arialshop.com
 | `PUBLIC_LITEKART_STORE_ID` | in production | Store to serve directly, skipping domain lookup. `src/hooks.server.ts` writes it to the `litekart_store_id` cookie. |
 
 `/health` returns 503 listing anything missing: on Litekart it requires all three of
-`PUBLIC_LITEKART_API_URL`, `PUBLIC_LITEKART_STORE_ID` and `PUBLIC_LITEKART_DOMAIN`. Unlike the
-Medusa/Saleor/Vendure override modules, the raw Litekart connector exports no `connectorName`
-marker — that absence is what `/health` and `init` use to detect Litekart mode.
+`PUBLIC_LITEKART_API_URL`, `PUBLIC_LITEKART_STORE_ID` and `PUBLIC_LITEKART_DOMAIN`. Every module in
+`src/lib/core/connectors` exports a `connectorName` marker — `litekart` here — and that is what
+`/health`, `init` and the assistant service read to know which backend is active.
 
 ## Store identity
 
@@ -61,8 +65,8 @@ export default {}
 ```
 
 The static store config in `src/lib/core/connectors/default-store.json` exists for backends with
-no Litekart API behind them; on Litekart the API is authoritative for name, logo, currency,
-menus, plugin toggles and theme CSS variables.
+no Litekart API behind them; the Litekart module never reads it, because the API is authoritative
+for name, logo, currency, menus, plugin toggles and theme CSS variables.
 
 ## Theme
 

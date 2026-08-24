@@ -13,8 +13,8 @@ This storefront can run against a [Vendure](https://vendure.io) backend only. Co
    The GraphQL endpoint is resolved as `<PUBLIC_VENDURE_API_URL>/shop-api`.
 
 2. Switch the connector in `kitcommerce.config.ts` — the repo default is
-   `@misiki/litekart-connector` — to the repo's Vendure override module, not the raw connector
-   package (see [Why an override layer](#why-an-override-layer)):
+   `./src/lib/core/connectors/litekart` — to the repo's Vendure override module, not the raw
+   connector package (see [Why an override layer](#why-an-override-layer)):
 
    ```ts
    export * as services from './src/lib/core/connectors/vendure'
@@ -110,7 +110,7 @@ Litekart-REST-dependent services with static implementations:
 
 | Service              | Behaviour in Vendure mode                                                      |
 | -------------------- | ------------------------------------------------------------------------------ |
-| `StoreService`       | Returns the static store config (defaults + `kitcommerce.config.ts` export)    |
+| `StoreService`       | Returns the static store config (defaults + `kitcommerce.config.ts` export). That config defaults `isEmailMandatory` to true — an order cannot reach ArrangingPayment without a customer, and a customer needs an email |
 | `PageService`        | Resolves empty pages/lists — no CMS backend                                    |
 | `MenuService`        | Serves header/footer menus from the static store config (`menu` array)         |
 | `MeilisearchService` | Autocomplete returns empty suggestions — no Meilisearch behind Vendure         |
@@ -118,6 +118,9 @@ Litekart-REST-dependent services with static implementations:
 | `BlogService`        | Empty lists — no CMS backend (blog routes render their empty state)            |
 | `WishlistService`    | Empty state; toggling shows "Wishlist is not available on this store"          |
 | `CouponService`      | Empty coupon list (the cart's coupon drawer shows none)                        |
+| `CategoryService`    | `get('/api/categories/all')` → Vendure collections (`fetchAllCategories`)      |
+| `OrderService`       | `listOrdersByParent` / `getOrder` / `fetchOrder` → `orderByCode`; `list` → `activeCustomer.orders` |
+| `CheckoutService`    | Attaches the customer before payment and carries the order code out as `order_no` |
 | everything else      | Unchanged: Vendure GraphQL via `<base URL>/shop-api`                           |
 
 The Conversational Shopping assistant (`/api/commerce-assistant/*`) is Litekart-only; its widget

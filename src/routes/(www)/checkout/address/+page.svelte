@@ -52,6 +52,19 @@
 	}
 
 	const isGuestCheckout = $derived(!userState?.user?.role)
+
+	// The pinned footer carries whichever action actually moves the shopper forward. Until the guest
+	// address is saved that is Save Address — Continue to Payment cannot fire without a shipping
+	// address, so offering it there was a dead end, and the form's own Save sat below the fold.
+	// Anything Continue needs and the cart lacks — email included, now that it is mandatory. Keying
+	// this on the address alone left a guest with a saved address but no email staring at a
+	// permanently disabled "Select Address" while the only control that could fix it sat below the
+	// fold.
+	const fillingGuestAddress = $derived(isGuestCheckout && !(isEmailOk && isPhoneOk && cartState.cart?.shippingAddress))
+
+	// Submitting through the form element runs its own validation and error display; the footer
+	// button is outside the form, so it cannot be a plain submit button.
+	const submitAddressForm = () => (document.getElementById('checkout-address-form') as HTMLFormElement | null)?.requestSubmit()
 	let loadingForGuestCheckout = $state(false)
 
 	// Coming back from the payment step: prefill the guest form with the saved
@@ -93,7 +106,7 @@
 	<title>Address - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
-<div class="min-h-screen py-8">
+<div class="min-h-screen py-8 max-sm:pb-[calc(9rem_+_env(safe-area-inset-bottom))]">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={2} />
 			<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
@@ -124,8 +137,10 @@
 				</div>
 			{:else}
 				<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
-					<!-- Left Column -->
-					<div class="space-y-6">
+					<!-- Left Column. `min-w-0`: a grid item's default `min-width: auto` lets a wide
+					     min-content child (a nowrap button, a long token) stretch the column past the
+					     viewport, which scrolls the whole page sideways on a phone. -->
+					<div class="min-w-0 space-y-6">
 						<!-- Contact Details -->
 						{#await userState.hasLoaded then _}
 							<!-- Every logged-out visitor sees the guest-checkout banner. -->
@@ -152,7 +167,11 @@
 								</div>
 							{/if}
 						{/await}
-						{#if addressModule.isPhoneRequired || addressModule.isEmailRequired}
+						<!-- Logged-in shoppers only. The guest form below already collects email and phone —
+						     `handleGuestSubmit` pushes both onto the cart before saving the address — so asking
+						     for them in a separate Contact Details step first made guests fill two forms with
+						     the same fields. -->
+						{#if !isGuestCheckout && (addressModule.isPhoneRequired || addressModule.isEmailRequired)}
 						<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
 							<div class="flex items-center justify-between border-b border-border px-5 py-4">
 								<div class="flex items-center space-x-3">
@@ -236,8 +255,10 @@
 							{/if}
 						</div>
 						{/if}
-						<!-- Shipping Address -->
-						{#if isEmailOk && isPhoneOk}
+						<!-- Shipping Address. Guests reach this straight away: their email and phone are fields
+						     of this form, so gating it on `isEmailOk && isPhoneOk` would hide the only place
+						     they can be entered. -->
+						{#if isGuestCheckout || (isEmailOk && isPhoneOk)}
 							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
 								{#if isGuestCheckout}
 									<!-- Guest checkout: inline address form, no login required -->
@@ -249,7 +270,7 @@
 											<Button
 												variant="link"
 												onclick={() => showAuthModal('login')}
-												class="h-auto p-0"
+												class="h-auto whitespace-normal p-0 text-left"
 											>
 												Login to view your saved addresses
 											</Button>
@@ -482,13 +503,23 @@
 									</div>
 
                   {#if !addressModule.showAddressList && !addressModule.showAddressForm}
-									  <CheckoutButton
-									  	text="Continue to Payment"
-									  	disabledText="Select Address"
-									  	disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
-									  	onclick={addressModule.handleProceedToPayment}
-									  	loading={addressModule.loadingForCheckout}
-									  />
+									  {#if fillingGuestAddress}
+									  	<CheckoutButton
+									  		text="Save Address"
+									  		onclick={submitAddressForm}
+									  		loading={loadingForGuestCheckout}
+									  		total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+									  	/>
+									  {:else}
+									  	<CheckoutButton
+									  		text="Continue to Payment"
+									  		disabledText="Select Address"
+									  		disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
+									  		onclick={addressModule.handleProceedToPayment}
+									  		loading={addressModule.loadingForCheckout}
+									  		total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+									  	/>
+									  {/if}
                   {/if}
 								</div>
 							{/if}

@@ -49,6 +49,11 @@
 			(cartState.cart?.discountAmount || 0)
 	)
 
+	// Shown twice — the summary row and the pinned mobile bar — and `total` is absent from the
+	// resolved CartExtended type here, the same drift as the line-item fields above, so it is read
+	// through an `any` view once.
+	const cartTotal = $derived(formatPrice((cartState.cart as any)?.total, page?.data?.store?.currency?.code))
+
 	const animatedSavings = tweened(0, {
 		duration: 1000,
 		easing: cubicOut
@@ -59,6 +64,8 @@
 	})
 </script>
 
+<!-- Touch-sized: this is the mobile-only stepper, so the controls are 40px rather than the 28px
+     the pointer-driven sm+ one uses. -->
 {#snippet quantitySelector(item: any)}
 	<div class="flex items-center rounded-radius border border-border bg-background p-1 shadow-sm transition-all duration-300 hover:shadow-md">
 		<Button
@@ -66,12 +73,12 @@
 			size="icon"
 			onclick={(e) => cartModule.decreaseQty(e, item)}
 			disabled={isUpdating(item) || item.qty <= 1}
-			class="flex h-7 w-7 items-center justify-center"
+			class="flex h-10 w-10 items-center justify-center"
 			aria-label="Decrease quantity"
 		>
-			<Minus class="size-3 text-gray-900" />
+			<Minus class="size-4 text-gray-900" />
 		</Button>
-		<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-xs font-bold text-gray-900">
+		<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-sm font-bold text-gray-900">
 			{#if isUpdating(item)}
 				<LoadingDots />
 			{:else}
@@ -81,12 +88,12 @@
 		<Button
 			variant="ghost"
 			size="icon"
-			class="flex h-7 w-7 items-center justify-center"
+			class="flex h-10 w-10 items-center justify-center"
 			aria-label="Increase quantity"
 			disabled={isUpdating(item)}
 			onclick={(e) => cartModule.increaseQty(e, item)}
 		>
-			<Plus class="size-3 text-gray-900" />
+			<Plus class="size-4 text-gray-900" />
 		</Button>
 	</div>
 {/snippet}
@@ -95,7 +102,7 @@
 	<title>Cart - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
-<div class="min-h-screen py-8">
+<div class="min-h-screen py-8 max-sm:pb-[calc(9rem_+_env(safe-area-inset-bottom))]">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={1} />
 
@@ -141,8 +148,9 @@
 				</div>
 			{:else}
 				<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
-					<!-- Left Column -->
-					<div>
+					<!-- Left Column. `min-w-0` keeps a wide min-content child from stretching the column
+					     past the viewport and scrolling the page sideways on a phone. -->
+					<div class="min-w-0">
 						<!-- {#if freeShippingOn && cartState?.cart?.total <= freeShippingOn}
 						<div class="mb-5 w-fit rounded-lg bg-gray-100 p-4 py-2 text-sm text-gray-600">
 							<p>
@@ -477,16 +485,16 @@
 												</div>
 											</div>
 
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        class="h-auto w-auto p-1.5 text-gray-400 self-end mb-1.5"
-                        aria-label="Remove item"
-                        disabled={isUpdating(item)}
-                        onclick={(e) => removeItem(e, item)}
-                      >
-                        <Trash class="size-3.5" />
-                      </Button>
+											<Button
+												variant="ghost"
+												size="icon"
+												class="mb-1.5 h-10 w-10 self-end text-gray-400 sm:hidden"
+												aria-label="Remove item"
+												disabled={isUpdating(item)}
+												onclick={(e) => removeItem(e, item)}
+											>
+												<Trash class="size-4 text-destructive" />
+											</Button>
 										</div>
 									</a>
 								</div>
@@ -559,7 +567,7 @@
 
 										<div class="flex items-center justify-between pt-2">
 											<span class="text-sm font-bold uppercase text-gray-900">Total</span>
-											<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart?.total, page?.data?.store?.currency?.code)}</span>
+											<span class="text-xl font-bold text-gray-900">{cartTotal}</span>
 										</div>
 
 										<!-- {#if totalSavings > 0}
@@ -584,7 +592,11 @@
 										</div>
 
 										{#if !cartModule.noItemsChecked}
-											<CheckoutButton onclick={cartModule.gotoCheckout} loading={cartModule.loadingForCheckout} />
+											<CheckoutButton
+												onclick={cartModule.gotoCheckout}
+												loading={cartModule.loadingForCheckout}
+												total={cartTotal}
+											/>
 										{:else}
 											<div
 												class="mt-4 rounded bg-yellow-50 p-3 text-center text-[10px] font-bold uppercase tracking-widest text-yellow-700 ring-1 ring-yellow-100"

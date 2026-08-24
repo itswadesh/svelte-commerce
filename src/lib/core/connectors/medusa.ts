@@ -1,6 +1,8 @@
 import {
+	BaseService as MedusaBaseService,
 	AuthService as MedusaAuthService,
 	BlogService as MedusaBlogService,
+	CategoryService as MedusaCategoryService,
 	CouponService as MedusaCouponService,
 	WishlistService as MedusaWishlistService,
 	MeilisearchService as MedusaMeilisearchService,
@@ -11,6 +13,8 @@ import {
 	UserService as MedusaUserService
 } from '@misiki/medusa-connector'
 import { staticStoreConfig } from './static-store'
+import { blockLitekartRest, serveLitekartRestLocally } from './no-litekart-rest'
+import { localStoreData } from './local-store-data'
 
 // Medusa-only connector: like the vendure connector, @misiki/medusa-connector still calls Litekart
 // REST endpoints (`/api/stores/public-details`, `/api/pages/*`, `/api/menu`,
@@ -23,6 +27,13 @@ export * from '@misiki/medusa-connector'
 
 // Lets the hooks `init` verify the selected connector matches the PUBLIC_MEDUSA_* env.
 export const connectorName = 'medusa'
+
+// Nothing in Medusa mode may fall through to a Litekart REST path: that API is not installed and
+// not running. Reads return empty, writes fail loudly, and each unimplemented path is reported
+// once — see no-litekart-rest.ts.
+// Local data first — menus, countries, currencies, plugin toggles — then the guard.
+serveLitekartRestLocally(localStoreData)
+blockLitekartRest(MedusaBaseService, 'medusa')
 
 // Store identity overrides (name, logo, currency, menus, plugins…) belong in
 // kitcommerce.config.ts's default export — see staticStoreConfig.
@@ -156,3 +167,22 @@ export class CouponService extends MedusaCouponService {
 }
 
 export const couponService = new CouponService()
+
+// `use-category-filters` in @misiki/kitcommerce-core fetches the category tree by raw Litekart REST
+// path rather than a typed method — `categoryService.get('/api/categories/all')`. With no Litekart
+// API behind Medusa that URL stays relative, so Vite proxies it to
+// PUBLIC_LITEKART_API_URL || localhost:7000 and dev logs
+// `http proxy error: api/categories/all ... ECONNREFUSED` (nothing renders the category tree).
+// Route that one path to the connector's own Medusa-native category query; `fetchAllCategories`
+// already returns the `{ data }` shape the composable reads. Any other URL falls through
+// unchanged, so services that legitimately call `get()` are untouched.
+export class CategoryService extends MedusaCategoryService {
+	async get<T>(url: string): Promise<T> {
+		if (typeof url === 'string' && url.startsWith('/api/categories/all')) {
+			return (await this.fetchAllCategories()) as T
+		}
+		return super.get<T>(url)
+	}
+}
+
+export const categoryService = new CategoryService()

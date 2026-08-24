@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { taxonomy } from '$lib/core/connectors/taxonomy'
 	import { page } from '$app/state'
 	import { goto } from '$app/navigation'
 	import { onDestroy, onMount } from 'svelte'
@@ -71,7 +72,7 @@
 				href: '/my/wishlist'
 			},
 			{
-				label: 'Categories',
+				label: taxonomy.many,
 				icon: Grid,
 				href: '/categories'
 			},

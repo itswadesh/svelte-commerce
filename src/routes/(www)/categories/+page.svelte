@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { taxonomy } from '$lib/core/connectors/taxonomy'
 	import Canonical from '$lib/components/seo/canonical.svelte'
 	import EmptyImage from '$lib/core/components/image/empty-image.svelte'
 	import { ChevronRight } from '@lucide/svelte'
@@ -7,10 +8,10 @@
 </script>
 
 <svelte:head>
-	<title>Categories</title>
+	<title>{taxonomy.many}</title>
 </svelte:head>
 <div class="container max-w-6xl px-4 py-4 md:py-10">
-	<h1 class="mb-6 text-xl font-medium md:text-2xl">Shop by Category</h1>
+	<h1 class="mb-6 text-xl font-medium md:text-2xl">Shop by {taxonomy.one}</h1>
 
 	<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
 		{#each data.categories as category}

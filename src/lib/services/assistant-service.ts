@@ -92,10 +92,11 @@ export class AssistantService {
 
 	async getConfig(): Promise<{ enabled: boolean; currency: string; maxRecommendations: number }> {
 		try {
-			// The assistant backend only exists behind the Litekart API. The non-Litekart override
-			// modules (src/lib/core/connectors) export a `connectorName` marker — when one is active,
-			// stay disabled without firing the doomed `/api/commerce-assistant/*` request.
-			if ((services as { connectorName?: string }).connectorName) {
+			// The assistant backend only exists behind the Litekart API. Every module in
+			// src/lib/core/connectors exports a `connectorName` marker — when the active one is not
+			// litekart, stay disabled without firing the doomed `/api/commerce-assistant/*` request.
+			const connectorName = (services as { connectorName?: string }).connectorName
+			if (connectorName && connectorName !== 'litekart') {
 				return { enabled: false, currency: 'INR', maxRecommendations: 5 }
 			}
 			const res = await this.fetchFn(`${BASE}/config`, { headers: { accept: 'application/json' } })

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { taxonomy } from '$lib/core/connectors/taxonomy'
 	import { page } from '$app/state'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { ShoppingBag, Home, ArrowLeft, Search, Package, Tag } from '@lucide/svelte'
@@ -57,7 +58,7 @@
 		<div class="mb-8 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
 			<a href="/" class="transition-colors hover:text-primary">Home</a>
 			<span>•</span>
-			<a href="/categories" class="transition-colors hover:text-primary">Categories</a>
+			<a href="/categories" class="transition-colors hover:text-primary">{taxonomy.many}</a>
 			<span>•</span>
 			<a href="/products" class="transition-colors hover:text-primary">All Products</a>
 			<span>•</span>

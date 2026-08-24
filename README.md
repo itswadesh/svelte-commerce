@@ -16,36 +16,39 @@
 
 ## Backend support
 
-Svelte Commerce talks to any backend through a connector package. Nothing in the app
-imports a connector by name — every service resolves through `$lib/core/services`, which follows
-whatever `kitcommerce.config.ts` exports. So switching backends is one export change:
+Svelte Commerce talks to any backend through a connector package. Nothing in the app imports a
+connector by name — every service resolves through `$lib/core/services`, which follows whatever
+`kitcommerce.config.ts` exports. Switching backends is three steps:
+
+**1. Select the backend** in `kitcommerce.config.ts` — exactly one line active:
 
 ```ts
-// pick exactly one
-export * as services from "@misiki/shopify-connector"
-// export * as services from "@misiki/litekart-connector"
-// export * as services from '@misiki/medusa-connector'
-// export * as services from '@misiki/vendure-connector'
-// export * as services from '@misiki/saleor-connector'
-// export * as services from '@misiki/commercetools-connector'
-// export * as services from '@misiki/woocommerce-connector'
+export * as services from './src/lib/core/connectors/litekart'
+// export * as services from './src/lib/core/connectors/vendure'
+// export * as services from './src/lib/core/connectors/medusa'
+// export * as services from './src/lib/core/connectors/saleor'
 ```
 
-`package.json` ships `@misiki/litekart-connector` as the stock connector. Replace it with the one
-you picked above so `npm i` — and any Docker build, which installs from `package.json` alone —
-resolves the connector your storefront actually talks to:
+Backends with no module in `src/lib/core/connectors` are selected by package instead — e.g.
+`export * as services from '@misiki/shopify-connector'`.
+
+**2. Install that connector** in place of the stock one, so `npm i` — and any Docker build, which
+installs from `package.json` alone — resolves it:
 
 ```sh
 npm uninstall @misiki/litekart-connector
 npm i @misiki/medusa-connector   # or vendure, saleor, ...
 ```
 
-That is the only change needed. `@misiki/kitcommerce-core` imports `@misiki/litekart-connector` by
-name — it is a peerDependency of that package — so two shims redirect that one specifier onto the
-connector you installed: a resolver plugin in `vite.config.ts` for the runtime/bundling layer, and
-an ambient declaration written by `sync-connector-types.js` (run by `npm run check`) for the type
-layer. Both read `package.json`, so installing your connector is all it takes; neither does anything
-when Litekart is the installed connector.
+**3. Set that backend's env** in `.env`: `PUBLIC_MEDUSA_API_URL`, `PUBLIC_VENDURE_API_URL`,
+`PUBLIC_SALEOR_API_URL`, or the `PUBLIC_LITEKART_*` trio. Per-backend guides are in
+[`docs/`](./docs/README.md).
+
+Nothing else. `@misiki/kitcommerce-core` imports `@misiki/litekart-connector` by name — its
+peerDependency — so two shims redirect that specifier onto the connector you installed:
+`vite.config.ts` for runtime/bundling, and an ambient declaration written by
+`sync-connector-types.js` (run by `npm run check`) for types. Both read `package.json`, and neither
+does anything while Litekart is installed.
 
 ## All 26 connectors — and a request to the people who build these platforms
 
@@ -278,7 +281,7 @@ npm run dev
 ```
 
 `.env.example` points at the public Litekart demo API, so the storefront works straight away. Edit
-`.env` to point at your own backend, and see [Configuration](#configuration) to switch connectors.
+`.env` to point at your own backend, and see [Backend support](#backend-support) to switch connectors.
 
 Open http://localhost:5173 — your storefront should be up and running.
 
@@ -293,19 +296,15 @@ npm run check     # sync connector types + svelte-check
 
 ## Configuration
 
-There is 1 place to configure
+Two files: `kitcommerce.config.ts` and `.env`.
 
-1. `kitcommerce.config.ts`
-   This is used to define which service to use. Only 1 of the listed services can be active at a
-   time — install that connector in `package.json` in place of `@misiki/litekart-connector`. Valid
-   values are:
-   - `export * as services from "@misiki/shopify-connector"`
-   - `export * as services from "@misiki/litekart-connector"`
-   - `export * as services from '@misiki/medusa-connector'`
-   - `export * as services from '@misiki/vendure-connector'`
-   - `export * as services from '@misiki/saleor-connector'`
-   - `export * as services from '@misiki/commercetools-connector'`
-   - `export * as services from '@misiki/woocommerce-connector'`
+1. **Backend and connector package** — the three steps in
+   [Backend support](#backend-support) above.
+2. **Store identity** — `kitcommerce.config.ts`'s default export holds overrides (name, logo,
+   favicon, currency, menus, plugins, cssVariables), merged over
+   `src/lib/core/connectors/default-store.json`. Leave it `{}` on Litekart: the API serves all of it.
+3. **Env** — copy `.env.example` to `.env`. Each backend's variables are listed in its
+   [platform guide](./docs/README.md).
 
 ## Documentation
 

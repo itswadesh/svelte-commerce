@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { taxonomy } from '$lib/core/connectors/taxonomy'
 	import { cn } from '$lib/core/utils/index.js'
 	import { X } from '@lucide/svelte'
 	import { fade, fly } from 'svelte/transition'
@@ -18,6 +19,14 @@
 	let { class: className = '' }: FilterProps = $props()
 
 	const filterState = getDesktopFilterState()
+
+	// A backend that cannot filter by price reports no range at all — see the guard on the block
+	// below.
+	const priceFilterSupported = $derived(
+		Number.isFinite(filterState.minPossiblePrice) &&
+			Number.isFinite(filterState.maxPossiblePrice) &&
+			filterState.maxPossiblePrice > filterState.minPossiblePrice
+	)
 
   function formatCategoryName(input: string) {
     const x = filterState.formatFilterOptionName(input)
@@ -103,7 +112,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="ed-df__label text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Categories</p>
+					<p class="ed-df__label text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>{taxonomy.many}</p>
 					<Button
 						variant="ghost"
 						size="icon"
@@ -280,54 +289,59 @@
 			<div class="ed-df__rule w-full border-b border-gray-200"></div>
 		{/if}
 
-		<!-- Price Filter -->
-		<p class="ed-df__label text-sm font-bold uppercase text-gray-900">Price Range</p>
+		<!-- Price Filter. Backends that report no price stats (Vendure returns
+		     `priceStat: { min: undefined, max: undefined }`) rendered an empty slider over blank
+		     Min/Max boxes that filtered nothing, so the whole block is dropped unless the facets
+		     carry a real range. `max > min` also keeps the slider maths off a zero-width range. -->
+		{#if priceFilterSupported}
+			<p class="ed-df__label text-sm font-bold uppercase text-gray-900">Price Range</p>
 
-		<div class="ed-df__slider relative mr-5 mt-2">
-			<!-- Range slider track -->
-			<div class="ed-df__track absolute h-1 w-full rounded bg-gray-100">
-				<div
-					class="ed-df__fill absolute h-1 bg-primary"
-					style="left: {filterState.priceSliderLeftPercentage}%; right: {filterState.priceSliderRightPercentage}%"
-				></div>
+			<div class="ed-df__slider relative mr-5 mt-2">
+				<!-- Range slider track -->
+				<div class="ed-df__track absolute h-1 w-full rounded bg-gray-100">
+					<div
+						class="ed-df__fill absolute h-1 bg-primary"
+						style="left: {filterState.priceSliderLeftPercentage}%; right: {filterState.priceSliderRightPercentage}%"
+					></div>
+				</div>
+
+				<!-- Range inputs -->
+				<input
+					type="range"
+					bind:value={filterState.minPrice}
+					aria-label="Choose minimum price"
+					min={filterState.minPossiblePrice}
+					max={filterState.maxPossiblePrice}
+					onchange={filterState.handleMinPriceChange}
+					class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
+				/>
+				<input
+					type="range"
+					bind:value={filterState.maxPrice}
+					min={filterState.minPossiblePrice}
+					aria-label="Choose maximum price"
+					max={filterState.maxPossiblePrice}
+					onchange={filterState.handleMaxPriceChange}
+					class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
+				/>
 			</div>
 
-			<!-- Range inputs -->
-			<input
-				type="range"
-				bind:value={filterState.minPrice}
-				aria-label="Choose minimum price"
-				min={filterState.minPossiblePrice}
-				max={filterState.maxPossiblePrice}
-				onchange={filterState.handleMinPriceChange}
-				class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
-			/>
-			<input
-				type="range"
-				bind:value={filterState.maxPrice}
-				min={filterState.minPossiblePrice}
-				aria-label="Choose maximum price"
-				max={filterState.maxPossiblePrice}
-				onchange={filterState.handleMaxPriceChange}
-				class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
-			/>
-		</div>
-
-		<!-- Editable price bounds (kept in sync with the slider) -->
-		<div class="ed-df__prices mt-4 grid grid-cols-2 gap-3">
-			<Textbox
-				type="number"
-				label="Min ({page.data?.store?.currency?.symbol})"
-				onchange={filterState.handleMinPriceChange}
-				bind:value={filterState.minPrice}
-			/>
-			<Textbox
-				type="number"
-				label="Max ({page.data?.store?.currency?.symbol})"
-				onchange={filterState.handleMaxPriceChange}
-				bind:value={filterState.maxPrice}
-			/>
-		</div>
+			<!-- Editable price bounds (kept in sync with the slider) -->
+			<div class="ed-df__prices mt-4 grid grid-cols-2 gap-3">
+				<Textbox
+					type="number"
+					label="Min ({page.data?.store?.currency?.symbol})"
+					onchange={filterState.handleMinPriceChange}
+					bind:value={filterState.minPrice}
+				/>
+				<Textbox
+					type="number"
+					label="Max ({page.data?.store?.currency?.symbol})"
+					onchange={filterState.handleMaxPriceChange}
+					bind:value={filterState.maxPrice}
+				/>
+			</div>
+		{/if}
 
 		<!-- Other generalized filters -->
 		{#if filterState.processedFilters}

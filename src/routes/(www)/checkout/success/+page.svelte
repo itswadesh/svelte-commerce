@@ -91,6 +91,13 @@
 				<h1 class="mb-3 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Thank you for your order</h1>
 				{#if firstOrder}
 					<p class="mx-auto max-w-lg text-lg text-gray-500 text-sm">We've received your order and we'll notify you as soon as it's on its way.</p>
+					<!-- The reference a shopper quotes to support. It used to appear only when the order
+					     failed to load, so a successful confirmation showed no number at all. -->
+					{#if orderNo}
+						<div class="mt-6 inline-flex items-center rounded-full border border-gray-100 bg-gray-50 px-4 py-1.5 text-sm font-medium text-gray-600">
+							Order #{orderNo}
+						</div>
+					{/if}
 				{:else}
 					<p class="mx-auto max-w-lg text-lg text-gray-500 text-sm">
 						Your payment went through. We're still confirming the order details — they'll appear in your account shortly.
