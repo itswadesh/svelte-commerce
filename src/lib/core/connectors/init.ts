@@ -7,7 +7,7 @@ import { services } from 'kitcommerce.config'
 
 // Loose view of whatever connector kitcommerce.config.ts exports. The static type follows the
 // active connector, so env-driven setup reads it through this shape instead. `connectorName` is
-// the marker each override module in this directory exports — it lets init fail loudly when a
+// the marker each module in this directory exports — it lets init fail loudly when a
 // PUBLIC_<CONNECTOR>_* env is set while a different connector is active, instead of silently
 // writing that connector's statics onto the wrong BaseService.
 type ActiveServices = {
@@ -21,9 +21,26 @@ const active = services as unknown as ActiveServices
 const wrongConnector = (envName: string, connector: string) =>
 	new Error(`${envName} is set but the ${connector} connector is not active in kitcommerce.config.ts`)
 
+// The mirror of wrongConnector. These three connectors reach their backend only through the base
+// URL applied below, and an unset env var used to be silent: `_baseUrl` stayed empty, every call
+// went to a relative `/shop-api` (or Medusa/Saleor equivalent) that the dev server answers with its
+// own 404 page, and the storefront rendered "No products found" with nothing pointing at the cause.
+// Fail at boot with the variable's name instead.
+const REQUIRED_ENV: Record<string, string> = {
+	vendure: 'PUBLIC_VENDURE_API_URL',
+	medusa: 'PUBLIC_MEDUSA_API_URL',
+	saleor: 'PUBLIC_SALEOR_API_URL'
+}
+
+const missingEnv = (envName: string, connector: string) =>
+	new Error(`the ${connector} connector is active in kitcommerce.config.ts but ${envName} is not set — add it to .env`)
+
 // Shared by src/hooks.server.ts and src/hooks.client.ts: SSR and the browser both need the
 // backend URL applied (in production the browser must reach the public API URL).
 export const initActiveConnector = async () => {
+	const required = active.connectorName ? REQUIRED_ENV[active.connectorName] : undefined
+	if (required && !env[required as `PUBLIC_${string}`]) throw missingEnv(required, active.connectorName as string)
+
 	if (env.PUBLIC_MEDUSA_API_URL) {
 		if (active.connectorName !== 'medusa' || !active.BaseService)
 			throw wrongConnector('PUBLIC_MEDUSA_API_URL', 'medusa')

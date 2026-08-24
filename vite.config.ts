@@ -49,6 +49,14 @@ export default defineConfig(({ command, mode }) => {
 	const connector = activeConnector()
 	return {
 		plugins: [connectorPeerShim(connector), sveltekit()],
+		resolve: {
+			// @misiki/kitcommerce-core ships its own nested copy of svelte-sonner, so its components
+			// (the address form renderer, the cart store, …) called `toast()` on a different module
+			// instance from the `<Toaster />` mounted in src/routes/+layout.svelte. Every error routed
+			// through a toast — a rejected address field, a failed save — silently rendered nowhere,
+			// which is what made Save Address look dead. One instance, one toast store.
+			dedupe: ['svelte-sonner']
+		},
 		ssr: {
 			noExternal: ['bits-ui']
 		},

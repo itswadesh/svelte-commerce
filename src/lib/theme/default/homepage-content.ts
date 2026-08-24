@@ -1,4 +1,5 @@
 import type { ThemeHomepageContent } from '../types.js'
+import { taxonomy } from '$lib/core/connectors/taxonomy'
 
 export const defaultContent: ThemeHomepageContent = {
   description: "Discover featured products, curated collections, and a smooth shopping experience.",
@@ -9,7 +10,7 @@ export const defaultContent: ThemeHomepageContent = {
     titleRest: "Every Day",
     text: "Discover featured products, curated collections, and a smooth shopping experience.",
     primaryCta: "Shop Products",
-    secondaryCta: "Browse Categories",
+    secondaryCta: `Browse ${taxonomy.many}`,
     bgText: "SHOP",
     image: "",
     imageAlt: "Store featured visual",
@@ -18,12 +19,12 @@ export const defaultContent: ThemeHomepageContent = {
   },
   ticker: [],
   category: {
-    label: "Categories",
+    label: taxonomy.many,
     titleLead: "Browse by",
-    titleAccent: "Category",
-    text: "Explore product categories from the store catalogue.",
-    emptyTitle: "No categories available",
-    emptyText: "Categories will appear here when they are returned by the API."
+    titleAccent: taxonomy.one,
+    text: `Explore product ${taxonomy.manyLower} from the store catalogue.`,
+    emptyTitle: `No ${taxonomy.manyLower} available`,
+    emptyText: `${taxonomy.many} will appear here when they are returned by the API.`
   },
   about: {
     label: "About",
@@ -88,7 +89,7 @@ export const defaultContent: ThemeHomepageContent = {
     ]
   },
   contact: { label: "Contact", titleLead: "Contact", titleAccent: "Us", text: "", panelTitle: "Let us talk", panelText: "", addressLabel: "Address", phoneLabel: "Phone", emailLabel: "Email", hoursLabel: "Working Hours", address: "", phone: "", email: "", hours: "", cta: "Send Message" },
-  defaultHome: { eyebrow: "New season picks", primaryCta: "Shop Products", secondaryCta: "Browse Categories", featuredLabel: "Featured", featuredTitle: "Popular products", emptyTitle: "No products available", emptyText: "Products will appear here when they are returned by the API." },
+  defaultHome: { eyebrow: "New season picks", primaryCta: "Shop Products", secondaryCta: `Browse ${taxonomy.many}`, featuredLabel: "Featured", featuredTitle: "Popular products", emptyTitle: "No products available", emptyText: "Products will appear here when they are returned by the API." },
   editorial: {
     hero: {
       eyebrow: "New Season",
@@ -97,7 +98,7 @@ export const defaultContent: ThemeHomepageContent = {
       text: "A curated edit of pieces made to be kept — thoughtfully sourced, honestly priced, and ready to ship.",
       primaryCta: "Shop the collection",
       primaryHref: "/products",
-      secondaryCta: "Explore categories",
+      secondaryCta: `Explore ${taxonomy.manyLower}`,
       secondaryHref: "/products",
       image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400&q=80&auto=format&fit=crop",
       imageAlt: "Editorial lifestyle photograph",
@@ -106,7 +107,7 @@ export const defaultContent: ThemeHomepageContent = {
     marquee: ["Free shipping on your first order", "7-day easy returns", "Secure checkout", "New arrivals every week"],
     categories: {
       eyebrow: "Browse",
-      title: "Shop by category",
+      title: `Shop by ${taxonomy.oneLower}`,
       viewAll: "View all",
       viewAllHref: "/products",
       tiles: [

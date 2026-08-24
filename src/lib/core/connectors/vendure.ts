@@ -1,15 +1,16 @@
 import {
+	BaseService as VendureBaseService,
 	BlogService as VendureBlogService,
 	CouponService as VendureCouponService,
 	WishlistService as VendureWishlistService,
 	MeilisearchService as VendureMeilisearchService,
 	MenuService as VendureMenuService,
 	PageService as VendurePageService,
-	ProfileService as VendureProfileService,
-	StoreService as VendureStoreService,
-	UserService as VendureUserService
+	StoreService as VendureStoreService
 } from '@misiki/vendure-connector'
 import { staticStoreConfig } from './static-store'
+import { blockLitekartRest, serveLitekartRestLocally } from './no-litekart-rest'
+import { localStoreData } from './local-store-data'
 
 // Vendure-only connector: the stock @misiki/vendure-connector still calls Litekart REST endpoints
 // (`/api/stores/public-details`, `/api/pages/*`, `/api/menu`, `/api/ms-autocomplete/*`,
@@ -20,8 +21,20 @@ import { staticStoreConfig } from './static-store'
 // (default-store.json + kitcommerce.config.ts overrides) or delegated to Vendure-native calls.
 export * from '@misiki/vendure-connector'
 
+// What stays here is what only this storefront can answer: store identity and menus come from
+// kitcommerce.config.ts + default-store.json, not from Vendure. Everything else — orders, the
+// customer guard, the order number carried out of checkout, categories, profile — now lives in
+// @misiki/vendure-connector itself (>= 2.0.36).
+
 // Lets the hooks `init` verify the selected connector matches the PUBLIC_VENDURE_* env.
 export const connectorName = 'vendure'
+
+// Nothing in Vendure mode may fall through to a Litekart REST path: that API is not installed and
+// not running. Reads return empty, writes fail loudly, and each unimplemented path is reported
+// once — see no-litekart-rest.ts.
+// Local data first — menus, countries, currencies, plugin toggles — then the guard.
+serveLitekartRestLocally(localStoreData)
+blockLitekartRest(VendureBaseService, 'vendure')
 
 // Store identity overrides (name, logo, currency, menus, plugins…) belong in
 // kitcommerce.config.ts's default export — see staticStoreConfig.
@@ -77,26 +90,6 @@ export class MeilisearchService extends VendureMeilisearchService {
 }
 
 export const meilisearchService = new MeilisearchService()
-
-// The profile page (use-my-profile) calls ProfileService, whose stock implementation is the
-// Litekart-only `/api/users/*`. The connector's UserService already has Vendure-native
-// equivalents (GraphQL activeCustomer / updateCustomer) — delegate to those.
-export class ProfileService extends VendureProfileService {
-	async getOne(): ReturnType<VendureProfileService['getOne']> {
-		return new VendureUserService(this.getFetch()).getMe() as ReturnType<VendureProfileService['getOne']>
-	}
-
-	async save(profile: Parameters<VendureProfileService['save']>[0]): ReturnType<VendureProfileService['save']> {
-		// updateProfile's param type requires an `id` its implementation never reads; the profile
-		// shape coming from getMe has none, so satisfy the type with a blank one.
-		return new VendureUserService(this.getFetch()).updateProfile({
-			id: '',
-			...profile
-		} as Parameters<VendureUserService['updateProfile']>[0]) as ReturnType<VendureProfileService['save']>
-	}
-}
-
-export const profileService = new ProfileService()
 
 // Blogs are Litekart CMS content with no Vendure equivalent; the blog routes already render an
 // empty state for `{ data: [] }`.

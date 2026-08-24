@@ -12,15 +12,16 @@ import { env } from '$env/dynamic/public'
 // rollout routes traffic to it, and it replaces a working container with one that fails every page.
 // Failing here makes that deploy roll back instead.
 //
-// Which env is required depends on the active connector (kitcommerce.config.ts). The override
-// modules in src/lib/core/connectors export a `connectorName` marker; the raw litekart connector
-// has none and needs the Litekart trio.
+// Which env is required depends on the active connector (kitcommerce.config.ts). Every module in
+// src/lib/core/connectors exports a `connectorName` marker; a config pointed straight at a raw
+// connector package has none, and falls back to the Litekart trio.
+const LITEKART_REQUIRED_ENV = ['PUBLIC_LITEKART_API_URL', 'PUBLIC_LITEKART_STORE_ID', 'PUBLIC_LITEKART_DOMAIN'] as const
 const CONNECTOR_REQUIRED_ENV: Record<string, readonly string[]> = {
+	litekart: LITEKART_REQUIRED_ENV,
 	vendure: ['PUBLIC_VENDURE_API_URL'],
 	medusa: ['PUBLIC_MEDUSA_API_URL'],
 	saleor: ['PUBLIC_SALEOR_API_URL']
 }
-const LITEKART_REQUIRED_ENV = ['PUBLIC_LITEKART_API_URL', 'PUBLIC_LITEKART_STORE_ID', 'PUBLIC_LITEKART_DOMAIN'] as const
 
 export const GET: RequestHandler = async () => {
 	const { services } = await import('kitcommerce.config')

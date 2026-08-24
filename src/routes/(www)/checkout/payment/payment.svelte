@@ -18,13 +18,40 @@
 	const cartState = paymentModule.cartState
 
 	let showAddress = $state(false)
+
+	// What the order still needs before it can be reviewed. Previously the CTA was simply not
+	// rendered when any of this was missing, so the payment step showed payment methods and no way
+	// forward at all — and since email became mandatory, a cart without one lands here routinely.
+	const missingDetails = $derived(
+		[
+			isEmailRequired && !cartState?.cart?.email ? 'an email address' : '',
+			isPhoneRequired && !cartState?.cart?.phone ? 'a phone number' : '',
+			!(cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId) ? 'a delivery address' : ''
+		].filter(Boolean)
+	)
+
+	// The connector's PaymentModule pre-selects a shipping rate only when the store offers exactly
+	// one (use-payment.svelte.js: `res?.data?.length === 1`). With several rates every radio starts
+	// unselected, so Review Order stays disabled until the shopper picks one — a required extra tap,
+	// and on mobile an extra scroll past the payment methods. Select the first rate as soon as the
+	// list arrives. A rate already on the cart always wins, and the shopper can still change it.
+	// `attemptedRateId` stops a failed setShippingRate (which leaves `shippingRateId` unset) from
+	// retrying on every re-render.
+	let attemptedRateId: string | undefined
+
+	$effect(() => {
+		const firstRate = paymentModule.shippingRates?.data?.[0]
+		if (!firstRate || cartState?.cart?.shippingRateId || attemptedRateId === firstRate.id) return
+		attemptedRateId = firstRate.id
+		paymentModule.handleShippingRateChange(firstRate)
+	})
 </script>
 
 <svelte:head>
 	<title>Checkout - Secure Payment</title>
 </svelte:head>
 
-<div class="min-h-screen py-8">
+<div class="min-h-screen py-8 max-sm:pb-[calc(9rem_+_env(safe-area-inset-bottom))]">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={3} />
 					<!-- <div class="mb-8 flex justify-between items-center">
@@ -44,8 +71,9 @@
 			</div>
 		{:else}
 			<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
-				<!-- Left Column -->
-					<div class="flex flex-col gap-6">
+				<!-- Left Column. `min-w-0` keeps a wide min-content child from stretching the column
+				     past the viewport and scrolling the page sideways on a phone. -->
+					<div class="flex min-w-0 flex-col gap-6">
 
 
 						{#if paymentModule.shippingRates?.error?.message}
@@ -312,13 +340,23 @@
 										<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
 									</div>
 
-									{#if (!isPhoneRequired || cartState?.cart?.phone) && (!isEmailRequired || cartState?.cart?.email) && (cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId)}
+									{#if missingDetails.length === 0}
 										<CheckoutButton
 											text="Review Order"
 											disabledText="Select Method"
 											onclick={onreview}
 											disabled={paymentModule.checkoutDisabled || !!paymentModule.shippingRates?.error?.message}
 											loading={paymentModule.paymentLoader}
+											total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+										/>
+									{:else}
+										<p class="rounded-radius border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+											This order still needs {missingDetails.join(' and ')}.
+										</p>
+										<CheckoutButton
+											text="Add delivery details"
+											onclick={paymentModule.handleAddressChange}
+											total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
 										/>
 									{/if}
 								</div>

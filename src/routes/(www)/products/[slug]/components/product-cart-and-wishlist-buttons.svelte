@@ -45,7 +45,10 @@
 	{/if}
 {/snippet}
 
-{#if productState.showAddToCartMessage}
+<!-- Adding to the bag also opens the cart drawer, which shows the same line item with the same
+     "View Bag" affordance. Two confirmations of one action, stacked on top of each other, so this
+     card stands down whenever the drawer is the thing on screen. -->
+{#if productState.showAddToCartMessage && !productState.cartState?.isOpen}
 	<!-- Added to cart message toast-like notification -->
 	<div
 		transition:fly={{ x: 50, duration: 300, easing: quintOut }}

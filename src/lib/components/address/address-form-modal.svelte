@@ -34,7 +34,10 @@
 <AddressFormRenderer bind:address bind:show {onback} {ondelete} {onsave}>
 	{#snippet content({ isSaving, handleBack, handleSubmit, handleDelete })}
 		<Dialog bind:open={show}>
-			<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
+			<!-- The dialog is a centred fixed box with no height cap, so on a phone the address fields
+			     ran past the bottom of the screen and Save went with them. Cap it, scroll the fields,
+			     and keep the actions pinned as the dialog's last grid row. -->
+			<DialogContent class="max-h-[90dvh] grid-rows-[auto_minmax(0,1fr)] sm:max-w-[425px] [&>button]:!bg-transparent">
 				<DialogHeader>
 					<div class="flex items-center gap-2">
 						<Button variant="ghost" size="icon" aria-label="Back to address list" onclick={handleBack}>
@@ -43,63 +46,66 @@
 						<DialogTitle>{isEdit ? 'Edit Address' : 'Add New Address'}</DialogTitle>
 					</div>
 				</DialogHeader>
-				<form onsubmit={handleSubmit} class="grid py-4">
-					<div class="grid grid-cols-2 gap-2">
+				<form onsubmit={handleSubmit} class="flex min-h-0 flex-col">
+					<div class="grid min-h-0 flex-1 overflow-y-auto py-4">
+						<div class="grid grid-cols-2 gap-2">
+							<Textbox
+								name="firstName"
+								bind:value={address.firstName}
+								placeholder="First Name"
+								schema={AddressSchema.firstName}
+								label="First Name"
+								required
+							/>
+							<Textbox
+								name="lastName"
+								bind:value={address.lastName}
+								placeholder="Last Name"
+								schema={AddressSchema.lastName}
+								label="Last Name"
+								required
+							/>
+						</div>
 						<Textbox
-							name="firstName"
-							bind:value={address.firstName}
-							placeholder="First Name"
-							schema={AddressSchema.firstName}
-							label="First Name"
+							info={page?.data?.store?.isPhoneMandatory ? '' : 'Phone number is recommended for delivery updates.'}
+							required={page.data?.store?.isPhoneMandatory}
+							name="phone"
+							type="tel"
+							bind:value={address.phone}
+							placeholder="+1234567890"
+							schema={AddressSchema.phone}
+							label="Phone"
+						/>
+						<Textbox
+							name="address_1"
+							bind:value={address.address_1}
+							placeholder="Street Address"
+							schema={AddressSchema.address_1}
+							label="Address Line 1"
 							required
 						/>
-						<Textbox
-							name="lastName"
-							bind:value={address.lastName}
-							placeholder="Last Name"
-							schema={AddressSchema.lastName}
-							label="Last Name"
-							required
-						/>
+						<Textbox name="address_2" bind:value={address.address_2} placeholder="Apartment, suite, etc." label="Address Line 2" />
+						<div class="grid grid-cols-2 gap-x-2">
+							<Textbox name="city" bind:value={address.city} placeholder="City" schema={AddressSchema.city} label="City" required />
+							<Textbox name="state" bind:value={address.state} placeholder="State" schema={AddressSchema.state} label="State" required />
+							<Select
+								id="countryCode"
+								title="Select Country"
+								label="Country"
+								showSearch={true}
+								value={address.countryCode || page?.data?.store?.country?.code || 'AU'}
+								data={page?.data?.store?.countries || []}
+								valueField="code"
+								optionSelected={(v: any) => {
+									address.countryCode = v
+								}}
+							/>
+							<Textbox name="zip" bind:value={address.zip} placeholder="12345" schema={AddressSchema.zip} label="ZIP Code" required />
+						</div>
 					</div>
-					<Textbox
-						info={page?.data?.store?.isPhoneMandatory ? '' : 'Phone number is recommended for delivery updates.'}
-						required={page.data?.store?.isPhoneMandatory}
-						name="phone"
-						type="tel"
-						bind:value={address.phone}
-						placeholder="+1234567890"
-						schema={AddressSchema.phone}
-						label="Phone"
-					/>
-					<Textbox
-						name="address_1"
-						bind:value={address.address_1}
-						placeholder="Street Address"
-						schema={AddressSchema.address_1}
-						label="Address Line 1"
-						required
-					/>
-					<Textbox name="address_2" bind:value={address.address_2} placeholder="Apartment, suite, etc." label="Address Line 2" />
-					<div class="grid grid-cols-2 gap-x-2">
-						<Textbox name="city" bind:value={address.city} placeholder="City" schema={AddressSchema.city} label="City" required />
-						<Textbox name="state" bind:value={address.state} placeholder="State" schema={AddressSchema.state} label="State" required />
-						<Select
-							id="countryCode"
-							title="Select Country"
-							label="Country"
-							showSearch={true}
-							value={address.countryCode || page?.data?.store?.country?.code || 'AU'}
-							data={page?.data?.store?.countries || []}
-							valueField="code"
-							optionSelected={(v: any) => {
-								address.countryCode = v
-							}}
-						/>
-						<Textbox name="zip" bind:value={address.zip} placeholder="12345" schema={AddressSchema.zip} label="ZIP Code" required />
-					</div>
-					<br />
-					<div class="flex flex-col gap-2">
+					<div
+						class="flex flex-col gap-2 border-t border-border bg-background pt-3 pb-[env(safe-area-inset-bottom)]"
+					>
 						<Button type="submit" class="w-full" disabled={isSaving}>
 							{#if isSaving}
 								<LoadingDots />
