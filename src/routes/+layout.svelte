@@ -62,9 +62,32 @@
 		}
 	})
 
+	// The last path this session settled on, so a change of page can be detected without trusting
+	// the navigation's own `from`.
+	let landedPath = ''
+
 	// Also re-check on every navigation so a stale webview updates promptly.
-	afterNavigate(() => {
+	afterNavigate(({ to }) => {
 		if (browser) updated.check()
+		if (!browser) return
+
+		// Land at the top when the page itself changes. SvelteKit normally handles this, but the
+		// product page replaces its URL with `?variant_id=…` (`replaceState`, `noScroll`) the moment it
+		// mounts — that navigation supersedes the one that brought the shopper in, so the scroll reset
+		// never happens and its `afterNavigate` reports the product page as both `from` and `to`.
+		// Tapping a product from halfway down a listing therefore dropped them halfway down the
+		// product page. Comparing against the last settled path sidesteps that entirely.
+		//
+		// Query-only changes keep their position on purpose: those are the filter and variant updates.
+		const path = to?.url.pathname
+		if (!path) return
+		if (path === landedPath) return
+		landedPath = path
+
+		// `behavior: 'instant'` is the other half of the fix. app.css sets `html { scroll-behavior: smooth }`, so a
+		// plain scrollTo animates — and the product page replaces its URL (`?variant_id=…`) while that
+		// animation is still running, which cancels it and leaves the shopper at the listing's offset.
+		window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
 	})
 
 	// Origin serving product imagery — usually the LCP element and always a different host from

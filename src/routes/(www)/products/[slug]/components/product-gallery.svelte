@@ -1,6 +1,5 @@
 <script lang="ts">
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import LazyImgWithZoom from '$lib/core/components/image/lazy-img-with-zoom.svelte'
 	import * as Carousel from '$lib/components/ui/carousel/index.js'
 	import type { CarouselAPI } from '$lib/components/ui/carousel/context.js'
 	import { Play, X } from '@lucide/svelte'
@@ -166,7 +165,7 @@
 					{@const youtubeId = getYoutubeId(img)}
 					<Carousel.Item>
 						<div
-							class="sm:mb-5 sm:cursor-zoom-in"
+							class="sm:mb-5 sm:cursor-pointer"
 							role="button"
 							tabindex="0"
 							onclick={() => showCarousel(img)}
@@ -194,9 +193,10 @@
 								</video>
 							{:else}
 								<!-- Keyed so the image fully re-renders when a variant change swaps the image URL.
-								     Zoom-on-hover (desktop only; the component no-ops on mobile). -->
+								     No hover zoom: clicking opens the full-screen gallery, which is the same
+								     look-closer affordance without a lens following the cursor. -->
 								{#key img}
-									<LazyImgWithZoom
+									<LazyImg
 										src={img}
 										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
 										class="w-full rounded-radius object-contain"
