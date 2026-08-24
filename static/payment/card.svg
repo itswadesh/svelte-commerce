@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" width="48" height="32" role="img" aria-label="Card payment">
+	<rect x="1" y="1" width="46" height="30" rx="4" fill="#F4F5F8" stroke="#C4C8D4" stroke-width="1.5" />
+	<rect x="1" y="8" width="46" height="6" fill="#5A6180" />
+	<rect x="6" y="20" width="14" height="3" rx="1.5" fill="#A9AFC2" />
+	<rect x="24" y="20" width="7" height="3" rx="1.5" fill="#C4C8D4" />
+	<rect x="34" y="19.5" width="8" height="4" rx="2" fill="#C4C8D4" />
+</svg>

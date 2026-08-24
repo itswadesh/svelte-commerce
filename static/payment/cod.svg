@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" width="48" height="32" role="img" aria-label="Cash on delivery">
+	<rect x="1" y="1" width="46" height="30" rx="4" fill="#F1F5F2" stroke="#BBCBC0" stroke-width="1.5" />
+	<circle cx="24" cy="16" r="7" fill="#FFFFFF" stroke="#5B8A6B" stroke-width="1.5" />
+	<path d="M26.4 12.8c-.6-.7-1.5-1.1-2.5-1.1-1.9 0-3.2 1.3-3.2 2.6 0 1.2 1 1.8 2.6 2.2 1.9.5 3 1.1 3 2.4 0 1.4-1.4 2.5-3.3 2.5-1.1 0-2.1-.4-2.7-1.2" fill="none" stroke="#5B8A6B" stroke-width="1.5" stroke-linecap="round" />
+	<path d="M24 9.6v12.8" stroke="#5B8A6B" stroke-width="1.5" stroke-linecap="round" />
+	<circle cx="8.5" cy="16" r="2" fill="#BBCBC0" />
+	<circle cx="39.5" cy="16" r="2" fill="#BBCBC0" />
+</svg>

@@ -1,5 +1,6 @@
 import {
 	BaseService as MedusaBaseService,
+	PaymentMethodService as MedusaPaymentMethodService,
 	AuthService as MedusaAuthService,
 	BlogService as MedusaBlogService,
 	CategoryService as MedusaCategoryService,
@@ -15,6 +16,7 @@ import {
 import { staticStoreConfig } from './static-store'
 import { blockLitekartRest, serveLitekartRestLocally } from './no-litekart-rest'
 import { localStoreData } from './local-store-data'
+import { withLocalPaymentIcons } from './payment-icons'
 
 // Medusa-only connector: like the vendure connector, @misiki/medusa-connector still calls Litekart
 // REST endpoints (`/api/stores/public-details`, `/api/pages/*`, `/api/menu`,
@@ -186,3 +188,13 @@ export class CategoryService extends MedusaCategoryService {
 }
 
 export const categoryService = new CategoryService()
+
+// The connector points payment icons at `/static/payment/<code>`, which only a Litekart API serves.
+// Repoint them at the copies this storefront ships — see payment-icons.ts.
+export class PaymentMethodService extends MedusaPaymentMethodService {
+	async list(params: Parameters<MedusaPaymentMethodService['list']>[0]): ReturnType<MedusaPaymentMethodService['list']> {
+		return withLocalPaymentIcons(await super.list(params)) as Awaited<ReturnType<MedusaPaymentMethodService['list']>>
+	}
+}
+
+export const paymentMethodService = new PaymentMethodService()
