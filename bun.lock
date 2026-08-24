@@ -9,7 +9,7 @@
         "@lucide/svelte": "^1.8.0",
         "@misiki/kitcommerce-core": "^0.1.33",
         "@misiki/litekart-connector": "^2.0.26",
-        "@misiki/vendure-connector": "^2.0.38",
+        "@misiki/vendure-connector": "^2.0.39",
         "cheerio": "^1.2.0",
         "culori": "^4.0.2",
         "fuse.js": "^7.1.0",
@@ -270,7 +270,7 @@
 
     "@misiki/litekart-connector": ["@misiki/litekart-connector@2.0.29", "", {}, "sha512-ADY5L+hvWpZndbMb5G8rkly25hA5/oCawh+V+EeoViqeAH2sgfhFh21AYjwuC4HG8M01vji3JtJu7OVE2Shr4g=="],
 
-    "@misiki/vendure-connector": ["@misiki/vendure-connector@2.0.38", "", {}, "sha512-1wzdypLn/WhDB27hk3fUXMBjASyPf5Wv/er2Erhe52NuEzJtAcRL5pFfroAWEjTgutJ8QbYoh4GNW1lnkhg7Ew=="],
+    "@misiki/vendure-connector": ["@misiki/vendure-connector@2.0.39", "", {}, "sha512-3LcCpCcxqfsnAzFH7ElBva1BQLwOcJik9Q7YMiiWTEv4O0zY76ef5a/VFjOfImSuyOU/yCv5rse8vbDjnahwwA=="],
 
     "@nodelib/fs.scandir": ["@nodelib/fs.scandir@2.1.5", "", { "dependencies": { "@nodelib/fs.stat": "2.0.5", "run-parallel": "^1.1.9" } }, "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="],
 

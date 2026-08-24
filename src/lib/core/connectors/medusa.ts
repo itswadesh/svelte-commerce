@@ -14,7 +14,7 @@ import {
 	UserService as MedusaUserService
 } from '@misiki/medusa-connector'
 import { staticStoreConfig } from './static-store'
-import { blockLitekartRest, serveLitekartRestLocally } from './no-litekart-rest'
+import { blockRestFallbacks, serveRestLocally } from './rest-guard'
 import { localStoreData } from './local-store-data'
 import { withLocalPaymentIcons } from './payment-icons'
 
@@ -32,10 +32,10 @@ export const connectorName = 'medusa'
 
 // Nothing in Medusa mode may fall through to a Litekart REST path: that API is not installed and
 // not running. Reads return empty, writes fail loudly, and each unimplemented path is reported
-// once — see no-litekart-rest.ts.
+// once — see rest-guard.ts.
 // Local data first — menus, countries, currencies, plugin toggles — then the guard.
-serveLitekartRestLocally(localStoreData)
-blockLitekartRest(MedusaBaseService, 'medusa')
+serveRestLocally(localStoreData)
+blockRestFallbacks(MedusaBaseService, 'medusa')
 
 // Store identity overrides (name, logo, currency, menus, plugins…) belong in
 // kitcommerce.config.ts's default export — see staticStoreConfig.

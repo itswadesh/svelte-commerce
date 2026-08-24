@@ -21,18 +21,18 @@ type RestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete'
  * which is the only place that can reach the storefront's own config. Return `undefined` to fall
  * through to the empty/throw behaviour below.
  */
-export type LocalResolver = (url: string) => Promise<unknown> | unknown | undefined
+export type RestResolver = (url: string) => Promise<unknown> | unknown | undefined
 
-let localResolver: LocalResolver | undefined
+let localResolver: RestResolver | undefined
 
-export const serveLitekartRestLocally = (resolver: LocalResolver) => {
+export const serveRestLocally = (resolver: RestResolver) => {
 	localResolver = resolver
 }
 
 const READ_METHODS: RestMethod[] = ['get']
 const WRITE_METHODS: RestMethod[] = ['post', 'put', 'patch', 'delete']
 
-const LITEKART_REST = /^\/api\//
+const REST_PATH = /^\/api\//
 
 // The shape most list call sites destructure.
 const emptyResult = () => ({ data: [], count: 0, pageSize: 0, noOfPage: 0, page: 1 })
@@ -72,7 +72,7 @@ const report = (connector: string, method: RestMethod, url: string) => {
 	if (reported.has(key)) return
 	reported.add(key)
 	console.warn(
-		`[${connector}] no native implementation for \`${key}\` — this is a Litekart REST path and was not called. ` +
+		`[${connector}] no native implementation for \`${key}\` — this path belongs to the storefront's REST API and was not called. ` +
 			`Add an override in src/lib/core/connectors/${connector}.ts if ${connector} can serve it.`
 	)
 }
@@ -89,7 +89,7 @@ type Patchable = { prototype: object }
  * would tell the shopper their review, enquiry or upload was saved when nothing left the browser.
  * Call once per override module, passing the connector's own BaseService.
  */
-export const blockLitekartRest = (BaseService: Patchable, connectorName: string) => {
+export const blockRestFallbacks = (BaseService: Patchable, connectorName: string) => {
 	const proto = BaseService.prototype as Record<string, any>
 	if (proto.__litekartRestBlocked) return
 	proto.__litekartRestBlocked = true
@@ -98,7 +98,7 @@ export const blockLitekartRest = (BaseService: Patchable, connectorName: string)
 		const original = proto[method] as (this: unknown, url: string, ...rest: unknown[]) => Promise<unknown>
 		if (typeof original !== 'function') continue
 		proto[method] = async function (this: unknown, url: string, ...rest: unknown[]) {
-			if (typeof url === 'string' && LITEKART_REST.test(url)) {
+			if (typeof url === 'string' && REST_PATH.test(url)) {
 				// Local first: the storefront ships static data for several of these (menus, countries,
 				// currencies, plugin toggles…), and serving it beats answering empty just because the
 				// backend has no endpoint of its own.
@@ -119,7 +119,7 @@ export const blockLitekartRest = (BaseService: Patchable, connectorName: string)
 		const original = proto[method] as (this: unknown, url: string, ...rest: unknown[]) => Promise<unknown>
 		if (typeof original !== 'function') continue
 		proto[method] = function (this: unknown, url: string, ...rest: unknown[]) {
-			if (typeof url === 'string' && LITEKART_REST.test(url)) {
+			if (typeof url === 'string' && REST_PATH.test(url)) {
 				report(connectorName, method, url)
 				return Promise.reject(new Error(`This feature is not available on this store (${connectorName}).`))
 			}

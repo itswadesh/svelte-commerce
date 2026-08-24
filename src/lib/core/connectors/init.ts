@@ -4,6 +4,8 @@ import { env } from '$env/dynamic/public'
 // client init silently failed and setBaseUrl never ran (worked locally only because the default
 // base URL matched). The config module is in the client bundle anyway via the services shim.
 import { services } from 'kitcommerce.config'
+import { staticStoreConfig } from './static-store'
+import { localStoreData } from './local-store-data'
 
 // Loose view of whatever connector kitcommerce.config.ts exports. The static type follows the
 // active connector, so env-driven setup reads it through this shape instead. `connectorName` is
@@ -14,9 +16,24 @@ type ActiveServices = {
 	connectorName?: string
 	BaseService?: Record<string, string | undefined>
 	storeService?: { setBaseUrl?: (url: string) => unknown }
+	/** Connectors that can take this storefront's store record instead of asking a Litekart API. */
+	setStaticStore?: (provider: typeof staticStoreConfig) => void
+	/** Connectors that guard their own legacy REST paths and can consult local data first. */
+	serveRestLocally?: (resolver: typeof localStoreData) => void
+	/** The pre-rename name, still exported by connectors published before it. */
+	serveLitekartRestLocally?: (resolver: typeof localStoreData) => void
 }
 
 const active = services as unknown as ActiveServices
+
+// Registered here rather than per backend: every connector that accepts these gets them, and one
+// that predates them is simply left alone. Store identity (name, logo, currency, menus, plugin
+// toggles, theme variables) has no equivalent on Medusa, Saleor, Shopify, WooCommerce or Vendure —
+// it comes from default-store.json merged under the kitcommerce.config.ts default export. The
+// resolver answers the handful of Litekart REST paths this storefront can serve from that same
+// record. Litekart itself is unaffected: its connector reads neither.
+active.setStaticStore?.(staticStoreConfig)
+;(active.serveRestLocally ?? active.serveLitekartRestLocally)?.(localStoreData)
 
 // Naming the fix matters: the usual cause is a config pointed at the raw connector package
 // (`@misiki/<connector>-connector`) rather than the override module, which is what carries the
