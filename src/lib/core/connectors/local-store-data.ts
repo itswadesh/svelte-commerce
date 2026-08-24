@@ -1,5 +1,5 @@
 import { staticStoreConfig } from './static-store'
-import type { LocalResolver } from './no-litekart-rest'
+import type { RestResolver } from './rest-guard'
 
 // The storefront ships static data for a handful of things a non-Litekart backend has no endpoint
 // for — menus, the country list the address form offers, currencies, plugin toggles, the payment and
@@ -8,7 +8,7 @@ import type { LocalResolver } from './no-litekart-rest'
 // overrides instead of returning nothing: the data is right here, and an empty country dropdown or a
 // missing menu is a worse answer than the one we already hold.
 //
-// Anything not listed falls through to the empty/throw behaviour in no-litekart-rest.ts.
+// Anything not listed falls through to the empty/throw behaviour in rest-guard.ts.
 
 const listShape = (data: unknown[]) => ({
 	data,
@@ -36,7 +36,7 @@ const LOCAL_SOURCES: Array<{ prefix: string; from: (store: Record<string, any>) 
 	{ prefix: '/api/shipping-zones', from: (store) => listShape(store.shippingZones ?? []) }
 ]
 
-export const localStoreData: LocalResolver = async (url: string) => {
+export const localStoreData: RestResolver = async (url: string) => {
 	const path = url.split('?')[0]
 	const source = LOCAL_SOURCES.find((entry) => path.startsWith(entry.prefix))
 	if (!source) return undefined

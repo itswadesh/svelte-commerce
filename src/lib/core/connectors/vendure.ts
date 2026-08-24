@@ -1,6 +1,6 @@
 import * as vendure from '@misiki/vendure-connector'
 import { staticStoreConfig } from './static-store'
-import { blockLitekartRest, serveLitekartRestLocally } from './no-litekart-rest'
+import { blockRestFallbacks, serveRestLocally } from './rest-guard'
 import { localStoreData } from './local-store-data'
 
 // Vendure-only connector. Everything the backend itself can answer for — orders, the customer guard,
@@ -24,6 +24,6 @@ export const connectorName = 'vendure'
 
 // Local data first — countries, currencies, plugin toggles, the rest of the store record — then the
 // net: nothing in Vendure mode may fall through to a Litekart REST path, because that API is neither
-// installed nor running. See no-litekart-rest.ts.
-serveLitekartRestLocally(localStoreData)
-blockLitekartRest(vendure.BaseService, 'vendure')
+// installed nor running. See rest-guard.ts.
+serveRestLocally(localStoreData)
+blockRestFallbacks(vendure.BaseService, 'vendure')

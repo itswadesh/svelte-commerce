@@ -13,7 +13,7 @@ import {
 	UserService as SaleorUserService
 } from '@misiki/saleor-connector'
 import { staticStoreConfig } from './static-store'
-import { blockLitekartRest, serveLitekartRestLocally } from './no-litekart-rest'
+import { blockRestFallbacks, serveRestLocally } from './rest-guard'
 import { localStoreData } from './local-store-data'
 
 // Saleor-only connector: like the vendure connector, @misiki/saleor-connector still calls Litekart
@@ -31,10 +31,10 @@ export const connectorName = 'saleor'
 
 // Nothing in Saleor mode may fall through to a Litekart REST path: that API is not installed and
 // not running. Reads return empty, writes fail loudly, and each unimplemented path is reported
-// once — see no-litekart-rest.ts.
+// once — see rest-guard.ts.
 // Local data first — menus, countries, currencies, plugin toggles — then the guard.
-serveLitekartRestLocally(localStoreData)
-blockLitekartRest(SaleorBaseService, 'saleor')
+serveRestLocally(localStoreData)
+blockRestFallbacks(SaleorBaseService, 'saleor')
 
 // Store identity overrides (name, logo, currency, menus, plugins…) belong in
 // kitcommerce.config.ts's default export — see staticStoreConfig.
