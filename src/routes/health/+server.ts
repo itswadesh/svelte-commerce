@@ -1,5 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit'
 import { env } from '$env/dynamic/public'
+import { requiredEnvFor } from '$lib/core/connectors/init'
 
 // Readiness probe for the container orchestrator. It answers "is this process up AND configured
 // well enough to serve?" — NOT "is the backend healthy?". It deliberately does NOT call the upstream
@@ -12,22 +13,16 @@ import { env } from '$env/dynamic/public'
 // rollout routes traffic to it, and it replaces a working container with one that fails every page.
 // Failing here makes that deploy roll back instead.
 //
-// Which env is required depends on the active connector (kitcommerce.config.ts). Every module in
-// src/lib/core/connectors exports a `connectorName` marker; a config pointed straight at a raw
-// connector package has none, and falls back to the Litekart trio.
-const LITEKART_REQUIRED_ENV = ['PUBLIC_LITEKART_API_URL', 'PUBLIC_LITEKART_STORE_ID', 'PUBLIC_LITEKART_DOMAIN'] as const
-const CONNECTOR_REQUIRED_ENV: Record<string, readonly string[]> = {
-	litekart: LITEKART_REQUIRED_ENV,
-	vendure: ['PUBLIC_VENDURE_API_URL'],
-	medusa: ['PUBLIC_MEDUSA_API_URL'],
-	saleor: ['PUBLIC_SALEOR_API_URL']
-}
+// Which env is required depends on the active connector (kitcommerce.config.ts). Every connector
+// package exports a `connectorName` marker naming its row in the CONNECTORS table that
+// `src/lib/core/connectors/init.ts` also boots from — one list, so a backend can never be ready
+// here and unconfigured there. A config naming something that table has no row for falls back to
+// the Litekart trio.
 
 export const GET: RequestHandler = async () => {
 	const { services } = await import('kitcommerce.config')
 	const connectorName = (services as { connectorName?: string }).connectorName
-	const required = (connectorName && CONNECTOR_REQUIRED_ENV[connectorName]) || LITEKART_REQUIRED_ENV
-	const missing = required.filter((key) => !env[key as `PUBLIC_${string}`])
+	const missing = requiredEnvFor(connectorName).filter((key) => !env[key as `PUBLIC_${string}`])
 	if (missing.length > 0) {
 		return new Response(`misconfigured: missing required env ${missing.join(', ')}`, {
 			status: 503,

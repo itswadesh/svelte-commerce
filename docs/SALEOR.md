@@ -109,19 +109,19 @@ connector a local resolver for the REST paths this repo can serve, and keeps a p
 (`blockRestFallbacks`) in case a service still reaches for one. The behaviour below is the
 connector's:
 
-| Service              | Behaviour in Saleor mode                                                    |
-| -------------------- | --------------------------------------------------------------------------- |
-| `StoreService`       | Returns the static store config (defaults + `kitcommerce.config.ts` export). That config defaults `isEmailMandatory` to true — `checkoutComplete` requires an email on the checkout |
-| `PageService`        | Connector-native static dummy pages; unknown ids resolve to empty           |
-| `MenuService`        | Serves header/footer menus from the static store config (`menu` array)      |
-| `MeilisearchService` | Autocomplete returns empty suggestions — no Litekart Meilisearch proxy      |
-| `ProfileService`     | Delegates to Saleor-native `me` / `accountUpdate` (profile page)            |
-| `BlogService`        | Empty lists — no CMS backend (blog routes render their empty state)         |
-| `WishlistService`    | Empty state; toggling shows "Wishlist is not available on this store"       |
-| `CouponService`      | Empty coupon list (the cart's coupon drawer shows none)                     |
-| `CategoryService`    | `get('/api/categories/all')` → Saleor categories (`fetchAllCategories`)      |
-| everything else Litekart-REST | Never requested: collection reads resolve empty, single-record reads and writes throw — see the connector's `rest-guard.ts` |
-| everything else      | Unchanged: Saleor GraphQL via `PUBLIC_SALEOR_API_URL`                       |
+| Service                       | Behaviour in Saleor mode                                                                                                                                                            |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `StoreService`                | Returns the static store config (defaults + `kitcommerce.config.ts` export). That config defaults `isEmailMandatory` to true — `checkoutComplete` requires an email on the checkout |
+| `PageService`                 | Connector-native static dummy pages; unknown ids resolve to empty                                                                                                                   |
+| `MenuService`                 | Serves header/footer menus from the static store config (`menu` array)                                                                                                              |
+| `MeilisearchService`          | Autocomplete returns empty suggestions — no Litekart Meilisearch proxy                                                                                                              |
+| `ProfileService`              | Delegates to Saleor-native `me` / `accountUpdate` (profile page)                                                                                                                    |
+| `BlogService`                 | Empty lists — no CMS backend (blog routes render their empty state)                                                                                                                 |
+| `WishlistService`             | Empty state; toggling shows "Wishlist is not available on this store"                                                                                                               |
+| `CouponService`               | Empty coupon list (the cart's coupon drawer shows none)                                                                                                                             |
+| `CategoryService`             | `get('/api/categories/all')` → Saleor categories (`fetchAllCategories`)                                                                                                             |
+| everything else Litekart-REST | Never requested: collection reads resolve empty, single-record reads and writes throw — see the connector's `rest-guard.ts`                                                         |
+| everything else               | Unchanged: Saleor GraphQL via `PUBLIC_SALEOR_API_URL`                                                                                                                               |
 
 The Conversational Shopping assistant (`/api/commerce-assistant/*`) is Litekart-only; its widget
 detects the active connector and stays hidden in Saleor mode without firing requests.
