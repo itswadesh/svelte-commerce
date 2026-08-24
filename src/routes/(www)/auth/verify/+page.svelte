@@ -9,17 +9,25 @@
 	import { goto } from '$app/navigation'
 
   let status = $state<"loading" | "success" | "failed">("loading")
+  let failureReason = $state('')
   const userState = getUserState()
 
   onMount(async () => {
 	  try {
       status = "loading"
-	  	const email = page.url.searchParams.get('email')
+	  	// Only the token is required. Litekart's verification links carry the address too, but
+	  	// Vendure's carry `?token=` alone (its `verifyCustomerAccount` mutation takes just the token),
+	  	// and demanding an email here rejected every Vendure link before it reached the backend.
+	  	const email = page.url.searchParams.get('email') ?? ''
 	  	const token = page.url.searchParams.get('token')
-	  	if (!email || !token) {
-	  		throw Error('Invalid email or token')
+	  	if (!token) {
+	  		throw Error('This link is missing its verification token.')
 	  	}
-	  	await authService.verifyEmail(email, token)
+	  	const result = (await authService.verifyEmail(email, token)) as { errorCode?: string; message?: string } | undefined
+	  	// Vendure answers a bad or expired token with an ErrorResult rather than throwing.
+	  	if (result?.errorCode) {
+	  		throw Error(result.message || 'This verification link is no longer valid.')
+	  	}
       if (!userState.user?.role) {
         const { me } = userState.retrieveUserId()
 			  if (me?.userId) {
@@ -31,6 +39,7 @@
       status = "success"
 	  } catch (e) {
       console.error(e)
+      failureReason = e instanceof Error ? e.message : ''
       status = "failed"
 	  }
   })
@@ -74,7 +83,7 @@
 
 			<div class="space-y-4">
 				<h1 class="text-2xl font-bold text-gray-900 md:text-3xl">Email Verification Failed!</h1>
-				<p class="text-gray-600">The link you clicked is invalid or expired. Please try again.</p>
+				<p class="text-gray-600">{failureReason || 'The link you clicked is invalid or expired. Please try again.'}</p>
 			</div>
 
 			<div class="pt-4">

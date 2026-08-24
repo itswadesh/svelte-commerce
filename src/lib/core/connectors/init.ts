@@ -18,8 +18,14 @@ type ActiveServices = {
 
 const active = services as unknown as ActiveServices
 
+// Naming the fix matters: the usual cause is a config pointed at the raw connector package
+// (`@misiki/<connector>-connector`) rather than the override module, which is what carries the
+// `connectorName` marker this check reads — see docs/<CONNECTOR>.md, step 2.
 const wrongConnector = (envName: string, connector: string) =>
-	new Error(`${envName} is set but the ${connector} connector is not active in kitcommerce.config.ts`)
+	new Error(
+		`${envName} is set but the ${connector} connector is not active in kitcommerce.config.ts — ` +
+			`point it at './src/lib/core/connectors/${connector}'`
+	)
 
 // The mirror of wrongConnector. These three connectors reach their backend only through the base
 // URL applied below, and an unset env var used to be silent: `_baseUrl` stayed empty, every call
