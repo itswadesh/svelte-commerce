@@ -21,12 +21,7 @@ type ActiveServices = {
 		/** The shared hook: 21 of these connectors take their whole config through it. */
 		setCredentials?: (creds: Record<string, string>) => void
 		/** Shopify's equivalent — positional, and keyed on a store domain rather than a URL. */
-		setShopifyCredentials?: (
-			storeDomain: string,
-			accessToken: string,
-			storefrontAccessToken?: string,
-			proxyUrl?: string
-		) => void
+		setShopifyCredentials?: (storeDomain: string, accessToken: string, storefrontAccessToken?: string, proxyUrl?: string) => void
 		[key: string]: unknown
 	}
 	storeService?: { setBaseUrl?: (url: string) => unknown }
@@ -85,9 +80,9 @@ type Backend = {
 	/** Hands the PUBLIC_ env over to whatever this connector exposes for it. */
 	apply?: () => void
 	/**
-	 * The module under this directory that `kitcommerce.config.ts` should name, for the four
-	 * backends that have one. Everything else is selected by its package directly, so the error
-	 * messages below quote whichever is right for that backend.
+	 * The module under this directory that `kitcommerce.config.ts` names to select this backend.
+	 * Every backend has one, so the switch is always one path under src/lib/core/connectors and
+	 * never a connector package by name — which is what keeps app code free of both.
 	 */
 	module?: string
 }
@@ -96,8 +91,8 @@ type Backend = {
 // things that used to be spelled out separately per connector: which env a deployment must set,
 // how that env reaches the connector, and (via `/health`) what a readiness probe checks.
 //
-// Adding a backend is one row. The connector package supplies everything else — `connectorName`,
-// `setStaticStore`, `serveRestLocally` — so no module under this directory is required for it.
+// Adding a backend is one row here plus its module next to this file. The connector package
+// supplies the rest — `connectorName`, `setStaticStore`, `serveRestLocally`.
 export const CONNECTORS: Record<string, Backend> = {
 	// Litekart is the REST API the others merely inherit paths from, so it takes no base URL here:
 	// its connector reads the trio itself, and its `/api/*` calls must never be intercepted.
@@ -137,6 +132,7 @@ export const CONNECTORS: Record<string, Backend> = {
 	// Shopify is keyed on a store domain, not a URL, and takes its tokens positionally.
 	shopify: {
 		required: ['PUBLIC_SHOPIFY_API_URL'],
+		module: 'shopify',
 		apply: () => {
 			const url = read('PUBLIC_SHOPIFY_API_URL')
 			if (!url) return
@@ -153,62 +149,59 @@ export const CONNECTORS: Record<string, Backend> = {
 
 	// The rest share `BaseService.setCredentials`. The second argument lists the extra keys that
 	// connector's own `Credentials` adds beyond SHARED_CREDENTIALS.
-	bagisto: { required: ['PUBLIC_BAGISTO_API_URL'], apply: credentials('PUBLIC_BAGISTO', ['locale', 'currency']) },
-	broadleaf: { required: ['PUBLIC_BROADLEAF_API_URL'], apply: credentials('PUBLIC_BROADLEAF') },
+	bagisto: { required: ['PUBLIC_BAGISTO_API_URL'], module: 'bagisto', apply: credentials('PUBLIC_BAGISTO', ['locale', 'currency']) },
+	broadleaf: { required: ['PUBLIC_BROADLEAF_API_URL'], module: 'broadleaf', apply: credentials('PUBLIC_BROADLEAF') },
 	commercetools: {
 		required: ['PUBLIC_COMMERCETOOLS_API_URL'],
-		apply: credentials('PUBLIC_COMMERCETOOLS', [
-			'region',
-			'projectKey',
-			'authUrl',
-			'scope',
-			'locale',
-			'currency',
-			'country'
-		])
+		module: 'commercetools',
+		apply: credentials('PUBLIC_COMMERCETOOLS', ['region', 'projectKey', 'authUrl', 'scope', 'locale', 'currency', 'country'])
 	},
-	'cs-cart': { required: ['PUBLIC_CS_CART_API_URL'], apply: credentials('PUBLIC_CS_CART') },
-	evershop: { required: ['PUBLIC_EVERSHOP_API_URL'], apply: credentials('PUBLIC_EVERSHOP') },
-	magento: { required: ['PUBLIC_MAGENTO_API_URL'], apply: credentials('PUBLIC_MAGENTO') },
-	nopcommerce: { required: ['PUBLIC_NOPCOMMERCE_API_URL'], apply: credentials('PUBLIC_NOPCOMMERCE') },
-	opencart: { required: ['PUBLIC_OPENCART_API_URL'], apply: credentials('PUBLIC_OPENCART') },
+	'cs-cart': { required: ['PUBLIC_CS_CART_API_URL'], module: 'cs-cart', apply: credentials('PUBLIC_CS_CART') },
+	evershop: { required: ['PUBLIC_EVERSHOP_API_URL'], module: 'evershop', apply: credentials('PUBLIC_EVERSHOP') },
+	magento: { required: ['PUBLIC_MAGENTO_API_URL'], module: 'magento', apply: credentials('PUBLIC_MAGENTO') },
+	nopcommerce: { required: ['PUBLIC_NOPCOMMERCE_API_URL'], module: 'nopcommerce', apply: credentials('PUBLIC_NOPCOMMERCE') },
+	opencart: { required: ['PUBLIC_OPENCART_API_URL'], module: 'opencart', apply: credentials('PUBLIC_OPENCART') },
 	orocommerce: {
 		required: ['PUBLIC_OROCOMMERCE_API_URL'],
+		module: 'orocommerce',
 		apply: credentials('PUBLIC_OROCOMMERCE', ['localizationId', 'currency', 'productIdMode'])
 	},
 	// The package is `oscar-connector`, but the env and docs say DJANGO_OSCAR — it is Django Oscar.
-	oscar: { required: ['PUBLIC_DJANGO_OSCAR_API_URL'], apply: credentials('PUBLIC_DJANGO_OSCAR') },
+	oscar: { required: ['PUBLIC_DJANGO_OSCAR_API_URL'], module: 'oscar', apply: credentials('PUBLIC_DJANGO_OSCAR') },
 	prestashop: {
 		required: ['PUBLIC_PRESTASHOP_API_URL'],
+		module: 'prestashop',
 		apply: credentials('PUBLIC_PRESTASHOP', ['languageId', 'shopId', 'shopGroupId'])
 	},
 	sharetribe: {
 		required: ['PUBLIC_SHARETRIBE_API_URL'],
+		module: 'sharetribe',
 		apply: credentials('PUBLIC_SHARETRIBE', ['clientId', 'assetUrl'])
 	},
-	shopware: { required: ['PUBLIC_SHOPWARE_API_URL'], apply: credentials('PUBLIC_SHOPWARE') },
-	shuup: { required: ['PUBLIC_SHUUP_API_URL'], apply: credentials('PUBLIC_SHUUP') },
-	spree: { required: ['PUBLIC_SPREE_API_URL'], apply: credentials('PUBLIC_SPREE') },
+	shopware: { required: ['PUBLIC_SHOPWARE_API_URL'], module: 'shopware', apply: credentials('PUBLIC_SHOPWARE') },
+	shuup: { required: ['PUBLIC_SHUUP_API_URL'], module: 'shuup', apply: credentials('PUBLIC_SHUUP') },
+	spree: { required: ['PUBLIC_SPREE_API_URL'], module: 'spree', apply: credentials('PUBLIC_SPREE') },
 	spryker: {
 		required: ['PUBLIC_SPRYKER_API_URL'],
+		module: 'spryker',
 		apply: credentials('PUBLIC_SPRYKER', ['locale', 'anonymousCustomerId', 'navigationKey'])
 	},
-	swell: { required: ['PUBLIC_SWELL_API_URL'], apply: credentials('PUBLIC_SWELL') },
-	sylius: { required: ['PUBLIC_SYLIUS_API_URL'], apply: credentials('PUBLIC_SYLIUS', ['localeCode']) },
+	swell: { required: ['PUBLIC_SWELL_API_URL'], module: 'swell', apply: credentials('PUBLIC_SWELL') },
+	sylius: { required: ['PUBLIC_SYLIUS_API_URL'], module: 'sylius', apply: credentials('PUBLIC_SYLIUS', ['localeCode']) },
 	virto: {
 		required: ['PUBLIC_VIRTO_COMMERCE_API_URL'],
+		module: 'virto',
 		apply: credentials('PUBLIC_VIRTO_COMMERCE', ['cultureName', 'currencyCode', 'catalogId'])
 	},
-	woocommerce: { required: ['PUBLIC_WOOCOMMERCE_API_URL'], apply: credentials('PUBLIC_WOOCOMMERCE') },
-	'x-cart': { required: ['PUBLIC_X_CART_API_URL'], apply: credentials('PUBLIC_X_CART') }
+	woocommerce: { required: ['PUBLIC_WOOCOMMERCE_API_URL'], module: 'woocommerce', apply: credentials('PUBLIC_WOOCOMMERCE') },
+	'x-cart': { required: ['PUBLIC_X_CART_API_URL'], module: 'x-cart', apply: credentials('PUBLIC_X_CART') }
 }
 
 /** What a deployment must set when the config names no connector we recognise. */
 export const FALLBACK_REQUIRED_ENV = CONNECTORS.litekart.required
 
 /** The env `/health` and `initActiveConnector` both check, for whichever backend is active. */
-export const requiredEnvFor = (connectorName: string | undefined) =>
-	(connectorName && CONNECTORS[connectorName]?.required) || FALLBACK_REQUIRED_ENV
+export const requiredEnvFor = (connectorName: string | undefined) => (connectorName && CONNECTORS[connectorName]?.required) || FALLBACK_REQUIRED_ENV
 
 // Naming the fix matters: the usual cause is a config that still names another backend, which is
 // what carries the `connectorName` marker this check reads — see docs/<CONNECTOR>.md, step 2.
@@ -216,9 +209,7 @@ const wrongConnector = (envName: string, connector: string) => {
 	const target = CONNECTORS[connector]?.module
 	return new Error(
 		`${envName} is set but the ${connector} connector is not active in kitcommerce.config.ts — ` +
-			(target
-				? `point it at './src/lib/core/connectors/${target}'`
-				: `point it at '@misiki/${connector}-connector'`)
+			(target ? `point it at './src/lib/core/connectors/${target}'` : `point it at '@misiki/${connector}-connector'`)
 	)
 }
 

@@ -35,10 +35,11 @@ Targeting this platform required choosing which API generation to wire against.
    npm i @misiki/virto-connector
    ```
 
-2. Point `kitcommerce.config.ts` at it:
+2. Point `kitcommerce.config.ts` at this backend's module — not at the package, so app code
+   never names a connector:
 
    ```ts
-   export * as services from '@misiki/virto-connector'
+   export * as services from './src/lib/core/connectors/virto'
    ```
 
 3. Give the connector its base URL in `.env`:
@@ -56,17 +57,15 @@ Targeting this platform required choosing which API generation to wire against.
    `PUBLIC_VIRTO_COMMERCE_API_KEY`, `PUBLIC_VIRTO_COMMERCE_API_SECRET`, `PUBLIC_VIRTO_COMMERCE_ACCESS_TOKEN`, `PUBLIC_VIRTO_COMMERCE_ACCESS_KEY`, `PUBLIC_VIRTO_COMMERCE_STORE_ID`, `PUBLIC_VIRTO_COMMERCE_CHANNEL_ID`, `PUBLIC_VIRTO_COMMERCE_CULTURE_NAME`, `PUBLIC_VIRTO_COMMERCE_CURRENCY_CODE`, `PUBLIC_VIRTO_COMMERCE_CATALOG_ID`. Unset ones are not passed, so they never overwrite a value the connector already
    holds.
 
-4. You do not need an override module. `@misiki/virto-connector` carries its own
-   `setStaticStore`, `serveRestLocally` and `connectorName`, and
-   `src/lib/core/connectors/init.ts` registers the first two on whatever connector is active. So
-   store identity resolves from your config rather than `/api/stores/public-details`, and any
-   Litekart REST path the connector still inherits is answered from local data or resolved empty
-   instead of being requested — see the connector's own `rest-guard.ts`. Point
-   `kitcommerce.config.ts` straight at the package, as in step 2.
+4. What that module does. `@misiki/virto-connector` already carries its own `setStaticStore`,
+   `serveRestLocally` and `connectorName`, and `src/lib/core/connectors/init.ts` registers the
+   first two on whatever connector is active. So store identity resolves from your config rather
+   than `/api/stores/public-details`, and any Litekart REST path the connector still inherits is
+   answered from local data or resolved empty instead of being requested.
 
-   A module under `src/lib/core/connectors/` is worth adding only to override a service the
-   connector already implements. `src/lib/core/connectors/vendure.ts` is the smallest example of
-   one.
+   `src/lib/core/connectors/virto.ts` is thin on purpose: it re-exports the package, exports the
+   `connectorName` marker, and registers those two hooks at module load. Override a service here
+   only when you want to change what the connector already does.
 
 ## Store identity
 

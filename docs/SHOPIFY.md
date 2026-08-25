@@ -35,10 +35,11 @@ Scored out of 27 rather than 43: several storefront services have no equivalent 
    npm i @misiki/shopify-connector
    ```
 
-2. Point `kitcommerce.config.ts` at it:
+2. Point `kitcommerce.config.ts` at this backend's module — not at the package, so app code
+   never names a connector:
 
    ```ts
-   export * as services from '@misiki/shopify-connector'
+   export * as services from './src/lib/core/connectors/shopify'
    ```
 
 3. Give the connector its store and tokens in `.env`:
@@ -55,17 +56,15 @@ Scored out of 27 rather than 43: several storefront services have no equivalent 
    `https://` you include before handing it to `setShopifyCredentials`.
    `PUBLIC_SHOPIFY_PROXY_URL` is read too, for stores fronted by a proxy.
 
-4. You do not need an override module. `@misiki/shopify-connector` carries its own
-   `setStaticStore`, `serveRestLocally` and `connectorName`, and
-   `src/lib/core/connectors/init.ts` registers the first two on whatever connector is active. So
-   store identity resolves from your config rather than `/api/stores/public-details`, and any
-   Litekart REST path the connector still inherits is answered from local data or resolved empty
-   instead of being requested — see the connector's own `rest-guard.ts`. Point
-   `kitcommerce.config.ts` straight at the package, as in step 2.
+4. What that module does. `@misiki/shopify-connector` already carries its own `setStaticStore`,
+   `serveRestLocally` and `connectorName`, and `src/lib/core/connectors/init.ts` registers the
+   first two on whatever connector is active. So store identity resolves from your config rather
+   than `/api/stores/public-details`, and any Litekart REST path the connector still inherits is
+   answered from local data or resolved empty instead of being requested.
 
-   A module under `src/lib/core/connectors/` is worth adding only to override a service the
-   connector already implements. `src/lib/core/connectors/vendure.ts` is the smallest example of
-   one.
+   `src/lib/core/connectors/shopify.ts` is thin on purpose: it re-exports the package, exports the
+   `connectorName` marker, and registers those two hooks at module load. Override a service here
+   only when you want to change what the connector already does.
 
 ## Store identity
 
