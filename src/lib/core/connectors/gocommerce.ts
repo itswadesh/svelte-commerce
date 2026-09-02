@@ -1,12 +1,13 @@
-import { BaseService, clearPhantomSession, hasPhantomSession, setStaticStore } from '@misiki/gocommerce-connector'
+import { BaseService, clearPhantomSessionIfUnavailable, setStaticStore } from '@misiki/gocommerce-connector'
 import { staticStoreConfig } from './static-store'
 import { blockRestFallbacks, serveRestLocally } from './rest-guard'
 import { localStoreData } from './local-store-data'
 
 // GoCommerce-only connector. Everything the backend can answer for — catalogue, cart, guest
-// checkout, orders — and honest empty states for what GoCommerce deliberately does not have live in
-// @misiki/gocommerce-connector, written against the server's own OpenAPI document. What remains in
-// this file is what only the storefront can answer.
+// checkout, orders, and shopper accounts when the store installs the `identity` module — and honest
+// empty states for what GoCommerce deliberately does not have live in @misiki/gocommerce-connector
+// (>= 0.2.0), written against the server's own OpenAPI document. What remains in this file is what
+// only the storefront can answer.
 export * from '@misiki/gocommerce-connector'
 
 // Lets the hooks `init` verify the selected connector matches the PUBLIC_GOCOMMERCE_* env.
@@ -20,7 +21,7 @@ export const connectorName = 'gocommerce'
 // The toggles for features GoCommerce cannot perform are forced off when the record is read, not
 // here — `init.ts` re-registers this provider at boot for whatever connector is active, so anything
 // wrapped around it at module load is replaced. See `IMPOSSIBLE_FEATURES` in the connector's
-// static-store module.
+// static-store module. `accounts` is forced off only when the store has no identity module.
 setStaticStore(staticStoreConfig)
 
 // Local data first — countries, currencies, plugin toggles, the rest of the store record — then the
@@ -31,9 +32,10 @@ setStaticStore(staticStoreConfig)
 serveRestLocally(localStoreData)
 blockRestFallbacks(BaseService, 'gocommerce')
 
-// GoCommerce has no accounts, so `connect.sid` / `me` in this browser can only be left over from
-// running this storefront against a backend that does. The shared user store reads those cookies
-// directly to decide who is signed in, and believing it here is not a cosmetic problem: it makes
-// the checkout take the saved-address path instead of the guest one, against a store that has no
-// address book. Drop them once, at load, before anything reads them.
-if (hasPhantomSession()) clearPhantomSession()
+// On a store without the identity module, `connect.sid` / `me` in this browser can only be left over
+// from running this storefront against a backend that has accounts. The shared user store reads
+// those cookies directly to decide who is signed in, and believing it here is not a cosmetic
+// problem: it makes the checkout take the saved-address path instead of the guest one, against a
+// store that has no address book. With the module installed the pair is a real session and stays.
+// The connector asks the store which it is (one probe, remembered) and drops them only if it must.
+void clearPhantomSessionIfUnavailable()

@@ -9,9 +9,11 @@ GoCommerce differs from every other backend here in three ways that shape the wh
 
 - **The connector is `@misiki/gocommerce-connector`**, written against the server's own OpenAPI
   document (`GET /doc` on a running store).
-- **Guest checkout is permanent.** There are no shopper accounts by design — "a shopper needs a
-  cart token and an email, never an account". Everything account-shaped is unavailable, and that is
-  the product's intent rather than a gap in the connector.
+- **Guest checkout is permanent.** GoCommerce's core has no shopper accounts by design — "a shopper
+  needs a cart token and an email, never an account". Accounts are available when the store installs
+  the optional `identity` module (`identity.New(...)` in the store's `main()`); the connector detects
+  it and lights up sign-in, profile, saved addresses and order history. Without it, everything
+  account-shaped is unavailable, and that is the product's intent rather than a gap in the connector.
 - **The browser cannot call the API directly.** GoCommerce sends no CORS headers and answers a
   preflight with `405`, so browser-side calls are forwarded through this storefront's own origin.
   See [The proxy](#the-proxy).
@@ -119,13 +121,13 @@ requirement, it only moves the failure to the payment step.
 ### Feature toggles this connector forces off
 
 The storefront decides which features to show from `plugins.*.active` — it is how the search icon
-and the wishlist button already hide themselves. GoCommerce has no accounts, no discount engine, no
-wishlist, no reviews and one vendor, so the connector forces these off
-over whatever `kitcommerce.config.ts` says:
+and the wishlist button already hide themselves. GoCommerce has no discount engine, no wishlist, no
+reviews and one vendor, so the connector forces these off over whatever `kitcommerce.config.ts` says
+— and forces `accounts` off too, unless the store has installed the `identity` module:
 
 | Toggle                       | Why                                                              |
 | ---------------------------- | ---------------------------------------------------------------- |
-| `accounts`                   | Guest checkout is permanent; there is no sign-in to offer         |
+| `accounts`                   | Only without the `identity` module: then there is no sign-in to offer |
 | `isDiscountCoupons`          | No discount engine — every code entered can only be refused       |
 | `isWishlist`                 | Nothing to store a wishlist in                                    |
 | `isProductReviewsAndRatings` | No review API                                                     |
@@ -187,23 +189,40 @@ nowhere before that call. The storefront collects them one step earlier, so `che
 holds them in the browser against that cart id and spends them when the order is placed. They are
 cleared as soon as the cart converts.
 
-### Sessions and the address book
+### Accounts, sessions and the address book
 
-GoCommerce has no accounts, so nobody can be signed in — but the shared user store does not ask a
-service about that. It decides by reading the `connect.sid` and `me` cookies straight from
-`document.cookie`. A pair left behind by running this storefront against a backend that *does* have
-accounts therefore makes a GoCommerce store look signed-in, and that is not cosmetic: the checkout
-then takes the saved-address path instead of the guest one. So the connector clears those two
-cookies when it loads in a browser, and `logout()` clears them too — the checkout page already calls
-`logout()` and retries when it detects a stale session, and that recovery only works if something
-actually clears them.
+Shopper accounts come from GoCommerce's optional `identity` module, mounted under `/x/identity/`.
+The connector finds out once per process whether the store has it — `GET /x/identity/me` with no
+credential answers `401` with the module and `404` without — and every account-shaped service
+branches on that answer.
 
-The address book itself is real, and local to this browser (`address-book.ts`). GoCommerce has
-nowhere to store addresses — a delivery address exists only as an argument to checkout — but the
-storefront's signed-in flow saves an address, lists it, and only then copies the selection onto the
-cart. Refusing that write does not degrade gracefully; it dead-ends checkout. So the addresses live
-beside the checkout details, under the same rule: the shopper's own data, on the shopper's own
-device, sent to GoCommerce only when the order is placed. Clearing site data clears them.
+**With the module.** Sessions are bearer tokens. The shared user store does not ask a service who is
+signed in; it reads the `connect.sid` and `me` cookies straight from `document.cookie`. So on login,
+signup and password reset the connector writes those two cookies itself — the token as
+`connect.sid`, the storefront-shaped user (with `userId`) as `me` — and `logout()` revokes the token
+on the server and clears both. Profile edits go to `PATCH /x/identity/me`; a password change revokes
+every other session and hands back a fresh token. Saved addresses live on the account
+(`/x/identity/me/addresses`) and are listed, edited and deleted there. An order placed while signed
+in is claimed into the account straight after checkout (`POST /x/identity/me/orders` with the
+number and access token the checkout returned), so "my orders" follows the shopper across devices.
+Password-reset links are built by the *store* from the module's `ResetURL` setting, not from the
+storefront's `referrer`; point it at this storefront's `/auth/reset-password?token={token}`.
+
+**Without it.** Nobody can be signed in, but a `connect.sid` / `me` pair left behind by running this
+storefront against a backend that *does* have accounts makes a GoCommerce store look signed-in, and
+that is not cosmetic: the checkout then takes the saved-address path instead of the guest one. So the
+connector clears those two cookies when it loads in a browser — after asking the store whether the
+module exists — and `logout()` clears them too; the checkout page already calls `logout()` and
+retries when it detects a stale session, and that recovery only works if something actually clears
+them.
+
+Without the module the address book is still real, and local to this browser (`address-book.ts`).
+GoCommerce's core has nowhere to store addresses — a delivery address exists only as an argument to
+checkout — but the storefront's signed-in flow saves an address, lists it, and only then copies the
+selection onto the cart. Refusing that write does not degrade gracefully; it dead-ends checkout. So
+the addresses live beside the checkout details, under the same rule: the shopper's own data, on the
+shopper's own device, sent to GoCommerce only when the order is placed. Clearing site data clears
+them.
 
 ### Checkout and payment
 
@@ -273,10 +292,10 @@ listing page looks its category up by slug directly.
 | `MeilisearchService`, `AutocompleteService` | `?q=` on the catalogue — GoCommerce ships no separate search engine                             |
 | `CartService`                          | `/api/carts` and its line-items; the address step is held in the browser (see above)                |
 | `CheckoutService`, `PaymentMethodService` | `GET /api/checkout`, `POST /api/checkout/{code}`                                                  |
-| `OrderService`                         | `/api/orders/{number}?token=…`; the confirmation page falls back to the converted cart               |
+| `OrderService`                         | `/api/orders/{number}?token=…`; `/x/identity/me/orders` when signed in; the confirmation page falls back to the converted cart |
 | `StoreService`, `MenuService`, `CountryService`, `CurrencyService`, `PluginService`, `SettingService` | The static store config                       |
-| `AuthService`, `UserService`, `ProfileService` | No accounts exist — reads answer empty, writes explain why                            |
-| `AddressService`                       | A browser-local address book; GoCommerce has nowhere to put one (see below)                          |
+| `AuthService`, `UserService`, `ProfileService` | `/x/identity/*` with the identity module; otherwise reads answer empty, writes explain why |
+| `AddressService`                       | `/x/identity/me/addresses` when signed in; otherwise a browser-local address book (see above)        |
 | `PageService`, `BlogService`, `BannerService`, `GalleryService`, `ReelsService` | Empty — no CMS                                        |
 | `WishlistService`, `CouponService`, `ReviewService`, `VendorService` | Empty lists; writes throw a named message                        |
 | `ContactService`, `EnquiryService`, `UploadService` | Throw — there is no inbox behind them, and a silent success is a lie                 |
@@ -292,16 +311,19 @@ detects the active connector and stays hidden without firing requests.
 | Cart, checkout, payment methods, orders    | GoCommerce REST API              |
 | Store identity, menus, countries, plugins  | Static (`kitcommerce.config.ts`) |
 | CMS pages, blog, banners                   | Static/empty — no CMS            |
-| Accounts, addresses, wishlist, reviews     | Unavailable — guest checkout only |
+| Accounts, addresses, order history         | The `identity` module, when installed; otherwise unavailable |
+| Wishlist, reviews                          | Unavailable                      |
 
 ## Current limitations
 
 Most of these are GoCommerce's design, not missing connector work:
 
-- **No accounts.** `/my/*` is behind the storefront's auth guard and is therefore unreachable;
-  login, signup and password reset all explain that no account is needed. A guest's order
-  confirmation is where they see what they bought. Saved addresses work, but they never leave the
-  device — see [Sessions and the address book](#sessions-and-the-address-book).
+- **Accounts need the `identity` module.** Without it, `/my/*` is behind the storefront's auth guard
+  and is therefore unreachable; login, signup and password reset all explain that no account is
+  needed, and a guest's order confirmation is where they see what they bought. Saved addresses work,
+  but they never leave the device — see
+  [Accounts, sessions and the address book](#accounts-sessions-and-the-address-book). Phone-OTP
+  sign-in and email verification have no equivalent even with the module.
 - **No discount codes, wishlist, reviews, vendors or CMS.** Their UI is hidden by the forced
   toggles above rather than offered and refused; the pages that remain render empty states, and the
   write paths throw a named message rather than succeeding silently.
