@@ -52,8 +52,8 @@
 	{#snippet content({ loadingForSubmitting })}
 		<div class="flex flex-col gap-2 sm:gap-3">
 			<div class="space-y-1.5">
-				<h3 class="text-sm font-bold uppercase tracking-widest text-foreground">{plugin.heading || 'Newsletter'}</h3>
-				<p class="text-sm text-muted-foreground"> {plugin.subheading || 'Subscribe to get the latest arrivals and offers.'}</p>
+				<h3 class="text-sm font-bold uppercase tracking-widest text-foreground">{plugin?.heading || 'Newsletter'}</h3>
+				<p class="text-sm text-muted-foreground"> {plugin?.subheading || 'Subscribe to get the latest arrivals and offers.'}</p>
 			</div>
 
 			<form
@@ -66,7 +66,7 @@
 				<Input
 					type="email"
 					aria-label="Email address"
-					placeholder={plugin.placeholder || "Enter your email" }
+					placeholder={plugin?.placeholder || "Enter your email" }
 					bind:value={email}
 					class="h-10 w-full min-w-0 flex-1 bg-background"
 					required
