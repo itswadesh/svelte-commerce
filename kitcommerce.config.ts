@@ -3,18 +3,19 @@
 // module in src/lib/core/connectors is all it takes to run the same storefront on another backend.
 // Swap the connector package in package.json to match, so installs and Docker builds resolve it.
 //
-// Each module re-exports its @misiki/*-connector and exports a `connectorName` marker. Every
-// backend but Litekart also needs a PUBLIC_<CONNECTOR>_* env set in .env;
+// Each module re-exports its @misiki/*-connector and exports a `connectorName` marker.
+// Every backend but Litekart also needs a PUBLIC_<CONNECTOR>_* env set in .env;
 // `src/lib/core/connectors/init.ts` holds one row per backend and fails at boot naming the
 // variable when it is missing, or set while a different connector is active. See
 // docs/<CONNECTOR>.md for that backend's variables and its Store identity section.
 
-export * as services from './src/lib/core/connectors/litekart'
+// export * as services from './src/lib/core/connectors/litekart'
 // export * as services from './src/lib/core/connectors/bagisto'
 // export * as services from './src/lib/core/connectors/broadleaf'
 // export * as services from './src/lib/core/connectors/commercetools'
 // export * as services from './src/lib/core/connectors/cs-cart'
 // export * as services from './src/lib/core/connectors/evershop'
+export * as services from './src/lib/core/connectors/gocommerce'
 // export * as services from './src/lib/core/connectors/magento'
 // export * as services from './src/lib/core/connectors/medusa'
 // export * as services from './src/lib/core/connectors/nopcommerce'

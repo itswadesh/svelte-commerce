@@ -158,6 +158,7 @@ export const CONNECTORS: Record<string, Backend> = {
 	},
 	'cs-cart': { required: ['PUBLIC_CS_CART_API_URL'], module: 'cs-cart', apply: credentials('PUBLIC_CS_CART') },
 	evershop: { required: ['PUBLIC_EVERSHOP_API_URL'], module: 'evershop', apply: credentials('PUBLIC_EVERSHOP') },
+	gocommerce: { required: ['PUBLIC_GOCOMMERCE_API_URL'], module: 'gocommerce', apply: credentials('PUBLIC_GOCOMMERCE') },
 	magento: { required: ['PUBLIC_MAGENTO_API_URL'], module: 'magento', apply: credentials('PUBLIC_MAGENTO') },
 	nopcommerce: { required: ['PUBLIC_NOPCOMMERCE_API_URL'], module: 'nopcommerce', apply: credentials('PUBLIC_NOPCOMMERCE') },
 	opencart: { required: ['PUBLIC_OPENCART_API_URL'], module: 'opencart', apply: credentials('PUBLIC_OPENCART') },
