@@ -27,6 +27,7 @@
 	// `any` on purpose: the connector's CartLineItem type resolves without its own fields in this
 	// file, so a structural type here is rejected as having "no properties in common" with it.
 	const isUpdating = (item: any) => !!cartState.updatingItem[item?.id]
+	const discountCouponsPlugin = $derived(page?.data?.store?.plugins?.isDiscountCoupons)
 
 	// Removing a line is one tap with no dialog, so offer an undo instead of a blocking confirm.
 	function removeItem(e: Event, item: any) {
@@ -342,11 +343,11 @@
 										</label>
 									{/if}
 
-									<a class="flex flex-1 gap-3 py-5 sm:px-4 sm:p-3 md:gap-6 md:p-5" href={`/products/${item.slug}`} target="_blank">
+									<a class="flex flex-1 gap-3 py-5 sm:p-3 sm:px-4 md:gap-6 md:p-5" href={`/products/${item.slug}`} target="_blank">
 										<div class="flex flex-col items-center gap-3">
 											<div class="relative flex items-center justify-center">
 												<div class="overflow-hidden bg-gray-50 ring-gray-100">
-													<LazyImg src={item.thumbnail || '/placeholder.svg'} alt={item.title} class="w-24 object-top object-contain sm:w-32" />
+													<LazyImg src={item.thumbnail || '/placeholder.svg'} alt={item.title} class="w-24 object-contain object-top sm:w-32" />
 												</div>
 											</div>
 
@@ -519,7 +520,14 @@
 							</div>
 						{/if}
 
-						<CouponsDrawer />
+						<!-- Offering a promo box a backend cannot honour is a dead end: every code the shopper
+						     tries comes back "Discount codes are not available on this store". Gate it on the
+						     store's own toggle, the way the wishlist and search are gated — a backend with no
+						     discount engine sets `isDiscountCoupons.active` false and simply shows no box.
+						     `undefined` keeps the box, for stores that predate the toggle. -->
+						{#if discountCouponsPlugin?.active !== false}
+							<CouponsDrawer />
+						{/if}
 
 						<div class="space-y-4 rounded-lg border border-border bg-background p-3 shadow-sm md:p-6">
 							<div class="">
@@ -592,11 +600,7 @@
 										</div>
 
 										{#if !cartModule.noItemsChecked}
-											<CheckoutButton
-												onclick={cartModule.gotoCheckout}
-												loading={cartModule.loadingForCheckout}
-												total={cartTotal}
-											/>
+											<CheckoutButton onclick={cartModule.gotoCheckout} loading={cartModule.loadingForCheckout} total={cartTotal} />
 										{:else}
 											<div
 												class="mt-4 rounded bg-yellow-50 p-3 text-center text-[10px] font-bold uppercase tracking-widest text-yellow-700 ring-1 ring-yellow-100"

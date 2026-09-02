@@ -17,6 +17,7 @@ whether you add them yourself — the page tells you which.
 | :------------- | :--------------------------------------- | :------- | :----------- |
 | Litekart       | [LITEKART.md](./LITEKART.md)             | 39/43    | built in     |
 | Vendure        | [VENDURE.md](./VENDURE.md)               | 39/43    | built in     |
+| GoCommerce     | [GOCOMMERCE.md](./GOCOMMERCE.md)         | 10/43    | built in     |
 | Medusa         | [MEDUSA.md](./MEDUSA.md)                 | 31/43    | built in     |
 | Broadleaf      | [BROADLEAF.md](./BROADLEAF.md)           | 28/43    | add yourself |
 | Saleor         | [SALEOR.md](./SALEOR.md)                 | 28/43    | built in     |

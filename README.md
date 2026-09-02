@@ -68,6 +68,7 @@ gap, and the one thing platform maintainers can fix that we cannot.
 | :--- | :--- | :--- | :-: | :-: | :-: | :-: | :--- |
 | [Litekart](https://litekart.in) | `@misiki/litekart-connector` | **39/43** | ✅ | ✅ | ✅ | ✅ | — |
 | [Vendure](https://www.vendure.io) | `@misiki/vendure-connector` | **39/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [GoCommerce](https://github.com/itswadesh/gocommerce) | `@misiki/gocommerce-connector` | **10/43** | ✅ | ✅ | ✅ | ⛔ | CORS headers on the API; sort/price/tag params on `/api/products` |
 | [Medusa](https://medusajs.com) | `@misiki/medusa-connector` | **31/43** | — | ✅ | ✅ | ⛔ | address, auth, cart, category, payment-method, product, search, user |
 | [Broadleaf Commerce](https://www.broadleafcommerce.com) | `@misiki/broadleaf-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | — |
 | [Saleor](https://saleor.io) | `@misiki/saleor-connector` | **28/43** | — | — | — | ⛔ | address, auth, cart, category, checkout, coupon, order, page, payment-method, search, user |
@@ -184,6 +185,13 @@ See [SALEOR.md](./docs/SALEOR.md) for the full Saleor setup guide.
 - Set a publishable API key and add your storefront origin to the Store CORS config.
 
 See [MEDUSA.md](./docs/MEDUSA.md) for the full Medusa setup guide.
+
+**GoCommerce**
+
+- Nothing to configure on the server. Because GoCommerce sends no CORS headers, browser-side calls
+  are forwarded through `/proxy/gocommerce/*` — so only the storefront server needs to reach the API.
+
+See [GOCOMMERCE.md](./docs/GOCOMMERCE.md) for the full GoCommerce setup guide.
 
 ### Demos
 

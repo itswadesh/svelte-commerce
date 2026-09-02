@@ -1,11 +1,12 @@
 # Connectors — status, gaps, and a request for help
 
-Svelte Commerce talks to any backend through a **connector**: a small TypeScript package that
-maps one platform's API onto a shared 43-service surface (`product`, `cart`, `checkout`, `order`,
+Svelte Commerce talks to any backend through a **connector**: a small TypeScript module — usually a
+package, once (GoCommerce) a directory in this repo — that maps one platform's API onto a shared
+43-service surface (`product`, `cart`, `checkout`, `order`,
 `auth`, `address`, …). Nothing in the storefront imports a connector by name — swap the export in
 `kitcommerce.config.ts` and the same storefront runs on a different backend.
 
-There are **26 connectors** today. This page is an honest account of how complete each one is,
+There are **27 connectors** today. This page is an honest account of how complete each one is,
 and an open request to the people who build and maintain these platforms.
 
 ---
@@ -69,6 +70,7 @@ bypass, not a placeholder.
 | :------------------------------------------------------------------------------- | :-------------------------------- | :------ | :-------- | :--: | :------: | :--: | :----------------------------------------------------------------------------------------- |
 | [Litekart](https://litekart.in)                                                  | `@misiki/litekart-connector`      | 2.0.30  | **39/43** |  ✅  |    ✅    |  ✅  | reference implementation                                                                   |
 | [Vendure](https://www.vendure.io)                                                | `@misiki/vendure-connector`       | 2.0.35  | **39/43** |  ✅  |    ✅    |  ✅  | —                                                                                          |
+| [GoCommerce](https://github.com/itswadesh/gocommerce)                             | `@misiki/gocommerce-connector`    | —       | **10/43** |  ✅  |    ✅    |  ⛔  | accounts, coupon, wishlist, review, vendor, CMS — none exist in the API                     |
 | [Medusa](https://medusajs.com)                                                   | `@misiki/medusa-connector`        | 2.1.5   | **31/43** |  —   |    ✅    |  —   | auth, cart, product, category, search, address, user, payment-method                       |
 | [Broadleaf](https://www.broadleafcommerce.com)                                   | `@misiki/broadleaf-connector`     | 0.5.0   | **28/43** |  ✅  |    ✅    |  ✅  | —                                                                                          |
 | [Saleor](https://saleor.io)                                                      | `@misiki/saleor-connector`        | 1.0.3   | **28/43** |  —   |    —     |  —   | auth, cart, checkout, order, category, coupon, search, address, user, page, payment-method |
@@ -103,6 +105,21 @@ bypass, not a placeholder.
 ### Litekart, Vendure
 
 The two most complete connectors. Vendure's GraphQL Shop API covers essentially the whole surface.
+
+### GoCommerce
+
+`@misiki/gocommerce-connector` is written against the server's own OpenAPI document. Its 10/43 is the honest ceiling, not a to-do list: guest checkout is permanent by design,
+so there are no accounts, addresses, wishlists or reviews to wire, and there is no CMS. Catalogue,
+cart, checkout and orders are all native.
+
+Three things a maintainer could change that would matter more than any connector work: the API sends
+**no CORS headers** and answers a preflight with `405`, so a browser cannot call it at all and this
+storefront forwards every browser-side call through its own origin; the shopper-facing catalogue has
+**no sort parameter and no price or tag filter**, so the listing page's sort control and facets are
+applied client-side over one 200-product window; and `Product.image_url` is **missing from the
+OpenAPI document** at `/doc`, which still names `Variant.image` as the only shopper-facing media — a
+connector written from the spec alone shows no product images. See
+[GOCOMMERCE.md](./GOCOMMERCE.md).
 
 ### Medusa, Saleor
 
