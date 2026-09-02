@@ -108,9 +108,11 @@ The two most complete connectors. Vendure's GraphQL Shop API covers essentially 
 
 ### GoCommerce
 
-`@misiki/gocommerce-connector` is written against the server's own OpenAPI document. Its 10/43 is the honest ceiling, not a to-do list: guest checkout is permanent by design,
-so there are no accounts, addresses, wishlists or reviews to wire, and there is no CMS. Catalogue,
-cart, checkout and orders are all native.
+`@misiki/gocommerce-connector` is written against the server's own OpenAPI document. Its 10/43 is
+the honest ceiling for a bare store, not a to-do list: guest checkout is permanent by design, and
+there are no wishlists or reviews to wire and no CMS. Catalogue, cart, checkout and orders are all
+native. A store that installs GoCommerce's optional `identity` module adds four more — auth, user,
+profile and addresses — which the connector detects and wires automatically.
 
 Three things a maintainer could change that would matter more than any connector work: the API sends
 **no CORS headers** and answers a preflight with `405`, so a browser cannot call it at all and this
