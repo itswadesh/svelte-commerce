@@ -19,6 +19,27 @@
 	const useremail = $derived(firstOrder?.userEmail || firstOrder?.shippingAddress?.email)
 	const orderNo = $derived(page.url.searchParams.get('order_no') || firstOrder?.orderNo)
 
+	// Compose the address from the parts that exist, so nothing renders as stray punctuation.
+	const recipientName = $derived([firstOrder?.shippingAddress?.firstName, firstOrder?.shippingAddress?.lastName].filter(Boolean).join(' '))
+	const localityLine = $derived(
+		[[firstOrder?.shippingAddress?.city, firstOrder?.shippingAddress?.state].filter(Boolean).join(', '), firstOrder?.shippingAddress?.zip]
+			.filter(Boolean)
+			.join(' ')
+	)
+	const hasShippingAddress = $derived(!!(recipientName || firstOrder?.shippingAddress?.address_1 || localityLine))
+
+	// The confirmation carried per-item prices but no order-level money at all: no subtotal, no
+	// shipping, no total and no payment method. A shopper could not check what they had been
+	// charged without opening their email.
+	const currencyCode = $derived(firstOrder?.currencyCode || page?.data?.store?.currency?.code)
+	const orderTotals = $derived(
+		[
+			{ label: 'Subtotal', value: firstOrder?.subtotal },
+			{ label: 'Shipping', value: firstOrder?.shippingCharges },
+			{ label: 'Discount', value: firstOrder?.discount ? -Math.abs(firstOrder.discount) : 0 }
+		].filter((row) => typeof row.value === 'number' && row.value !== 0)
+	)
+
 	const estimatedDeliveryDateMachine = $derived.by(() => {
 		if (!firstOrder) return ''
 		const date = new Date(firstOrder.createdAt)
@@ -79,7 +100,7 @@
 			class="overflow-hidden rounded-2xl bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05),0_20px_40px_rgba(0,0,0,0.02)]"
 		>
 			<!-- Header Section -->
-			<div class="border-b border-gray-100 bg-white p-3 sm:p-8 text-center md:p-12">
+			<div class="border-b border-gray-100 bg-white p-3 text-center sm:p-8 md:p-12">
 				<div class="mb-6 flex justify-center">
 					<div class="relative">
 						<div class="absolute inset-0 animate-ping rounded-full bg-green-100 opacity-20"></div>
@@ -90,7 +111,7 @@
 				</div>
 				<h1 class="mb-3 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Thank you for your order</h1>
 				{#if firstOrder}
-					<p class="mx-auto max-w-lg text-lg text-gray-500 text-sm">We've received your order and we'll notify you as soon as it's on its way.</p>
+					<p class="mx-auto max-w-lg text-lg text-sm text-gray-500">We've received your order and we'll notify you as soon as it's on its way.</p>
 					<!-- The reference a shopper quotes to support. It used to appear only when the order
 					     failed to load, so a successful confirmation showed no number at all. -->
 					{#if orderNo}
@@ -99,7 +120,7 @@
 						</div>
 					{/if}
 				{:else}
-					<p class="mx-auto max-w-lg text-lg text-gray-500 text-sm">
+					<p class="mx-auto max-w-lg text-lg text-sm text-gray-500">
 						Your payment went through. We're still confirming the order details — they'll appear in your account shortly.
 					</p>
 					{#if orderNo}
@@ -143,88 +164,115 @@
 
 			<!-- The order lookup can fail after a real payment; never render empty detail blocks. -->
 			{#if firstOrder}
-			<!-- Items List -->
-			<div class="border-b border-muted/30 pb-6 p-2 md:p-12">
-				<h2 class="mb-6 text-lg font-bold text-gray-900">Order Summary</h2>
-				<div class="divide-y divide-gray-100">
-					{#each orders as { lineItems }}
-						{#each lineItems || [] as item}
-							<div class="group flex  items-start gap-6 py-6 first:pt-0 last:pb-0">
-								<div
-									class="relative flex-shrink-0 overflow-hidden transition-all duration-300"
-								>
-													<LazyImg
-														src={item.thumbnail || '/placeholder.svg'}
-														alt={item.title}
-														class="aspect-[3/4] w-16 object-contain sm:w-16"
-													/>
-								</div>
-								<div class="flex flex-1 flex-col transition-all duration-300">
-									<div class="flex justify-between text-base font-semibold text-gray-900">
-										<h3 class="transition-colors ">
-											<a href={`/products/${item.slug}`}>
-												{item.title}
-											</a>
-										</h3>
-										<p class="ml-4">{formatPrice(item.subtotal, page?.data?.store?.currency?.code)}</p>
+				<!-- Items List -->
+				<div class="border-b border-muted/30 p-2 pb-6 md:p-12">
+					<h2 class="mb-6 text-lg font-bold text-gray-900">Order Summary</h2>
+					<div class="divide-y divide-gray-100">
+						{#each orders as { lineItems }}
+							{#each lineItems || [] as item}
+								<div class="group flex items-start gap-6 py-6 first:pt-0 last:pb-0">
+									<div class="relative flex-shrink-0 overflow-hidden transition-all duration-300">
+										<LazyImg src={item.thumbnail || '/placeholder.svg'} alt={item.title} class="aspect-[3/4] w-16 object-contain sm:w-16" />
 									</div>
-									<p class="mt-1 text-sm text-gray-500">
-										{formatPrice(item.price, page?.data?.store?.currency?.code)} × {item.qty}
-									</p>
-									{#if item.variantTitle}
-										<p class="mt-1 text-xs text-gray-400">{item.variantTitle}</p>
-									{/if}
+									<div class="flex flex-1 flex-col transition-all duration-300">
+										<div class="flex justify-between text-base font-semibold text-gray-900">
+											<h3 class="transition-colors">
+												<a href={`/products/${item.slug}`}>
+													{item.title}
+												</a>
+											</h3>
+											<p class="ml-4">{formatPrice(item.subtotal, page?.data?.store?.currency?.code)}</p>
+										</div>
+										<p class="mt-1 text-sm text-gray-500">
+											{formatPrice(item.price, page?.data?.store?.currency?.code)} × {item.qty}
+										</p>
+										{#if item.variantTitle}
+											<p class="mt-1 text-xs text-gray-400">{item.variantTitle}</p>
+										{/if}
+									</div>
 								</div>
+							{/each}
+						{/each}
+					</div>
+
+					<!-- Order-level money. The page listed per-item prices and then stopped, so a shopper could
+					     not check what they had actually been charged, or how, without opening their email. -->
+					<div class="mt-6 space-y-2 border-t border-muted/30 pt-6 text-sm">
+						{#each orderTotals as row}
+							<div class="flex items-center justify-between text-muted-foreground">
+								<span>{row.label}</span>
+								<span>{formatPrice(row.value, currencyCode)}</span>
 							</div>
 						{/each}
-					{/each}
-				</div>
-			</div>
-
-			<!-- Shipping and Delivery Info -->
-			<div class="grid gap-0 border-b border-muted/30 sm:grid-cols-2">
-				<!-- Shipping Info -->
-				<div class="border-b border-muted/30 p-4 sm:border-b-0 sm:border-r md:p-6">
-					<div class="mb-4 flex text-base items-center gap-2 font-bold text-gray-900">
-						<MapPin class="h-5 w-5 text-primary" />
-						<h3>Shipping Address</h3>
-					</div>
-					<div class="text-sm leading-relaxed text-gray-600 px-2">
-						<p class="mb-1 font-bold text-gray-700">
-							{firstOrder?.shippingAddress?.firstName}
-							{firstOrder?.shippingAddress?.lastName}
-						</p>
-						<p class="text-gray-700">{firstOrder?.shippingAddress?.address_1}</p>
-						{#if firstOrder?.shippingAddress?.address_2}
-							<p>{firstOrder?.shippingAddress?.address_2}</p>
+						{#if typeof firstOrder?.total === 'number'}
+							<div class="flex items-center justify-between border-t border-muted/30 pt-2 text-base font-bold text-foreground">
+								<span>Total</span>
+								<span>{formatPrice(firstOrder.total, currencyCode)}</span>
+							</div>
 						{/if}
-						<p>{firstOrder?.shippingAddress?.city}, {firstOrder?.shippingAddress?.state} {firstOrder?.shippingAddress?.zip}</p>
-						<p class="flex items-center gap-2">
-							<!-- <span class="inline-block h-1 w-1 rounded-full bg-gray-700"></span> -->
-							{firstOrder?.shippingAddress?.phone}
-						</p>
+						{#if firstOrder?.paymentMethod}
+							<div class="flex items-center justify-between pt-1 text-muted-foreground">
+								<span>Paid with</span>
+								<span class="capitalize">{String(firstOrder.paymentMethod).replace(/[-_]/g, ' ')}</span>
+							</div>
+						{/if}
 					</div>
 				</div>
 
-				<!-- Delivery Status -->
-				<div class="p-4 md:p-6">
-					<div class="mb-4 flex items-center gap-2 text-base font-bold text-gray-900">
-						<Calendar class="h-5 w-5 text-primary" />
-						<h3>Estimated Delivery</h3>
-					</div>
-					<p class="text-lg px-2 font-bold tracking-tight text-gray-900">{estimatedDeliveryDateDisplay}</p>
-					<div class="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-2">
-						<Mail class="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-						<p class="text-sm leading-relaxed text-gray-700">
-							{#if useremail}
-								Confirmation sent to <span class="font-bold text-gray-700">{useremail}</span>. We'll email you again when your items ship.
+				<!-- Shipping and Delivery Info -->
+				<div class="grid gap-0 border-b border-muted/30 sm:grid-cols-2">
+					<!-- Shipping Info -->
+					<div class="border-b border-muted/30 p-4 sm:border-b-0 sm:border-r md:p-6">
+						<div class="mb-4 flex items-center gap-2 text-base font-bold text-gray-900">
+							<MapPin class="h-5 w-5 text-primary" />
+							<h3>Shipping Address</h3>
+						</div>
+						<!-- Every line is conditional. The city/state/zip line was interpolated unconditionally,
+					     so an order whose address the backend does not return rendered as a lone comma
+					     under the heading — the shopper's confirmation of where their order is going was
+					     a punctuation mark. -->
+						<div class="px-2 text-sm leading-relaxed text-muted-foreground">
+							{#if hasShippingAddress}
+								{#if recipientName}
+									<p class="mb-1 font-bold text-foreground">{recipientName}</p>
+								{/if}
+								{#if firstOrder?.shippingAddress?.address_1}
+									<p class="text-foreground">{firstOrder.shippingAddress.address_1}</p>
+								{/if}
+								{#if firstOrder?.shippingAddress?.address_2}
+									<p>{firstOrder.shippingAddress.address_2}</p>
+								{/if}
+								{#if localityLine}
+									<p>{localityLine}</p>
+								{/if}
+								{#if firstOrder?.shippingAddress?.phone}
+									<p class="flex items-center gap-2">{firstOrder.shippingAddress.phone}</p>
+								{/if}
 							{:else}
-								We'll email you a confirmation and let you know again when your items ship.
+								<p>We'll confirm your delivery address by email.</p>
 							{/if}
-						</p>
+						</div>
+					</div>
+
+					<!-- Delivery Status -->
+					<div class="p-4 md:p-6">
+						<div class="mb-4 flex items-center gap-2 text-base font-bold text-gray-900">
+							<Calendar class="h-5 w-5 text-primary" />
+							<h3>Estimated Delivery</h3>
+						</div>
+						<p class="px-2 text-lg font-bold tracking-tight text-gray-900">{estimatedDeliveryDateDisplay}</p>
+						<div class="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-2">
+							<Mail class="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+							<p class="text-sm leading-relaxed text-gray-700">
+								{#if useremail}
+									Confirmation sent to <span class="font-bold text-gray-700">{useremail}</span>. We'll email you again when your items ship.
+								{:else}
+									We'll email you a confirmation and let you know again when your items ship.
+								{/if}
+							</p>
+						</div>
 					</div>
 				</div>
-			</div>
 			{:else}
 				<div class="border-b border-muted/30 p-6 md:p-12">
 					<div class="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-4">
@@ -249,21 +297,12 @@
 			<!-- Action Buttons -->
 			<div class="bg-white p-8 md:p-12">
 				<div class="flex flex-col gap-4 sm:flex-row">
-					<Button
-						href="/products"
-						class="group order-1 h-14 flex-1 sm:order-2"
-					>
+					<Button href="/products" class="group order-1 h-14 flex-1 sm:order-2">
 						Continue Shopping
 						<ArrowRight class="ml-2 h-4 w-4" />
 					</Button>
 					{#if userState?.user?.role}
-						<Button
-							variant="outline"
-							href="/my/orders"
-							class="order-2 h-14 flex-1 sm:order-1"
-						>
-							Track My Order
-						</Button>
+						<Button variant="outline" href="/my/orders" class="order-2 h-14 flex-1 sm:order-1">Track My Order</Button>
 					{/if}
 				</div>
 				<div class="mt-8 text-center">
