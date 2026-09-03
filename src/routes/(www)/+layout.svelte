@@ -5,13 +5,26 @@
 	import { StorePlugins } from '$lib/core/components/index.js'
 	import ConversationalShopping from '$lib/components/chat/conversational-shopping.svelte'
 	import type { LayoutProps } from './$types'
+	import { page } from '$app/state'
+	import { hasConfiguredSupportChat } from '$lib/components/common/store-capabilities.js'
 
 	const { children }: LayoutProps = $props()
+
+	// StorePlugins mounts the support-chat widget, and the core component falls back to a demo
+	// account id when the merchant switches the plugin on without filling one in — which puts another
+	// business's inbox on the storefront. Mount it only once an account is actually configured.
+	// Checkout gets its own reduced chrome. Carrying the full category nav, search, wishlist,
+	// account and the entire footer link list through every step is the distraction the rulebook
+	// warns about: tabbing forward from the last address field reached the footer links in three
+	// presses. The code already treats checkout as special — the cart drawer is suppressed there
+	// and a dedicated step rail exists — so this makes the rest of the chrome agree.
+	const isCheckout = $derived(page.url.pathname.startsWith('/checkout'))
+
+	const supportChatConfigured = $derived(hasConfiguredSupportChat(page.data?.store?.plugins))
 
 	setCartState()
 	setProductState()
 	setWishlistState()
-
 </script>
 
 <!-- No <link rel="icon"> here: the root layout already emits one for every route *with* a
@@ -30,14 +43,20 @@
 	>
 		Skip to main content
 	</a>
-	<Nav />
+	{#if !isCheckout}
+		<Nav />
+	{/if}
 	<main id="main" class="inter-gap flex min-h-screen flex-1 flex-col">
 		{@render children()}
 	</main>
-	<Footer />
+	{#if !isCheckout}
+		<Footer />
+	{/if}
 </div>
 
-<StorePlugins />
+{#if supportChatConfigured}
+	<StorePlugins />
+{/if}
 
 <!-- Self-gates on the store's admin toggle via /api/commerce-assistant/config -->
 <ConversationalShopping />

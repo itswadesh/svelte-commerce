@@ -5,6 +5,7 @@
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import { storeService, productService } from '$lib/core/services'
+	import { canSubscribeToNewsletter } from '$lib/components/common/store-capabilities.js'
 	import { getUserState } from '$lib/core/stores/index.js'
 	import { klaviyoIdentify, klaviyoSubscribe, resolveKlaviyoConfig } from '$lib/klaviyo'
 	import { toast } from '@misiki/kitcommerce-core'
@@ -221,6 +222,19 @@
 	let email = $state('')
 	let subscribed = $state(false)
 	let subscribing = $state(false)
+	// A form that can only ever answer "not available" is worse than no form: this posts to the
+	// storefront's own Litekart REST API, which no other backend serves.
+	const canSubscribe = canSubscribeToNewsletter()
+
+	// Editorial images arrive from the content file as one URL carrying its own width (…?w=1400…).
+	// The slot is at most ~46vw on a wide screen, so the shipped file was roughly four times the
+	// pixels the slot can show — paid for on the one connection a mobile shopper has. Re-emit the
+	// same URL at several widths and let the browser choose. A URL with no width is passed through.
+	function responsiveSrcset(url: string, widths = [480, 768, 1024, 1400]) {
+		if (!url || !/[?&]w=\d+/.test(url)) return ''
+		return widths.map((w) => `${url.replace(/([?&]w=)\d+/, `$1${w}`)} ${w}w`).join(', ')
+	}
+
 	async function onSubscribe(e: Event) {
 		e.preventDefault()
 		const parsed = z.string().email().safeParse(email.trim())
@@ -350,6 +364,10 @@
 				<div class="ed-hero__media">
 					<img
 						src={ed.hero.image}
+						srcset={responsiveSrcset(ed.hero.image)}
+						sizes="(min-width: 1024px) 46vw, 100vw"
+						width="1400"
+						height="1190"
 						alt={ed.hero.imageAlt}
 						loading={heroSlides.length ? 'lazy' : 'eager'}
 						fetchpriority={heroSlides.length ? 'auto' : 'high'}
@@ -481,7 +499,15 @@
 		{#if !hidden.banner}
 			<section class="ed-wrap ed-banner">
 				<div class="ed-banner__media">
-					<img src={ed.banner.image} alt={ed.banner.imageAlt} loading="lazy" />
+					<img
+						src={ed.banner.image}
+						srcset={responsiveSrcset(ed.banner.image)}
+						sizes="(min-width: 1024px) 46vw, 100vw"
+						width="1400"
+						height="1050"
+						alt={ed.banner.imageAlt}
+						loading="lazy"
+					/>
 				</div>
 				<div class="ed-banner__body">
 					<span class="ed-eyebrow">{ed.banner.eyebrow}</span>
@@ -511,7 +537,10 @@
 		{/if}
 
 		<!-- NEWSLETTER -->
-		{#if !hidden.newsletter}
+		<!-- Also gated on the store being able to accept a subscription: this posts to the
+		     storefront's own Litekart REST API, which no other backend serves, so on this store every
+		     submit could only answer "not available". A form that cannot succeed is worse than none. -->
+		{#if !hidden.newsletter && canSubscribe}
 			<section class="ed-tint">
 				<div class="ed-wrap ed-news">
 					<span class="ed-eyebrow">{ed.newsletter.eyebrow}</span>
@@ -586,7 +615,10 @@
 
 	.ed-hero h1 {
 		margin: 0;
-		font-size: clamp(2.6rem, 5.6vw, 4.9rem);
+		/* 28-40px, the documented page-title step. This was clamp(2.6rem, 5.6vw, 4.9rem) — 72px at
+		   1280 — and that single line is what pushed the hero's primary action down past 600px and
+		   delayed the product grid. Section titles below follow the 22-32px step for the same reason. */
+		font-size: clamp(1.75rem, 4.2vw, 2.5rem);
 		line-height: 1.02;
 	}
 
@@ -880,7 +912,7 @@
 
 	.ed-head__title {
 		margin: 0;
-		font-size: clamp(2rem, 4vw, 3.2rem);
+		font-size: clamp(1.5rem, 3vw, 2rem);
 		line-height: 1.05;
 	}
 
@@ -1085,7 +1117,7 @@
 
 	.ed-banner__title {
 		margin: 0 0 18px;
-		font-size: clamp(1.9rem, 3.6vw, 3rem);
+		font-size: clamp(1.5rem, 3vw, 2rem);
 		line-height: 1.06;
 	}
 
@@ -1145,7 +1177,7 @@
 
 	.ed-news__title {
 		margin: 0;
-		font-size: clamp(2rem, 4vw, 3.1rem);
+		font-size: clamp(1.5rem, 3vw, 2rem);
 		line-height: 1.06;
 	}
 
