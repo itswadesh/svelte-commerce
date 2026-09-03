@@ -38,11 +38,13 @@
 				</a>
 			{/if} -->
 
-				<!-- Dynamic menu items with same styling -->
+				<!-- Dynamic menu items. The 32px box is deliberate: these are standalone navigation
+				     targets, not links inside a sentence, so WCAG 2.2's inline exception does not cover
+				     them and a bare 20px text link misses the 24px minimum. -->
 				{#each page?.data?.store?.menu?.find?.((menu: Menu) => menu?.menuId === 'header')?.items || [] as item}
 					<a
 						href={item.link}
-						class="ed-nav-link relative text-sm font-bold uppercase tracking-widest text-muted-foreground transition-all after:absolute after:bottom-[-4px]
+						class="ed-nav-link relative inline-flex min-h-[32px] items-center text-sm font-bold uppercase tracking-widest text-muted-foreground transition-all after:absolute after:bottom-[-4px]
 					after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-foreground hover:after:w-full active:scale-95"
 						style="font-family: var(--font-body);"
 					>
