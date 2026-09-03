@@ -20,9 +20,7 @@
 	// `url.origin` already carries the scheme — prefixing it with another `https://` produced
 	// `https://https://example.com` and broke the WebSite -> Organization @id join.
 	const origin = $derived(sveltePage.url.origin)
-	const [aspectWidth, aspectHeight] = $derived(
-		data?.store?.productImageAspectRatio?.split(':') || ['1', '1']
-	)
+	const [aspectWidth, aspectHeight] = $derived(data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
 
 	setCollectionState()
 
@@ -54,9 +52,7 @@
 	const featuredCategories = $derived(
 		homepageModule.featuredCategories?.length ? homepageModule.featuredCategories : (data?.featuredCategories ?? [])
 	)
-	const featuredProducts = $derived(
-		homepageModule.featuredProducts?.length ? homepageModule.featuredProducts : (data?.featuredProducts ?? [])
-	)
+	const featuredProducts = $derived(homepageModule.featuredProducts?.length ? homepageModule.featuredProducts : (data?.featuredProducts ?? []))
 
 	// Section-driven themes ship their homepage as data (`themeLayout` from the API) and are
 	// rendered with the shared section library. Themes that still have a bespoke component fall
@@ -88,9 +84,7 @@
 	const organizationSchema = $derived.by(() => {
 		const store = data?.store
 		const social = store?.socialSharing?.active
-			? (Object.values(store?.socialSharing || {}).filter(
-					(link: any) => typeof link === 'string' && link.startsWith('http')
-				) as string[])
+			? (Object.values(store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[])
 			: []
 		if (!social.length) {
 			const plugin = store?.plugins?.socialSharingButtons || {}
@@ -139,9 +133,16 @@
 		}
 	})
 
-	// WebSite JSON-LD. The core component's SearchAction points at `/products?search=`, which
-	// this site's own robots.txt disallows (`Disallow: /*?*search=`) and the project's link
-	// convention forbids; the canonical term route is the bare slug.
+	// WebSite JSON-LD. The SearchAction target has to be the URL the site's own search box submits
+	// to, and that is `/products?search=`. It used to publish `${origin}/{search_term_string}` on
+	// the reasoning that a bare slug was the canonical term route, but that route resolves a
+	// category or a product and 404s for everything else, so the markup advertised a search
+	// endpoint that answered almost no query.
+	//
+	// robots.txt disallows `/*?*search=` on purpose, to keep an unbounded set of query URLs out of
+	// the index. That means this entry point is unlikely to earn a sitelinks search box, which is
+	// the honest trade: describing the search a shopper can actually perform beats describing one
+	// that does not work.
 	const websiteSchema = $derived.by(() => {
 		const description = cleanSchemaText(data?.store?.description)
 		return {
@@ -155,7 +156,7 @@
 				'@type': 'SearchAction',
 				target: {
 					'@type': 'EntryPoint',
-					urlTemplate: `${origin}/{search_term_string}`
+					urlTemplate: `${origin}/products?search={search_term_string}`
 				},
 				'query-input': 'required name=search_term_string'
 			}
@@ -215,9 +216,7 @@
 		<div class="flex max-w-[320px] gap-3 border-l-4 border-primary bg-white p-3.5 shadow-lg">
 			<a href="/products/{homepageModule.selectedRecentOrder?.slug || ''}" class="flex gap-3 text-foreground">
 				<img
-					src={homepageModule.selectedRecentOrder?.image ||
-						homepageModule.selectedRecentOrder?.img ||
-						homepageModule.selectedRecentOrder?.thumbnail}
+					src={homepageModule.selectedRecentOrder?.image || homepageModule.selectedRecentOrder?.img || homepageModule.selectedRecentOrder?.thumbnail}
 					alt={homepageModule.selectedRecentOrder?.title || 'Product'}
 					class="h-[58px] w-[58px] object-cover"
 				/>
@@ -227,11 +226,7 @@
 					</p>
 					<strong class="block text-sm text-primary">{homepageModule.selectedRecentOrder?.title || 'a menu item'}</strong>
 					<span class="text-xs text-gray-500">
-						{timestampToAgo(
-							homepageModule.selectedRecentOrder?.created_at ||
-								homepageModule.selectedRecentOrder?.createdAt ||
-								''
-						)}
+						{timestampToAgo(homepageModule.selectedRecentOrder?.created_at || homepageModule.selectedRecentOrder?.createdAt || '')}
 					</span>
 				</div>
 			</a>

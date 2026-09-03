@@ -95,8 +95,10 @@
 <!-- No role="navigation": a single toggle button is not a navigation landmark, and an unnamed
      one just adds noise to the screen-reader landmark list. -->
 <div class="relative">
+	<!-- The box makes the target, not the 20px glyph: 44px on phones, 36px from md up, the same
+	     geometry as every other header action. -->
 	<button
-		class="flex rounded-full px-2"
+		class="flex h-9 w-9 items-center justify-center rounded-full max-md:h-11 max-md:w-11"
 		aria-label="Cart, {cartState?.cart?.qty ?? 0} items"
 		aria-expanded={!!cartState?.isOpen}
 		onclick={() => {
@@ -195,10 +197,7 @@
 							>
 								Checkout
 							</Button>
-							<button
-								class="mt-3 w-full text-center text-xs font-medium text-gray-500 hover:text-gray-900"
-								onclick={onContinueShopping}
-							>
+							<button class="mt-3 w-full text-center text-xs font-medium text-gray-500 hover:text-gray-900" onclick={onContinueShopping}>
 								Continue shopping
 							</button>
 						</div>

@@ -36,6 +36,28 @@
 		if (page?.data?.store?.plugins?.imageCdn?.active) return getImageCDNUrl(x, width)
 		return x
 	}
+
+	// Closing on mouse-leave is delayed, not immediate. The panel is centred under the whole row
+	// rather than under its own trigger, so the pointer usually travels diagonally to reach it and
+	// briefly leaves the <li>; closing on the first leave event would snatch the menu away
+	// mid-movement. Re-entering within the grace period cancels the close.
+	const CLOSE_GRACE_MS = 180
+	let closeTimer: ReturnType<typeof setTimeout> | null = null
+
+	function cancelPendingClose() {
+		if (closeTimer) {
+			clearTimeout(closeTimer)
+			closeTimer = null
+		}
+	}
+
+	function scheduleClose(close: () => void) {
+		cancelPendingClose()
+		closeTimer = setTimeout(() => {
+			closeTimer = null
+			close()
+		}, CLOSE_GRACE_MS)
+	}
 </script>
 
 <MegaMenuRenderer>
@@ -53,19 +75,31 @@
 					<li
 						class="hoverable"
 						onmousemove={() => {
+							cancelPendingClose()
 							openChildMenu(category.name, index)
 						}}
 						onmouseleave={() => {
-							//closeChildMenu(index, true)
+							// Was commented out, so the panel only ever hid via CSS: aria-expanded stayed
+							// true, the links stayed in the tab order and the trigger kept its open styling
+							// long after the pointer had gone.
+							scheduleClose(() => closeChildMenu(index, true))
 						}}
 						onfocusin={() => {
+							cancelPendingClose()
 							openChildMenu(category.name, index)
 						}}
 						onfocusout={(e) => {
 							if (!e.currentTarget.contains(e.relatedTarget as Node | null)) closeChildMenu(index, true)
 						}}
 						onkeydown={(e) => {
-							if (e.key === 'Escape') closeChildMenu(index, true)
+							if (e.key !== 'Escape') return
+							// Put focus back on the trigger before the panel unmounts. Closing while focus
+							// sat on a link inside it left document.activeElement on <body>, dropping a
+							// keyboard user out of the header entirely.
+							const trigger = e.currentTarget.querySelector('a')
+							cancelPendingClose()
+							closeChildMenu(index, true)
+							trigger?.focus()
 						}}
 					>
 						<a
@@ -74,7 +108,7 @@
 							href={category.link || '/' + category.slug}
 							class="ed-mm-link relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap {slim
 								? 'py-1.5'
-								: 'py-3'} text-sm font-semibold uppercase  text-gray-900 transition-all duration-300 hover:text-gray-900 active:scale-95
+								: 'py-3'} text-sm font-semibold uppercase text-gray-900 transition-all duration-300 hover:text-gray-900 active:scale-95
 								{selectedCategory === category.name ? 'text-primary after:scale-x-100' : 'after:scale-x-0'}
 								after:ease-out-expo after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
 							style="font-family: var(--font-body);"
@@ -170,10 +204,7 @@
 								</div>
 
 								<div class="ed-mm-foot border-t border-gray-100 bg-gray-50 px-10 py-4">
-									<a
-										href={category.link || '/' + category.slug}
-										class="ed-mm-viewall text-xs font-semibold text-muted-foreground transition-colors"
-									>
+									<a href={category.link || '/' + category.slug} class="ed-mm-viewall text-xs font-semibold text-muted-foreground transition-colors">
 										View all {category.name}
 									</a>
 								</div>
@@ -182,6 +213,27 @@
 					</li>
 				{/each}
 			</ul>
+			<!-- Backdrop. Deliberately a sibling of the <ul>, not a child of the hovered <li>, so it
+			     cannot keep the panel open. It sits at z-overlay, below the sticky header's z-index,
+			     so the header row stays undimmed and clickable while everything below it recedes.
+			     Without this a 90vw white panel dropped onto a live hero and a mis-aimed click hit a
+			     call to action instead of dismissing the menu. -->
+			{#if selectedCategory}
+				<div
+					class="fixed inset-0 z-overlay bg-black/40"
+					aria-hidden="true"
+					transition:fade={{ duration: 150 }}
+					onclick={() => {
+						cancelPendingClose()
+						// Close by the index that is actually open: closeChildMenu clears
+						// toggleMenuItemChildren[index], so a hardcoded 0 would blank the selected
+						// category while leaving another index's panel mounted.
+						toggleMenuItemChildren.forEach((isOpen, i) => {
+							if (isOpen) closeChildMenu(i, true)
+						})
+					}}
+				></div>
+			{/if}
 		{:else if headerMenuItems === undefined && !megamenuSettled}
 			<!-- Only while the category megamenu is still loading; a settled-but-empty menu renders nothing. -->
 			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none" transition:fade={{ duration: 100 }}>

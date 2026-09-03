@@ -1,21 +1,5 @@
 <script lang="ts">
-	import {
-		X,
-		UserCircle,
-		ChevronLeft,
-		ChevronDown,
-		Phone,
-		Mail,
-		Menu,
-		Heart,
-		Home,
-		Tag,
-		Layers,
-		Package,
-		MapPin,
-		KeyRound,
-		LogOut
-	} from '@lucide/svelte'
+	import { X, UserCircle, ChevronDown, Phone, Mail, Menu, Heart, Home, Tag, Layers, Package, MapPin, KeyRound, LogOut } from '@lucide/svelte'
 	import MainNav from './main-nav.svelte'
 	import MegaMenu from './mega-menu.svelte'
 	import { page } from '$app/state'
@@ -36,6 +20,7 @@
 	import NoorNav from '$lib/theme/noor/NoorNav.svelte'
 	import LimeNav from '$lib/theme/lime/LimeNav.svelte'
 	import { resolveThemeContent } from '$lib/theme/index.js'
+	import { dialog } from '$lib/actions/dialog.js'
 
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
@@ -48,6 +33,18 @@
 	// the cycle repeats. The gap must exceed the height lost on collapse (hello bar +
 	// row-height change ≈ 56px).
 	let isScrolled = $state(false)
+
+	// Background scroll lock for the menu drawer. Without it the page behind the open drawer still
+	// scrolls under a touch drag, so closing the menu returned the shopper somewhere they never
+	// chose to be. Paired with the focus trap on the drawer itself.
+	$effect(() => {
+		if (!navModule.openSidebar) return
+		const previous = document.body.style.overflow
+		document.body.style.overflow = 'hidden'
+		return () => {
+			document.body.style.overflow = previous
+		}
+	})
 	$effect(() => {
 		if (navModule.scrollY > 90) isScrolled = true
 		else if (navModule.scrollY < 10) isScrolled = false
@@ -104,15 +101,11 @@
 	// not suppress it), so the two never stack.
 	const themeContent = $derived(resolveThemeContent(activeThemeName, page.data?.store))
 	const themeHeader = $derived(themeContent?.header)
-	const themeAnnouncement = $derived(
-		themeHeader?.hideAnnouncement === true ? '' : themeHeader?.announcement || ''
-	)
+	const themeAnnouncement = $derived(themeHeader?.hideAnnouncement === true ? '' : themeHeader?.announcement || '')
 	const helloBarHasContent = $derived(
 		!!(
 			navModule.helloBarPlugin?.active &&
-			(navModule.helloBarPlugin?.content ||
-				navModule.helloBarPlugin?.content2 ||
-				navModule.helloBarPlugin?.content3)
+			(navModule.helloBarPlugin?.content || navModule.helloBarPlugin?.content2 || navModule.helloBarPlugin?.content3)
 		)
 	)
 
@@ -136,16 +129,14 @@
 		class:ed={activeThemeName === 'default'}
 		class="{navModule.isProductListingPage
 			? 'max-sm:border-b'
-			: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-background transition-all duration-200"
+			: ''} sticky top-0 z-50 w-full flex-col items-center justify-between bg-background shadow-xs transition-all duration-200"
 	>
 		<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
 		     content wins -->
 		{#if !helloBarHasContent && themeAnnouncement && isHomepage}
 			<div class="grid transition-[grid-template-rows] duration-300 ease-in-out {isScrolled ? 'grid-rows-[0fr]' : 'grid-rows-[1fr]'}">
 				<div class="overflow-hidden">
-					<div
-						class="max-w-none bg-primary px-4 py-2.5 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-primary-foreground"
-					>
+					<div class="max-w-none bg-primary px-4 py-2.5 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-primary-foreground">
 						{#if themeHeader?.announcementHref}
 							<a href={themeHeader.announcementHref} class="transition-opacity hover:opacity-80">{themeAnnouncement}</a>
 						{:else}
@@ -189,13 +180,23 @@
 			</div>
 		{/if}
 		<!-- Fixed heights stand in for vertical padding here, so the scroll slimming transitions height instead. -->
-		<div class="ed-row page-width flex items-center justify-between bg-background transition-[height] duration-300 ease-in-out {isScrolled ? 'h-12' : 'h-16 sm:h-14'}">
+		<div
+			class="ed-row page-width flex items-center justify-between bg-background transition-[height] duration-300 ease-in-out {isScrolled
+				? 'h-12'
+				: 'h-16 sm:h-14'}"
+		>
 			<div class="hidden justify-center gap-3 sm:flex">
+				<!-- `lg:hidden`, not `md:hidden`: MainNav only reveals its inline links at `lg`, so
+				     hiding this button at `md` left 768-1023px with no way to reach any category —
+				     no menu button, no links, and the category row below is plugin-gated. The two
+				     breakpoints now hand over to each other. -->
 				<Button
 					variant="ghost"
 					size="icon"
-					aria-label="Sidebar"
-					class="md:hidden"
+					aria-label="Menu"
+					aria-expanded={navModule.openSidebar}
+					aria-controls="main-menu-drawer"
+					class="lg:hidden"
 					onclick={() => {
 						navModule.openSidebar = true
 					}}
@@ -205,55 +206,43 @@
 				<MainNav />
 			</div>
 
+			<!-- Below `sm` the header keeps the same shape on every route. It used to swap itself for a
+			     back chevron plus the page title on listing routes, which left a phone shopper
+			     arriving from an ad or a shared link with no menu, no brand link and no search, and
+			     the one control there called history.back() — on a fresh tab that exits to
+			     about:blank. The listing already prints its own title and count in the page body. -->
 			<div class="flex items-center justify-center sm:hidden">
-				{#if navModule.isProductListingPage}
-					<div class="flex items-center gap-2">
-						<Button variant="ghost" size="icon" aria-label="Go back" onclick={navModule.goBack}>
-							<ChevronLeft class="h-6 w-6 font-bold" />
-							<span class="sr-only">Go back</span>
-						</Button>
-
-						<div class="flex flex-col items-start">
-							{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
-								<p class="ed-plp-title text-base font-semibold capitalize">
-									{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
-								</p>
-							{:else}
-								<p class="ed-plp-title text-base font-semibold">Products</p>
-							{/if}
-
-							<p class="ed-plp-count text-xs text-muted-foreground">{(navModule.productsCount ?? 0).toLocaleString('en-US')} products</p>
-						</div>
-					</div>
-				{:else}
-					<Button
-						variant="ghost"
-						size="icon"
-						aria-label="Sidebar"
-						class="md:hidden"
-						onclick={() => {
-							navModule.openSidebar = true
-						}}
-					>
-						<Menu class="text-foreground" />
-					</Button>
-					<MainNav />
-				{/if}
+				<Button
+					variant="ghost"
+					size="icon"
+					aria-label="Menu"
+					aria-expanded={navModule.openSidebar}
+					aria-controls="main-menu-drawer"
+					onclick={() => {
+						navModule.openSidebar = true
+					}}
+				>
+					<Menu class="text-foreground" />
+				</Button>
+				<MainNav />
 			</div>
 
 			{#if navModule.megaMenuPluginActive}
-				<div class="hidden md:block">
+				<nav aria-label="Main navigation" class="hidden md:block">
 					<MegaMenu slim={isScrolled} />
-				</div>
+				</nav>
 			{/if}
 			<div class="flex items-center gap-2 sm:gap-2">
 				<MsSearch />
 
 				{#if wishlistPlugin?.active}
-					<div class="relative hidden sm:block" role="navigation">
+					<!-- No `role="navigation"` here: it wrapped a single link, so assistive tech
+					     announced a navigation landmark containing one item. The wrapper stays only
+					     because the count badge is positioned against it. -->
+					<div class="relative hidden sm:block">
 						<a
 							href="/my/wishlist"
-							class="ed-action flex items-center justify-center rounded-full px-2 text-muted-foreground transition-colors hover:text-foreground"
+							class="ed-action flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground max-md:h-11 max-md:w-11"
 							aria-label="Wishlist"
 						>
 							<Heart class="h-5 w-5" />
@@ -278,12 +267,16 @@
 					</div>
 				{/if}
 
-				<div class="flex h-full items-center px-2 font-sans">
+				<div class="flex h-full items-center font-sans">
 					{#if userState?.user?.role}
 						<ProfileDropdown onSignOut={navModule.handleSignOut} />
 					{:else}
+						<!-- The glyph is 20px, so the target has to come from the box around it: 44px on
+						     phones, the compact 36px from md up, matching the other header actions. -->
 						<AuthButton aria-label="Login" type="login">
-							<div class="ed-action flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground">
+							<div
+								class="ed-action flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground max-md:h-11 max-md:w-11"
+							>
 								<UserCircle class="h-5 w-5" />
 							</div>
 						</AuthButton>
@@ -296,37 +289,46 @@
 
 <!-- Sidebar -->
 {#if navModule.openSidebar}
-	<aside class:ed={activeThemeName === 'default'} class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent font-sans">
+	<!-- A real dialog. This was a bare <aside>, which is also why it is a <div> now: an aside is a complementary landmark, not a modal. Focus stayed on the trigger, focus stayed on the trigger, the first tab presses
+	     walked the header behind it, Escape did nothing, the page scrolled underneath and closing
+	     dropped focus to <body>. On a phone this is the only navigation there is. `use:dialog`
+	     moves focus in, traps Tab, closes on Escape and restores focus to the trigger. -->
+	<div
+		id="main-menu-drawer"
+		class:ed={activeThemeName === 'default'}
+		class="fixed inset-0 z-drawer flex overflow-hidden bg-transparent font-sans"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="main-menu-drawer-title"
+		tabindex="-1"
+		use:dialog={() => (navModule.openSidebar = false)}
+	>
+		<!-- The scrim is decoration: a click target, not a control. It used to be
+		     `role="button" tabindex="0"`, so assistive tech announced a full-viewport button ahead
+		     of the menu and it took a tab stop. The dialog's own Escape handler is the keyboard
+		     route out. -->
 		<div
-			role="button"
-			tabindex="0"
-			aria-label="Close sidebar"
+			aria-hidden="true"
 			in:fade={{ duration: 300 }}
 			out:fade={{ duration: 300 }}
-			class="backdrop-blur-xs absolute inset-0 bg-black/40"
+			class="absolute inset-0 bg-black/40 backdrop-blur-xs"
 			onclick={() => {
 				navModule.openSidebar = false
 			}}
-			onkeydown={(e) => {
-				if (e.key === 'Enter' || e.key === ' ') {
-					navModule.openSidebar = false
-				}
-			}}
-		>
-			<span class="sr-only">Close sidebar</span>
-		</div>
+		></div>
 		<div
 			in:fly={{ x: -320, duration: 300, easing: cubicOut }}
 			out:fly={{ x: -320, duration: 300, easing: cubicOut }}
-			class="ed-drawer relative z-[60] flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-border bg-background text-foreground shadow-2xl"
+			class="ed-drawer relative z-10 flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-border bg-background text-foreground shadow-z-10"
 		>
+			<h2 id="main-menu-drawer-title" class="sr-only">Main menu</h2>
 			<!-- Header -->
 			<div class="ed-drawer-head flex items-center justify-between border-b border-border px-5 py-4">
 				<a href="/" class="flex items-center gap-2" onclick={() => (navModule.openSidebar = false)}>
 					{#if page?.data?.store?.logo}
 						<!-- Through the CDN: store logos are uploaded at full resolution and this renders
 					     32px tall. Served raw it can be the heaviest above-the-fold asset on a store. -->
-					<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
+						<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
 						<span class="text-base font-black uppercase tracking-wider text-foreground">
 							{page?.data?.store?.name || 'Svelte Commerce'}
@@ -395,7 +397,6 @@
 								<span>Home</span>
 							</a>
 						</li>
-
 
 						<li>
 							<a
@@ -545,7 +546,7 @@
 				</div>
 			{/if}
 		</div>
-	</aside>
+	</div>
 {/if}
 
 <AuthModal bind:show={navModule.showAuthModal} />
@@ -578,18 +579,9 @@
 		color: hsl(var(--primary));
 	}
 
-	/* Mobile product-listing header */
-	.ed .ed-plp-title {
-		font-family: var(--ed-display);
-		font-weight: 500;
-		letter-spacing: -0.01em;
-		color: var(--ed-ink);
-	}
-
-	.ed .ed-plp-count {
-		color: var(--ed-soft);
-		letter-spacing: 0.02em;
-	}
+	/* The mobile product-listing header rules that lived here are gone with the markup they
+	   dressed: the listing route now keeps the ordinary header instead of swapping it for a back
+	   chevron and a repeated page title. */
 
 	/* ---------- Mobile drawer ---------- */
 	.ed .ed-drawer {
