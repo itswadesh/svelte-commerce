@@ -12,6 +12,11 @@ on purpose so that page work never restates the rules:
 Do not repeat colours, spacing, component behaviour, accessibility rules or responsive rules in a
 page task. Those belong here. Repository-level findings live in `docs/UX_AUDIT.md`.
 
+**Active scope: the default theme.** The repository ships five themes, and the theming mechanism
+must keep working, but design and audit work targets the default theme only. Do not design for
+wine, organic, lime or noor, and do not spend a page task reconciling them. Shared files are still
+shared: when you change one, keep it safe for the other themes without designing for them.
+
 ---
 
 ## 1. Project context
@@ -19,7 +24,8 @@ page task. Those belong here. Repository-level findings live in `docs/UX_AUDIT.m
 ```text
 Product: Svelte Commerce, an open-source headless storefront (SvelteKit), one codebase for many merchants.
 Primary users: shoppers on a merchant's storefront, majority on mobile; merchants configure, they do not code.
-Merchant types: multi-category by design. Shipped themes: default (editorial), wine, organic, lime, noor.
+Merchant types: multi-category by design. Design target: the default (editorial) theme.
+                Also shipped, and out of scope for design work: wine, organic, lime, noor.
                 The public demo (arialshop.com, Litekart) is a jewellery store; treat it as one merchant, not the product.
 Primary business goal: conversion, with product discovery as the path to it.
 Brand personality (system baseline, per-theme tokens on top): quiet, product-first, trustworthy, fast, compact.
@@ -52,7 +58,7 @@ Performance target: fast, stable pages with visible loading states and no avoida
 | Page container | `.page-width` in `src/app.css` | The single content rail: `min(--container-max, 100% - 2 × --container-gutter)`. Use it; do not add another max-width. |
 | Headless/accessible primitives | `src/lib/components/ui/*` | shadcn-svelte on bits-ui: button, input, select, dialog, sheet, drawer, popover, dropdown-menu, tabs, collapsible, skeleton, tooltip, checkbox, radio-group, switch, pagination, table, sonner. |
 | Storefront components | `src/lib/components/*` | nav (header, mega-menu, search, cart drawer, bottom nav), product-catalogue (listing, filters, product card), home, cart, checkout, address, auth, common (footer, pagination, modal). |
-| Theme-specific surfaces | `src/lib/theme/<theme>/*` | Each theme owns a homepage; lime and noor also own a nav, footer and product card. Section library in `src/lib/theme/sections`. |
+| Theme-specific surfaces | `src/lib/theme/<theme>/*` | The default theme owns `src/lib/theme/default` (homepage and product card). The other four are out of scope; leave their files alone. |
 | Routes | `src/routes/(www)`, `(my)`, `(legal)` | Product page UI is in `src/routes/(www)/products/[slug]/components`. Listing routes: `/products`, `/categories/[slug]`, `/collections/[slug]`, `/[slug]`. Checkout: `/checkout/{cart,address,payment,success,failed}`. |
 | Core (from the npm package) | `@misiki/kitcommerce-core` via `$lib/core/*` | Services, stores (cart/wishlist/user/product), composables, load functions, SEO and analytics plugins, `LazyImg`, `getImageCDNUrl`. Not editable here; the UI is. |
 | Tests | `tests/*.test.ts` (vitest + testing-library), `tests/*.spec.ts` (Playwright, baseURL `http://localhost:3000`) | Keep `data-testid` hooks stable. |
@@ -289,4 +295,5 @@ Preserve current URLs, query parameters, analytics, and backend adapters.
 - Product data, counts, prices, variants, totals and availability are consistent.
 - No new console errors or broken navigation (`bun run check` clean for touched files).
 - Loading feedback appears immediately and layout remains stable.
-- The page feels like the same product as every other Svelte Commerce page, in every shipped theme.
+- The page feels like the same product as every other Svelte Commerce page on the default theme,
+  and nothing done for it breaks the other shipped themes.
