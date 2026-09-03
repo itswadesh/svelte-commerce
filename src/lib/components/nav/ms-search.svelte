@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowUpRight, Clock, Search, Tag } from '@lucide/svelte'
+	import { Clock, Search, Tag } from '@lucide/svelte'
 	import * as Command from '$lib/components/ui/command/index.js'
 	import * as Dialog from '$lib/components/ui/dialog/index.js'
 	// Local renderer: Enter goes to the listing route, `loading` tracks every query, and recent
@@ -37,7 +37,7 @@
 			<Button
 				variant="ghost"
 				size="icon"
-				class="ed-search-trigger rounded-full"
+				class="rounded-full text-foreground transition-colors hover:text-primary"
 				aria-label="Open search"
 				aria-haspopup="dialog"
 				aria-expanded={expandSearch && showSearchResults}
@@ -65,8 +65,14 @@
 				handleCloseSearch()
 			}}
 		>
+			<!-- One surface. This used to carry a scoped stylesheet block painting the panel from
+			     `--ed-surface`, `--ed-line`, `--ed-radius` and a hard-coded rgba shadow — but those
+			     three are literal aliases of `--card`, `--border` and `--radius`, so the block was a
+			     second vocabulary for tokens that already exist, and the shadow was the only value in
+			     it that was not. The portal lands outside the shell's [data-theme] wrapper but inside
+			     <html>'s copy of it, so plain utilities resolve correctly here. -->
 			<Dialog.Content
-				class="ed-search-panel top-4 block w-[calc(100%-2rem)] max-w-2xl translate-y-0 gap-0 overflow-hidden p-0 sm:top-[10vh] {className}"
+				class="top-4 block w-[calc(100%-2rem)] max-w-xl translate-y-0 gap-0 overflow-hidden rounded-radius border bg-popover p-0 shadow-z-10 sm:top-[12vh] {className}"
 			>
 				<Dialog.Title class="sr-only">Search products</Dialog.Title>
 				<Dialog.Description class="sr-only">Type to see matching categories and products, or press Enter for the full result list.</Dialog.Description
@@ -74,11 +80,17 @@
 
 				<!-- `shouldFilter={false}`: the store has already matched the term server-side, so a
 				     second client-side pass would only drop hits it does not recognise. -->
-				<Command.Root shouldFilter={false} loop class="ed-search-cmd max-h-[80vh] bg-transparent">
-					<div class="ed-search-head border-b pr-12">
+				<Command.Root shouldFilter={false} loop class="max-h-[80vh] bg-transparent">
+					<!-- The query is the panel's header, not a field sitting inside it. The input drew its
+					     own border and then the global :focus-visible ring added `ring-2 ring-offset-2` on
+					     top, so the top of the panel was a box inside a box inside a box, with the close
+					     control stranded in the gutter beside it. The rule under the header is the focus
+					     indicator instead: it thickens and takes the ring colour on focus-within, which is
+					     visible across the full width and belongs to the surface rather than fighting it. -->
+					<div class="border-b border-border pr-14 transition-colors focus-within:border-ring">
 						<Command.Input
 							data-testid="search-input"
-							class="h-12 text-base sm:text-lg"
+							class="h-14 text-base focus-visible:ring-0 focus-visible:ring-offset-0"
 							bind:value={search}
 							placeholder={searchPlugin?.placeholder || placeholder || 'Search products...'}
 							aria-label={searchPlugin?.placeholder || 'Search products'}
@@ -87,61 +99,70 @@
 						/>
 					</div>
 
-					<Command.List class="max-h-[min(65vh,28rem)] p-2 scrollbar-thin scrollbar-track-transparent">
-						<!-- First on purpose. The list's first row is the one Enter activates, so the panel's
-						     exit to the full result set is always what the Enter key does — including while
-						     suggestions are still loading, and on a term the store carries nothing for. -->
+					<Command.List class="max-h-[min(65vh,26rem)] p-1.5 scrollbar-thin scrollbar-track-transparent">
+						<!-- First in the DOM on purpose, and that is a behaviour rather than a layout choice:
+						     the list's first row is the one Enter activates, so the exit to the full result
+						     set is always what Enter does — while suggestions are still loading, and on a
+						     term the store carries nothing for. What changed is its weight. cmdk selects the
+						     first row automatically, and with `aria-selected:bg-muted` that made a filled
+						     grey bar the heaviest thing in the panel: the fallback outranked the answer. The
+						     selected state is now a tint and a left accent, so you can still see what Enter
+						     will do without it shouting over the product you were looking for. -->
 						{#if search.trim()}
 							<Command.Group class="p-0">
 								<Command.Item
 									value="see-all-results"
-									class="h-11 justify-between gap-3 px-3 font-medium aria-selected:bg-muted aria-selected:text-foreground"
+									class="h-11 justify-between gap-3 rounded-radius border-l-2 border-transparent px-2.5 text-sm aria-selected:border-l-primary aria-selected:bg-muted/60 aria-selected:text-foreground"
 									onSelect={() => {
 										submitSearch()
 										handleCloseSearch()
 									}}
 								>
-									<span class="flex min-w-0 items-center gap-3">
-										<Search class="text-muted-foreground" />
-										<span class="truncate">See all results for “{search.trim()}”</span>
-									</span>
-									<ArrowUpRight class="text-muted-foreground" />
+									<span class="min-w-0 truncate">See all results for “{search.trim()}”</span>
+									<!-- Which key does this, shown where there is a keyboard to press it. -->
+									<kbd
+										class="hidden shrink-0 rounded border bg-muted px-1.5 py-0.5 font-sans text-[11px] font-medium text-muted-foreground sm:inline-block"
+										>Enter</kbd
+									>
 								</Command.Item>
 							</Command.Group>
-							<Command.Separator class="my-1" />
 						{/if}
 
 						{#if loading}
 							<!-- Same row height as a real suggestion, so the panel does not pump between the
 							     loading and loaded states on every keystroke. -->
-							<div class="space-y-2 p-1" aria-label="Loading suggestions">
+							<div class="space-y-1 p-1" aria-label="Loading suggestions">
 								{#each Array(4) as _}
-									<Skeleton class="h-16 w-full rounded-md" />
+									<Skeleton class="h-12 w-full rounded-radius" />
 								{/each}
 							</div>
 						{:else}
 							{#if !search.trim() && recentSearches.length}
-								<div class="flex items-center justify-between gap-2 px-3 pb-1 pt-2">
-									<p class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Recent searches</p>
-									<Button
-										variant="ghost"
-										class="h-8 px-2 text-xs font-medium text-muted-foreground hover:text-foreground"
+								<!-- Styled as a group heading rather than as its own thing. This row used to be
+								     `text-xs font-semibold uppercase tracking-wide` while the Categories and
+								     Products headings below it came from `Command.Group heading` — two heading
+								     treatments in one short list, one of them shouting. -->
+								<div class="flex items-center justify-between gap-2 px-2.5 pb-1 pt-2">
+									<p class="text-xs font-medium text-muted-foreground">Recent searches</p>
+									<button
+										type="button"
+										class="rounded-radius px-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
 										onclick={clearRecentSearches}
 									>
 										Clear
-									</Button>
+									</button>
 								</div>
 								<Command.Group class="p-0">
 									{#each recentSearches as term}
 										<Command.Item
 											value={`recent-${term}`}
-											class="h-11 gap-3 px-3 aria-selected:bg-muted aria-selected:text-foreground"
+											class="h-12 gap-3 rounded-radius border-l-2 border-transparent px-2.5 text-sm aria-selected:border-l-primary aria-selected:bg-muted/60 aria-selected:text-foreground"
 											onSelect={() => {
 												runSearch(term)
 												handleCloseSearch()
 											}}
 										>
-											<Clock class="text-muted-foreground" />
+											<Clock class="size-4 shrink-0 text-muted-foreground" />
 											<span class="truncate">{term}</span>
 										</Command.Item>
 									{/each}
@@ -154,7 +175,7 @@
 										<Command.LinkItem
 											href={category.href}
 											value={`category-${category.href}`}
-											class="h-11 gap-3 px-3 aria-selected:bg-muted aria-selected:text-foreground"
+											class="h-12 gap-3 rounded-radius border-l-2 border-transparent px-2.5 text-sm aria-selected:border-l-primary aria-selected:bg-muted/60 aria-selected:text-foreground"
 											onclick={() => {
 												closeSearch()
 												handleCloseSearch()
@@ -175,46 +196,48 @@
 										<Command.LinkItem
 											href={`/products/${result?.slug}`}
 											value={`product-${result?.slug}`}
-											class="gap-4 px-3 py-2 aria-selected:bg-muted aria-selected:text-foreground"
+											class="h-12 gap-3 rounded-radius border-l-2 border-transparent px-2.5 aria-selected:border-l-primary aria-selected:bg-muted/60 aria-selected:text-foreground"
 											onclick={() => {
 												closeSearch()
 												handleCloseSearch()
 											}}
 										>
-											<span class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border bg-muted">
+											<!-- 40px, down from 56px. The panel held three magnifiers before this: one
+											     labelling the input, one on the see-all row, and one standing in for a
+											     missing product image — which is every product on a store with no
+											     images, so the result list read as a column of search icons. The
+											     placeholder is the product's initial now, the same mark the auth
+											     dialogs use for a store with no logo. -->
+											<span class="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-radius border bg-muted">
 												{#if result.thumbnail}
-													<img src={result.thumbnail} alt="" class="h-full w-full object-cover" />
+													<img src={result.thumbnail} alt="" class="size-full object-cover" />
 												{:else}
-													<span class="flex h-full w-full items-center justify-center">
-														<Search class="h-5 w-5 text-muted-foreground" />
-													</span>
+													<span class="text-sm font-medium text-foreground/70">{(result.name || result.title || '?').charAt(0)}</span>
 												{/if}
 											</span>
-											<span class="min-w-0 flex-1 text-left">
-												<span class="block truncate font-medium text-foreground">
-													{result.name || result.title}
+											<span class="min-w-0 flex-1 truncate text-left text-sm font-medium text-foreground">
+												{result.name || result.title}
+											</span>
+											{#if result.price}
+												<!-- Right-aligned, so a scanning eye gets one price column instead of a
+												     price that starts wherever the title happened to end. -->
+												<span class="shrink-0 text-sm tabular-nums text-muted-foreground">
+													{priceRoundUp(result?.price, page?.data?.store?.currency?.code)}
 												</span>
-												{#if result.price}
-													<span class="block text-sm font-medium text-primary">
-														{priceRoundUp(result?.price, page?.data?.store?.currency?.code)}
-													</span>
-												{/if}
-											</span>
-											<ArrowUpRight class="size-5 shrink-0 text-muted-foreground" />
+											{/if}
 										</Command.LinkItem>
 									{/each}
 								</Command.Group>
 							{:else if search.trim()}
-								<div class="flex flex-col items-center justify-center px-6 py-10 text-center">
-									<div class="mb-4 rounded-full bg-muted p-4">
-										<Search class="h-7 w-7 text-muted-foreground" />
-									</div>
-									<p class="text-base font-medium text-foreground">No suggestions for “{search.trim()}”</p>
-									<p class="mt-1 text-sm text-muted-foreground">Check the spelling, or try a shorter, more general word.</p>
+								<!-- Both empty states used to open with a 60px tinted circle holding a magnifier.
+								     An empty result is a moment for direction, not for a medallion. -->
+								<div class="px-3 py-8 text-center">
+									<p class="text-sm font-medium text-foreground">No suggestions for “{search.trim()}”</p>
+									<p class="mt-1 text-sm text-muted-foreground">Check the spelling, or try a shorter word.</p>
 									<Button
 										variant="outline"
 										href="/products"
-										class="mt-4 h-11"
+										class="mt-4 h-10 text-sm"
 										onclick={() => {
 											closeSearch()
 											handleCloseSearch()
@@ -224,12 +247,7 @@
 									</Button>
 								</div>
 							{:else if !recentSearches.length}
-								<div class="flex flex-col items-center justify-center py-12 text-center">
-									<div class="mb-4 rounded-full bg-muted p-4">
-										<Search class="h-7 w-7 text-muted-foreground" />
-									</div>
-									<p class="text-sm text-muted-foreground">Start typing to search products.</p>
-								</div>
+								<p class="px-3 py-8 text-center text-sm text-muted-foreground">Start typing to search products.</p>
 							{/if}
 						{/if}
 					</Command.List>
@@ -238,34 +256,3 @@
 		</Dialog.Root>
 	{/snippet}
 </MsSearchRenderer>
-
-<!-- Editorial search styling for the default theme only (scoped via [data-theme='default']).
-     The panel is portalled to <body>, which sits outside the shell's [data-theme] wrapper but
-     inside <html>'s copy of it, so each rule is written fully global. -->
-<style>
-	:global([data-theme='default'] .ed-search-trigger) {
-		color: var(--ed-ink);
-		transition: color 0.25s ease;
-	}
-
-	:global([data-theme='default'] .ed-search-trigger:hover) {
-		color: hsl(var(--primary));
-	}
-
-	:global([data-theme='default'] .ed-search-panel) {
-		background: var(--ed-surface);
-		border: 1px solid var(--ed-line);
-		border-radius: var(--ed-radius);
-		box-shadow: 0 30px 60px -30px rgba(27, 26, 23, 0.35);
-	}
-
-	:global([data-theme='default'] .ed-search-head) {
-		border-color: var(--ed-line);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .ed-search-trigger) {
-			transition: none;
-		}
-	}
-</style>
