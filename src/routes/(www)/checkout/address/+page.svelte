@@ -110,6 +110,9 @@
 <div class="min-h-screen py-8 max-sm:pb-[calc(9rem_+_env(safe-area-inset-bottom))]">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={2} />
+
+		<!-- Same as the cart step: the progress indicator is a control, not the page heading. -->
+		<h1 class="sr-only">Delivery address</h1>
 		<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
 		  <div>
 				<p class="font-semibold tracking-tight text-xl">My Addresses</p>
