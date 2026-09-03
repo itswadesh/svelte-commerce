@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PolicyLink from '$lib/components/common/policy-link.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { MyProfileDeleteModule } from '$lib/core/composables/index.js'
 
@@ -29,7 +30,7 @@
 						<p class="font-bold text-gray-900">Forfeit all benefits</p>
 						<p class="text-sm leading-relaxed text-gray-500">
 							You'll lose your order history, saved details, coupons, and benefits. These cannot be recovered. Please review our
-							<a href="/privacy-policy" class="font-semibold text-primary hover:underline">Privacy Policy</a>.
+							<PolicyLink href="/privacy-policy" class="font-semibold text-primary hover:underline">Privacy Policy</PolicyLink>.
 						</p>
 					</div>
 				</li>
@@ -74,12 +75,7 @@
 			</div>
 
 			<div class="mt-8 flex justify-end">
-				<Button
-					onclick={deleteModule.deleteUser}
-					variant="destructive"
-					class="h-12 px-10"
-					disabled={!deleteModule.iAgree}
-				>
+				<Button onclick={deleteModule.deleteUser} variant="destructive" class="h-12 px-10" disabled={!deleteModule.iAgree}>
 					Permanently Delete My Account
 				</Button>
 			</div>
