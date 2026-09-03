@@ -2,6 +2,7 @@
 	import CartItem from '$lib/components/cart/cart-item.svelte'
 	import { X, ShoppingBag } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { goto } from '$app/navigation'
 	import { formatPrice } from '$lib/core/utils'
 	import { getCartState } from '@misiki/kitcommerce-core/stores'
@@ -13,11 +14,30 @@
 	const cartState = getCartState()
 	const storeData = $derived(page.data?.store)
 
+	// One busy flag for the whole panel. The old guard read `isUpdatingCart`, which the line-item
+	// update path never sets, so the checkout CTA stayed enabled and the subtotal stayed at full
+	// contrast while a quantity change was still in flight — a shopper could start checkout against
+	// a figure that was already wrong. The store flips `updatingItem[lineId]` around every line
+	// mutation, so the two together are the honest answer.
+	const isBusy = $derived(!!cartState?.isUpdatingCart || Object.values(cartState?.updatingItem || {}).some(Boolean))
+
+	const subtotal = $derived(formatPrice(cartState?.cart?.subtotal ?? cartState?.cart?.total ?? 0, storeData?.currencyCode))
+	const itemCount = $derived(cartState?.cart?.lineItems?.length ?? 0)
+
 	const { onClose, onContinueShopping, onRemoveCartItem } = $props()
 	const modalHistoryKey = '__svelteCommerceCartSidebar'
 	const titleId = $props.id()
 	let ownsHistoryEntry = false
 	let isNavigatingFromCart = false
+
+	// The core nav composable exposes close as `(e) => { e.stopPropagation(); … }`, so every caller
+	// that has no event to hand it — the dialog action's Escape key, the popstate handler — threw a
+	// TypeError before anything closed. Escape left the drawer open and the focus trap in place,
+	// which is the one escape hatch a modal must always have. Give it a no-op event.
+	const noopEvent = { stopPropagation() {} } as unknown as Event
+	function closeCart(e?: Event) {
+		onClose?.(e ?? noopEvent)
+	}
 
 	// Auto-open the slide-out cart on any successful add/update action.
 	// `showCheckout` is flipped to true by the core store's add()/update() on a
@@ -32,7 +52,7 @@
 		if (!cartState?.isOpen || !ownsHistoryEntry) return
 		ownsHistoryEntry = false
 		cartState.isOpen = false
-		onClose?.()
+		closeCart()
 	}
 
 	onMount(() => {
@@ -68,15 +88,16 @@
 		prevShowCheckout = showCheckout
 	})
 
-	function slideFadeTopRight(node: Element, params: { delay?: number; duration?: number; easing?: any; transformOrigin?: any }) {
-		const existingTransform = getComputedStyle(node).transform.replace('none', '')
+	// A panel slides in from the edge it is anchored to; it does not squash. The previous transition
+	// animated `scaleX` from a top-right origin over 500ms, which stretched every price and button
+	// inside it horizontally for half a second. `prefers-reduced-motion` collapses it to a fade.
+	function slideInFromRight(node: Element, params: { duration?: number } = {}) {
+		const reduced = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 		return {
-			delay: params.delay || 0,
-			duration: params.duration || 400,
-			easing: params.easing || cubicOut,
-			css: (t: number, u: number) =>
-				`transform-origin: ${params.transformOrigin || 'top right'}; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
+			duration: reduced ? 0 : (params.duration ?? 220),
+			easing: cubicOut,
+			css: (t: number, u: number) => `transform: translateX(${u * 100}%); opacity: ${Math.min(1, t * 1.5)};`
 		}
 	}
 
@@ -98,6 +119,7 @@
 	<!-- The box makes the target, not the 20px glyph: 44px on phones, 36px from md up, the same
 	     geometry as every other header action. -->
 	<button
+		data-testid="cart-icon"
 		class="flex h-9 w-9 items-center justify-center rounded-full max-md:h-11 max-md:w-11"
 		aria-label="Cart, {cartState?.cart?.qty ?? 0} items"
 		aria-expanded={!!cartState?.isOpen}
@@ -118,9 +140,9 @@
 		<!-- close cart backdrop -->
 		<Button
 			variant="ghost"
-			class="fixed inset-0 z-50 h-svh w-full rounded-none bg-black/30 hover:bg-black/30"
+			class="fixed inset-0 z-overlay h-svh w-full rounded-none border-0 bg-foreground/40 hover:bg-foreground/40"
 			aria-label="Close cart"
-			onclick={onClose}
+			onclick={closeCart}
 		>
 			<style>
 				body {
@@ -130,80 +152,85 @@
 			<span class="sr-only">Close cart</span>
 		</Button>
 
+		<!-- Named z step instead of `z-[10000000]`, tokens instead of `bg-white`: the theme wrapper
+		     now sits on <html>, so a panel painted in `bg-background` follows the active theme
+		     rather than freezing the default palette into the drawer. -->
 		<div
-			class="shadow-3xl ease-out-expo fixed right-0 top-0 z-[10000000] h-screen w-full overflow-y-auto bg-white transition-all duration-500 sm:w-[37.5%]"
-			transition:slideFadeTopRight={{ duration: 500 }}
+			class="fixed right-0 top-0 z-modal flex h-svh w-full flex-col bg-background shadow-z-10 sm:w-[26rem]"
+			transition:slideInFromRight={{ duration: 220 }}
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby={titleId}
 			tabindex="-1"
-			use:dialog={onClose}
+			use:dialog={closeCart}
 		>
-			<div class="relative z-50 flex h-full flex-col justify-between bg-white p-4">
-				<div class="sm:mx-3">
-					<h2 id={titleId} class="mb-4 mt-4 text-xl font-semibold text-gray-900">
-						Your Cart
-						{#if cartState.cart?.lineItems?.length > 0}
-							<span class="font-normal text-gray-400">({cartState.cart.qty})</span>
-						{/if}
-					</h2>
-					<Button variant="ghost" size="icon" class="absolute right-4 top-4 rounded-full" aria-label="close cart" onclick={onClose}>
-						<X class="size-5" />
-					</Button>
+			<div class="flex shrink-0 items-center justify-between gap-2 border-b border-border px-4 py-3">
+				<h2 id={titleId} class="text-base font-semibold text-foreground">
+					Your bag
+					{#if itemCount > 0}
+						<span class="font-normal text-muted-foreground">({cartState.cart.qty})</span>
+					{/if}
+				</h2>
+				<Button variant="ghost" size="icon" class="-mr-2 rounded-full" aria-label="Close cart" onclick={closeCart}>
+					<X class="size-5" />
+				</Button>
+			</div>
 
+			{#if itemCount > 0}
+				<div class="min-h-0 flex-1 divide-y divide-border overflow-y-auto px-4">
 					{#each cartState.cart?.lineItems || [] as _, i}
-						<div class="rounded-lg transition-all duration-300 hover:bg-gray-50">
-							<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={onRemoveCartItem} />
-						</div>
+						<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={onRemoveCartItem} />
 					{/each}
 				</div>
 
-				<div
-					class="sticky bottom-0 {cartState.cart?.lineItems?.length > 0
-						? '-mx-4 border-t border-gray-100 bg-gray-50 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]'
-						: ''} py-6 sm:px-4"
-				>
-					<div class="space-y-1">
-						{#if cartState.cart?.lineItems?.length > 0}
-							<div class="mx-4 flex items-center justify-between">
-								<p class="text-sm font-medium text-gray-700 sm:text-base">Subtotal</p>
-								<p class="text-base font-bold text-gray-900 sm:text-xl">
-									{formatPrice(cartState?.cart?.subtotal ?? cartState?.cart?.total, storeData?.currencyCode)}
-								</p>
-							</div>
-							<p class="mx-4 mt-1 text-xs text-gray-400">Shipping &amp; taxes calculated at checkout.</p>
+				<div class="shrink-0 border-t border-border bg-muted/40 px-4 py-4 pb-[calc(1rem_+_env(safe-area-inset-bottom))]">
+					<div class="flex items-baseline justify-between gap-4">
+						<p class="text-sm font-medium text-foreground">Subtotal</p>
+						{#if isBusy}
+							<!-- Stale figures at full contrast are worse than none: while a line update is in
+							     flight the amount is skeletoned rather than left asserting the old number. -->
+							<Skeleton class="h-6 w-24" />
 						{:else}
-							<div class="flex min-h-[80vh] flex-col items-center justify-center gap-3 bg-white">
-								<div class="mb-6 rounded-full bg-gray-50 p-8 ring-1 ring-gray-100">
-									<ShoppingBag class="h-12 w-12 text-gray-300" />
-								</div>
-								<span class="text-xl font-bold uppercase tracking-widest text-gray-900">Empty Cart!!</span>
-								<span class="max-w-xs px-2 text-center text-xs font-medium leading-relaxed text-gray-500"
-									>We didn't find any item inside cart, Go ahead, order some essentials from the menu</span
-								>
-								<Button disabled={!!cartState.isUpdatingCart} onclick={onContinueShopping} class="mt-8 px-8">Continue Shopping</Button>
-							</div>
+							<p class="text-lg font-bold text-foreground">{subtotal}</p>
 						{/if}
 					</div>
-					{#if cartState.cart?.lineItems?.length > 0}
-						<div class="mx-4 mt-5 pb-6 md:pb-0">
-							<Button
-								disabled={!!cartState.isUpdatingCart}
-								onclick={(e) => {
-									e.stopPropagation()
-									proceedToCart()
-								}}
-								class="w-full py-6 text-base font-semibold"
-							>
-								Checkout
-							</Button>
-							<button class="mt-3 w-full text-center text-xs font-medium text-gray-500 hover:text-gray-900" onclick={onContinueShopping}>
-								Continue shopping
-							</button>
-						</div>
-					{/if}
+					<p class="mt-1 text-xs text-muted-foreground">Shipping and taxes calculated at checkout.</p>
+
+					<!-- The drawer had no live region, so a screen-reader user heard nothing when a quantity
+					     change moved the subtotal. -->
+					<p class="sr-only" aria-live="polite" aria-atomic="true">
+						{isBusy ? 'Updating your bag' : `${cartState.cart.qty} items in your bag, subtotal ${subtotal}`}
+					</p>
+
+					<Button
+						disabled={isBusy}
+						aria-busy={isBusy}
+						onclick={(e) => {
+							e.stopPropagation()
+							proceedToCart()
+						}}
+						class="mt-4 h-12 w-full text-sm font-semibold"
+					>
+						Checkout
+					</Button>
+					<Button
+						variant="link"
+						onclick={onContinueShopping}
+						class="mt-1 h-11 w-full text-sm font-medium text-muted-foreground hover:text-foreground hover:no-underline"
+					>
+						Continue shopping
+					</Button>
 				</div>
-			</div>
+			{:else}
+				<div class="flex flex-1 flex-col items-center justify-center gap-2 px-6 pb-10 text-center">
+					<div class="mb-4 rounded-full bg-muted p-6">
+						<ShoppingBag class="h-9 w-9 text-muted-foreground" />
+					</div>
+					<p class="text-base font-semibold text-foreground">Your bag is empty</p>
+					<p class="max-w-xs text-sm leading-relaxed text-muted-foreground">Nothing here yet. Browse the store and add something you like.</p>
+					<Button onclick={onContinueShopping} class="mt-6 h-11 px-8">Start shopping</Button>
+				</div>
+			{/if}
 		</div>
 	{/if}
 </div>
