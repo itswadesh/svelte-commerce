@@ -10,7 +10,7 @@
 	// Local shadow of the vendored renderer — it never passed `isSaving` through, never awaited
 	// `onsave` and closed the dialog even when the save failed. See the file header.
 	import AddressFormRenderer from './address-form-renderer.svelte'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import Spinner from '$lib/components/common/spinner.svelte'
 
 	let {
 		show = $bindable(),
@@ -103,12 +103,10 @@
 							<Textbox name="zip" bind:value={address.zip} placeholder="12345" schema={AddressSchema.zip} label="ZIP Code" required />
 						</div>
 					</div>
-					<div
-						class="flex flex-col gap-2 border-t border-border bg-background pt-3 pb-[env(safe-area-inset-bottom)]"
-					>
+					<div class="flex flex-col gap-2 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] pt-3">
 						<Button type="submit" class="w-full" disabled={isSaving}>
 							{#if isSaving}
-								<LoadingDots />
+								<Spinner label="Saving address" />
 							{:else}
 								Save Contact
 							{/if}

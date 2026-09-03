@@ -2,7 +2,7 @@
 	import { tv, type VariantProps } from 'tailwind-variants'
 
 	export const sheetVariants = tv({
-		base: 'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 gap-4 p-6 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+		base: 'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-drawer gap-4 p-6 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
 		variants: {
 			side: {
 				top: 'data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 border-b',
@@ -43,7 +43,7 @@
 	<SheetPrimitive.Content bind:ref class={cn(sheetVariants({ side }), className)} {...restProps}>
 		{@render children?.()}
 		<SheetPrimitive.Close
-			class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+			class="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none md:right-3 md:top-3 md:h-9 md:w-9"
 		>
 			<X class="size-4" />
 			<span class="sr-only">Close</span>

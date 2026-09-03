@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import Spinner from '$lib/components/common/spinner.svelte'
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { Input } from '$lib/components/ui/input/index.js'
 	import { PincodeCheckRenderer, useProductState } from '$lib/core/composables/index.js'
@@ -13,7 +13,7 @@
 	{#snippet content({ showPincode, loading, hasSingleWarehouse, selectedWarehouse, resultText, checkPincode, toggleShowPincode })}
 		{#if !productState.warehouseLoaded}
 			<div class="flex w-full justify-center">
-				<LoadingDots />
+				<Spinner size={5} label="Loading delivery options" />
 			</div>
 		{:else if !hasSingleWarehouse}
 			{#if !showPincode}
@@ -27,18 +27,14 @@
 					/>
 					<Button disabled={!(pincode && pincode > 0) || loading} onclick={checkPincode} class="min-w-[80px]">
 						{#if loading}
-							<LoadingDots />
+							<Spinner label="Checking pincode" />
 						{:else}
 							Check
 						{/if}
 					</Button>
 				</div>
-      {:else}
-				<Button
-					variant="plain"
-					onclick={toggleShowPincode}
-					class="flex min-h-[44px] items-center justify-start p-0 font-medium hover:bg-transparent"
-				>
+			{:else}
+				<Button variant="plain" onclick={toggleShowPincode} class="flex min-h-[44px] items-center justify-start p-0 font-medium hover:bg-transparent">
 					<span class="mr-2">Check Availability in your area</span>
 					<MapPin class="size-4 text-primary" />
 				</Button>

@@ -5,6 +5,7 @@
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
+	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 
@@ -182,33 +183,16 @@
 						<div class="h-1 w-12 bg-primary"></div>
 					</div>
 					<div class="space-y-4">
-						<div class="space-y-3 border-b border-border pb-6">
-							<div class="flex justify-between text-sm">
-								<span class="font-medium text-gray-500">Subtotal</span>
-								<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, currencyCode)}</span>
-							</div>
-							{#if cartState.cart.discountAmount > 0}
-								<div class="flex justify-between text-sm">
-									<span class="font-medium text-gray-500">Discount {cartState.cart.couponCode ? `(${cartState.cart.couponCode})` : ''}</span>
-									<span class="font-bold uppercase tracking-tight text-orange-600">- {formatPrice(cartState.cart.discountAmount, currencyCode)}</span>
-								</div>
-							{/if}
-							<div class="flex justify-between text-sm">
-								<span class="font-medium text-gray-500">Shipping</span>
-								{#if cartState.cart.shippingCharges}
-									<span class="font-bold text-gray-900">{formatPrice(cartState.cart.shippingCharges, currencyCode)}</span>
-								{:else}
-									<span class="rounded bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-green-600 ring-1 ring-green-100"
-										>FREE</span
-									>
-								{/if}
-							</div>
-						</div>
-
-						<div class="flex items-center justify-between pt-2">
-							<span class="text-sm font-bold uppercase text-gray-900">Total</span>
-							<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, currencyCode)}</span>
-						</div>
+						<PriceSummary
+							subtotal={cartState.cart.subtotal}
+							discount={cartState.cart.discountAmount}
+							discountLabel={cartState.cart.couponCode ? `Discount (${cartState.cart.couponCode})` : 'Discount'}
+							shipping={cartState.cart.shippingCharges}
+							tax={cartState.cart.tax}
+							total={cartState.cart.total}
+							{currencyCode}
+							shippingResolved={!!cartState.cart.shippingAddress}
+						/>
 
 						{#if paymentModule.showError}
 							<div class="rounded bg-destructive p-3 text-[11px] font-bold uppercase tracking-tight text-destructive-foreground ring-1 ring-red-100">

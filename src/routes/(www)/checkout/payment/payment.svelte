@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
 	import { formatPrice } from '$lib/core/utils'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
@@ -273,43 +273,18 @@
 								<div class="h-1 w-12 bg-primary"></div>
 							</div>
 							{#if paymentModule.loadingForCart}
-								<div class="flex items-center justify-center py-8">
-									<LoadingDots />
-								</div>
+								<PriceSummary loading />
 							{:else}
 								<div class="space-y-4">
-									<div class="space-y-3 border-b border-border pb-6">
-										<div class="flex justify-between text-sm">
-											<span class="font-medium text-gray-500">Subtotal</span>
-											<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
-										</div>
-										{#if cartState.cart.discountAmount > 0}
-											<div class="flex justify-between text-sm">
-												<span class="font-medium text-gray-500">Discount</span>
-												<span class="font-bold uppercase tracking-tight text-orange-600"
-													>- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span
-												>
-											</div>
-										{/if}
-										<div class="flex justify-between text-sm">
-											<span class="font-medium text-gray-500">Shipping</span>
-											{#if !cartState.cart.shippingAddress}
-												<span class="text-[10px] font-bold uppercase tracking-tighter text-gray-400"> Address required </span>
-											{:else if cartState.cart.shippingCharges}
-												<span class="font-bold text-gray-900">{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span>
-											{:else}
-												<span
-													class="rounded bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-green-600 ring-1 ring-green-100"
-													>FREE</span
-												>
-											{/if}
-										</div>
-									</div>
-
-									<div class="flex items-center justify-between pt-2">
-										<span class="text-sm font-bold uppercase text-gray-900">Total</span>
-										<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
-									</div>
+									<PriceSummary
+										subtotal={cartState.cart.subtotal}
+										discount={cartState.cart.discountAmount}
+										shipping={cartState.cart.shippingCharges}
+										tax={cartState.cart.tax}
+										total={cartState.cart.total}
+										currencyCode={page?.data?.store?.currency?.code}
+										shippingResolved={!!cartState.cart.shippingAddress}
+									/>
 
 									<div class="mt-6 flex items-center justify-center gap-2 rounded-md border border-gray-100 bg-gray-50/50 px-4 py-3">
 										<LockKeyhole class="h-3.5 w-3.5 text-gray-400" />
