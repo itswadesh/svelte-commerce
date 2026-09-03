@@ -6,10 +6,7 @@
 	import { TrustpilotPlugin } from '$lib/core/components/index.js'
 	import { sanitize } from '$lib/core/utils/index.js'
 	import { keepResolvableLinks } from './cms-pages.js'
-	import masterCard from '$lib/assets/payment-methods/mastercard.png'
-	import paypal from '$lib/assets/payment-methods/paypal.png'
-	import skrill from '$lib/assets/payment-methods/skrill.png'
-	import visa from '$lib/assets/payment-methods/visa.png'
+	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
 	import Newsletter from './newsletter.svelte'
 	import FooterMenu from './footer-menu.svelte'
 	import Logo from '$lib/components/common/logo.svelte'
@@ -18,22 +15,37 @@
 	import LimeFooter from '$lib/theme/lime/LimeFooter.svelte'
 	import NoorFooter from '$lib/theme/noor/NoorFooter.svelte'
 
-	let paymentMethodCards = [
-		{ src: masterCard, alt: 'Mastercard' },
-		{ src: paypal, alt: 'PayPal' },
-		{ src: skrill, alt: 'Skrill' },
-		{ src: visa, alt: 'Visa' }
-	]
-
 	// Derive store data to prevent unnecessary re-renders
 	const storeData = $derived(page?.data?.store || {})
 	const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
-	const socialSharing = $derived({
-		active: true, // Force active for SEO requirements
-		...storeData?.plugins?.socialSharingButtons
-		// youtube: storeData?.plugins?.socialSharingButtons?.youtube || '',
-		// twitter: storeData?.plugins?.socialSharingButtons?.twitter || ''
-	})
+
+	// The row used to be four hard-coded marks, so every store claimed Skrill and PayPal whether it
+	// accepted them or not. Build it from the methods the store actually configures; a store with
+	// none shows no row at all rather than four faint promises.
+	const paymentMethodCards = $derived(
+		(storeData?.paymentMethods ?? [])
+			.filter((method: { active?: boolean }) => method?.active !== false)
+			.map((method: { name?: string; code?: string; img?: string | null }) => ({
+				src: method?.img || localPaymentIcon(method),
+				alt: method?.name || method?.code || 'Payment method'
+			}))
+	)
+
+	// The toggle the merchant sets is the answer. It used to be overridden to `true`, so a store that
+	// had switched social links off still rendered whatever handles happened to be on the record.
+	const socialSharing = $derived(storeData?.plugins?.socialSharingButtons)
+	// Screen readers used to hear the raw config key — "linkedin", "twitter" — as the link name.
+	const SOCIAL_NAMES: Record<string, string> = {
+		twitter: 'X',
+		facebook: 'Facebook',
+		linkedin: 'LinkedIn',
+		instagram: 'Instagram',
+		telegram: 'Telegram',
+		youtube: 'YouTube',
+		whatsapp: 'WhatsApp',
+		pinterest: 'Pinterest'
+	}
+
 	const footerSettings = $derived(storeData?.plugins?.footerSettings)
 	const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
 
@@ -42,6 +54,15 @@
 	const activeThemeName = $derived(page.data?.theme?.name ?? 'default')
 	const themeContent = $derived(resolveThemeContent(activeThemeName, page.data?.store))
 	const themeFooter = $derived(themeContent?.footer)
+
+	// A vendor credit is a fact about the merchant's arrangement, not about this codebase, so it is
+	// read from the store record and is simply absent when the store supplies none. It used to be a
+	// hard-coded "Powered by Litekart" on every page of every store, true of that store or not.
+	// Accepts either a plain string or `{ label, link }`.
+	const credit = $derived((storeData as Record<string, any>)?.poweredBy as string | { label?: string; link?: string } | undefined)
+	const creditLabel = $derived(typeof credit === 'string' ? credit : credit?.label)
+	const creditLink = $derived(typeof credit === 'string' ? undefined : credit?.link)
+
 	// The theme's footer columns are static copy, but five of their links point at CMS-authored
 	// pages. On a store that never published them — or a backend with no CMS at all — every one of
 	// those links landed on a bare 404, from the bottom of every page on the site. Only link what
@@ -84,7 +105,9 @@
 		<NoorFooter footer={themeFooter} description={themeContent.description} brandName={storeData?.name || themeContent.brandName} />
 	{:else}
 		{#if footerSettings?.active}
-			<div class="w-full pb-4">
+			<!-- Merchant HTML used to run edge-to-edge while the columns below sat on the rail, so the
+			     two never lined up at any width. It shares the rail now. -->
+			<div class="page-width w-full pb-4">
 				{#await sanitize(footerSettings.html) then html}
 					{@html html}
 				{:catch error}
@@ -92,12 +115,15 @@
 				{/await}
 			</div>
 		{/if}
-		<!-- `me-container` was an undefined class; the real gutters live on .ed-foot-inner below. -->
-		<footer class:ed={activeThemeName === 'default'}>
-			<div class="ed-foot-inner w-full xl:pb-2">
+		<!-- The footer used to re-declare the rail formula in its own <style> block, giving the single
+		     content rail two definitions that could drift. `.page-width` from app.css is the one. -->
+		<footer class:ed={activeThemeName === 'default'} aria-label="Site footer" data-build={version}>
+			<div class="page-width w-full xl:pb-2">
 				{#if shouldCollapseOnMobile}
 					<Button
 						variant="ghost"
+						aria-expanded={isExpanded}
+						aria-controls="footer-collapsible"
 						class="flex h-auto w-full items-center justify-between border-b bg-muted/30 p-4 md:hidden"
 						onclick={() => (isExpanded = !isExpanded)}
 					>
@@ -106,7 +132,7 @@
 					</Button>
 				{/if}
 
-				<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
+				<div id="footer-collapsible" class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
 					<div class="flex flex-col gap-8 py-8 md:gap-12 md:py-12 lg:flex-row lg:justify-between">
 						<div class="flex max-w-xs flex-col gap-3 sm:gap-4">
 							<!-- No `variant="light"`: this footer has no dark background on any theme that
@@ -125,10 +151,18 @@
 							{/if}
 
 							{#if socialSharing?.active}
-								<div class="flex flex-wrap items-center gap-5">
+								<!-- `-ml-2.5` pulls the first icon's padding back so the row still starts on the
+								     logo's edge; the padding is what makes each 24px mark a 44px target. -->
+								<div class="-ml-2.5 flex flex-wrap items-center gap-1">
 									{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
 										{#if social}
-											<a href={social as string} target="_blank" rel="nofollow" class="text-muted-foreground transition-colors hover:text-foreground">
+											<a
+												href={social as string}
+												target="_blank"
+												rel="noopener noreferrer"
+												aria-label={SOCIAL_NAMES[key] ?? key}
+												class="inline-flex items-center justify-center p-2.5 text-muted-foreground transition-colors hover:text-foreground"
+											>
 												{#if key == 'twitter'}
 													<svg class="size-6" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
 														><title>X</title><path
@@ -179,7 +213,6 @@
 														/></svg
 													>
 												{/if}
-												<span class="sr-only">{key}</span>
 											</a>
 										{/if}
 									{/each}
@@ -197,41 +230,37 @@
 
 					<div class="flex flex-col gap-6 border-t py-6 md:gap-8 md:py-8 lg:flex-row lg:items-center lg:justify-between">
 						<div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8">
-							<span class="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+							<!-- One sentence, sentence case. The uppercase treatment plus a line break before the full
+							     stop rendered as "© 2026 TEST . ALL RIGHTS RESERVED."; the build stamp that used to sit
+							     here as sr-only text was read out to screen readers and is now the footer's data-build. -->
+							<span class="text-xs text-muted-foreground">
 								{#if themeFooter?.copyright}
 									{themeFooter.copyright}
 								{:else}
 									&copy; {new Date().getFullYear()}
-									{' '}
-									<a href="/" class="text-foreground transition-colors hover:text-primary">
-										{storeData?.name}
-									</a>
-									. All Rights Reserved.
+									<a href="/" class="text-foreground transition-colors hover:text-primary">{storeData?.name}</a>. All rights reserved.
 								{/if}
-								<a
-									target="_blank"
-									href="https://litekart.in"
-									class="text-xs font-bold uppercase text-foreground transition-colors hover:text-primary"
-								>
-									Powered by Litekart
-								</a>
-								<!-- Support-only build stamp. It used to be painted the footer background colour
-								     (1:1 contrast — a WCAG 1.4.3 failure that still reached the a11y tree);
-								     sr-only removes it from view entirely with the same practical effect. -->
-								<span class="foot-version sr-only">{version}</span>
+								{#if creditLabel}
+									{#if creditLink}
+										<a href={creditLink} target="_blank" rel="noopener noreferrer" class="ml-1 text-foreground transition-colors hover:text-primary">
+											{creditLabel}
+										</a>
+									{:else}
+										<span class="ml-1">{creditLabel}</span>
+									{/if}
+								{/if}
 							</span>
 							<TrustpilotPlugin />
 						</div>
 
 						{#if paymentMethodCards?.length}
-							<ul class="flex flex-wrap items-center gap-4">
+							<!-- Built from the store's own methods, so it no longer claims Skrill and PayPal on a
+							     store that takes neither, and drawn at full opacity with its box reserved instead
+							     of four faint 20px smudges that shifted the row as they decoded. -->
+							<ul class="flex flex-wrap items-center gap-4" aria-label="Accepted payment methods">
 								{#each paymentMethodCards as pmc}
 									<li>
-										<img
-											src={pmc.src}
-											alt="payment method card - {pmc.alt}"
-											class="h-5 w-auto object-contain opacity-60 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 md:opacity-40"
-										/>
+										<img src={pmc.src} alt={pmc.alt} width="32" height="20" class="h-5 w-auto object-contain" />
 									</li>
 								{/each}
 							</ul>
@@ -254,15 +283,6 @@
 		border-top: 1px solid var(--ed-line);
 		color: var(--ed-ink);
 		font-family: var(--ed-body);
-	}
-
-	/* Gutters for EVERY theme that uses this footer (was scoped to `.ed`, so wine/organic still
-	   ran edge-to-edge and clipped the logo / copyright on narrow screens). Reads the shared
-	   container tokens from app.css, so the footer sits on the same rail as the header and the
-	   theme homepage; the .ed background below still spans full width. */
-	.ed-foot-inner {
-		width: min(var(--container-max, 1240px), 100% - 2 * var(--container-gutter, 16px));
-		margin-inline: auto;
 	}
 
 	.ed :global(.border-t) {

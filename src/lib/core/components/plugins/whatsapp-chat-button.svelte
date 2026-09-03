@@ -20,7 +20,7 @@
 {#if isMounted && page?.data?.store?.plugins?.whatsappChatButton?.active && page?.data?.store?.plugins?.whatsappChatButton?.phone}
 	<button
 		onclick={openWhatsApp}
-		class="fixed bottom-4 left-4 z-50 hidden h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-all hover:shadow-xl md:flex"
+		class="fixed bottom-20 left-4 z-overlay flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-z-10 transition-all hover:shadow-z-10 sm:bottom-5"
 		aria-label="Chat on WhatsApp"
 	>
 		<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#fff" viewBox="0 0 256 256"
@@ -32,8 +32,19 @@
 {/if}
 
 <style>
+	/* Rendered at every width now. It used to start at `md`, so the channel most mobile shoppers
+	   actually use was hidden from all of them. `bottom-20` below `sm` clears the product page's
+	   sticky Add to Cart bar; the layer comes from the shared z scale rather than a bare `z-50`. */
 	button {
 		animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	}
+
+	/* A launcher that springs into view is exactly what a visitor asking for reduced motion is
+	   asking not to see. */
+	@media (prefers-reduced-motion: reduce) {
+		button {
+			animation: none;
+		}
 	}
 
 	@keyframes bounce-in {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ChevronDownIcon } from '@lucide/svelte'
+	import { Button } from '$lib/components/ui/button'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
 	import { cleanSchemaText } from '$lib/components/seo/schema.js'
@@ -35,38 +36,45 @@
 
 <StructuredData schema={faqSchema} />
 
-<div class="mx-auto max-w-3xl px-4 py-8">
-	<h1 class="mb-8 text-center text-3xl font-bold text-gray-900">Frequently Asked Questions</h1>
+<div class="page-width py-10 md:py-16">
+	<div class="mx-auto max-w-3xl">
+		<h1 class="mb-8 text-center text-3xl font-bold tracking-tight text-foreground md:text-4xl">Frequently asked questions</h1>
 
-	{#if faqs.length}
-		<div class="space-y-4">
-			{#each faqs as faq (faq.id)}
-				<!-- Native disclosure: the answer stays in the server HTML whether or not it is open,
+		{#if faqs.length}
+			<div class="space-y-4">
+				{#each faqs as faq (faq.id)}
+					<!-- Native disclosure: the answer stays in the server HTML whether or not it is open,
 				     so crawlers read question and answer together. Also keyboard/AT accessible with
 				     no JS state to keep in sync. -->
-				<details class="faq overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
-					<summary
-						class="flex w-full cursor-pointer items-center justify-between px-6 py-4 text-left transition-colors hover:bg-gray-50"
-					>
-						<span class="flex-1 pr-4 text-lg font-medium text-gray-900">{faq.question}</span>
-						<span class="faq-chevron text-gray-500 transition-transform duration-200">
-							<ChevronDownIcon class="h-5 w-5" />
-						</span>
-					</summary>
+					<details class="faq overflow-hidden rounded-lg border bg-card shadow-xs">
+						<summary class="flex w-full cursor-pointer items-center justify-between px-6 py-4 text-left transition-colors hover:bg-muted/50">
+							<span class="flex-1 pr-4 text-lg font-medium text-foreground">{faq.question}</span>
+							<span class="faq-chevron text-muted-foreground transition-transform duration-fast">
+								<ChevronDownIcon class="h-5 w-5" />
+							</span>
+						</summary>
 
-					<div id="faq-{faq.id}" class="px-6 pb-4">
-						<div class="prose prose-sm max-w-none text-gray-600 prose-p:my-0 prose-li:my-0">
-							{@html faq.answer}
+						<div id="faq-{faq.id}" class="px-6 pb-4">
+							<div class="prose prose-sm prose-neutral max-w-none text-muted-foreground prose-a:text-primary">
+								{@html faq.answer}
+							</div>
 						</div>
-					</div>
-				</details>
-			{/each}
-		</div>
-	{:else}
-		<div class="py-8 text-center text-gray-500">
-			<p>No FAQs available at the moment.</p>
-		</div>
-	{/if}
+					</details>
+				{/each}
+			</div>
+		{:else}
+			<!-- A shopper who followed the FAQs link was looking for something. One grey sentence with no
+		     way onward sends them back to the navigation to guess again. -->
+			<div class="mx-auto max-w-md py-10 text-center">
+				<p class="text-muted-foreground">There are no questions and answers here yet.</p>
+				<p class="mt-2 text-sm text-muted-foreground">For anything about an order, delivery or a return, write to us and we will answer directly.</p>
+				<div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+					<Button href="/contact-us" class="h-11">Contact us</Button>
+					<Button href="/products" variant="outline" class="h-11">Browse products</Button>
+				</div>
+			</div>
+		{/if}
+	</div>
 </div>
 
 <style>
