@@ -8,12 +8,12 @@
 </script>
 
 {#if page.data?.product?.ag && Object.keys(page.data?.product?.ag).length}
-	<div class="intra-gap flex flex-col edp-aggregation">
+	<div class="intra-gap edp-aggregation flex flex-col">
 		{#each Object.entries(page.data?.product?.ag || {}) as [optionName, values]}
 			{#if Array.isArray(values)}
 				<div class="flex flex-col gap-3">
 					<div class="flex items-center gap-2">
-						<span class="text-sm font-semibold text-gray-900 dark:text-gray-100 edp-opt-label">
+						<span class="edp-opt-label text-sm font-semibold text-gray-900 dark:text-gray-100">
 							{optionName}
 
 							{#if productState.selectedAggregations?.[optionName]}
@@ -21,7 +21,7 @@
 							{/if}
 						</span>
 
-						<span class="font-semibold edp-opt-value">{productState.selectedAggregations?.[optionName] || ''}</span>
+						<span class="edp-opt-value font-semibold">{productState.selectedAggregations?.[optionName] || ''}</span>
 					</div>
 
 					<div class="flex flex-wrap items-center gap-3">

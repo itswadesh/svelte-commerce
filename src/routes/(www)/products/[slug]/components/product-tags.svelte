@@ -8,7 +8,7 @@
 </script>
 
 {#if data?.product?.productTags?.length > 0}
-	<div class=" flex flex-wrap gap-2 edp-tags">
+	<div class=" edp-tags flex flex-wrap gap-2">
 		{#each (data?.product.productTags || '').split(',') || [] as t}
 			<Badge variant="outline" class="edp-tag">{t}</Badge>
 		{/each}

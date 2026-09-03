@@ -6,34 +6,33 @@
 	const productState = useProductState()
 </script>
 
-<div class="intra-gap flex flex-col edp-pricewrap">
-	<div class="gap-1 flex flex-wrap items-baseline lg:flex-nowrap">
-		<div class="text-xl font-semibold  text-gray-900 dark:text-white edp-price">
+<div class="intra-gap edp-pricewrap flex flex-col">
+	<div class="flex flex-wrap items-baseline gap-1 lg:flex-nowrap">
+		<div class="edp-price text-xl font-semibold text-gray-900 dark:text-white">
 			{formatPrice(productState.selectedVariant?.price || page.data?.product?.price, page?.data?.store?.currency?.code)}
 		</div>
 
 		{#if productState.selectedVariant?.price}
 			{#if productState.selectedVariant?.mrp && productState.selectedVariant?.mrp > productState.selectedVariant?.price}
-				<div class="text-sm line-through edp-mrp">
+				<div class="edp-mrp text-sm line-through">
 					{formatPrice(productState.selectedVariant?.mrp, page?.data?.store?.currency?.code)}
 				</div>
-				<div class="text-lg  px-2 text-success edp-off">
+				<div class="edp-off px-2 text-lg text-success">
 					{Math.round(((productState.selectedVariant?.mrp - productState.selectedVariant?.price) / productState.selectedVariant?.mrp) * 100)}% OFF
 				</div>
 			{/if}
 		{:else if page.data?.product?.price}
 			{#if page.data?.product?.mrp && page.data?.product?.mrp > page.data?.product?.price}
-					<div class="text-sm line-through edp-mrp">
+				<div class="edp-mrp text-sm line-through">
 					{formatPrice(page.data?.product?.mrp, page?.data?.store?.currency?.code)}
 				</div>
-				<div class="text-lg  px-2 text-success edp-off">
+				<div class="edp-off px-2 text-lg text-success">
 					{Math.round(((page.data?.product?.mrp - page.data?.product?.price) / page.data?.product?.mrp) * 100)}% Off
 				</div>
 			{/if}
 		{/if}
-			<span class="w-fit text-sm font-medium text-900 ml-1 edp-tax">Inclusive of all taxes</span>
+		<span class="text-900 edp-tax ml-1 w-fit text-sm font-medium">Inclusive of all taxes</span>
 	</div>
-
 </div>
 
 <style>

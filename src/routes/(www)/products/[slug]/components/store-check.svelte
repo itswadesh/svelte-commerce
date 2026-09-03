@@ -9,19 +9,19 @@
 
 {#if productState.wareHousePluginEnabled && productState.warehouses?.length > 0}
 	<Sheet.Root>
-		<div class="my-5 flex flex-col gap-2 edp-store">
+		<div class="edp-store my-5 flex flex-col gap-2">
 			<div class="flex items-center gap-2">
 				<StoreIcon class="h-5 w-5" />
 
-				<span class="font-semibold edp-store-title">Looking to pickup this item?</span>
+				<span class="edp-store-title font-semibold">Looking to pickup this item?</span>
 			</div>
 
-			<span class="text-sm text-gray-500 edp-store-text">
+			<span class="edp-store-text text-sm text-gray-500">
 				You can pick up this item from our store. Please check the availability of this item at your nearest store.
 			</span>
 
 			<Sheet.Trigger>
-				<Button variant="link" class="self-start h-auto p-0">Check Availability</Button>
+				<Button variant="link" class="h-auto self-start p-0">Check Availability</Button>
 			</Sheet.Trigger>
 		</div>
 

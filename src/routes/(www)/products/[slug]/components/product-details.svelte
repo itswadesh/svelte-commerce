@@ -1,10 +1,7 @@
 <script lang="ts">
 	import LoginModal from '$lib/components/auth/login-modal.svelte'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
-	import {
-		GoogleStructuredDataBreadcrumb,
-		GoogleStructuredVideoSchema
-	} from '$lib/core/components/index.js'
+	import { GoogleStructuredDataBreadcrumb, GoogleStructuredVideoSchema } from '$lib/core/components/index.js'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
 	import { availabilityUrl } from '$lib/components/seo/schema.js'
@@ -29,8 +26,8 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 
 	const productState = useProductState()
-  const data = $derived(page.data)
-  const showPincodeCheck = $derived(productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
+	const data = $derived(page.data)
+	const showPincodeCheck = $derived(productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
 
 	/** Strip HTML tags and collapse whitespace; returns '' for placeholder-only values like "-". */
 	const cleanHtmlText = (value: string | null | undefined): string => {
@@ -45,9 +42,7 @@
 
 	// This is a white-label template: the merchant's own name comes from store settings, and no
 	// delivery/returns promise is made on their behalf unless their own copy says so.
-	const metaTitle = $derived(
-		data?.product?.metaTitle || [data?.product?.title, storeName].filter(Boolean).join(' | ')
-	)
+	const metaTitle = $derived(data?.product?.metaTitle || [data?.product?.title, storeName].filter(Boolean).join(' | '))
 
 	// Feed data sometimes carries placeholder descriptions ("-"); never surface them in meta tags.
 	// When a product has no copy of its own, fall through to SeoHeader's store-level default
@@ -130,10 +125,7 @@
 		const scored = ratings.filter((r: any) => Number(r?.rating) > 0)
 		const reviewCount = Number(p.reviewCount) || scored.length
 		const ratingValue =
-			Number(p.rating) ||
-			(scored.length
-				? Math.round((scored.reduce((a: number, r: any) => a + Number(r.rating), 0) / scored.length) * 10) / 10
-				: 0)
+			Number(p.rating) || (scored.length ? Math.round((scored.reduce((a: number, r: any) => a + Number(r.rating), 0) / scored.length) * 10) / 10 : 0)
 
 		const description = cleanHtmlText(p.description)
 		const brandName = p.brandName || storeName
@@ -195,9 +187,7 @@
 				priceValidUntil,
 				// Emitted only when the API carries them — a type-only husk with none of the
 				// required properties is a validation error, not a partial win.
-				...(p.shippingDetails
-					? { shippingDetails: { '@type': 'OfferShippingDetails', ...p.shippingDetails } }
-					: {}),
+				...(p.shippingDetails ? { shippingDetails: { '@type': 'OfferShippingDetails', ...p.shippingDetails } } : {}),
 				...(p.hasMerchantReturnPolicy
 					? {
 							hasMerchantReturnPolicy: {
@@ -211,12 +201,7 @@
 	})
 </script>
 
-<SeoHeader
-	{metaTitle}
-	metaDescription={metaDescription}
-	metaKeywords={data?.product?.keywords || ''}
-	image={data?.product?.thumbnail || ''}
-/>
+<SeoHeader {metaTitle} {metaDescription} metaKeywords={data?.product?.keywords || ''} image={data?.product?.thumbnail || ''} />
 
 <StructuredData schema={productSchema} />
 
@@ -245,23 +230,25 @@
 	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
 </div>
 
-<div class="page-width intra-gap flex flex-col edp-root">
+<div class="page-width intra-gap edp-root flex flex-col">
 	{#if !data?.product && !productState.isLoading}
 		<div class="flex h-96 flex-col items-center justify-center space-y-4">
 			<h2 class="page-heading edp-empty-title">Product not found</h2>
-			<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4 edp-empty-link">Browse All Products</a>
+			<a href="/products" class="edp-empty-link text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4"
+				>Browse All Products</a
+			>
 		</div>
 	{:else}
-		<div class="inter-gap relative grid grid-cols-1 items-start lg:grid-cols-2 edp-grid">
-			<div class="col-span-1 sm:mt-0 ">
+		<div class="inter-gap edp-grid relative grid grid-cols-1 items-start lg:grid-cols-2">
+			<div class="col-span-1 sm:mt-0">
 				<ProductGallerySection />
 			</div>
 
-      <div class="block md:hidden">
-        <Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
-      </div>
+			<div class="block md:hidden">
+				<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
+			</div>
 
-			<div class="intra-gap top-28 mx-0 lg:pl-6 flex flex-col space-y-0 edp-buybox">
+			<div class="intra-gap edp-buybox top-28 mx-0 flex flex-col space-y-0 lg:pl-6">
 				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
@@ -272,17 +259,15 @@
 					<ProductVariation />
 
 					<!-- Desktop Cart Button -->
-					<div class="intra-gap hidden flex-col sm:flex mt-2">
+					<div class="intra-gap mt-2 hidden flex-col sm:flex">
 						<ProductCartAndWishlistButtons />
 					</div>
 
 					{#if showPincodeCheck}
-						<div class="intra-gap border-t intra-pt flex flex-col">
+						<div class="intra-gap intra-pt flex flex-col border-t">
 							<div class="intra-gap flex items-center justify-start">
 								<Truck class="size-4 text-gray-900" />
-								<span class="text-sm  text-gray-900">
-									Delivery Options
-								</span>
+								<span class="text-sm text-gray-900"> Delivery Options </span>
 							</div>
 							<PincodeCheck />
 						</div>
@@ -303,28 +288,20 @@
 					{/if}
 
 					{#if productState.trustBadgesPlugin?.active}
-						<div class="border-t border-gray-100 intra-pt">
+						<div class="intra-pt border-t border-gray-100">
 							{@html productState.trustBadgesPlugin?.html}
 						</div>
 					{/if}
 
 					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
 						<div class="">
-							  <h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
-							<div
-								class="text-sm leading-relaxed text-gray-600 {!productState.showReturnPolicy
-									? 'line-clamp-2 overflow-hidden'
-									: ''}"
-							>
+							<h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
+							<div class="text-sm leading-relaxed text-gray-600 {!productState.showReturnPolicy ? 'line-clamp-2 overflow-hidden' : ''}">
 								{@html productState.returnPlugin?.html}
 							</div>
 
 							{#if productState.returnPlugin?.below_more}
-								<Button
-									variant="link"
-									class="h-auto p-0 mt-1"
-									onclick={() => (productState.showReturnPolicy = !productState.showReturnPolicy)}
-								>
+								<Button variant="link" class="mt-1 h-auto p-0" onclick={() => (productState.showReturnPolicy = !productState.showReturnPolicy)}>
 									{productState.showReturnPolicy ? 'Show Less' : 'Read Full Policy'}
 								</Button>
 							{/if}
@@ -362,9 +339,9 @@
 
 <!-- Mobile cart button - Sticky Footer -->
 <div
-	class="sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 p-page shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden edp-mobilebar"
+	class="edp-mobilebar sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 p-page shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden"
 >
-	<div class="flex-1 flex flex-col intra-gap">
+	<div class="intra-gap flex flex-1 flex-col">
 		<ProductCartAndWishlistButtons showWishlist={false} />
 	</div>
 </div>
@@ -377,6 +354,7 @@
 	productTitle={data?.product?.title}
 	onClose={() => (productState.showEnquiryModal = false)}
 />
+
 <!-- {/snippet}
 </ProductRenderer> -->
 

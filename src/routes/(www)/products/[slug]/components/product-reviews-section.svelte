@@ -23,7 +23,12 @@
 
 	// Review photos are stored as a comma-separated URL list in `img`.
 	const reviewImages = (r: any): string[] =>
-		r?.img ? String(r.img).split(',').map((s: string) => s.trim()).filter(Boolean) : []
+		r?.img
+			? String(r.img)
+					.split(',')
+					.map((s: string) => s.trim())
+					.filter(Boolean)
+			: []
 
 	const allPhotos = $derived(ratings.flatMap(reviewImages))
 	const PHOTO_STRIP = 3
@@ -53,10 +58,7 @@
 	let submitting = $state(false)
 	const onPhotosPicked = (e: Event) => {
 		const files = [...((e.target as HTMLInputElement).files ?? [])].slice(0, 5 - pendingPhotos.length)
-		pendingPhotos = [
-			...pendingPhotos,
-			...files.map((file) => ({ file, preview: URL.createObjectURL(file) }))
-		]
+		pendingPhotos = [...pendingPhotos, ...files.map((file) => ({ file, preview: URL.createObjectURL(file) }))]
 		;(e.target as HTMLInputElement).value = ''
 	}
 	const removePendingPhoto = (i: number) => {
@@ -107,9 +109,7 @@
 <!-- Customer Ratings -->
 {#if page.data.store?.plugins?.isProductReviewsAndRatings?.active}
 	<section class="edp-rev">
-		<h2 class="edp-rev-title mb-6 border-b border-border pb-4 text-3xl font-bold tracking-tight text-foreground">
-			Customer Ratings
-		</h2>
+		<h2 class="edp-rev-title mb-6 border-b border-border pb-4 text-3xl font-bold tracking-tight text-foreground">Customer Ratings</h2>
 
 		{#if ratings.length}
 			<!-- Summary: average / distribution / customer photos -->
@@ -157,7 +157,12 @@
 									onclick={() => openLightbox(allPhotos, i)}
 									aria-label="View customer photo {i + 1} of {allPhotos.length}"
 								>
-									<img src={photo} alt="Customer review" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+									<img
+										src={photo}
+										alt="Customer review"
+										class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+										loading="lazy"
+									/>
 									{#if i === PHOTO_STRIP - 1 && allPhotos.length > PHOTO_STRIP}
 										<span class="absolute inset-0 flex items-center justify-center bg-black/45 text-sm font-semibold text-white">
 											+{allPhotos.length - PHOTO_STRIP} more
@@ -186,9 +191,7 @@
 							</div>
 							<div class="mt-2.5 flex items-center gap-0.5">
 								{#each { length: 5 } as _, i}
-									<StarIcon
-										class="h-4.5 w-4.5 {i < Math.round(rating.rating) ? 'fill-primary text-primary' : 'text-muted-foreground/40'}"
-									/>
+									<StarIcon class="h-4.5 w-4.5 {i < Math.round(rating.rating) ? 'fill-primary text-primary' : 'text-muted-foreground/40'}" />
 								{/each}
 							</div>
 							{#if size}
@@ -208,7 +211,12 @@
 											onclick={() => openLightbox(photos, i)}
 											aria-label="View review photo {i + 1} from {rating.name || 'customer'}"
 										>
-											<img src={photo} alt="" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+											<img
+												src={photo}
+												alt=""
+												class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+												loading="lazy"
+											/>
 										</button>
 									{/each}
 								</div>
@@ -224,9 +232,7 @@
 					<Star class="h-10 w-10" />
 				</div>
 				<h3 class="mb-2 text-2xl font-bold tracking-tight text-foreground">No reviews yet</h3>
-				<p class="mb-8 max-w-sm text-muted-foreground">
-					Be the first to share your thoughts on this product and help other shoppers.
-				</p>
+				<p class="mb-8 max-w-sm text-muted-foreground">Be the first to share your thoughts on this product and help other shoppers.</p>
 				<Button class="h-12 px-8" onclick={() => (productState.showReviewForm = true)}>Write the First Review</Button>
 			</div>
 		{/if}
@@ -370,7 +376,9 @@
 
 						<!-- Photos -->
 						<div class="space-y-3">
-							<span class="block text-base font-bold text-foreground">Add Photos <span class="text-sm font-normal text-muted-foreground">(optional, up to 5)</span></span>
+							<span class="block text-base font-bold text-foreground"
+								>Add Photos <span class="text-sm font-normal text-muted-foreground">(optional, up to 5)</span></span
+							>
 							<div class="flex flex-wrap gap-3">
 								{#each pendingPhotos as photo, i}
 									<div class="relative aspect-square w-20 overflow-hidden rounded-md ring-1 ring-border">
@@ -401,11 +409,7 @@
 				<div class="border-t border-border bg-background/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-5">
 					<div class="flex items-center justify-end gap-3">
 						<Button variant="ghost" onclick={() => (productState.showReviewForm = false)} class="h-11 px-5">Discard</Button>
-						<Button
-							disabled={productState.select === null || !productState.reviewMessage || submitting}
-							class="h-11 px-8"
-							onclick={submitReview}
-						>
+						<Button disabled={productState.select === null || !productState.reviewMessage || submitting} class="h-11 px-8" onclick={submitReview}>
 							{submitting ? 'Posting…' : 'Post Review'}
 						</Button>
 					</div>

@@ -32,20 +32,19 @@
 		if (!first || videoURLRegex.test(first) || /youtube\.com|youtu\.be/.test(first)) return null
 		return getImageCDNUrl(first, 1280, 0)
 	})
-
 </script>
+
 <svelte:head>
 	{#if lcpImage}
 		<link rel="preload" as="image" fetchpriority="high" href={lcpImage} />
 	{/if}
 </svelte:head>
 
-
 <div class="relative">
-  {#if page?.data?.store?.plugins?.socialSharingButtons}
-	  <div class="absolute right-2 top-2 z-30 rounded-full bg-white block edp-gallery-float">
+	{#if page?.data?.store?.plugins?.socialSharingButtons}
+		<div class="edp-gallery-float absolute right-2 top-2 z-30 block rounded-full bg-white">
 			<ShareButton productName={page.data?.product?.title} productImage={page.data?.product?.thumbnail} url={page?.url?.href} />
-	  </div>
+		</div>
 	{/if}
 	{#if productState.productImagesArray?.length > 0}
 		<div class="relative">
@@ -54,7 +53,7 @@
 
 		<Drawer.Root direction="bottom" bind:open={productState.showSimilarDrawer}>
 			{#if productState.productsOfSameCategory?.length}
-				<Drawer.Trigger class="absolute bottom-12 right-4 rounded-full bg-white p-2 sm:hidden edp-gallery-float">
+				<Drawer.Trigger class="edp-gallery-float absolute bottom-12 right-4 rounded-full bg-white p-2 sm:hidden">
 					<div class="">
 						<svg
 							class="[&>*]:stroke-[1.2]"
