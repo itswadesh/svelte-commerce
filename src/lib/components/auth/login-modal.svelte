@@ -3,7 +3,6 @@
 	import { ArrowLeft, Check, LoaderIcon, X, Phone, Mail } from '@lucide/svelte'
 	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { Label } from '$lib/components/ui/label/index.js'
 	import { env } from '$env/dynamic/public'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '../common/modal.svelte'
@@ -31,8 +30,19 @@
 			? `${loginModule.identifier.slice(0, Math.min(4, loginModule.identifier.length - 4))}${'•'.repeat(4)}${loginModule.identifier.slice(-2)}`
 			: loginModule.identifier
 	)
-	const loginPrompt = $derived(
-		loginModule.isPhoneNumber ? 'Use your phone number to receive a one-time code.' : 'Use your email and password to continue.'
+	const loginPrompt = $derived(loginModule.isPhoneNumber ? 'We will text you a code to sign in.' : 'Enter your email and password.')
+
+	// The old markup branched on `identifier.length === 0` before falling back to isPhoneNumber, so
+	// a store locked to one login type showed its configured label only while the field was empty.
+	// The store's setting does not change as the shopper types, so it wins outright when it is set.
+	const identifierLabel = $derived(
+		page.data.store?.loginType === 'PHONE'
+			? 'Phone number'
+			: page.data.store?.loginType === 'EMAIL'
+				? 'Email address'
+				: loginModule.isPhoneNumber
+					? 'Phone number'
+					: 'Email address'
 	)
 
 	function startResendCooldown() {
@@ -185,39 +195,46 @@
 	hAuto
 	wAuto
 >
+	<!-- One rhythm for the whole dialog. Every vertical gap comes from this `space-y-5`, from the
+	     field group's `space-y-3`, or from a component's own margin — never from a second scope
+	     nested inside the first. The previous markup stacked five of them (space-y-6 > space-y-5 >
+	     space-y-4 > space-y-4 > space-y-2, plus mt-2/pt-2/pt-1.5), which is where the dialog's
+	     height came from. Sizes are dialog scale, not page scale: this is a doorway a shopper
+	     passes through mid-purchase, not a screen to be read. -->
 	<div
-		class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl ring-1 ring-white/20 transition-all dark:border-gray-700 dark:bg-gray-900 dark:ring-white/5 max-sm:min-h-[100dvh] max-sm:px-5 max-sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] max-sm:pt-[max(1rem,env(safe-area-inset-top))] sm:max-w-[480px] sm:rounded-radius sm:p-8"
+		class="w-full space-y-5 border bg-card p-5 text-foreground shadow-z-10 max-sm:flex max-sm:min-h-[100dvh] max-sm:flex-col max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:w-[380px] sm:rounded-radius sm:p-6"
 	>
-		<!-- Close Icon -->
-		<div class="z-50 flex min-h-11 items-center justify-end sm:absolute sm:right-5 sm:top-5">
+		<!-- The brand mark and the close control share one row, so the dialog no longer spends a
+		     44px band on the close button before any content starts. -->
+		<div class="flex items-center justify-between gap-3">
+			{#if page?.data?.store?.logo}
+				<img src={page.data.store.logo} alt={page.data.store.name} class="h-7 w-auto object-contain" />
+			{:else}
+				<span class="flex size-8 items-center justify-center rounded-radius border bg-muted text-sm font-semibold">
+					{page?.data?.store?.name?.charAt(0) || 'L'}
+				</span>
+			{/if}
 			<button
-				aria-label="Close modal button"
-				class="inline-flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+				type="button"
+				aria-label="Close"
+				class="-mr-1.5 inline-flex size-9 items-center justify-center rounded-radius text-muted-foreground transition-colors hover:bg-muted hover:text-foreground max-md:size-11"
 				onclick={() => {
 					show = false
 					loginModule.removeUrlParams()
 				}}
 			>
-				<X class="h-5 w-5" />
+				<X class="size-5" />
 			</button>
 		</div>
 
 		{#if loginModule.step === 1}
-			<div class="flex flex-col items-center space-y-3 pb-2 text-center max-sm:pt-5">
-				{#if page?.data?.store?.logo}
-					<div class="mb-1 flex h-10 items-center justify-center">
-						<img src={page.data.store.logo} alt={page.data.store.name} class="h-9 object-contain dark:brightness-110" />
-					</div>
-				{:else}
-					<div class="mb-1 flex h-12 w-12 items-center justify-center rounded-radius bg-muted shadow-sm ring-1 ring-border">
-						<span class="text-lg font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
-					</div>
-				{/if}
-				<div class="space-y-2">
-					<h1 class="text-3xl font-bold tracking-tight text-gray-950 dark:text-white">Welcome back</h1>
-					<p class="mx-auto max-w-[30ch] text-sm leading-6 text-gray-600 dark:text-gray-300">{loginPrompt}</p>
-				</div>
+			<!-- h2, not h1: the page underneath already owns the h1, and a dialog that opens over it
+			     must not give the document a second one. -->
+			<div>
+				<h2 class="text-xl font-semibold">Sign in</h2>
+				<p class="mt-1 text-sm text-muted-foreground">{loginPrompt}</p>
 			</div>
+
 			<form
 				onsubmit={async (e) => {
 					if (loginModule.isPhoneNumber) {
@@ -234,195 +251,159 @@
 						show = false
 					}
 				}}
-				class="flex flex-col space-y-5 max-sm:pt-2"
+				class="space-y-4 max-sm:flex max-sm:flex-1 max-sm:flex-col"
 			>
-				<div class="space-y-4">
-					<div class="space-y-4">
-						{#if !page.data.store?.loginType || page.data.store?.loginType == 'BOTH'}
-							<div class="relative flex w-full rounded-radius bg-gray-100/80 p-1.5 shadow-inner dark:bg-gray-800/80">
-								<!-- Active Background Indicator -->
-								<div
-									class="absolute left-1.5 top-1.5 flex h-[calc(100%-12px)] w-[calc(50%-6px)] rounded-radius bg-white shadow-sm transition-transform duration-300 ease-in-out dark:bg-gray-700"
-									style:transform={loginModule.isPhoneNumber ? 'translateX(0)' : 'translateX(100%)'}
-								></div>
+				<!-- Textbox ships its own `mb-3`, so the group zeroes it and sets the gap once. Without
+				     that, the space between fields was the component's margin plus the parent's rhythm. -->
+				<div class="space-y-3 [&>div]:mb-0">
+					{#if !page.data.store?.loginType || page.data.store?.loginType == 'BOTH'}
+						<div class="relative flex rounded-radius border bg-muted/40 p-1" role="group" aria-label="Sign-in method">
+							<div
+								class="absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-radius border bg-background shadow-xs transition-transform duration-200 ease-out motion-reduce:transition-none"
+								style:transform={loginModule.isPhoneNumber ? 'translateX(0)' : 'translateX(100%)'}
+							></div>
 
-								<button
-									type="button"
-									class="relative z-10 flex min-h-11 flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-semibold transition-colors {loginModule.isPhoneNumber
-										? 'text-gray-900 dark:text-white'
-										: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
-									onclick={() => !loginModule.isPhoneNumber && loginModule.switchLoginType()}
-								>
-									<Phone class="h-4 w-4" />
-									Phone
-								</button>
-
-								<button
-									type="button"
-									class="relative z-10 flex min-h-11 flex-1 items-center justify-center gap-2 rounded-radius py-2.5 text-sm font-semibold transition-colors {!loginModule.isPhoneNumber
-										? 'text-gray-900 dark:text-white'
-										: 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}"
-									onclick={() => loginModule.isPhoneNumber && loginModule.switchLoginType()}
-								>
-									<Mail class="h-4 w-4" />
-									Email
-								</button>
-							</div>
-						{/if}
-						<div class="mt-2 space-y-2">
-							<Label for="identifier" class="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200">
-								{#if loginModule.identifier.length === 0}
-									{#if page.data.store?.loginType === 'PHONE'}
-										Phone Number
-									{:else if page.data.store?.loginType === 'EMAIL'}
-										Email Address
-									{:else}
-										{loginModule.isPhoneNumber ? 'Phone Number' : 'Email Address'}
-									{/if}
-								{:else}
-									{loginModule.isPhoneNumber ? 'Phone Number' : 'Email Address'}
-								{/if}
-							</Label>
-							{#key loginModule.isPhoneNumber}
-								<Textbox
-									name="identifier"
-									bind:value={loginModule.identifier}
-									placeholder={loginModule.isPhoneNumber ? '+91234567890' : 'johndoe@gmail.com'}
-									type={loginModule.isPhoneNumber ? 'tel' : 'email'}
-									schema={loginModule.isPhoneNumber ? customPhoneSchema : schemas.email}
-									oninput={(e) => {
-										if (loginModule.isPhoneNumber) {
-											const target = e.target as HTMLInputElement
-											const current = target.value
-											const cleaned = current.replace(/[^\d\+\s]/g, '')
-											if (current !== cleaned) {
-												const start = target.selectionStart
-												target.value = cleaned
-												loginModule.identifier = cleaned
-												if (start !== null) {
-													target.setSelectionRange(start - 1, start - 1)
-												}
-											} else {
-												loginModule.identifier = current
-											}
-										}
-									}}
-									class="h-14 text-base"
-									required
-								/>
-							{/key}
-						</div>
-
-						{#if !loginModule.isPhoneNumber}
-							<div class="space-y-2">
-								<Label for="password" class="text-sm font-medium text-gray-700 dark:text-gray-300">Password</Label>
-								<Textbox
-									name="password"
-									type="password"
-									bind:value={loginModule.password}
-									placeholder="Enter your password"
-									schema={schemas.password}
-									class="h-12"
-									required
-								/>
-							</div>
-						{/if}
-					</div>
-					{#if !loginModule.isPhoneNumber}
-						<div class="flex items-center justify-center gap-2">
-							<!-- <div>
-							{#if env.PUBLIC_IS_DEMO_MODE}
-								<Button
-									variant="secondary"
-									type="button"
-									class="border border-green-600 bg-green-50 text-sm text-green-600 hover:bg-green-100 hover:text-green-500"
-									onclick={loginModule.useDemoCredentials}
-								>
-									Use demo credentials
-								</Button>
-							{/if}
-						</div> -->
-							<div class="flex items-center justify-end">
-								<AuthButton type="forgot-password" extraqueries={{ email: loginModule.identifier }}>
-									<Button variant="link" class="-mr-4 text-sm text-gray-600 hover:text-gray-500">Forgot password?</Button>
-								</AuthButton>
-							</div>
-						</div>
-					{/if}
-
-					<Button
-						type="submit"
-						class="mt-2 h-14 w-full text-wrap px-4 py-2 text-base font-semibold shadow-sm transition-colors"
-						disabled={userState.loading || loginModule.isLoading}
-					>
-						{#if loginModule.isPhoneNumber && (loginModule.isLoading || userState.loading)}
-							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
-							Sending OTP...
-						{:else if userState.loading && !loginModule.isPhoneNumber}
-							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
-							Signing in...
-						{:else}
-							{loginModule.isPhoneNumber ? 'Send OTP' : 'Sign In'}
-						{/if}
-					</Button>
-
-					{#if loginModule.showSignupButton && page.data.store?.loginType !== 'PHONE'}
-						<div class="pt-2 text-center">
-							<p class="text-sm text-gray-500 dark:text-gray-400">
-								New to {page?.data?.store?.name}?
-								<AuthButton type="signup" class="ml-1 font-semibold text-gray-900 hover:underline dark:text-white">Create an account</AuthButton>
-							</p>
-						</div>
-					{/if}
-
-					<div class="space-y-1 pt-1.5 text-center text-xs leading-5 text-gray-500 dark:text-gray-400">
-						<p>
-							By continuing, you agree to our
-							<PolicyLink
-								href="/terms-and-conditions"
-								class="font-medium text-gray-700 hover:underline dark:text-gray-300"
-								onclick={() => (show = false)}>Terms & Conditions</PolicyLink
+							<button
+								type="button"
+								aria-pressed={loginModule.isPhoneNumber}
+								class="relative z-10 flex h-9 flex-1 items-center justify-center gap-1.5 rounded-radius text-sm font-medium transition-colors max-md:h-11 {loginModule.isPhoneNumber
+									? 'text-foreground'
+									: 'text-foreground/70 hover:text-foreground'}"
+								onclick={() => !loginModule.isPhoneNumber && loginModule.switchLoginType()}
 							>
-						</p>
+								<Phone class="size-4" />
+								Phone
+							</button>
 
-						{#if page?.data?.store?.plugins?.isMultiVendor?.active}
-							<div class="pt-0.5">
-								<a
-									href="/auth/join-as-vendor"
-									class="font-medium text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
-									onclick={() => (show = false)}>Join as a Vendor</a
-								>
-							</div>
-						{/if}
-					</div>
+							<button
+								type="button"
+								aria-pressed={!loginModule.isPhoneNumber}
+								class="relative z-10 flex h-9 flex-1 items-center justify-center gap-1.5 rounded-radius text-sm font-medium transition-colors max-md:h-11 {!loginModule.isPhoneNumber
+									? 'text-foreground'
+									: 'text-foreground/70 hover:text-foreground'}"
+								onclick={() => loginModule.isPhoneNumber && loginModule.switchLoginType()}
+							>
+								<Mail class="size-4" />
+								Email
+							</button>
+						</div>
+					{/if}
+
+					{#key loginModule.isPhoneNumber}
+						<Textbox
+							name="identifier"
+							label={identifierLabel}
+							bind:value={loginModule.identifier}
+							placeholder={loginModule.isPhoneNumber ? '+91 234 567 890' : 'you@example.com'}
+							type={loginModule.isPhoneNumber ? 'tel' : 'email'}
+							schema={loginModule.isPhoneNumber ? customPhoneSchema : schemas.email}
+							oninput={(e) => {
+								if (loginModule.isPhoneNumber) {
+									const target = e.target as HTMLInputElement
+									const current = target.value
+									const cleaned = current.replace(/[^\d\+\s]/g, '')
+									if (current !== cleaned) {
+										const start = target.selectionStart
+										target.value = cleaned
+										loginModule.identifier = cleaned
+										if (start !== null) {
+											target.setSelectionRange(start - 1, start - 1)
+										}
+									} else {
+										loginModule.identifier = current
+									}
+								}
+							}}
+							class="h-11 md:h-10"
+							required
+						/>
+					{/key}
+
+					{#if !loginModule.isPhoneNumber}
+						<Textbox
+							name="password"
+							label="Password"
+							type="password"
+							bind:value={loginModule.password}
+							placeholder="Enter your password"
+							schema={schemas.password}
+							class="h-11 md:h-10"
+							required
+						/>
+						<div class="flex justify-end">
+							<AuthButton
+								type="forgot-password"
+								extraqueries={{ email: loginModule.identifier }}
+								aria-label="Reset your password"
+								class="inline-flex cursor-pointer items-center rounded-radius text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+							>
+								Forgot password?
+							</AuthButton>
+						</div>
+					{/if}
 				</div>
+
+				<Button type="submit" class="h-11 w-full text-sm font-semibold md:h-10" disabled={userState.loading || loginModule.isLoading}>
+					{#if loginModule.isPhoneNumber && (loginModule.isLoading || userState.loading)}
+						<LoaderIcon class="mr-2 size-4 animate-spin" />
+						Sending code…
+					{:else if userState.loading && !loginModule.isPhoneNumber}
+						<LoaderIcon class="mr-2 size-4 animate-spin" />
+						Signing in…
+					{:else}
+						{loginModule.isPhoneNumber ? 'Send code' : 'Sign in'}
+					{/if}
+				</Button>
+
+				{#if loginModule.showSignupButton && page.data.store?.loginType !== 'PHONE'}
+					<p class="text-center text-sm text-muted-foreground">
+						New to {page?.data?.store?.name}?
+						<AuthButton
+							type="signup"
+							aria-label="Create an account"
+							class="inline cursor-pointer font-medium text-foreground underline-offset-4 hover:underline">Create an account</AuthButton
+						>
+					</p>
+				{/if}
+
+				<!-- The vendor link used to be its own stacked block beneath the legal line. Folding it
+				     into the same sentence removes a whole section for one link. -->
+				<p class="text-center text-xs leading-relaxed text-muted-foreground max-sm:!mt-auto max-sm:pt-6">
+					By continuing you agree to our
+					<PolicyLink href="/terms-and-conditions" class="text-foreground hover:underline" onclick={() => (show = false)}
+						>Terms &amp; Conditions</PolicyLink
+					>{#if page?.data?.store?.plugins?.isMultiVendor?.active}. Selling with us?
+						<a href="/auth/join-as-vendor" class="text-foreground hover:underline" onclick={() => (show = false)}>Join as a vendor</a>{/if}.
+				</p>
 			</form>
 		{:else if loginModule.step === 2}
-			<div class="flex min-h-[min(540px,100dvh)] flex-col py-1 sm:min-h-0">
-				<div class="flex items-center justify-between">
+			<div class="space-y-5">
+				<div class="flex items-center justify-between gap-3">
 					<button
 						type="button"
-						class="-ml-2 inline-flex min-h-11 items-center gap-1 rounded-md px-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+						class="-ml-2 inline-flex h-9 items-center gap-1 rounded-radius px-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground max-md:h-11"
 						onclick={() => (loginModule.step = 1)}
 					>
-						<ArrowLeft class="h-4 w-4" /> Change number
+						<ArrowLeft class="size-4" /> Change number
 					</button>
-					<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400"
-						><Check class="h-3.5 w-3.5 text-primary" /> Code sent</span
-					>
+					<span class="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+						<Check class="size-3.5 text-primary" /> Code sent
+					</span>
 				</div>
 
-				<div class="mt-10 space-y-2 text-center sm:mt-8">
-					<h2 class="text-3xl font-bold tracking-tight text-gray-950 dark:text-white">Check your phone</h2>
-					<p class="text-sm leading-6 text-gray-600 dark:text-gray-300">
-						Enter the 4-digit code sent to <span class="font-semibold text-gray-950 dark:text-white">{recipient}</span>.
+				<div>
+					<h2 class="text-xl font-semibold">Check your phone</h2>
+					<p class="mt-1 text-sm text-muted-foreground">
+						Enter the 4-digit code sent to <span class="font-medium text-foreground">{recipient}</span>.
 					</p>
 					{#if dev}
-						<p class="text-xs font-semibold text-amber-700 dark:text-amber-300">Dev mode: use 1111</p>
+						<p class="mt-1 text-xs font-medium text-warning">Dev mode: use 1111</p>
 					{/if}
 				</div>
 
-				<div class="flex flex-1 items-center justify-center py-10 sm:py-8">
+				<!-- The code row used to sit in a 540px-tall flex column with py-10 above and below it,
+				     which is most of why this step scrolled on a phone. It is four boxes. -->
+				<div class="flex justify-center">
 					<InputOTP.Root
 						aria-label="Four digit verification code"
 						maxlength={4}
@@ -431,12 +412,12 @@
 						bind:ref={loginModule.otpInputRef}
 					>
 						{#snippet children({ cells })}
-							<InputOTP.Group class="gap-2.5 sm:gap-3">
+							<InputOTP.Group class="gap-2">
 								{#each cells as cell}
 									<InputOTP.Slot
 										{cell}
-										class="h-14 w-12 rounded-md border border-gray-300 bg-white text-xl font-bold shadow-sm transition-colors dark:border-gray-600 dark:bg-gray-900 {cell.isActive
-											? 'border-primary ring-2 ring-primary/35'
+										class="h-12 w-11 rounded-radius border bg-background text-lg font-semibold transition-colors {cell.isActive
+											? 'border-primary ring-2 ring-ring/35'
 											: ''}"
 									/>
 								{/each}
@@ -446,25 +427,25 @@
 				</div>
 				<input type="hidden" name="otp" bind:value={loginModule.otp} />
 
-				<div class="space-y-4 text-center">
+				<div class="space-y-3">
 					<Button
-						class="h-12 w-full text-base font-semibold shadow-sm"
+						class="h-11 w-full text-sm font-semibold md:h-10"
 						onclick={loginModule.handleVerifyOtp}
 						disabled={loginModule.otp.length !== 4 || userState.loading}
 					>
 						{#if userState.loading}
-							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" /> Verifying...
+							<LoaderIcon class="mr-2 size-4 animate-spin" /> Verifying…
 						{:else}
 							Continue
 						{/if}
 					</Button>
-					<p class="text-sm text-gray-600 dark:text-gray-300">
+					<p class="text-center text-sm text-muted-foreground">
 						{#if resendSeconds > 0}
 							Resend code in {resendSeconds}s
 						{:else}
 							Didn't get it? <button
 								type="button"
-								class="min-h-11 font-semibold text-gray-950 underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:text-white"
+								class="font-medium text-foreground underline-offset-4 transition-colors hover:underline"
 								onclick={handleResendOtp}>Resend code</button
 							>
 						{/if}
