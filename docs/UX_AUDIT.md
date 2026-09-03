@@ -46,6 +46,7 @@ The type check now reports 144 errors and 87 warnings, against a clean-tree base
 102 — fewer than before this work began. The unit suite is unchanged: the same 19 files fail on a
 clean tree. Later checkout verification stops at the review step, because that store writes to a
 shared remote database.
+The only failing request left on any route is the connector probing for the optional identity
 module, which this store does not install.
 
 **Still open:** the remaining Medium and Low findings listed below, plus three items whose root
