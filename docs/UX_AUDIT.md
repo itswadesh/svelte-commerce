@@ -31,16 +31,27 @@ Updated 2026-09-03. The design plan below is being worked in order; these commit
 | Checkout steps show a loading shape, not a blank region | `0cd8b093` |
 | Guest checkout can choose a delivery country | `afb22402` |
 | Order confirmation shows an address and a total | `514e00fc` |
+| Listing sort keyboard-operable; checkout loading shapes; guest country field | `1a38533d`, `0cd8b093`, `afb22402` |
+| Product card and product page: states, targets, honest prices | `bde52445` |
+| Cart: one row, busy states, Escape that works | `10b77f2e` |
+| Checkout: own chrome, per-field errors, honest empty and failure states | `9b12e437` |
+| Listing and search: real dialogs, real history, grouped panel | `f1191aad` |
+| Footer, account and plugins: stop offering actions the store cannot perform | `84b11245` |
+| Homepage type scale, brand palette on first paint, responsive images | `3c05e9e2` |
 
 **Verified after each change**, on the default theme against the local GoCommerce store: every
 route returns 200 at 390px and 1280px, no horizontal overflow, exactly one `h1` per route, no
 unlabeled controls, and a complete guest purchase from product to confirmation with no page errors.
-The type check holds at 160 errors and 100 warnings against a clean-tree baseline of 160 and 102.
-The only failing request left on any route is the connector probing for the optional identity
+The type check now reports 144 errors and 87 warnings, against a clean-tree baseline of 160 and
+102 — fewer than before this work began. The unit suite is unchanged: the same 19 files fail on a
+clean tree. Later checkout verification stops at the review step, because that store writes to a
+shared remote database.
 module, which this store does not install.
 
-**Still open:** the payment and confirmation steps beyond the fixes above, autocomplete grouping
-and recent searches, and the remaining Medium and Low findings listed below.
+**Still open:** the remaining Medium and Low findings listed below, plus three items whose root
+cause sits in `@misiki/kitcommerce-core` and must be fixed upstream: the variant lookup comparing a
+string parameter against a numeric id, `selectVariant` navigating without `keepFocus`, and the
+shared image component omitting non-priority images from the server HTML.
 
 ---
 
