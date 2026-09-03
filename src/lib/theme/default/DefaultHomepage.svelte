@@ -1,18 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { page } from '$app/state'
-	import {
-		Truck,
-		RotateCcw,
-		ShieldCheck,
-		Headset,
-		ArrowRight,
-		ArrowUpRight,
-		ChevronLeft,
-		ChevronRight,
-		Pause,
-		Play
-	} from '@lucide/svelte'
+	import { Truck, RotateCcw, ShieldCheck, Headset, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import { storeService, productService } from '$lib/core/services'
@@ -22,12 +11,7 @@
 	import { z } from 'zod'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
 	import { resolveEditorialForDevice } from '$lib/theme/homepage-content.js'
-	import {
-		resolveHeroSlides,
-		resolvePageBands,
-		type PageBanner,
-		type PageSection
-	} from './page-inheritance.js'
+	import { resolveHeroSlides, resolvePageBands, type PageBanner, type PageSection } from './page-inheritance.js'
 
 	let {
 		themeContent,
@@ -127,8 +111,7 @@
 	let heroIndex = $state(0)
 	let heroPaused = $state(false)
 	/** Read the live position rather than trusting heroIndex, which lags during the slide. */
-	const currentSlide = () =>
-		heroTrack ? Math.round(heroTrack.scrollLeft / Math.max(1, heroTrack.clientWidth)) : 0
+	const currentSlide = () => (heroTrack ? Math.round(heroTrack.scrollLeft / Math.max(1, heroTrack.clientWidth)) : 0)
 
 	// The slide is tweened frame by frame rather than with scrollTo({behavior:'smooth'}),
 	// because Chrome silently downgrades that to an instant jump when the OS has
@@ -173,8 +156,7 @@
 		slideFrame = requestAnimationFrame(tick)
 	}
 	/** Step by ±1 with wraparound — shared by the arrows and autoplay. */
-	const stepSlide = (delta: number) =>
-		slideTo((currentSlide() + delta + heroSlides.length) % heroSlides.length)
+	const stepSlide = (delta: number) => slideTo((currentSlide() + delta + heroSlides.length) % heroSlides.length)
 	const onHeroScroll = () => {
 		if (!heroTrack) return
 		heroIndex = currentSlide()
@@ -291,12 +273,7 @@
 			>
 				<div class="ed-slider__track" bind:this={heroTrack} onscroll={onHeroScroll}>
 					{#each heroSlides as slide, i}
-						<svelte:element
-							this={slide.link ? 'a' : 'div'}
-							class="ed-slide"
-							href={slide.link || undefined}
-							aria-label={slide.title || undefined}
-						>
+						<svelte:element this={slide.link ? 'a' : 'div'} class="ed-slide" href={slide.link || undefined} aria-label={slide.title || undefined}>
 							<picture>
 								<!-- Breakpoints match the .ed-slider aspect tiers below (and the admin's
 								     upload hints), so each device fetches only its own artwork. A tier is
@@ -320,30 +297,15 @@
 				{#if heroSlides.length > 1}
 					<!-- Arrows are pointer affordances: on touch the track swipes natively, so they
 					     are hidden below the mobile breakpoint where they would cover the artwork. -->
-					<button
-						type="button"
-						class="ed-slider__arrow ed-slider__arrow--prev"
-						aria-label="Previous slide"
-						onclick={() => stepSlide(-1)}
-					>
+					<button type="button" class="ed-slider__arrow ed-slider__arrow--prev" aria-label="Previous slide" onclick={() => stepSlide(-1)}>
 						<ChevronLeft class="ed-slider__arrow-icon" />
 					</button>
-					<button
-						type="button"
-						class="ed-slider__arrow ed-slider__arrow--next"
-						aria-label="Next slide"
-						onclick={() => stepSlide(1)}
-					>
+					<button type="button" class="ed-slider__arrow ed-slider__arrow--next" aria-label="Next slide" onclick={() => stepSlide(1)}>
 						<ChevronRight class="ed-slider__arrow-icon" />
 					</button>
 					<div class="ed-slider__dots">
 						{#each heroSlides as _, i}
-							<button
-								type="button"
-								class="ed-dot"
-								aria-current={heroIndex === i}
-								aria-label="Go to slide {i + 1}"
-								onclick={() => slideTo(i)}
+							<button type="button" class="ed-dot" aria-current={heroIndex === i} aria-label="Go to slide {i + 1}" onclick={() => slideTo(i)}
 							></button>
 						{/each}
 						<button
@@ -366,34 +328,34 @@
 
 		<!-- HERO -->
 		{#if !hidden.hero}
-		<section class="ed-wrap ed-hero">
-			<div class="ed-hero__body">
-				<span class="ed-eyebrow">{ed.hero.eyebrow}</span>
-				<h1 class="ed-display">
-					{ed.hero.titleLead}
-					<em>{ed.hero.titleAccent}</em>
-				</h1>
-				<p class="ed-hero__text">{ed.hero.text}</p>
-				<div class="ed-hero__actions">
-					<a class="ed-btn" href={ed.hero.primaryHref}>{ed.hero.primaryCta}</a>
-					<a class="ed-link" href={ed.hero.secondaryHref}>
-						{ed.hero.secondaryCta}
-						<ArrowRight class="ed-link__icon" />
-					</a>
+			<section class="ed-wrap ed-hero">
+				<div class="ed-hero__body">
+					<span class="ed-eyebrow">{ed.hero.eyebrow}</span>
+					<h1 class="ed-display">
+						{ed.hero.titleLead}
+						<em>{ed.hero.titleAccent}</em>
+					</h1>
+					<p class="ed-hero__text">{ed.hero.text}</p>
+					<div class="ed-hero__actions">
+						<a class="ed-btn" href={ed.hero.primaryHref}>{ed.hero.primaryCta}</a>
+						<a class="ed-link" href={ed.hero.secondaryHref}>
+							{ed.hero.secondaryCta}
+							<ArrowRight class="ed-link__icon" />
+						</a>
+					</div>
+					{#if ed.hero.note}
+						<p class="ed-hero__note">{ed.hero.note}</p>
+					{/if}
 				</div>
-				{#if ed.hero.note}
-					<p class="ed-hero__note">{ed.hero.note}</p>
-				{/if}
-			</div>
-			<div class="ed-hero__media">
-				<img
-					src={ed.hero.image}
-					alt={ed.hero.imageAlt}
-					loading={heroSlides.length ? 'lazy' : 'eager'}
-					fetchpriority={heroSlides.length ? 'auto' : 'high'}
-				/>
-			</div>
-		</section>
+				<div class="ed-hero__media">
+					<img
+						src={ed.hero.image}
+						alt={ed.hero.imageAlt}
+						loading={heroSlides.length ? 'lazy' : 'eager'}
+						fetchpriority={heroSlides.length ? 'auto' : 'high'}
+					/>
+				</div>
+			</section>
 		{/if}
 
 		<!-- MARQUEE / assurance ribbon -->
@@ -444,44 +406,44 @@
 
 		<!-- FEATURED PRODUCTS -->
 		{#if !hidden.featured}
-		<section class="ed-tint">
-			<div class="ed-wrap ed-section">
-				<header class="ed-head">
-					<div>
-						<span class="ed-eyebrow">{ed.featured.eyebrow}</span>
-						<h2 class="ed-display ed-head__title">{ed.featured.title}</h2>
-					</div>
-					<a class="ed-link" href={ed.featured.viewAllHref}>
-						{ed.featured.viewAll}
-						<ArrowRight class="ed-link__icon" />
-					</a>
-				</header>
+			<section class="ed-tint">
+				<div class="ed-wrap ed-section">
+					<header class="ed-head">
+						<div>
+							<span class="ed-eyebrow">{ed.featured.eyebrow}</span>
+							<h2 class="ed-display ed-head__title">{ed.featured.title}</h2>
+						</div>
+						<a class="ed-link" href={ed.featured.viewAllHref}>
+							{ed.featured.viewAll}
+							<ArrowRight class="ed-link__icon" />
+						</a>
+					</header>
 
-				{#if loading}
-					<div class="ed-products">
-						{#each Array(8) as _}
-							<div class="ed-skel">
-								<Skeleton class="ed-skel__img" />
-								<Skeleton class="h-4 w-2/3 rounded" />
-								<Skeleton class="h-4 w-1/3 rounded" />
-							</div>
-						{/each}
-					</div>
-				{:else if products.length}
-					<div class="ed-products">
-						{#each products as product (product.id || product.slug)}
-							<ProductCard {product} aspectRatio={productAspect} />
-						{/each}
-					</div>
-				{:else}
-					<div class="ed-empty">
-						<h3 class="ed-display">{themeContent.defaultHome.emptyTitle}</h3>
-						<p>{themeContent.defaultHome.emptyText}</p>
-						<a class="ed-btn" href="/products">Browse the catalogue</a>
-					</div>
-				{/if}
-			</div>
-		</section>
+					{#if loading}
+						<div class="ed-products">
+							{#each Array(8) as _}
+								<div class="ed-skel">
+									<Skeleton class="ed-skel__img" />
+									<Skeleton class="h-4 w-2/3 rounded" />
+									<Skeleton class="h-4 w-1/3 rounded" />
+								</div>
+							{/each}
+						</div>
+					{:else if products.length}
+						<div class="ed-products">
+							{#each products as product (product.id || product.slug)}
+								<ProductCard {product} aspectRatio={productAspect} />
+							{/each}
+						</div>
+					{:else}
+						<div class="ed-empty">
+							<h3 class="ed-display">{themeContent.defaultHome.emptyTitle}</h3>
+							<p>{themeContent.defaultHome.emptyText}</p>
+							<a class="ed-btn" href="/products">Browse the catalogue</a>
+						</div>
+					{/if}
+				</div>
+			</section>
 		{/if}
 
 		<!-- HOME PAGE GRIDS — the merchant's own banner sections, in the theme's tile styling -->
@@ -500,11 +462,7 @@
 							style="--ed-band-cols: {band.columns}; --ed-band-aspect: {band.aspect}"
 						>
 							{#each band.items as item}
-								<svelte:element
-									this={item.link ? 'a' : 'div'}
-									class="ed-band__item"
-									href={item.link || undefined}
-								>
+								<svelte:element this={item.link ? 'a' : 'div'} class="ed-band__item" href={item.link || undefined}>
 									<div class="ed-band__media">
 										<img src={item.url} alt={item.title || band.title || 'Banner'} loading="lazy" />
 									</div>
@@ -521,56 +479,56 @@
 
 		<!-- EDITORIAL BANNER -->
 		{#if !hidden.banner}
-		<section class="ed-wrap ed-banner">
-			<div class="ed-banner__media">
-				<img src={ed.banner.image} alt={ed.banner.imageAlt} loading="lazy" />
-			</div>
-			<div class="ed-banner__body">
-				<span class="ed-eyebrow">{ed.banner.eyebrow}</span>
-				<h2 class="ed-display ed-banner__title">{ed.banner.title}</h2>
-				<p>{ed.banner.text}</p>
-				<a class="ed-btn ed-btn--ghost" href={ed.banner.href}>{ed.banner.cta}</a>
-			</div>
-		</section>
+			<section class="ed-wrap ed-banner">
+				<div class="ed-banner__media">
+					<img src={ed.banner.image} alt={ed.banner.imageAlt} loading="lazy" />
+				</div>
+				<div class="ed-banner__body">
+					<span class="ed-eyebrow">{ed.banner.eyebrow}</span>
+					<h2 class="ed-display ed-banner__title">{ed.banner.title}</h2>
+					<p>{ed.banner.text}</p>
+					<a class="ed-btn ed-btn--ghost" href={ed.banner.href}>{ed.banner.cta}</a>
+				</div>
+			</section>
 		{/if}
 
 		<!-- ASSURANCES -->
 		{#if !hidden.assurances}
-		<section class="ed-wrap">
-			<div class="ed-assure">
-				{#each ed.assurances as a}
-					{@const Icon = assuranceIcons[a.icon]}
-					<div class="ed-assure__item">
-						<Icon class="ed-assure__icon" />
-						<div>
-							<p class="ed-assure__title">{a.title}</p>
-							<p class="ed-assure__text">{a.text}</p>
+			<section class="ed-wrap">
+				<div class="ed-assure">
+					{#each ed.assurances as a}
+						{@const Icon = assuranceIcons[a.icon]}
+						<div class="ed-assure__item">
+							<Icon class="ed-assure__icon" />
+							<div>
+								<p class="ed-assure__title">{a.title}</p>
+								<p class="ed-assure__text">{a.text}</p>
+							</div>
 						</div>
-					</div>
-				{/each}
-			</div>
-		</section>
+					{/each}
+				</div>
+			</section>
 		{/if}
 
 		<!-- NEWSLETTER -->
 		{#if !hidden.newsletter}
-		<section class="ed-tint">
-			<div class="ed-wrap ed-news">
-				<span class="ed-eyebrow">{ed.newsletter.eyebrow}</span>
-				<h2 class="ed-display ed-news__title">{ed.newsletter.title}</h2>
-				<p class="ed-news__text">{ed.newsletter.text}</p>
-				{#if subscribed}
-					<p class="ed-news__thanks">Thanks — you're on the list.</p>
-				{:else}
-					<form class="ed-news__form" onsubmit={onSubscribe}>
-						<label class="sr-only" for="ed-news-email">Email address</label>
-						<input id="ed-news-email" type="email" required placeholder="you@example.com" bind:value={email} />
-						<button type="submit" disabled={subscribing}>{subscribing ? 'Subscribing…' : ed.newsletter.cta}</button>
-					</form>
-				{/if}
-				<p class="ed-news__privacy">{ed.newsletter.privacy}</p>
-			</div>
-		</section>
+			<section class="ed-tint">
+				<div class="ed-wrap ed-news">
+					<span class="ed-eyebrow">{ed.newsletter.eyebrow}</span>
+					<h2 class="ed-display ed-news__title">{ed.newsletter.title}</h2>
+					<p class="ed-news__text">{ed.newsletter.text}</p>
+					{#if subscribed}
+						<p class="ed-news__thanks">Thanks — you're on the list.</p>
+					{:else}
+						<form class="ed-news__form" onsubmit={onSubscribe}>
+							<label class="sr-only" for="ed-news-email">Email address</label>
+							<input id="ed-news-email" type="email" required placeholder="you@example.com" bind:value={email} />
+							<button type="submit" disabled={subscribing}>{subscribing ? 'Subscribing…' : ed.newsletter.cta}</button>
+						</form>
+					{/if}
+					<p class="ed-news__privacy">{ed.newsletter.privacy}</p>
+				</div>
+			</section>
 		{/if}
 	</div>
 {/if}
@@ -1267,7 +1225,11 @@
 	}
 
 	/* ---------- ENTRANCE MOTION ---------- */
-	.ed-hero__body > * {
+	/* Hidden only while scripts are running, so the entrance has something to reveal. Without
+	   the `html.js` guard the hero painted as a blank cream rectangle until hydration — and
+	   forever with scripts blocked — while holding the store's only value proposition, its
+	   primary action and the largest paint on the page. */
+	:global(html.js) .ed-hero__body > * {
 		opacity: 0;
 		transform: translateY(16px);
 	}
@@ -1292,7 +1254,7 @@
 		animation-delay: 0.33s;
 	}
 
-	.ed-hero__media {
+	:global(html.js) .ed-hero__media {
 		opacity: 0;
 		transform: scale(1.03);
 	}

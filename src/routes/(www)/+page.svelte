@@ -54,6 +54,13 @@
 	)
 	const featuredProducts = $derived(homepageModule.featuredProducts?.length ? homepageModule.featuredProducts : (data?.featuredProducts ?? []))
 
+	// Only "loading" when there is nothing to show. The module starts with loading=true and only
+	// settles on the client, so passing it straight through made the server render eight skeleton
+	// cards over products the load function had already fetched: every visitor watched a swap, the
+	// swap shifted layout, and a crawler that runs no scripts found no product links on the
+	// storefront's highest-authority page.
+	const listLoading = $derived(homepageModule.loading && !featuredProducts.length)
+
 	// Section-driven themes ship their homepage as data (`themeLayout` from the API) and are
 	// rendered with the shared section library. Themes that still have a bespoke component fall
 	// back to it, so both kinds work side by side while themes are migrated.
@@ -66,7 +73,7 @@
 		aspectHeight,
 		featuredProducts,
 		featuredCategories,
-		loading: homepageModule.loading,
+		loading: listLoading,
 		ProductCard
 	})
 	const filterButtons = $derived([
@@ -196,7 +203,7 @@
 		{featuredProducts}
 		{filterButtons}
 		{homepageModule}
-		loading={homepageModule.loading}
+		loading={listLoading}
 		desktopBanners={page?.desktopBanners}
 		tabletBanners={page?.tabletBanners}
 		mobileBanners={page?.mobileBanners}
