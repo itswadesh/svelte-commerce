@@ -1,4 +1,4 @@
-import { BaseService, clearPhantomSessionIfUnavailable, setStaticStore } from '@misiki/gocommerce-connector'
+import { BaseService, clearPhantomSessionIfUnavailable, meilisearchService as connectorSearch, setStaticStore } from '@misiki/gocommerce-connector'
 import { staticStoreConfig } from './static-store'
 import { blockRestFallbacks, serveRestLocally } from './rest-guard'
 import { localStoreData } from './local-store-data'
@@ -12,6 +12,24 @@ export * from '@misiki/gocommerce-connector'
 
 // Lets the hooks `init` verify the selected connector matches the PUBLIC_GOCOMMERCE_* env.
 export const connectorName = 'gocommerce'
+
+// The shared search components ask for `{ query }` — the storefront's neutral spelling, and what
+// Litekart's own service reads. GoCommerce's connector reads `params.q` and defaults it to '', so
+// the typed term was dropped on the floor and every keystroke returned the same first page of the
+// catalogue: "mug", "tee" and "zzzqqq" all produced an identical list of confident-looking
+// suggestions. Translating one backend's parameter spelling belongs here, in the adapter, and not
+// in a nav component that has to work against 26 backends.
+//
+// Patched on the singleton at module load, the same way `blockRestFallbacks` patches BaseService
+// below, and for the same reason: re-exporting a wrapped copy from this module does not reach the
+// call sites. `@misiki/kitcommerce-core/services` ships pre-built and reads its services off the
+// namespace of `kitcommerce.config`, so a local `export const` here never displaces the one that
+// arrives via `export *`. The instance is a shared singleton, so patching it is what every
+// consumer sees, whichever path resolved it.
+type AutoCompleteParams = { q?: string; query?: string; limit?: number }
+
+const forwardAutoComplete = connectorSearch.searchAutoComplete.bind(connectorSearch)
+connectorSearch.searchAutoComplete = (params: AutoCompleteParams = {}) => forwardAutoComplete({ ...params, q: params.q ?? params.query ?? '' })
 
 // Store identity — name, logo, favicon, currency, menus, plugin toggles, theme variables — has no
 // GoCommerce equivalent, so the connector reads it from here: default-store.json merged under the

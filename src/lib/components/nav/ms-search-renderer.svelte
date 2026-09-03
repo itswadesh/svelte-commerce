@@ -1,11 +1,19 @@
 <script lang="ts">
-	// Local copy of the vendored MsSearchRenderer with two fixes that cannot be made from the
+	// Local copy of the vendored MsSearchRenderer with three fixes that cannot be made from the
 	// call site:
-	//   1. Enter navigates to the clean slug route (/pendant), not /products?search=pendant —
-	//      the latter is both against the project's link convention and robots-disallowed.
+	//   1. Enter submits to the route that actually renders a term, /products?search=<term>.
+	//      It used to slugify the term and navigate to /<slug>, on the reasoning that a clean
+	//      URL suited the project's link convention. But /<slug> resolves a category or a
+	//      product and throws 404 for anything else, so "mug", "t shirts" and every plural or
+	//      multi-word query dead-ended on the not-found page while the listing route answered
+	//      the same term correctly. robots.txt already disallows `?search=`, so the destination
+	//      stays out of the index and is simply the page a shopper lands on.
 	//   2. `loading` is set for every query, not only the initial recommendations, so the panel
 	//      no longer shows the previous query's results or a false "No products found" while a
 	//      request is in flight.
+	//   3. The autocomplete effect only runs while the panel is open. It used to fire on mount
+	//      on every route, so each page load spent a request on an empty-query autocomplete
+	//      whose results nothing displayed.
 	import { type Snippet } from 'svelte'
 	import { meilisearchService } from '$lib/core/services/index.js'
 	import { page } from '$app/state'
@@ -35,6 +43,8 @@
 		handleKeyDown: (e: KeyboardEvent) => void
 		handleResultClick: (res: any) => void
 		showSearch: () => void
+		submitSearch: () => void
+		searchUrl: (term: string) => string
 	}
 
 	// Only the newest request may write results; late responses from an abandoned query are dropped.
@@ -68,7 +78,12 @@
 		}, 300)
 	}
 
+	// Only while the panel is open. This used to run on mount on every route, so every page load
+	// paid for an empty-query autocomplete whose results were never shown. Opening the panel is
+	// handled by the recommendations effect below; this one covers typing.
 	$effect(() => {
+		if (!expandSearch) return
+		if (!search.trim()) return
 		debouncedSearch(search)
 	})
 
@@ -95,20 +110,21 @@
 		}
 	})
 
-	const toSlug = (term: string) =>
-		term
-			.trim()
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, '-')
-			.replace(/^-+|-+$/g, '')
+	/** The one route that renders results for a free-text term. Shared with the "see all" row. */
+	const searchUrl = (term: string) => `/products?search=${encodeURIComponent(term.trim())}`
+
+	function submitSearch() {
+		const term = search.trim()
+		if (!term) return
+		searchResults = []
+		showSearchResults = false
+		expandSearch = false
+		goto(searchUrl(term))
+	}
 
 	function handleKeyDown(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
-			const slug = toSlug(search)
-			if (!slug) return
-			searchResults = []
-			showSearchResults = false
-			goto(`/${slug}`)
+			submitSearch()
 		} else if (e.key === 'Escape') closeSearch()
 		else {
 			showSearchResults = true
@@ -141,5 +157,7 @@
 	closeSearch,
 	toggleSearchResults,
 	handleKeyDown,
-	handleResultClick
+	handleResultClick,
+	submitSearch,
+	searchUrl
 })}
