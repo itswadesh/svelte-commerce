@@ -1325,6 +1325,15 @@
 		.ed-news__form {
 			flex-direction: column;
 		}
+
+		/* `flex: 1` on the field means `flex: 1 1 0%`. Once the form stacks, that basis applies to
+		   HEIGHT, so it beat the 52px rule and the email field rendered 22px tall — the smallest
+		   target on the page, on the viewport where it matters most. */
+		.ed-news__form input,
+		.ed-news__form button {
+			flex: none;
+			width: 100%;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
