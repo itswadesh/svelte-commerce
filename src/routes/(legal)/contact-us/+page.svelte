@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
+	import { canSubmitContactForm } from '$lib/components/common/store-capabilities.js'
 	import { Button } from '$lib/components/ui/button'
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
@@ -20,17 +21,32 @@
 
 	// Only real, store-configured contact details — no template fallback address and no
 	// invented live-chat SLA. Anything the store record does not carry simply is not shown.
-	const contactMethods = $derived.by(() => {
-		const methods: Array<{ icon: any; title: string; value: string; description: string }> = []
+	// `href` is what makes each one usable on a phone, and it is also what stands in for the form
+	// when the store cannot receive one.
+	const contactEmail = $derived(store?.contact?.email || store?.businessEmail)
+	const contactPhone = $derived(store?.contact?.phone)
 
-		const email = store?.contact?.email || store?.businessEmail
-		if (email) {
-			methods.push({ icon: Mail, title: 'Email', value: email, description: 'Our team will respond within 24 hours.' })
+	const contactMethods = $derived.by(() => {
+		const methods: Array<{ icon: any; title: string; value: string; description: string; href?: string }> = []
+
+		if (contactEmail) {
+			methods.push({
+				icon: Mail,
+				title: 'Email',
+				value: contactEmail,
+				description: 'Our team will respond within 24 hours.',
+				href: `mailto:${contactEmail}`
+			})
 		}
 
-		const phone = store?.contact?.phone
-		if (phone) {
-			methods.push({ icon: Phone, title: 'Phone', value: phone, description: 'Call us for order and delivery queries.' })
+		if (contactPhone) {
+			methods.push({
+				icon: Phone,
+				title: 'Phone',
+				value: contactPhone,
+				description: 'Call us for order and delivery queries.',
+				href: `tel:${String(contactPhone).replace(/\s+/g, '')}`
+			})
 		}
 
 		const address = [store?.address?.street, store?.address?.city, store?.address?.state, store?.address?.pincode, store?.address?.country]
@@ -42,6 +58,17 @@
 
 		return methods
 	})
+
+	// The form writes to the storefront's own REST API. Behind a backend that has no such API every
+	// submit answered "Failed to send message. Please try again later." and no retry could ever
+	// succeed, so the shopper spent their message on a channel that was never open. Offer the
+	// channels that are open instead. See store-capabilities.ts.
+	const formAvailable = canSubmitContactForm()
+
+	// With no form and no contact details on the store record there is nothing to put in a second
+	// column, and the two-column shell left about 600px of blank canvas beside a small card. Fall
+	// back to one centred column at the card's width.
+	const twoColumn = $derived(formAvailable || contactMethods.length > 0)
 </script>
 
 <SeoHeader
@@ -49,18 +76,21 @@
 	metaDescription={`Get in touch with ${store?.name || 'us'} about orders, delivery, returns and product questions.`}
 />
 
-<div class="min-h-screen bg-[#fafafa] py-12 md:py-24">
+<!-- The page used to paint `body` from its own <style> block, so one visit recoloured the canvas of
+     every page after it for the rest of the session. The tint belongs to this page's own wrapper,
+     and it comes from the muted surface token so a merchant palette reaches it. -->
+<div class="min-h-screen bg-muted/30 py-12 md:py-20">
 	<div class="container mx-auto max-w-6xl px-4">
 		<ContactUsRenderer bind:info>
 			{#snippet content({ error, success, nameError, messageError, emailError, loading, handleSubmit })}
-				<div class="grid gap-12 lg:grid-cols-12 lg:items-start">
+				<div class="grid gap-12 lg:items-start {twoColumn ? 'lg:grid-cols-12' : 'mx-auto max-w-2xl'}">
 					<!-- Left Column: Content & Info -->
-					<div class="lg:col-span-5" in:fly={{ x: -20, duration: 600 }}>
+					<div class={twoColumn ? 'lg:col-span-5' : ''} in:fly={{ x: -20, duration: 600 }}>
 						<div class="mb-10">
-							<h1 class="text-4xl font-black tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
+							<h1 class="text-3xl font-black tracking-tight text-gray-900 md:text-4xl">
 								Let's Start a <span class="text-primary">Conversation</span>
 							</h1>
-							<p class="mt-6 text-lg leading-relaxed text-gray-500">
+							<p class="mt-4 text-lg leading-relaxed text-gray-500">
 								Have a question about an order or just want to say hi? We're here to help you create the perfect shopping experience.
 							</p>
 						</div>
@@ -77,7 +107,15 @@
 										</div>
 										<div>
 											<h3 class="font-bold text-gray-900">{method.title}</h3>
-											<p class="mt-1 font-medium text-primary">{method.value}</p>
+											{#if method.href}
+												<!-- A phone number the shopper cannot tap is a phone number they have to
+												     retype. 32px keeps the standalone link above the WCAG 2.2 target floor. -->
+												<a href={method.href} class="mt-1 inline-flex min-h-[32px] items-center font-medium text-primary hover:underline">
+													{method.value}
+												</a>
+											{:else}
+												<p class="mt-1 font-medium text-primary">{method.value}</p>
+											{/if}
 											<p class="mt-1 text-sm text-gray-400">{method.description}</p>
 										</div>
 									</div>
@@ -96,8 +134,43 @@
 					</div>
 
 					<!-- Right Column: Form -->
-					<div class="lg:col-span-7" in:fly={{ x: 20, duration: 600, delay: 200 }}>
-						{#if success}
+					<div class={twoColumn ? 'lg:col-span-7' : ''} in:fly={{ x: 20, duration: 600, delay: 200 }}>
+						{#if !formAvailable}
+							<div class="rounded-lg border bg-card p-8 shadow-xs md:p-10">
+								<h2 class="text-2xl font-bold text-foreground">Reach us directly</h2>
+								<p class="mt-2 text-muted-foreground">
+									{#if contactEmail || contactPhone}
+										This store takes enquiries over email and phone rather than through a form.
+									{:else}
+										This store does not take messages through the site, but most order, delivery and returns questions are already answered.
+									{/if}
+								</p>
+
+								{#if contactEmail || contactPhone}
+									<div class="mt-8 flex flex-col gap-3 sm:flex-row">
+										{#if contactEmail}
+											<Button href="mailto:{contactEmail}" class="h-12 w-full gap-2 sm:w-auto">
+												<Mail class="h-4 w-4" />
+												Email us
+											</Button>
+										{/if}
+										{#if contactPhone}
+											<Button variant="outline" href="tel:{String(contactPhone).replace(/\s+/g, '')}" class="h-12 w-full gap-2 sm:w-auto">
+												<Phone class="h-4 w-4" />
+												Call us
+											</Button>
+										{/if}
+									</div>
+								{/if}
+
+								<p class="mt-8 border-t pt-6 text-sm text-muted-foreground">
+									Looking for delivery, returns or payment details?
+									<a href="/faqs" class="inline-flex min-h-[32px] items-center text-primary hover:underline">Read the FAQs</a>
+									or
+									<a href="/products" class="inline-flex min-h-[32px] items-center text-primary hover:underline">keep shopping</a>.
+								</p>
+							</div>
+						{:else if success}
 							<div
 								in:fade
 								class="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-xl md:p-12"
@@ -245,9 +318,3 @@
 		</ContactUsRenderer>
 	</div>
 </div>
-
-<style>
-	:global(body) {
-		background-color: #fafafa;
-	}
-</style>

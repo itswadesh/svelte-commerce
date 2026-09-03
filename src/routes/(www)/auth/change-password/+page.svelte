@@ -5,6 +5,14 @@
 	import { Lock, KeyRound, Eye, EyeOff } from '@lucide/svelte'
 
 	const changePasswordModule = new ChangePasswordModule()
+
+	// Each message was a sibling paragraph painted red and nothing else: the input never carried
+	// `aria-invalid`, nothing pointed at the text, and colour was the only signal. A screen-reader
+	// user who typed a short password heard nothing and could not find out why the form would not
+	// proceed. One stable id per field ties the three together.
+	const oldInvalid = $derived(!!changePasswordModule.errors.old && changePasswordModule.old.length > 0)
+	const passwordInvalid = $derived(!!changePasswordModule.errors.password && changePasswordModule.password.length > 0)
+	const retypeInvalid = $derived(!!changePasswordModule.errors.retype && changePasswordModule.retype.length > 0)
 </script>
 
 <svelte:head>
@@ -40,14 +48,19 @@
 						id="old"
 						type={changePasswordModule.showOld ? 'text' : 'password'}
 						name="old"
+						autocomplete="current-password"
 						bind:value={changePasswordModule.old}
 						placeholder="Enter your current password"
 						required
-						class="pl-10 pr-10"
+						aria-invalid={oldInvalid ? 'true' : undefined}
+						aria-describedby={oldInvalid ? 'old-error' : undefined}
+						class="pl-10 pr-12 {oldInvalid ? 'border-destructive focus-visible:ring-destructive' : ''}"
 					/>
 					<button
 						type="button"
-						class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
+						aria-label={changePasswordModule.showOld ? 'Hide current password' : 'Show current password'}
+						aria-pressed={changePasswordModule.showOld}
+						class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-muted-foreground hover:text-foreground"
 						onclick={() => (changePasswordModule.showOld = !changePasswordModule.showOld)}
 					>
 						{#if changePasswordModule.showOld}
@@ -57,8 +70,8 @@
 						{/if}
 					</button>
 				</div>
-				{#if changePasswordModule.errors.old && changePasswordModule.old.length > 0}
-					<p class="mt-1 text-sm text-red-500">{changePasswordModule.errors.old}</p>
+				{#if oldInvalid}
+					<p id="old-error" class="mt-1 text-sm text-destructive">{changePasswordModule.errors.old}</p>
 				{/if}
 			</div>
 
@@ -72,14 +85,19 @@
 						id="password"
 						type={changePasswordModule.showNew ? 'text' : 'password'}
 						name="password"
+						autocomplete="new-password"
 						bind:value={changePasswordModule.password}
 						placeholder="Enter your new password"
 						required
-						class="pl-10 pr-10"
+						aria-invalid={passwordInvalid ? 'true' : undefined}
+						aria-describedby={passwordInvalid ? 'password-error' : undefined}
+						class="pl-10 pr-12 {passwordInvalid ? 'border-destructive focus-visible:ring-destructive' : ''}"
 					/>
 					<button
 						type="button"
-						class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
+						aria-label={changePasswordModule.showNew ? 'Hide new password' : 'Show new password'}
+						aria-pressed={changePasswordModule.showNew}
+						class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-muted-foreground hover:text-foreground"
 						onclick={() => (changePasswordModule.showNew = !changePasswordModule.showNew)}
 					>
 						{#if changePasswordModule.showNew}
@@ -89,8 +107,8 @@
 						{/if}
 					</button>
 				</div>
-				{#if changePasswordModule.errors.password && changePasswordModule.password.length > 0}
-					<p class="mt-1 text-sm text-red-500">{changePasswordModule.errors.password}</p>
+				{#if passwordInvalid}
+					<p id="password-error" class="mt-1 text-sm text-destructive">{changePasswordModule.errors.password}</p>
 				{/if}
 			</div>
 
@@ -104,14 +122,19 @@
 						id="retype"
 						type={changePasswordModule.showRetype ? 'text' : 'password'}
 						name="retype"
+						autocomplete="new-password"
 						bind:value={changePasswordModule.retype}
 						placeholder="Confirm your new password"
 						required
-						class="pl-10 pr-10"
+						aria-invalid={retypeInvalid ? 'true' : undefined}
+						aria-describedby={retypeInvalid ? 'retype-error' : undefined}
+						class="pl-10 pr-12 {retypeInvalid ? 'border-destructive focus-visible:ring-destructive' : ''}"
 					/>
 					<button
 						type="button"
-						class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
+						aria-label={changePasswordModule.showRetype ? 'Hide confirmed password' : 'Show confirmed password'}
+						aria-pressed={changePasswordModule.showRetype}
+						class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-muted-foreground hover:text-foreground"
 						onclick={() => (changePasswordModule.showRetype = !changePasswordModule.showRetype)}
 					>
 						{#if changePasswordModule.showRetype}
@@ -121,8 +144,8 @@
 						{/if}
 					</button>
 				</div>
-				{#if changePasswordModule.errors.retype && changePasswordModule.retype.length > 0}
-					<p class="mt-1 text-sm text-red-500">{changePasswordModule.errors.retype}</p>
+				{#if retypeInvalid}
+					<p id="retype-error" class="mt-1 text-sm text-destructive">{changePasswordModule.errors.retype}</p>
 				{/if}
 			</div>
 
