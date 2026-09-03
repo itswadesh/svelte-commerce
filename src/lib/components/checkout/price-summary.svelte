@@ -92,7 +92,7 @@
 						<span class="font-medium text-muted-foreground">{unresolvedShippingText}</span>
 					{:else if isFreeShipping}
 						<span
-							class="rounded-radius bg-success/10 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-success ring-1 ring-inset ring-success/25"
+							class="rounded-radius bg-success/5 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-success ring-1 ring-inset ring-success/30"
 						>
 							Free
 						</span>

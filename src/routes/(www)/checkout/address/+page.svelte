@@ -21,6 +21,7 @@
 	import { authService } from '$lib/core/services/index.js'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { onMount } from 'svelte'
+	import { replaceState } from '$app/navigation'
 
 	const addressModule = new AddressModule()
 	const cartState = addressModule.cartState
@@ -53,6 +54,49 @@
 	}
 
 	const isGuestCheckout = $derived(!userState?.user?.role)
+
+	// The payment step's Change link routes here as `?showEditAddress=true`, and the core module's
+	// mount() answers it with `handleAddressChangeClick()` — which for a guest opens the address
+	// dialog on top of the inline form that already holds the very same address, with no email
+	// field, a Delete Address link, and `editAddress` left true so Continue to Payment greys out
+	// whichever way the dialog is dismissed. A guest edits in place: close it, drop the flag so a
+	// reload cannot re-open it, and put the cursor in the prefilled form (UX-080).
+	let guestEditFlagHandled = false
+
+	$effect(() => {
+		if (guestEditFlagHandled || !isGuestCheckout || !page.url.searchParams.has('showEditAddress')) return
+		if (!addressModule.showAddressForm) return
+		guestEditFlagHandled = true
+		addressModule.showAddressForm = false
+		addressModule.editAddress = false
+		addressModule.currentAddressType = null
+		const url = new URL(page.url)
+		url.searchParams.delete('showEditAddress')
+		try {
+			replaceState(url, page.state)
+		} catch {
+			// replaceState is unavailable before hydration finishes; the flag is already neutralised.
+		}
+		requestAnimationFrame(() => {
+			const form = document.getElementById('checkout-address-form')
+			;(form?.querySelector('[name="firstName"]') as HTMLElement | null)?.focus()
+		})
+	})
+
+	// What the order still needs before Continue to Payment can fire. It used to live inside the
+	// button as its disabled label, which is both the least legible text in the flow and a moving
+	// target where the shopper expects one constant forward action (UX-301).
+	const continueBlocker = $derived(
+		!isEmailOk
+			? 'Add an email address to continue.'
+			: !isPhoneOk
+				? 'Add a phone number to continue.'
+				: !cartState.cart?.shippingAddress
+					? 'Add a delivery address to continue.'
+					: addressModule.editAddress
+						? 'Save your address to continue.'
+						: ''
+	)
 
 	// The pinned footer carries whichever action actually moves the shopper forward. Until the guest
 	// address is saved that is Save Address — Continue to Payment cannot fire without a shipping
@@ -153,12 +197,12 @@
 		{:then}
 			{#if addressModule.noItemsChecked && cartState?.cart?.lineItems?.length > 0}
 				<div class="flex h-96 flex-col items-center justify-center gap-3">
-					<p class="text-xl text-gray-400">You must select at least one item in cart for checkout</p>
+					<p class="text-xl text-muted-foreground">You must select at least one item in cart for checkout</p>
 					<Button variant="outline" href={appendOneTimeCartId('/checkout/cart')}>Go back to cart</Button>
 				</div>
 			{:else if cartState?.cart?.lineItems?.length === 0 && !cartState?.isUpdatingCart}
 				<div class="flex h-96 flex-col items-center justify-center gap-3">
-					<p class="text-xl text-gray-400">Your cart is empty</p>
+					<p class="text-xl text-muted-foreground">Your cart is empty</p>
 					<Button variant="outline" href="/">Continue Shopping</Button>
 				</div>
 			{:else}
@@ -201,7 +245,7 @@
 							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
 								<div class="flex items-center justify-between border-b border-border px-5 py-4">
 									<div class="flex items-center space-x-3">
-										<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Contact Details</h2>
+										<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Contact Details</h2>
 									</div>
 									{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
 										<Button onclick={addressModule.handleEditEmail} variant="ghost" size="sm" class="h-8">
@@ -214,19 +258,19 @@
 								{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
 									<div class="grid grid-cols-1 gap-6 p-6 transition-all duration-500 sm:grid-cols-2">
 										<div class="flex flex-col gap-1">
-											<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Email Address</p>
-											<p class="text-sm font-medium text-gray-900">{cartState.cart.email}</p>
+											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Email Address</p>
+											<p class="text-sm font-medium text-foreground">{cartState.cart.email}</p>
 										</div>
 										<div class="flex flex-col gap-1">
-											<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone Number</p>
-											<p class="text-sm font-medium text-gray-900">{cartState.cart.phone}</p>
+											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Phone Number</p>
+											<p class="text-sm font-medium text-foreground">{cartState.cart.phone}</p>
 										</div>
 									</div>
 								{:else if !isEmailOk || !isPhoneOk || addressModule.editEmail}
 									<form class="space-y-4 p-5 transition-all duration-500" onsubmit={saveContactInfo}>
 										<div class="space-y-1">
-											<label for="email" class="block text-sm font-medium text-gray-700">
-												Email address {#if !addressModule.isEmailRequired}<span class="text-gray-400">(optional)</span>{/if}
+											<label for="email" class="block text-sm font-medium text-foreground">
+												Email address {#if !addressModule.isEmailRequired}<span class="text-muted-foreground">(optional)</span>{/if}
 											</label>
 											<Textbox
 												type="email"
@@ -236,11 +280,11 @@
 												schema={schemas.email}
 												placeholder="your@email.com"
 											/>
-											<p class="mt-1 text-xs text-gray-500">We'll send order confirmation to this email</p>
+											<p class="mt-1 text-xs text-muted-foreground">We'll send order confirmation to this email</p>
 										</div>
 										<div class="space-y-1">
-											<label for="phone" class="block text-sm font-medium text-gray-700">
-												Phone number {#if !addressModule.isPhoneRequired}<span class="text-gray-400">(optional)</span>{/if}
+											<label for="phone" class="block text-sm font-medium text-foreground">
+												Phone number {#if !addressModule.isPhoneRequired}<span class="text-muted-foreground">(optional)</span>{/if}
 											</label>
 											<Textbox
 												type="tel"
@@ -250,7 +294,7 @@
 												schema={schemas.phone}
 												placeholder="XXXXXXXXXX"
 											/>
-											<p class="mt-1 text-xs text-gray-500">For delivery updates</p>
+											<p class="mt-1 text-xs text-muted-foreground">For delivery updates</p>
 										</div>
 										<div class="flex justify-end space-x-3 pt-2">
 											{#if cartState.cart.email}
@@ -277,7 +321,7 @@
 									<!-- Guest checkout: inline address form, no login required -->
 									<div class="p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Delivery Address</h2>
+											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Delivery Address</h2>
 											<Button variant="link" onclick={() => showAuthModal('login')} class="h-auto whitespace-normal p-0 text-left">
 												Login to view your saved addresses
 											</Button>
@@ -287,7 +331,7 @@
 								{:else if cartState.cart.shippingAddress}
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Delivery Address</h2>
+											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Delivery Address</h2>
 											{#if !addressModule.loadingForSaveToCart}
 												<Button onclick={addressModule.handleAddressChangeClick} variant="ghost" class="h-8">Change</Button>
 											{/if}
@@ -300,12 +344,12 @@
 											<div class="p-6 transition-all duration-500">
 												<div class="mb-4 flex items-center">
 													<MapPin class="mr-2 h-4 w-4 text-primary" />
-													<h3 class="text-sm font-bold uppercase tracking-tight text-gray-900">
+													<h3 class="text-sm font-bold uppercase tracking-tight text-foreground">
 														{cartState.cart.shippingAddress?.firstName}
 														{cartState.cart.shippingAddress?.lastName}
 													</h3>
 												</div>
-												<div class="space-y-1 text-sm leading-relaxed text-gray-600">
+												<div class="space-y-1 text-sm leading-relaxed text-muted-foreground">
 													<p>{cartState.cart.shippingAddress?.address_1}</p>
 													{#if cartState.cart.shippingAddress?.address_2}
 														<p>{cartState.cart.shippingAddress?.address_2}</p>
@@ -318,7 +362,7 @@
 														{cartState.cart.shippingAddress?.zip}
 													</p>
 													<p class="mt-4 border-border pt-4 font-medium">
-														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone</span>
+														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Phone</span>
 														{cartState.cart.shippingAddress?.phone}
 													</p>
 												</div>
@@ -328,7 +372,7 @@
 								{:else}
 									<div class="p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: var(--font-body);">
+											<h2 class="text-base font-bold uppercase tracking-widest text-foreground" style="font-family: var(--font-body);">
 												Shipping Address
 											</h2>
 
@@ -341,9 +385,9 @@
 												<Skeleton class="h-[100px] w-full rounded-lg" />
 											{:else}
 												<div
-													class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50 py-8 text-center transition-all duration-300 hover:bg-gray-100/50"
+													class="flex flex-col items-center justify-center rounded-lg border border-dashed border-border bg-background py-8 text-center"
 												>
-													<p class="mb-6 text-sm text-gray-500">No shipping address selected</p>
+													<p class="mb-6 text-sm text-muted-foreground">No shipping address selected</p>
 													<Button type="button" variant="default" class="px-8" onclick={addressModule.handleAddNewAddress}>Add New Address</Button>
 												</div>
 											{/if}
@@ -356,7 +400,7 @@
 								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm transition-all duration-300">
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Billing Address</h2>
+											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Billing Address</h2>
 											{#if !addressModule.loadingForSaveToCart}
 												<Button onclick={addressModule.handleBilingAddOrChangeClick} variant="ghost" class="h-8">
 													{#if cartState.cart.billingAddress?.address_1}
@@ -375,40 +419,40 @@
 											<div class="p-6 transition-all duration-500">
 												<div class="mb-4 flex items-center">
 													<MapPin class="mr-2 h-4 w-4 text-primary" />
-													<h3 class="text-sm font-bold uppercase tracking-tight text-gray-900">
+													<h3 class="text-sm font-bold uppercase tracking-tight text-foreground">
 														{cartState.cart.billingAddress?.firstName}
 														{cartState.cart.billingAddress?.lastName}
 													</h3>
 												</div>
-												<div class="space-y-1 text-sm leading-relaxed text-gray-600">
+												<div class="space-y-1 text-sm leading-relaxed text-muted-foreground">
 													<p>{cartState.cart.billingAddress?.address_1}</p>
 													{#if cartState.cart.billingAddress?.address_2}
 														<p>{cartState.cart.billingAddress?.address_2}</p>
 													{/if}
 													<p>{cartState.cart.billingAddress?.city}, {cartState.cart.billingAddress?.state}</p>
 													<p>{cartState.cart.billingAddress?.countryCode} {cartState.cart.billingAddress?.zip}</p>
-													<p class="mt-4 border-t border-gray-50 pt-4 font-medium">
-														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone</span>
+													<p class="mt-4 border-t border-border pt-4 font-medium">
+														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Phone</span>
 														{cartState.cart.billingAddress?.phone}
 													</p>
 												</div>
 											</div>
 										{:else}
-											<div class="bg-gray-50 p-8 text-center transition-all duration-500">
-												<p class="text-sm text-gray-500">No billing address saved.</p>
+											<div class="bg-background p-8 text-center transition-all duration-500">
+												<p class="text-sm text-muted-foreground">No billing address saved.</p>
 											</div>
 										{/if}
 									</div>
 								</div>
 							{/if}
 							{#if !isGuestCheckout}
-								<div class="flex items-center justify-start gap-2 p-4 transition-all hover:bg-gray-100">
+								<div class="flex items-center justify-start gap-2 p-4 transition-colors hover:bg-muted/20">
 									<Checkbox
 										checked={addressModule.isBillingAddressSameAsShipping}
 										onCheckedChange={addressModule?.handleBillingAddressSameCheck}
 										id="isBillingAddressSameAsShipping"
 									/>
-									<label for="isBillingAddressSameAsShipping" class="cursor-pointer text-xs font-bold uppercase tracking-tight text-gray-700"
+									<label for="isBillingAddressSameAsShipping" class="cursor-pointer text-xs font-bold uppercase tracking-tight text-foreground"
 										>Billing address same as shipping</label
 									>
 								</div>
@@ -420,7 +464,7 @@
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Price Summary</h2>
+								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price Summary</h2>
 								<div class="h-1 w-12 bg-primary"></div>
 							</div>
 							{#if addressModule.loadingForCart}
@@ -438,31 +482,34 @@
 									/>
 
 									{#if addressModule.showError}
-										<div class="mt-4 rounded bg-red-50 p-3 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
+										<div class="mt-4 rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">
 											{addressModule.errorMessage}
 										</div>
 									{/if}
 
-									<div
-										class="mt-6 flex items-center justify-center gap-2 rounded-md border border-gray-100 bg-gray-50/50 px-4 py-3 transition-all hover:bg-gray-100/80"
-									>
-										<LockKeyhole class="h-3.5 w-3.5 text-gray-400" />
-										<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
+									<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3">
+										<LockKeyhole class="h-3.5 w-3.5 text-muted-foreground" />
+										<p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Secure 256-bit encryption</p>
 									</div>
 
 									{#if !addressModule.showAddressList && !addressModule.showAddressForm}
 										{#if fillingGuestAddress}
+											<!-- Named for what it does. The in-form control saves; this one saves and moves the
+											     order on, so the two full-width buttons on the step no longer carry the same
+											     label in the same weight (UX-081). -->
 											<CheckoutButton
-												text="Save Address"
+												text="Save & Continue"
 												onclick={submitAddressForm}
 												loading={loadingForGuestCheckout}
 												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
 											/>
 										{:else}
+											{#if continueBlocker}
+												<p class="text-sm text-muted-foreground">{continueBlocker}</p>
+											{/if}
 											<CheckoutButton
 												text="Continue to Payment"
-												disabledText="Select Address"
-												disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
+												disabled={!!continueBlocker}
 												onclick={addressModule.handleProceedToPayment}
 												loading={addressModule.loadingForCheckout}
 												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}

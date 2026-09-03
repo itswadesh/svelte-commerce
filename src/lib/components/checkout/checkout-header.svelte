@@ -15,15 +15,12 @@
 			variant="plain"
 			disabled={step === 1 || step === 4}
 			onclick={() => goto(appendOneTimeCartId('/checkout/cart'))}
-			class={cn(
-				'flex h-auto items-center p-0 font-normal disabled:opacity-100',
-				step === 1 ? 'text-primary' : 'text-inherit'
-			)}
+			class={cn('flex h-auto items-center p-0 font-normal disabled:opacity-100', step === 1 ? 'text-primary' : 'text-inherit')}
 		>
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 1 ? 'bg-primary border-primary text-primary-foreground' : 'border-gray-200'
+					step === 1 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
 				1
@@ -31,7 +28,7 @@
 			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 1 ? '' : 'hidden sm:inline'}">Cart</span>
 		</Button>
 
-		<div class="h-px w-4 bg-gray-200 sm:w-8 md:w-16"></div>
+		<div class="h-px w-4 bg-border sm:w-8 md:w-16"></div>
 
 		<!-- Step 2: Address -->
 		<Button
@@ -40,13 +37,13 @@
 			onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
 			class={cn(
 				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
-				step === 2 ? 'text-primary' : step === 1 ? 'text-gray-400 hover:text-gray-900' : 'text-inherit'
+				step === 2 ? 'text-primary' : step === 1 ? 'text-muted-foreground hover:text-foreground' : 'text-inherit'
 			)}
 		>
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 2 ? 'bg-primary border-primary text-primary-foreground' : 'border-gray-200'
+					step === 2 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
 				2
@@ -54,7 +51,7 @@
 			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 2 ? '' : 'hidden sm:inline'}">Address</span>
 		</Button>
 
-		<div class="h-px w-4 bg-gray-200 sm:w-8 md:w-16"></div>
+		<div class="h-px w-4 bg-border sm:w-8 md:w-16"></div>
 
 		<!-- Step 3: Payment -->
 		<Button
@@ -62,13 +59,13 @@
 			disabled={true}
 			class={cn(
 				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
-				step === 3 ? 'text-primary' : 'text-gray-400'
+				step === 3 ? 'text-primary' : 'text-muted-foreground'
 			)}
 		>
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 3 ? 'bg-primary border-primary text-primary-foreground' : 'border-gray-200'
+					step === 3 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
 				3
@@ -76,7 +73,7 @@
 			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 3 ? '' : 'hidden sm:inline'}">Payment</span>
 		</Button>
 
-		<div class="h-px w-4 bg-gray-200 sm:w-8 md:w-16"></div>
+		<div class="h-px w-4 bg-border sm:w-8 md:w-16"></div>
 
 		<!-- Step 4: Placed -->
 		<Button
@@ -84,13 +81,13 @@
 			disabled={true}
 			class={cn(
 				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
-				step === 4 ? 'text-primary' : 'text-gray-400'
+				step === 4 ? 'text-primary' : 'text-muted-foreground'
 			)}
 		>
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 4 ? 'bg-primary border-primary text-primary-foreground' : 'border-gray-200'
+					step === 4 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
 				4
