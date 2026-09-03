@@ -11,9 +11,7 @@
 
 	const listedProducts = $derived(products ?? page.data.products?.data ?? [])
 
-	const categoryHierarchy: { name: string; slug?: string }[] = $derived(
-		page.data.products?.categoryHierarchy || []
-	)
+	const categoryHierarchy: { name: string; slug?: string }[] = $derived(page.data.products?.categoryHierarchy || [])
 </script>
 
 <ProductListSchema products={listedProducts} />

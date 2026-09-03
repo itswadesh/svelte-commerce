@@ -3,12 +3,14 @@
 	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
 	import ListingPage from '$lib/components/product-catalogue/listing-page.svelte'
 	import { stripPageOnFilterNavigation } from '$lib/components/product-catalogue/strip-page-on-filter'
+	import { scopeListingFilters } from '$lib/components/product-catalogue/scope-filters'
 	import { page } from '$app/state'
 	import ListingScehma from '$lib/components/product-catalogue/listing-scehma.svelte'
 
 	setDesktopFilterState()
 	setCategoryFilterState()
 	stripPageOnFilterNavigation()
+	scopeListingFilters()
 
 	const data = $derived(page.data)
 

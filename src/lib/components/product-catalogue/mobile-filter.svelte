@@ -8,10 +8,20 @@
 	import Input from '$lib/components/ui/input/input.svelte'
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
 	import { sortOptions } from '$lib/config.js'
+	import { page } from '$app/state'
+	import { readAppliedFilters } from './scope-filters.js'
 
 	let { selectedSort = $bindable(), onSortChange = (value: string) => {} } = $props()
 
 	const filterModule = getDesktopFilterState()
+
+	// The search term is what the filters run against, not one of them, so it is not summarised on
+	// the Filter button. It has its own removable chip above the grid.
+	const barFilters = $derived(
+		readAppliedFilters(page.url, Object.keys(page.data?.products?.facets || {}), page.data?.store?.currencySymbol ?? '').filter(
+			(f) => f.key !== 'search'
+		)
+	)
 
 	// A backend that cannot filter by price reports no range at all (Vendure returns
 	// `priceStat: { min: undefined, max: undefined }`), which rendered a dead slider with blank
@@ -23,9 +33,7 @@
 			filterModule.maxPossiblePrice > filterModule.minPossiblePrice
 	)
 
-	const menuItems = $derived(
-		priceFilterSupported ? filterModule.menuItems : filterModule.menuItems.filter((item: any) => item.id !== 'price')
-	)
+	const menuItems = $derived(priceFilterSupported ? filterModule.menuItems : filterModule.menuItems.filter((item: any) => item.id !== 'price'))
 
 	// The dropped tab must not stay selected: `selectedSection` is seeded from the composable's own
 	// list, which always includes price.
@@ -104,18 +112,18 @@
 			<Filter class="mx-2 max-h-4 min-h-4 min-w-4 max-w-4 text-gray-500" />
 
 			<div class="flex max-w-[50%] flex-col items-start">
-				<span class="text-sm font-semibold text-gray-700">Filter</span>
-				<!-- Applied filter keys -->
+				<span class="text-sm font-semibold text-foreground">Filter</span>
+				<!-- What is actually narrowing the results, read from the URL. The composable's own
+				     applied-filter map counts `search`, `sort` and `page` as facets, so a plain search
+				     result advertised "Search" as a filter the shopper had supposedly applied, and a
+				     sorted listing claimed a filter that did not exist. -->
 				<div class="grid grid-cols-1">
-					{#if filterModule.anyFilterApplied}
-						<span class="truncate text-xs capitalize text-gray-500">
-							{Object.keys(filterModule.appliedFiltersCountByKey)
-								?.splice?.(0, 2)
-								?.map((k) => (k?.includes('attributes') || k?.includes('option') ? k.split('.')?.[1] : k))
-								?.join?.(', ') +
-								(Object.keys(filterModule.appliedFiltersCountByKey)?.length > 2
-									? ` +${Object.keys(filterModule.appliedFiltersCountByKey)?.length - 2}`
-									: '')}
+					{#if barFilters.length}
+						<span class="truncate text-xs capitalize text-muted-foreground">
+							{barFilters
+								.slice(0, 2)
+								.map((f) => f.label)
+								.join(', ') + (barFilters.length > 2 ? ` +${barFilters.length - 2}` : '')}
 						</span>
 					{/if}
 				</div>
