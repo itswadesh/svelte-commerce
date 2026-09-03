@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import Select from '$lib/components/form/select.svelte'
+	import * as Select from '$lib/components/ui/select/index.js'
 	import { sortOptions } from '$lib/config.js'
 	import { selectSort } from '$lib/core/utils/index.js'
 
-	const { selectedSort = $bindable() } = $props()
+	// `let`, not `const`: the select writes the new value back through the binding.
+	let { selectedSort = $bindable() } = $props()
 
 	const data = $derived(page.data)
+
+	const sortLabel = $derived(sortOptions.find((option) => option.value === selectedSort)?.name ?? 'Sort')
 </script>
 
 <!-- Ungated on purpose: this block used to be `hidden lg:flex`, which is display:none — it took the
@@ -37,14 +40,30 @@
 		     shopper could filter but never re-order. The sidebar is already visible from md, so the
 		     bar stays hidden and there is exactly one sort affordance at every width. -->
 		<div class="ed-lh__sort hidden items-center gap-2 md:flex">
-			<span class="ed-lh__sortlabel text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sort by</span>
-			<Select
-				class="ed-lh__select !mb-0"
-				id="sort-by"
+			<span id="sort-by-label" class="ed-lh__sortlabel text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sort by</span>
+			<!-- The shadcn/bits-ui select, not the project's custom combobox. That one opens a popover
+			     whose command list has no focusable input when search is off, so nothing consumed the
+			     arrow keys, Enter was swallowed, and only Escape closed it: a keyboard or switch user
+			     could not sort a listing at all. This primitive ships roving focus, type-ahead, Enter
+			     and Escape, and it had zero call sites before now. -->
+			<Select.Root
+				type="single"
 				value={selectedSort}
-				data={sortOptions}
-				optionSelected={(value: string) => selectSort(value)}
-			/>
+				onValueChange={(value: string) => {
+					if (!value) return
+					selectedSort = value
+					selectSort(value)
+				}}
+			>
+				<Select.Trigger id="sort-by" aria-labelledby="sort-by-label sort-by" class="ed-lh__select w-[200px]">
+					{sortLabel}
+				</Select.Trigger>
+				<Select.Content>
+					{#each sortOptions as option}
+						<Select.Item value={option.value} label={option.name}>{option.name}</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
 		</div>
 	{/if}
 
