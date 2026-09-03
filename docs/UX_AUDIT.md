@@ -49,6 +49,19 @@ shared remote database.
 The only failing request left on any route is the connector probing for the optional identity
 module, which this store does not install.
 
+**Verified against a production build**, not only the dev server: `vite build` succeeds, the
+adapter-node server boots, and the same 24 route and width combinations pass on it — 200 each, no
+overflow, one heading, no unlabeled controls — along with a complete guest checkout to the review
+step with no page errors. The server HTML from that build carries the product links, the page
+heading and the theme attribute on `<html>`, so the server-rendering and portal fixes hold in
+production and not just under hot reload.
+
+One environment note for whoever runs this next: `bun run check` and `bunx vite build` both fail
+in this checkout. `check` calls a `sync-connector-types.js` that is not in the repo, and `bunx`
+reports corrupted bin metadata. Invoke the tools directly instead —
+`bunx svelte-check --tsconfig ./tsconfig.json` and `node node_modules/vite/bin/vite.js build`.
+Neither failure is caused by this work.
+
 **Still open:** the remaining Medium and Low findings listed below, plus three items whose root
 cause sits in `@misiki/kitcommerce-core` and must be fixed upstream: the variant lookup comparing a
 string parameter against a numeric id, `selectVariant` navigating without `keepFocus`, and the
