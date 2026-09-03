@@ -285,7 +285,7 @@
 
 <div class="page-width intra-gap edp-root flex flex-col">
 	{#if !data?.product && !productState.isLoading}
-		<div class="flex h-96 flex-col items-center justify-center space-y-4">
+		<div class="flex h-80 flex-col items-center justify-center gap-3">
 			<h2 class="page-heading edp-empty-title">Product not found</h2>
 			<a href="/products" class="edp-empty-link text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4"
 				>Browse All Products</a
@@ -301,7 +301,7 @@
 				<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
 			</div>
 
-			<div class="intra-gap edp-buybox top-28 mx-0 flex flex-col space-y-0 lg:pl-6">
+			<div class="intra-gap edp-buybox top-28 mx-0 flex flex-col lg:pl-6">
 				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
@@ -310,71 +310,72 @@
 
 				<ProductAggregation />
 
-				<div class="intra-gap flex flex-col">
-					<ProductVariation />
+				<ProductVariation />
 
-					<!-- In flow on every viewport. The mobile CTA used to exist only inside the sticky
-					     bar, which is why that bar had to be pinned from first paint. -->
-					<div class="intra-gap mt-2 flex flex-col" bind:this={inFlowCta}>
-						<ProductCartAndWishlistButtons />
-					</div>
-
-					{#if showPincodeCheck}
-						<div class="intra-gap intra-pt flex flex-col border-t">
-							<div class="intra-gap flex items-center justify-start">
-								<Truck class="size-4 text-muted-foreground" />
-								<span class="text-sm text-foreground">Delivery options</span>
-							</div>
-							<PincodeCheck />
-						</div>
-					{:else if hasShippingPolicy || hasRefundPolicy}
-						<!-- No delivery plugin on this store, so nothing is promised on the merchant's
-						     behalf: their own published policies are linked instead. -->
-						<div class="intra-pt flex flex-col gap-2 border-t text-sm">
-							{#if hasShippingPolicy}
-								<p class="flex items-center gap-2 text-muted-foreground">
-									<Truck class="size-4 shrink-0" aria-hidden="true" />
-									<PolicyLink href="/shipping-policy" class="underline underline-offset-4 hover:text-foreground">Shipping and delivery</PolicyLink>
-								</p>
-							{/if}
-							{#if hasRefundPolicy}
-								<p class="flex items-center gap-2 text-muted-foreground">
-									<RotateCcw class="size-4 shrink-0" aria-hidden="true" />
-									<PolicyLink href="/refund-policy" class="underline underline-offset-4 hover:text-foreground">Returns and refunds</PolicyLink>
-								</p>
-							{/if}
-						</div>
-					{/if}
-
-					{#if productState.trustBadgesPlugin?.active}
-						<div class="intra-pt border-t">
-							{@html productState.trustBadgesPlugin?.html}
-						</div>
-					{/if}
-
-					{#if productState.returnPlugin?.active && productState.returnPlugin?.html}
-						<div>
-							<h2 class="mb-2 text-base font-semibold text-foreground">Returns and exchanges</h2>
-							<div class="text-sm leading-relaxed text-muted-foreground {!productState.showReturnPolicy ? 'line-clamp-2 overflow-hidden' : ''}">
-								{@html productState.returnPlugin?.html}
-							</div>
-
-							{#if productState.returnPlugin?.below_more}
-								<Button variant="link" class="mt-1 h-auto p-0" onclick={() => (productState.showReturnPolicy = !productState.showReturnPolicy)}>
-									{productState.showReturnPolicy ? 'Show less' : 'Read full policy'}
-								</Button>
-							{/if}
-						</div>
-					{/if}
-
-					<div class="">
-						<StoreCheck />
-						<ProductSpecifications />
-						<ProductDescription />
-					</div>
-
-					<ProductMetaDataSection />
+				<!-- In flow on every viewport. The mobile CTA used to exist only inside the sticky
+				     bar, which is why that bar had to be pinned from first paint. The wrapper exists
+				     only as the IntersectionObserver target, so it sets no spacing of its own. -->
+				<div bind:this={inFlowCta}>
+					<ProductCartAndWishlistButtons />
 				</div>
+
+				{#if showPincodeCheck}
+					<div class="flex flex-col gap-2 border-t pt-3">
+						<div class="flex items-center gap-2">
+							<Truck class="size-4 text-muted-foreground" />
+							<span class="text-sm text-foreground">Delivery options</span>
+						</div>
+						<PincodeCheck />
+					</div>
+				{:else if hasShippingPolicy || hasRefundPolicy}
+					<!-- No delivery plugin on this store, so nothing is promised on the merchant's
+					     behalf: their own published policies are linked instead. -->
+					<div class="flex flex-col gap-2 border-t pt-3 text-sm">
+						{#if hasShippingPolicy}
+							<p class="flex items-center gap-2 text-muted-foreground">
+								<Truck class="size-4 shrink-0" aria-hidden="true" />
+								<PolicyLink href="/shipping-policy" class="underline underline-offset-4 hover:text-foreground">Shipping and delivery</PolicyLink>
+							</p>
+						{/if}
+						{#if hasRefundPolicy}
+							<p class="flex items-center gap-2 text-muted-foreground">
+								<RotateCcw class="size-4 shrink-0" aria-hidden="true" />
+								<PolicyLink href="/refund-policy" class="underline underline-offset-4 hover:text-foreground">Returns and refunds</PolicyLink>
+							</p>
+						{/if}
+					</div>
+				{/if}
+
+				{#if productState.trustBadgesPlugin?.active}
+					<div class="border-t pt-3">
+						{@html productState.trustBadgesPlugin?.html}
+					</div>
+				{/if}
+
+				{#if productState.returnPlugin?.active && productState.returnPlugin?.html}
+					<div>
+						<h2 class="mb-1 text-sm font-semibold text-foreground">Returns and exchanges</h2>
+						<div class="text-sm leading-relaxed text-muted-foreground {!productState.showReturnPolicy ? 'line-clamp-2 overflow-hidden' : ''}">
+							{@html productState.returnPlugin?.html}
+						</div>
+
+						{#if productState.returnPlugin?.below_more}
+							<Button variant="link" class="mt-1 h-auto p-0 text-sm" onclick={() => (productState.showReturnPolicy = !productState.showReturnPolicy)}>
+								{productState.showReturnPolicy ? 'Show less' : 'Read full policy'}
+							</Button>
+						{/if}
+					</div>
+				{/if}
+
+				<!-- The accordion stack is one region: each panel draws its own hairline rule, so the
+				     column gap must not also apply between them. -->
+				<div>
+					<StoreCheck />
+					<ProductSpecifications />
+					<ProductDescription />
+				</div>
+
+				<ProductMetaDataSection />
 
 				<ProductTags />
 			</div>
@@ -383,9 +384,7 @@
 
 	<ProductReviewsSection />
 
-	<div class="">
-		<RelatedProducts />
-	</div>
+	<RelatedProducts />
 </div>
 
 <!-- Mobile purchase bar. Fixed, not sticky: stuck to the last flow element it rendered mid-screen
@@ -417,13 +416,19 @@
 	/* Refined Editorial — default theme only. Route component renders for all themes,
 	   so every rule is gated under [data-theme='default']. */
 	:global([data-theme='default'] .edp-grid) {
-		column-gap: clamp(28px, 5vw, 72px);
-		row-gap: 18px;
+		/* Was clamp(28px, 5vw, 72px) — a 72px trench between the image and the buy box at 1440,
+		   which pushed the purchase column toward the right edge and made the two halves read as
+		   unrelated pages. 24-48px is the project's own gutter range. */
+		column-gap: clamp(24px, 3.5vw, 48px);
+		row-gap: 16px;
 	}
 
+	/* On top of the grid's own column gap this was a second, larger indent — 44px of padding
+	   inside a 72px gutter. The gap belongs to the grid; the buy box only needs a hairline of
+	   optical separation. */
 	@media (min-width: 1024px) {
 		:global([data-theme='default'] .edp-buybox) {
-			padding-left: clamp(16px, 3vw, 44px);
+			padding-left: clamp(8px, 1.5vw, 20px);
 		}
 	}
 
@@ -436,15 +441,16 @@
 		font-family: var(--ed-display);
 		font-weight: 500;
 		letter-spacing: -0.01em;
-		font-size: clamp(1.8rem, 4vw, 2.6rem);
+		/* An error state does not need a 41.6px display heading. */
+		font-size: clamp(1.35rem, 2.4vw, 1.75rem);
 		color: var(--ed-ink);
 	}
 
 	:global([data-theme='default'] .edp-empty-link) {
 		color: var(--ed-ink);
 		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		font-size: 0.76rem;
+		letter-spacing: 0.12em;
+		font-size: 0.75rem;
 		text-decoration: none;
 		border-bottom: 1px solid var(--ed-ink);
 		padding-bottom: 2px;

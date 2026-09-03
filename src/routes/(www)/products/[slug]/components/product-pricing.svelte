@@ -24,7 +24,7 @@
 
 <div class="edp-pricewrap flex flex-col">
 	<div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-		<div class="edp-price text-xl font-semibold text-foreground" data-testid="product-price">
+		<div class="edp-price text-lg font-semibold text-foreground sm:text-xl" data-testid="product-price">
 			{formatPrice(price, currency?.code)}
 		</div>
 
@@ -47,20 +47,22 @@
 	/* Refined Editorial — default theme only. */
 	:global([data-theme='default'] .edp-price) {
 		font-family: var(--ed-body);
-		font-size: 1.6rem;
+		/* Was a flat 1.6rem (25.6px) at every width, which made the price LARGER than the product
+		   title on a phone. 20-22.4px keeps it second in the hierarchy, where it belongs. */
+		font-size: clamp(1.25rem, 1.6vw, 1.4rem);
 		font-weight: 600;
 		letter-spacing: -0.01em;
 		color: var(--ed-ink);
 	}
 
 	:global([data-theme='default'] .edp-mrp) {
-		font-size: 0.9rem;
+		font-size: 0.875rem;
 		color: var(--ed-soft);
 		text-decoration: line-through;
 	}
 
 	:global([data-theme='default'] .edp-off) {
-		font-size: 0.78rem;
+		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.04em;
 		text-transform: uppercase;
@@ -68,7 +70,7 @@
 	}
 
 	:global([data-theme='default'] .edp-tax) {
-		font-size: 0.76rem;
+		font-size: 0.75rem;
 		font-weight: 400;
 		color: var(--ed-soft);
 	}

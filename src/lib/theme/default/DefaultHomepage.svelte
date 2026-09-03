@@ -572,6 +572,12 @@
 		color: var(--ed-ink);
 		font-family: var(--ed-body);
 		-webkit-font-smoothing: antialiased;
+
+		/* ONE band rhythm for the whole page. Four different section paddings used to compete —
+		   .ed-section 56-120px, .ed-banner's 56-120px margins, .ed-news' 56-116px and .ed-bands'
+		   36-64px gap — so the distance between two bands depended on which two they happened to
+		   be, and the product grid sat 230px away from the lookbook on a 1280px screen. */
+		--ed-band: clamp(40px, 5vw, 64px);
 	}
 
 	/* Same container rail as the header (.page-width) and footer (.ed-foot-inner). */
@@ -581,7 +587,7 @@
 	}
 
 	.ed-section {
-		padding-block: clamp(56px, 9vw, 120px);
+		padding-block: var(--ed-band);
 	}
 
 	.ed-display {
@@ -592,9 +598,11 @@
 
 	.ed-eyebrow {
 		display: inline-block;
-		margin-bottom: 14px;
+		margin-bottom: 10px;
 		color: var(--ed-soft);
-		font-size: 0.72rem;
+		/* 12px, the floor of the supporting-text band. 0.72rem is 11.5px, and this is uppercase
+		   at 0.2em tracking — it was the smallest, hardest-to-read text on the page. */
+		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.2em;
 		text-transform: uppercase;
@@ -605,48 +613,69 @@
 		display: grid;
 		grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
 		align-items: center;
-		gap: clamp(28px, 5vw, 72px);
-		padding-block: clamp(48px, 8vw, 104px);
+		gap: clamp(24px, 3.5vw, 48px);
+		/* Deliberately less than a full band: the hero opens the page directly under the header,
+		   so the air above it is the header's gap, not a boundary between two bands. It was
+		   104px top AND bottom around a column of copy 250px tall. */
+		padding-block: clamp(28px, 3.4vw, 48px);
 	}
 
 	.ed-hero__body {
+		/* One rhythm for the column. The eyebrow (14px), paragraph (22px), actions (34px) and
+		   note (26px) each used to set their own margin, so four scopes decided four different
+		   gaps inside a single 250px-tall block. */
+		display: grid;
+		gap: 14px;
 		max-width: 34rem;
+	}
+
+	/* The eyebrow carries its own bottom margin for the section headers, where nothing else sets
+	   a gap. Inside the two grid columns, that margin would stack on top of the grid gap. */
+	.ed-hero__body .ed-eyebrow,
+	.ed-banner__body .ed-eyebrow {
+		margin-bottom: 0;
 	}
 
 	.ed-hero h1 {
 		margin: 0;
-		/* 28-40px, the documented page-title step. This was clamp(2.6rem, 5.6vw, 4.9rem) — 72px at
-		   1280 — and that single line is what pushed the hero's primary action down past 600px and
-		   delayed the product grid. Section titles below follow the 22-32px step for the same reason. */
-		font-size: clamp(1.75rem, 4.2vw, 2.5rem);
-		line-height: 1.02;
+		/* The page-title step, shared verbatim with .ed-lh__title on the listing header: 28px on a
+		   phone, 30.7px at 1280, 34.6px at 1440, 36px at the widest. Both titles already agreed on
+		   the 1.75rem floor and the 2.25rem ceiling and differed only in the ramp (3.4vw here),
+		   so the hero hit the ceiling at 1060px while the listing title reached it at 1500px and
+		   the two pages showed a 5.3px gap on the same 1280px screen. The slower ramp wins: it is
+		   the smaller value at every width where they disagree. (It was worse before:
+		   clamp(2.6rem, 5.6vw, 4.9rem), 72px at 1280.) */
+		font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+		line-height: 1.06;
 	}
 
 	.ed-hero h1 em {
+		display: block;
 		font-style: italic;
 		color: hsl(var(--primary));
 	}
 
 	.ed-hero__text {
 		max-width: 42ch;
-		margin: 22px 0 0;
+		/* Margins removed: .ed-hero__body owns every gap in this column now. 1.05rem/1.7 was over
+		   the 14-16px body band and looser than the 1.45-1.6 line-height band. */
+		margin: 0;
 		color: var(--ed-soft);
-		font-size: 1.05rem;
-		line-height: 1.7;
+		font-size: 1rem;
+		line-height: 1.55;
 	}
 
 	.ed-hero__actions {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 14px 26px;
-		margin-top: 34px;
+		gap: 12px 20px;
 	}
 
 	.ed-hero__note {
-		margin: 26px 0 0;
+		margin: 0;
 		color: var(--ed-soft);
-		font-size: 0.82rem;
+		font-size: 0.8rem;
 		letter-spacing: 0.01em;
 	}
 
@@ -654,7 +683,9 @@
 		position: relative;
 		overflow: hidden;
 		border-radius: var(--ed-radius);
-		aspect-ratio: 4 / 3.4;
+		/* 4/3.4 made the photograph 514px tall at 1280 beside a 250px column of copy, which is what
+		   set the hero's height — and so how far a shopper scrolled before reaching a product. */
+		aspect-ratio: 4 / 3;
 		background: #eae5dd;
 	}
 
@@ -819,13 +850,17 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 52px;
-		padding: 0 30px;
+		/* 44px on touch, 40px from the tablet breakpoint up (see below) — the two control heights
+		   the design system defines. A flat 52px is taller than any control in the storefront. */
+		min-height: 44px;
+		padding: 0 22px;
 		border: 1px solid hsl(var(--primary));
 		border-radius: var(--ed-radius);
 		background: hsl(var(--primary));
 		color: hsl(var(--primary-foreground));
-		font-size: 0.82rem;
+		/* 0.8rem, the size the PDP's Add to bag CTA and the listing's sort trigger already use.
+		   Three uppercase button labels at 0.8 / 0.82 / 0.85rem is drift, not hierarchy. */
+		font-size: 0.8rem;
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
@@ -848,6 +883,13 @@
 	.ed-btn--ghost:hover {
 		background: var(--ed-ink);
 		color: var(--ed-canvas);
+	}
+
+	/* Pointer-sized controls once there is room for them; the 44px touch target stays below. */
+	@media (min-width: 768px) {
+		.ed-btn {
+			min-height: 40px;
+		}
 	}
 
 	.ed-link {
@@ -886,10 +928,13 @@
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: center;
-		gap: 14px 22px;
-		padding-block: 16px;
+		gap: 6px 16px;
+		padding-block: 12px;
 		color: var(--ed-soft);
-		font-size: 0.78rem;
+		font-size: 0.75rem;
+		/* This wraps to three lines on a 390px screen; at 16px padding and a 14px row gap the
+		   assurance strip was 122px tall, taller than any product title it sits above. */
+		line-height: 1.4;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 	}
@@ -907,13 +952,21 @@
 		align-items: flex-end;
 		justify-content: space-between;
 		gap: 24px;
-		margin-bottom: clamp(28px, 4vw, 52px);
+		margin-bottom: clamp(20px, 2.4vw, 32px);
+	}
+
+	/* 22px on a phone, 28px on a desktop. The section-title band is 22-32px and every heading on
+	   this page sat on its ceiling. Shared with the lookbook and newsletter titles below so the
+	   page has one heading step rather than three identical clamps that can drift apart. */
+	.ed-head__title,
+	.ed-banner__title,
+	.ed-news__title {
+		font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+		line-height: 1.1;
 	}
 
 	.ed-head__title {
 		margin: 0;
-		font-size: clamp(1.5rem, 3vw, 2rem);
-		line-height: 1.05;
 	}
 
 	.ed-tint {
@@ -962,8 +1015,8 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 8px;
-		margin-top: 14px;
-		font-size: 0.95rem;
+		margin-top: 10px;
+		font-size: 0.875rem;
 		font-weight: 600;
 	}
 
@@ -982,7 +1035,7 @@
 	/* ---------- HOME PAGE GRIDS (merchant sections from the admin Home page) ---------- */
 	.ed-bands {
 		display: grid;
-		gap: clamp(36px, 5vw, 64px);
+		gap: var(--ed-band);
 	}
 
 	.ed-band__grid {
@@ -1045,7 +1098,8 @@
 	.ed-products {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: clamp(16px, 2vw, 28px);
+		/* Same gap as .ed-cats: two grids of tiles one band apart should not use two rhythms. */
+		gap: clamp(14px, 1.6vw, 22px);
 	}
 
 	.ed-skel {
@@ -1062,8 +1116,8 @@
 	.ed-empty {
 		display: grid;
 		justify-items: center;
-		gap: 14px;
-		padding: clamp(48px, 8vw, 96px) 24px;
+		gap: 12px;
+		padding: clamp(32px, 5vw, 56px) 24px;
 		border: 1px solid var(--ed-line);
 		border-radius: var(--ed-radius);
 		text-align: center;
@@ -1071,7 +1125,7 @@
 
 	.ed-empty h3 {
 		margin: 0;
-		font-size: 1.6rem;
+		font-size: 1.375rem;
 	}
 
 	.ed-empty p {
@@ -1089,14 +1143,15 @@
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		align-items: stretch;
-		gap: clamp(24px, 4vw, 60px);
-		margin-block: clamp(56px, 9vw, 120px);
+		gap: clamp(20px, 3vw, 40px);
+		margin-block: calc(var(--ed-band) / 2) var(--ed-band);
 	}
 
 	.ed-banner__media {
 		overflow: hidden;
 		border-radius: var(--ed-radius);
-		aspect-ratio: 5 / 4;
+		/* Was 5/4 — 472px tall next to a 200px column of copy. */
+		aspect-ratio: 4 / 3;
 		background: #eae5dd;
 	}
 
@@ -1108,25 +1163,26 @@
 	}
 
 	.ed-banner__body {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
+		/* Grid with one gap, like the hero column. justify-items reproduces the old
+		   align-items: flex-start, so the ghost button still shrink-wraps. The eyebrow (14px),
+		   title (18px) and paragraph (30px) each used to set their own bottom margin. */
+		display: grid;
+		align-content: center;
+		justify-items: start;
+		gap: 14px;
 		max-width: 34rem;
 	}
 
 	.ed-banner__title {
-		margin: 0 0 18px;
-		font-size: clamp(1.5rem, 3vw, 2rem);
-		line-height: 1.06;
+		margin: 0;
 	}
 
 	.ed-banner__body p {
-		margin: 0 0 30px;
+		margin: 0;
 		max-width: 46ch;
 		color: var(--ed-soft);
-		font-size: 1.02rem;
-		line-height: 1.7;
+		font-size: 1rem;
+		line-height: 1.55;
 	}
 
 	/* ---------- ASSURANCES ---------- */
@@ -1140,7 +1196,7 @@
 		display: flex;
 		align-items: center;
 		gap: 14px;
-		padding: 30px clamp(12px, 2vw, 26px);
+		padding: 20px clamp(12px, 2vw, 26px);
 	}
 
 	.ed-assure__item + .ed-assure__item {
@@ -1157,7 +1213,7 @@
 
 	.ed-assure__title {
 		margin: 0;
-		font-size: 0.92rem;
+		font-size: 0.875rem;
 		font-weight: 600;
 	}
 
@@ -1171,36 +1227,34 @@
 	.ed-news {
 		max-width: 42rem;
 		margin-inline: auto;
-		padding-block: clamp(56px, 9vw, 116px);
+		padding-block: var(--ed-band);
 		text-align: center;
 	}
 
 	.ed-news__title {
 		margin: 0;
-		font-size: clamp(1.5rem, 3vw, 2rem);
-		line-height: 1.06;
 	}
 
 	.ed-news__text {
 		max-width: 46ch;
-		margin: 16px auto 0;
+		margin: 12px auto 0;
 		color: var(--ed-soft);
-		font-size: 1.02rem;
-		line-height: 1.7;
+		font-size: 1rem;
+		line-height: 1.55;
 	}
 
 	.ed-news__form {
 		display: flex;
 		gap: 10px;
 		max-width: 30rem;
-		margin: 30px auto 0;
+		margin: 20px auto 0;
 	}
 
 	.ed-news__form input {
 		flex: 1;
 		min-width: 0;
-		height: 52px;
-		padding: 0 18px;
+		height: 44px;
+		padding: 0 16px;
 		border: 1px solid var(--ed-line);
 		border-radius: var(--ed-radius);
 		background: var(--ed-canvas);
@@ -1215,8 +1269,8 @@
 	}
 
 	.ed-news__form button {
-		height: 52px;
-		padding: 0 26px;
+		height: 44px;
+		padding: 0 22px;
 		border: 1px solid hsl(var(--primary));
 		border-radius: var(--ed-radius);
 		background: hsl(var(--primary));
@@ -1234,15 +1288,23 @@
 		transform: translateY(-2px);
 	}
 
+	/* Matches the .ed-btn step: 44px on touch, 40px once the viewport is pointer-sized. */
+	@media (min-width: 768px) {
+		.ed-news__form input,
+		.ed-news__form button {
+			height: 40px;
+		}
+	}
+
 	.ed-news__thanks {
-		margin: 28px 0 0;
+		margin: 20px 0 0;
 		color: hsl(var(--primary));
-		font-size: 1.05rem;
+		font-size: 1rem;
 		font-weight: 600;
 	}
 
 	.ed-news__privacy {
-		margin: 16px 0 0;
+		margin: 12px 0 0;
 		color: var(--ed-soft);
 		font-size: 0.78rem;
 	}
@@ -1324,7 +1386,11 @@
 		}
 		.ed-hero__media {
 			order: 1;
-			aspect-ratio: 16 / 11;
+			/* Once the hero stacks the photograph is full-bleed: at 768px, 16/11 made it 484px
+			   tall and pushed the headline and the primary action off the first screen. The
+			   max-height keeps it under half the fold on short viewports too. */
+			aspect-ratio: 16 / 10;
+			max-height: 46vh;
 		}
 		.ed-cats {
 			grid-template-columns: repeat(2, minmax(0, 1fr));

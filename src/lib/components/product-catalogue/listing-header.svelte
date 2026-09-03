@@ -55,7 +55,7 @@
 					onSortChange(value)
 				}}
 			>
-				<Select.Trigger id="sort-by" aria-labelledby="sort-by-label sort-by" class="ed-lh__select w-[200px]">
+				<Select.Trigger id="sort-by" aria-labelledby="sort-by-label sort-by" class="ed-lh__select w-[180px]">
 					{sortLabel}
 				</Select.Trigger>
 				<Select.Content>
@@ -79,12 +79,15 @@
 	/* ---- Refined Editorial · listing header (default theme only) ----
 	   Other themes keep the original markup + Tailwind classes untouched;
 	   every rule below is gated to [data-theme='default']. */
+	/* No margin-bottom. The header sits inside .ed-plp__main, an `inter-gap` flex column, so the
+	   space above the grid was set twice — 34px here plus the column's own 20px gap = 53px at
+	   1280px. The column gap is now the single rhythm for this region (see listing-page.svelte). */
 	:global([data-theme='default']) .ed-lh {
 		flex-wrap: wrap;
 		align-items: flex-end;
-		gap: 20px 32px;
-		padding-bottom: clamp(16px, 2vw, 22px);
-		margin-bottom: clamp(20px, 2.6vw, 34px);
+		gap: 12px 24px;
+		padding-bottom: clamp(12px, 1.4vw, 16px);
+		margin-bottom: 0;
 		border-bottom: 1px solid var(--ed-line);
 	}
 
@@ -92,24 +95,29 @@
 	:global([data-theme='default']) .ed-lh__group {
 		flex-direction: column-reverse;
 		align-items: flex-start;
-		gap: 8px;
+		gap: 6px;
 	}
 
+	/* 12px, not 11.5px: this is the only line stating how many results the filters produced, and
+	   the design system floors supporting text at 12px. */
 	:global([data-theme='default']) .ed-lh__count {
 		font-family: var(--ed-body);
-		font-size: 0.72rem;
+		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.18em;
 		text-transform: uppercase;
 		color: var(--ed-soft);
 	}
 
+	/* Was clamp(1.9rem, 3.4vw, 3rem) — 43.5px at 1280 and 48px at 1440, well past the 28-40px
+	   page-title band and the single loudest element on the page. 28px on a phone, 36px at the
+	   widest. */
 	:global([data-theme='default']) .ed-lh__title {
 		margin: 0;
 		font-family: var(--ed-display);
 		font-weight: 500;
-		font-size: clamp(1.9rem, 3.4vw, 3rem);
-		line-height: 1.04;
+		font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+		line-height: 1.08;
 		letter-spacing: -0.01em;
 		color: var(--ed-ink);
 	}
@@ -125,15 +133,22 @@
 		margin-top: 4px;
 		max-width: 70ch;
 		color: var(--ed-soft);
-		font-size: 0.9rem;
-		line-height: 1.7;
+		font-size: 0.875rem;
+		line-height: 1.6;
 	}
 
-	/* Refined sort dropdown trigger (shadcn Button rendered inside Select) */
-	:global([data-theme='default'] .ed-lh__select button) {
-		height: 44px;
-		min-width: 200px;
-		padding: 0 14px;
+	/* Refined sort dropdown trigger. The selector used to be `.ed-lh__select button`, but
+	   Select.Trigger renders the <button> ITSELF and carries this class, so nothing below ever
+	   applied and the trigger kept the raw shadcn skin. Reviving it at 44px would have made the
+	   control bigger; this block never renders below 768px (a phone sorts from the fixed bar), so
+	   it takes 40px — the single desktop control height the rest of the storefront already uses
+	   (the homepage .ed-btn, the PDP Add-to-bag CTA, the PDP variant pills and both PDP accordion
+	   triggers are all 40px from md up). It used to drop to 36px at 1024px, which made this the one
+	   control that got SMALLER as the screen got larger while every sibling held 40. */
+	:global([data-theme='default'] .ed-lh__select) {
+		height: 40px;
+		min-width: 0;
+		padding: 0 12px;
 		border: 1px solid var(--ed-line-strong);
 		border-radius: var(--ed-radius);
 		background: var(--ed-surface);
@@ -148,17 +163,17 @@
 	/* The global focus ring in app.css is a Tailwind `ring`, which compiles to a box-shadow. A
 	   blanket `box-shadow: none` on this trigger erased it, so the one control a keyboard shopper
 	   most needs to find drew nothing on Tab. Flatten the resting state only. */
-	:global([data-theme='default'] .ed-lh__select button:not(:focus-visible)) {
+	:global([data-theme='default'] .ed-lh__select:not(:focus-visible)) {
 		box-shadow: none;
 	}
 
-	:global([data-theme='default'] .ed-lh__select button:hover) {
+	:global([data-theme='default'] .ed-lh__select:hover) {
 		border-color: hsl(var(--primary));
 		background: var(--ed-surface);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .ed-lh__select button) {
+		:global([data-theme='default'] .ed-lh__select) {
 			transition: none;
 		}
 	}
