@@ -61,7 +61,18 @@
 			}))
 			.filter((column) => column.items.length)
 	)
-	const renderedFooterMenu = $derived(themeFooterMenu.length ? themeFooterMenu : footerMenu)
+	// The fallback path needs the same treatment: the backend's own footer menu carries those five
+	// policy links too, so a store whose theme ships no footer columns re-introduced every dead link
+	// the filtering above had just removed.
+	const resolvableFooterMenu = $derived(
+		(footerMenu || [])
+			.map((column: { name?: string; items?: { link?: string; name?: string }[] }) => ({
+				...column,
+				items: keepResolvableLinks(column?.items || [], publishedCms)
+			}))
+			.filter((column: { items: unknown[] }) => column.items.length)
+	)
+	const renderedFooterMenu = $derived(themeFooterMenu.length ? themeFooterMenu : resolvableFooterMenu)
 	const footerDescription = $derived(activeThemeName === 'default' ? storeData?.description : themeContent?.description || storeData?.description)
 </script>
 

@@ -16,6 +16,17 @@
 
 	let showDropDown = $state(false)
 
+	// The X share used to post `zapvi` as both hashtag and handle, with mobile-accessory keywords
+	// as `related`, whatever the store sells. Nothing about another merchant belongs in a share
+	// this store's shopper sends; the only credit that can be right is the store's own handle,
+	// taken from its social settings, and nothing at all when it has none.
+	const twitterVia = $derived.by(() => {
+		const profile = page.data?.store?.plugins?.socialSharingButtons?.twitter
+		if (!profile) return ''
+		const handle = String(profile).replace(/\/+$/, '').split('/').pop() || ''
+		return /^[A-Za-z0-9_]{1,15}$/.test(handle) ? handle : ''
+	})
+
 	let socialSharesList = [
 		{
 			icon: whatsappIcon,
@@ -36,7 +47,7 @@
 		{
 			icon: twitterIcon,
 			title: 'X',
-			href: `https://twitter.com/intent/tweet/?text=${productName}&hashtags=${'zapvi'}&via=${'zapvi'}&related=${'mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories'}&url=${url}`
+			href: `https://twitter.com/intent/tweet/?text=${productName}&url=${url}`
 		},
 		{
 			icon: pinterestIcon,
@@ -65,8 +76,8 @@
 	<button
 		type="button"
 		aria-label="Open Share Options"
-		class="group flex items-center gap-2 rounded-full sm:border border-zinc-200 px-3 py-1.5 transition-all duration-300 hover:border-primary-500 hover:text-primary-500 focus:outline-none sm:focus:ring-2 sm:focus:ring-primary-500 sm:focus:ring-offset-2 lg:px-4
-		{showDropDown ? 'sm:bg-zinc-900 sm:text-white sm:border-zinc-900 sm:ring-2 sm:ring-primary-500 sm:ring-offset-2' : 'bg-white text-zinc-700'}
+		class="group flex items-center gap-2 rounded-full border-border px-3 py-1.5 transition-all duration-fast hover:border-primary hover:text-primary sm:border lg:px-4
+		{showDropDown ? 'sm:border-foreground sm:bg-foreground sm:text-background' : 'bg-background text-foreground'}
 		"
 		onclick={() => (showDropDown = !showDropDown)}
 	>
@@ -78,14 +89,14 @@
 			></path>
 		</svg>
 
-		<span class="text-sm hidden sm:block font-medium">Share</span>
+		<span class="hidden text-sm font-medium sm:block">Share</span>
 	</button>
 
 	{#if showDropDown}
 		<!-- Backdrop for closing -->
 		<button
 			type="button"
-			class="fixed inset-0 z-[9999997] bg-zinc-950/20 backdrop-blur-[2px] transition-opacity focus:outline-none"
+			class="fixed inset-0 z-overlay bg-black/40 backdrop-blur-xs transition-opacity"
 			onclick={() => (showDropDown = false)}
 			transition:fade={{ duration: 200 }}
 		>
@@ -95,82 +106,83 @@
 		<!-- Desktop Share Popover -->
 		<div
 			transition:fly={{ y: -10, duration: 300 }}
-			class="absolute right-0 top-12 z-[9999998] hidden w-72 flex-col rounded-radius border border-zinc-200 bg-white p-4 shadow-2xl lg:flex"
+			class="absolute right-0 top-12 z-popover hidden w-72 flex-col rounded-lg border bg-popover p-4 shadow-z-10 lg:flex"
 		>
 			<div class="mb-4 flex items-center justify-between px-1">
-				<h3 class="text-sm font-bold text-zinc-900">Share Product</h3>
+				<h3 class="text-sm font-bold text-foreground">Share Product</h3>
 				<button
 					type="button"
-					class="rounded-full p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 focus:outline-none transition-colors"
+					aria-label="Close share options"
+					class="rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
 					onclick={() => (showDropDown = false)}
 				>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
-						<path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+						<path
+							d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+						/>
 					</svg>
 				</button>
 			</div>
 
-			<div class="grid grid-cols-4 gap-y-6 gap-x-2">
+			<div class="grid grid-cols-4 gap-x-2 gap-y-6">
 				<div class="flex flex-col items-center gap-1.5">
 					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
-						<WhatsApp class="h-full flex w-full" text="{productName} {url}" />
+						<WhatsApp class="flex h-full w-full" text="{productName} {url}" />
 					</div>
-					<span class="text-[10px] font-medium text-zinc-500">WhatsApp</span>
+					<span class="text-xs font-medium text-muted-foreground">WhatsApp</span>
 				</div>
 				<div class="flex flex-col items-center gap-1.5">
 					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
-						<Telegram class="h-full flex w-full" text={productName} {url} />
+						<Telegram class="flex h-full w-full" text={productName} {url} />
 					</div>
-					<span class="text-[10px] font-medium text-zinc-500">Telegram</span>
+					<span class="text-xs font-medium text-muted-foreground">Telegram</span>
 				</div>
 				<div class="flex flex-col items-center gap-1.5">
 					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
-						<Facebook class="h-full flex w-full" quote={productName} {url} />
+						<Facebook class="flex h-full w-full" quote={productName} {url} />
 					</div>
-					<span class="text-[10px] flex font-medium text-zinc-500">Facebook</span>
+					<span class="flex text-xs font-medium text-muted-foreground">Facebook</span>
 				</div>
 				<div class="flex flex-col items-center gap-1.5">
 					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
-						<X
-							class="h-full flex w-full"
-							text={productName}
-							{url}
-							hashtags="zapvi"
-							via="zapvi"
-							related="mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories"
-						/>
+						<X class="flex h-full w-full" text={productName} {url} via={twitterVia} />
 					</div>
-					<span class="text-[10px] font-medium text-zinc-500">X</span>
+					<span class="text-xs font-medium text-muted-foreground">X</span>
 				</div>
 				<div class="flex flex-col items-center gap-1.5">
 					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
-						<Pinterest class="h-full flex w-full" {url} media={productImage} description={productName} />
+						<Pinterest class="flex h-full w-full" {url} media={productImage} description={productName} />
 					</div>
-					<span class="text-[10px] font-medium text-zinc-500">Pinterest</span>
+					<span class="text-xs font-medium text-muted-foreground">Pinterest</span>
 				</div>
 				<div class="flex flex-col items-center gap-1.5">
 					<div class="flex h-10 w-10 overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
-						<LinkedIn class="h-full flex w-full" {url} />
+						<LinkedIn class="flex h-full w-full" {url} />
 					</div>
-					<span class="text-[10px] font-medium text-zinc-500">LinkedIn</span>
+					<span class="text-xs font-medium text-muted-foreground">LinkedIn</span>
 				</div>
 				<div class="flex flex-col items-center gap-1.5">
 					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
-						<Email class="h-full flex w-full" subject="Check this out: {productName}" body={url} />
+						<Email class="flex h-full w-full" subject="Check this out: {productName}" body={url} />
 					</div>
-					<span class="text-[10px] font-medium text-zinc-500">Email</span>
+					<span class="text-xs font-medium text-muted-foreground">Email</span>
 				</div>
 				<div class="flex flex-col items-center gap-1.5">
 					<button
 						type="button"
-						class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-all hover:bg-primary-500 "
+						aria-label="Copy product link"
+						class="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-foreground transition-all hover:bg-primary hover:text-primary-foreground"
 						onclick={() => copyToClipboard(url)}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
+							/>
 						</svg>
 					</button>
-					<span class="text-[10px] font-medium text-zinc-500">Copy Link</span>
+					<span class="text-xs font-medium text-muted-foreground">Copy Link</span>
 				</div>
 			</div>
 		</div>
@@ -178,23 +190,25 @@
 		<!-- Mobile Share Bottom Sheet -->
 		<div
 			transition:fly={{ y: '100%', duration: 400, opacity: 1 }}
-			class="fixed inset-x-0 bottom-0 z-[9999997] overflow-hidden rounded-t-[2rem] bg-white pb-safe lg:hidden"
-			style="box-shadow: 0px -8px 40px rgba(0, 0, 0, 0.12);"
+			class="pb-safe fixed inset-x-0 bottom-0 z-drawer overflow-hidden rounded-t-xl bg-background shadow-z-10 lg:hidden"
 		>
 			<!-- Drag Handle -->
 			<div class="flex justify-center pt-3">
-				<div class="h-1.5 w-12 rounded-full bg-zinc-200"></div>
+				<div class="h-1.5 w-12 rounded-full bg-muted"></div>
 			</div>
 
 			<div class="flex items-center justify-between px-6 py-4">
-				<h3 class="text-lg font-bold text-zinc-900">Share Product</h3>
+				<h3 class="text-lg font-bold text-foreground">Share Product</h3>
 				<button
 					type="button"
-					class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 active:bg-zinc-200"
+					aria-label="Close share options"
+					class="flex h-11 w-11 items-center justify-center rounded-full bg-muted text-muted-foreground active:bg-muted/70"
 					onclick={() => (showDropDown = false)}
 				>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-6 w-6">
-						<path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+						<path
+							d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+						/>
 					</svg>
 				</button>
 			</div>
@@ -202,16 +216,16 @@
 			<div class="grid grid-cols-4 items-start justify-items-center gap-y-6 px-4 pb-12 pt-2">
 				<button
 					type="button"
-					class="group flex flex-col items-center gap-2 focus:outline-none"
+					class="group flex flex-col items-center gap-2"
 					onclick={() => {
 						copyToClipboard(url)
 						showDropDown = false
 					}}
 				>
-					<div class="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 group-active:scale-95 transition-all">
-						<img src={linkIcon} alt="Copy Link" class="h-7 w-7 opacity-80" />
+					<div class="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-foreground transition-all group-active:scale-95">
+						<img src={linkIcon} alt="" class="h-7 w-7 opacity-80" />
 					</div>
-					<span class="text-xs font-medium text-zinc-600">Copy Link</span>
+					<span class="text-xs font-medium text-muted-foreground">Copy Link</span>
 				</button>
 
 				{#each socialSharesList as ss}
@@ -220,17 +234,18 @@
 						data-action={ss.dataAction || ''}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="group flex flex-col items-center gap-2 focus:outline-none"
+						class="group flex flex-col items-center gap-2"
 						onclick={() => (showDropDown = false)}
 					>
-						<div class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-zinc-50 group-active:scale-95 group-active:bg-zinc-100 transition-all border border-zinc-100">
-							<img src={ss.icon} alt={ss.title} class="h-14 w-14 rounded-full object-cover" />
+						<div
+							class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border bg-muted/50 transition-all group-active:scale-95 group-active:bg-muted"
+						>
+							<img src={ss.icon} alt="" class="h-14 w-14 rounded-full object-cover" />
 						</div>
-						<span class="text-xs font-medium text-zinc-600">{ss.title}</span>
+						<span class="text-xs font-medium text-muted-foreground">{ss.title}</span>
 					</a>
 				{/each}
 			</div>
 		</div>
 	{/if}
 </div>
-

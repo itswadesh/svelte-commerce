@@ -9,12 +9,20 @@
 	import { storeService } from '$lib/core/services'
 	import { getUserState } from '$lib/core/stores/index.js'
 	import { klaviyoIdentify, klaviyoSubscribe, resolveKlaviyoConfig } from '$lib/klaviyo'
+	import { canSubscribeToNewsletter } from './store-capabilities.js'
 
 	let email = $state('')
 	let subscribing = $state(false)
 	const plugin = $derived(page.data.store?.plugins?.newsletter)
 	const klaviyoConfig = $derived(resolveKlaviyoConfig(page.data.store?.plugins))
 	const userState = getUserState()
+
+	// Two independent places an address can land: the storefront's own list, served by the Litekart
+	// REST API, and Klaviyo. On a backend that has neither, the form could only ever answer
+	// "Subscription failed" — asking for an address the store has nowhere to put is worse than not
+	// asking — so the block does not render at all. See store-capabilities.ts.
+	const storeListAvailable = canSubscribeToNewsletter()
+	const canSubscribe = $derived(storeListAvailable || klaviyoConfig.active)
 
 	// Own submit instead of the renderer's subscribeToNewsletter: that one only fires a
 	// toast and gives no success signal back, but a successful subscribe must land on
@@ -28,11 +36,13 @@
 
 		subscribing = true
 		try {
-			// Litekart's own newsletter list (existing behavior).
-			await storeService.post('/api/newsletter/subscribe', {
-				email,
-				customerId: userState?.user?.userId || null
-			})
+			// Litekart's own newsletter list (existing behavior), where that API is behind this store.
+			if (storeListAvailable) {
+				await storeService.post('/api/newsletter/subscribe', {
+					email,
+					customerId: userState?.user?.userId || null
+				})
+			}
 			// Klaviyo: attach the session to a profile, then subscribe it to the configured
 			// list so flows/campaigns can email them. No-op when Klaviyo isn't configured.
 			klaviyoIdentify({ email })
@@ -48,44 +58,42 @@
 </script>
 
 <!-- NewsletterRenderer is kept for its side effect: it prefills `email` for logged-in users. -->
-<NewsletterRenderer bind:email>
-	{#snippet content({ loadingForSubmitting })}
-		<div class="flex flex-col gap-2 sm:gap-3">
-			<div class="space-y-1.5">
-				<h3 class="text-sm font-bold uppercase tracking-widest text-foreground">{plugin?.heading || 'Newsletter'}</h3>
-				<p class="text-sm text-muted-foreground"> {plugin?.subheading || 'Subscribe to get the latest arrivals and offers.'}</p>
-			</div>
+{#if canSubscribe}
+	<NewsletterRenderer bind:email>
+		{#snippet content({ loadingForSubmitting })}
+			<div class="flex flex-col gap-2 sm:gap-3">
+				<div class="space-y-1.5">
+					<h3 class="text-sm font-bold uppercase tracking-widest text-foreground">{plugin?.heading || 'Newsletter'}</h3>
+					<p class="text-sm text-muted-foreground">{plugin?.subheading || 'Subscribe to get the latest arrivals and offers.'}</p>
+				</div>
 
-			<form
-				class="flex flex-row items-center gap-2"
-				onsubmit={(e) => {
-					e.preventDefault()
-					handleSubscribe()
-				}}
-			>
-				<Input
-					type="email"
-					aria-label="Email address"
-					placeholder={plugin?.placeholder || "Enter your email" }
-					bind:value={email}
-					class="h-10 w-full min-w-0 flex-1 bg-background"
-					required
-				/>
-				<Button
-					type="submit"
-					class="ed-sub-btn h-10 shrink-0 px-5 sm:px-8"
-					disabled={subscribing || loadingForSubmitting}
+				<form
+					class="flex flex-row items-center gap-2"
+					onsubmit={(e) => {
+						e.preventDefault()
+						handleSubscribe()
+					}}
 				>
-					{#if subscribing}
-						Subscribing…
-					{:else}
-						Subscribe
-					{/if}
-				</Button>
-			</form>
-		</div>
-	{/snippet}
-</NewsletterRenderer>
+					<Input
+						type="email"
+						aria-label="Email address"
+						placeholder={plugin?.placeholder || 'Enter your email'}
+						bind:value={email}
+						class="h-10 w-full min-w-0 flex-1 bg-background"
+						required
+					/>
+					<Button type="submit" class="ed-sub-btn h-10 shrink-0 px-5 sm:px-8" disabled={subscribing || loadingForSubmitting}>
+						{#if subscribing}
+							Subscribing…
+						{:else}
+							Subscribe
+						{/if}
+					</Button>
+				</form>
+			</div>
+		{/snippet}
+	</NewsletterRenderer>
+{/if}
 
 <style>
 	/* Match the editorial buttons on the homepage (.ed-btn): sharp radius, uppercase, tracked,
