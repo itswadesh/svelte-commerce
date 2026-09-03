@@ -72,6 +72,7 @@
 				<Textbox
 					name="email"
 					type="email"
+					autocomplete="email"
 					bind:value={forgotPasswordModule.email}
 					placeholder="swadesh@litekrat.in"
 					schema={schemas.email}
