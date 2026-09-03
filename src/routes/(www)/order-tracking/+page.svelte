@@ -18,6 +18,9 @@
 	<title>Order</title>
 </svelte:head>
 <div>
+	<!-- The page shipped no h1, so nothing named it in the document outline. Visually hidden: the
+	     order number below becomes the visible title once an order resolves. -->
+	<h1 class="sr-only">Track your order</h1>
 	{#if orderTrackingModule.loading}
 		<div class="flex items-center justify-center">
 			<OrderListSkeleton />
