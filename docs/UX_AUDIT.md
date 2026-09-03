@@ -11,6 +11,39 @@ This audit is the "audit first" step that [UX_SYSTEM.md](../UX_SYSTEM.md) sectio
 any redesign. Use it by picking finding ids into a page task, in the wording of section 9 of that
 document. The design plan sequences the first five page tasks.
 
+## Implementation status
+
+Updated 2026-09-03. The design plan below is being worked in order; these commits are on `main`.
+
+| Shipped | Commit |
+| :-- | :-- |
+| Foundation slice: tokens, portal cascade, shared primitives | `cc25cc78` |
+| Slice 1: search restored, navigation at every width, drawer as a dialog | `6104561b` |
+| Slice 2: filtering keeps results, active-filter chips, sort everywhere, grid busy state | `d1ead3f5` |
+| Slice 3: variant selection truthful, product name as heading, options not served disabled | `5adc2acc` |
+| Policy links no longer point at pages that 404 | `34d9a16c` |
+| Homepage renders its hero and products before JavaScript | `56f1d467` |
+| A failed cart load is told apart from an empty bag | `250ac02c` |
+| Standalone links meet the WCAG 2.2 target minimum | `661c89fd` |
+| Cart, address, tracking pages have headings | `00361fa5`, `9dcd3c8c` |
+| Price sliders and the newsletter field usable on a phone | `e5bfa740` |
+| Listing sort operable by keyboard | `1a38533d` |
+| Checkout steps show a loading shape, not a blank region | `0cd8b093` |
+| Guest checkout can choose a delivery country | `afb22402` |
+| Order confirmation shows an address and a total | `514e00fc` |
+
+**Verified after each change**, on the default theme against the local GoCommerce store: every
+route returns 200 at 390px and 1280px, no horizontal overflow, exactly one `h1` per route, no
+unlabeled controls, and a complete guest purchase from product to confirmation with no page errors.
+The type check holds at 160 errors and 100 warnings against a clean-tree baseline of 160 and 102.
+The only failing request left on any route is the connector probing for the optional identity
+module, which this store does not install.
+
+**Still open:** the payment and confirmation steps beyond the fixes above, autocomplete grouping
+and recent searches, and the remaining Medium and Low findings listed below.
+
+---
+
 ## Method
 
 Sixteen agents audited one dimension each, reading the components and routes in full and
