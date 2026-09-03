@@ -8,6 +8,7 @@
 	import { toast } from 'svelte-sonner'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
+	import { dialog } from '$lib/actions/dialog.js'
 	import { onDestroy, onMount } from 'svelte'
 
 	let { isOpen = false, productId = '', productTitle = '', onClose = () => {} } = $props()
@@ -66,33 +67,48 @@
 	}
 
 	async function handleSubmit() {
-		// TODO: Implement enquiry submission logic
-
 		try {
 			loading = true
 			await enquiryService.create({ name, email, phone, message, productId })
 			toast.success('Enquiry submitted successfully')
+			// Close only on success. Closing in a `finally` threw away the name, phone and message the
+			// shopper had just typed the moment the request failed, so the retry the toast invites
+			// meant typing all of it again.
+			onClose()
 			await goto('/enquiry/success')
 		} catch (e: any) {
 			toast.error(e?.message || 'Failed to submit enquiry')
 		} finally {
 			loading = false
-			onClose()
 		}
 	}
 </script>
 
 {#if isOpen}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-		<div class="relative w-full max-w-md rounded-lg bg-white p-6 dark:bg-gray-800">
+	<!-- A real dialog. This was a bare overlay: opening it moved no focus, Tab walked the product page
+	     behind it, and Escape did nothing. `use:dialog` moves focus in, traps Tab, closes on Escape
+	     and hands focus back to whatever opened it. -->
+	<div
+		class="fixed inset-0 z-modal flex items-center justify-center p-4"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="enquiry-modal-title"
+		tabindex="-1"
+		use:dialog={() => onClose()}
+	>
+		<!-- The scrim is decoration: a click target, not a control. -->
+		<div aria-hidden="true" class="absolute inset-0 bg-black/40" onclick={() => onClose()}></div>
+		<div class="relative w-full max-w-md rounded-lg border bg-background p-6 shadow-z-10">
 			<button
-				class="absolute right-4 top-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-				onclick={(e: MouseEvent) => onClose()}
+				type="button"
+				aria-label="Close enquiry form"
+				class="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+				onclick={() => onClose()}
 			>
 				<X size={20} />
 			</button>
 
-			<h2 class="mb-4 text-xl font-semibold dark:text-white">{productTitle}</h2>
+			<h2 id="enquiry-modal-title" class="mb-4 pr-10 text-xl font-semibold text-foreground">{productTitle}</h2>
 
 			<form
 				onsubmit={(e: SubmitEvent) => {
