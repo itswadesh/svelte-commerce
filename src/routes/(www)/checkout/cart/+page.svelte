@@ -157,6 +157,11 @@
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={1} />
 
+		<!-- The page had no h1 at all: the step indicator above is a progress control, not a heading,
+			     so a screen-reader user landed on a page with nothing naming it and the document outline
+			     started at h2. Visually hidden because the step indicator already says Cart on screen. -->
+		<h1 class="sr-only">Your bag</h1>
+
 		<!-- <div class="mb-8">
 		  <div>
 				<p class="font-semibold tracking-tight text-xl">My Bag <span class="font-bold">({cartState?.cart?.lineItems?.length ?? 0}) {cartState.cart.lineItems.length>1 ? "Items" : "Item"}</span></p>
