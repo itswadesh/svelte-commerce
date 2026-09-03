@@ -11,8 +11,20 @@
 		aspectRatio = page?.data?.store?.productImageAspectRatio,
 		width = 'auto',
 		priority = false,
-		loading = priority ? 'eager' : 'lazy',
-		fetchpriority = priority ? 'high' : 'auto',
+		/**
+		 * Render and fetch this image now, without waiting for it to intersect the viewport, but at
+		 * low fetch priority so it never competes with the LCP element.
+		 *
+		 * The intersection gate below means a non-priority image is not merely
+		 * `loading="lazy"` — its <img> is not in the DOM at all. Inside the product carousel every
+		 * slide past the first sits offscreen *horizontally*, so nothing intersects and the request
+		 * does not begin until the shopper swipes. They then wait a full round trip against the
+		 * placeholder on every swipe. Callers turn this on once the page has gone idle, so first
+		 * paint is unaffected.
+		 */
+		eager = false,
+		loading = undefined,
+		fetchpriority = undefined,
 		sizes = undefined,
 		...rest
 	}: {
@@ -23,11 +35,15 @@
 		aspectRatio?: string
 		width?: string | number
 		priority?: boolean
+		eager?: boolean
 		loading?: 'lazy' | 'eager'
 		fetchpriority?: 'auto' | 'high' | 'low'
 		sizes?: string
 		[key: string]: any
 	} = $props()
+
+	const resolvedLoading = $derived(loading ?? (priority || eager ? 'eager' : 'lazy'))
+	const resolvedFetchPriority = $derived(fetchpriority ?? (priority ? 'high' : eager ? 'low' : 'auto'))
 
 	// Fallback CDN resize width for responsive (w-full) images that pass no explicit
 	// width. Without it the CDN URL omits width=/height= and serves the full-res original.
@@ -123,7 +139,7 @@
 	{/if} -->
 	{#if page?.data?.store?.plugins?.imageCdn?.active && !usingFallback}
 		<div class={klass}>
-			{#if isIntersecting || priority}
+			{#if isIntersecting || priority || eager}
 				<!-- srcset/sizes are declared BEFORE src on purpose. This <img> is created by the
 				     client (behind the IntersectionObserver gate), not by the HTML parser, so Svelte
 				     applies attributes in source order and setting src first starts a load for the
@@ -146,11 +162,11 @@
 					}}
 					{alt}
 					draggable="false"
-					{fetchpriority}
+					fetchpriority={resolvedFetchPriority}
 					decoding="async"
 	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 					data-nimg="1"
-					{loading}
+					loading={resolvedLoading}
 					srcset={cdnSrcset}
 					{sizes}
 					src={getImageCDNUrl(src, cdnW, h)}
@@ -172,7 +188,7 @@
 			class={klass}
 			style="{width !== 'auto' ? `width: ${width}px;` : ''} {height !== 'auto' ? `height: ${height}px;` : ''}"
 		>
-			{#if isIntersecting || priority}
+			{#if isIntersecting || priority || eager}
 				<img
 					onload={() => {
 						loaded = true
@@ -185,8 +201,8 @@
 					{alt}
 					{src}
 					draggable="false"
-					{loading}
-					{fetchpriority}
+					loading={resolvedLoading}
+					fetchpriority={resolvedFetchPriority}
 					decoding="async"
 					data-nimg="1"
 	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import * as Carousel from '$lib/components/ui/carousel/index.js'
 	import type { CarouselAPI } from '$lib/components/ui/carousel/context.js'
@@ -20,6 +21,29 @@
 	let displayCarousel = $state('hidden')
 	let selectedImage = $state<string>('')
 	const settingState = getSettingState()
+
+	/**
+	 * Slides past the first are gated behind an IntersectionObserver, and in a carousel they sit
+	 * offscreen horizontally — so their request did not start until the shopper swiped, and every
+	 * swipe cost a full round trip against the placeholder. Once the page has gone idle, with the
+	 * LCP element and the initial fetches already done, turn the rest on. They fetch at
+	 * `fetchpriority="low"`, so swiping becomes instant without taking bandwidth from first paint.
+	 * Slide 0 keeps `priority` and is untouched.
+	 */
+	let preloadRest = $state(false)
+	onMount(() => {
+		// The timeout is load-bearing. A bare requestIdleCallback can be starved indefinitely when
+		// the main thread never goes idle, which is the slow-connection case this preload exists
+		// for — so without it the fix would do nothing for the shoppers who need it most.
+		// Called on `window` rather than through a detached reference: a bare `rIC(...)` invokes it
+		// with an undefined receiver, which some engines reject as an illegal invocation.
+		if (typeof window.requestIdleCallback === 'function') {
+			const id = window.requestIdleCallback(() => (preloadRest = true), { timeout: 2500 })
+			return () => window.cancelIdleCallback?.(id)
+		}
+		const t = setTimeout(() => (preloadRest = true), 1500)
+		return () => clearTimeout(t)
+	})
 
 	const [aspectWidth, aspectHeight] = $derived(page?.data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
 
@@ -201,6 +225,7 @@
 										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
 										class="w-full rounded-radius object-contain"
 										priority={index === 0}
+										eager={preloadRest}
 									/>
 								{/key}
 							{/if}

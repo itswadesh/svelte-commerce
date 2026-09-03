@@ -197,7 +197,7 @@
 							{#each lineItems || [] as item}
 								<div class="group flex items-start gap-6 py-6 first:pt-0 last:pb-0">
 									<div class="relative flex-shrink-0 overflow-hidden transition-all duration-300">
-										<LazyImg src={item.thumbnail || '/placeholder.svg'} alt={item.title} class="aspect-[3/4] w-16 object-contain sm:w-16" />
+										<LazyImg src={item.thumbnail} alt={item.title} class="aspect-[3/4] w-16 object-contain sm:w-16" />
 									</div>
 									<div class="flex flex-1 flex-col transition-all duration-300">
 										<div class="flex justify-between text-base font-semibold text-foreground">

@@ -203,7 +203,7 @@
 													class="h-full w-full object-cover object-center"
 												/> -->
 													<LazyImg
-														src={item.thumbnail || '/placeholder.svg'}
+														src={item.thumbnail}
 														alt={item.title}
 														class="aspect-[3/4] w-24 object-contain sm:w-16"
 													/>

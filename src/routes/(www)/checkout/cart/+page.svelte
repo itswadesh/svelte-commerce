@@ -305,7 +305,7 @@
 
 									<div class="flex shrink-0 flex-col items-center gap-3">
 										<a href={`/products/${item.slug}`} class="block w-24 overflow-hidden rounded-md bg-muted sm:w-28" aria-label="View {item.title}">
-											<LazyImg src={item.thumbnail || '/placeholder.svg'} alt={item.title} class="w-full object-contain object-top" />
+											<LazyImg src={item.thumbnail} alt={item.title} class="w-full object-contain object-top" />
 										</a>
 
 										<div class="sm:hidden">
