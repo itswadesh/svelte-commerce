@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
-	import { Check, Loader, LoaderCircle, LockKeyhole, Minus, Plus, ShoppingBag, Tag, Trash, X } from '@lucide/svelte'
+	import { AlertCircle, Check, Loader, LoaderCircle, LockKeyhole, Minus, Plus, ShoppingBag, Tag, Trash, X } from '@lucide/svelte'
 	import { formatPrice } from '$lib/core/utils'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { page } from '$app/state'
@@ -16,6 +16,7 @@
 	import { cubicOut } from 'svelte/easing'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import { toast } from 'svelte-sonner'
+	import { onMount } from 'svelte'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
@@ -27,6 +28,55 @@
 	// `any` on purpose: the connector's CartLineItem type resolves without its own fields in this
 	// file, so a structural type here is rejected as having "no properties in common" with it.
 	const isUpdating = (item: any) => !!cartState.updatingItem[item?.id]
+
+	// Tell a failed load apart from a genuinely empty bag.
+	//
+	// The shared cart store catches its own hydration failure, logs "bag may display empty" and
+	// resolves anyway, so a dropped connection, an expired session or a server error all landed in
+	// the empty-bag branch. A shopper who had added items was told the bag was empty, with no
+	// message, no retry and no sign anything had failed. Re-adding everything or abandoning the
+	// purchase is the reasonable response to that.
+	//
+	// The store keeps its cart id in localStorage, so a stored id with no cart behind it is exactly
+	// the failure case the store swallowed. `reload` counts retries and re-runs the store's own
+	// hydration.
+	let reloads = $state(0)
+	let cartLoadFailed = $state(false)
+
+	function detectFailedLoad() {
+		if (typeof window === 'undefined') return
+		let storedCartId: string | null = null
+		try {
+			storedCartId = window.localStorage.getItem('cart_id')
+		} catch {
+			// Storage blocked; there is no id to contradict, so treat it as a genuinely empty bag.
+		}
+		// `any` view for the same reason the rest of this file uses one: the connector's CartExtended
+		// type resolves here without its own fields.
+		cartLoadFailed = !!storedCartId && !(cartState.cart as any)?.id
+	}
+
+	// The store's promise resolves whether hydration succeeded or not, so the check has to happen
+	// after it settles rather than during render.
+	onMount(async () => {
+		try {
+			await cartState.hasLoaded
+		} catch {
+			// Resolved or rejected, the check below is what decides.
+		}
+		detectFailedLoad()
+	})
+
+	async function retryCartLoad() {
+		cartLoadFailed = false
+		reloads += 1
+		try {
+			await (cartState as any).setState?.()
+		} catch {
+			// Swallowed the same way the store does; detectFailedLoad decides what to show.
+		}
+		detectFailedLoad()
+	}
 	const discountCouponsPlugin = $derived(page?.data?.store?.plugins?.isDiscountCoupons)
 
 	// Removing a line is one tap with no dialog, so offer an undo instead of a blocking confirm.
@@ -138,7 +188,20 @@
 		{:then _}
 			<!-- `=== 0` missed a null/undefined cart (e.g. login before anything is added) and fell
 			     through to the item branch, which then crashed. -->
-			{#if !cartState.cart?.lineItems?.length}
+			{#if cartLoadFailed}
+				<!-- Same shape as the orders page's error state: say what failed, and offer the one
+				     action that can fix it. -->
+				<div class="flex h-[60vh] flex-col items-center justify-center px-6 text-center">
+					<div class="mb-6 rounded-full bg-destructive/10 p-6">
+						<AlertCircle class="h-10 w-10 text-destructive" />
+					</div>
+					<h2 class="mb-2 text-xl font-semibold text-foreground">We couldn't load your bag</h2>
+					<p class="mb-6 max-w-sm text-sm text-muted-foreground">
+						Your items are still saved. This is usually a connection problem, so trying again often works.
+					</p>
+					<Button onclick={retryCartLoad} class="h-11 px-6">Try again</Button>
+				</div>
+			{:else if !cartState.cart?.lineItems?.length}
 				<div class="flex h-[60vh] flex-col items-center justify-center text-center">
 					<div class="mb-6 rounded-full bg-gray-50 p-8 ring-1 ring-gray-100">
 						<ShoppingBag class="h-12 w-12 text-gray-300" />
