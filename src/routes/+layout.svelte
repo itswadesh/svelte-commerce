@@ -109,6 +109,20 @@
 		return STYLE_OPEN.replace('theme-css', 'store-palette') + "[data-theme='default'][data-theme] { " + declarations + ' }' + STYLE_CLOSE
 	})
 
+	// Mobile browsers paint their own chrome — the address-bar strip on Chrome for Android, the
+	// status-bar backdrop once the storefront is installed — in a default grey unless the page names
+	// a colour, so there was a visible seam above a header that is itself `bg-background`. Take the
+	// merchant override when there is one so a custom palette moves the chrome with it, and fall back
+	// to the theme value. Only the default theme is in scope; the others own their own backgrounds.
+	const themeColor = $derived.by(() => {
+		if ((data?.theme?.name || 'default') !== 'default') return ''
+		// Read through entries rather than by key: `cssVariables` is typed `{}` upstream, so indexing it
+		// needs a cast. This is what paletteStyleTag above already does with the same object.
+		const override = Object.entries(data?.store?.cssVariables ?? {}).find(([key]) => key === '--background')?.[1]
+		const triplet = typeof override === 'string' && override.trim() ? override.replaceAll(',', '').replace('hsl(', '').replace(')', '').trim() : '0 0% 100%'
+		return `hsl(${triplet})`
+	})
+
 	// Stale-client protection. SvelteKit's `updated` store flips to true once the
 	// deployed build (via _app/version.json polling) no longer matches the running
 	// client. We then load fresh code so mobile/PWA users never keep running an
@@ -181,6 +195,9 @@
 		<link rel="preconnect" href={imageCdnOrigin} />
 	{/if}
 	<link rel="icon" href={data?.store?.favicon || '/favicon.png'} />
+	{#if themeColor}
+		<meta name="theme-color" content={themeColor} />
+	{/if}
 	<!-- No canonical here. A layout-level default cannot know whether the page below it already
 	     emitted one, and the listing routes now pass an explicit `canonicalUrl` that preserves
 	     ?page=N — so a default emitted here would ship a second, *conflicting* <link rel=canonical>

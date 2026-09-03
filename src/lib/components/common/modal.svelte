@@ -100,7 +100,7 @@
 				aria-label={hideHeader ? title : undefined}
 				tabindex="-1"
 				use:dialog={handleClose}
-				class="frosted-black fixed inset-0 h-screen w-full items-center justify-center
+				class="frosted-black fixed inset-0 h-[100dvh] w-full items-center justify-center
       {show ? 'flex' : 'hidden'}"
 			>
 				<Card.Root
