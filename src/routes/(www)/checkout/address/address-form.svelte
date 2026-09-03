@@ -7,6 +7,8 @@
 	import { AddressSchema } from '$lib/core/components/index.js'
 	import { AddressFormRenderer, checkoutAddressSchema } from '$lib/core/composables/index.js'
 	import { z } from 'zod'
+	import * as Select from '$lib/components/ui/select/index.js'
+	import { Label } from '$lib/components/ui/label/index.js'
 
 	let {
 		address = $bindable(),
@@ -73,7 +75,12 @@
 	const countryCode = $derived(address?.countryCode || page?.data?.store?.country?.code || '')
 	const countryName = $derived(page?.data?.store?.countries?.find((c: any) => c.code === countryCode)?.name || countryCode)
 
-	// The country is display-only, so make sure the saved address still carries a code.
+	// The store's own list. A single-country store keeps the read-only treatment.
+	const countries = $derived(
+		[...(page?.data?.store?.countries ?? [])].filter((c: any) => c?.code && c?.name).sort((a: any, b: any) => a.name.localeCompare(b.name))
+	)
+
+	// Seed the code so a shopper who never opens the select still saves a valid address.
 	$effect(() => {
 		if (address && !address.countryCode && page?.data?.store?.country?.code) {
 			address.countryCode = page.data.store.country.code
@@ -164,9 +171,29 @@
 					label="State"
 					required
 				/>
-				<div class="flex flex-col justify-center">
-					<span class="text-xs uppercase tracking-wide text-gray-500">Country</span>
-					<span class="text-sm font-medium text-gray-900">{countryName}</span>
+				<!-- A real control, not two spans. A guest shipping anywhere but the store default had no
+				     way to say so: they either abandoned here or reached the payment step and hit
+				     "we currently deliver only to…" with nothing to change. Read-only is kept only for
+				     a store that genuinely ships to one country, decided by the country list itself.
+				     The cell also matches its neighbours now; it used to use a 12px uppercase caption
+				     where every other field uses the 14px label, and centred itself so its text sat
+				     below the ZIP label beside it. -->
+				<div class="flex flex-col gap-2">
+					<Label for="country-code"
+						>Country{#if countries.length > 1}<span class="text-destructive"> *</span>{/if}</Label
+					>
+					{#if countries.length > 1}
+						<Select.Root type="single" value={countryCode} onValueChange={(value: string) => value && (address.countryCode = value)}>
+							<Select.Trigger id="country-code" class="h-11 w-full">{countryName || 'Select country'}</Select.Trigger>
+							<Select.Content>
+								{#each countries as country}
+									<Select.Item value={country.code} label={country.name}>{country.name}</Select.Item>
+								{/each}
+							</Select.Content>
+						</Select.Root>
+					{:else}
+						<p id="country-code" class="flex h-11 items-center text-sm font-medium text-foreground">{countryName}</p>
+					{/if}
 				</div>
 				<Textbox
 					name="zip"
