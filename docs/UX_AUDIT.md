@@ -1372,3 +1372,59 @@ another, dropped as unsupported, or removed as specific to a theme that is now o
 This revision dropped 1, merged 5, promoted 5
 and demoted 19. The all-theme revision of this audit, covering 406
 findings across five themes, is in the git history at commit `064bba5b`.
+
+## Ported from the jws fork
+
+The `misiki-in/jws` fork ran a parallel UX and performance effort over August 2026, roughly 190
+commits. Most of it is that storefront's own brand and layout work — a jewellery wordmark, metal and
+carat facets, a serif display face, gold tokens — and none of that belongs in a template that has to
+serve twenty-six backends. What follows is every commit that carried a generic defect, and what
+happened to it here.
+
+### Landed
+
+| jws commit | What it fixed | Where it landed |
+| --- | --- | --- |
+| `22a7c1c` (part) | Sticky header stealing wheel scroll; `overflow-anchor` | `src/app.css` |
+| `22a7c1c` (part) | Mobile browser chrome has no colour to paint | `src/routes/+layout.svelte`, driven by the merchant palette rather than jws's hardcoded white |
+| `22a7c1c` (part) | Full-screen overlays sized in `vh`, clipped under the iOS URL bar | Three auth modals, the modal shell, two drawers, the review dialog |
+| `cb6bd34` (part) | Duplicate in-flight API reads | `src/lib/core/connectors/dedupe-inflight.ts`, patched onto `BaseService.transport` so it covers every service rather than the two jws named |
+| `6e715ad` (part) | `src` declared before `srcset`, so a client-created image loads the wrong candidate | Homepage hero and lookbook |
+| `8ef2dd7` + `13d28b9` | Carousel slides never requested until the shopper swiped | `lazy-img.svelte` gains `eager`; the gallery turns it on from an idle callback |
+| `9e2533d` (class of) | A referenced asset that 404s | Three pages stopped falling back to `/placeholder.svg` |
+| `3df7c69` | 107 modulepreload headers starving the LCP image | Already present in `src/hooks.server.ts` |
+| `df5634f`, `d7fd6df` | LCP image discovered late; literal markup in a comment breaking the build | Already present in the gallery section |
+| `cb6bd34` (part) | Autocomplete fetched on every page load for an empty query | Already present in the local search renderer |
+
+### Rejected, with the reason
+
+- **`a3e3273`** server-renders the homepage hero. jws's hero came from a block component that emits
+  one copy per breakpoint, so marking it priority downloaded four images. Here that component only
+  serves the legal pages, and the homepage hero is a hand-written server-rendered image that already
+  carries `fetchpriority="high"`. No defect to fix.
+- **`f85ee01`** fixes thumbnails freezing on a variant switch, caused by `const` where runes mode
+  needs `$derived`. jws's own message notes the kitcommerce-core copy is correct and only their
+  vendored one was wrong. This repo's copy descends from the correct one.
+- **`86de2ac`, `912a3e3`** fix 500s on `/collections` and `/vendors` from filter singletons that
+  were never set. Both routes return 200 here at every width in the sweep.
+- **`41c00e1`** collapses two mounted search components into one. This nav mounts one.
+- **`cb6bd34`** as a mechanism patches the core package's source from a vite plugin, with anchors
+  that fail the build if core moves the code. That trade is defensible for one storefront pinned to
+  one core version. It is not for a template that ships against twenty-six backends and a range of
+  core versions, where a build that breaks on a dependency bump is the worse failure.
+
+### Known, deliberately not fixed
+
+- **The account-area guard accepts a stale session.** The core guard checks only that a
+  `connect.sid` cookie exists, so an expired one passes and the pages behind it fail individually.
+  jws validates the session in the layout load against `/api/users/me`. That exact fix is unsafe
+  here: this app has no `/api` routes, so the call would 404, and a 404 is one of the statuses jws
+  treats as a dead session — every signed-in shopper would be logged out. The service-layer
+  alternative is no better, because the GoCommerce connector's `getMe` reads the token from
+  `document.cookie` and so returns null for every server-side call. A correct fix needs to know how
+  each connector represents a session on the server, which is design work rather than a port, and it
+  cannot be verified against a store with no accounts.
+- **Two homepage reads still repeat.** The 200-product list and the flat category tree are each
+  fetched twice, sequentially, so the in-flight dedupe cannot join them. Collapsing them needs a
+  short cache with a time to live, which that module rejects on purpose: a cache can serve stale
+  data and an in-flight join cannot.
