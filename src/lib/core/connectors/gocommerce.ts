@@ -1,6 +1,7 @@
 import { BaseService, clearPhantomSessionIfUnavailable, meilisearchService as connectorSearch, setStaticStore } from '@misiki/gocommerce-connector'
 import { staticStoreConfig } from './static-store'
 import { blockRestFallbacks, serveRestLocally } from './rest-guard'
+import { dedupeInflightGets } from './dedupe-inflight'
 import { localStoreData } from './local-store-data'
 
 // GoCommerce-only connector. Everything the backend can answer for — catalogue, cart, guest
@@ -49,6 +50,12 @@ setStaticStore(staticStoreConfig)
 // not touched by the guard. See rest-guard.ts.
 serveRestLocally(localStoreData)
 blockRestFallbacks(BaseService, 'gocommerce')
+
+// Several core composables fetch the same catalogue data from their own onMount with no knowledge
+// of each other, so a first page load paid for the same 200-product payload three times. Collapse
+// identical in-flight GETs at the one method every service call gets its fetch from. See
+// dedupe-inflight.ts for why this is browser-only and never a cache.
+dedupeInflightGets(BaseService)
 
 // On a store without the identity module, `connect.sid` / `me` in this browser can only be left over
 // from running this storefront against a backend that has accounts. The shared user store reads

@@ -323,7 +323,20 @@
 		border-color: hsl(var(--border));
 	}
 
+	/*
+	 * The sticky header collapses by ~54px when it condenses. It is in normal flow, so that removes
+	 * 54px from above the content, and Chrome's scroll anchoring then adjusts scrollY to keep the
+	 * anchored element still — which eats the gesture. Measured here on the mobile home page at the
+	 * collapse threshold: a 60px wheel step DOWN moved the page 12px BACKWARDS, and the following
+	 * step up moved 48px. That lurch, once each way, is what reads as a broken header, and it only
+	 * appears under directional scrolling, which is why scrollTo-based checks kept reporting it fine.
+	 *
+	 * Turning anchoring off lets the collapse behave like ordinary content moving up. The header's
+	 * own hysteresis (collapse past 90, expand under 10, in nav.svelte) already guards the
+	 * oscillation anchoring would otherwise help with here.
+	 */
 	html {
+		overflow-anchor: none;
 		scroll-behavior: smooth;
 	}
 
