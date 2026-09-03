@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { formatPrice } from '$lib/core/utils'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
@@ -68,8 +69,24 @@
 		</div> -->
 
 		{#if paymentModule.loadingForPaymentMethods}
-			<div class="flex min-h-96 items-center justify-center py-8">
-				<LoaderCircle class="animate-spin" />
+			<!-- The shape of the step that is coming. A lone spinner in an empty region is the wrong
+			     answer anywhere, and least defensible at the payment step. -->
+			<div class="grid gap-8 lg:grid-cols-[1fr_400px]" aria-busy="true" aria-label="Loading payment options">
+				<div class="flex min-w-0 flex-col gap-6">
+					<div class="space-y-3 rounded-lg border p-6">
+						<Skeleton class="h-4 w-40" />
+						{#each Array(3) as _}
+							<Skeleton class="h-14 w-full rounded-md" />
+						{/each}
+					</div>
+				</div>
+				<div class="space-y-3 rounded-lg border p-6">
+					<Skeleton class="h-4 w-32" />
+					{#each Array(4) as _}
+						<Skeleton class="h-4 w-full" />
+					{/each}
+					<Skeleton class="mt-4 h-11 w-full rounded-md" />
+				</div>
 			</div>
 		{:else}
 			<div class="grid gap-8 lg:grid-cols-[1fr_400px]">

@@ -125,8 +125,30 @@
 		</div> -->
 
 		{#await cartState.hasLoaded}
-			<div class="flex min-h-96 items-center justify-center py-8">
-				<LoaderCircle class="animate-spin" />
+			<!-- The shape of the page that is coming, not a spinner in an empty region. This step used
+			     to render a single small spinner for around two and a half seconds, so the checkout
+			     read as a blank page between the step indicator and the footer at the exact moment a
+			     shopper is deciding whether to trust it. -->
+			<div class="grid gap-8 lg:grid-cols-[1fr_400px]" aria-busy="true" aria-label="Loading checkout">
+				<div class="min-w-0 space-y-6">
+					<Skeleton class="h-24 w-full rounded-lg" />
+					<div class="space-y-3 rounded-lg border p-6">
+						<Skeleton class="h-4 w-40" />
+						<div class="grid gap-3 sm:grid-cols-2">
+							{#each Array(6) as _}
+								<Skeleton class="h-11 w-full rounded-md" />
+							{/each}
+						</div>
+						<Skeleton class="h-11 w-40 rounded-md" />
+					</div>
+				</div>
+				<div class="space-y-3 rounded-lg border p-6">
+					<Skeleton class="h-4 w-32" />
+					{#each Array(4) as _}
+						<Skeleton class="h-4 w-full" />
+					{/each}
+					<Skeleton class="mt-4 h-11 w-full rounded-md" />
+				</div>
 			</div>
 		{:then}
 			{#if addressModule.noItemsChecked && cartState?.cart?.lineItems?.length > 0}
