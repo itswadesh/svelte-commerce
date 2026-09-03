@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PolicyLink from '$lib/components/common/policy-link.svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
@@ -201,8 +202,8 @@
 
 									<p class="text-center text-[10px] font-medium text-gray-400">
 										By clicking "Send Message", you agree to our
-										<a href="/terms-and-conditions" class="text-primary hover:underline">Terms</a> and
-										<a href="/privacy-policy" class="text-primary hover:underline">Privacy Policy</a>.
+										<PolicyLink href="/terms-and-conditions" class="text-primary hover:underline">Terms</PolicyLink> and
+										<PolicyLink href="/privacy-policy" class="text-primary hover:underline">Privacy Policy</PolicyLink>.
 									</p>
 								</form>
 							</div>

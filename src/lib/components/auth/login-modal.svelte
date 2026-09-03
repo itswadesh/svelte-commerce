@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PolicyLink from '$lib/components/common/policy-link.svelte'
 	import { ArrowLeft, Check, LoaderIcon, X, Phone, Mail } from '@lucide/svelte'
 	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
@@ -229,9 +230,9 @@
 					}
 					const success = await loginModule.handleSubmit(e)
 					if (success) {
-					  loginModule.removeUrlParams()
-            show = false
-          }
+						loginModule.removeUrlParams()
+						show = false
+					}
 				}}
 				class="flex flex-col space-y-5 max-sm:pt-2"
 			>
@@ -377,8 +378,10 @@
 					<div class="space-y-1 pt-1.5 text-center text-xs leading-5 text-gray-500 dark:text-gray-400">
 						<p>
 							By continuing, you agree to our
-							<a href="/terms-and-conditions" class="font-medium text-gray-700 hover:underline dark:text-gray-300" onclick={() => (show = false)}
-								>Terms & Conditions</a
+							<PolicyLink
+								href="/terms-and-conditions"
+								class="font-medium text-gray-700 hover:underline dark:text-gray-300"
+								onclick={() => (show = false)}>Terms & Conditions</PolicyLink
 							>
 						</p>
 

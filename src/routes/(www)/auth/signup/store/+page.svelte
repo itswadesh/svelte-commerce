@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PolicyLink from '$lib/components/common/policy-link.svelte'
 	import { LoaderIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { toast } from '@misiki/kitcommerce-core'
@@ -146,9 +147,9 @@
 			<div class="text-center text-xs text-gray-500">
 				<p>By creating a store, you agree to our</p>
 				<div class="space-x-1">
-					<a href="/terms-and-conditions" class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-300">Terms of Service</a>
+					<PolicyLink href="/terms-and-conditions" class="text-gray-600 hover:text-gray-900">Terms of Service</PolicyLink>
 					<span>and</span>
-					<a href="/privacy-policy" class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-300">Privacy Policy</a>
+					<PolicyLink href="/privacy-policy" class="text-gray-600 hover:text-gray-900">Privacy Policy</PolicyLink>
 				</div>
 			</div>
 		</div>

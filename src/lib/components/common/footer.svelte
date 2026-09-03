@@ -5,6 +5,7 @@
 	import { page } from '$app/state'
 	import { TrustpilotPlugin } from '$lib/core/components/index.js'
 	import { sanitize } from '$lib/core/utils/index.js'
+	import { keepResolvableLinks } from './cms-pages.js'
 	import masterCard from '$lib/assets/payment-methods/mastercard.png'
 	import paypal from '$lib/assets/payment-methods/paypal.png'
 	import skrill from '$lib/assets/payment-methods/skrill.png'
@@ -29,7 +30,7 @@
 	const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
 	const socialSharing = $derived({
 		active: true, // Force active for SEO requirements
-		...storeData?.plugins?.socialSharingButtons,
+		...storeData?.plugins?.socialSharingButtons
 		// youtube: storeData?.plugins?.socialSharingButtons?.youtube || '',
 		// twitter: storeData?.plugins?.socialSharingButtons?.twitter || ''
 	})
@@ -41,33 +42,35 @@
 	const activeThemeName = $derived(page.data?.theme?.name ?? 'default')
 	const themeContent = $derived(resolveThemeContent(activeThemeName, page.data?.store))
 	const themeFooter = $derived(themeContent?.footer)
+	// The theme's footer columns are static copy, but five of their links point at CMS-authored
+	// pages. On a store that never published them — or a backend with no CMS at all — every one of
+	// those links landed on a bare 404, from the bottom of every page on the site. Only link what
+	// the store actually serves; a column left with nothing but its heading is dropped too.
+	const publishedCms = $derived(page?.data?.cmsPages ?? [])
 	const themeFooterMenu = $derived(
-		(themeFooter?.columns || []).map((column) => ({
-			name: column.title,
-			items: [
-				...(column.links || []).map((link) => ({ name: link.label, link: link.href })),
-				...(column.text || []).map((text) => ({ name: text }))
-			]
-		}))
+		(themeFooter?.columns || [])
+			.map((column) => ({
+				name: column.title,
+				items: [
+					...keepResolvableLinks(
+						(column.links || []).map((link) => ({ name: link.label, link: link.href })),
+						publishedCms
+					),
+					...(column.text || []).map((text) => ({ name: text }))
+				]
+			}))
+			.filter((column) => column.items.length)
 	)
 	const renderedFooterMenu = $derived(themeFooterMenu.length ? themeFooterMenu : footerMenu)
 	const footerDescription = $derived(activeThemeName === 'default' ? storeData?.description : themeContent?.description || storeData?.description)
-
 </script>
 
 <div class="mt-5">
 	{#if activeThemeName === 'lime'}
 		<!-- The store's own name wins over the theme's demo brand name. -->
-		<LimeFooter
-			footer={themeFooter}
-			brandName={storeData?.name || themeContent.brandName}
-		/>
+		<LimeFooter footer={themeFooter} brandName={storeData?.name || themeContent.brandName} />
 	{:else if activeThemeName === 'noor'}
-		<NoorFooter
-			footer={themeFooter}
-			description={themeContent.description}
-			brandName={storeData?.name || themeContent.brandName}
-		/>
+		<NoorFooter footer={themeFooter} description={themeContent.description} brandName={storeData?.name || themeContent.brandName} />
 	{:else}
 		{#if footerSettings?.active}
 			<div class="w-full pb-4">
@@ -114,12 +117,7 @@
 								<div class="flex flex-wrap items-center gap-5">
 									{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
 										{#if social}
-											<a
-												href={social as string}
-												target="_blank"
-												rel="nofollow"
-												class="text-muted-foreground transition-colors hover:text-foreground"
-											>
+											<a href={social as string} target="_blank" rel="nofollow" class="text-muted-foreground transition-colors hover:text-foreground">
 												{#if key == 'twitter'}
 													<svg class="size-6" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
 														><title>X</title><path
@@ -199,7 +197,11 @@
 									</a>
 									. All Rights Reserved.
 								{/if}
-								<a target="_blank" href="https://litekart.in" class="uppercase text-xs font-bold text-foreground transition-colors hover:text-primary">
+								<a
+									target="_blank"
+									href="https://litekart.in"
+									class="text-xs font-bold uppercase text-foreground transition-colors hover:text-primary"
+								>
 									Powered by Litekart
 								</a>
 								<!-- Support-only build stamp. It used to be painted the footer background colour
@@ -268,5 +270,4 @@
 	.ed :global(a.hover\:text-primary:hover) {
 		color: hsl(var(--primary));
 	}
-
 </style>
