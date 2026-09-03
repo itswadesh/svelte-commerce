@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { navigating, page } from '$app/state'
+	import { afterNavigate, beforeNavigate } from '$app/navigation'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
@@ -59,11 +60,31 @@
 
 	function writeScrollCache(key: string) {
 		try {
-			sessionStorage.setItem(SCROLL_CACHE_KEY, JSON.stringify({ key, currentPage, products }))
+			sessionStorage.setItem(SCROLL_CACHE_KEY, JSON.stringify({ key, currentPage, products, scrollY: window.scrollY }))
 		} catch {
 			// Quota exceeded or storage blocked — accumulation just won't survive a back-navigation.
 		}
 	}
+
+	// The shopper's place in the list, not just the list. The root layout resets scroll on every
+	// pathname change — Back included — which overrides SvelteKit's own restoration, so a listing
+	// scrolled to 400px came back at the top after opening a product and pressing Back, and the
+	// cache above restored the products under a shopper who was no longer looking at them.
+	beforeNavigate(() => {
+		if (previousListingQueryKey) writeScrollCache(previousListingQueryKey)
+	})
+
+	afterNavigate(({ type }) => {
+		if (type !== 'popstate') return
+
+		const cached = readScrollCache(listingQueryKey)
+		const top = cached?.scrollY
+		if (typeof top !== 'number' || top <= 0) return
+
+		// After the restored cards are in the DOM, otherwise the page is not yet tall enough to
+		// scroll to the offset. `instant` because app.css sets `scroll-behavior: smooth`.
+		requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top, behavior: 'instant' as ScrollBehavior })))
+	})
 
 	$effect(() => {
 		if (listingQueryKey === previousListingQueryKey) return
@@ -142,7 +163,6 @@
 		{#if hasRemovableFilters}
 			<a
 				href={urlWithoutAnyFilter(page.url)}
-				data-sveltekit-replacestate
 				class="ed-empty__link mt-3 inline-flex h-11 items-center rounded-md border border-input px-4 text-sm font-semibold transition-colors hover:bg-muted"
 			>
 				Clear all filters
@@ -158,6 +178,7 @@
 	</div>
 {:else}
 	<div
+		data-testid="product-grid"
 		class="ed-grid intra-gap grid auto-rows-auto grid-cols-2 transition-opacity md:grid-cols-3 xl:grid-cols-4 {refining ? 'opacity-60' : ''}"
 		aria-busy={refining}
 	>

@@ -2,10 +2,11 @@
 	import { page } from '$app/state'
 	import * as Select from '$lib/components/ui/select/index.js'
 	import { sortOptions } from '$lib/config.js'
-	import { selectSort } from '$lib/core/utils/index.js'
 
-	// `let`, not `const`: the select writes the new value back through the binding.
-	let { selectedSort = $bindable() } = $props()
+	// A plain prop, not a binding: the current sort is derived from the URL by listing-page.svelte,
+	// which also owns the navigation. Seeding it once and mutating it locally left the trigger
+	// claiming the old order after Clear all re-sorted the grid.
+	let { selectedSort = 'popularity:desc', onSortChange = (value: string) => {} } = $props()
 
 	const data = $derived(page.data)
 
@@ -51,8 +52,7 @@
 				value={selectedSort}
 				onValueChange={(value: string) => {
 					if (!value) return
-					selectedSort = value
-					selectSort(value)
+					onSortChange(value)
 				}}
 			>
 				<Select.Trigger id="sort-by" aria-labelledby="sort-by-label sort-by" class="ed-lh__select w-[200px]">
@@ -142,8 +142,14 @@
 		font-size: 0.8rem;
 		font-weight: 500;
 		letter-spacing: 0.01em;
-		box-shadow: none;
 		transition: border-color 0.2s ease;
+	}
+
+	/* The global focus ring in app.css is a Tailwind `ring`, which compiles to a box-shadow. A
+	   blanket `box-shadow: none` on this trigger erased it, so the one control a keyboard shopper
+	   most needs to find drew nothing on Tab. Flatten the resting state only. */
+	:global([data-theme='default'] .ed-lh__select button:not(:focus-visible)) {
+		box-shadow: none;
 	}
 
 	:global([data-theme='default'] .ed-lh__select button:hover) {
