@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
+	import { isCmsPageResolvable } from '$lib/components/common/cms-pages.js'
 	import { ArrowLeft, Check, LoaderIcon, X, Phone, Mail } from '@lucide/svelte'
 	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
@@ -35,6 +36,9 @@
 	// The old markup branched on `identifier.length === 0` before falling back to isPhoneNumber, so
 	// a store locked to one login type showed its configured label only while the field was empty.
 	// The store's setting does not change as the shopper types, so it wins outright when it is set.
+	// Not "can this be linked?" but "can this be read?" — see the consent block in the markup.
+	const termsResolvable = $derived(isCmsPageResolvable('/terms-and-conditions', page.data?.cmsPages ?? []))
+
 	const identifierLabel = $derived(
 		page.data.store?.loginType === 'PHONE'
 			? 'Phone number'
@@ -192,6 +196,7 @@
 	hideFooter
 	useMaxHeight
 	class="p-0 max-sm:h-[100dvh] max-sm:w-screen max-sm:!rounded-none"
+	rootClass="shadow-z-10 sm:rounded-radius"
 	hAuto
 	wAuto
 >
@@ -202,7 +207,7 @@
 	     height came from. Sizes are dialog scale, not page scale: this is a doorway a shopper
 	     passes through mid-purchase, not a screen to be read. -->
 	<div
-		class="w-full space-y-5 border bg-card p-5 text-foreground shadow-z-10 max-sm:flex max-sm:min-h-[100dvh] max-sm:flex-col max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:w-[380px] sm:rounded-radius sm:p-6"
+		class="w-full space-y-5 bg-card p-5 text-foreground max-sm:flex max-sm:min-h-[100dvh] max-sm:flex-col max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:w-[380px] sm:p-6"
 	>
 		<!-- The brand mark and the close control share one row, so the dialog no longer spends a
 		     44px band on the close button before any content starts. -->
@@ -257,7 +262,7 @@
 				     that, the space between fields was the component's margin plus the parent's rhythm. -->
 				<div class="space-y-3 [&>div]:mb-0">
 					{#if !page.data.store?.loginType || page.data.store?.loginType == 'BOTH'}
-						<div class="relative flex rounded-radius border bg-muted/40 p-1" role="group" aria-label="Sign-in method">
+						<div class="relative flex rounded-radius bg-muted p-1" role="group" aria-label="Sign-in method">
 							<div
 								class="absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-radius border bg-background shadow-xs transition-transform duration-200 ease-out motion-reduce:transition-none"
 								style:transform={loginModule.isPhoneNumber ? 'translateX(0)' : 'translateX(100%)'}
@@ -355,26 +360,42 @@
 					{/if}
 				</Button>
 
-				{#if loginModule.showSignupButton && page.data.store?.loginType !== 'PHONE'}
-					<p class="text-center text-sm text-muted-foreground">
-						New to {page?.data?.store?.name}?
-						<AuthButton
-							type="signup"
-							aria-label="Create an account"
-							class="inline cursor-pointer font-medium text-foreground underline-offset-4 hover:underline">Create an account</AuthButton
-						>
-					</p>
-				{/if}
+				<!-- One tail block, so the bottom-pinning on a phone survives whichever lines render. -->
+				<div class="space-y-3 max-sm:!mt-auto max-sm:pt-6">
+					{#if loginModule.showSignupButton && page.data.store?.loginType !== 'PHONE'}
+						<p class="text-center text-sm text-muted-foreground">
+							New to {page?.data?.store?.name}?
+							<AuthButton
+								type="signup"
+								aria-label="Create an account"
+								class="inline cursor-pointer font-medium text-foreground underline-offset-4 hover:underline">Create an account</AuthButton
+							>
+						</p>
+					{/if}
 
-				<!-- The vendor link used to be its own stacked block beneath the legal line. Folding it
-				     into the same sentence removes a whole section for one link. -->
-				<p class="text-center text-xs leading-relaxed text-muted-foreground max-sm:!mt-auto max-sm:pt-6">
-					By continuing you agree to our
-					<PolicyLink href="/terms-and-conditions" class="text-foreground hover:underline" onclick={() => (show = false)}
-						>Terms &amp; Conditions</PolicyLink
-					>{#if page?.data?.store?.plugins?.isMultiVendor?.active}. Selling with us?
-						<a href="/auth/join-as-vendor" class="text-foreground hover:underline" onclick={() => (show = false)}>Join as a vendor</a>{/if}.
-				</p>
+					<!-- The consent sentence is gated on whether the terms can actually be read, not just
+					     on whether they can be linked. PolicyLink degrades a dead link to plain text, which
+					     is the honest thing to do with a link — but applied here it left the storefront
+					     telling a shopper they had agreed to a document it could not show them, with the
+					     name of that document sitting there unclickable. A claim nobody can check is worse
+					     than no claim, so when the page is not published the sentence does not appear. It
+					     returns, as a working link, the moment the merchant writes the page.
+					     The vendor link used to be its own stacked block beneath this one. -->
+					{#if termsResolvable || page?.data?.store?.plugins?.isMultiVendor?.active}
+						<p class="text-center text-xs leading-relaxed text-muted-foreground">
+							{#if termsResolvable}
+								By continuing you agree to our
+								<PolicyLink href="/terms-and-conditions" class="text-foreground hover:underline" onclick={() => (show = false)}
+									>Terms &amp; Conditions</PolicyLink
+								>.
+							{/if}
+							{#if page?.data?.store?.plugins?.isMultiVendor?.active}
+								Selling with us?
+								<a href="/auth/join-as-vendor" class="text-foreground hover:underline" onclick={() => (show = false)}>Join as a vendor</a>.
+							{/if}
+						</p>
+					{/if}
+				</div>
 			</form>
 		{:else if loginModule.step === 2}
 			<div class="space-y-5">

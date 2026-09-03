@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
+	import { isCmsPageResolvable } from '$lib/components/common/cms-pages.js'
 	import { canSubmitContactForm } from '$lib/components/common/store-capabilities.js'
 	import { Button } from '$lib/components/ui/button'
 	import { Input } from '$lib/components/ui/input'
@@ -77,6 +78,12 @@
 	// column, and the two-column shell left about 600px of blank canvas beside a small card. Fall
 	// back to one centred column at the card's width.
 	const twoColumn = $derived(formAvailable || contactMethods.length > 0)
+
+	// Name only the policies this store has actually published. PolicyLink turns a dead link into
+	// plain text, which is right for a link and wrong for a promise: it left the form telling people
+	// they agreed to documents it could not show them.
+	const termsOk = $derived(isCmsPageResolvable('/terms-and-conditions', page.data?.cmsPages ?? []))
+	const privacyOk = $derived(isCmsPageResolvable('/privacy-policy', page.data?.cmsPages ?? []))
 </script>
 
 <SeoHeader
@@ -274,11 +281,15 @@
 										{/if}
 									</Button>
 
-									<p class="text-center text-xs text-muted-foreground">
-										By sending this message you agree to our
-										<PolicyLink href="/terms-and-conditions" class="text-primary hover:underline">Terms</PolicyLink> and
-										<PolicyLink href="/privacy-policy" class="text-primary hover:underline">Privacy Policy</PolicyLink>.
-									</p>
+									{#if termsOk || privacyOk}
+										<p class="text-center text-xs text-muted-foreground">
+											By sending this message you agree to our
+											{#if termsOk}<PolicyLink href="/terms-and-conditions" class="text-primary hover:underline">Terms</PolicyLink
+												>{/if}{#if termsOk && privacyOk}
+												and
+											{/if}{#if privacyOk}<PolicyLink href="/privacy-policy" class="text-primary hover:underline">Privacy Policy</PolicyLink>{/if}.
+										</p>
+									{/if}
 								</form>
 							</div>
 						{/if}

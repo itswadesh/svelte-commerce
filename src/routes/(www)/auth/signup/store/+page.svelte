@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
+	import { isCmsPageResolvable } from '$lib/components/common/cms-pages.js'
 	import { LoaderIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { toast } from '@misiki/kitcommerce-core'
@@ -46,6 +47,10 @@
 			isLoading = false
 		}
 	}
+
+	// Same rule as the sign-in dialog: only claim agreement to documents the store can show.
+	const storeTermsOk = $derived(isCmsPageResolvable('/terms-and-conditions', page.data?.cmsPages ?? []))
+	const storePrivacyOk = $derived(isCmsPageResolvable('/privacy-policy', page.data?.cmsPages ?? []))
 </script>
 
 <svelte:head>
@@ -144,14 +149,16 @@
 				</AuthButton>
 			</div>
 
-			<div class="text-center text-xs text-gray-500">
-				<p>By creating a store, you agree to our</p>
-				<div class="space-x-1">
-					<PolicyLink href="/terms-and-conditions" class="text-gray-600 hover:text-gray-900">Terms of Service</PolicyLink>
-					<span>and</span>
-					<PolicyLink href="/privacy-policy" class="text-gray-600 hover:text-gray-900">Privacy Policy</PolicyLink>
+			{#if storeTermsOk || storePrivacyOk}
+				<div class="text-center text-xs text-gray-500">
+					<p>By creating a store, you agree to our</p>
+					<div class="space-x-1">
+						{#if storeTermsOk}<PolicyLink href="/terms-and-conditions" class="text-gray-600 hover:text-gray-900">Terms of Service</PolicyLink>{/if}
+						{#if storeTermsOk && storePrivacyOk}<span>and</span>{/if}
+						{#if storePrivacyOk}<PolicyLink href="/privacy-policy" class="text-gray-600 hover:text-gray-900">Privacy Policy</PolicyLink>{/if}
+					</div>
 				</div>
-			</div>
+			{/if}
 		</div>
 	</div>
 </div>

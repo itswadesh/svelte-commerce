@@ -1,9 +1,15 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
+	import { isCmsPageResolvable } from '$lib/components/common/cms-pages.js'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { MyProfileDeleteModule } from '$lib/core/composables/index.js'
 
 	const deleteModule = new MyProfileDeleteModule()
+
+	// Dropping the sentence rather than the link: "Please review our Privacy Policy" with the name
+	// sitting there unclickable is an instruction the shopper cannot follow.
+	const deletePrivacyOk = $derived(isCmsPageResolvable('/privacy-policy', page.data?.cmsPages ?? []))
 </script>
 
 <svelte:head>
@@ -29,8 +35,9 @@
 					<div class="space-y-1">
 						<p class="font-bold text-gray-900">Forfeit all benefits</p>
 						<p class="text-sm leading-relaxed text-gray-500">
-							You'll lose your order history, saved details, coupons, and benefits. These cannot be recovered. Please review our
-							<PolicyLink href="/privacy-policy" class="font-semibold text-primary hover:underline">Privacy Policy</PolicyLink>.
+							You'll lose your order history, saved details, coupons, and benefits. These cannot be recovered.{#if deletePrivacyOk}
+								Please review our
+								<PolicyLink href="/privacy-policy" class="font-semibold text-primary hover:underline">Privacy Policy</PolicyLink>.{/if}
 						</p>
 					</div>
 				</li>

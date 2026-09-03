@@ -21,6 +21,13 @@
 		useMaxHeight?: boolean
 		useMaxWidth?: boolean
 		rounded?: boolean
+		/**
+		 * Extra classes for the card element itself. `class` goes to Card.Content, which sits inside
+		 * a Card.Root carrying `overflow-hidden` — so a radius set through `class` is drawn and then
+		 * clipped square by the parent, and the border a caller sees is Root's, not its own. This is
+		 * the only way to reach that element.
+		 */
+		rootClass?: string
 		zIndex?: number
 		confirmButtonPosition?: 'top' | 'bottom'
 		loading?: boolean
@@ -42,6 +49,7 @@
 		useMaxHeight = false,
 		useMaxWidth = false,
 		rounded = true,
+		rootClass = '',
 		zIndex = 1000000,
 		confirmButtonPosition = 'bottom',
 		loading,
@@ -105,7 +113,7 @@
 			>
 				<Card.Root
 					class="overflow-hidden border
-        {rounded ? '' : 'rounded-none'}
+        {rounded ? '' : 'rounded-none'} {rootClass}
         {wAuto ? '' : useMaxWidth ? 'w-full max-w-[80vw]' : 'width'}
         {hAuto ? '' : useMaxHeight ? 'max-h-[80vh] ' : 'h-[80vh]'}"
 				>

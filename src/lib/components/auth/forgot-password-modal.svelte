@@ -31,6 +31,7 @@
 	hideFooter
 	useMaxHeight
 	class="p-0 max-sm:h-[100dvh] max-sm:w-screen max-sm:!rounded-none"
+	rootClass="shadow-z-10 sm:rounded-radius"
 	hAuto
 	wAuto
 >
@@ -38,7 +39,7 @@
 	     one from "Forgot password?" inside the login modal, so a different scale here would read as
 	     a different product one click into the same flow. -->
 	<div
-		class="w-full space-y-5 border bg-card p-5 text-foreground shadow-z-10 max-sm:flex max-sm:min-h-[100dvh] max-sm:flex-col max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:w-[380px] sm:rounded-radius sm:p-6"
+		class="w-full space-y-5 bg-card p-5 text-foreground max-sm:flex max-sm:min-h-[100dvh] max-sm:flex-col max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:w-[380px] sm:p-6"
 	>
 		<div class="flex items-center justify-between gap-3">
 			{#if page?.data?.store?.logo}

@@ -30,6 +30,7 @@
 			hideFooter
 			useMaxHeight
 			class="p-0 max-sm:h-[100dvh] max-sm:w-screen max-sm:!rounded-none"
+			rootClass="shadow-z-10 sm:rounded-radius"
 			hAuto
 			wAuto
 		>
@@ -37,7 +38,7 @@
 			     two in one click, so they cannot be two different scales. Five fields means this one
 			     scrolls, hence the flex column and max height the login dialog does not need. -->
 			<div
-				class="flex max-h-[100dvh] w-full flex-col space-y-5 overflow-y-auto border bg-card p-5 text-foreground shadow-z-10 max-sm:min-h-[100dvh] max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:max-h-[92vh] sm:w-[400px] sm:rounded-radius sm:p-6"
+				class="flex max-h-[100dvh] w-full flex-col space-y-5 overflow-y-auto bg-card p-5 text-foreground max-sm:min-h-[100dvh] max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:max-h-[92vh] sm:w-[400px] sm:p-6"
 			>
 				<div class="flex shrink-0 items-center justify-between gap-3">
 					{#if page?.data?.store?.logo}

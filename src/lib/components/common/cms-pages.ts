@@ -64,6 +64,19 @@ export function publishedCmsSlugs(): Promise<string[]> {
 }
 
 /**
+ * Whether a link to a CMS-backed page would actually resolve. Anything outside that set — an
+ * external URL, `/contact-us`, `/products` — always resolves and is never gated.
+ *
+ * Callers use this for two different jobs. `PolicyLink` uses it to decide between an anchor and
+ * plain text. A consent sentence uses it to decide whether to make the claim at all: telling a
+ * shopper they agree to terms the store cannot show them is not something a working link would fix.
+ */
+export function isCmsPageResolvable(href: string, published: Iterable<string>): boolean {
+	if (!CMS_BACKED_PATHS.has(href)) return true
+	return new Set(published).has(slugOf(href))
+}
+
+/**
  * Drop links to CMS pages this store does not publish. Anything that is not a CMS-backed path —
  * `/products`, `/contact-us`, `/faqs`, `/blog`, an external URL — is left exactly as it is.
  */
