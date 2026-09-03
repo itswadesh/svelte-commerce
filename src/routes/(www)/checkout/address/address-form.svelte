@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js'
-	import { Save } from '@lucide/svelte'
+	import { AlertCircle, Save } from '@lucide/svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { page } from '$app/state'
@@ -31,6 +31,31 @@
 	let formError = $state('')
 	let formEl = $state<HTMLFormElement | null>(null)
 
+	// Every rejected field, not just the first one. Reporting `errors[0]` alone made an empty form a
+	// guessing game: submit, fix one field, submit again, nine times over, with the single message
+	// stranded below the fold (UX-082). The shared textbox renders an externally supplied error
+	// straight away, so each field now carries its own.
+	let fieldErrors = $state<Record<string, string>>({})
+
+	const errorCount = $derived(Object.keys(fieldErrors).length)
+	const summary = (errors: Record<string, string>) => {
+		const values = Object.values(errors)
+		if (!values.length) return ''
+		return values.length === 1 ? values[0] : `Please correct the ${values.length} highlighted fields below.`
+	}
+
+	// A banner that is only cleared on a successful submit keeps naming a field the shopper has
+	// already fixed, and contradicts the live field errors beside it. Input events bubble, so one
+	// handler on the form clears whichever field was just corrected.
+	function clearErrorOnInput(event: Event) {
+		const name = (event.target as HTMLInputElement | null)?.name
+		if (!name || !fieldErrors[name]) return
+		const next = { ...fieldErrors }
+		delete next[name]
+		fieldErrors = next
+		formError = summary(next)
+	}
+
 	// `checkoutAddressSchema.email` accepts an empty string, so it cannot carry a store that mandates
 	// email — every backend served by the static store config does (see static-store.ts).
 	const emailRule = $derived(
@@ -49,14 +74,22 @@
 		candidate.countryCode = address?.countryCode || page?.data?.store?.country?.code || ''
 		const result = z.object({ ...AddressSchema, email: emailRule }).safeParse(candidate)
 		if (!result.success) {
-			const issue = result.error.errors[0]
-			formError = issue?.message || 'Please fill in every required field correctly.'
-			const field = issue?.path?.[0]
-			const el = field ? (formEl?.querySelector(`[name="${field}"]`) as HTMLElement | null) : null
+			const next: Record<string, string> = {}
+			for (const issue of result.error.errors) {
+				const field = String(issue?.path?.[0] ?? '')
+				if (field && !next[field]) next[field] = issue.message
+			}
+			fieldErrors = next
+			formError = summary(next) || 'Please fill in every required field correctly.'
+			const first = Object.keys(next)[0]
+			const el = first
+				? (formEl?.querySelector(`[name="${first}"], #${first === 'countryCode' ? 'country-code' : first}`) as HTMLElement | null)
+				: null
 			el?.scrollIntoView({ block: 'center', behavior: 'smooth' })
 			el?.focus()
 			return
 		}
+		fieldErrors = {}
 		formError = ''
 		handleSubmit(event)
 	}
@@ -68,6 +101,7 @@
 		try {
 			await onsave?.(saved)
 		} catch (e) {
+			fieldErrors = {}
 			formError = e instanceof Error ? e.message : 'Could not save this address. Please try again.'
 		}
 	}
@@ -93,10 +127,29 @@
 		<!-- novalidate: the footer submits this form with `requestSubmit()`, and native constraint
 		     validation would abort before the submit event fires, pinning its bubble to whichever
 		     field is off-screen. The zod pass below is the single authority and reports on the form. -->
-		<form id={FORM_ID} bind:this={formEl} novalidate onsubmit={(e) => submitWithVisibleErrors(e, handleSubmit)} class="grid">
+		<form
+			id={FORM_ID}
+			bind:this={formEl}
+			novalidate
+			oninput={clearErrorOnInput}
+			onsubmit={(e) => submitWithVisibleErrors(e, handleSubmit)}
+			class="grid"
+		>
+			<!-- Above the fields, not below all nine of them: at 390px the old placement put the only
+			     message the shopper received off-screen (UX-082). -->
+			{#if formError}
+				<p
+					role="alert"
+					class="mb-4 flex items-start gap-2 rounded-radius border border-destructive/40 bg-destructive/5 px-3 py-2 text-sm font-medium text-destructive"
+				>
+					<AlertCircle class="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+					<span>{formError}</span>
+				</p>
+			{/if}
 			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 				<Textbox
 					name="firstName"
+					error={fieldErrors.firstName}
 					autocomplete="given-name"
 					bind:value={address.firstName}
 					placeholder="First Name"
@@ -106,6 +159,7 @@
 				/>
 				<Textbox
 					name="lastName"
+					error={fieldErrors.lastName}
 					autocomplete="family-name"
 					bind:value={address.lastName}
 					placeholder="Last Name"
@@ -117,16 +171,18 @@
 			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 				<Textbox
 					name="email"
+					error={fieldErrors.email}
 					type="email"
 					autocomplete="email"
 					bind:value={address.email}
 					placeholder="your@email.com"
-					schema={checkoutAddressSchema.email}
+					schema={emailRule}
 					label="Email"
 					required
 				/>
 				<Textbox
 					name="phone"
+					error={fieldErrors.phone}
 					type="tel"
 					autocomplete="tel"
 					bind:value={address.phone}
@@ -138,6 +194,7 @@
 			</div>
 			<Textbox
 				name="address_1"
+				error={fieldErrors.address_1}
 				autocomplete="address-line1"
 				bind:value={address.address_1}
 				placeholder="Street Address"
@@ -155,6 +212,7 @@
 			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 				<Textbox
 					name="city"
+					error={fieldErrors.city}
 					autocomplete="address-level2"
 					bind:value={address.city}
 					placeholder="City"
@@ -164,6 +222,7 @@
 				/>
 				<Textbox
 					name="state"
+					error={fieldErrors.state}
 					autocomplete="address-level1"
 					bind:value={address.state}
 					placeholder="State"
@@ -194,9 +253,16 @@
 					{:else}
 						<p id="country-code" class="flex h-11 items-center text-sm font-medium text-foreground">{countryName}</p>
 					{/if}
+					{#if fieldErrors.countryCode}
+						<p class="flex items-start gap-1 text-sm font-medium text-destructive">
+							<AlertCircle class="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+							{fieldErrors.countryCode}
+						</p>
+					{/if}
 				</div>
 				<Textbox
 					name="zip"
+					error={fieldErrors.zip}
 					autocomplete="postal-code"
 					inputmode="numeric"
 					bind:value={address.zip}
@@ -206,16 +272,14 @@
 					required
 				/>
 			</div>
-			<br />
-			{#if formError}
-				<p role="alert" class="mb-3 rounded-radius border border-destructive/40 bg-destructive/5 px-3 py-2 text-sm font-medium text-destructive">
-					{formError}
-				</p>
-			{/if}
-			<div class="flex flex-col gap-2">
-				<!-- No dirty-tracking gate: autofill and paste never fired keyup, so it stranded shoppers.
+			<div class="mt-4 flex flex-col gap-2">
+				<!-- Outline, not a second full-width primary: the summary card's CTA is the one control
+				     that moves the order forward, and two identically weighted dark buttons carrying the
+				     same label told the shopper nothing about which one did (UX-081). Kept as the form's
+				     submit so Enter still saves, and it stays the in-flow action on a phone.
+				     No dirty-tracking gate: autofill and paste never fired keyup, so it stranded shoppers.
 				     The renderer's zod validation on submit already blocks incomplete addresses. -->
-				<Button type="submit" disabled={isLoading} class="w-full">
+				<Button type="submit" variant="outline" disabled={isLoading} class="h-11 w-full">
 					{#if isLoading}
 						<Spinner label="Saving address" />
 					{:else}

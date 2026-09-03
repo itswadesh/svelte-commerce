@@ -38,13 +38,13 @@
 				<div class="group flex items-center justify-between rounded-lg border p-4">
 					<div class="flex-1">
 						<p class="font-medium">{address.firstName} {address.lastName}</p>
-						<p class="text-sm text-gray-500">{address.address_1}</p>
-						<p class="text-sm text-gray-500">{address.address_2}</p>
-						<p class="text-sm text-gray-500">
+						<p class="text-sm text-muted-foreground">{address.address_1}</p>
+						<p class="text-sm text-muted-foreground">{address.address_2}</p>
+						<p class="text-sm text-muted-foreground">
 							{address.city}, {address.state}
 							{address.zip}
 						</p>
-						<p class="text-sm text-gray-500">{address.phone}</p>
+						<p class="text-sm text-muted-foreground">{address.phone}</p>
 					</div>
 					<div class="flex flex-col gap-2">
 						<div class="flex justify-between gap-2">
@@ -52,9 +52,15 @@
 								<PencilSimple class="h-4 w-4" />
 							</Button>
 							<!-- {#if addressState.cartState.cart?.shippingAddress?.id !== address.id} -->
-								<Button type="button" variant="ghost" disabled={addressState.cartState?.cart?.shippingAddress?.id === address.id}  onclick={() => ondelete?.(address)} class="w-fit opacity-0 group-hover:opacity-100">
-									<Trash2 class="h-4 w-4" />
-								</Button>
+							<Button
+								type="button"
+								variant="ghost"
+								disabled={addressState.cartState?.cart?.shippingAddress?.id === address.id}
+								onclick={() => ondelete?.(address)}
+								class="w-fit opacity-0 group-hover:opacity-100"
+							>
+								<Trash2 class="h-4 w-4" />
+							</Button>
 							<!-- {/if} -->
 						</div>
 						<Button variant="default" onclick={() => addressState.handleSelect(address)}>Select</Button>

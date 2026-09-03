@@ -33,7 +33,10 @@
 
 <AddressFormRenderer bind:address bind:show {onback} {ondelete} {onsave}>
 	{#snippet content({ isSaving, handleBack, handleSubmit, handleDelete })}
-		<Dialog bind:open={show}>
+		<!-- `onclose` was accepted and never called, so Escape, the overlay and the X left the page's
+		     `editAddress` flag set — which is exactly what greys out Continue to Payment. Every close
+		     route now runs the same handler as Save and Back (UX-080). -->
+		<Dialog bind:open={show} onOpenChange={(next: boolean) => !next && onclose?.()}>
 			<!-- The dialog is a centred fixed box with no height cap, so on a phone the address fields
 			     ran past the bottom of the screen and Save went with them. Cap it, scroll the fields,
 			     and keep the actions pinned as the dialog's last grid row. -->
@@ -108,11 +111,11 @@
 							{#if isSaving}
 								<Spinner label="Saving address" />
 							{:else}
-								Save Contact
+								Save address
 							{/if}
 						</Button>
 						{#if isEdit}
-							<Button type="button" variant="link" onclick={handleDelete} class="w-full text-red-700">
+							<Button type="button" variant="link" onclick={handleDelete} class="w-full text-destructive">
 								<Trash2 class="h-4 w-4" />
 								Delete Address
 							</Button>
