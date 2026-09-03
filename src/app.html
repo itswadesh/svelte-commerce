@@ -4,6 +4,14 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 		<link rel="apple-touch-icon" href="/favicon.png" />
+		<!-- Marks that scripts are running, before the body paints. Entrance animations hide their
+		     content in the first frame and reveal it on hydration, which is fine when JavaScript is
+		     coming and leaves a permanently blank region when it is not. Anything that starts hidden
+		     must scope that to `html.js`, so the no-script and pre-hydration paint shows the finished
+		     state instead of an empty box. -->
+		<script>
+			document.documentElement.classList.add('js')
+		</script>
 		%sveltekit.head%
 	</head>
 
