@@ -1,16 +1,46 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { goto } from '$app/navigation'
 	import DesktopFilter from '$lib/components/product-catalogue/desktop-filter.svelte'
 	import MobileFilter from '$lib/components/product-catalogue/mobile-filter.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
-	import { selectSort } from '$lib/core/utils/index.js'
+	import { getDesktopFilterState } from '$lib/core/composables/index.js'
 	import ListingGrid from '$lib/components/product-catalogue/listing-grid.svelte'
 	import ListingHeader from './listing-header.svelte'
 	import { X } from '@lucide/svelte'
 	import { readAppliedFilters, urlWithoutAnyFilter, urlWithoutFilter } from './scope-filters.js'
 
 	const data = $derived(page.data)
-	let selectedSort = $state(page.url.searchParams.get('sort') ?? 'popularity:desc')
+
+	// The URL is the single source of truth for the sort, so every surface agrees after any
+	// navigation — including a Clear all that re-orders the grid, and a Back that undoes a sort.
+	const selectedSort = $derived(page.url.searchParams.get('sort') ?? 'popularity:desc')
+
+	// Sort, filter and price changes are the shopper's deliberate refinements, and Back is the
+	// universal undo for a refinement they regret. Every one of them navigated with
+	// `replaceState: true` — the vendored `selectSort` util and every mutation in the vendored
+	// filter composable — so the history length never grew and one Back press ejected the shopper
+	// out of discovery altogether. Both are repaired at this call site rather than in the package.
+	function applySort(value: string) {
+		if (!value) return
+		const url = new URL(page.url)
+		url.searchParams.set('sort', value)
+		url.searchParams.delete('page')
+		goto(url, { keepFocus: true, noScroll: true })
+	}
+
+	// Every filter mutation funnels through the composable's one shared navigator, so the same
+	// choke point `strip-page-on-filter.ts` uses turns them all into real history entries. A
+	// navigation the composable makes with no options is its category jump — a route change that
+	// must keep its own scroll and focus behaviour — so that one is passed straight through.
+	const filterState = getDesktopFilterState() as any
+	const filterNavigator = filterState?.navigator
+	if (filterNavigator && !filterNavigator.__pushesFilterHistory) {
+		const navigate = filterNavigator.goto.bind(filterNavigator)
+		filterNavigator.goto = (url: URL, options?: Record<string, unknown>) =>
+			options ? navigate(url, { ...options, replaceState: false, keepFocus: true, noScroll: true }) : navigate(url)
+		filterNavigator.__pushesFilterHistory = true
+	}
 
 	// Read from the URL, not from the filter composable: that one files `sort`, `page` and
 	// `search` as facets, so a merely sorted listing would sprout chips for filters nobody set.
@@ -32,16 +62,10 @@
 			</div>
 		{/if}
 
-		<MobileFilter
-			bind:selectedSort
-			onSortChange={(value: string) => {
-				selectedSort = value
-				selectSort(value)
-			}}
-		/>
+		<MobileFilter {selectedSort} onSortChange={applySort} />
 
 		<div class="ed-plp__main inter-gap flex min-w-0 flex-1 flex-col">
-			<ListingHeader bind:selectedSort />
+			<ListingHeader {selectedSort} onSortChange={applySort} />
 
 			<!-- Active filters. The row itself scrolls on a phone rather than the page, so a long
 			     set of chips can never introduce horizontal overflow. -->
@@ -50,7 +74,6 @@
 					{#each appliedFilters as filter (filter.key + (filter.value ?? ''))}
 						<a
 							href={urlWithoutFilter(page.url, filter)}
-							data-sveltekit-replacestate
 							class="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border border-input bg-background px-2.5 text-xs font-medium text-foreground transition-colors hover:bg-muted max-md:h-11"
 						>
 							<span class="max-w-[12rem] truncate">{filter.label}</span>
@@ -62,7 +85,6 @@
 					{#if appliedFilters.length > 1}
 						<a
 							href={urlWithoutAnyFilter(page.url)}
-							data-sveltekit-replacestate
 							class="inline-flex h-8 shrink-0 items-center px-2 text-xs font-semibold text-muted-foreground underline underline-offset-4 hover:text-foreground max-md:h-11"
 						>
 							Clear all
