@@ -173,7 +173,7 @@
 					{#each menuItems as item}
 						<Button
 							variant="ghost"
-							class="ed-mf__tab h-auto min-h-11 w-full justify-between gap-1 rounded-none px-4 py-4 {filterModule.selectedSection === item.id
+							class="ed-mf__tab h-auto min-h-11 w-full justify-between gap-1 rounded-none px-4 py-3 {filterModule.selectedSection === item.id
 								? 'bg-background text-primary hover:bg-background'
 								: 'text-muted-foreground'}"
 							aria-current={filterModule.selectedSection === item.id ? 'true' : undefined}
@@ -274,8 +274,13 @@
 						<div class="w-full">
 							<p class="ed-mf__label text-xs font-bold uppercase tracking-widest text-foreground">Price range</p>
 
-							<div class="ed-mf__slider relative mr-5 mt-8 px-2">
-								<div class="ed-mf__track absolute h-1 w-full rounded bg-muted">
+							<!-- h-5: every child of this wrapper is absolutely positioned, so it used to be a zero-height
+							      box. Its own top margin then collapsed straight through with the price block's, which put
+							      the Min/Max captions on the same line as the track and left the 20px thumbs sitting on top
+							      of the words. Giving the wrapper the thumb's own height stops the collapse, so the margin
+							      below it is real space again. The 44px input hit area still overhangs it. -->
+							<div class="ed-mf__slider relative mr-5 mt-3 h-5 px-2">
+								<div class="ed-mf__track absolute top-1/2 h-1 w-full -translate-y-1/2 rounded bg-muted">
 									<div
 										class="ed-mf__fill absolute h-1 bg-primary"
 										style="left: {filterModule.priceSliderLeftPercentage}%; right: {filterModule.priceSliderRightPercentage}%"
@@ -307,7 +312,7 @@
 
 							<!-- The same editable bounds the desktop panel already ships. Dragging two
 							     overlapping thumbs is not a way to set an exact budget on a phone. -->
-							<div class="ed-mf__prices mt-10 grid grid-cols-2 gap-3">
+							<div class="ed-mf__prices mt-3 grid grid-cols-2 gap-3">
 								<Textbox
 									type="number"
 									class="h-11"

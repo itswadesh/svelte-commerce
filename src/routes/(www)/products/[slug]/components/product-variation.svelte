@@ -151,11 +151,11 @@
      `{#each}` blocks below update the same DOM nodes in place, so focus, hover and the pressed
      state survive a selection. -->
 {#if options.length}
-	<div class="edp-variation flex flex-col gap-5" data-testid="product-variants">
+	<div class="edp-variation flex flex-col gap-4" data-testid="product-variants">
 		{#each options as option (option.id)}
 			{@const selectedValue = selectedValueOf(option)}
-			<div class="flex flex-col gap-3">
-				<div class="flex items-center justify-between gap-3">
+			<div class="flex flex-col gap-2">
+				<div class="flex min-h-6 items-center justify-between gap-3">
 					<h2 class="edp-opt-label flex items-baseline gap-1.5 text-sm font-semibold text-foreground">
 						<span>{option.title}</span>
 						{#if selectedValue}
@@ -223,7 +223,8 @@
 	   rule is gated under [data-theme='default']. */
 	:global([data-theme='default'] .edp-opt-label) {
 		font-family: var(--ed-body);
-		font-size: 0.72rem;
+		/* 12px floor for supporting text. The row is min-h-6, so this does not reflow. */
+		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;

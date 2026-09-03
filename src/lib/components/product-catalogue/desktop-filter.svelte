@@ -33,19 +33,25 @@
 		if (x.length > 27) return x.substring(0, 24) + '...'
 		return x
 	}
+
+	// max-height, not height. As a fixed height the rail was always a full viewport tall, so a store
+	// with one price filter drew an 866px column — and, with the wrapper's border-right, an 866px
+	// hairline — down the side of a two-row grid. It still scrolls internally when the facets are
+	// long. The old expression also emitted the literal `height: autopx` during SSR.
+	const panelHeightStyle = $derived(browser ? `max-height: ${Math.max(240, window.innerHeight - (filterState.containerTop || 0))}px` : '')
 </script>
 
 <div class="ed-df group sticky" style={`top: ${filterState.containerTop}px;`}>
 	<div
 		bind:this={filterState.container}
 		class={cn(
-			'ed-df__panel intra-gap flex min-w-56 flex-col overflow-y-auto !pb-20 scrollbar-none scrollbar-track-transparent scrollbar-thumb-transparent  group-hover:scrollbar-track-inherit group-hover:scrollbar-thumb-inherit',
+			'ed-df__panel intra-gap flex min-w-0 flex-col overflow-y-auto !pb-6 scrollbar-none scrollbar-track-transparent scrollbar-thumb-transparent  group-hover:scrollbar-track-inherit group-hover:scrollbar-thumb-inherit',
 			className
 		)}
-		style={`height: ${browser ? window?.innerHeight - (filterState.containerTop || 0) : 'auto'}px`}
+		style={panelHeightStyle}
 	>
 		<div class="flex items-center justify-between">
-			<p class="ed-df__title text-lg font-bold">Filters</p>
+			<p class="ed-df__title text-sm font-bold">Filters</p>
 
 			{#if filterState.anyFilterApplied}
 				<Button variant="link" size="sm" class="ed-df__clear h-auto p-0" onclick={filterState.clearFilters}>
@@ -55,7 +61,7 @@
 			{/if}
 		</div>
 
-		<div class="ed-df__rule w-full border-b border-gray-200"></div>
+		<div class="ed-df__rule w-full border-b border-border"></div>
 
 		<!-- Applied filters -->
 		<!-- <div class="flex w-full max-w-56 flex-col flex-wrap intra-gap text-[11px] text-gray-600">
@@ -95,7 +101,7 @@
 						bind:value={filterState.categorySearchQuery}
 						type="text"
 						placeholder="Search categories"
-						class="ed-df__search w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+						class="ed-df__search w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-input focus:outline-none focus:ring-2 focus:ring-primary"
 						onkeydown={filterState.handleCategorySearchKeyDown}
 						autofocus
 					/>
@@ -111,7 +117,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="ed-df__label text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>{taxonomy.many}</p>
+					<p class="ed-df__label text-sm font-bold uppercase text-foreground" in:fade={{ duration: 200, delay: 200 }}>{taxonomy.many}</p>
 					<Button
 						variant="ghost"
 						size="icon"
@@ -157,7 +163,7 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="ed-df__cat flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary"
+							<span class="ed-df__cat flex-1 py-0.5 capitalize text-muted-foreground transition-colors group-hover:text-primary"
 								>{formatCategoryName(category.name)}</span
 							>
 						</Button>
@@ -183,7 +189,7 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="ed-df__cat flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary"
+							<span class="ed-df__cat flex-1 py-0.5 capitalize text-muted-foreground transition-colors group-hover:text-primary"
 								>{formatCategoryName(category.name)}</span
 							>
 						</Button>
@@ -197,7 +203,7 @@
 
 		<!-- Tags List -->
 		{#if filterState.tags.length > 0}
-			<div class="ed-df__rule w-full border-b border-gray-200"></div>
+			<div class="ed-df__rule w-full border-b border-border"></div>
 
 			{#if filterState.showTagSearch}
 				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
@@ -205,7 +211,7 @@
 						bind:value={filterState.tagSearchQuery}
 						type="text"
 						placeholder="Search tags"
-						class="ed-df__search w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+						class="ed-df__search w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-input focus:outline-none focus:ring-2 focus:ring-primary"
 						onkeydown={filterState.handleTagSearchKeyDown}
 						autofocus
 					/>
@@ -221,9 +227,9 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="ed-df__label text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
+					<p class="ed-df__label text-sm font-bold uppercase text-foreground" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
 					<Button
-						class="flex w-8 items-center justify-center rounded-full text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700"
+						class="flex w-8 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground"
 						variant="ghost"
 						size="icon"
 						onclick={() => filterState.toggleTagSearch()}
@@ -262,7 +268,8 @@
 							/>
 							<label
 								for={`tag-${tag.slug || tag.name}`}
-								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">{tag.name}</label
+								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
+								>{tag.name}</label
 							>
 						</div>
 					{/each}
@@ -283,7 +290,8 @@
 							/>
 							<label
 								for={`tag-${tag.slug || tag.name}`}
-								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">{tag.name}</label
+								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
+								>{tag.name}</label
 							>
 						</div>
 					{/each}
@@ -293,7 +301,7 @@
 				{/if}
 			</div>
 
-			<div class="ed-df__rule w-full border-b border-gray-200"></div>
+			<div class="ed-df__rule w-full border-b border-border"></div>
 		{/if}
 
 		<!-- Price Filter. Backends that report no price stats (Vendure returns
@@ -301,11 +309,11 @@
 		     Min/Max boxes that filtered nothing, so the whole block is dropped unless the facets
 		     carry a real range. `max > min` also keeps the slider maths off a zero-width range. -->
 		{#if priceFilterSupported}
-			<p class="ed-df__label text-sm font-bold uppercase text-gray-900">Price Range</p>
+			<p class="ed-df__label text-sm font-bold uppercase text-foreground">Price Range</p>
 
-			<div class="ed-df__slider relative mr-5 mt-2">
+			<div class="ed-df__slider relative mr-5 mt-3">
 				<!-- Range slider track -->
-				<div class="ed-df__track absolute h-1 w-full rounded bg-gray-100">
+				<div class="ed-df__track absolute h-1 w-full rounded bg-muted">
 					<div
 						class="ed-df__fill absolute h-1 bg-primary"
 						style="left: {filterState.priceSliderLeftPercentage}%; right: {filterState.priceSliderRightPercentage}%"
@@ -320,7 +328,7 @@
 					min={filterState.minPossiblePrice}
 					max={filterState.maxPossiblePrice}
 					onchange={filterState.handleMinPriceChange}
-					class="pointer-events-none absolute top-1/2 h-11 w-full -translate-y-1/2 appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
+					class="pointer-events-none absolute top-1/2 h-11 w-full -translate-y-1/2 appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-background [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-border [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-border"
 				/>
 				<input
 					type="range"
@@ -329,12 +337,14 @@
 					aria-label="Choose maximum price"
 					max={filterState.maxPossiblePrice}
 					onchange={filterState.handleMaxPriceChange}
-					class="pointer-events-none absolute top-1/2 h-11 w-full -translate-y-1/2 appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
+					class="pointer-events-none absolute top-1/2 h-11 w-full -translate-y-1/2 appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-background [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-border [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-border"
 				/>
 			</div>
 
 			<!-- Editable price bounds (kept in sync with the slider) -->
-			<div class="ed-df__prices mt-4 grid grid-cols-2 gap-3">
+			<!-- mt-2, not mt-4: .ed-df__slider is a zero-height box (its children are absolute), so the
+			     panel's own column gap already sits between the track and these inputs. -->
+			<div class="ed-df__prices mt-2 grid grid-cols-2 gap-3">
 				<Textbox
 					type="number"
 					label="Min ({page.data?.store?.currency?.symbol})"
@@ -353,10 +363,10 @@
 		<!-- Other generalized filters -->
 		{#if filterState.processedFilters}
 			{#each Object.keys(filterState.processedFilters) as key, idx}
-				<div class="ed-df__rule w-full border-b border-gray-200"></div>
+				<div class="ed-df__rule w-full border-b border-border"></div>
 
 				<div class="intra-gap flex flex-col">
-					<p class="ed-df__label text-sm font-bold uppercase text-gray-900">
+					<p class="ed-df__label text-sm font-bold uppercase text-foreground">
 						{filterState.formatFilterName(key)}
 					</p>
 
@@ -374,11 +384,11 @@
 									/>
 									<label
 										for={`gen-${value}`}
-										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900"
+										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
 									>
 										{#if value?.startsWith?.('#')}
 											<div class="flex items-center gap-2">
-												<div class="h-4 w-4 rounded-full border border-gray-200" style="background-color: {value};"></div>
+												<div class="h-4 w-4 rounded-full border border-border" style="background-color: {value};"></div>
 												{GetColorName(value)}
 											</div>
 										{:else}
@@ -411,11 +421,11 @@
 									/>
 									<label
 										for={`gen-${value}`}
-										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900"
+										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
 									>
 										{#if value?.startsWith?.('#')}
 											<div class="flex items-center gap-2">
-												<div class="h-4 w-4 rounded-full border border-gray-200" style="background-color: {value};"></div>
+												<div class="h-4 w-4 rounded-full border border-border" style="background-color: {value};"></div>
 												{GetColorName(value)}
 											</div>
 										{:else}
@@ -446,9 +456,12 @@
 	/* ---- Refined Editorial · desktop filter sidebar (default theme only) ----
 	   Every rule is gated to [data-theme='default']; wine/organic/lime/noor
 	   keep the original Tailwind styling. */
+	/* One rhythm for the whole rail. `intra-gap` is 16px, and because each group separator is
+	   itself a child, every hairline cost 32px of surrounding space. */
 	:global([data-theme='default']) .ed-df__panel {
 		font-family: var(--ed-body);
 		color: var(--ed-ink);
+		gap: 12px;
 	}
 
 	/* Panel title + Clear */
@@ -480,7 +493,7 @@
 	/* Quiet uppercase section labels */
 	:global([data-theme='default']) .ed-df__label {
 		font-family: var(--ed-body);
-		font-size: 0.72rem;
+		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.18em;
 		text-transform: uppercase;

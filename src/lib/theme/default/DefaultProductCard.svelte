@@ -8,12 +8,20 @@
 	import type { CartLineItem } from '$lib/core/types/index.js'
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
+	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 
 	const cartState = getCartState()
 
 	let { product, aspectRatio, hideCartControls = true, priority = false }: any = $props()
 
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
+
+	// The store's productImageAspectRatio is the fallback, not a hard-coded square. Only the
+	// homepage passed an explicit ratio, so the SAME three products rendered 2:3 portrait there
+	// and 1:1 square on /products, /collections/[slug] and the PDP recommendations — one catalogue,
+	// two shapes. LimeProductCard and NoorProductCard already resolve the store setting this way;
+	// this card was the only one in the family that dropped it.
+	const mediaRatio = $derived(toCssRatio(aspectRatio || page?.data?.store?.productImageAspectRatio, '1:1'))
 
 	// One resolved display name for the visible text, the tooltip, the alt text and the link
 	// label. A connector that normalises the product onto `name` used to leave the card with an
@@ -93,7 +101,7 @@
 			     one product had two crawlable URLs and the image and title on a single card pointed
 			     at different ones. -->
 			<a data-testid="product-card-link" class="dpc__media-link" href="/products/{product.slug}" aria-label="View details of {displayName}">
-				<figure title={displayName} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: {aspectRatio || '1 / 1'};">
+				<figure title={displayName} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: {mediaRatio};">
 					{#if imageSrc && !imageFailed}
 						<div class="dpc__frame" use:trackImage onloadcapture={() => (imageLoaded = true)} onerrorcapture={() => (imageFailed = true)}>
 							<LazyImg
@@ -434,7 +442,7 @@
 	}
 
 	.dpc__price-from {
-		font-size: 0.72rem;
+		font-size: 0.75rem;
 		font-weight: 500;
 		color: var(--ed-soft);
 	}

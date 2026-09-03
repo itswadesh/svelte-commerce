@@ -8,7 +8,7 @@
 </script>
 
 {#if data?.product?.productTags?.length > 0}
-	<div class=" edp-tags flex flex-wrap gap-2">
+	<div class="edp-tags flex flex-wrap gap-2">
 		{#each (data?.product.productTags || '').split(',') || [] as t}
 			<Badge variant="outline" class="edp-tag">{t}</Badge>
 		{/each}
@@ -17,17 +17,13 @@
 
 <style>
 	/* Refined Editorial — default theme only. */
-	:global([data-theme='default'] .edp-tags) {
-		margin-top: 8px;
-	}
-
 	:global([data-theme='default'] .edp-tag) {
 		border: 1px solid var(--ed-line) !important;
 		border-radius: var(--ed-radius) !important;
 		background: transparent !important;
 		color: var(--ed-soft) !important;
 		font-family: var(--ed-body);
-		font-size: 0.68rem;
+		font-size: 0.75rem;
 		font-weight: 500;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;

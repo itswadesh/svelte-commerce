@@ -5,9 +5,16 @@
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import { SearchService } from '$lib/core/services/index.js'
+	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { readAppliedFilters, urlWithoutAnyFilter } from './scope-filters.js'
 
 	const data = $derived(page.data)
+
+	// The ratio the product cards below actually resolve to, so the load-more skeletons reserve the
+	// height the incoming products will occupy. Hard-coding `aspect-square` here worked only while
+	// the card itself was hard-coded square; now that the card honours the store's
+	// productImageAspectRatio, a square placeholder would jump on every page of an infinite scroll.
+	const cardRatio = $derived(toCssRatio(page?.data?.store?.productImageAspectRatio, '1:1'))
 	const searchService = new SearchService(fetch)
 	const listingQueryKey = $derived.by(() => {
 		const params = new URLSearchParams(page.url.search)
@@ -145,7 +152,7 @@
 {#if !data.products?.data?.length}
 	<!-- Say what was looked for and offer the one action that helps. The old copy was a bare
 	     "No products found" over a link to /products, which also threw away the search term. -->
-	<div class="ed-empty flex flex-col items-center justify-center gap-2 px-6 py-20 text-center">
+	<div class="ed-empty flex flex-col items-center justify-center gap-2 px-6 py-12 text-center">
 		<p class="ed-empty__title text-lg font-medium text-foreground">
 			{#if searchTerm}
 				No products match “{searchTerm}”
@@ -163,14 +170,14 @@
 		{#if hasRemovableFilters}
 			<a
 				href={urlWithoutAnyFilter(page.url)}
-				class="ed-empty__link mt-3 inline-flex h-11 items-center rounded-md border border-input px-4 text-sm font-semibold transition-colors hover:bg-muted"
+				class="ed-empty__link mt-2 inline-flex h-11 items-center rounded-md border border-input px-4 text-sm font-semibold transition-colors hover:bg-muted"
 			>
 				Clear all filters
 			</a>
 		{:else if searchTerm}
 			<a
 				href="/products"
-				class="ed-empty__link mt-3 inline-flex h-11 items-center rounded-md border border-input px-4 text-sm font-semibold transition-colors hover:bg-muted"
+				class="ed-empty__link mt-2 inline-flex h-11 items-center rounded-md border border-input px-4 text-sm font-semibold transition-colors hover:bg-muted"
 			>
 				Browse all products
 			</a>
@@ -188,7 +195,7 @@
 	</div>
 
 	{#if hasMore || loadingMore}
-		<div use:infiniteScroll class="mt-6 flex min-h-16 items-center justify-center lg:hidden" aria-live="polite">
+		<div use:infiniteScroll class="mt-2 flex min-h-11 items-center justify-center lg:hidden" aria-live="polite">
 			{#if loadingMore}
 				<!-- Card-shaped, at the same aspect ratio as the real cards, so the page grows by the
 				     height the products will occupy instead of jumping when they arrive. This used to
@@ -196,7 +203,7 @@
 				<div class="intra-gap grid w-full grid-cols-2" aria-label="Loading more products">
 					{#each Array(2) as _}
 						<div class="flex flex-col gap-2">
-							<Skeleton class="aspect-square w-full rounded-md" />
+							<Skeleton class="w-full rounded-md" style="aspect-ratio: {cardRatio};" />
 							<Skeleton class="h-3 w-3/4" />
 							<Skeleton class="h-3 w-1/3" />
 						</div>
@@ -212,14 +219,14 @@
 					}}
 					class="text-xs font-semibold uppercase tracking-[0.16em] {loadFailed
 						? 'ed-empty__link text-primary underline underline-offset-4'
-						: 'ed-more text-gray-400'}"
+						: 'ed-more text-muted-foreground'}"
 				>
 					{loadFailed ? 'Retry' : 'Load more'}
 				</a>
 			{/if}
 		</div>
 	{:else if products.length > 0}
-		<p class="ed-end mt-8 text-center text-xs font-semibold uppercase tracking-[0.16em] text-gray-400 lg:hidden">You've reached the end</p>
+		<p class="ed-end mt-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground lg:hidden">You've reached the end</p>
 	{/if}
 
 	<div class="ed-pagination hidden lg:block">
@@ -230,22 +237,29 @@
 <style>
 	/* ---- Refined Editorial · listing grid (default theme only) ---- */
 
-	/* Generous, symmetric gutters echoing the homepage product grid */
+	/* One product-grid rhythm for the whole storefront: the homepage grid (.ed-products) and the
+	   PDP recommendations grid (.edp-related-grid) hold this identical clamp.
+	   Was clamp(16px, 2vw, 28px) / clamp(30px, 3.4vw, 52px) — a 49px trough between card rows at
+	   1440px, wider than the card's own title-plus-price block — then clamp(12px, 1.6vw, 24px) /
+	   clamp(22px, 2.2vw, 32px). All three grids already shared the 1.6vw middle term and had
+	   drifted only at the ends, so the same three products sat 22px apart vertically here and 14px
+	   apart on the homepage. Uniform, not split: the card's caption already separates one row from
+	   the next, so a taller row-gap only adds height. */
 	:global([data-theme='default']) .ed-grid {
-		column-gap: clamp(16px, 2vw, 28px);
-		row-gap: clamp(30px, 3.4vw, 52px);
+		column-gap: clamp(14px, 1.6vw, 22px);
+		row-gap: clamp(14px, 1.6vw, 22px);
 	}
 
-	/* Empty state */
+	/* Empty state. 58vh reserved most of a viewport for one sentence and a button. */
 	:global([data-theme='default']) .ed-empty {
-		min-height: 58vh;
-		gap: 14px;
+		min-height: 38vh;
+		gap: 10px;
 	}
 
 	:global([data-theme='default']) .ed-empty__title {
 		font-family: var(--ed-display);
 		font-weight: 500;
-		font-size: clamp(1.5rem, 3vw, 2.1rem);
+		font-size: clamp(1.25rem, 1.6vw, 1.5rem);
 		letter-spacing: -0.01em;
 		text-transform: none;
 		color: var(--ed-ink);
@@ -262,9 +276,10 @@
 	}
 
 	/* Editorial pagination — hairline chips, primary fill for the active page */
+	/* The .ed-plp__main column already contributes its 16px gap above this block. */
 	:global([data-theme='default'] .ed-pagination) {
 		font-family: var(--ed-body);
-		margin-top: clamp(28px, 4vw, 44px);
+		margin-top: clamp(8px, 1.2vw, 16px);
 	}
 
 	:global([data-theme='default'] .ed-pagination a),

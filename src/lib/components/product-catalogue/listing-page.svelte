@@ -51,13 +51,25 @@
 </script>
 
 <div class="ed-plp">
-	<div class="page-width ed-plp__crumbs hidden lg:block">
-		<Breadcrumb categoryHierarchy={data?.products?.categoryHierarchy} />
-	</div>
+	<!-- Gated on the same condition Breadcrumb itself renders under. Mounted unconditionally, the
+	     wrapper's own top padding drew a 34px empty band above the title on /products and on every
+	     listing whose backend sends no hierarchy. -->
+	{#if data?.products?.categoryHierarchy?.length}
+		<div class="page-width ed-plp__crumbs hidden lg:block">
+			<Breadcrumb categoryHierarchy={data?.products?.categoryHierarchy} />
+		</div>
+	{/if}
 
-	<div class="page-width inter-gap ed-plp__row flex h-full min-h-screen flex-row">
+	<!-- No min-h-screen. It forced the row to a full viewport height whatever the result count, so
+	     a short listing (or the last page of a long one) ended in several hundred pixels of void
+	     between the last card and the footer, with the filter rail's hairline running down through
+	     it. The rail is sticky and scrolls on its own; nothing here needed the floor. -->
+	<div class="page-width inter-gap ed-plp__row flex flex-row">
+		<!-- `w-`, not `max-w-`. As a max-width on a flex item whose content carried its own
+		     min-width, the rail measured 173px at 768px while the panel inside stayed 224px and spilled
+		     27px over the first column of products. -->
 		{#if Object.keys(data.products.facets || {}).length}
-			<div class="ed-plp__aside hidden max-w-[25%] border-input md:block">
+			<div class="ed-plp__aside hidden w-1/4 min-w-0 border-input md:block">
 				<DesktopFilter />
 			</div>
 		{/if}
@@ -109,20 +121,28 @@
 	:global([data-theme='default']) .ed-plp {
 		display: block;
 		background: var(--ed-surface);
-		padding-bottom: clamp(48px, 8vw, 100px);
+		padding-bottom: clamp(28px, 3.5vw, 56px);
 	}
 
 	:global([data-theme='default']) .ed-plp__crumbs {
-		padding-top: clamp(20px, 3vw, 34px);
+		padding-top: clamp(14px, 1.6vw, 20px);
 	}
 
+	/* Was clamp(24px, 3vw, 48px) / clamp(20px, 2.6vw, 34px): a 48px rail gutter and 34px above the
+	   title, on top of the 34px the breadcrumb block already spent. 32px is the desktop gutter. */
 	:global([data-theme='default']) .ed-plp__row {
-		gap: clamp(24px, 3vw, 48px);
-		padding-top: clamp(20px, 2.6vw, 34px);
+		gap: clamp(20px, 2.2vw, 32px);
+		padding-top: clamp(14px, 1.6vw, 20px);
+	}
+
+	/* The one rhythm for the main column — header, filter chips, grid, pagination. Every child that
+	   also carried its own margin has been zeroed so this gap is the only thing setting it. */
+	:global([data-theme='default']) .ed-plp__main {
+		gap: 16px;
 	}
 
 	:global([data-theme='default']) .ed-plp__aside {
 		border-right: 1px solid var(--ed-line);
-		padding-right: clamp(16px, 1.8vw, 30px);
+		padding-right: clamp(14px, 1.4vw, 24px);
 	}
 </style>

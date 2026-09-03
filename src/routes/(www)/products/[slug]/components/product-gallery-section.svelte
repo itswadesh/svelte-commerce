@@ -43,7 +43,7 @@
 
 <div class="relative">
 	{#if page?.data?.store?.plugins?.socialSharingButtons}
-		<div class="edp-gallery-float absolute right-2 top-2 z-30 block rounded-full bg-white">
+		<div class="edp-gallery-float absolute right-2 top-2 z-10 block rounded-full bg-card shadow-z-1">
 			<ShareButton productName={page.data?.product?.title} productImage={page.data?.product?.thumbnail} url={page?.url?.href} />
 		</div>
 	{/if}
@@ -54,8 +54,8 @@
 
 		<Drawer.Root direction="bottom" bind:open={productState.showSimilarDrawer}>
 			{#if productState.productsOfSameCategory?.length}
-				<Drawer.Trigger class="edp-gallery-float absolute bottom-12 right-4 rounded-full bg-white p-2 sm:hidden">
-					<div class="">
+				<Drawer.Trigger class="edp-gallery-float absolute bottom-10 right-3 rounded-full bg-card p-2 shadow-z-1 sm:hidden">
+					<div class="text-foreground">
 						<svg
 							class="[&>*]:stroke-[1.2]"
 							xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@
 							viewBox="0 0 20 20"
 							stroke="none"
 							style="height: 20px; width: 20px;"
-							><g stroke="#1C1C1C" stroke-width="1.5" clip-path="url(#icon-ymal_svg__a)"
+							><g stroke="currentColor" stroke-width="1.5" clip-path="url(#icon-ymal_svg__a)"
 								><rect width="8.9" height="13.7" x="5.55" y="3.15" rx="1.25"></rect><path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -104,10 +104,10 @@
 		     page blank beside the buy box. Reserve the same square the gallery would occupy and say
 		     plainly that there is no photograph, rather than letting the layout look broken. -->
 		<div
-			class="flex aspect-square w-full flex-col items-center justify-center gap-3 rounded-lg border border-border bg-muted text-muted-foreground"
+			class="flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-lg border bg-muted text-muted-foreground"
 			data-testid="product-image"
 		>
-			<ImageOff class="h-10 w-10" aria-hidden="true" />
+			<ImageOff class="h-8 w-8" aria-hidden="true" />
 			<p class="text-sm">No photo of this product yet</p>
 		</div>
 	{/if}
@@ -118,6 +118,5 @@
 	:global([data-theme='default'] .edp-gallery-float) {
 		background: var(--ed-surface);
 		border: 1px solid var(--ed-line);
-		box-shadow: 0 6px 20px -12px rgba(27, 26, 23, 0.3);
 	}
 </style>

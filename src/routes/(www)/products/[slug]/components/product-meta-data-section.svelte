@@ -8,8 +8,8 @@
 </script>
 
 {#if metadataEntries.length}
-	<div class="edp-meta mt-4">
-		<div class="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
+	<div class="edp-meta">
+		<div class="grid grid-cols-1 gap-3 md:grid-cols-2">
 			{#each metadataEntries as [key, value]}
 				<div class="card edp-meta-item">
 					<div class="card-header">
@@ -33,9 +33,9 @@
 
 	:global([data-theme='default'] .edp-meta-key) {
 		font-family: var(--ed-body);
-		font-size: 0.7rem;
+		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.12em;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: var(--ed-soft);
 		margin: 0 0 4px;
@@ -43,7 +43,7 @@
 
 	:global([data-theme='default'] .edp-meta-val) {
 		font-family: var(--ed-body);
-		font-size: 0.92rem;
+		font-size: 0.875rem;
 		color: var(--ed-ink);
 	}
 </style>

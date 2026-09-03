@@ -73,12 +73,18 @@
 
 {#snippet wishlistButton()}
 	{#if showWishlist && productState.wishlistPluginEnabled}
-		<Button variant="outline" size="icon" class="edp-wish h-full w-[4rem]" onclick={productState.handleWishlistClick} aria-label="Add to wishlist">
+		<Button
+			variant="outline"
+			size="icon"
+			class="edp-wish h-full w-11 shrink-0 md:w-10"
+			onclick={productState.handleWishlistClick}
+			aria-label="Add to wishlist"
+		>
 			{#if productState.wishlistLoading}
-				<Spinner size={6} label="Updating wishlist" class="text-primary" />
+				<Spinner size={5} label="Updating wishlist" class="text-primary" />
 			{:else}
 				<HeartIcon
-					class="!h-6 !w-6 stroke-[1.3] {productState.wishlisted
+					class="!h-5 !w-5 stroke-[1.3] {productState.wishlisted
 						? 'scale-110 fill-destructive text-destructive'
 						: 'text-foreground'} transition-transform duration-fast"
 				/>
@@ -93,17 +99,17 @@
 {#if productState.showAddToCartMessage && !productState.cartState?.isOpen && !compact}
 	<div
 		transition:fly={{ x: 50, duration: 300, easing: quintOut }}
-		class="edp-toast fixed right-4 top-24 z-toast hidden w-full max-w-sm rounded-lg border bg-card p-4 shadow-z-10 md:block"
+		class="edp-toast fixed right-4 top-24 z-toast hidden w-full max-w-sm rounded-lg border bg-card p-3 shadow-z-10 md:block"
 		role="status"
 	>
-		<div class="flex items-center gap-4">
+		<div class="flex items-center gap-3">
 			{#if thumbnail}
-				<div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border bg-muted">
-					<img src={thumbnail} alt="" width="64" height="64" class="h-full w-full object-contain" />
+				<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md border bg-muted">
+					<img src={thumbnail} alt="" width="48" height="48" class="h-full w-full object-contain" />
 				</div>
 			{/if}
 			<div class="flex flex-1 flex-col gap-1">
-				<p class="text-xs font-bold uppercase tracking-tight text-foreground">Added to bag</p>
+				<p class="text-sm font-semibold text-foreground">Added to bag</p>
 				<p class="line-clamp-1 text-xs text-muted-foreground">{page.data?.product?.title}</p>
 				<p class="text-xs font-bold text-foreground">
 					{formatPrice(productState.selectedVariant?.price || page.data?.product?.price, page.data?.store?.currency?.code)}
@@ -123,7 +129,7 @@
 {/if}
 
 <div class="flex flex-col gap-2">
-	<div class="flex h-[3.25rem] items-center gap-3 sm:h-[3.5rem] lg:h-[3rem]">
+	<div class="flex h-11 items-center gap-2 md:h-10">
 		<div class="h-full flex-1">
 			{#if enquiryPlugin?.active}
 				<EnquiryModal
@@ -140,7 +146,7 @@
 				     never a different button in its place. -->
 				<Button
 					data-testid="add-to-cart-button"
-					class="edp-atc flex h-full w-full items-center justify-center gap-2 text-base font-semibold uppercase {justAdded
+					class="edp-atc flex h-full w-full items-center justify-center gap-2 text-sm font-semibold uppercase {justAdded
 						? 'bg-success text-success-foreground hover:bg-success'
 						: ''}"
 					size="lg"
@@ -152,12 +158,12 @@
 						<Spinner label="Adding to bag" />
 						<span>Adding…</span>
 					{:else if justAdded}
-						<Check class="h-5 w-5" aria-hidden="true" />
+						<Check class="h-4 w-4" aria-hidden="true" />
 						<span>Added</span>
 					{:else if outOfStock}
 						<span>Out of stock</span>
 					{:else}
-						<ShoppingBag class="h-5 w-5" aria-hidden="true" />
+						<ShoppingBag class="h-4 w-4" aria-hidden="true" />
 						<span>Add to bag</span>
 					{/if}
 				</Button>
@@ -180,7 +186,7 @@
 	/* Refined Editorial — default theme only. Primary fill CTA + bordered ghost wishlist. */
 	:global([data-theme='default'] .edp-atc) {
 		border-radius: var(--ed-radius) !important;
-		font-size: 0.82rem !important;
+		font-size: 0.8rem !important;
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		transition:

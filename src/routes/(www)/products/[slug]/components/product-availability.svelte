@@ -39,7 +39,7 @@
 
 <!-- aria-live: price, SKU and this line all change together when a variant is picked, and this is
      the one that decides whether the shopper can buy at all. -->
-<div class="edp-avail flex min-h-[1.75rem] items-center" aria-live="polite" data-testid="product-availability">
+<div class="edp-avail flex min-h-7 items-center" aria-live="polite" data-testid="product-availability">
 	{#if status === 'unknown'}
 		<Skeleton class="h-5 w-28" />
 	{:else if status === 'out'}
