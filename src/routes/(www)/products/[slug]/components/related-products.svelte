@@ -6,10 +6,10 @@
 </script>
 
 {#if productState.isLoadingRelatedProducts || productState.productsOfSameCategory.length > 0}
-	<div class="mx-2 mb-20 mt-4 edp-related">
+	<div class="edp-related mx-2 mb-20 mt-4">
 		<header class="edp-related-head">
 			<span class="edp-related-eyebrow">More to explore</span>
-			<h2 class="my-4 text-center text-2xl font-bold edp-related-title">Related Products</h2>
+			<h2 class="edp-related-title my-4 text-center text-2xl font-bold">Related Products</h2>
 		</header>
 
 		{#if productState.isLoadingRelatedProducts}
@@ -17,7 +17,7 @@
 				<div class="border-primary-500 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
 			</div>
 		{:else}
-			<div class="grid grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 edp-related-grid">
+			<div class="edp-related-grid grid grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
 				{#each productState.productsOfSameCategory as { id, slug, thumbnail, price, mrp, title, vendor, variants }}
 					<ProductCard
 						product={{

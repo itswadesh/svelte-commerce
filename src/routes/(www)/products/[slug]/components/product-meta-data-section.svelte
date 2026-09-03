@@ -8,7 +8,7 @@
 </script>
 
 {#if metadataEntries.length}
-	<div class="mt-4 edp-meta">
+	<div class="edp-meta mt-4">
 		<div class="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
 			{#each metadataEntries as [key, value]}
 				<div class="card edp-meta-item">

@@ -74,8 +74,8 @@
 	</style>
 {/if}
 
-<div class="flex flex-col-reverse gap-4 sm:flex-row edp-gallery">
-  <!-- Preview images -->
+<div class="edp-gallery flex flex-col-reverse gap-4 sm:flex-row">
+	<!-- Preview images -->
 	<div class="hidden sm:flex sm:w-24 sm:flex-col">
 		<Carousel.Root
 			opts={{ align: 'start', loop: true }}
@@ -85,15 +85,15 @@
 					previewCarouselApi = api
 				}
 			}}
-			class="relative w-full h-[480px]"
+			class="relative h-[480px] w-full"
 		>
 			<Carousel.Content class="-mt-2 h-[480px]">
 				{#each images as img, idx}
 					{@const youtubeId = getYoutubeId(img)}
-					<Carousel.Item class="pt-2 basis-1/5">
+					<Carousel.Item class="basis-1/5 pt-2">
 						<div
 							class={cn(
-								'relative overflow-hidden rounded-radius border p-0.5 w-full aspect-square',
+								'relative aspect-square w-full overflow-hidden rounded-radius border p-0.5',
 								idx === currentIndex ? 'border-primary' : 'border-muted'
 							)}
 							role="button"
@@ -137,17 +137,17 @@
 					</Carousel.Item>
 				{/each}
 			</Carousel.Content>
-      {#if images.length > 4}
-			  <div class="hidden sm:block">
-			  	<Carousel.Previous class="-top-4 left-1/2 -translate-x-1/2 rotate-90 size-7 [&>svg]:size-3.5" />
-			  	<Carousel.Next class="-bottom-4 left-1/2 -translate-x-1/2 rotate-90 size-7 [&>svg]:size-3.5" />
-			  </div>
-      {/if}
+			{#if images.length > 4}
+				<div class="hidden sm:block">
+					<Carousel.Previous class="-top-4 left-1/2 size-7 -translate-x-1/2 rotate-90 [&>svg]:size-3.5" />
+					<Carousel.Next class="-bottom-4 left-1/2 size-7 -translate-x-1/2 rotate-90 [&>svg]:size-3.5" />
+				</div>
+			{/if}
 		</Carousel.Root>
 	</div>
 
 	<div class="flex-1">
-    <!-- Main Preview Image -->
+		<!-- Main Preview Image -->
 		<Carousel.Root
 			opts={{ loop: true }}
 			setApi={(api) => {
@@ -283,7 +283,11 @@
 										Video not supported
 									</video>
 								{:else}
-									<LazyImg src={img} alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`} class="max-h-[90vh]" />
+									<LazyImg
+										src={img}
+										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
+										class="max-h-[90vh]"
+									/>
 								{/if}
 							</div>
 						</Carousel.Item>
@@ -300,7 +304,9 @@
 					<Button
 						variant="ghost"
 						style="aspect-ratio: {aspectWidth}/{aspectHeight};"
-						class="relative h-24  overflow-hidden rounded-radius p-0 {currentIndex === i ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : ''}"
+						class="relative h-24  overflow-hidden rounded-radius p-0 {currentIndex === i
+							? 'ring-2 ring-primary ring-offset-2 ring-offset-black'
+							: ''}"
 						onclick={() => {
 							if (carouselApi) {
 								carouselApi.scrollTo(i)

@@ -7,13 +7,13 @@
 	const productState = useProductState()
 </script>
 
-<div class="intra-gap flex flex-col edp-variation">
+<div class="intra-gap edp-variation flex flex-col">
 	{#key productState.productOptions}
 		{#each productState.productOptions || [] as option}
 			<div class="flex flex-col gap-3">
 				<div class="flex items-center justify-between">
 					<div class="flex items-center gap-2">
-					  <span class="text-sm font-semibold  text-gray-900 dark:text-gray-100 edp-opt-label">
+						<span class="edp-opt-label text-sm font-semibold text-gray-900 dark:text-gray-100">
 							{option.title}
 
 							{#if productState.selectedVariant?.options?.find((opt: Record<string, any>) => option.id === opt.optionId)?.value}
@@ -21,14 +21,21 @@
 							{/if}
 						</span>
 
-						<span class="font-semibold edp-opt-value">{productState.selectedVariant?.options?.find((opt: Record<string, any>) => option.id === opt.optionId)?.value}</span>
+						<span class="edp-opt-value font-semibold"
+							>{productState.selectedVariant?.options?.find((opt: Record<string, any>) => option.id === opt.optionId)?.value}</span
+						>
 					</div>
 					{#if option.type === 'Size'}
 						<SizeGuideDrawer />
 					{/if}
 				</div>
 
-				<!-- role="group" + aria-label ties the swatches/pills to "Size"/"Colour", and aria-pressed
+				<!-- `selectable === false`, not `!selectable`. The flag is only ever set by a client effect, so
+				     the server rendered every size and colour as disabled and the theme struck each one
+				     through: a shopper's first impression was a product whose options were all crossed out,
+				     and it stayed that way permanently without JavaScript. Undefined now means available, and
+				     the disabled treatment is reserved for values the API has actually excluded.
+				     role="group" + aria-label ties the swatches/pills to "Size"/"Colour", and aria-pressed
 				     is the only thing that tells AT which one is currently selected — the selected state
 				     was otherwise a class swap (ring / edp-on) and invisible to screen readers. -->
 				<div class="flex flex-wrap items-center gap-3" role="group" aria-label={option.title}>
@@ -38,12 +45,9 @@
 								variant="outline"
 								size="icon"
 								aria-pressed={productState.isVariantOptionSelected(option.id, v.value)}
-								class="edp-swatch group relative h-10 w-10 rounded-full p-0.5 {productState.isVariantOptionSelected(
-									option.id,
-									v.value
-								)
+								class="edp-swatch group relative h-10 w-10 rounded-full p-0.5 {productState.isVariantOptionSelected(option.id, v.value)
 									? 'edp-on ring-2 ring-primary ring-offset-2'
-									: ''} {!v?.selectable ? 'opacity-40' : ''}"
+									: ''} {v?.selectable === false ? 'opacity-40' : ''}"
 								onclick={() => productState.selectVariant({ option, value: v })}
 								title={v.value}
 							>
@@ -54,9 +58,8 @@
 							<Button
 								variant={productState.isVariantOptionSelected(option.id, v.value) ? 'default' : 'plain'}
 								aria-pressed={productState.isVariantOptionSelected(option.id, v.value)}
-								disabled={!v?.selectable}
-								class="edp-pill min-w-[3.5rem] !bg-primary px-4 py-2 {
-                  productState.isVariantOptionSelected(option.id, v.value)
+								disabled={v?.selectable === false}
+								class="edp-pill min-w-[3.5rem] !bg-primary px-4 py-2 {productState.isVariantOptionSelected(option.id, v.value)
 									? 'edp-on border !border-accent !bg-transparent'
 									: '!bg-accent text-accent-foreground'}"
 								onclick={() => productState.selectVariant({ option, value: v })}
@@ -130,4 +133,3 @@
 		box-shadow: none !important;
 	}
 </style>
-

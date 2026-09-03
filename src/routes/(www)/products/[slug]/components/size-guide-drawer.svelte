@@ -46,21 +46,17 @@
 
 <Drawer.Root bind:open direction={innerWidth > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
 	<Drawer.Trigger>
-		<span class="text-sm font-medium text-primary underline-offset-4 hover:underline inline-flex items-center gap-1 edp-sizeguide">
+		<span class="edp-sizeguide inline-flex items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline">
 			<Ruler class="h-3.5 w-3.5" />
 			Size Guide
 		</span>
 	</Drawer.Trigger>
 
-	<Drawer.Content
-		class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-screen sm:w-fit sm:max-w-md [&>div:first-child]:hidden"
-	>
-		<div in:fly={{ duration: 300 }} class="mx-auto w-full max-w-md pb-8 sm:pb-0 sm:h-screen sm:flex sm:flex-col">
+	<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-screen sm:w-fit sm:max-w-md [&>div:first-child]:hidden">
+		<div in:fly={{ duration: 300 }} class="mx-auto w-full max-w-md pb-8 sm:flex sm:h-screen sm:flex-col sm:pb-0">
 			<Drawer.Header class="text-left">
 				<Drawer.Title>Ring Size Guide</Drawer.Title>
-				<Drawer.Description class="text-sm text-muted-foreground">
-					Find your perfect fit using the chart below or measure at home.
-				</Drawer.Description>
+				<Drawer.Description class="text-sm text-muted-foreground">Find your perfect fit using the chart below or measure at home.</Drawer.Description>
 				<Drawer.Close
 					class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
 				>
@@ -105,9 +101,7 @@
 					<ol class="space-y-4">
 						{#each measureSteps as step, i}
 							<li class="flex gap-3">
-								<span
-									class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
-								>
+								<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
 									{i + 1}
 								</span>
 								<span class="text-sm leading-relaxed text-foreground">{step}</span>

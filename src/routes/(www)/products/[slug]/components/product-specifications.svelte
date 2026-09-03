@@ -13,7 +13,10 @@
 </script>
 
 <div class="edp-spec">
-	<button class="flex w-full items-center justify-between gap-2 text-semibold font-bold pb-2 text-gray-900 intra-pt" onclick={() => (isOpen = !isOpen)}>
+	<button
+		class="text-semibold intra-pt flex w-full items-center justify-between gap-2 pb-2 font-bold text-gray-900"
+		onclick={() => (isOpen = !isOpen)}
+	>
 		<span class="edp-acc-label">Product Specifications</span>
 
 		{#if isOpen}
@@ -26,68 +29,68 @@
 	{#if isOpen}
 		<div class="grid grid-cols-2 gap-y-4">
 			<!-- SKU and Barcode Section -->
-				{#if productState.selectedVariant?.sku || data?.product?.sku}
-					<div class="flex flex-col gap-1">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">SKU</p>
-						<p class="break-words break-all text-sm font-medium text-gray-600">
-							{String(productState.selectedVariant?.sku || data?.product?.sku)}
-						</p>
-					</div>
-				{/if}
+			{#if productState.selectedVariant?.sku || data?.product?.sku}
+				<div class="flex flex-col gap-1">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">SKU</p>
+					<p class="break-words break-all text-sm font-medium text-gray-600">
+						{String(productState.selectedVariant?.sku || data?.product?.sku)}
+					</p>
+				</div>
+			{/if}
 
-				{#if productState.selectedVariant?.barcode || data?.product?.barcode}
-					<div class="flex flex-col gap-1 text-left">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Barcode</p>
-						<p class="text-sm font-medium text-gray-900">
-							{productState.selectedVariant?.barcode || data?.product?.barcode}
-						</p>
-					</div>
-				{/if}
+			{#if productState.selectedVariant?.barcode || data?.product?.barcode}
+				<div class="flex flex-col gap-1 text-left">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Barcode</p>
+					<p class="text-sm font-medium text-gray-900">
+						{productState.selectedVariant?.barcode || data?.product?.barcode}
+					</p>
+				</div>
+			{/if}
 
 			<!-- Dimensions and Weight Section -->
-				{#if productState.selectedVariant?.width || data?.product?.width || productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.length || data?.product?.length}
-					<div class="flex flex-col gap-1">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Dimensions</p>
-						<p class="text-sm font-medium text-gray-900">
-							{#if productState.selectedVariant?.width || data?.product?.width}
-								W-{productState.selectedVariant?.width || data?.product?.width}
-							{/if}
+			{#if productState.selectedVariant?.width || data?.product?.width || productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.length || data?.product?.length}
+				<div class="flex flex-col gap-1">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Dimensions</p>
+					<p class="text-sm font-medium text-gray-900">
+						{#if productState.selectedVariant?.width || data?.product?.width}
+							W-{productState.selectedVariant?.width || data?.product?.width}
+						{/if}
 
-							{#if (productState.selectedVariant?.width || data?.product?.width) && (productState.selectedVariant?.height || data?.product?.height)}
-								x
-							{/if}
+						{#if (productState.selectedVariant?.width || data?.product?.width) && (productState.selectedVariant?.height || data?.product?.height)}
+							x
+						{/if}
 
-							{#if productState.selectedVariant?.height || data?.product?.height}
-								H-{productState.selectedVariant?.height || data?.product?.height}
-							{/if}
+						{#if productState.selectedVariant?.height || data?.product?.height}
+							H-{productState.selectedVariant?.height || data?.product?.height}
+						{/if}
 
-							{#if (productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.width || data?.product?.width) && (productState.selectedVariant?.length || data?.product?.length)}
-								x
-							{/if}
+						{#if (productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.width || data?.product?.width) && (productState.selectedVariant?.length || data?.product?.length)}
+							x
+						{/if}
 
-							{#if productState.selectedVariant?.length || data?.product?.length}
-								L-{productState.selectedVariant?.length || data?.product?.length}
-							{/if}
-						</p>
-					</div>
-				{/if}
+						{#if productState.selectedVariant?.length || data?.product?.length}
+							L-{productState.selectedVariant?.length || data?.product?.length}
+						{/if}
+					</p>
+				</div>
+			{/if}
 
-				{#if productState.selectedVariant?.weight || data?.product?.weight}
-					<div class="flex flex-col gap-1 text-right">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Weight</p>
-						<p class="text-sm font-medium text-gray-900">
-							{productState.selectedVariant?.weight || data?.product?.weight}
-							{page?.data?.store.weight_unit || settingState?.selectedStore?.weight_unit}
-						</p>
-					</div>
-				{/if}
+			{#if productState.selectedVariant?.weight || data?.product?.weight}
+				<div class="flex flex-col gap-1 text-right">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Weight</p>
+					<p class="text-sm font-medium text-gray-900">
+						{productState.selectedVariant?.weight || data?.product?.weight}
+						{page?.data?.store.weight_unit || settingState?.selectedStore?.weight_unit}
+					</p>
+				</div>
+			{/if}
 
-				{#if data?.product?.originCountry}
-					<div class="flex flex-col gap-1">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Origin</p>
-						<p class="text-sm font-medium text-gray-900">{data?.product?.originCountry}</p>
-					</div>
-				{/if}
+			{#if data?.product?.originCountry}
+				<div class="flex flex-col gap-1">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Origin</p>
+					<p class="text-sm font-medium text-gray-900">{data?.product?.originCountry}</p>
+				</div>
+			{/if}
 
 			{#each data?.product?.attributes as { name, value }}
 				<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
@@ -99,7 +102,7 @@
 			{/each}
 
 			{#if productState.selectedVariant?.qrcode || data?.product?.qrcode}
-				<div class="mt-4 flex flex-col items-center gap-2 rounded-lg bg-gray-50 p-4 edp-spec-qr">
+				<div class="edp-spec-qr mt-4 flex flex-col items-center gap-2 rounded-lg bg-gray-50 p-4">
 					<p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Product Authenticity</p>
 					<QrCodeDisplayer base64Data={productState.selectedVariant?.qrcode || data?.product?.qrcode} />
 				</div>

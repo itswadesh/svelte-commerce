@@ -15,23 +15,15 @@
 
 	let showEnquiryModal = $state(false)
 
-  function handleClick() {
-    if (productState.cartState?.showCheckout)
-      productState.cartState.isOpen = true
-    else
-      productState.handleAddToCart()
-  }
+	function handleClick() {
+		if (productState.cartState?.showCheckout) productState.cartState.isOpen = true
+		else productState.handleAddToCart()
+	}
 </script>
 
 {#snippet wishlistButton()}
 	{#if showWishlist && productState.wishlistPluginEnabled}
-		<Button
-			variant="outline"
-			size="icon"
-			class="h-full w-[4rem] edp-wish"
-			onclick={productState.handleWishlistClick}
-			aria-label="Add to wishlist"
-		>
+		<Button variant="outline" size="icon" class="edp-wish h-full w-[4rem]" onclick={productState.handleWishlistClick} aria-label="Add to wishlist">
 			{#if productState.wishlistLoading}
 				<LoaderCircle class="h-7 w-7 animate-spin text-primary" />
 			{:else}
@@ -52,15 +44,11 @@
 	<!-- Added to cart message toast-like notification -->
 	<div
 		transition:fly={{ x: 50, duration: 300, easing: quintOut }}
-		class="fixed hidden md:block right-4 top-24 z-[100] w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl edp-toast"
+		class="edp-toast fixed right-4 top-24 z-[100] hidden w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl md:block"
 	>
 		<div class="flex items-center gap-4">
 			<div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-100 bg-gray-50">
-				<img
-					src={productState.selectedVariant?.image || page.data?.product?.thumbnail}
-					alt="Product"
-					class="h-full w-full object-contain"
-				/>
+				<img src={productState.selectedVariant?.image || page.data?.product?.thumbnail} alt="Product" class="h-full w-full object-contain" />
 			</div>
 			<div class="flex flex-1 flex-col gap-1">
 				<p class="text-xs font-bold uppercase tracking-tight text-gray-900">Added to Bag</p>
@@ -83,7 +71,7 @@
 {/if}
 
 <div class="flex h-[4rem] items-center gap-4 lg:h-[3rem]">
-	<div class="flex-1 h-full">
+	<div class="h-full flex-1">
 		{#if enquiryPlugin?.active}
 			<EnquiryModal
 				onClose={() => (showEnquiryModal = false)}
@@ -91,31 +79,28 @@
 				productId={page.data?.product?.id}
 				productTitle={page.data?.product?.title}
 			/>
-			<Button
-				onclick={() => (showEnquiryModal = true)}
-				class="h-full w-full edp-atc"
-			>
+			<Button onclick={() => (showEnquiryModal = true)} class="edp-atc h-full w-full">
 				{enquiryPlugin?.buttonText || 'Enquire'}
 			</Button>
 		{:else}
 			<div class="flex h-full w-full gap-2">
 				<Button
-					class="edp-atc h-full flex justify-center items-center gap-2 text-base flex-1 uppercase font-semibold {productState
-						.cartState?.addToCartMessage == 'Added to cart'
+					class="edp-atc flex h-full flex-1 items-center justify-center gap-2 text-base font-semibold uppercase {productState.cartState
+						?.addToCartMessage == 'Added to cart'
 						? 'bg-green-600 hover:bg-green-700'
 						: ''}"
 					size="lg"
 					disabled={productState.addToCartButtonDisabled}
 					onclick={handleClick}
 				>
-					{#if !productState.isLoading && (!page.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? (productState.selectedVariant?.manageInventory && !productState.selectedVariant?.stock) : !page.data?.product.stock)}
+					{#if !productState.isLoading && (!page.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? productState.selectedVariant?.manageInventory && !productState.selectedVariant?.stock : !page.data?.product.stock)}
 						Out of Stock
 					{:else if productState.cartState?.showCheckout}
 						Go to bag
 						<ChevronRight class="h-5 w-5" />
 					{:else}
 						<ShoppingBag class="h-5 w-5" />
-					<span class="">Add to bag</span>
+						<span class="">Add to bag</span>
 					{/if}
 				</Button>
 
