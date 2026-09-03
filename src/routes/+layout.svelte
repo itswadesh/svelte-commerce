@@ -89,6 +89,26 @@
 	const STYLE_CLOSE = '</sty' + 'le>'
 	const themeStyleTag = $derived(data?.store?.themeCss ? STYLE_OPEN + data.store.themeCss + STYLE_CLOSE : '')
 
+	// The merchant palette, in the SSR head rather than applied after hydration. StorePalette writes
+	// the same custom properties onto the shell in an effect, so until this existed the storefront
+	// painted the theme palette first and visibly flipped to the brand one once JavaScript ran —
+	// most obvious on muted surfaces and on every primary button. Emitting it here means the first
+	// paint is already correct; StorePalette still runs, so a runtime palette change keeps working.
+	const paletteStyleTag = $derived.by(() => {
+		if ((data?.theme?.name || 'default') !== 'default') return ''
+		const vars = data?.store?.cssVariables ?? {}
+		const declarations = Object.entries(vars)
+			.filter(([key, value]) => typeof value === 'string' && value && key.startsWith('--'))
+			.map(([key, value]) => key + ': ' + String(value).replaceAll(',', '').replace('hsl(', '').replace(')', '') + ';')
+			.join(' ')
+		if (!declarations) return ''
+		// Doubled attribute selector on purpose: Tailwind 3 emits its @layer base rules as plain,
+		// unlayered CSS, so the theme block and this one would tie on specificity and the winner would
+		// depend on stylesheet order — which differs between the dev server and a production build.
+		// (0,2,0) settles it, and matches what StorePalette already does with inline styles.
+		return STYLE_OPEN.replace('theme-css', 'store-palette') + "[data-theme='default'][data-theme] { " + declarations + ' }' + STYLE_CLOSE
+	})
+
 	// Stale-client protection. SvelteKit's `updated` store flips to true once the
 	// deployed build (via _app/version.json polling) no longer matches the running
 	// client. We then load fresh code so mobile/PWA users never keep running an
@@ -177,6 +197,9 @@
 	{/if}
 	{#if themeStyleTag}
 		{@html themeStyleTag}
+	{/if}
+	{#if paletteStyleTag}
+		{@html paletteStyleTag}
 	{/if}
 	{#if data?.store?.plugins?.headerScripts?.active}
 		{@html data?.store?.plugins?.headerScripts?.html}
