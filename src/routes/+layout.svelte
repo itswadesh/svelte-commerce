@@ -32,6 +32,9 @@
 	const themeName = $derived(data?.theme?.name || 'default')
 	const themeFontsUrl = $derived(getThemeFontsUrl(themeName))
 
+	// A navigation that changes the page, not just its query string.
+	const isCrossRouteNavigation = $derived(!!$navigating && $navigating.to?.url.pathname !== $navigating.from?.url.pathname)
+
 	// Second carrier for the active theme, on <html>. Portalled overlays — every bits-ui dialog,
 	// sheet, drawer, popover, dropdown and tooltip — attach to `document.body`, which sits above the
 	// shell below, so without this they resolve the `:root` fallback palette, radius and font
@@ -192,7 +195,11 @@
 	<!-- Background/min-height wrapper only. NOT a <main>: every group layout renders its own
 	     <main>, and nesting them ships duplicate main landmarks on all 55 routes. -->
 	<div class="min-h-screen bg-background">
-		{#if !!$navigating}
+		<!-- Cross-route only. Filter, sort and pagination changes navigate to the same route, and this
+		     overlay blurred the whole page behind a modal spinner for them, which said nothing about
+		     which region was updating and blocked the controls the shopper had just used. Those
+		     refinements now report progress on the grid itself. -->
+		{#if isCrossRouteNavigation}
 			<!-- Delayed spinner: fast navigations finish without a loader flash; only
 			     navigations still pending after 700ms get the overlay. -->
 			{#await new Promise((resolve) => setTimeout(resolve, 700)) then _}
