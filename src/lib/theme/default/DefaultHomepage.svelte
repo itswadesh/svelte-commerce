@@ -363,9 +363,9 @@
 				</div>
 				<div class="ed-hero__media">
 					<img
-						src={ed.hero.image}
 						srcset={responsiveSrcset(ed.hero.image)}
 						sizes="(min-width: 1024px) 46vw, 100vw"
+						src={ed.hero.image}
 						width="1400"
 						height="1190"
 						alt={ed.hero.imageAlt}
@@ -500,9 +500,9 @@
 			<section class="ed-wrap ed-banner">
 				<div class="ed-banner__media">
 					<img
-						src={ed.banner.image}
 						srcset={responsiveSrcset(ed.banner.image)}
 						sizes="(min-width: 1024px) 46vw, 100vw"
+						src={ed.banner.image}
 						width="1400"
 						height="1050"
 						alt={ed.banner.imageAlt}

@@ -325,7 +325,7 @@
 					</Button>
 				</div>
 
-				<div class="max-h-[calc(100vh-140px)] overflow-y-auto px-6 py-6 sm:max-h-[calc(90vh-170px)] sm:px-8 sm:py-8">
+				<div class="max-h-[calc(100dvh-140px)] overflow-y-auto px-6 py-6 sm:max-h-[calc(90vh-170px)] sm:px-8 sm:py-8">
 					<div class="space-y-8">
 						<!-- Rating Selection -->
 						<div class="space-y-3">

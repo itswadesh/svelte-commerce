@@ -52,8 +52,8 @@
 		</span>
 	</Drawer.Trigger>
 
-	<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-screen sm:w-fit sm:max-w-md [&>div:first-child]:hidden">
-		<div in:fly={{ duration: 300 }} class="mx-auto w-full max-w-md pb-8 sm:flex sm:h-screen sm:flex-col sm:pb-0">
+	<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-[100dvh] sm:w-fit sm:max-w-md [&>div:first-child]:hidden">
+		<div in:fly={{ duration: 300 }} class="mx-auto w-full max-w-md pb-8 sm:flex sm:h-[100dvh] sm:flex-col sm:pb-0">
 			<Drawer.Header class="text-left">
 				<Drawer.Title>Ring Size Guide</Drawer.Title>
 				<Drawer.Description class="text-sm text-muted-foreground">Find your perfect fit using the chart below or measure at home.</Drawer.Description>

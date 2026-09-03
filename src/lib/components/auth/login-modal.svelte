@@ -181,7 +181,7 @@
 	hideHeader
 	hideFooter
 	useMaxHeight
-	class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none"
+	class="p-0 max-sm:h-[100dvh] max-sm:w-screen max-sm:!rounded-none"
 	hAuto
 	wAuto
 >
