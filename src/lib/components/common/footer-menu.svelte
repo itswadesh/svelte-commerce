@@ -11,18 +11,22 @@
 					<h4 class="text-xs font-bold uppercase tracking-widest text-foreground">{item.name}</h4>
 				{/if}
 				{#if item?.items?.length > 0}
-					<ul class="flex flex-col gap-1">
+					<!-- `inline-flex` with a minimum height, not a bare inline link. These sit in a list
+					     rather than inside a sentence, so WCAG 2.2's inline exception does not apply and
+					     an 18px-tall link fails the 24px target minimum this project targets. The row
+					     gap absorbs the extra height, so the footer does not grow. -->
+					<ul class="flex flex-col">
 						{#each item.items as child}
 							<li>
 								{#if child.link}
 									<a
 										href={child.link || '#'}
-										class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+										class="inline-flex min-h-[32px] items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
 									>
 										{child.name}
 									</a>
 								{:else}
-									<span class="text-sm text-muted-foreground">{child.name}</span>
+									<span class="inline-flex min-h-[32px] items-center text-sm text-muted-foreground">{child.name}</span>
 								{/if}
 							</li>
 						{/each}

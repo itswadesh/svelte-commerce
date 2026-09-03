@@ -819,6 +819,9 @@
 	}
 
 	.ed-link {
+		/* 32px tall so a standalone call to action clears the WCAG 2.2 target minimum; these sit
+		   beside buttons, not inside a sentence, so the inline exception does not apply. */
+		min-height: 32px;
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;

@@ -138,7 +138,9 @@
 				<div class="overflow-hidden">
 					<div class="max-w-none bg-primary px-4 py-2.5 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-primary-foreground">
 						{#if themeHeader?.announcementHref}
-							<a href={themeHeader.announcementHref} class="transition-opacity hover:opacity-80">{themeAnnouncement}</a>
+							<a href={themeHeader.announcementHref} class="inline-flex min-h-[32px] items-center transition-opacity hover:opacity-80"
+								>{themeAnnouncement}</a
+							>
 						{:else}
 							{themeAnnouncement}
 						{/if}
