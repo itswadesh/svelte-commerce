@@ -16,12 +16,7 @@
 {:else}
 	<div class="intra-gap grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 		{#each data || [] as p}
-					<Product
-				product={p}
-				{displayProduct}
-				hideVariations={true}
-				hideCartControls={true}
-			/>
+			<Product product={p} {displayProduct} hideVariations={true} hideCartControls={true} />
 		{/each}
 	</div>
 

@@ -26,15 +26,25 @@
 		</h1>
 
 		<div class="flex flex-col">
-			<span class="ed-lh__count text-sm tracking-widest text-gray-900 dark:text-gray-200">
+			<span class="ed-lh__count text-sm tracking-widest text-foreground">
 				{data.products.count > 999 ? '1000+' : data.products.count} Products
 			</span>
 		</div>
 	</div>
 	{#if data.products.data.length}
-		<div class="ed-lh__sort hidden items-center gap-2 lg:flex">
-			<span class="ed-lh__sortlabel text-[10px] font-bold uppercase tracking-widest text-gray-400">Sort by</span>
-			<Select class="!mb-0 ed-lh__select" id="sort-by" value={selectedSort} data={sortOptions} optionSelected={(value: string) => selectSort(value)} />
+		<!-- `md:flex`, not `lg:flex`. The fixed Filter/Sort bar that carries sorting on a phone is
+		     itself `md:hidden`, so between 768px and 1023px neither control rendered and a tablet
+		     shopper could filter but never re-order. The sidebar is already visible from md, so the
+		     bar stays hidden and there is exactly one sort affordance at every width. -->
+		<div class="ed-lh__sort hidden items-center gap-2 md:flex">
+			<span class="ed-lh__sortlabel text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sort by</span>
+			<Select
+				class="ed-lh__select !mb-0"
+				id="sort-by"
+				value={selectedSort}
+				data={sortOptions}
+				optionSelected={(value: string) => selectSort(value)}
+			/>
 		</div>
 	{/if}
 

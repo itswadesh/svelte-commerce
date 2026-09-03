@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/state'
+	import { navigating, page } from '$app/state'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import { SearchService } from '$lib/core/services/index.js'
+	import { readAppliedFilters, urlWithoutAnyFilter } from './scope-filters.js'
 
 	const data = $derived(page.data)
 	const searchService = new SearchService(fetch)
@@ -23,6 +24,16 @@
 	let previousListingQueryKey = ''
 
 	const hasMore = $derived(currentPage < (data.products?.totalPages ?? 0))
+
+	// A refinement is a navigation to this same route with a different query. Ticking a facet or
+	// changing the sort used to leave the previous cards and the previous count on screen with
+	// nothing acknowledging the tap, until the layout's 700ms overlay blurred the entire page and
+	// still did not say which region was updating. Marking just the grid busy is both the honest
+	// answer and the quiet one.
+	const refining = $derived(!!navigating.to && navigating.to.url.pathname === page.url.pathname)
+
+	const searchTerm = $derived(page.url.searchParams.get('search') ?? '')
+	const hasRemovableFilters = $derived(readAppliedFilters(page.url, Object.keys(data?.products?.facets || {})).some((f) => f.key !== 'search'))
 
 	// Mobile is the viewport Googlebot renders, and the desktop pagination is display:none there.
 	// Giving the infinite-scroll trigger a real href keeps page 2+ reachable without JS.
@@ -111,12 +122,45 @@
 </script>
 
 {#if !data.products?.data?.length}
-	<div class="ed-empty intra-gap flex h-96 flex-col items-center justify-center">
-		<p class="ed-empty__title text-md uppercase text-gray-500">No products found</p>
-		<a href="/products" class="ed-empty__link text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4">Clear all filters</a>
+	<!-- Say what was looked for and offer the one action that helps. The old copy was a bare
+	     "No products found" over a link to /products, which also threw away the search term. -->
+	<div class="ed-empty flex flex-col items-center justify-center gap-2 px-6 py-20 text-center">
+		<p class="ed-empty__title text-lg font-medium text-foreground">
+			{#if searchTerm}
+				No products match “{searchTerm}”
+			{:else}
+				No products match these filters
+			{/if}
+		</p>
+		<p class="max-w-sm text-sm text-muted-foreground">
+			{#if hasRemovableFilters}
+				Try removing a filter, or search for something more general.
+			{:else}
+				Try a shorter or more general search term.
+			{/if}
+		</p>
+		{#if hasRemovableFilters}
+			<a
+				href={urlWithoutAnyFilter(page.url)}
+				data-sveltekit-replacestate
+				class="ed-empty__link mt-3 inline-flex h-11 items-center rounded-md border border-input px-4 text-sm font-semibold transition-colors hover:bg-muted"
+			>
+				Clear all filters
+			</a>
+		{:else if searchTerm}
+			<a
+				href="/products"
+				class="ed-empty__link mt-3 inline-flex h-11 items-center rounded-md border border-input px-4 text-sm font-semibold transition-colors hover:bg-muted"
+			>
+				Browse all products
+			</a>
+		{/if}
 	</div>
 {:else}
-	<div class="ed-grid intra-gap grid auto-rows-auto grid-cols-2 lg:grid-cols-3">
+	<div
+		class="ed-grid intra-gap grid auto-rows-auto grid-cols-2 transition-opacity md:grid-cols-3 xl:grid-cols-4 {refining ? 'opacity-60' : ''}"
+		aria-busy={refining}
+	>
 		{#each products as product, i (product.id)}
 			<ProductCard {product} priority={i < 6} />
 		{/each}
@@ -125,9 +169,17 @@
 	{#if hasMore || loadingMore}
 		<div use:infiniteScroll class="mt-6 flex min-h-16 items-center justify-center lg:hidden" aria-live="polite">
 			{#if loadingMore}
-				<div class="grid grid-cols-2 gap-3" aria-label="Loading more products">
-					<Skeleton class="h-2 w-20 bg-gray-200 dark:bg-gray-700" />
-					<Skeleton class="h-2 w-20 bg-gray-200 dark:bg-gray-700" />
+				<!-- Card-shaped, at the same aspect ratio as the real cards, so the page grows by the
+				     height the products will occupy instead of jumping when they arrive. This used to
+				     be two 8px grey dashes, which read as a rendering fault rather than as loading. -->
+				<div class="intra-gap grid w-full grid-cols-2" aria-label="Loading more products">
+					{#each Array(2) as _}
+						<div class="flex flex-col gap-2">
+							<Skeleton class="aspect-square w-full rounded-md" />
+							<Skeleton class="h-3 w-3/4" />
+							<Skeleton class="h-3 w-1/3" />
+						</div>
+					{/each}
 				</div>
 			{:else}
 				<a
@@ -137,7 +189,9 @@
 						e.preventDefault()
 						loadNextPage()
 					}}
-					class="text-xs font-semibold uppercase tracking-[0.16em] {loadFailed ? 'ed-empty__link text-primary underline underline-offset-4' : 'ed-more text-gray-400'}"
+					class="text-xs font-semibold uppercase tracking-[0.16em] {loadFailed
+						? 'ed-empty__link text-primary underline underline-offset-4'
+						: 'ed-more text-gray-400'}"
 				>
 					{loadFailed ? 'Retry' : 'Load more'}
 				</a>

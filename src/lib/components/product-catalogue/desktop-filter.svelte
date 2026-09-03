@@ -28,12 +28,11 @@
 			filterState.maxPossiblePrice > filterState.minPossiblePrice
 	)
 
-  function formatCategoryName(input: string) {
-    const x = filterState.formatFilterOptionName(input)
-    if (x.length > 27)
-      return x.substring(0, 24) + '...'
-    return x
-  }
+	function formatCategoryName(input: string) {
+		const x = filterState.formatFilterOptionName(input)
+		if (x.length > 27) return x.substring(0, 24) + '...'
+		return x
+	}
 </script>
 
 <div class="ed-df group sticky" style={`top: ${filterState.containerTop}px;`}>
@@ -158,7 +157,9 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="ed-df__cat flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
+							<span class="ed-df__cat flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary"
+								>{formatCategoryName(category.name)}</span
+							>
 						</Button>
 					{/each}
 					{#if filterState.filteredCategories.length > 5}
@@ -182,10 +183,14 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="ed-df__cat flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
+							<span class="ed-df__cat flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary"
+								>{formatCategoryName(category.name)}</span
+							>
 						</Button>
 					{/each}
-					<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>Show less</Button>
+					<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}
+						>Show less</Button
+					>
 				{/if}
 			</div>
 		{/if}
@@ -282,7 +287,9 @@
 							>
 						</div>
 					{/each}
-					<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>Show less</Button>
+					<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}
+						>Show less</Button
+					>
 				{/if}
 			</div>
 
@@ -365,7 +372,10 @@
 											filterState.handleGeneralFiltersChange({ key, value, checked })
 										}}
 									/>
-									<label for={`gen-${value}`} class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">
+									<label
+										for={`gen-${value}`}
+										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900"
+									>
 										{#if value?.startsWith?.('#')}
 											<div class="flex items-center gap-2">
 												<div class="h-4 w-4 rounded-full border border-gray-200" style="background-color: {value};"></div>
@@ -399,7 +409,10 @@
 											filterState.handleGeneralFiltersChange({ key, value, checked })
 										}}
 									/>
-									<label for={`gen-${value}`} class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">
+									<label
+										for={`gen-${value}`}
+										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900"
+									>
 										{#if value?.startsWith?.('#')}
 											<div class="flex items-center gap-2">
 												<div class="h-4 w-4 rounded-full border border-gray-200" style="background-color: {value};"></div>
