@@ -50,6 +50,7 @@
 							bind:value={resetPasswordModule.password}
 							placeholder="********"
 							type="password"
+							autocomplete="new-password"
 							disabled={!!userState.loading}
 							class="bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
 						/>
@@ -61,6 +62,7 @@
 							bind:value={resetPasswordModule.retype}
 							placeholder="********"
 							type="password"
+							autocomplete="new-password"
 							disabled={!!userState.loading}
 							class="bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
 						/>
@@ -83,8 +85,11 @@
 			</form>
 		{:else}
 			<div class="space-y-4 text-center">
-				<p class="text-green-600">Password reset link sent! Check your email.</p>
-				<Button variant="outline" class="w-full" onclick={() => (resetPasswordModule.success = false)}>Send another link</Button>
+				<!-- This branch runs after the password has actually been reset, not after a link was
+				     sent. It told the shopper to check their email and offered to send another link, so a
+				     successful reset read as an unfinished one. -->
+				<p class="font-medium text-success">Your password has been reset.</p>
+				<p class="text-sm text-muted-foreground">You can sign in with your new password now.</p>
 			</div>
 		{/if}
 	</CardContent>
