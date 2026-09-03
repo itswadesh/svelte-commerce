@@ -3,6 +3,7 @@ import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
 import { initActiveConnector } from '$lib/core/connectors/init'
+import { resolveStorefrontTheme } from '$lib/theme/index.js'
 
 export const init = initActiveConnector
 
@@ -63,6 +64,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
+	// Flips once `transformPageChunk` below has stamped the opening <html> tag for this response.
+	let themeStamped = false
+
 	const response = await resolve(event, {
 		filterSerializedResponseHeaders: (name) => name === 'content-type',
 		// SvelteKit emits a `Link: rel=modulepreload` header for EVERY client chunk (107 on the jws
@@ -72,7 +76,32 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// Measured on jws, Pixel 5 / 4x CPU / Slow 4G: LCP-TTFB 4952ms -> 1668ms, with all app JS
 		// still finishing within 216ms of before. Dropping js entirely reaches 763ms but delays
 		// hydration by 1.1s, which is the worse trade.
-		preload: ({ type, path }) => type === 'css' || path.includes('/entry/') || path.includes('/nodes/')
+		preload: ({ type, path }) => type === 'css' || path.includes('/entry/') || path.includes('/nodes/'),
+		// Second carrier for the active theme, on <html>. Every bits-ui portal — dialog, sheet,
+		// drawer, popover, dropdown, tooltip — and the toaster attach to `document.body`, which sits
+		// ABOVE the shell <div> in +layout.svelte that carries `data-theme`. Without an ancestor of
+		// their own they resolve the `:root` fallback: the wine palette, a 0px radius and a font this
+		// storefront never downloads. Stamping the same value on <html> here means the SSR'd document
+		// already carries it, so portals are themed before hydration and there is no flash.
+		//
+		// The shell keeps its attribute — it is the documented carrier for runtime theme switching —
+		// so this adds a carrier rather than moving one. Both are derived from `locals.storeDetails`
+		// through `resolveStorefrontTheme`, exactly as +layout.server.ts derives `data.theme`, so the
+		// two can never disagree. Load functions have already run by the time chunks are transformed,
+		// which is what makes `locals.storeDetails` readable here.
+		transformPageChunk: ({ html }) => {
+			// Called once per streamed chunk, and only the first one holds the opening tag. Stopping
+			// after the first successful stamp keeps a literal `<html` anywhere further down the
+			// document from being rewritten, and skips the resolve on every later chunk.
+			if (themeStamped) return html
+			// Theme names come from store data, so keep the attribute value to the character set
+			// `normalizeThemeName` can produce rather than interpolating a store string into markup.
+			const theme = resolveStorefrontTheme(event.locals.storeDetails).name.replace(/[^a-z0-9_-]/g, '')
+			if (!theme) return html
+			const stamped = html.replace(/<html(?=[\s>])/, `<html data-theme="${theme}"`)
+			themeStamped = stamped !== html
+			return stamped
+		}
 	})
 	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
 	return response

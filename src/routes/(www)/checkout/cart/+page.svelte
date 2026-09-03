@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { Check, Loader, LoaderCircle, LockKeyhole, Minus, Plus, ShoppingBag, Tag, Trash, X } from '@lucide/svelte'
 	import { formatPrice } from '$lib/core/utils'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import Spinner from '$lib/components/common/spinner.svelte'
 	import { page } from '$app/state'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { goto } from '$app/navigation'
@@ -81,7 +81,7 @@
 		</Button>
 		<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-sm font-bold text-gray-900">
 			{#if isUpdating(item)}
-				<LoadingDots />
+				<Spinner label="Updating quantity" />
 			{:else}
 				{item.qty}
 			{/if}
@@ -268,7 +268,7 @@
 												</button>
 												<span class="border-x px-4 py-1">
 													{#if isUpdating(item)}
-														<LoadingDots />
+														<Spinner label="Updating quantity" />
 													{:else}
 														{item.qty}
 													{/if}
@@ -434,7 +434,7 @@
 													</Button>
 													<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-xs font-bold text-gray-900">
 														{#if isUpdating(item)}
-															<LoadingDots />
+															<Spinner size={3} label="Updating quantity" />
 														{:else}
 															{item.qty}
 														{/if}
@@ -537,7 +537,7 @@
 								</div>
 								{#if cartModule.loadingForCart}
 									<div class="flex items-center justify-center py-8">
-										<LoadingDots />
+										<Spinner size={6} label="Loading order totals" />
 									</div>
 								{:else}
 									<div class="space-y-4">

@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation'
 	import { ChevronRight, LoaderCircle, LockKeyhole, MapPin, Pencil, ShoppingBag, Truck } from '@lucide/svelte'
 	import { formatPrice } from '$lib/core/utils/index.js'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import Spinner from '$lib/components/common/spinner.svelte'
 	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
 	import { page } from '$app/state'
@@ -14,6 +14,7 @@
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { AddressModule, emptyAddress, checkoutAddressSchema as schemas } from '$lib/core/composables/index.js'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
+	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import AddressForm from './address-form.svelte'
@@ -109,7 +110,7 @@
 <div class="min-h-screen py-8 max-sm:pb-[calc(9rem_+_env(safe-area-inset-bottom))]">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={2} />
-			<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
+		<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
 		  <div>
 				<p class="font-semibold tracking-tight text-xl">My Addresses</p>
 			</div>
@@ -172,88 +173,75 @@
 						     for them in a separate Contact Details step first made guests fill two forms with
 						     the same fields. -->
 						{#if !isGuestCheckout && (addressModule.isPhoneRequired || addressModule.isEmailRequired)}
-						<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
-							<div class="flex items-center justify-between border-b border-border px-5 py-4">
-								<div class="flex items-center space-x-3">
-									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
-										Contact Details
-									</h2>
+							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
+								<div class="flex items-center justify-between border-b border-border px-5 py-4">
+									<div class="flex items-center space-x-3">
+										<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Contact Details</h2>
+									</div>
+									{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
+										<Button onclick={addressModule.handleEditEmail} variant="ghost" size="sm" class="h-8">
+											<Pencil class="mr-1.5 h-3 w-3" />
+											<span>Edit</span>
+										</Button>
+									{/if}
 								</div>
-								{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
-									<Button
-										onclick={addressModule.handleEditEmail}
-										variant="ghost"
-										size="sm"
-										class="h-8"
-									>
-										<Pencil class="mr-1.5 h-3 w-3" />
-										<span>Edit</span>
-									</Button>
+
+								{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
+									<div class="grid grid-cols-1 gap-6 p-6 transition-all duration-500 sm:grid-cols-2">
+										<div class="flex flex-col gap-1">
+											<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Email Address</p>
+											<p class="text-sm font-medium text-gray-900">{cartState.cart.email}</p>
+										</div>
+										<div class="flex flex-col gap-1">
+											<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone Number</p>
+											<p class="text-sm font-medium text-gray-900">{cartState.cart.phone}</p>
+										</div>
+									</div>
+								{:else if !isEmailOk || !isPhoneOk || addressModule.editEmail}
+									<form class="space-y-4 p-5 transition-all duration-500" onsubmit={saveContactInfo}>
+										<div class="space-y-1">
+											<label for="email" class="block text-sm font-medium text-gray-700">
+												Email address {#if !addressModule.isEmailRequired}<span class="text-gray-400">(optional)</span>{/if}
+											</label>
+											<Textbox
+												type="email"
+												bind:value={addressModule.email}
+												required={addressModule.isEmailRequired}
+												class="w-full"
+												schema={schemas.email}
+												placeholder="your@email.com"
+											/>
+											<p class="mt-1 text-xs text-gray-500">We'll send order confirmation to this email</p>
+										</div>
+										<div class="space-y-1">
+											<label for="phone" class="block text-sm font-medium text-gray-700">
+												Phone number {#if !addressModule.isPhoneRequired}<span class="text-gray-400">(optional)</span>{/if}
+											</label>
+											<Textbox
+												type="tel"
+												bind:value={addressModule.phone}
+												required={addressModule.isPhoneRequired}
+												class="w-full"
+												schema={schemas.phone}
+												placeholder="XXXXXXXXXX"
+											/>
+											<p class="mt-1 text-xs text-gray-500">For delivery updates</p>
+										</div>
+										<div class="flex justify-end space-x-3 pt-2">
+											{#if cartState.cart.email}
+												<Button variant="outline" onclick={() => (addressModule.editEmail = false)} type="button">Cancel</Button>
+											{/if}
+											<Button type="submit" disabled={cartState.isUpdatingCart} class="min-w-[120px]">
+												{#if cartState.isUpdatingCart}
+													<Spinner label="Saving contact details" />
+												{:else}
+													Save Contact
+												{/if}
+											</Button>
+										</div>
+									</form>
 								{/if}
 							</div>
-
-							{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
-								<div class="grid grid-cols-1 gap-6 p-6 transition-all duration-500 sm:grid-cols-2">
-									<div class="flex flex-col gap-1">
-										<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Email Address</p>
-										<p class="text-sm font-medium text-gray-900">{cartState.cart.email}</p>
-									</div>
-									<div class="flex flex-col gap-1">
-										<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Phone Number</p>
-										<p class="text-sm font-medium text-gray-900">{cartState.cart.phone}</p>
-									</div>
-								</div>
-							{:else if !isEmailOk || !isPhoneOk || addressModule.editEmail}
-								<form class="space-y-4 p-5 transition-all duration-500" onsubmit={saveContactInfo}>
-									<div class="space-y-1">
-										<label for="email" class="block text-sm font-medium text-gray-700">
-											Email address {#if !addressModule.isEmailRequired}<span class="text-gray-400">(optional)</span>{/if}
-										</label>
-										<Textbox
-											type="email"
-											bind:value={addressModule.email}
-											required={addressModule.isEmailRequired}
-											class="w-full"
-											schema={schemas.email}
-											placeholder="your@email.com"
-										/>
-										<p class="mt-1 text-xs text-gray-500">We'll send order confirmation to this email</p>
-									</div>
-									<div class="space-y-1">
-										<label for="phone" class="block text-sm font-medium text-gray-700">
-											Phone number {#if !addressModule.isPhoneRequired}<span class="text-gray-400">(optional)</span>{/if}
-										</label>
-										<Textbox
-											type="tel"
-											bind:value={addressModule.phone}
-											required={addressModule.isPhoneRequired}
-											class="w-full"
-											schema={schemas.phone}
-											placeholder="XXXXXXXXXX"
-										/>
-										<p class="mt-1 text-xs text-gray-500">For delivery updates</p>
-									</div>
-									<div class="flex justify-end space-x-3 pt-2">
-										{#if cartState.cart.email}
-											<Button
-												variant="outline"
-												onclick={() => (addressModule.editEmail = false)}
-												type="button"
-											>
-												Cancel
-											</Button>
-										{/if}
-										<Button type="submit" disabled={cartState.isUpdatingCart} class="min-w-[120px]">
-											{#if cartState.isUpdatingCart}
-												<LoadingDots />
-											{:else}
-												Save Contact
-											{/if}
-										</Button>
-									</div>
-								</form>
-							{/if}
-						</div>
 						{/if}
 						<!-- Shipping Address. Guests reach this straight away: their email and phone are fields
 						     of this form, so gating it on `isEmailOk && isPhoneOk` would hide the only place
@@ -264,37 +252,19 @@
 									<!-- Guest checkout: inline address form, no login required -->
 									<div class="p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
-												Delivery Address
-											</h2>
-											<Button
-												variant="link"
-												onclick={() => showAuthModal('login')}
-												class="h-auto whitespace-normal p-0 text-left"
-											>
+											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Delivery Address</h2>
+											<Button variant="link" onclick={() => showAuthModal('login')} class="h-auto whitespace-normal p-0 text-left">
 												Login to view your saved addresses
 											</Button>
 										</div>
-										<AddressForm
-											bind:address={addressModule.currentAddress}
-											isLoading={loadingForGuestCheckout}
-											onsave={handleGuestSubmit}
-										/>
+										<AddressForm bind:address={addressModule.currentAddress} isLoading={loadingForGuestCheckout} onsave={handleGuestSubmit} />
 									</div>
 								{:else if cartState.cart.shippingAddress}
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">
-												Delivery Address
-											</h2>
+											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Delivery Address</h2>
 											{#if !addressModule.loadingForSaveToCart}
-												<Button
-													onclick={addressModule.handleAddressChangeClick}
-													variant="ghost"
-													class="h-8"
-												>
-													Change
-												</Button>
+												<Button onclick={addressModule.handleAddressChangeClick} variant="ghost" class="h-8">Change</Button>
 											{/if}
 										</div>
 										{#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'shipping'}
@@ -338,13 +308,7 @@
 											</h2>
 
 											{#if !userState?.user?.role}
-												<Button
-													variant="link"
-													onclick={() => showAuthModal('login')}
-													class="h-auto p-0"
-												>
-													Login to view saved addresses
-												</Button>
+												<Button variant="link" onclick={() => showAuthModal('login')} class="h-auto p-0">Login to view saved addresses</Button>
 											{/if}
 										</div>
 										<form class="">
@@ -355,12 +319,7 @@
 													class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50 py-8 text-center transition-all duration-300 hover:bg-gray-100/50"
 												>
 													<p class="mb-6 text-sm text-gray-500">No shipping address selected</p>
-													<Button
-														type="button"
-														variant="default"
-														class="px-8"
-														onclick={addressModule.handleAddNewAddress}>Add New Address</Button
-													>
+													<Button type="button" variant="default" class="px-8" onclick={addressModule.handleAddNewAddress}>Add New Address</Button>
 												</div>
 											{/if}
 										</form>
@@ -372,15 +331,9 @@
 								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm transition-all duration-300">
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: var(--font-body);">
-												Billing Address
-											</h2>
+											<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Billing Address</h2>
 											{#if !addressModule.loadingForSaveToCart}
-												<Button
-													onclick={addressModule.handleBilingAddOrChangeClick}
-													variant="ghost"
-													class="h-8"
-												>
+												<Button onclick={addressModule.handleBilingAddOrChangeClick} variant="ghost" class="h-8">
 													{#if cartState.cart.billingAddress?.address_1}
 														Change
 													{:else}
@@ -442,52 +395,22 @@
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: var(--font-body);">
-									Price Summary
-								</h2>
+								<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: var(--font-body);">Price Summary</h2>
 								<div class="h-1 w-12 bg-primary"></div>
 							</div>
 							{#if addressModule.loadingForCart}
-								<div class="flex items-center justify-center py-8">
-									<LoadingDots />
-								</div>
+								<PriceSummary loading />
 							{:else}
 								<div class="space-y-4">
-									<div class="space-y-3 border-b border-border pb-6">
-										<div class="flex justify-between text-sm">
-											<span class="font-medium text-gray-500">Subtotal</span>
-											<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
-										</div>
-										{#if cartState.cart.discountAmount > 0}
-											<div class="flex justify-between text-sm">
-												<span class="font-medium text-gray-500">Discount</span>
-												<span class="font-bold uppercase tracking-tight text-orange-600"
-													>- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span
-												>
-											</div>
-										{/if}
-										<div class="flex flex-col gap-1">
-											<div class="flex justify-between text-sm">
-												<span class="font-medium text-gray-500">Shipping</span>
-												{#if !cartState.cart.shippingAddress}
-													<span class="text-[10px] font-bold uppercase tracking-tighter text-gray-400"> Address required </span>
-												{:else if cartState.cart.shippingCharges}
-													<span class="font-bold text-gray-900">{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span
-													>
-												{:else}
-													<span
-														class="rounded bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-green-600 ring-1 ring-green-100"
-														>FREE</span
-													>
-												{/if}
-											</div>
-										</div>
-									</div>
-
-									<div class="flex items-center justify-between pt-2">
-										<span class="text-sm font-bold uppercase text-gray-900">Total</span>
-										<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
-									</div>
+									<PriceSummary
+										subtotal={cartState.cart.subtotal}
+										discount={cartState.cart.discountAmount}
+										shipping={cartState.cart.shippingCharges}
+										tax={cartState.cart.tax}
+										total={cartState.cart.total}
+										currencyCode={page?.data?.store?.currency?.code}
+										shippingResolved={!!cartState.cart.shippingAddress}
+									/>
 
 									{#if addressModule.showError}
 										<div class="mt-4 rounded bg-red-50 p-3 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
@@ -502,25 +425,25 @@
 										<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
 									</div>
 
-                  {#if !addressModule.showAddressList && !addressModule.showAddressForm}
-									  {#if fillingGuestAddress}
-									  	<CheckoutButton
-									  		text="Save Address"
-									  		onclick={submitAddressForm}
-									  		loading={loadingForGuestCheckout}
-									  		total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
-									  	/>
-									  {:else}
-									  	<CheckoutButton
-									  		text="Continue to Payment"
-									  		disabledText="Select Address"
-									  		disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
-									  		onclick={addressModule.handleProceedToPayment}
-									  		loading={addressModule.loadingForCheckout}
-									  		total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
-									  	/>
-									  {/if}
-                  {/if}
+									{#if !addressModule.showAddressList && !addressModule.showAddressForm}
+										{#if fillingGuestAddress}
+											<CheckoutButton
+												text="Save Address"
+												onclick={submitAddressForm}
+												loading={loadingForGuestCheckout}
+												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+											/>
+										{:else}
+											<CheckoutButton
+												text="Continue to Payment"
+												disabledText="Select Address"
+												disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
+												onclick={addressModule.handleProceedToPayment}
+												loading={addressModule.loadingForCheckout}
+												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+											/>
+										{/if}
+									{/if}
 								</div>
 							{/if}
 						</div>

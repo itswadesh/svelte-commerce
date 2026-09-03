@@ -37,10 +37,10 @@ const config: Config = {
 		},
 		extend: {
 			spacing: {
-				page: '8px',
+				page: '8px'
 			},
 			borderColor: {
-				DEFAULT: 'hsl(var(--border) / <alpha-value>)',
+				DEFAULT: 'hsl(var(--border) / <alpha-value>)'
 			},
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
@@ -64,6 +64,15 @@ const config: Config = {
 					DEFAULT: 'hsl(var(--success) / <alpha-value>)',
 					foreground: 'hsl(var(--success-foreground) / <alpha-value>)'
 				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning) / <alpha-value>)',
+					foreground: 'hsl(var(--warning-foreground) / <alpha-value>)'
+				},
+				// Additive. `primary-hover` gives the hover step a token instead of
+				// `hover:bg-primary/90`, which blends the button into whatever is behind it;
+				// `border-strong` is the >=3:1 control boundary that `border` is too quiet to be.
+				'primary-hover': 'hsl(var(--primary-hover) / <alpha-value>)',
+				'border-strong': 'hsl(var(--border-strong) / <alpha-value>)',
 				muted: {
 					DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
 					foreground: 'hsl(var(--muted-foreground) / <alpha-value>)'
@@ -141,6 +150,28 @@ const config: Config = {
 			},
 			fontSize: {
 				xxs: '10px'
+			},
+			// One named z-index scale, backed by the --z-* properties in src/app.css so the
+			// call sites a utility cannot reach — inline styles and component <style> blocks —
+			// read the same numbers as `z-modal` and friends instead of bidding with arbitrary
+			// values from 60 to 1,000,000,000.
+			zIndex: {
+				sticky: 'var(--z-sticky)',
+				overlay: 'var(--z-overlay)',
+				drawer: 'var(--z-drawer)',
+				modal: 'var(--z-modal)',
+				popover: 'var(--z-popover)',
+				toast: 'var(--z-toast)',
+				skip: 'var(--z-skip)'
+			},
+			// `duration-fast` for feedback (120-180ms), `duration-panel` for panels
+			// (180-240ms), `ease-standard` for both.
+			transitionDuration: {
+				fast: 'var(--motion-fast)',
+				panel: 'var(--motion-panel)'
+			},
+			transitionTimingFunction: {
+				standard: 'var(--motion-ease)'
 			}
 		}
 	},

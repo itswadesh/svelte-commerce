@@ -11,7 +11,11 @@
 	bind:ref
 	class={cn(
 		'relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md',
-		cell.isActive && 'z-10 ring-1 ring-ring',
+		// The cell is a <div>; the field's one real input is visually hidden, so `:focus-visible`
+		// never reaches this element and the global ring cannot draw it. The active cell is the
+		// focus indicator, so it matches that ring's width and token (no offset - an offset band
+		// would paint over the adjoining cells, which sit flush against it).
+		cell.isActive && 'z-10 ring-2 ring-ring',
 		className
 	)}
 	{...restProps}

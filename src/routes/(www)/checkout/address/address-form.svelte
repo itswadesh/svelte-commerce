@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { Save } from '@lucide/svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import Spinner from '$lib/components/common/spinner.svelte'
 	import { page } from '$app/state'
 	import { AddressSchema } from '$lib/core/components/index.js'
 	import { AddressFormRenderer, checkoutAddressSchema } from '$lib/core/composables/index.js'
@@ -81,22 +81,12 @@
 	})
 </script>
 
-<AddressFormRenderer
-	bind:address
-	bind:show
-	onsave={saveAndReportFailure}
->
+<AddressFormRenderer bind:address bind:show onsave={saveAndReportFailure}>
 	{#snippet content({ handleSubmit })}
 		<!-- novalidate: the footer submits this form with `requestSubmit()`, and native constraint
 		     validation would abort before the submit event fires, pinning its bubble to whichever
 		     field is off-screen. The zod pass below is the single authority and reports on the form. -->
-		<form
-			id={FORM_ID}
-			bind:this={formEl}
-			novalidate
-			onsubmit={(e) => submitWithVisibleErrors(e, handleSubmit)}
-			class="grid"
-		>
+		<form id={FORM_ID} bind:this={formEl} novalidate onsubmit={(e) => submitWithVisibleErrors(e, handleSubmit)} class="grid">
 			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 				<Textbox
 					name="firstName"
@@ -200,7 +190,7 @@
 				     The renderer's zod validation on submit already blocks incomplete addresses. -->
 				<Button type="submit" disabled={isLoading} class="w-full">
 					{#if isLoading}
-						<LoadingDots />
+						<Spinner label="Saving address" />
 					{:else}
 						<Save class="mr-2 h-4 w-4" />
 						Save Address

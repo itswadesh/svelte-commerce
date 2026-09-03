@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css'
-	import { Toaster } from '@misiki/kitcommerce-core'
+	import { Toaster } from '$lib/components/ui/sonner/index.js'
 	import { getThemeFontsUrl } from '$lib/theme/index.js'
 	import { setUserState } from '$lib/core/stores/index.js'
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
@@ -12,9 +12,9 @@
 	import { Loader } from '@lucide/svelte'
 	import { type Snippet } from 'svelte'
 	import type { StoreData } from '$lib/core/types/index.js'
-  import { ColorPalette } from '$lib/core/components/index.js'
-  import StoreFont from '$lib/components/common/store-font.svelte'
-  import StorePalette from '$lib/components/common/store-palette.svelte'
+	import { ColorPalette } from '$lib/core/components/index.js'
+	import StoreFont from '$lib/components/common/store-font.svelte'
+	import StorePalette from '$lib/components/common/store-palette.svelte'
 
 	interface LayoutData {
 		store: StoreData
@@ -29,7 +29,53 @@
 	let { children, data }: { children: Snippet; data: LayoutData } = $props()
 	setUserState()
 
-	const themeFontsUrl = $derived(getThemeFontsUrl(data?.theme?.name || 'default'))
+	const themeName = $derived(data?.theme?.name || 'default')
+	const themeFontsUrl = $derived(getThemeFontsUrl(themeName))
+
+	// Second carrier for the active theme, on <html>. Portalled overlays — every bits-ui dialog,
+	// sheet, drawer, popover, dropdown and tooltip — attach to `document.body`, which sits above the
+	// shell below, so without this they resolve the `:root` fallback palette, radius and font
+	// instead of this theme's. hooks.server.ts stamps the same value during SSR; this keeps <html>
+	// in step when the theme changes client-side. The shell keeps its own attribute.
+	$effect(() => {
+		document.documentElement.setAttribute('data-theme', themeName)
+	})
+
+	// store-palette.svelte and store-font.svelte apply the merchant's admin-set palette and body
+	// font as inline custom properties on `document.querySelector('[data-theme]')` — which, now
+	// that <html> carries the attribute too, resolves to <html> rather than the shell. Values
+	// inherited from <html> lose to the shell's own `[data-theme='…']` block, which declares the
+	// same token names, so re-project whatever those components set on <html> onto the shell. The
+	// page and the portals then read one palette instead of two.
+	let shell: HTMLDivElement | null = $state(null)
+
+	$effect(() => {
+		const el = shell
+		if (!el) return
+		const root = document.documentElement
+		let applied: string[] = []
+		const project = () => {
+			const next: string[] = []
+			for (let i = 0; i < root.style.length; i++) {
+				const name = root.style[i]
+				if (!name.startsWith('--')) continue
+				el.style.setProperty(name, root.style.getPropertyValue(name))
+				next.push(name)
+			}
+			for (const name of applied) {
+				if (!next.includes(name)) el.style.removeProperty(name)
+			}
+			applied = next
+		}
+		project()
+		// Those components own their own effects, so react to their writes rather than racing them.
+		const observer = new MutationObserver(project)
+		observer.observe(root, { attributes: true, attributeFilter: ['style'] })
+		return () => {
+			observer.disconnect()
+			for (const name of applied) el.style.removeProperty(name)
+		}
+	})
 
 	// Themes built on the section library keep their look in the API and ship it on the store
 	// payload. Inlining it here means the theme's CSS is already in the SSR head — no extra
@@ -38,9 +84,7 @@
 	// file as this component's own stylesheet, even inside a string, and tries to compile it.
 	const STYLE_OPEN = '<sty' + 'le id="theme-css">'
 	const STYLE_CLOSE = '</sty' + 'le>'
-	const themeStyleTag = $derived(
-		data?.store?.themeCss ? STYLE_OPEN + data.store.themeCss + STYLE_CLOSE : ''
-	)
+	const themeStyleTag = $derived(data?.store?.themeCss ? STYLE_OPEN + data.store.themeCss + STYLE_CLOSE : '')
 
 	// Stale-client protection. SvelteKit's `updated` store flips to true once the
 	// deployed build (via _app/version.json polling) no longer matches the running
@@ -144,11 +188,7 @@
 
 <!-- <ThemeProvider /> -->
 
-<div
-	class="light min-h-screen theme-{data?.theme?.name || 'default'}"
-	data-theme={data?.theme?.name || 'default'}
-	data-theme-source={data?.theme?.source || 'default'}
->
+<div bind:this={shell} class="light min-h-screen theme-{themeName}" data-theme={themeName} data-theme-source={data?.theme?.source || 'default'}>
 	<!-- Background/min-height wrapper only. NOT a <main>: every group layout renders its own
 	     <main>, and nesting them ships duplicate main landmarks on all 55 routes. -->
 	<div class="min-h-screen bg-background">
@@ -168,5 +208,7 @@
 		{/if}
 		{@render children()}
 	</div>
+	<!-- Inside the wrapper on purpose: svelte-sonner renders where it is mounted, so out here it
+	     used to paint every toast in the root fallback palette and font. -->
+	<Toaster position="top-center" />
 </div>
-<Toaster position="top-center" />

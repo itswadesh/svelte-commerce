@@ -1,17 +1,9 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { ChevronRight } from '@lucide/svelte'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import Spinner from '$lib/components/common/spinner.svelte'
 
-	let {
-		onclick,
-		disabled = false,
-		loading = false,
-		text = 'Proceed to Shipping',
-		disabledText = '',
-		total = '',
-		class: className = ''
-	} = $props()
+	let { onclick, disabled = false, loading = false, text = 'Proceed to Shipping', disabledText = '', total = '', class: className = '' } = $props()
 </script>
 
 <!-- Below sm this is the checkout step's only visible CTA: the summary card it lives in sits under
@@ -30,20 +22,29 @@
 			<span class="text-base font-bold text-foreground">{total}</span>
 		</div>
 	{/if}
+	<!-- Busy is disabled, so that a second tap cannot place a second order — but it must not *look*
+	     unavailable. Without this the disabled palette repaints the button grey-on-grey the instant
+	     it is pressed, and the spinner, drawn in currentColor, lands at gray-400 on gray-100. -->
 	<Button
-		class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold tracking-[0.2em] uppercase shadow-lg transition-all duration-300 hover:shadow-xl max-sm:h-20 max-sm:rounded-none disabled:bg-gray-100 disabled:text-gray-400 disabled:shadow-none disabled:border-gray-200 disabled:border disabled:opacity-100"
+		class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:shadow-xl disabled:border disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400 disabled:opacity-100 disabled:shadow-none max-sm:h-20 max-sm:rounded-none {loading
+			? 'disabled:border-0 disabled:bg-primary disabled:text-primary-foreground disabled:shadow-lg'
+			: ''}"
 		disabled={disabled || loading}
+		aria-busy={loading}
 		{onclick}
 	>
-		{#if loading}
-			<LoadingDots />
-		{:else}
-			<div class="flex items-center justify-center gap-2">
+		<div class="flex items-center justify-center gap-2">
+			{#if loading}
+				<!-- The label stays put while the request is in flight. Swapping it out left the flow's
+				     highest-stakes control reading as an empty box (UX-077). -->
+				<Spinner label="Submitting" />
+				<span>{text}</span>
+			{:else}
 				<span>{disabled && disabledText ? disabledText : text}</span>
 				{#if !disabled}
 					<ChevronRight class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
 				{/if}
-			</div>
-		{/if}
+			{/if}
+		</div>
 	</Button>
 </div>
