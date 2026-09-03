@@ -18,7 +18,7 @@
 </script>
 
 {#if hasDescription}
-	<div class="edp-acc border-b border-gray-300">
+	<div class="edp-acc border-b" data-testid="product-description">
 		<button
 			class="intra-pt edp-acc-btn flex w-full items-center justify-between gap-2 pb-2 text-base font-bold text-gray-900"
 			onclick={() => (isOpen = !isOpen)}

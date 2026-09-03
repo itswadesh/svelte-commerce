@@ -40,7 +40,7 @@
 		     tee and "25" on the gift card. The server sent the right name and hydration replaced it
 		     about 2.5s later, so the visible page contradicted the indexed one and a screen reader
 		     announced a variant string as the page heading. The selection is shown below instead. -->
-		<h1 class="edp-title text-md flex-1 font-medium leading-[1] tracking-tight text-foreground sm:text-xl">
+		<h1 class="edp-title text-md flex-1 font-medium leading-[1] tracking-tight text-foreground sm:text-xl" data-testid="product-title">
 			{product.title}
 		</h1>
 
@@ -50,7 +50,9 @@
 					<LoaderCircle class="h-6 w-6 animate-spin text-primary" />
 				{:else}
 					<HeartIcon
-						class="h-6 w-6 {productState.wishlisted ? 'scale-110 fill-red-500 text-red-500' : 'text-gray-900'} transition-transform duration-300"
+						class="h-6 w-6 {productState.wishlisted
+							? 'scale-110 fill-destructive text-destructive'
+							: 'text-foreground'} transition-transform duration-fast"
 					/>
 				{/if}
 			</Button>
@@ -61,7 +63,7 @@
 	     to be stated somewhere: the price, SKU and availability below all belong to this one. Only
 	     rendered when the product actually has variants worth distinguishing. -->
 	{#if variantLabel}
-		<p class="edp-variant mt-1 text-sm text-muted-foreground" aria-live="polite">
+		<p class="edp-variant mt-1 text-sm text-muted-foreground" aria-live="polite" data-testid="selected-variant">
 			{variantLabel}
 		</p>
 	{/if}
@@ -78,7 +80,7 @@
 				<div class="relative flex items-center">
 					<div class="flex gap-0.5">
 						{#each { length: 5 } as _}
-							<Star class="h-4 w-4 fill-gray-100 text-gray-100" />
+							<Star class="h-4 w-4 fill-muted text-muted" />
 						{/each}
 					</div>
 					<div class="absolute left-0 top-0 flex gap-0.5 overflow-hidden">
@@ -90,15 +92,15 @@
 						{/if}
 					</div>
 				</div>
-				<span class="text-xs font-bold text-gray-900 dark:text-gray-100">{avgRating}</span>
-				<span class="h-1 w-1 rounded-full bg-gray-300"></span>
-				<span class="text-xs text-gray-500">{reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}</span>
+				<span class="text-xs font-bold text-foreground">{avgRating}</span>
+				<span class="h-1 w-1 rounded-full bg-border-strong"></span>
+				<span class="text-xs text-muted-foreground">{reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}</span>
 				<Button variant="link" class="h-auto p-0 text-xs font-medium">View Reviews</Button>
 			</div>
 		</div>
 	{:else if reviewsEnabled}
 		<div class="intra-pt edp-reviewrow">
-			<span class="edp-review-empty text-sm text-gray-400">Be the first to review</span>
+			<span class="edp-review-empty text-sm text-muted-foreground">Be the first to review</span>
 		</div>
 	{/if}
 </div>
@@ -137,16 +139,16 @@
 		margin-top: 16px;
 	}
 
-	:global([data-theme='default'] .edp-reviewrow .text-gray-900) {
+	:global([data-theme='default'] .edp-reviewrow .text-foreground) {
 		color: var(--ed-ink);
 	}
 
-	:global([data-theme='default'] .edp-reviewrow .text-gray-500),
+	:global([data-theme='default'] .edp-reviewrow .text-muted-foreground),
 	:global([data-theme='default'] .edp-review-empty) {
 		color: var(--ed-soft);
 	}
 
-	:global([data-theme='default'] .edp-reviewrow .bg-gray-300) {
+	:global([data-theme='default'] .edp-reviewrow .bg-border-strong) {
 		background: var(--ed-line-strong);
 	}
 </style>

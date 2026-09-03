@@ -6,7 +6,7 @@
 </script>
 
 {#if productState.isLoadingRelatedProducts || productState.productsOfSameCategory.length > 0}
-	<div class="edp-related mx-2 mb-20 mt-4">
+	<div class="edp-related mx-2 mb-20 mt-4" data-testid="related-products">
 		<header class="edp-related-head">
 			<span class="edp-related-eyebrow">More to explore</span>
 			<h2 class="edp-related-title my-4 text-center text-2xl font-bold">Related Products</h2>
