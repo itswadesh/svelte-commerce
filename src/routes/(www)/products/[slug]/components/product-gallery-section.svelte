@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ImageOff } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import * as Drawer from '$lib/components/ui/drawer/index.js'
@@ -98,6 +99,17 @@
 				{/if}
 			</Drawer.Content>
 		</Drawer.Root>
+	{:else}
+		<!-- A product with no media used to render nothing at all, leaving the whole left column of the
+		     page blank beside the buy box. Reserve the same square the gallery would occupy and say
+		     plainly that there is no photograph, rather than letting the layout look broken. -->
+		<div
+			class="flex aspect-square w-full flex-col items-center justify-center gap-3 rounded-lg border border-border bg-muted text-muted-foreground"
+			data-testid="product-image"
+		>
+			<ImageOff class="h-10 w-10" aria-hidden="true" />
+			<p class="text-sm">No photo of this product yet</p>
+		</div>
 	{/if}
 </div>
 

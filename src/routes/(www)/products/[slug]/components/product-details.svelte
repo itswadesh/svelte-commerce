@@ -7,9 +7,11 @@
 	import { availabilityUrl } from '$lib/components/seo/schema.js'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
+	import PolicyLink from '$lib/components/common/policy-link.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { Truck } from '@lucide/svelte'
+	import { RotateCcw, Truck } from '@lucide/svelte'
 	import ProductAggregation from './product-aggregation.svelte'
+	import ProductAvailability from './product-availability.svelte'
 	import ProductCartAndWishlistButtons from './product-cart-and-wishlist-buttons.svelte'
 	import ProductDescription from './product-description.svelte'
 	import ProductGallerySection from './product-gallery-section.svelte'
@@ -24,10 +26,61 @@
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button/index.js'
+	import { fly } from 'svelte/transition'
+	import { prefersReducedMotion } from 'svelte/motion'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
 	const showPincodeCheck = $derived(productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
+
+	// Delivery and returns are stated only where the merchant has actually published the policy.
+	// The commented-out fallbacks this replaces promised free delivery over ₹999 and a 7-day
+	// return window on every store in every currency; `cmsPages` is the list the root layout
+	// resolved from the backend, so an unpublished policy is simply not offered.
+	const publishedCmsPages = $derived<string[]>(data?.cmsPages ?? [])
+	const hasShippingPolicy = $derived(publishedCmsPages.includes('shipping-policy'))
+	const hasRefundPolicy = $derived(publishedCmsPages.includes('refund-policy'))
+
+	// The sticky mobile purchase bar, revealed only after the in-flow Add to bag has scrolled out
+	// of view — never from first paint, which is what the rule forbids, and never on a viewport
+	// that renders the in-flow CTA anyway (two copies of the CTA in one document would also give
+	// the add-to-cart test hook two matches).
+	let inFlowCta = $state<HTMLElement | null>(null)
+	let ctaOnScreen = $state(true)
+	let isCompactViewport = $state(false)
+
+	$effect(() => {
+		const mq = window.matchMedia('(max-width: 639px)')
+		const sync = () => (isCompactViewport = mq.matches)
+		sync()
+		mq.addEventListener('change', sync)
+		return () => mq.removeEventListener('change', sync)
+	})
+
+	$effect(() => {
+		const el = inFlowCta
+		if (!el || typeof IntersectionObserver === 'undefined') return
+		const observer = new IntersectionObserver((entries) => (ctaOnScreen = entries[0]?.isIntersecting ?? true))
+		observer.observe(el)
+		return () => observer.disconnect()
+	})
+
+	const showStickyBar = $derived(isCompactViewport && !ctaOnScreen)
+
+	// A fixed layer covers whatever is under it, and at the foot of the page that is the footer.
+	// The document gets exactly the bar's own height back as padding for as long as it is on
+	// screen, measured rather than guessed so the reserve always matches.
+	let stickyBarEl = $state<HTMLElement | null>(null)
+
+	$effect(() => {
+		const el = stickyBarEl
+		if (!showStickyBar || !el) return
+		const previous = document.body.style.paddingBottom
+		document.body.style.paddingBottom = `${el.offsetHeight}px`
+		return () => {
+			document.body.style.paddingBottom = previous
+		}
+	})
 
 	/** Strip HTML tags and collapse whitespace; returns '' for placeholder-only values like "-". */
 	const cleanHtmlText = (value: string | null | undefined): string => {
@@ -239,7 +292,7 @@
 			>
 		</div>
 	{:else}
-		<div class="inter-gap edp-grid relative grid grid-cols-1 items-start lg:grid-cols-2">
+		<div class="inter-gap edp-grid relative grid grid-cols-1 items-start lg:grid-cols-2" data-testid="product-detail">
 			<div class="col-span-1 sm:mt-0">
 				<ProductGallerySection />
 			</div>
@@ -253,67 +306,65 @@
 
 				<ProductPricing />
 
+				<ProductAvailability />
+
 				<ProductAggregation />
 
 				<div class="intra-gap flex flex-col">
 					<ProductVariation />
 
-					<!-- Desktop Cart Button -->
-					<div class="intra-gap mt-2 hidden flex-col sm:flex">
+					<!-- In flow on every viewport. The mobile CTA used to exist only inside the sticky
+					     bar, which is why that bar had to be pinned from first paint. -->
+					<div class="intra-gap mt-2 flex flex-col" bind:this={inFlowCta}>
 						<ProductCartAndWishlistButtons />
 					</div>
 
 					{#if showPincodeCheck}
 						<div class="intra-gap intra-pt flex flex-col border-t">
 							<div class="intra-gap flex items-center justify-start">
-								<Truck class="size-4 text-gray-900" />
-								<span class="text-sm text-gray-900"> Delivery Options </span>
+								<Truck class="size-4 text-muted-foreground" />
+								<span class="text-sm text-foreground">Delivery options</span>
 							</div>
 							<PincodeCheck />
 						</div>
-					{:else}
-						<!-- Fallback delivery estimate when plugin is not enabled -->
-						<!-- <div class="intra-gap border-t border-gray-100 intra-pt flex flex-col">
-							<div class="flex items-center gap-2">
-								<Truck class="size-4 text-gray-900" />
-								<span class="text-base font-bold text-gray-900">Delivery Information</span>
-							</div>
-							<div class="space-y-1">
-								<p class="text-sm font-medium text-gray-700">Free delivery on orders above ₹999</p>
-								<p class="text-[11px] font-bold uppercase tracking-tight text-gray-400">
-									Estimated delivery: 5-7 business days
+					{:else if hasShippingPolicy || hasRefundPolicy}
+						<!-- No delivery plugin on this store, so nothing is promised on the merchant's
+						     behalf: their own published policies are linked instead. -->
+						<div class="intra-pt flex flex-col gap-2 border-t text-sm">
+							{#if hasShippingPolicy}
+								<p class="flex items-center gap-2 text-muted-foreground">
+									<Truck class="size-4 shrink-0" aria-hidden="true" />
+									<PolicyLink href="/shipping-policy" class="underline underline-offset-4 hover:text-foreground">Shipping and delivery</PolicyLink>
 								</p>
-							</div>
-						</div> -->
+							{/if}
+							{#if hasRefundPolicy}
+								<p class="flex items-center gap-2 text-muted-foreground">
+									<RotateCcw class="size-4 shrink-0" aria-hidden="true" />
+									<PolicyLink href="/refund-policy" class="underline underline-offset-4 hover:text-foreground">Returns and refunds</PolicyLink>
+								</p>
+							{/if}
+						</div>
 					{/if}
 
 					{#if productState.trustBadgesPlugin?.active}
-						<div class="intra-pt border-t border-gray-100">
+						<div class="intra-pt border-t">
 							{@html productState.trustBadgesPlugin?.html}
 						</div>
 					{/if}
 
-					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
-						<div class="">
-							<h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
-							<div class="text-sm leading-relaxed text-gray-600 {!productState.showReturnPolicy ? 'line-clamp-2 overflow-hidden' : ''}">
+					{#if productState.returnPlugin?.active && productState.returnPlugin?.html}
+						<div>
+							<h2 class="mb-2 text-base font-semibold text-foreground">Returns and exchanges</h2>
+							<div class="text-sm leading-relaxed text-muted-foreground {!productState.showReturnPolicy ? 'line-clamp-2 overflow-hidden' : ''}">
 								{@html productState.returnPlugin?.html}
 							</div>
 
 							{#if productState.returnPlugin?.below_more}
 								<Button variant="link" class="mt-1 h-auto p-0" onclick={() => (productState.showReturnPolicy = !productState.showReturnPolicy)}>
-									{productState.showReturnPolicy ? 'Show Less' : 'Read Full Policy'}
+									{productState.showReturnPolicy ? 'Show less' : 'Read full policy'}
 								</Button>
 							{/if}
 						</div>
-					{:else}
-						<!-- Fallback return policy when plugin is not configured -->
-						<!-- <div class="">
-							<h3 class="mb-2 text-base font-bold text-gray-900">Returns & Exchanges</h3>
-							<p class="text-sm leading-relaxed text-gray-600">
-								We accept returns within 7 days of delivery for unused items in original packaging.
-							</p>
-						</div> -->
 					{/if}
 
 					<div class="">
@@ -337,14 +388,18 @@
 	</div>
 </div>
 
-<!-- Mobile cart button - Sticky Footer -->
-<div
-	class="edp-mobilebar sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 p-page shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden"
->
-	<div class="intra-gap flex flex-1 flex-col">
-		<ProductCartAndWishlistButtons showWishlist={false} />
+<!-- Mobile purchase bar. Fixed, not sticky: stuck to the last flow element it rendered mid-screen
+     on short pages and left the viewport entirely at the foot of the page, which is exactly where
+     a shopper who has read the description reaches for it. -->
+{#if showStickyBar}
+	<div
+		bind:this={stickyBarEl}
+		transition:fly={{ y: 24, duration: prefersReducedMotion.current ? 0 : 180 }}
+		class="edp-mobilebar fixed inset-x-0 bottom-0 z-sticky border-t bg-background px-4 py-3 shadow-z-2 sm:hidden"
+	>
+		<ProductCartAndWishlistButtons showWishlist={false} compact />
 	</div>
-</div>
+{/if}
 
 <LoginModal bind:show={productState.showLoginModal} />
 
@@ -375,8 +430,6 @@
 	:global([data-theme='default'] .edp-mobilebar) {
 		background: var(--ed-surface);
 		border-top: 1px solid var(--ed-line);
-		box-shadow: 0 -6px 24px -14px rgba(27, 26, 23, 0.22);
-		backdrop-filter: none;
 	}
 
 	:global([data-theme='default'] .edp-empty-title) {
