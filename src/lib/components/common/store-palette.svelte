@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { guardStorePalette } from './store-palette-guard.js'
 
 	/**
 	 * Applies the store's admin-set palette (store.cssVariables, edited on the admin Theme
@@ -16,10 +17,10 @@
 		if (!shell) return
 		const applied: string[] = []
 		if (activeTheme === 'default') {
-			for (const [key, value] of Object.entries(vars)) {
-				if (typeof value !== 'string' || !value) continue
-				// Same shadcn-raw transform the core ColorPalette uses: "hsl(24, 100%, 50%)" → "24 100% 50%"
-				shell.style.setProperty(key, value.replaceAll(',', '').replace('hsl(', '').replace(')', ''))
+			// Guarded, and in exactly the same way as the SSR block in +layout.svelte — otherwise the
+			// first paint and hydration would disagree about the palette.
+			for (const [key, value] of Object.entries(guardStorePalette(vars as Record<string, unknown>))) {
+				shell.style.setProperty(key, value)
 				applied.push(key)
 			}
 		}

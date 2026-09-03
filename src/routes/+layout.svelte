@@ -15,6 +15,7 @@
 	import { ColorPalette } from '$lib/core/components/index.js'
 	import StoreFont from '$lib/components/common/store-font.svelte'
 	import StorePalette from '$lib/components/common/store-palette.svelte'
+	import { guardStorePalette } from '$lib/components/common/store-palette-guard.js'
 
 	interface LayoutData {
 		store: StoreData
@@ -97,9 +98,8 @@
 	const paletteStyleTag = $derived.by(() => {
 		if ((data?.theme?.name || 'default') !== 'default') return ''
 		const vars = data?.store?.cssVariables ?? {}
-		const declarations = Object.entries(vars)
-			.filter(([key, value]) => typeof value === 'string' && value && key.startsWith('--'))
-			.map(([key, value]) => key + ': ' + String(value).replaceAll(',', '').replace('hsl(', '').replace(')', '') + ';')
+		const declarations = Object.entries(guardStorePalette(vars as Record<string, unknown>))
+			.map(([key, value]) => key + ': ' + value + ';')
 			.join(' ')
 		if (!declarations) return ''
 		// Doubled attribute selector on purpose: Tailwind 3 emits its @layer base rules as plain,
@@ -119,7 +119,8 @@
 		// Read through entries rather than by key: `cssVariables` is typed `{}` upstream, so indexing it
 		// needs a cast. This is what paletteStyleTag above already does with the same object.
 		const override = Object.entries(data?.store?.cssVariables ?? {}).find(([key]) => key === '--background')?.[1]
-		const triplet = typeof override === 'string' && override.trim() ? override.replaceAll(',', '').replace('hsl(', '').replace(')', '').trim() : '0 0% 100%'
+		const triplet =
+			typeof override === 'string' && override.trim() ? override.replaceAll(',', '').replace('hsl(', '').replace(')', '').trim() : '0 0% 100%'
 		return `hsl(${triplet})`
 	})
 

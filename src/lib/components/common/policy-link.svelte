@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { CMS_BACKED_PATHS } from './cms-pages.js'
+	import { isCmsPageResolvable } from './cms-pages.js'
 	import type { Snippet } from 'svelte'
 
 	/**
@@ -24,8 +24,7 @@
 	// beyond href/class/children is forwarded to whichever element ends up rendering.
 	const { href, class: className = '', children, ...rest }: Props = $props()
 
-	const slug = $derived(href.replace(/^\/+/, '').replace(/\/+$/, ''))
-	const resolvable = $derived(!CMS_BACKED_PATHS.has(href) || (page?.data?.cmsPages ?? []).includes(slug))
+	const resolvable = $derived(isCmsPageResolvable(href, page?.data?.cmsPages ?? []))
 </script>
 
 {#if resolvable}
