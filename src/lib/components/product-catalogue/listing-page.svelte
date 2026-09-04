@@ -121,28 +121,50 @@
 	:global([data-theme='default']) .ed-plp {
 		display: block;
 		background: var(--ed-surface);
-		padding-bottom: clamp(28px, 3.5vw, 56px);
+		padding-bottom: clamp(24px, 2.4vw, 40px);
 	}
 
 	:global([data-theme='default']) .ed-plp__crumbs {
-		padding-top: clamp(14px, 1.6vw, 20px);
+		padding-top: clamp(10px, 1.1vw, 14px);
 	}
 
 	/* Was clamp(24px, 3vw, 48px) / clamp(20px, 2.6vw, 34px): a 48px rail gutter and 34px above the
 	   title, on top of the 34px the breadcrumb block already spent. 32px is the desktop gutter. */
 	:global([data-theme='default']) .ed-plp__row {
-		gap: clamp(20px, 2.2vw, 32px);
-		padding-top: clamp(14px, 1.6vw, 20px);
+		gap: clamp(16px, 1.6vw, 24px);
+		padding-top: clamp(10px, 1.1vw, 16px);
 	}
 
 	/* The one rhythm for the main column — header, filter chips, grid, pagination. Every child that
 	   also carried its own margin has been zeroed so this gap is the only thing setting it. */
 	:global([data-theme='default']) .ed-plp__main {
-		gap: 16px;
+		gap: 12px;
 	}
 
+	/* 28px chips with 6px between them from md up, where the pointer is a mouse. Below md the
+	   markup's own `max-md:h-11` still wins, so a phone keeps the 44px target. */
+	@media (min-width: 768px) {
+		:global([data-theme='default']) .ed-plp__chips {
+			gap: 6px;
+			padding-bottom: 0;
+		}
+
+		:global([data-theme='default']) .ed-plp__chips a {
+			height: 28px;
+			padding-inline: 8px;
+		}
+	}
+
+	/* A rail sized by the facets it holds, not by a quarter of whatever the viewport happens to
+	   be. `w-1/4` spent 310px of a 1240px page on two checkboxes and a price slider, and every
+	   pixel of it came out of the grid. Capped at 232px — the width a dense facet list actually
+	   needs — the main column gains ~80px from 1280 up, which is what pays for the fifth product
+	   column. Floored at 180px so a tablet rail stays legible. `flex: 0 0`, not a max-width: as a
+	   max-width on a flex item whose panel carries its own min-width, the rail measures narrower
+	   than its contents and spills over the first column of products. */
 	:global([data-theme='default']) .ed-plp__aside {
+		flex: 0 0 clamp(180px, 17vw, 232px);
 		border-right: 1px solid var(--ed-line);
-		padding-right: clamp(14px, 1.4vw, 24px);
+		padding-right: clamp(12px, 1.2vw, 20px);
 	}
 </style>

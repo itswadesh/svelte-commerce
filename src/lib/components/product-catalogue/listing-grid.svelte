@@ -246,20 +246,37 @@
 	   apart on the homepage. Uniform, not split: the card's caption already separates one row from
 	   the next, so a taller row-gap only adds height. */
 	:global([data-theme='default']) .ed-grid {
-		column-gap: clamp(14px, 1.6vw, 22px);
-		row-gap: clamp(14px, 1.6vw, 22px);
+		column-gap: clamp(10px, 1.1vw, 16px);
+		row-gap: clamp(14px, 1.4vw, 20px);
+	}
+
+	/* A denser column ladder than the Tailwind classes above, and expressed here rather than on
+	   the element so the other four themes keep 2 / 3 / 4 with the quarter-width rail they were
+	   built against. The default theme's rail is capped at 232px (see listing-page.svelte), which
+	   is what makes room for the extra column: it holds the card between 155px and 184px at every
+	   width from 360 up, instead of swinging from 160px on a tablet to 205px on a desktop. */
+	@media (min-width: 1024px) {
+		:global([data-theme='default']) .ed-grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 1280px) {
+		:global([data-theme='default']) .ed-grid {
+			grid-template-columns: repeat(5, minmax(0, 1fr));
+		}
 	}
 
 	/* Empty state. 58vh reserved most of a viewport for one sentence and a button. */
 	:global([data-theme='default']) .ed-empty {
-		min-height: 38vh;
-		gap: 10px;
+		min-height: 30vh;
+		gap: 8px;
 	}
 
 	:global([data-theme='default']) .ed-empty__title {
 		font-family: var(--ed-display);
 		font-weight: 500;
-		font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+		font-size: clamp(1.125rem, 1.4vw, 1.375rem);
 		letter-spacing: -0.01em;
 		text-transform: none;
 		color: var(--ed-ink);
@@ -279,7 +296,7 @@
 	/* The .ed-plp__main column already contributes its 16px gap above this block. */
 	:global([data-theme='default'] .ed-pagination) {
 		font-family: var(--ed-body);
-		margin-top: clamp(8px, 1.2vw, 16px);
+		margin-top: clamp(4px, 0.8vw, 10px);
 	}
 
 	:global([data-theme='default'] .ed-pagination a),

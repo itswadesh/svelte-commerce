@@ -18,10 +18,13 @@
      (/products, /[slug], /categories/[slug]) shipped zero h1. Only the sort control is hidden on
      small screens now; mobile sorts from the fixed bar in mobile-filter.svelte. -->
 <div class="ed-lh flex flex-wrap items-center justify-between gap-y-2">
-	<div class="ed-lh__group intra-gap flex items-center">
+	<!-- Title and count on one baseline, not a tracked eyebrow stacked over a display heading. The
+	     two lines said one thing in two typographic voices and cost 60px of header before the first
+	     product; a listing's subject and its size are a single fact and read as one line. -->
+	<div class="ed-lh__group flex min-w-0 items-baseline gap-2">
 		<h1 class="page-heading ed-lh__title">
 			{#if page.url.searchParams.get('search')}
-				Search Results: "{page.url.searchParams.get('search')}"
+				Results for "{page.url.searchParams.get('search')}"
 			{:else if data.products?.categoryHierarchy?.length > 0}
 				{data.products.categoryHierarchy[data.products.categoryHierarchy.length - 1].name}
 			{:else}
@@ -29,18 +32,16 @@
 			{/if}
 		</h1>
 
-		<div class="flex flex-col">
-			<span class="ed-lh__count text-sm tracking-widest text-foreground">
-				{data.products.count > 999 ? '1000+' : data.products.count} Products
-			</span>
-		</div>
+		<span class="ed-lh__count shrink-0">
+			{data.products.count > 999 ? '1000+' : data.products.count} items
+		</span>
 	</div>
 	{#if data.products.data.length}
 		<!-- `md:flex`, not `lg:flex`. The fixed Filter/Sort bar that carries sorting on a phone is
 		     itself `md:hidden`, so between 768px and 1023px neither control rendered and a tablet
 		     shopper could filter but never re-order. The sidebar is already visible from md, so the
 		     bar stays hidden and there is exactly one sort affordance at every width. -->
-		<div class="ed-lh__sort hidden items-center gap-2 md:flex">
+		<div class="ed-lh__sort hidden items-center gap-1.5 md:flex">
 			<span id="sort-by-label" class="ed-lh__sortlabel text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sort by</span>
 			<!-- The shadcn/bits-ui select, not the project's custom combobox. That one opens a popover
 			     whose command list has no focusable input when search is off, so nothing consumed the
@@ -55,7 +56,7 @@
 					onSortChange(value)
 				}}
 			>
-				<Select.Trigger id="sort-by" aria-labelledby="sort-by-label sort-by" class="ed-lh__select w-[180px]">
+				<Select.Trigger id="sort-by" aria-labelledby="sort-by-label sort-by" class="ed-lh__select w-[160px]">
 					{sortLabel}
 				</Select.Trigger>
 				<Select.Content>
@@ -84,40 +85,41 @@
 	   1280px. The column gap is now the single rhythm for this region (see listing-page.svelte). */
 	:global([data-theme='default']) .ed-lh {
 		flex-wrap: wrap;
-		align-items: flex-end;
-		gap: 12px 24px;
-		padding-bottom: clamp(12px, 1.4vw, 16px);
+		align-items: center;
+		gap: 8px 16px;
+		padding-bottom: clamp(8px, 0.9vw, 12px);
 		margin-bottom: 0;
 		border-bottom: 1px solid var(--ed-line);
 	}
 
-	/* Count reads as an uppercase eyebrow ABOVE the Bodoni title */
+	/* One line: subject, then size. */
 	:global([data-theme='default']) .ed-lh__group {
-		flex-direction: column-reverse;
-		align-items: flex-start;
-		gap: 6px;
+		min-width: 0;
 	}
 
-	/* 12px, not 11.5px: this is the only line stating how many results the filters produced, and
-	   the design system floors supporting text at 12px. */
+	/* 12px, the design-system floor for supporting text. Sentence case rather than a tracked
+	   uppercase eyebrow — beside the title it is an aside, and tracked caps read as a second
+	   heading. */
 	:global([data-theme='default']) .ed-lh__count {
 		font-family: var(--ed-body);
 		font-size: 0.75rem;
-		font-weight: 600;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
+		font-weight: 500;
+		letter-spacing: 0.01em;
+		text-transform: none;
 		color: var(--ed-soft);
 	}
 
-	/* Was clamp(1.9rem, 3.4vw, 3rem) — 43.5px at 1280 and 48px at 1440, well past the 28-40px
-	   page-title band and the single loudest element on the page. 28px on a phone, 36px at the
-	   widest. */
+	/* 20px on a phone, 24px at the widest, against 28-36px before. The bottom of the 20-28px
+	   page-title band in UX_SYSTEM section 4, which is where that section puts a listing title: it
+	   labels a grid of products rather than carrying the page's message, and at display scale it
+	   was the loudest thing on a screen whose job is to show merchandise. */
 	:global([data-theme='default']) .ed-lh__title {
 		margin: 0;
+		min-width: 0;
 		font-family: var(--ed-display);
 		font-weight: 500;
-		font-size: clamp(1.75rem, 2.4vw, 2.25rem);
-		line-height: 1.08;
+		font-size: clamp(1.25rem, 1.5vw, 1.5rem);
+		line-height: 1.15;
 		letter-spacing: -0.01em;
 		color: var(--ed-ink);
 	}
@@ -130,25 +132,22 @@
 	:global([data-theme='default']) .ed-lh__desc {
 		flex-basis: 100%;
 		order: 9;
-		margin-top: 4px;
+		margin-top: 2px;
 		max-width: 70ch;
 		color: var(--ed-soft);
-		font-size: 0.875rem;
-		line-height: 1.6;
+		font-size: 0.8125rem;
+		line-height: 1.55;
 	}
 
 	/* Refined sort dropdown trigger. The selector used to be `.ed-lh__select button`, but
 	   Select.Trigger renders the <button> ITSELF and carries this class, so nothing below ever
-	   applied and the trigger kept the raw shadcn skin. Reviving it at 44px would have made the
-	   control bigger; this block never renders below 768px (a phone sorts from the fixed bar), so
-	   it takes 40px — the single desktop control height the rest of the storefront already uses
-	   (the homepage .ed-btn, the PDP Add-to-bag CTA, the PDP variant pills and both PDP accordion
-	   triggers are all 40px from md up). It used to drop to 36px at 1024px, which made this the one
-	   control that got SMALLER as the screen got larger while every sibling held 40. */
+	   applied and the trigger kept the raw shadcn skin. 36px — the bottom of the 36-40px desktop
+	   control band — because this block never renders below 768px (a phone sorts from the fixed
+	   bar), so no touch target depends on it, and the header it sits in is now 36px tall itself. */
 	:global([data-theme='default'] .ed-lh__select) {
-		height: 40px;
+		height: 36px;
 		min-width: 0;
-		padding: 0 12px;
+		padding: 0 10px;
 		border: 1px solid var(--ed-line-strong);
 		border-radius: var(--ed-radius);
 		background: var(--ed-surface);
