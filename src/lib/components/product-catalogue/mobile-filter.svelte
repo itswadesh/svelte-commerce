@@ -425,8 +425,11 @@
 		}
 	}
 
-	/* Fixed bottom Sort / Filter bar */
+	/* Fixed bottom Sort / Filter bar. 48px, not 56px: both halves are full-height so each is
+	   still a 48px touch target, comfortably past the 44px minimum, and the bar overlays the
+	   product grid on every listing — eight pixels back is eight pixels of merchandise. */
 	:global([data-theme='default'] .ed-mf__bar) {
+		height: 48px;
 		border-top: 1px solid var(--ed-line);
 		background: var(--ed-surface);
 		box-shadow: 0 -1px 12px rgba(27, 26, 23, 0.06);

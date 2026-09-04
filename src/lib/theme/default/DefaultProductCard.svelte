@@ -107,7 +107,7 @@
 							<LazyImg
 								src={imageSrc}
 								alt="{displayName} product image"
-								sizes="(min-width: 1024px) 25vw, (min-width: 768px) 38vw, 50vw"
+								sizes="(min-width: 1280px) 14vw, (min-width: 1024px) 17vw, (min-width: 768px) 21vw, 46vw"
 								class="dpc__img"
 								{priority}
 							/>
@@ -233,6 +233,11 @@
 		flex-direction: column;
 		font-family: var(--ed-body);
 		color: var(--ed-ink);
+		/* The caption sizes itself against the card, not the viewport. The same card is 170px wide
+		   in two columns on a phone and 154px in three columns on a tablet, so a viewport media
+		   query would tune the wrong one — a container query asks the only question that matters,
+		   which is how much room this card actually has. */
+		container-type: inline-size;
 	}
 
 	.dpc__media-link {
@@ -296,8 +301,8 @@
 	}
 
 	.dpc :global(.dpc__empty-icon) {
-		width: 28px;
-		height: 28px;
+		width: 22px;
+		height: 22px;
 		stroke-width: 1.25;
 		color: hsl(var(--muted-foreground));
 		opacity: 0.55;
@@ -305,35 +310,35 @@
 
 	.dpc__tag {
 		position: absolute;
-		left: 10px;
-		top: 10px;
+		left: 8px;
+		top: 8px;
 		z-index: 2;
 	}
 
 	.dpc__tag span {
 		display: inline-block;
-		padding: 4px 9px;
+		padding: 3px 7px;
 		background: var(--ed-surface);
 		color: var(--ed-ink);
-		font-size: 0.62rem;
+		font-size: 0.6875rem;
 		font-weight: 600;
-		letter-spacing: 0.12em;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		border-radius: 2px;
 	}
 
 	.dpc__rating {
 		position: absolute;
-		left: 10px;
-		bottom: 10px;
+		left: 8px;
+		bottom: 8px;
 		z-index: 2;
 		display: flex;
 		align-items: center;
-		gap: 4px;
-		padding: 3px 8px;
+		gap: 3px;
+		padding: 2px 6px;
 		background: var(--ed-surface);
 		border-radius: 999px;
-		font-size: 0.68rem;
+		font-size: 0.6875rem;
 		font-weight: 600;
 		color: var(--ed-ink);
 	}
@@ -374,10 +379,10 @@
 	   screen for the majority audience and saving a product meant opening it first. */
 	@media (hover: hover) and (pointer: fine) {
 		.dpc__wish {
-			right: 10px;
-			top: 10px;
-			width: 36px;
-			height: 36px;
+			right: 8px;
+			top: 8px;
+			width: 32px;
+			height: 32px;
 			opacity: 0;
 			transform: translateY(-4px);
 		}
@@ -405,11 +410,14 @@
 		color: hsl(var(--primary));
 	}
 
+	/* The caption is two facts — what it is, what it costs — so it is one tight block under the
+	   photograph rather than three spaced rows. 8px from the image and 3px between the lines,
+	   against 12px and 6px: at four to five cards per row that is ~14px off every grid row. */
 	.dpc__info {
 		display: flex;
 		flex-direction: column;
-		gap: 6px;
-		padding-top: 12px;
+		gap: 3px;
+		padding-top: 8px;
 	}
 
 	.dpc__title-link {
@@ -417,11 +425,16 @@
 		color: inherit;
 	}
 
+	/* Still two lines, deliberately: the catalogue is full of products whose names differ only in
+	   the tail ("…14k Rose Gold" against "…10k Yellow Gold"), and clamping to one would make
+	   neighbouring cards indistinguishable. The height is now RESERVED at two lines so a one-line
+	   name does not float its price up out of line with the card beside it — every price in a row
+	   sits on the same baseline, which is what makes a dense grid scannable rather than ragged. */
 	.dpc__title {
-		display: block;
-		font-size: 0.9rem;
+		font-size: 0.8125rem;
 		font-weight: 500;
-		line-height: 1.4;
+		line-height: 1.35;
+		min-height: 2.7em;
 		color: var(--ed-ink);
 		overflow: hidden;
 		display: -webkit-box;
@@ -434,41 +447,64 @@
 		color: hsl(var(--primary));
 	}
 
+	/* Price, was-price and saving on one row. They wrapped onto a second line on a 171px phone
+	   card, which made two cards in the same row different heights for no reason; a step down in
+	   each of the three sizes fits the longest price this catalogue produces on one line. */
 	.dpc__price {
 		display: flex;
 		align-items: baseline;
 		flex-wrap: wrap;
-		gap: 6px;
+		gap: 5px;
 	}
 
 	.dpc__price-from {
-		font-size: 0.75rem;
+		font-size: 0.6875rem;
 		font-weight: 500;
 		color: var(--ed-soft);
 	}
 
 	.dpc__price-now {
-		font-size: 0.95rem;
-		font-weight: 600;
+		font-size: 0.875rem;
+		font-weight: 700;
 		color: var(--ed-ink);
 	}
 
 	.dpc__price-mrp {
-		font-size: 0.8rem;
+		font-size: 0.75rem;
 		color: var(--ed-soft);
 		text-decoration: line-through;
 	}
 
 	.dpc__price-off {
-		font-size: 0.72rem;
+		font-size: 0.6875rem;
 		font-weight: 600;
-		letter-spacing: 0.04em;
+		letter-spacing: 0.02em;
 		text-transform: uppercase;
+		white-space: nowrap;
 		color: hsl(var(--success));
 	}
 
+	/* Below ~172px the three price facts no longer fit on one line at full size, and the row
+	   wrapped — so two cards side by side came out different heights because one price happened to
+	   be a character shorter. One step down on each holds the line to a 148px card, the narrowest
+	   this grid produces (three columns at 768px). Nothing drops below 11px. */
+	@container (max-width: 172px) {
+		.dpc__price {
+			gap: 4px;
+		}
+
+		.dpc__price-now {
+			font-size: 0.8125rem;
+		}
+
+		.dpc__price-mrp,
+		.dpc__price-off {
+			font-size: 0.6875rem;
+		}
+	}
+
 	.dpc__cart {
-		margin-top: 10px;
+		margin-top: 8px;
 	}
 
 	.dpc__add {

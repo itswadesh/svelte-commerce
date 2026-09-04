@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Clock, Search, Tag } from '@lucide/svelte'
+	import { Clock, ImageOff, Search, Tag } from '@lucide/svelte'
 	import * as Command from '$lib/components/ui/command/index.js'
 	import * as Dialog from '$lib/components/ui/dialog/index.js'
 	// Local renderer: Enter goes to the listing route, `loading` tracks every query, and recent
@@ -196,32 +196,36 @@
 										<Command.LinkItem
 											href={`/products/${result?.slug}`}
 											value={`product-${result?.slug}`}
-											class="h-12 gap-3 rounded-radius border-l-2 border-transparent px-2.5 aria-selected:border-l-primary aria-selected:bg-muted/60 aria-selected:text-foreground"
+											class="min-h-14 items-start gap-3 rounded-radius border-l-2 border-transparent px-2.5 py-2 aria-selected:border-l-primary aria-selected:bg-muted/60 aria-selected:text-foreground"
 											onclick={() => {
 												closeSearch()
 												handleCloseSearch()
 											}}
 										>
-											<!-- 40px, down from 56px. The panel held three magnifiers before this: one
-											     labelling the input, one on the see-all row, and one standing in for a
-											     missing product image — which is every product on a store with no
-											     images, so the result list read as a column of search icons. The
-											     placeholder is the product's initial now, the same mark the auth
-											     dialogs use for a store with no logo. -->
-											<span class="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-radius border bg-muted">
+											<!-- 40px, down from 56px. The fallback is the same ImageOff mark the product
+											     card and the product page use for a product with no photograph — NOT the
+											     product's initial, which this catalogue turned into nonsense: names like
+											     "1.50 ct Lab Grown Diamond…" made the column read 1 · 2 · 4 · 0 · 2, a
+											     numbered list whose numbers meant nothing and did not even ascend. A
+											     uniform quiet placeholder says "no photo"; digits say "broken". -->
+											<span class="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-radius border bg-card">
 												{#if result.thumbnail}
 													<img src={result.thumbnail} alt="" class="size-full object-cover" />
 												{:else}
-													<span class="text-sm font-medium text-foreground/70">{(result.name || result.title || '?').charAt(0)}</span>
+													<ImageOff class="size-4 shrink-0 text-muted-foreground/60" aria-hidden="true" />
 												{/if}
 											</span>
-											<span class="min-w-0 flex-1 truncate text-left text-sm font-medium text-foreground">
+											<!-- Two lines, not one. Truncated to a single line on a 390px phone, seven
+											     suggestions all read "1.50 ct Lab Grown Diamond F VS…" — the panel offered
+											     a choice between seven identical strings, and what separates these
+											     products (Fancy Ring, Mens Band, 14k Rose) lives in the tail it cut. -->
+											<span class="line-clamp-2 min-w-0 flex-1 self-center text-left text-sm font-medium leading-snug text-foreground">
 												{result.name || result.title}
 											</span>
 											{#if result.price}
 												<!-- Right-aligned, so a scanning eye gets one price column instead of a
 												     price that starts wherever the title happened to end. -->
-												<span class="shrink-0 text-sm tabular-nums text-muted-foreground">
+												<span class="shrink-0 self-center text-sm tabular-nums text-muted-foreground">
 													{priceRoundUp(result?.price, page?.data?.store?.currency?.code)}
 												</span>
 											{/if}

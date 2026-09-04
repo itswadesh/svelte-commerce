@@ -97,6 +97,11 @@ current state and priorities.
 Use a **quiet, product-first commerce system**: modern, compact, trustworthy, fast, and easy to
 scan. The product and its decision-making information carry the page, not decoration.
 
+Compact is a conversion goal, not a taste. A shopper who can see fifteen products without
+scrolling compares more of them than one who can see eight, and every pixel a page spends on a
+display heading, a wide filter rail or a generous gutter is a pixel not spent on merchandise.
+When a rule in section 4 and a page's appetite for whitespace disagree, the rule wins.
+
 Use these products as references for principles, not as layouts to copy:
 
 - **Shopify:** efficient commerce patterns, clear actions, predictable system behaviour.
@@ -127,7 +132,8 @@ structure incrementally.
   `primary-hover`, `accent`, `success`, `warning`, `danger`, `focus` (mapped in section 2).
 - Typography: `font-sans` (`--font-body`) for UI and commerce data; `font-serif` (`--font-heading`)
   only for controlled editorial headings.
-- Spacing: a 4px base scale of 4, 8, 12, 16, 20, 24, 32, 40, 48, 64 (Tailwind 1–16).
+- Spacing: a 4px base scale of 4, 8, 12, 16, 20, 24, 32, 40, 48, 64 (Tailwind 1–16). Live in the
+  4–24 range; 32 and above separate page regions, not elements.
 - Radius: 8px for controls, 12px for cards, 16px for large surfaces, expressed through the
   `--radius`-derived scale (`rounded-sm/md/lg/xl`) so square themes stay square. No arbitrary radii.
 - Elevation: borders for normal grouping; shadows only for floating layers (dialogs, menus,
@@ -136,19 +142,34 @@ structure incrementally.
 
 ### Density rules
 
-- Desktop controls may be 36–40px high, but the interactive area must stay easy to target.
-- Mobile interactive controls are normally at least 44px high.
-- Gutters: 16px mobile, 24px tablet, 32px desktop (the `--container-gutter` clamp).
-- One content container with a sensible maximum width, normally 1280–1440px.
+Compact is the default, not a variant. Every number below is a ceiling: if a page can do its job
+in less space, it should. Density is bought from chrome — headings, gutters, rails, padding —
+never from the product, the information a shopper decides on, or a touch target.
+
+- Controls: 36–40px on desktop for primary actions; 28–32px for dense secondary controls
+  (filter chips, rail rows, sort triggers, table rows). Never below the WCAG 2.2 24px target
+  minimum.
+- Mobile: important actions stay at least 44px. A control that only ever renders above 768px is
+  not a mobile target and takes the desktop sizes.
+- Gutters: 16px mobile, 24px tablet, 32–48px desktop (the `--container-gutter` clamp).
+- One content container, 1240–1440px. No second max-width.
+- Vertical rhythm, one value per scope and never two at once: 8px inside a component, 12–16px
+  between components in a column, 24–40px between major page regions. Past 40px only for a
+  deliberate editorial band. A component that sets its own margin inside a `gap` column is
+  setting the space twice.
 - Prefer fewer, better-grouped surfaces over cards inside cards.
 - Avoid oversized headings, excessive vertical gaps, pill-shaped styling everywhere, heavy
   gradients, glassmorphism and decorative animation.
 
 ### Type scale
 
-- Body: 14–16px, line-height 1.45–1.6.
-- Supporting text: 12–14px, never low-contrast merely to appear elegant.
-- Page title: 28–40px depending on viewport. Section title: 22–32px.
+- Body: 13–15px, line-height 1.4–1.55.
+- Supporting text: 12–13px, never low-contrast merely to appear elegant. 11px is for a badge or
+  an eyebrow, never for a sentence.
+- Page title: 20–28px. A listing, account or checkout title sits at the bottom of that band — it
+  labels the content, it is not the page's message. One editorial hero headline per site may
+  reach 36px; nothing else does.
+- Section title: 18–24px.
 - Product price: prominent, but not larger than the product title hierarchy requires.
 - Weights: 400, 500, 600 and one display weight.
 
@@ -180,15 +201,30 @@ structure incrementally.
 
 ### Search and product listing
 
-- Useful autocomplete: query suggestions, categories, recent searches, and a few products.
-- Result counts accurate and synchronised with filters; counts share the query/filter scope.
+- Useful autocomplete: query suggestions, categories, recent searches, and a few products. A
+  suggestion row carries enough of the product name to tell it apart from the row above it, and
+  a product with no image gets the same quiet placeholder the card uses — never a derived mark
+  (an initial, an index) that reads as data.
+- Result counts accurate and synchronised with filters; counts share the query/filter scope. The
+  count belongs on the title's line, not stacked above it as a second heading.
 - Hide zero-result filter values unless they explain an already-selected state.
 - Active filters as removable chips above the grid, with "Clear all".
 - Sticky mobile toolbar for **Filter** and **Sort**; filters open in a bottom sheet or full-height drawer.
 - Desktop filters easy to scan with counts, sensible defaults, and collapsed low-priority groups.
+- The filter rail is sized by the facets it holds, not as a fraction of the viewport. Cap it near
+  232px and floor it near 180px; the width a percentage rail would take on a wide screen belongs
+  to the grid.
+- Add columns rather than widening cards. Hold the card between roughly 150px and 200px at every
+  viewport: 2 on a phone, 3 from 768px, 4 from 1024px, 5 from 1280px. Grid gaps 10–16px across,
+  14–20px down.
 - Product cards prioritise image, product name, price, meaningful variant information,
   availability and wishlist. No repeated merchant name in a single-brand shop.
+- The card caption is one tight block, not three spaced rows: 8px below the media, 2–4px between
+  title and price, price and saving on a single line. Reserve the title at its clamped height so
+  every price in a row shares one baseline — a ragged price column is what makes a dense grid
+  hard to scan.
 - Do not hide the meaningful difference between similar products through aggressive truncation.
+  Two clamped lines beat one truncated line whenever names differ in the tail.
 - Reserve image dimensions and show skeletons to prevent layout shift.
 
 ### Product page
@@ -243,7 +279,7 @@ load, subtle progress for later updates.
 > 2. Audit UX first. List issues by Critical, High, Medium, and Low priority. For each issue, state the evidence, user impact, and recommended correction.
 > 3. Preserve working commerce behavior, API contracts, SEO, analytics, and accessibility. Do not remove features simply to make the page cleaner.
 > 4. Apply the shared Svelte Commerce design system. Reuse semantic tokens and existing components. Do not add one-off colors, spacing, typography, radii, shadows, or component variants inside a page unless the design system genuinely lacks the required primitive.
-> 5. Make the experience modern, compact, product-first, and calm. Use strong hierarchy, disciplined spacing, clear content, restrained motion, and minimal decorative noise. Do not use excessive gradients, glassmorphism, oversized text, nested cards, or pills for every control.
+> 5. Make the experience modern, compact, product-first, and calm. Treat the density rules and type scale in section 4 as binding limits, not suggestions: a page ships denser than the one it replaces, or you say why. Use strong hierarchy, disciplined spacing, clear content, restrained motion, and minimal decorative noise. Do not use excessive gradients, glassmorphism, oversized text, nested cards, or pills for every control.
 > 6. Use Shopify for commerce clarity, Apple for hierarchy, Stripe for polished information grouping, Linear for compact density, and Baymard research for e-commerce behavior. Borrow principles only; do not copy another product's brand or layout.
 > 7. Design mobile-first, then verify at 360px, 390px, 768px, 1024px, 1280px, and 1440px. Important mobile actions should have approximately 44px touch targets. Desktop may look compact without making the interaction area difficult to use.
 > 8. Meet WCAG 2.2 AA: semantic HTML, visible focus, keyboard operation, adequate contrast, understandable labels, meaningful alt text, accessible dialogs/drawers, and reduced-motion support.
@@ -288,6 +324,8 @@ Preserve current URLs, query parameters, analytics, and backend adapters.
 
 - UX audit completed before visual changes.
 - Uses shared tokens and reusable components; no unexplained one-off styling.
+- Denser than what it replaced: page height and the count of products or rows visible above the
+  fold both moved the right way, and nothing dropped below its control, type or target minimum.
 - Works at all defined breakpoints without clipping or horizontal scrolling.
 - All data states are designed and implemented.
 - Keyboard and screen-reader-critical flows work.

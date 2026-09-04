@@ -153,7 +153,7 @@
 						<Button
 							variant="link"
 							title={formattedCategoryName}
-							class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
+							class="ed-df__catbtn group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
 							onclick={() => filterState.handleCategoryClick({ slug: category.slug, name: category.name })}
 						>
 							{#if category.thumbnail}
@@ -179,7 +179,7 @@
 						<Button
 							variant="link"
 							title={formattedCategoryName}
-							class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
+							class="ed-df__catbtn group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
 							onclick={() => filterState.handleCategoryClick({ slug: category.slug, name: category.name })}
 						>
 							{#if category.thumbnail}
@@ -365,12 +365,12 @@
 			{#each Object.keys(filterState.processedFilters) as key, idx}
 				<div class="ed-df__rule w-full border-b border-border"></div>
 
-				<div class="intra-gap flex flex-col">
+				<div class="ed-df__group intra-gap flex flex-col">
 					<p class="ed-df__label text-sm font-bold uppercase text-foreground">
 						{filterState.formatFilterName(key)}
 					</p>
 
-					<div class="flex flex-col space-y-1 text-sm">
+					<div class="ed-df__opts flex flex-col space-y-1 text-sm">
 						{#if !filterState.showMoreGeneralFilters[idx]}
 							{@const valuesToShow = filterState.processedFilters[key].slice(0, 3)}
 							{#each valuesToShow as value}
@@ -461,15 +461,58 @@
 	:global([data-theme='default']) .ed-df__panel {
 		font-family: var(--ed-body);
 		color: var(--ed-ink);
-		gap: 12px;
+		gap: 10px;
+	}
+
+	/* Each group separator is itself a flex child, so a hairline costs two panel gaps. Pulling the
+	   rule tight against the group below it turns 20px of surrounding air into 8px, four times
+	   down a rail whose whole job is to fit its facets above the fold. */
+	:global([data-theme='default']) .ed-df__rule {
+		margin: 2px 0 -2px;
+	}
+
+	/* Option rows: 13px labels on a 28px row. Smaller than the 14px they were, but the row is the
+	   pointer target and 28px clears the WCAG 2.2 24px minimum — and this rail never renders below
+	   768px, so no phone-sized touch target depends on it. */
+	:global([data-theme='default']) .ed-df__opt,
+	:global([data-theme='default']) .ed-df__cat {
+		display: flex;
+		align-items: center;
+		min-height: 28px;
+		padding-top: 0;
+		padding-bottom: 0;
+		font-size: 0.8125rem;
+		line-height: 1.35;
+	}
+
+	/* The row is the target, so the padding lives on the label inside it, not on the button. */
+	:global([data-theme='default'] .ed-df__catbtn) {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	/* `intra-gap` is 16px and `space-y-1` another 4px between every option — 20px of rhythm inside
+	   a group whose rows are 28px tall. Both are neutralised here and nowhere else, so the other
+	   four themes keep the spacing they were built with. */
+	:global([data-theme='default']) .ed-df__group {
+		gap: 6px;
+	}
+
+	:global([data-theme='default'] .ed-df__opts > * + *) {
+		margin-top: 0;
+	}
+
+	:global([data-theme='default'] .ed-df__prices) {
+		margin-top: 0;
+		gap: 8px;
 	}
 
 	/* Panel title + Clear */
 	:global([data-theme='default']) .ed-df__title {
 		font-family: var(--ed-body);
-		font-size: 0.8rem;
+		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.18em;
+		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		color: var(--ed-ink);
 	}
@@ -493,9 +536,9 @@
 	/* Quiet uppercase section labels */
 	:global([data-theme='default']) .ed-df__label {
 		font-family: var(--ed-body);
-		font-size: 0.75rem;
+		font-size: 0.6875rem;
 		font-weight: 600;
-		letter-spacing: 0.18em;
+		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		color: var(--ed-soft);
 	}
@@ -520,7 +563,7 @@
 	:global([data-theme='default'] .ed-df__more) {
 		color: var(--ed-soft);
 		font-family: var(--ed-body);
-		font-size: 0.72rem;
+		font-size: 0.6875rem;
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
