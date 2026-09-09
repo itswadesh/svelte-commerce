@@ -9,17 +9,24 @@
 
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
+	import LimelightProductCard from '$lib/theme/limelight/LimelightProductCard.svelte'
+	import NoorProductCard from '$lib/theme/noor/NoorProductCard.svelte'
 
 	const cartState = getCartState()
 
 	let { product, aspectRatio, hideVariations = true, hideCartControls = true }: any = $props()
+
+	// Theme-specific product card. Guarded so the default store is unaffected;
+	// only the limelight theme swaps in its bespoke presentation (logic reused
+	// via the same ProductCardRenderer inside the themed card).
+	const activeTheme = $derived(page?.data?.theme?.name || 'default')
 
 	const discount = product.mrp && product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0
 
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 
 	const categoryName = $derived.by(() => {
-		const name = product?.categories?.[0]?.category?.name
+		const name = product?.category?.name || product?.categories?.[0]?.category?.name
 		if (name?.toLowerCase() == 'uncategorized') return false
 		return name
 	})
@@ -30,6 +37,11 @@
 	})
 </script>
 
+{#if activeTheme === 'limelight'}
+	<LimelightProductCard {product} {aspectRatio} {hideCartControls} />
+{:else if activeTheme === 'noor'}
+	<NoorProductCard {product} {aspectRatio} {hideCartControls} />
+{:else}
 <ProductCardRenderer {product} {aspectRatio}>
 	{#snippet content({ aspectHeight, toggleWishlist, isWishlisted, aspectWidth, handleCardClick, changeQuantity, addToCart })}
 		<section
@@ -48,6 +60,7 @@
 						<LazyImg
 							src={product.thumbnail || product?.image_url}
 							alt="{product.title || product.name} product image"
+							sizes="(min-width: 1024px) 25vw, (min-width: 768px) 38vw, 50vw"
 							class="w-full rounded-md object-top object-contain transition-transform duration-500"
 						/>
 					{:else}
@@ -81,38 +94,34 @@
 							</div>
 						</div>
 					{/if}
+					{#if wishlistPlugin?.active}
+						<div class="absolute right-2 top-2 z-10">
+							<Button
+								variant="ghost"
+								size="icon"
+								class="h-auto w-auto rounded-full bg-white/80 p-1.5 shadow-sm backdrop-blur-sm hover:bg-white"
+								data-testid="wishlist-button"
+								onclick={(e) => {
+									e.stopPropagation()
+									e.preventDefault()
+									toggleWishlist()
+								}}
+							>
+								{#if isWishlisted}
+									<Heart class="size-4 fill-red-500 stroke-red-500" />
+								{:else}
+									<Heart class="size-4" />
+								{/if}
+								<span class="sr-only">Toggle wishlist</span>
+							</Button>
+						</div>
+					{/if}
 				</figure>
 			</a>
 
-			<div data-testid="product-card-info-wrapper" class="flex flex-col pt-[7.5px] lg:pt-3">
-				<div class="flex items-center justify-between">
-					<span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm" data-testid="product-brand">
-						{categoryName || page.data?.store?.name}
-					</span>
-					{#if wishlistPlugin?.active}
-						<Button
-							variant="ghost"
-							size="icon"
-							class="h-auto w-auto p-1"
-							data-testid="wishlist-button"
-							onclick={(e) => {
-								e.stopPropagation()
-								e.preventDefault()
-								toggleWishlist()
-							}}
-						>
-							{#if isWishlisted}
-								<Heart class="size-4 fill-red-500 stroke-red-500" />
-							{:else}
-								<Heart class="size-4" />
-							{/if}
-							<span class="sr-only">Toggle wishlist</span>
-						</Button>
-					{/if}
-				</div>
-
-				<a href="/products/{product.slug}" class="block overflow-hidden">
-					<span class="block w-[80%] truncate text-xs text-gray-600 lg:text-sm" data-testid="product-title" title={product.title}>
+			<div data-testid="product-card-info-wrapper" class="flex flex-col justify-between h-full pt-[7.5px] lg:pt-3">
+				<a href="/products/{product.slug}" class="flex-1 block overflow-hidden">
+					<span class="block w-[80%] text-xs text-gray-600 lg:text-sm" data-testid="product-title" title={product.title}>
 						{product.title}
 					</span>
 				</a>
@@ -164,6 +173,7 @@
 		</section>
 	{/snippet}
 </ProductCardRenderer>
+{/if}
 
 <!-- <div
       class="absolute right-1 top-1 z-20 ml-2 flex max-h-[60px] justify-between space-y-2 opacity-100 transition-opacity duration-300 group-hover:opacity-100 mobilel:right-2 mobilel:top-2 laptop:opacity-0"
