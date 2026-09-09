@@ -5,7 +5,7 @@ import { pageService } from '$lib/core/services/index.js'
  *
  * Five footer links — About Us, Privacy Policy, Terms and Conditions, Shipping Policy and Refund
  * Policy — are static theme content, but the pages behind them are authored in the merchant's CMS.
- * A backend with no CMS (GoCommerce answers every page request empty) or a merchant who never wrote
+ * A backend with no CMS — some answer every page request empty — or a merchant who never wrote
  * them leaves all five resolving to a bare 404 with no header and no footer, linked from the bottom
  * of every page on the site. The contact form's own consent line pointed at the same dead policies,
  * so a shopper could not read the terms before writing in.

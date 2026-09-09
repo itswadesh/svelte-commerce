@@ -12,13 +12,12 @@ This storefront can run against a [Vendure](https://vendure.io) backend only. Co
 
    The GraphQL endpoint is resolved as `<PUBLIC_VENDURE_API_URL>/shop-api`.
 
-2. Switch the connector in `kitcommerce.config.ts` — the repo default is
-   `./src/lib/core/connectors/litekart` — to the repo's Vendure override module, not the raw
-   connector package (see [Why an override layer](#why-an-override-layer)):
+2. There is no export to switch and no per-backend module to pick: `vite.config.ts` resolves
+   whichever connector is installed, and `src/lib/core/connectors/active.ts` wraps it (see
+   [Why an override layer](#why-an-override-layer)). `kitcommerce.config.ts` only carries your
+   store identity overrides:
 
    ```ts
-   export * as services from './src/lib/core/connectors/vendure'
-
    export default {
    	// store identity overrides — see below
    }
@@ -105,7 +104,7 @@ REST helpers still called Litekart API endpoints (`/api/stores/public-details`, 
 with relative URLs — without a Litekart API those requests hit the app's own origin and fail, and
 the store lookup failure is fatal (hooks and the root layout both require store details).
 
-From 2.0.39 the connector answers them itself, so `src/lib/core/connectors/vendure.ts` is down to
+From 2.0.39 the connector answers them itself, so `src/lib/core/connectors/active.ts` is down to
 what only this storefront can know: it registers the store record through `setStaticStore`, hands
 the connector a local resolver for the REST paths this repo can serve, and keeps a prototype-level
 net (`blockRestFallbacks`) in case a service still reaches for one. The behaviour below is the
@@ -163,10 +162,11 @@ implemented for Vendure yet. Concretely:
 
 ## Troubleshooting
 
-- **`PUBLIC_VENDURE_API_URL is set but the vendure connector is not active in kitcommerce.config.ts`**
-  — thrown by the hooks `init` when that env var is set while a different connector (e.g. the
-  litekart default) is exported from `kitcommerce.config.ts`. Switch the export to
-  `./src/lib/core/connectors/vendure`, or remove the env var if you meant to run Litekart.
+- **`PUBLIC_VENDURE_API_URL is set, but it configures a different backend than the one this build runs on`**
+  — thrown by the hooks `init` when that env var is set while a different connector is
+  installed (e.g. the stock Litekart one). Install `@misiki/vendure-connector`, or remove the
+  env var if you meant to run Litekart. With more than one connector installed, set
+  `PUBLIC_CONNECTOR='@misiki/vendure-connector'` to say which one this build uses.
 - **`[vendure] no native implementation for \`get /api/...\`` in the console** — the connector's
   REST guard caught an inherited Litekart path and answered it empty rather than requesting it.
   Each path is reported once. Harmless if that feature has no Vendure equivalent; if it does,

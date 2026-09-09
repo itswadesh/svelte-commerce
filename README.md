@@ -16,39 +16,32 @@
 
 ## Backend support
 
-Svelte Commerce talks to any backend through a connector package. Nothing in the app imports a
-connector by name — every service resolves through `$lib/core/services`, which follows whatever
-`kitcommerce.config.ts` exports. Switching backends is three steps:
+Svelte Commerce talks to any backend through a connector package. **No file in this repo names a
+connector.** Every service resolves through `$lib/core/services`, and which connector answers is
+decided by what `package.json` installs. Switching backends is two steps:
 
-**1. Select the backend** in `kitcommerce.config.ts` — exactly one line active:
-
-```ts
-export * as services from './src/lib/core/connectors/litekart'
-// export * as services from './src/lib/core/connectors/vendure'
-// export * as services from './src/lib/core/connectors/medusa'
-// export * as services from './src/lib/core/connectors/saleor'
-```
-
-Backends with no module in `src/lib/core/connectors` are selected by package instead — e.g.
-`export * as services from '@misiki/shopify-connector'`.
-
-**2. Install that connector** in place of the stock one, so `npm i` — and any Docker build, which
+**1. Install the connector** in place of the stock one, so `npm i` — and any Docker build, which
 installs from `package.json` alone — resolves it:
 
 ```sh
 npm uninstall @misiki/litekart-connector
-npm i @misiki/medusa-connector   # or vendure, saleor, ...
+npm i @misiki/shopify-connector   # or vendure, medusa, saleor, ...
 ```
 
-**3. Set that backend's env** in `.env`: `PUBLIC_MEDUSA_API_URL`, `PUBLIC_VENDURE_API_URL`,
-`PUBLIC_SALEOR_API_URL`, or the `PUBLIC_LITEKART_*` trio. Per-backend guides are in
-[`docs/`](./docs/README.md).
+**2. Set that backend's env** in `.env` — `PUBLIC_SHOPIFY_API_URL`, `PUBLIC_MEDUSA_API_URL`, the
+`PUBLIC_LITEKART_*` trio, and so on. The convention is `PUBLIC_<BACKEND>_API_URL`, with any extra
+credentials read from the same prefix, so a connector this repo has never heard of configures
+itself the same way. Per-backend guides are in [`docs/`](./docs/README.md).
 
-Nothing else. `@misiki/kitcommerce-core` imports `@misiki/litekart-connector` by name — its
-peerDependency — so two shims redirect that specifier onto the connector you installed:
-`vite.config.ts` for runtime/bundling, and an ambient declaration written by
-`sync-connector-types.js` (run by `npm run check`) for types. Both read `package.json`, and neither
-does anything while Litekart is installed.
+There is no third step, and nothing to uncomment. `vite.config.ts` resolves whichever
+`@misiki/*-connector` is installed and exposes it as `$connector`;
+`src/lib/core/connectors/active.ts` is the one module that wraps it, for every backend. Set
+`PUBLIC_CONNECTOR` to override that — to attach a connector this repo has never heard of
+(`PUBLIC_CONNECTOR='@my-co/custom-connector'`), or to choose when several are installed.
+
+`@misiki/kitcommerce-core` imports `@misiki/litekart-connector` by name — its peerDependency — so
+a shim in `vite.config.ts` redirects that specifier onto the connector you installed. It does
+nothing while Litekart is installed.
 
 ## All 26 connectors — and a request to the people who build these platforms
 
@@ -68,7 +61,6 @@ gap, and the one thing platform maintainers can fix that we cannot.
 | :--- | :--- | :--- | :-: | :-: | :-: | :-: | :--- |
 | [Litekart](https://litekart.in) | `@misiki/litekart-connector` | **39/43** | ✅ | ✅ | ✅ | ✅ | — |
 | [Vendure](https://www.vendure.io) | `@misiki/vendure-connector` | **39/43** | ✅ | ✅ | ✅ | ✅ | — |
-| [GoCommerce](https://github.com/itswadesh/gocommerce) | `@misiki/gocommerce-connector` | **10/43** | ✅ | ✅ | ✅ | ⛔ | CORS headers on the API; sort/price/tag params on `/api/products` |
 | [Medusa](https://medusajs.com) | `@misiki/medusa-connector` | **31/43** | — | ✅ | ✅ | ⛔ | address, auth, cart, category, payment-method, product, search, user |
 | [Broadleaf Commerce](https://www.broadleafcommerce.com) | `@misiki/broadleaf-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | — |
 | [Saleor](https://saleor.io) | `@misiki/saleor-connector` | **28/43** | — | — | — | ⛔ | address, auth, cart, category, checkout, coupon, order, page, payment-method, search, user |
@@ -185,13 +177,6 @@ See [SALEOR.md](./docs/SALEOR.md) for the full Saleor setup guide.
 - Set a publishable API key and add your storefront origin to the Store CORS config.
 
 See [MEDUSA.md](./docs/MEDUSA.md) for the full Medusa setup guide.
-
-**GoCommerce**
-
-- Nothing to configure on the server. Because GoCommerce sends no CORS headers, browser-side calls
-  are forwarded through `/proxy/gocommerce/*` — so only the storefront server needs to reach the API.
-
-See [GOCOMMERCE.md](./docs/GOCOMMERCE.md) for the full GoCommerce setup guide.
 
 ### Demos
 

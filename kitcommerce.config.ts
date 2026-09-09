@@ -1,41 +1,16 @@
-// Pick exactly one. This line is the whole backend switch: the rest of the app reaches services
-// through `$lib/core/services`, never a connector package by name, so pointing it at another
-// module in src/lib/core/connectors is all it takes to run the same storefront on another backend.
-// Swap the connector package in package.json to match, so installs and Docker builds resolve it.
+// The backend is whichever commerce connector this project installs. There is nothing to uncomment
+// here and no per-backend module to pick: `src/lib/core/connectors/active.ts` wraps whatever
+// `$connector` resolves to, and vite.config.ts resolves that from package.json.
 //
-// Each module re-exports its @misiki/*-connector and exports a `connectorName` marker.
-// Every backend but Litekart also needs a PUBLIC_<CONNECTOR>_* env set in .env;
-// `src/lib/core/connectors/init.ts` holds one row per backend and fails at boot naming the
-// variable when it is missing, or set while a different connector is active. See
-// docs/<CONNECTOR>.md for that backend's variables and its Store identity section.
-
-// export * as services from './src/lib/core/connectors/litekart'
-// export * as services from './src/lib/core/connectors/bagisto'
-// export * as services from './src/lib/core/connectors/broadleaf'
-// export * as services from './src/lib/core/connectors/commercetools'
-// export * as services from './src/lib/core/connectors/cs-cart'
-// export * as services from './src/lib/core/connectors/evershop'
-export * as services from './src/lib/core/connectors/gocommerce'
-// export * as services from './src/lib/core/connectors/magento'
-// export * as services from './src/lib/core/connectors/medusa'
-// export * as services from './src/lib/core/connectors/nopcommerce'
-// export * as services from './src/lib/core/connectors/opencart'
-// export * as services from './src/lib/core/connectors/orocommerce'
-// export * as services from './src/lib/core/connectors/oscar'
-// export * as services from './src/lib/core/connectors/prestashop'
-// export * as services from './src/lib/core/connectors/saleor'
-// export * as services from './src/lib/core/connectors/sharetribe'
-// export * as services from './src/lib/core/connectors/shopify'
-// export * as services from './src/lib/core/connectors/shopware'
-// export * as services from './src/lib/core/connectors/shuup'
-// export * as services from './src/lib/core/connectors/spree'
-// export * as services from './src/lib/core/connectors/spryker'
-// export * as services from './src/lib/core/connectors/swell'
-// export * as services from './src/lib/core/connectors/sylius'
-// export * as services from './src/lib/core/connectors/vendure'
-// export * as services from './src/lib/core/connectors/virto'
-// export * as services from './src/lib/core/connectors/woocommerce'
-// export * as services from './src/lib/core/connectors/x-cart'
+//   bun remove @misiki/litekart-connector
+//   bun add    @misiki/shopify-connector
+//
+// is the whole switch. Set `PUBLIC_CONNECTOR` to override it — that is how you attach a connector
+// this repo has never heard of (`PUBLIC_CONNECTOR='@my-co/custom-connector'`), and how you choose
+// when more than one is installed. Every backend but Litekart also needs its own PUBLIC_<NAME>_*
+// env; `src/lib/core/connectors/init.ts` derives which one and fails at boot naming it when it is
+// missing. See docs/CONNECTORS.md.
+export * as services from './src/lib/core/connectors/active'
 
 // Connectors without a Litekart API behind them read store details from static config instead.
 // Merge store identity overrides here — name, logo, favicon, currency, menus, plugins,

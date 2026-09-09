@@ -37,9 +37,9 @@ Current stack: SvelteKit 2.17 · Svelte 5.19 (runes: $props/$state/$derived; no 
                vaul-svelte (mobile drawers/sheets) · embla-carousel-svelte (carousels)
                @lucide/svelte (icons) · svelte-sonner (toasts) · sveltekit-superforms + formsnap + zod (forms)
                @misiki/kitcommerce-core (services, stores, composables, load functions, SEO/analytics plugins)
-Supported backends: 26 connectors (@misiki/<platform>-connector). Exactly one is active, chosen by the single
-               uncommented export in kitcommerce.config.ts (currently GoCommerce). App code never imports a
-               connector by name; everything resolves through $lib/core/services.
+Supported backends: 26 connectors (@misiki/<platform>-connector). Exactly one is active, resolved from whichever
+               package.json installs (currently Litekart); no file in the repo names a connector. App code
+               never imports one by name; everything resolves through $lib/core/services.
 Must preserve: backend-neutral components, SSR, SEO (SeoHeader/Canonical/structured data), analytics hooks,
                cart/checkout/auth logic, URL and query-parameter contracts, data-testid hooks used by tests,
                and runtime theme switching (data-theme on the root wrapper).
