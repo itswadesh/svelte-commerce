@@ -7,18 +7,46 @@ const require = createRequire(import.meta.url)
 const LITEKART_CONNECTOR = '@misiki/litekart-connector'
 const CONNECTOR_NAME = /^@misiki\/[a-z0-9-]+-connector$/
 
-// The backend connector is whichever @misiki/*-connector package.json installs; kitcommerce.config.ts
-// exports it (directly, or via an override module in src/lib/core/connectors). Litekart is only the
-// stock choice, so nothing may assume it is present. Finding no connector — or more than one — is
-// not an error: the shim below simply does not apply, and resolution behaves exactly as it would
-// without it.
-const activeConnector = () => {
+// Every @misiki/*-connector this project installs.
+const installedConnectors = () => {
 	const pkg = require('./package.json')
-	const names = Object.keys({ ...pkg.dependencies, ...pkg.devDependencies }).filter((name) =>
-		CONNECTOR_NAME.test(name)
-	)
-	return names.length === 1 ? names[0] : null
+	return Object.keys({ ...pkg.dependencies, ...pkg.devDependencies }).filter((name) => CONNECTOR_NAME.test(name))
 }
+
+/**
+ * Which backend this build runs on — resolved once, here, and handed to the rest of the build as
+ * the `$connector` alias. This is the whole backend switch: nothing under src/ names a connector
+ * package, so attaching a different one never means editing this repo.
+ *
+ * `PUBLIC_CONNECTOR` wins when set. That is the escape hatch for a connector this repo has never
+ * heard of (`@my-co/custom-connector`) and for a project that deliberately installs several.
+ * Otherwise the single installed connector is it, and `bun add @misiki/shopify-connector` is the
+ * entire migration.
+ *
+ * Failing here is deliberate. A specifier that resolves to a package nobody installed is what
+ * produces `Rollup failed to resolve import "@misiki/…-connector"` minutes into a Docker build with
+ * nothing naming the cause. These messages name it before the build starts.
+ */
+const activeConnector = (override?: string) => {
+	if (override) return override
+	const installed = installedConnectors()
+	if (installed.length === 1) return installed[0]
+	if (installed.length === 0) {
+		throw new Error(
+			'No commerce connector is installed. Add the backend this storefront runs on — e.g. ' +
+				'`bun add @misiki/shopify-connector` — or set PUBLIC_CONNECTOR to the package to use.'
+		)
+	}
+	// Several are installed. Litekart is the documented stock choice, so prefer it over guessing.
+	if (installed.includes(LITEKART_CONNECTOR)) return LITEKART_CONNECTOR
+	throw new Error(
+		`Several commerce connectors are installed (${installed.join(', ')}) and none is the stock ` +
+			'Litekart one, so which to run on is ambiguous. Set PUBLIC_CONNECTOR to pick one.'
+	)
+}
+
+/** `@misiki/x-cart-connector` → `x-cart`: the short name the env convention and rest-guard key on. */
+const connectorShortName = (specifier: string) => specifier.replace(/^@[^/]+\//, '').replace(/-connector$/, '')
 
 // @misiki/kitcommerce-core declares @misiki/litekart-connector as a peerDependency and imports it by
 // name in dist/composables/my-reviews-renderer.svelte, which the $lib/core/composables barrel pulls
@@ -46,10 +74,17 @@ const connectorPeerShim = (connector: string | null): Plugin => ({
 
 export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '')
-	const connector = activeConnector()
+	const connector = activeConnector(env.PUBLIC_CONNECTOR)
 	return {
 		plugins: [connectorPeerShim(connector), sveltekit()],
+		// The one place a connector package is named. `$connector` is what src/lib/core/connectors/
+		// active.ts imports, and `__CONNECTOR_NAME__` is the fallback short name for connectors old
+		// enough not to export a `connectorName` marker of their own (Litekart 2.0.x is one).
+		define: {
+			__CONNECTOR_NAME__: JSON.stringify(connectorShortName(connector))
+		},
 		resolve: {
+			alias: [{ find: /^\$connector$/, replacement: connector }],
 			// @misiki/kitcommerce-core ships its own nested copy of svelte-sonner, so its components
 			// (the address form renderer, the cart store, …) called `toast()` on a different module
 			// instance from the `<Toaster />` mounted in src/routes/+layout.svelte. Every error routed

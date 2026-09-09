@@ -35,11 +35,13 @@ A marketplace, not a webshop. The mapping is `listing` to `Product` and `transac
    npm i @misiki/sharetribe-connector
    ```
 
-2. Point `kitcommerce.config.ts` at this backend's module — not at the package, so app code
-   never names a connector:
+2. That is the whole switch — there is no file in this repo to edit. `vite.config.ts` resolves
+   whichever connector is installed and `src/lib/core/connectors/active.ts` wraps it, so
+   `kitcommerce.config.ts` never names a backend. Keeping more than one connector installed is
+   fine; name the one to run on:
 
-   ```ts
-   export * as services from './src/lib/core/connectors/sharetribe'
+   ```env
+   PUBLIC_CONNECTOR='@misiki/sharetribe-connector'
    ```
 
 3. Give the connector its base URL in `.env`:
@@ -48,8 +50,8 @@ A marketplace, not a webshop. The mapping is `listing` to `Product` and `transac
    PUBLIC_SHARETRIBE_API_URL=https://your-store.example.com
    ```
 
-   `src/lib/core/connectors/init.ts` carries a row for every backend this storefront supports and
-   applies that row at boot, in both hooks — the server one covers SSR, the client one covers the
+   `src/lib/core/connectors/init.ts` derives this backend's variables from its connector name
+   (`PUBLIC_SHARETRIBE_*`) and applies them at boot, in both hooks — the server one covers SSR, the client one covers the
    browser, which must reach the same URL in production. Boot fails naming the variable if it is
    missing, rather than letting every call fall through to a relative path.
 
@@ -57,15 +59,16 @@ A marketplace, not a webshop. The mapping is `listing` to `Product` and `transac
    `PUBLIC_SHARETRIBE_API_KEY`, `PUBLIC_SHARETRIBE_API_SECRET`, `PUBLIC_SHARETRIBE_ACCESS_TOKEN`, `PUBLIC_SHARETRIBE_ACCESS_KEY`, `PUBLIC_SHARETRIBE_STORE_ID`, `PUBLIC_SHARETRIBE_CHANNEL_ID`, `PUBLIC_SHARETRIBE_CLIENT_ID`, `PUBLIC_SHARETRIBE_ASSET_URL`. Unset ones are not passed, so they never overwrite a value the connector already
    holds.
 
-4. What that module does. `@misiki/sharetribe-connector` already carries its own `setStaticStore`,
+4. What the wrapper does. `@misiki/sharetribe-connector` already carries its own `setStaticStore`,
    `serveRestLocally` and `connectorName`, and `src/lib/core/connectors/init.ts` registers the
    first two on whatever connector is active. So store identity resolves from your config rather
    than `/api/stores/public-details`, and any Litekart REST path the connector still inherits is
    answered from local data or resolved empty instead of being requested.
 
-   `src/lib/core/connectors/sharetribe.ts` is thin on purpose: it re-exports the package, exports the
-   `connectorName` marker, and registers those two hooks at module load. Override a service here
-   only when you want to change what the connector already does.
+   `src/lib/core/connectors/active.ts` is thin on purpose, and it is the same file for every
+   backend: it re-exports whichever package is installed, resolves the `connectorName` marker,
+   and registers those two hooks at module load. Wrap a service there only when you want to
+   change what the connector already does.
 
 ## Store identity
 

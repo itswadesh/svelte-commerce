@@ -24,11 +24,12 @@ Everything else falls back to static theme content for those. See
 
 ## Setup
 
-Litekart is the default, so there is nothing to install or switch. `kitcommerce.config.ts` ships
-with the Litekart connector module selected:
+Litekart is the stock choice, so there is nothing to install or switch: `package.json` ships
+`@misiki/litekart-connector`, and `vite.config.ts` resolves whichever connector is installed.
+`kitcommerce.config.ts` names no backend at all:
 
 ```ts
-export * as services from './src/lib/core/connectors/litekart'
+export * as services from './src/lib/core/connectors/active'
 ```
 
 That module is a plain re-export of `@misiki/litekart-connector` — Litekart is the one backend

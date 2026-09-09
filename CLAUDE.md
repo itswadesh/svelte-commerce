@@ -31,22 +31,25 @@ the relevant ones in their prompts so each does not re-derive them.
 - `bun run dev` serves the default theme. `PUBLIC_STOREFRONT_THEME=<name>` overrides it, but only
   when the store record carries no theme of its own.
 
-**The local backend, and why much of the UI never renders**
+**The local backend**
 
-- GoCommerce on `127.0.0.1:8080`, store "Test": three products, **no product images**, **no
-  accounts** (auth throws `NotSupportedError`), and no server-side sort, price or tag parameters.
-  The browser reaches it through `/proxy/gocommerce`, because the API sends no CORS headers.
-- `src/lib/core/connectors/default-store.json` ships `search`, `isWishlist` and
-  `isDiscountCoupons` **inactive**, so the search trigger, wishlist buttons and coupon drawer do
-  not render locally. Their absence on screen is configuration, not a bug in the component.
+- The active connector is Litekart (`kitcommerce.config.ts`), and `.env.example` points it at the
+  hosted demo API: `PUBLIC_LITEKART_API_URL=https://api.litekart.in`, `PUBLIC_LITEKART_DOMAIN=arialshop.com`.
+  Litekart reads store identity, menus and plugin toggles live from that API, so
+  `src/lib/core/connectors/default-store.json` and `static-store.ts` are out of the picture here —
+  they serve the connectors that have no store record of their own.
+- The notes that used to live here about a three-product store with no images, no accounts and
+  inactive `search` / `isWishlist` / `isDiscountCoupons` toggles were specific to the local
+  GoCommerce backend, which has been removed. Re-verify against the live backend before treating
+  any absent control as configuration rather than a bug.
 - A missing product image is demo data, not a defect. A component that collapses to zero height
   because the image is missing is a defect.
 
 **Ownership: what you may not edit**
 
 - `src/lib/core/**` and `node_modules/**` are package-owned (`@misiki/kitcommerce-core`, the
-  connectors). Wrap behaviour at the call site, or in `src/lib/core/connectors/gocommerce.ts`;
-  never edit in place.
+  connectors). Wrap behaviour at the call site, or in the active connector's module under
+  `src/lib/core/connectors/`; never edit in place.
 - `src/lib/theme/{wine,organic,lime,noor}/**` is out of design scope. Do not break it, do not
   design for it.
 - `package.json` and `bun.lock` are often modified by a parallel session working in this same
@@ -54,7 +57,9 @@ the relevant ones in their prompts so each does not re-derive them.
 
 ## Conventions
 
-- Backend: exactly one `export * as services from …` line is active in `kitcommerce.config.ts`. App
+- Backend: no file names a connector. `vite.config.ts` resolves whichever `@misiki/*-connector`
+  `package.json` installs (override with `PUBLIC_CONNECTOR`) and exposes it as `$connector`;
+  `src/lib/core/connectors/active.ts` is the single module wrapping it, for every backend. App
   code never imports a connector package by name; use `$lib/core/services`.
 - Tokens: `src/app.css` (per `[data-theme]` HSL variables) mapped by `tailwind.config.ts`. Use the
   semantic utilities (`bg-background`, `text-muted-foreground`, `border`, `bg-primary`, …), the

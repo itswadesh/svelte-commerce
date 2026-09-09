@@ -35,11 +35,13 @@ Scored out of 27 rather than 43: several storefront services have no equivalent 
    npm i @misiki/shopify-connector
    ```
 
-2. Point `kitcommerce.config.ts` at this backend's module — not at the package, so app code
-   never names a connector:
+2. That is the whole switch — there is no file in this repo to edit. `vite.config.ts` resolves
+   whichever connector is installed and `src/lib/core/connectors/active.ts` wraps it, so
+   `kitcommerce.config.ts` never names a backend. Keeping more than one connector installed is
+   fine; name the one to run on:
 
-   ```ts
-   export * as services from './src/lib/core/connectors/shopify'
+   ```env
+   PUBLIC_CONNECTOR='@misiki/shopify-connector'
    ```
 
 3. Give the connector its store and tokens in `.env`:
@@ -50,21 +52,22 @@ Scored out of 27 rather than 43: several storefront services have no equivalent 
    PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN=...
    ```
 
-   `src/lib/core/connectors/init.ts` carries a row for every backend this storefront supports and
-   applies that row at boot, in both hooks — the server one covers SSR, the client one covers the
+   `src/lib/core/connectors/init.ts` derives this backend's variables from its connector name
+   (`PUBLIC_SHOPIFY_*`) and applies them at boot, in both hooks — the server one covers SSR, the client one covers the
    browser. Shopify is keyed on a store domain rather than a URL, so the row strips any
    `https://` you include before handing it to `setShopifyCredentials`.
    `PUBLIC_SHOPIFY_PROXY_URL` is read too, for stores fronted by a proxy.
 
-4. What that module does. `@misiki/shopify-connector` already carries its own `setStaticStore`,
+4. What the wrapper does. `@misiki/shopify-connector` already carries its own `setStaticStore`,
    `serveRestLocally` and `connectorName`, and `src/lib/core/connectors/init.ts` registers the
    first two on whatever connector is active. So store identity resolves from your config rather
    than `/api/stores/public-details`, and any Litekart REST path the connector still inherits is
    answered from local data or resolved empty instead of being requested.
 
-   `src/lib/core/connectors/shopify.ts` is thin on purpose: it re-exports the package, exports the
-   `connectorName` marker, and registers those two hooks at module load. Override a service here
-   only when you want to change what the connector already does.
+   `src/lib/core/connectors/active.ts` is thin on purpose, and it is the same file for every
+   backend: it re-exports whichever package is installed, resolves the `connectorName` marker,
+   and registers those two hooks at module load. Wrap a service there only when you want to
+   change what the connector already does.
 
 ## Store identity
 

@@ -14,13 +14,12 @@ limits.
    PUBLIC_SALEOR_API_URL=https://your-store.saleor.cloud/graphql/
    ```
 
-2. Switch the connector in `kitcommerce.config.ts` — the repo default is
-   `./src/lib/core/connectors/litekart` — to the repo's Saleor override module, not the raw
-   connector package (see [Why an override layer](#why-an-override-layer)):
+2. There is no export to switch and no per-backend module to pick: `vite.config.ts` resolves
+   whichever connector is installed, and `src/lib/core/connectors/active.ts` wraps it (see
+   [Why an override layer](#why-an-override-layer)). `kitcommerce.config.ts` only carries your
+   store identity overrides:
 
    ```ts
-   export * as services from './src/lib/core/connectors/saleor'
-
    export default {
    	// store identity overrides — see below
    }
@@ -103,7 +102,7 @@ while a different connector is active.
 store metadata — without a Litekart API that request fails, and the store lookup failure is fatal
 (hooks and the root layout both require store details).
 
-From 1.0.4 the connector answers it itself, so `src/lib/core/connectors/saleor.ts` is down to what
+From 1.0.4 the connector answers it itself, so `src/lib/core/connectors/active.ts` is down to what
 only this storefront can know: it registers the store record through `setStaticStore`, hands the
 connector a local resolver for the REST paths this repo can serve, and keeps a prototype-level net
 (`blockRestFallbacks`) in case a service still reaches for one. The behaviour below is the
@@ -150,10 +149,11 @@ See the connector capability matrix in `README.md` for what's implemented for Sa
 
 ## Troubleshooting
 
-- **`PUBLIC_SALEOR_API_URL is set but the saleor connector is not active in kitcommerce.config.ts`**
-  — thrown by the hooks `init` when that env var is set while a different connector (e.g. the
-  litekart default) is exported from `kitcommerce.config.ts`. Switch the export to
-  `./src/lib/core/connectors/saleor`, or remove the env var if you meant to run another backend.
+- **`PUBLIC_SALEOR_API_URL is set, but it configures a different backend than the one this build runs on`**
+  — thrown by the hooks `init` when that env var is set while a different connector is
+  installed (e.g. the stock Litekart one). Install `@misiki/saleor-connector`, or remove the
+  env var if you meant to run another backend. With more than one connector installed, set
+  `PUBLIC_CONNECTOR='@misiki/saleor-connector'` to say which one this build uses.
 - **`[saleor] no native implementation for \`get /api/...\`` in the console** — the connector's
   REST guard caught an inherited Litekart path and answered it empty rather than requesting it.
   Each path is reported once. Harmless if that feature has no Saleor equivalent; if it does,
