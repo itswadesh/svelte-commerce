@@ -4,43 +4,112 @@
 
 `now build a new theme based on {WEBSITE_NAME}`
 
-<div align="center">
+<div >
 
-**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
+**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payme[...]
 Turnkey integration with
 
-- [litekart.in](https://litekart.in/)
-- [shopify.com](https://www.shopify.com)
-- [medusajs.com](https://medusajs.com/)
+## Backend support
+
+Svelte Commerce talks to any backend through a connector package. Switch backends by
+changing a single export in `src/lib/services/index.ts`:
+
+```ts
+// pick exactly one
+export * from '@misiki/litekart-connector'
+// export * from '@misiki/medusa-connector'
+// export * from '@misiki/vendure-connector'
+// export * from '@misiki/saleor-connector'
+// export * from '@misiki/shopify-connector'
+// export * from '@misiki/woocommerce-connector'
+```
+
+| Capability | Litekart | Medusa | Vendure | Saleor |
+| --- | :---: | :---: | :---: | :---: |
+| Product listing / search | ✅ | ✅ | ✅ | ✅ |
+| Product detail page | ✅ | ✅ | ✅ | ✅ |
+| Categories / collections | ✅ | ✅ | ✅ | ❓ |
+| Cart | ✅ | ✅ | ✅ | ✅ |
+| Checkout | ✅ | ✅ | ✅ | ✅ |
+| Payment methods | ✅ | ✅ | ✅ | ✅ |
+| Order placement | ✅ | ✅ | ✅ | ✅ |
+| Order history / detail | ✅ | ❓ | ❌ | ❓ |
+| Auth / registration | ✅ | ❓ | ✅ | ❓ |
+| Addresses | ✅ | ❓ | ✅ | ❓ |
+| Customer profile | ✅ | ❓ | ❌ | ❓ |
+| Wishlist | ✅ | ❓ | ❌ | ❓ |
+| Reviews | ✅ | ❓ | ❌ | ❓ |
+| Coupons / promotions | ✅ | ❓ | ❌ | ❓ |
+| Multi-currency / regions | ✅ | ❓ | ❌ | ❓ |
+| Faceted search (Meilisearch) | ✅ | ❓ | ❌ | ❓ |
+| CMS pages, blog, banners, FAQ | ✅ | ❓ | ❌ | ❌ |
+| Multi-vendor / marketplace | ✅ | ❌ | ❌ | ❌ |
+
+✅ supported · ❌ not implemented yet · ❓ untested
+
+> Litekart is the reference implementation and is the most complete. The Medusa, Vendure
+> and Saleor connectors cover the core commerce path — browse, product, cart, checkout,
+> order — and are actively being extended. PRs welcome.
+
+### Required backend settings
+
+Each backend needs a few settings changed before the storefront will work end to end.
+
+**Vendure**
+
+- `authOptions.requireVerification` → `false`
+- `isPhoneMandatory` → `false`
+- `isEmailMandatory` → `false`
+
+**Saleor**
+
+- Require email confirmation for user registration → `false`
+- `isPhoneMandatory` → `false`
+- Allow unpaid orders in **order settings** → enabled
+- Allow unpaid orders in **channel settings** → enabled
+
+**Medusa**
+
+- Set a publishable API key and add your storefront origin to the Store CORS config.
+
+### Demos
+
+| Backend | Demo |
+| --- | --- |
+| Litekart | https://litekart.in |
+| Medusa | _add URL_ |
+| Vendure | _add URL_ |
+| Saleor | _add URL_ |
+  
 </div>
 
 <div align="center">
   <br>
-    <img width="400" src="https://github.com/user-attachments/assets/9e2c6455-6cfc-4df6-b813-c5a52a862b2f" >
+    <img width="400" src="./.github/assets/5.gif" >
 </div>
 
 <div align="center">
   <br>
-    <img width="400" src="https://github.com/user-attachments/assets/3d63e9b7-4744-4fc8-ba52-eceeb7edbdaa" >
-    <img width="400" src="https://github.com/user-attachments/assets/a2b44ac9-1f0c-4e68-9506-6e3316b78902" hspace="5">
+    <img width="400" src="./.github/assets/6.gif" >
+    <img width="400" src="./.github/assets/7.gif" hspace="5">
 </div>
 
 <br>
 <p align="center">
-<img height="400" src="https://github.com/user-attachments/assets/d8be1287-3631-4634-82b3-dd3fbf8e1273" hspace="10">
-<img height="400" src="https://github.com/user-attachments/assets/0b2a90f2-e7a5-4977-9327-43d6055ef583" hspace="10">
-<img height="400" src="https://github.com/user-attachments/assets/55d4acf6-7c24-4150-9149-d6de30441680" hspace="10">
+<img height="400" src="./.github/assets/8.jpg" hspace="10">
+<img height="400" src="./.github/assets/9.jpg" hspace="10">
+<img height="400" src="./.github/assets/10.jpg" hspace="10">
 </p>
 
 <br/>
 <h2 align="center"> Premium themes made using svelte-commerce </h2>
 <p align="center">
-<img height="200" src="https://github.com/user-attachments/assets/cb372959-bb44-4f28-a214-b85cd28ca2b4" hspace="10">
-<img height="200" src="https://github.com/user-attachments/assets/f947a3c6-938c-4528-b98a-f49f899aaf8c" hspace="10">
+<img height="200" src="./.github/assets/1.jpg" hspace="10">
+<img height="200" src="./.github/assets/2.jpg" hspace="10">
 <br>
 <br>
-<img height="200" src="https://github.com/user-attachments/assets/b1310c53-b4d0-4375-833f-80d37511faf2" hspace="10">
-<img height="200" src="https://github.com/user-attachments/assets/69034280-a815-4e3e-a3a1-93d98575eb95" hspace="10">
+<img height="200" src="./.github/assets/3.jpg" hspace="10">
+<img height="200" src="./.github/assets/4.jpg" hspace="10">
 </p>
 
 <br/>
@@ -94,7 +163,7 @@ Reach out to me with queries!
 
 - Svelte Commerce is a PWA storefront for your existing eCommerce based on Sveltekit.
 - It is possible to connect with any eCommerce backend that provides an API
-- We are working on adaptors of Medusajs, Shopify
+- We are working on adaptors of Medusajs, Shopify, and WooCommerce
 
 ## Features
 
@@ -139,6 +208,8 @@ There are 3 places to configure
    This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are
    - `export * from '@misiki/litekart-connector'`
    - `export * from '@misiki/medusa-connector'`
+   - `export * from '@misiki/shopify-connector'`
+   - `export * from '@misiki/woocommerce-connector'`
 
 ## Deployment
 
@@ -148,7 +219,7 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=arialshop.com)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=ari[...]
 
 The following envirnoment variable is mandatory
 
@@ -169,9 +240,9 @@ docker run -d -p 3000:3000 ghcr.io/itswadesh/svelte-commerce:latest
 
 ## Features
 
-<!-- If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list of the [active issues](https://github.com/itswadesh/svelte-commerce/issues) or contact me directly via hi@litekart.in -->
+<!-- If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list[...]
 
-Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted Filters, Open Source
+Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted[...]
 
 ## Updates
 
