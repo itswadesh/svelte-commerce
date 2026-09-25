@@ -2,10 +2,10 @@
 <h2>Svelte Commerce</h2>
 <h3>The production-ready open-source headless commerce storefront</h3>
 
-**[Website](https://sc.misiki.tech)** ·
-**[Live demo](https://arialshop.com)** ·
-**[Integrations](https://sc.misiki.tech/integrations/)** ·
-**[Themes](https://sc.misiki.tech/themes/)** ·
+**[Website](https://kitcommerce.store/svelte-commerce/)** ·
+**[Running in production](https://arialshop.com)** ·
+**[Backends](https://kitcommerce.store/svelte-commerce/backends/)** ·
+**[Themes](https://kitcommerce.store/svelte-commerce/themes/)** ·
 **[Docs](./docs/README.md)**
 
 </div>
