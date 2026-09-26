@@ -3,6 +3,18 @@ import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
 
+export const init = async () => {
+  if (env.PUBLIC_MEDUSA_API_URL) {
+    const services = await import('@misiki/kitcommerce-core/services')
+    if (!services.BaseService)
+      throw new Error("PUBLIC_MEDUSA_API_URL is set but medusaa-connector is not being used")
+    console.log("Hook ran", env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY, env.PUBLIC_MEDUSA_API_URL)
+    services.BaseService.PUBLISHABLE_KEY = env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY
+    services.BaseService.BASE_URL = env.PUBLIC_MEDUSA_API_URL
+    services.BaseService.REGION_ID = env.PUBLIC_MEDUSA_REGION_ID
+  }
+}
+
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
 	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
