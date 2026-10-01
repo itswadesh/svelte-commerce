@@ -243,7 +243,7 @@
 			<div class="mt-4 flex justify-center gap-1.5 sm:hidden">
 				{#each images as _, i}
 					<button
-						class="h-1.5 rounded-full transition-all duration-300 {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-gray-300'}"
+						class="h-1.5 rounded-full transition-colors duration-fast {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-gray-300'}"
 						onclick={() => mainCarouselApi?.scrollTo(i)}
 						aria-label="Go to slide {i + 1}"
 					></button>

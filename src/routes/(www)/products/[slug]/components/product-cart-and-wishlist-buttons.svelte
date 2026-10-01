@@ -190,9 +190,9 @@
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		transition:
-			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-			opacity 0.25s ease,
-			background 0.25s ease;
+			transform var(--motion-fast) var(--motion-ease),
+			opacity var(--motion-fast) var(--motion-ease),
+			background var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default'] .edp-atc:hover:not(:disabled)) {
@@ -204,8 +204,8 @@
 		border-radius: var(--ed-radius) !important;
 		background: transparent !important;
 		transition:
-			border-color 0.2s ease,
-			background 0.2s ease;
+			border-color var(--motion-fast) var(--motion-ease),
+			background var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default'] .edp-wish:hover) {

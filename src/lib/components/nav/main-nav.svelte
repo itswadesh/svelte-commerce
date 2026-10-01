@@ -73,16 +73,10 @@
 		font-weight: 600;
 		font-size: 0.75rem;
 		letter-spacing: 0.18em;
-		transition: color 0.25s ease;
+		transition: color var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default'] .ed-nav-link:hover) {
 		color: var(--ed-ink);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .ed-nav-link) {
-			transition: none;
-		}
 	}
 </style>

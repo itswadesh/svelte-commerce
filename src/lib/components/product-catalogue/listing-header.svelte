@@ -156,7 +156,7 @@
 		font-size: 0.8rem;
 		font-weight: 500;
 		letter-spacing: 0.01em;
-		transition: border-color 0.2s ease;
+		transition: border-color var(--motion-fast) var(--motion-ease);
 	}
 
 	/* The global focus ring in app.css is a Tailwind `ring`, which compiles to a box-shadow. A
@@ -169,11 +169,5 @@
 	:global([data-theme='default'] .ed-lh__select:hover) {
 		border-color: hsl(var(--primary));
 		background: var(--ed-surface);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .ed-lh__select) {
-			transition: none;
-		}
 	}
 </style>

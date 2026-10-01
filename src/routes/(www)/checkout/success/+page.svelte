@@ -140,13 +140,13 @@
 					<div class="relative flex justify-between">
 						<!-- Timeline Line -->
 						<div class="absolute left-0 top-5 h-[2px] w-full bg-border">
-							<div class="h-full w-1/3 bg-primary transition-all duration-1000"></div>
+							<div class="h-full w-1/3 bg-primary"></div>
 						</div>
 
 						{#each timelineSteps as step, i}
 							<div class="relative z-10 flex flex-col items-center">
 								<div
-									class="flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-500
+									class="flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-panel
 									{step.completed
 										? 'border-primary bg-primary text-primary-foreground'
 										: step.current
@@ -196,10 +196,10 @@
 						{#each orders as { lineItems }}
 							{#each lineItems || [] as item}
 								<div class="group flex items-start gap-6 py-6 first:pt-0 last:pb-0">
-									<div class="relative flex-shrink-0 overflow-hidden transition-all duration-300">
+									<div class="relative flex-shrink-0 overflow-hidden">
 										<LazyImg src={item.thumbnail} alt={item.title} class="aspect-[3/4] w-16 object-contain sm:w-16" />
 									</div>
-									<div class="flex flex-1 flex-col transition-all duration-300">
+									<div class="flex flex-1 flex-col">
 										<div class="flex justify-between text-base font-semibold text-foreground">
 											<h3 class="transition-colors">
 												<a href={`/products/${item.slug}`}>

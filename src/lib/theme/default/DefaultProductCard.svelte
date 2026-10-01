@@ -370,9 +370,9 @@
 		cursor: pointer;
 		transform: translateY(0);
 		transition:
-			opacity 0.3s ease,
-			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-			background 0.2s ease;
+			opacity var(--motion-fast) var(--motion-ease),
+			transform var(--motion-fast) var(--motion-ease),
+			background var(--motion-fast) var(--motion-ease);
 	}
 
 	/* Reveal-on-hover is for pointers only. A phone has no hover, so the heart was never on
@@ -440,7 +440,7 @@
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
-		transition: color 0.2s ease;
+		transition: color var(--motion-fast) var(--motion-ease);
 	}
 
 	.dpc:hover .dpc__title {
@@ -521,8 +521,8 @@
 		text-transform: uppercase;
 		cursor: pointer;
 		transition:
-			background 0.25s ease,
-			color 0.25s ease;
+			background var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
 	}
 
 	.dpc__add:hover:not(:disabled) {

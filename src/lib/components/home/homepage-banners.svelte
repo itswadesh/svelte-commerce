@@ -43,7 +43,7 @@
 								<a
 									href={banner.link || link}
 									aria-label={banner.title || banner.link}
-									class="group relative block w-full overflow-hidden rounded-none shadow-sm transition-all duration-500 hover:shadow-xl"
+									class="group relative block w-full overflow-hidden rounded-none shadow-sm transition-shadow duration-panel hover:shadow-xl"
 								>
 									<div class="relative overflow-hidden">
 										<LazyImg
@@ -53,7 +53,7 @@
 											class="relative w-full"
 										/>
 										<div
-											class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+											class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-panel group-hover:opacity-100"
 										>
 											{#if banner.title}
 												<div class="absolute bottom-6 left-6 text-white">

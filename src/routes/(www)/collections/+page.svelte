@@ -41,7 +41,7 @@
 									alt={collection.name}
 									width={400}
 									height={400}
-									class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+									class="h-full w-full object-cover transition-transform duration-emphasis ease-standard group-hover:scale-105"
 									priority={i < 4}
 								/>
 							</div>

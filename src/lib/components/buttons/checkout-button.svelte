@@ -55,7 +55,7 @@
 			{:else}
 				<span>{disabled && disabledText ? disabledText : text}</span>
 				{#if !disabled}
-					<ChevronRight class="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+					<ChevronRight class="size-4 transition-transform duration-fast ease-standard group-hover:translate-x-1" />
 				{/if}
 			{/if}
 		</div>

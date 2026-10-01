@@ -83,7 +83,7 @@
 			<section
 				data-testid="product-card-{product.id}"
 				data-productid="product-card-{product.id}"
-				class="product-card group relative flex w-full flex-col overflow-hidden bg-card transition-all duration-300"
+				class="product-card group relative flex w-full flex-col overflow-hidden bg-card transition-[transform,opacity,box-shadow] duration-fast"
 			>
 				<!-- Same href as the title link below. It used to carry
 			     `?variant_id={first variant id or ''}`, so every product was linked from two
@@ -97,7 +97,7 @@
 									src={imageSrc}
 									alt="{displayName} product image"
 									sizes="(min-width: 1024px) 25vw, (min-width: 768px) 38vw, 50vw"
-									class="w-full rounded-md object-contain object-top transition-transform duration-500"
+									class="w-full rounded-md object-contain object-top transition-transform duration-emphasis"
 									{priority}
 								/>
 							</div>

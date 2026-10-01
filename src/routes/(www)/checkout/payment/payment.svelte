@@ -187,7 +187,7 @@
 								{#each paymentModule.shippingRates?.data as rate}
 									<label
 										for={rate.id}
-										class="flex items-center justify-between rounded-lg border bg-background p-5 transition-all duration-300 active:scale-[0.99] {cartState
+										class="flex items-center justify-between rounded-lg border bg-background p-5 transition-[transform,border-color,background-color] duration-fast ease-standard active:scale-[0.99] {cartState
 											?.cart?.shippingRateId === rate.id
 											? ''
 											: 'shadow-sm'}"
@@ -259,7 +259,9 @@
 										{cartState.cart.shippingAddress.lastName}
 									</span>
 								</div>
-								<ChevronDown class="h-5 w-5 text-muted-foreground transition-transform duration-300 {showAddress ? 'rotate-180' : ''}" />
+								<ChevronDown
+									class="h-5 w-5 text-muted-foreground transition-transform duration-panel ease-standard {showAddress ? 'rotate-180' : ''}"
+								/>
 							</Button>
 
 							{#if showAddress}

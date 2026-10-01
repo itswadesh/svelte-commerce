@@ -108,7 +108,7 @@
 							href={category.link || '/' + category.slug}
 							class="ed-mm-link relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap {slim
 								? 'py-1.5'
-								: 'py-3'} text-sm font-semibold uppercase text-gray-900 transition-all duration-300 hover:text-gray-900 active:scale-95
+								: 'py-3'} text-sm font-semibold uppercase text-gray-900 transition-[color,transform] duration-fast ease-standard hover:text-gray-900 active:scale-95
 								{selectedCategory === category.name ? 'text-primary after:scale-x-100' : 'after:scale-x-0'}
 								after:ease-out-expo after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
 							style="font-family: var(--font-body);"
@@ -121,7 +121,7 @@
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"
 									fill="currentColor"
-									class="ease-out-expo h-3.5 w-3.5 shrink-0 transition-transform duration-300
+									class="h-3.5 w-3.5 shrink-0 transition-transform duration-panel ease-standard
             {selectedCategory === category.name ? '-rotate-180 transform' : ''}"
 								>
 									<path

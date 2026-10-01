@@ -547,7 +547,7 @@
 	:global([data-theme='default']) .ed-df__opt {
 		color: var(--ed-soft);
 		font-family: var(--ed-body);
-		transition: color 0.15s ease;
+		transition: color var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default']) .ed-df__opt:hover {
@@ -644,12 +644,5 @@
 		font-weight: 500;
 		letter-spacing: 0.04em;
 		color: var(--ed-soft);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default']) .ed-df__cat,
-		:global([data-theme='default']) .ed-df__opt {
-			transition: none;
-		}
 	}
 </style>

@@ -153,7 +153,7 @@
 				{#if cartState?.cart?.lineItems?.length}
 					<div class="space-y-4">
 						{#each cartState.cart.lineItems || [] as _, i}
-							<div class="rounded-lg border border-gray-100 p-2 transition-all duration-300 hover:bg-gray-50">
+							<div class="rounded-lg border border-gray-100 p-2 transition-colors duration-fast hover:bg-gray-50">
 								<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={() => {}} />
 							</div>
 						{/each}
@@ -195,7 +195,7 @@
 								goto('/checkout/cart')
 							}}
 							size="lg"
-							class="w-full rounded-pill bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors duration-300 hover:bg-emerald-900"
+							class="w-full rounded-pill bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors duration-fast hover:bg-emerald-900"
 						>
 							Proceed to Checkout
 						</Button>

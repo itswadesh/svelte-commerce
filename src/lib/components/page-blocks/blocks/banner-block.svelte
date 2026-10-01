@@ -89,7 +89,7 @@
 			<div class="mt-3 flex justify-center gap-1.5">
 				{#each block.metadata.images || [] as _, i}
 					<button
-						class="h-1.5 rounded-full transition-all duration-300 {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-muted'}"
+						class="h-1.5 rounded-full transition-colors duration-fast {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-muted'}"
 						onclick={() => mainCarouselApi?.scrollTo(i)}
 						aria-label="Go to slide {i + 1}"
 					></button>

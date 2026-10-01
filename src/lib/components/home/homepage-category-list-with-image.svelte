@@ -48,16 +48,16 @@
 				{#each categories as { slug, icon, color, name, link, thumbnail, parentCategoryId } (slug)}
 					<a href={link ? link : slug ? `/${slug}` : `/products`} class="group flex flex-col items-center focus:outline-none">
 						<div
-							class="relative aspect-square w-full overflow-hidden bg-red-200 bg-muted shadow-sm transition-all duration-500 ease-out"
+							class="relative aspect-square w-full overflow-hidden bg-red-200 bg-muted shadow-sm"
 						>
 							<LazyImg
 								src={thumbnail}
 								alt={name}
-								class="h-full w-full object-cover transition-transform duration-700 ease-in-out"
+								class="h-full w-full object-cover transition-transform duration-emphasis ease-standard"
 							/>
 						</div>
 						<span
-							class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-300 lg:text-base"
+							class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-fast lg:text-base"
 						>
 							{name}
 						</span>

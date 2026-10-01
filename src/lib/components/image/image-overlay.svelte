@@ -18,7 +18,7 @@
 		</p>
 		<a href={link} class="inline-block">
 			<button
-				class="w-[180px] border border-black bg-black px-[15px] py-[10px] text-[14px] font-semibold uppercase text-white transition-colors duration-300 hover:bg-white hover:text-black"
+				class="w-[180px] border border-black bg-black px-[15px] py-[10px] text-[14px] font-semibold uppercase text-white transition-colors duration-fast hover:bg-white hover:text-black"
 			>
 				{buttonText}
 			</button>

@@ -138,18 +138,12 @@
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		transition:
-			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-			opacity 0.25s ease;
+			transform var(--motion-fast) var(--motion-ease),
+			opacity var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default']) .ed-sub-btn:hover {
 		transform: translateY(-2px);
 		opacity: 0.92;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default']) .ed-sub-btn {
-			transition: none;
-		}
 	}
 </style>

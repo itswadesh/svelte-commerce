@@ -20,7 +20,7 @@
 							alt={card.title}
 							width="370"
 							height="440"
-							class="h-full w-full transform object-cover transition-transform duration-300"
+							class="h-full w-full transform object-cover transition-transform duration-emphasis ease-standard"
 						/>
 					{:else}
 						<!-- Fallback div when no image is provided -->
@@ -35,7 +35,7 @@
 					<div class="mt-auto">
 						<a href={card.link} class="inline-block">
 							<button
-								class="w-[180px] border border-black bg-black px-[15px] py-[10px] text-[14px] font-semibold uppercase text-white transition-colors duration-300 hover:bg-white hover:text-black"
+								class="w-[180px] border border-black bg-black px-[15px] py-[10px] text-[14px] font-semibold uppercase text-white transition-colors duration-fast hover:bg-white hover:text-black"
 							>
 								SHOP NOW
 							</button>

@@ -34,9 +34,9 @@
 											loading={ix === 0 ? 'eager' : 'lazy'}
 										/>
 										<!-- <div
-											class="absolute inset-0 flex flex-col items-center justify-center bg-black/10 transition-opacity duration-500 group-hover:bg-black/20"
+											class="absolute inset-0 flex flex-col items-center justify-center bg-black/10 transition-colors duration-fast group-hover:bg-black/20"
 										>
-											<div class="translate-y-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+											<div class="translate-y-4 opacity-0 transition-[transform,opacity] duration-panel ease-standard group-hover:translate-y-0 group-hover:opacity-100">
 												<span class="mb-6 block text-center text-sm font-black uppercase tracking-[0.4em] text-white/90">Curated for you</span>
 												<a
 													href="/products"

@@ -191,7 +191,7 @@
 									<div class="group flex items-center intra-gap p-3">
 										<a
 											href="/my/orders/{order.parentOrderNo}"
-											class="relative shrink-0 overflow-hidden transition-transform duration-500"
+											class="relative shrink-0 overflow-hidden transition-transform duration-emphasis"
 										>
 											{#if item.thumbnail}
 												<!-- <LazyImg
