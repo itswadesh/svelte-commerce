@@ -517,16 +517,20 @@
 /* ------------------------------------------------------------------ *
  * Route transitions — src/lib/motion/route-transition.ts
  *
- * The page crossfades; the header, footer and bottom nav hold still because they carry names of
- * their own; the clicked product image morphs into the gallery through `product-media`.
+ * The page crossfades as one image pair, and the clicked product image morphs into the gallery
+ * through `product-media`. Nothing else is named. The old and new pages blend with plus-lighter,
+ * so chrome that is identical on both (header, bottom nav) stays visually still as long as both
+ * halves share one duration and easing, while every extra named group costs a main-thread size
+ * animation on each frame: naming the header and footer took a full-motion navigation from 48fps
+ * to 39fps when measured on 2026-10-01. The root group never moves, so its no-op animation goes.
  * ------------------------------------------------------------------ */
-::view-transition-old(root) {
-	animation-duration: var(--motion-exit);
-	animation-timing-function: var(--motion-ease-exit);
-}
+::view-transition-old(root),
 ::view-transition-new(root) {
 	animation-duration: var(--motion-panel);
 	animation-timing-function: var(--motion-ease);
+}
+::view-transition-group(root) {
+	animation: none;
 }
 ::view-transition-group(product-media) {
 	animation-duration: var(--motion-emphasis);
@@ -534,15 +538,6 @@
 }
 [data-vt-morph] {
 	view-transition-name: product-media;
-}
-.vt-site-header {
-	view-transition-name: site-header;
-}
-.vt-site-footer {
-	view-transition-name: site-footer;
-}
-.vt-bottom-nav {
-	view-transition-name: bottom-nav;
 }
 
 /* ------------------------------------------------------------------ *

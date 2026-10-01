@@ -133,7 +133,7 @@
 		style:top={barHeight ? `-${barHeight}px` : undefined}
 		class="{navModule.isProductListingPage
 			? 'max-sm:border-b'
-			: ''} vt-site-header sticky top-0 z-50 w-full flex-col items-center justify-between bg-background shadow-xs"
+			: ''} sticky top-0 z-50 w-full flex-col items-center justify-between bg-background shadow-xs"
 	>
 		<!-- Both bars sit in one always-mounted box, so its height drops to 0 on pages without one. -->
 		<div bind:clientHeight={barHeight}>
