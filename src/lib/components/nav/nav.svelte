@@ -9,8 +9,7 @@
 	// Local shadow of the vendored AuthButton — the packaged one is a <div role="button"> with
 	// no tabindex/key handler, so the auth modal was unreachable by keyboard. See the component.
 	import AuthButton from '$lib/components/auth/auth-button.svelte'
-	import { fade, fly } from 'svelte/transition'
-	import { cubicOut } from 'svelte/easing'
+	import { drawer, fade } from '$lib/motion'
 	import { NavModule } from '$lib/core/composables/index.js'
 	import { getWishlistState } from '@misiki/kitcommerce-core/stores'
 	import CartSidebar from './cart-sidebar.svelte'
@@ -311,16 +310,16 @@
 		     route out. -->
 		<div
 			aria-hidden="true"
-			in:fade={{ duration: 300 }}
-			out:fade={{ duration: 300 }}
+			in:fade
+			out:fade
 			class="absolute inset-0 bg-black/40 backdrop-blur-xs"
 			onclick={() => {
 				navModule.openSidebar = false
 			}}
 		></div>
 		<div
-			in:fly={{ x: -320, duration: 300, easing: cubicOut }}
-			out:fly={{ x: -320, duration: 300, easing: cubicOut }}
+			in:drawer={{ edge: 'left' }}
+			out:drawer={{ edge: 'left' }}
 			class="ed-drawer relative z-10 flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-border bg-background text-foreground shadow-z-10"
 		>
 			<h2 id="main-menu-drawer-title" class="sr-only">Main menu</h2>

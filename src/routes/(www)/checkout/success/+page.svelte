@@ -6,7 +6,7 @@
 	import { getUserState, getCartState } from '$lib/core/stores/index.js'
 	import { onMount } from 'svelte'
 	import { page } from '$app/state'
-	import { fade, fly } from 'svelte/transition'
+	import { fly } from '$lib/motion'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 
 	const userState = getUserState()
@@ -104,7 +104,7 @@
 		{#if hasOrderReference}
 			<CheckoutHeader step={4} />
 		{/if}
-		<div in:fly={{ y: 20, duration: 600 }} class="overflow-hidden rounded-lg border border-border bg-card shadow-z-1">
+		<div in:fly={{ y: 12 }} class="overflow-hidden rounded-lg border border-border bg-card shadow-z-1">
 			{#if hasOrderReference}
 				<!-- Header Section -->
 				<div class="border-b border-border bg-card p-3 text-center sm:p-8 md:p-12">

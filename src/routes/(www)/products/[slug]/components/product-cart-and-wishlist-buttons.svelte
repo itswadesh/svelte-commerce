@@ -5,9 +5,8 @@
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/core/utils'
 	import { Check, HeartIcon, ShoppingBag } from '@lucide/svelte'
-	import { fly } from 'svelte/transition'
+	import { fade, fly } from '$lib/motion'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
-	import { quintOut } from 'svelte/easing'
 	import { toast } from 'svelte-sonner'
 
 	/**
@@ -98,7 +97,8 @@
      card stands down whenever the drawer is the thing on screen. -->
 {#if productState.showAddToCartMessage && !productState.cartState?.isOpen && !compact}
 	<div
-		transition:fly={{ x: 50, duration: 300, easing: quintOut }}
+		in:fly={{ x: 24 }}
+		out:fade
 		class="edp-toast fixed right-4 top-24 z-toast hidden w-full max-w-sm rounded-lg border bg-card p-3 shadow-z-10 md:block"
 		role="status"
 	>

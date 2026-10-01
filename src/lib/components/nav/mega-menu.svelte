@@ -4,7 +4,7 @@
 	import { getImageCDNUrl } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
-	import { fade } from 'svelte/transition'
+	import { fade, fly, motionMs } from '$lib/motion'
 	import { onMount } from 'svelte'
 
 	// Slim variant for the scrolled header: drops the menu list's vertical padding.
@@ -135,6 +135,7 @@
 
 						{#if toggleMenuItemChildren[index] && childrenOf(category)?.length}
 							<div
+								transition:fly={{ y: -4, duration: motionMs('fast') }}
 								class="ed-mm-panel mega-menu ease-out-expo absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-all duration-500"
 							>
 								<div class="flex">
@@ -222,7 +223,7 @@
 				<div
 					class="fixed inset-0 z-overlay bg-black/40"
 					aria-hidden="true"
-					transition:fade={{ duration: 150 }}
+					transition:fade
 					onclick={() => {
 						cancelPendingClose()
 						// Close by the index that is actually open: closeChildMenu clears
@@ -236,7 +237,7 @@
 			{/if}
 		{:else if headerMenuItems === undefined && !megamenuSettled}
 			<!-- Only while the category megamenu is still loading; a settled-but-empty menu renders nothing. -->
-			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none" transition:fade={{ duration: 100 }}>
+			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none" transition:fade>
 				{#each Array(6) as _}
 					<li class={slim ? 'py-1.5' : 'py-3'}>
 						<Skeleton class="h-5 w-24 rounded-full" />

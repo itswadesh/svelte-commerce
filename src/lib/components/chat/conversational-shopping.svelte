@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { fly, fade } from 'svelte/transition'
+	import { fly, fade } from '$lib/motion'
 	import { MessageCircle, X, Send, Sparkles, Truck, Clock } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
 	import { getCartState } from '$lib/core/stores/index.js'
@@ -187,7 +187,7 @@
 		class="fixed inset-0 z-40 bg-black/30 md:hidden"
 		aria-label="Close shopping assistant"
 		onclick={toggle}
-		transition:fade={{ duration: 150 }}
+		transition:fade
 	></button>
 
 	<section
@@ -195,7 +195,7 @@
 		role="dialog"
 		aria-modal="true"
 		aria-label="Shopping assistant"
-		transition:fly={{ y: 24, duration: 200 }}
+		transition:fly={{ y: 24 }}
 	>
 		<!-- Header -->
 		<header class="flex items-center justify-between border-b border-border px-4 py-3">

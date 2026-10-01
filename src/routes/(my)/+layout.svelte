@@ -10,8 +10,7 @@
 	import { StorePlugins } from '$lib/core/components/index.js'
 	import { hasConfiguredSupportChat } from '$lib/components/common/store-capabilities.js'
 	import { dialog } from '$lib/actions/dialog.js'
-	import { fade, fly } from 'svelte/transition'
-	import { cubicOut } from 'svelte/easing'
+	import { drawer, fade } from '$lib/motion'
 
 	let { children }: { children: Snippet } = $props()
 	let isMobileMenuOpen = $state(false)
@@ -143,17 +142,11 @@
 	>
 		<!-- The scrim is decoration: a click target, not a control. Escape and the Close button are
 		     the keyboard routes out. -->
-		<div
-			aria-hidden="true"
-			in:fade={{ duration: 200 }}
-			out:fade={{ duration: 200 }}
-			class="absolute inset-0 bg-black/40 backdrop-blur-xs"
-			onclick={() => (isMobileMenuOpen = false)}
-		></div>
+		<div aria-hidden="true" in:fade out:fade class="absolute inset-0 bg-black/40 backdrop-blur-xs" onclick={() => (isMobileMenuOpen = false)}></div>
 
 		<div
-			in:fly={{ x: -320, duration: 200, easing: cubicOut }}
-			out:fly={{ x: -320, duration: 200, easing: cubicOut }}
+			in:drawer={{ edge: 'left' }}
+			out:drawer={{ edge: 'left' }}
 			class="relative z-10 flex h-full w-[80%] max-w-xs flex-col overflow-y-auto border-r bg-background shadow-z-10"
 		>
 			<div class="flex items-center justify-between border-b px-5 py-4">

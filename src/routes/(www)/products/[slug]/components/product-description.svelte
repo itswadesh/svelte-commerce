@@ -2,8 +2,7 @@
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { ChevronDown } from '@lucide/svelte'
-	import { slide } from 'svelte/transition'
-	import { prefersReducedMotion } from 'svelte/motion'
+	import { slide } from '$lib/motion'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
@@ -16,11 +15,6 @@
 	)
 
 	let isOpen = $state(true)
-
-	// One panel duration for both PDP accordions (the project's panel budget is 180-240ms), and
-	// zero for anyone who asked the OS for reduced motion — the panel then swaps instantly instead
-	// of sliding. Same constant, same import, in product-specifications.svelte.
-	const panelMs = $derived(prefersReducedMotion.current ? 0 : 200)
 </script>
 
 {#if hasDescription}
@@ -48,7 +42,7 @@
 		</button>
 
 		{#if isOpen}
-			<div id="product-description-panel" class="overflow-hidden" transition:slide={{ duration: panelMs }}>
+			<div id="product-description-panel" class="overflow-hidden" transition:slide>
 				<div
 					class="edp-prose prose prose-sm max-w-none pb-4 leading-relaxed text-muted-foreground prose-headings:text-foreground prose-strong:text-foreground prose-li:list-disc [&>table]:w-full [&>table]:border-collapse [&_td]:border-b [&_td]:py-2 [&_td]:text-sm [&_th]:border-b [&_th]:py-2 [&_th]:text-left [&_th]:text-xs [&_th]:font-medium [&_th]:text-muted-foreground"
 				>

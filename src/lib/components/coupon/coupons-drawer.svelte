@@ -4,7 +4,7 @@
 	import { ChevronRight, Copy, X } from '@lucide/svelte'
 	import Input from '$lib/components/ui/input/input.svelte'
 	import { CouponDrawerRenderer } from '$lib/core/composables/index.js'
-	import { fly } from 'svelte/transition'
+	import { fade } from '$lib/motion'
 	import { date, formatPrice } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
 	import { innerWidth } from 'svelte/reactivity/window'
@@ -26,7 +26,7 @@
 				</Button>
 			</Drawer.Trigger>
 			<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-[100dvh] sm:w-fit sm:max-w-xl [&>div:first-child]:hidden">
-				<div in:fly={{ duration: 300 }} class="mx-auto w-full max-w-4xl pb-20 sm:pb-0">
+				<div in:fade class="mx-auto w-full max-w-4xl pb-20 sm:pb-0">
 					<Drawer.Header class="text-left">
 						<Drawer.Title>Apply Promo Code</Drawer.Title>
 						<Drawer.Close

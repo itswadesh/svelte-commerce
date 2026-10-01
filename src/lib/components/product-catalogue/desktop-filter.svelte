@@ -2,8 +2,7 @@
 	import { taxonomy } from '$lib/core/connectors/taxonomy'
 	import { cn } from '$lib/core/utils/index.js'
 	import { X } from '@lucide/svelte'
-	import { fade, fly } from 'svelte/transition'
-	import { quintOut } from 'svelte/easing'
+	import { fade, fly } from '$lib/motion'
 	import { browser } from '$app/environment'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { GetColorName } from 'hex-color-to-color-name'
@@ -96,7 +95,7 @@
 		{#if filterState.categories.length > 0}
 			<!-- <div class="mt-4 pt-4 border-t border-gray-100"></div> -->
 			{#if filterState.showCategorySearch}
-				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
+				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 8 }}>
 					<input
 						bind:value={filterState.categorySearchQuery}
 						type="text"
@@ -117,7 +116,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="ed-df__label text-sm font-bold uppercase text-foreground" in:fade={{ duration: 200, delay: 200 }}>{taxonomy.many}</p>
+					<p class="ed-df__label text-sm font-bold uppercase text-foreground" in:fade>{taxonomy.many}</p>
 					<Button
 						variant="ghost"
 						size="icon"
@@ -206,7 +205,7 @@
 			<div class="ed-df__rule w-full border-b border-border"></div>
 
 			{#if filterState.showTagSearch}
-				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
+				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 8 }}>
 					<input
 						bind:value={filterState.tagSearchQuery}
 						type="text"
@@ -227,7 +226,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="ed-df__label text-sm font-bold uppercase text-foreground" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
+					<p class="ed-df__label text-sm font-bold uppercase text-foreground" in:fade>Tags</p>
 					<Button
 						class="flex w-8 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground"
 						variant="ghost"

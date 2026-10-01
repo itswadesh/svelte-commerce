@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte'
-	import { fade } from 'svelte/transition'
+	import { fade } from '$lib/motion'
 	import * as Card from '$lib/components/ui/card'
 	import type { WithElementRef } from 'bits-ui'
 	import type { HTMLAttributes } from 'svelte/elements'
@@ -101,7 +101,7 @@
 			     and focus returns to whatever opened the modal. Backs login/signup/forgot-password. -->
 			<div
 				style="z-index: {zIndex};"
-				transition:fade={{ duration: 100 }}
+				transition:fade
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby={hideHeader ? undefined : titleId}
