@@ -43,7 +43,9 @@
 
 <div class="relative">
 	{#if page?.data?.store?.plugins?.socialSharingButtons}
-		<div class="edp-gallery-float absolute right-2 top-2 z-10 block rounded-full bg-card shadow-z-1">
+		<div
+			class="edp-gallery-float absolute right-2 top-2 z-10 block rounded-full bg-card shadow-z-1 max-md:[&_button]:min-h-11 max-md:[&_button]:min-w-11"
+		>
 			<ShareButton productName={page.data?.product?.title} productImage={page.data?.product?.thumbnail} url={page?.url?.href} />
 		</div>
 	{/if}

@@ -119,7 +119,7 @@
 					{/snippet}
 				</Pagination.Root>
 
-				<div class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+				<div class="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
 					Showing page {currentPage} of {noOfPage}
 				</div>
 			</div>

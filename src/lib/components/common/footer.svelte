@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from '@lucide/svelte'
+	import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw, Link as LinkIcon } from '@lucide/svelte'
 	import { version } from '$app/environment'
 	import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 	import { page } from '$app/state'
@@ -138,7 +138,7 @@
 							<!-- No `variant="light"`: this footer has no dark background on any theme that
 							     uses it, so white text was invisible on wine/organic (only the default
 							     theme recolored it back). Logo's default renders text-foreground. -->
-							<Logo />
+							<Logo loading="lazy" />
 
 							{#if footerDescription}
 								<div class="prose prose-sm text-muted-foreground">
@@ -212,6 +212,17 @@
 															d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"
 														/></svg
 													>
+												{:else if key == 'pinterest'}
+													<svg class="size-6" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+														><title>Pinterest</title><path
+															fill="currentColor"
+															d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"
+														/></svg
+													>
+												{:else}
+													<!-- A network this footer has no mark for still gets a visible, sized icon: an empty link was an
+														     invisible 20px target only a screen reader could find (Pinterest, until it got its mark). -->
+													<LinkIcon class="size-6" aria-hidden="true" />
 												{/if}
 											</a>
 										{/if}
@@ -260,7 +271,7 @@
 							<ul class="flex flex-wrap items-center gap-4" aria-label="Accepted payment methods">
 								{#each paymentMethodCards as pmc}
 									<li>
-										<img src={pmc.src} alt={pmc.alt} width="32" height="20" class="h-5 w-auto object-contain" />
+										<img src={pmc.src} alt={pmc.alt} width="32" height="20" loading="lazy" class="h-5 w-auto object-contain" />
 									</li>
 								{/each}
 							</ul>

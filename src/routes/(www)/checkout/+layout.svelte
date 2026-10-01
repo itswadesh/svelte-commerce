@@ -32,9 +32,7 @@
 <div class="flex min-h-screen flex-col">
 	<header class="border-b border-border bg-background">
 		<div class="page-width flex h-14 items-center justify-between gap-4">
-			<a href="/" class="inline-flex min-h-[44px] items-center" aria-label="{storeName} home">
-				<Logo />
-			</a>
+			<Logo />
 			<p class="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
 				<LockKeyhole class="h-3.5 w-3.5" aria-hidden="true" />
 				Secure checkout
@@ -52,7 +50,10 @@
 			{#if legalLinks.length}
 				<nav aria-label="Checkout legal links" class="flex flex-wrap items-center gap-x-4">
 					{#each legalLinks as item}
-						<a href={item.link} class="inline-flex min-h-[32px] items-center text-xs text-muted-foreground transition-colors hover:text-foreground">
+						<a
+							href={item.link}
+							class="inline-flex min-h-11 min-w-11 items-center justify-center text-xs text-muted-foreground transition-colors hover:text-foreground md:min-h-8 md:min-w-0"
+						>
 							{item.name}
 						</a>
 					{/each}

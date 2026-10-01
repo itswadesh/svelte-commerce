@@ -22,6 +22,12 @@
 	<StorePlugins />
 {/if}
 
+<a
+	href="#main"
+	class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-skip focus:rounded focus:bg-background focus:p-3 focus:shadow"
+>
+	Skip to main content
+</a>
 <Nav />
 
 <main id="main" class="min-h-screen">

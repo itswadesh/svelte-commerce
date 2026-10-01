@@ -8,9 +8,15 @@
 <div class="mr-4 md:flex">
 	<div class="flex gap-3">
 		{#if page?.data?.store?.logo}
-			<a href="/">
+			<a href="/" class="flex min-h-11 min-w-11 items-center">
 				<!-- Renders 40px tall; serve a sized, format=auto asset rather than the raw upload. -->
-				<img src={getImageCDNUrl(page?.data?.store?.logo, 300, 0)} class="h-10 object-contain" alt="{page?.data?.store?.name || 'Store'} logo" />
+				<img
+					src={getImageCDNUrl(page?.data?.store?.logo, 300, 0)}
+					width="120"
+					height="40"
+					class="h-10 w-auto object-contain"
+					alt="{page?.data?.store?.name || 'Store'} logo"
+				/>
 			</a>
 		{:else}
 			<a href="/" class="flex items-center space-x-2">

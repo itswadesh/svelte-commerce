@@ -322,7 +322,7 @@
 					<div class="flex flex-col gap-2 border-t pt-3">
 						<div class="flex items-center gap-2">
 							<Truck class="size-4 text-muted-foreground" />
-							<span class="text-sm text-foreground">Delivery options</span>
+							<span id="pdp-delivery-label" class="text-sm text-foreground">Delivery options</span>
 						</div>
 						<PincodeCheck />
 					</div>

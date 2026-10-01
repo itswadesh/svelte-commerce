@@ -105,7 +105,13 @@
 			<a data-testid="product-card-link" class="dpc__media-link" href="/products/{product.slug}" aria-label="View details of {displayName}">
 				<figure title={displayName} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: {mediaRatio};">
 					{#if imageSrc && !imageFailed}
-						<div class="dpc__frame" data-vt-product-media={product.slug} use:trackImage onloadcapture={() => (imageLoaded = true)} onerrorcapture={() => (imageFailed = true)}>
+						<div
+							class="dpc__frame"
+							data-vt-product-media={product.slug}
+							use:trackImage
+							onloadcapture={() => (imageLoaded = true)}
+							onerrorcapture={() => (imageFailed = true)}
+						>
 							<LazyImg
 								src={imageSrc}
 								alt="{displayName} product image"
@@ -453,13 +459,14 @@
 	   each of the three sizes fits the longest price this catalogue produces on one line. */
 	.dpc__price {
 		display: flex;
+		font-variant-numeric: tabular-nums;
 		align-items: baseline;
 		flex-wrap: wrap;
 		gap: 5px;
 	}
 
 	.dpc__price-from {
-		font-size: 0.6875rem;
+		font-size: 0.75rem;
 		font-weight: 500;
 		color: var(--ed-soft);
 	}
@@ -477,7 +484,7 @@
 	}
 
 	.dpc__price-off {
-		font-size: 0.6875rem;
+		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.02em;
 		text-transform: uppercase;
@@ -487,8 +494,8 @@
 
 	/* Below ~172px the three price facts no longer fit on one line at full size, and the row
 	   wrapped — so two cards side by side came out different heights because one price happened to
-	   be a character shorter. One step down on each holds the line to a 148px card, the narrowest
-	   this grid produces (three columns at 768px). Nothing drops below 11px. */
+	   be a character shorter. A step down on the price and the saving holds the line to 165px;
+	   narrower than that, the next rule takes the was-price out of the row. Nothing drops below 12px. */
 	@container (max-width: 172px) {
 		.dpc__price {
 			gap: 4px;
@@ -498,9 +505,23 @@
 			font-size: 0.8125rem;
 		}
 
-		.dpc__price-mrp,
 		.dpc__price-off {
-			font-size: 0.6875rem;
+			font-size: 0.75rem;
+		}
+	}
+
+	/* Below 165px (three cards per row at 768px) the three facts no longer fit one line at 12px, and a
+	   wrapped price makes cards in one row different heights. The struck-through was-price steps out
+	   of sight here (the saving still says how much is off) but stays readable to screen readers. A
+	   390px phone card is 170px wide and keeps it. */
+	@container (max-width: 164px) {
+		.dpc__price-mrp {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip: rect(0 0 0 0);
+			white-space: nowrap;
 		}
 	}
 

@@ -155,7 +155,8 @@
 		--popover-foreground: 222 47% 11%;
 		/* Re-declared locally: white on the inherited 142 65% 36% is 3.76:1 and fails
 		   AA on the discount badge and the coupon row. 142 65% 30% is 5.12:1. */
-		--success: 142 65% 30%;
+		/* 28%, not 30%: success text on its own 10% tint reached only 4.47:1. */
+		--success: 142 65% 28%;
 		--success-foreground: 0 0% 100%;
 		/* 4.80:1 against white, both as a fill under --warning-foreground and as
 		   `text-warning` on the canvas. */

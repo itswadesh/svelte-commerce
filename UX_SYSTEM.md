@@ -156,6 +156,11 @@ never from the product, the information a shopper decides on, or a touch target.
   minimum.
 - Mobile: important actions stay at least 44px. A control that only ever renders above 768px is
   not a mobile target and takes the desktop sizes.
+- Secondary navigation keeps the WCAG 24px floor rather than 44px: breadcrumbs, and carousel dot
+  indicators (44px dots overflow a phone row at nine slides). A link that repeats a bigger link to
+  the same place in the same card, such as a card title beside its image, is covered by that bigger
+  target. Inputs and text areas are 16px on phones, or iOS zooms the page when they take focus.
+  `scripts/audit-pro-max.mjs` checks all of this per route at 390px (touch) and 1280px.
 - Gutters: 16px mobile, 24px tablet, 32–48px desktop (the `--container-gutter` clamp).
 - One content container, 1240–1440px. No second max-width.
 - Vertical rhythm, one value per scope and never two at once: 8px inside a component, 12–16px
