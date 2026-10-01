@@ -573,7 +573,19 @@
 	/* Header action icons (wishlist, account) — ink, accent on hover */
 	.ed .ed-action {
 		color: var(--ed-ink);
-		transition: color var(--motion-fast) var(--motion-ease);
+		transition:
+			color var(--motion-fast) var(--motion-ease),
+			transform var(--motion-fast) var(--motion-ease);
+	}
+
+	.ed .ed-action:active {
+		transform: scale(0.92);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ed .ed-action:active {
+			transform: none;
+		}
 	}
 
 	.ed .ed-action:hover {

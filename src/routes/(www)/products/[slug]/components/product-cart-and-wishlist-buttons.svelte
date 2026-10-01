@@ -39,6 +39,9 @@
 	// again got the cart drawer instead of a second line item.
 	const SUCCESS_MS = 2200
 	let justAdded = $state(false)
+	// Which face the add button shows; keyed so each change crossfades instead of swapping.
+	const atcState = $derived(productState.isAdding ? 'adding' : justAdded ? 'added' : outOfStock ? 'oos' : 'idle')
+	let wishToggled = $state(false)
 	let resetTimer: ReturnType<typeof setTimeout> | undefined
 
 	$effect(() => () => clearTimeout(resetTimer))
@@ -76,7 +79,10 @@
 			variant="outline"
 			size="icon"
 			class="edp-wish h-full w-11 shrink-0 md:w-10"
-			onclick={productState.handleWishlistClick}
+			onclick={() => {
+				wishToggled = true
+				productState.handleWishlistClick()
+			}}
 			aria-label="Add to wishlist"
 		>
 			{#if productState.wishlistLoading}
@@ -84,8 +90,8 @@
 			{:else}
 				<HeartIcon
 					class="!h-5 !w-5 stroke-[1.3] {productState.wishlisted
-						? 'scale-110 fill-destructive text-destructive'
-						: 'text-foreground'} transition-transform duration-fast"
+						? `fill-destructive text-destructive ${wishToggled ? 'motion-pop' : ''}`
+						: 'text-foreground'}"
 				/>
 			{/if}
 		</Button>
@@ -154,18 +160,22 @@
 					disabled={productState.isAdding || outOfStock}
 					onclick={addToBag}
 				>
-					{#if productState.isAdding}
-						<Spinner label="Adding to bag" />
-						<span>Adding…</span>
-					{:else if justAdded}
-						<Check class="h-4 w-4" aria-hidden="true" />
-						<span>Added</span>
-					{:else if outOfStock}
-						<span>Out of stock</span>
-					{:else}
-						<ShoppingBag class="h-4 w-4" aria-hidden="true" />
-						<span>Add to bag</span>
-					{/if}
+					{#key atcState}
+						<span class="inline-flex items-center gap-2" in:fade>
+							{#if productState.isAdding}
+								<Spinner label="Adding to bag" />
+								<span>Adding…</span>
+							{:else if justAdded}
+								<Check class="motion-pop-in h-4 w-4" aria-hidden="true" />
+								<span>Added</span>
+							{:else if outOfStock}
+								<span>Out of stock</span>
+							{:else}
+								<ShoppingBag class="h-4 w-4" aria-hidden="true" />
+								<span>Add to bag</span>
+							{/if}
+						</span>
+					{/key}
 				</Button>
 			{/if}
 		</div>
@@ -192,11 +202,16 @@
 		transition:
 			transform var(--motion-fast) var(--motion-ease),
 			opacity var(--motion-fast) var(--motion-ease),
-			background var(--motion-fast) var(--motion-ease);
+			background-color var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default'] .edp-atc:hover:not(:disabled)) {
 		transform: translateY(-2px);
+	}
+
+	:global([data-theme='default'] .edp-atc:active:not(:disabled)) {
+		transform: scale(0.97);
 	}
 
 	:global([data-theme='default'] .edp-wish) {
@@ -220,11 +235,8 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .edp-atc),
-		:global([data-theme='default'] .edp-wish) {
-			transition: none;
-		}
-		:global([data-theme='default'] .edp-atc:hover:not(:disabled)) {
+		:global([data-theme='default'] .edp-atc:hover:not(:disabled)),
+		:global([data-theme='default'] .edp-atc:active:not(:disabled)) {
 			transform: none;
 		}
 	}

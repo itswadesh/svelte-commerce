@@ -23,7 +23,7 @@
 								{#if child.link}
 									<a
 										href={child.link || '#'}
-										class="inline-flex min-h-[32px] items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
+										class="motion-underline inline-flex min-h-[32px] items-center self-start text-sm text-muted-foreground transition-colors duration-fast [--underline-offset:4px] hover:text-foreground"
 									>
 										{child.name}
 									</a>

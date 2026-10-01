@@ -30,6 +30,26 @@
 	let ownsHistoryEntry = false
 	let isNavigatingFromCart = false
 
+	// Bumps the badge when the count changes, but not for the first render or for the stored bag
+	// being restored after mount (`hasLoaded`): a page load is not news. A first add on a fresh
+	// session, where there is no bag until then, counts from 0.
+	let bumpKey = $state(0)
+	let cartRestored = $state(false)
+	let previousQty = 0
+	onMount(() => {
+		const settle = () => {
+			previousQty = cartState?.cart?.qty ?? 0
+			cartRestored = true
+		}
+		cartState?.hasLoaded?.then(settle, settle)
+	})
+	$effect(() => {
+		const qty = cartState?.cart?.qty ?? 0
+		if (!cartRestored) return
+		if (qty !== previousQty) bumpKey++
+		previousQty = qty
+	})
+
 	// The core nav composable exposes close as `(e) => { e.stopPropagation(); … }`, so every caller
 	// that has no event to hand it — the dialog action's Escape key, the popstate handler — threw a
 	// TypeError before anything closed. Escape left the drawer open and the focus trap in place,
@@ -107,7 +127,7 @@
 	     geometry as every other header action. -->
 	<button
 		data-testid="cart-icon"
-		class="flex h-9 w-9 items-center justify-center rounded-full max-md:h-11 max-md:w-11"
+		class="motion-press flex h-9 w-9 items-center justify-center rounded-full max-md:h-11 max-md:w-11"
 		aria-label="Cart, {cartState?.cart?.qty ?? 0} items"
 		aria-expanded={!!cartState?.isOpen}
 		onclick={() => {
@@ -116,10 +136,17 @@
 	>
 		<ShoppingBag class="h-5 w-5" />
 		{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
-			<span
-				class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-primary-foreground"
-			>
-				{cartState.cart.qty}
+			<!-- The outer span positions; the inner one animates, so the bump never fights the offset. -->
+			<span class="absolute right-0 top-0 -translate-y-1/2 translate-x-1/2">
+				{#key bumpKey}
+					<span
+						class="inline-flex items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-primary-foreground {bumpKey
+							? 'motion-bump'
+							: ''}"
+					>
+						{cartState.cart.qty}
+					</span>
+				{/key}
 			</span>
 		{/if}
 	</button>
