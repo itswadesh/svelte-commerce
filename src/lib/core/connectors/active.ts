@@ -2,6 +2,7 @@ import * as connector from '$connector'
 import { staticStoreConfig } from './static-store'
 import { blockRestFallbacks, serveRestLocally } from './rest-guard'
 import { localStoreData } from './local-store-data'
+import { baseServiceIn, bindFetchReceiver } from './fetch-receiver'
 
 // The active backend, whichever connector package this project installs.
 //
@@ -24,6 +25,12 @@ type ConnectorHooks = {
 }
 
 const hooks = connector as ConnectorHooks
+
+// Every backend, Litekart included: a stored native fetch must run with the global as receiver, or
+// the browser throws "Illegal invocation" and the menu, product rails and bag fail to load. See
+// fetch-receiver.ts. Litekart does not export its BaseService, so it is found through its services.
+const connectorBase = baseServiceIn(connector as Record<string, unknown>)
+if (connectorBase) bindFetchReceiver(connectorBase)
 
 /**
  * Names this backend for `init.ts` (which env it requires, how that env reaches it) and for
