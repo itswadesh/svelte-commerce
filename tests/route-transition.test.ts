@@ -175,3 +175,22 @@ describe('startRouteTransition', () => {
 		expect(named()).toEqual([])
 	})
 })
+
+describe('startRouteTransition, visibility of both ends', () => {
+	it('does not name a gallery that has scrolled out of view', async () => {
+		render('<div id="gallery" data-vt-gallery-primary data-place="-2000"></div>')
+		startRouteTransition(navigation('/products/ring-a', '/products', LISTING))
+		await calls[0].done
+		expect(calls[0].named).toEqual([])
+		expect(named()).toEqual([])
+	})
+
+	it('does not name a card that a carousel has moved sideways out of view', async () => {
+		render('<div id="card-a" data-vt-product-media="ring-a"></div>')
+		const card = document.getElementById('card-a')!
+		card.getBoundingClientRect = () => ({ top: 100, bottom: 200, left: -600, right: -400, width: 200, height: 100, x: -600, y: 100, toJSON() {} })
+		startRouteTransition(navigation('/products', '/products/ring-a', PDP()))
+		await calls[0].done
+		expect(calls[0].named).toEqual([])
+	})
+})

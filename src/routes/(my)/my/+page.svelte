@@ -90,7 +90,7 @@
 					<h3 class="mb-1 text-lg font-bold text-gray-900">
 						{option.title}
 					</h3>
-					<ArrowRight class="h-4 w-4 text-gray-300 transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+					<ArrowRight class="h-4 w-4 text-gray-300 transition-transform motion-safe:group-hover:translate-x-1 group-hover:text-primary" />
 				</div>
 				<p class="text-sm text-gray-500">
 					{option.description}

@@ -4,7 +4,7 @@
 	import { getImageCDNUrl } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
-	import { fade } from '$lib/motion'
+	import { fade, fly, motionMs } from '$lib/motion'
 	import { onMount } from 'svelte'
 
 	// Slim variant for the scrolled header: drops the menu list's vertical padding.
@@ -108,7 +108,7 @@
 							href={category.link || '/' + category.slug}
 							class="ed-mm-link motion-underline flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap [--underline-offset:0px] {slim
 								? 'py-1.5'
-								: 'py-3'} text-sm font-semibold uppercase text-gray-900 transition-[color,transform] duration-fast ease-standard hover:text-gray-900 active:scale-95
+								: 'py-3'} text-sm font-semibold uppercase text-gray-900 transition-[color,transform] duration-fast ease-standard hover:text-gray-900 motion-safe:active:scale-95
 								{selectedCategory === category.name ? 'text-primary' : ''}"
 							data-current={selectedCategory === category.name}
 							style="font-family: var(--font-body);"
@@ -134,7 +134,10 @@
 						</a>
 
 						{#if toggleMenuItemChildren[index] && childrenOf(category)?.length}
+							<!-- The panel mounts while it is already hovered, so its CSS transition never runs on open:
+							     the script one does. Closing keeps the CSS fade inside the grace period. -->
 							<div
+								in:fly={{ y: 4, duration: motionMs('fast') }}
 								class="ed-mm-panel mega-menu absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-[opacity,transform,visibility] duration-fast ease-standard"
 							>
 								<div class="flex">
@@ -143,7 +146,7 @@
 											<div class="flex flex-col gap-2">
 												<a
 													href={c.link || '/' + c.slug}
-													class="ed-mm-cat flex items-center gap-2 text-sm font-semibold text-gray-900 transition-all hover:translate-x-1"
+													class="ed-mm-cat flex items-center gap-2 text-sm font-semibold text-gray-900 transition-all motion-safe:hover:translate-x-1"
 													onclick={() => closeChildMenu(index, false)}
 												>
 													{#if c?.thumbnail}
@@ -167,7 +170,7 @@
 															<li>
 																<a
 																	href={c1.link || '/' + c1.slug}
-																	class="ed-mm-sub flex items-center gap-2 text-[13px] font-medium text-gray-700 transition-all hover:translate-x-1 hover:text-primary"
+																	class="ed-mm-sub flex items-center gap-2 text-[13px] font-medium text-gray-700 transition-all motion-safe:hover:translate-x-1 hover:text-primary"
 																	onclick={() => closeChildMenu(index, false)}
 																>
 																	{#if c1?.thumbnail}

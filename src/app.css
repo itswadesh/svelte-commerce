@@ -496,7 +496,6 @@
 }
 [data-theme='default'] .ed-btn-base.bg-primary:hover,
 [data-theme='default'] .ed-btn-base.bg-secondary:hover {
-	transform: translateY(-2px);
 	opacity: 0.94;
 }
 
@@ -505,13 +504,22 @@
 	letter-spacing: normal;
 }
 
-/* Press: every editorial button gives under the finger; icon-only ones a little more. (0,4,0) and
-   (0,5,0), so they outrank the (0,3,0) hover lift while held. */
-[data-theme='default'] .ed-btn-base:active:not(:disabled) {
-	transform: scale(0.97);
-}
-[data-theme='default'] .ed-btn-base.w-9:active:not(:disabled) {
-	transform: scale(0.92);
+/* Movement only for those who have not asked for less: filled CTAs lift on hover, and every
+   editorial button gives under the finger (icon-only ones a little more). Gated by the media query
+   rather than reset under `reduce`, because a reset has to out-specify every rule it cancels, and
+   these selectors run to (0,5,0). The press rules come after the lift and outrank it, so a held
+   button presses rather than lifts. */
+@media (prefers-reduced-motion: no-preference) {
+	[data-theme='default'] .ed-btn-base.bg-primary:hover,
+	[data-theme='default'] .ed-btn-base.bg-secondary:hover {
+		transform: translateY(-2px);
+	}
+	[data-theme='default'] .ed-btn-base:active:not(:disabled) {
+		transform: scale(0.97);
+	}
+	[data-theme='default'] .ed-btn-base.w-9:active:not(:disabled) {
+		transform: scale(0.92);
+	}
 }
 
 /* ------------------------------------------------------------------ *
@@ -538,6 +546,29 @@
 }
 [data-vt-morph] {
 	view-transition-name: product-media;
+}
+
+/* vaul-svelte drawers (size guide, coupons, the phone sort and filter, similar products) slide for
+   500ms, from their own stylesheet and from inline styles they set on close. The panel token
+   instead: !important to beat the inline close, and never while a finger drags the drawer, which
+   has to follow it without lag. */
+html [data-vaul-drawer]:not(.vaul-dragging) {
+	transition-duration: var(--motion-panel) !important;
+	transition-timing-function: var(--motion-ease) !important;
+}
+html [data-vaul-overlay] {
+	transition-duration: var(--motion-panel) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+	/* No slide: the drawer sits in place and fades in and out at the same length. */
+	html [data-vaul-drawer] {
+		transform: none !important;
+		transition-property: opacity !important;
+		opacity: 0;
+	}
+	html [data-vaul-drawer][data-vaul-drawer-visible='true']:not([data-state='closed']) {
+		opacity: 1;
+	}
 }
 
 /* ------------------------------------------------------------------ *
@@ -678,16 +709,11 @@
  * Overlays keep their full duration as pure fades; movement goes, feedback stays.
  * ------------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
-	/* Buttons keep their colour and opacity feedback; only the lift and the press go. */
+	/* Buttons keep their colour and opacity feedback. Their lift and press are gated to
+	   `no-preference` where they are declared, so nothing here has to out-specify them. */
 	html [data-theme='default'] .ed-btn-base,
 	html .ed-btn-base {
 		transition-property: background-color, color, border-color, opacity;
-	}
-	html [data-theme='default'] .ed-btn-base:hover,
-	html [data-theme='default'] .ed-btn-base:active,
-	html .ed-btn-base:hover,
-	html .ed-btn-base:active {
-		transform: none;
 	}
 
 	/* Purely decorative loops. */
@@ -707,10 +733,11 @@
 
 	/* Overlays (tailwindcss-animate: dialog, sheet, popover, dropdown, select, tooltip) keep their
 	   duration and lose their zoom and slide. The plugin builds its enter/exit keyframes from these
-	   variables, so neutralising them turns every overlay into a pure fade. !important because the
-	   `data-[state=open]:zoom-in-95` utilities sit at (0,2,0). */
-	html .animate-in,
-	html .animate-out {
+	   variables, so neutralising them turns every overlay into a pure fade. Matched on the class
+	   substring, because most overlays carry `data-[state=open]:animate-in`, not a bare `animate-in`;
+	   !important because those state utilities sit at (0,2,0). */
+	html [class*='animate-in'],
+	html [class*='animate-out'] {
 		--tw-enter-scale: 1 !important;
 		--tw-enter-rotate: 0 !important;
 		--tw-enter-translate-x: 0 !important;

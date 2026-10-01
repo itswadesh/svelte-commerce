@@ -1449,12 +1449,13 @@
 		.ed-link :global(.ed-link__icon) {
 			transition-property: background-color, color, border-color, opacity, box-shadow;
 		}
+		.ed-cat:hover .ed-cat__media img,
 		.ed-cat:hover .ed-cat__placeholder,
+		.ed-cat:hover :global(.ed-cat__icon),
 		a.ed-band__item:hover .ed-band__media img,
 		.ed-btn:hover,
 		.ed-news__form button:hover,
-		.ed-link:hover :global(.ed-link__icon),
-		.ed-cat__media:hover img {
+		.ed-link:hover :global(.ed-link__icon) {
 			transform: none;
 		}
 		/* The hero slider deliberately keeps gliding here: its slide is the point of the
