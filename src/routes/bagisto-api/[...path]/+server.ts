@@ -45,7 +45,7 @@ export const fallback: RequestHandler = async ({ request, params, url: reqUrl })
 
 		const method = request.method;
 
-		const requestInit: RequestInit = {
+		const requestInit: RequestInit & { duplex?: 'half' } = {
 			method,
 			headers,
 			// For Node.js standard fetch with body
