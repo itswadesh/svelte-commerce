@@ -22,7 +22,7 @@
 	const includesTax = $derived(currency?.includesTax === true)
 </script>
 
-<div class="edp-pricewrap flex flex-col">
+<div class="edp-pricewrap flex flex-col tabular-nums">
 	<div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
 		<div class="edp-price text-lg font-semibold text-foreground sm:text-xl" data-testid="product-price">
 			{formatPrice(price, currency?.code)}

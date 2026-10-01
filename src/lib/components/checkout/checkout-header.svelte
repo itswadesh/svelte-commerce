@@ -15,11 +15,14 @@
 			variant="plain"
 			disabled={step === 1 || step === 4}
 			onclick={() => goto(appendOneTimeCartId('/checkout/cart'))}
-			class={cn('flex h-auto items-center p-0 font-normal disabled:opacity-100', step === 1 ? 'text-primary' : 'text-inherit')}
+			class={cn(
+				'flex h-auto items-center p-0 font-normal disabled:opacity-100 max-md:min-w-11 max-md:justify-center',
+				step === 1 ? 'text-primary' : 'text-inherit'
+			)}
 		>
 			<div
 				class={cn(
-					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
+					'flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold tracking-tight',
 					step === 1 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
@@ -36,13 +39,13 @@
 			disabled={step === 1 || step === 4}
 			onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
 			class={cn(
-				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
+				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100 max-md:min-w-11 max-md:justify-center',
 				step === 2 ? 'text-primary' : step === 1 ? 'text-muted-foreground hover:text-foreground' : 'text-inherit'
 			)}
 		>
 			<div
 				class={cn(
-					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
+					'flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold tracking-tight',
 					step === 2 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
@@ -58,13 +61,13 @@
 			variant="plain"
 			disabled={true}
 			class={cn(
-				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
+				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100 max-md:min-w-11 max-md:justify-center',
 				step === 3 ? 'text-primary' : 'text-muted-foreground'
 			)}
 		>
 			<div
 				class={cn(
-					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
+					'flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold tracking-tight',
 					step === 3 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
@@ -80,13 +83,13 @@
 			variant="plain"
 			disabled={true}
 			class={cn(
-				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
+				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100 max-md:min-w-11 max-md:justify-center',
 				step === 4 ? 'text-primary' : 'text-muted-foreground'
 			)}
 		>
 			<div
 				class={cn(
-					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
+					'flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold tracking-tight',
 					step === 4 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>

@@ -3,6 +3,14 @@
 	import { cn } from '$lib/core/utils/index.js'
 	import { X } from '@lucide/svelte'
 	import { fade, fly } from '$lib/motion'
+
+	// An id is one token: a tag with no slug used its name, spaces and all, which broke the
+	// <label for> link and left the checkbox with no accessible name.
+	const idFrom = (value: string) =>
+		String(value)
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-|-$/g, '')
 	import { browser } from '$app/environment'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { GetColorName } from 'hex-color-to-color-name'
@@ -259,14 +267,14 @@
 					{#each tagsToShow as tag}
 						<div class="flex flex-row items-center gap-2">
 							<Checkbox
-								id={`tag-${tag.slug || tag.name}`}
+								id={`tag-${idFrom(tag.slug || tag.name)}`}
 								checked={filterState.selectedTags.find((t: any) => t.name === tag.name) ? true : false}
 								onCheckedChange={(checked) => {
 									filterState.handleTagChange({ tag, checked })
 								}}
 							/>
 							<label
-								for={`tag-${tag.slug || tag.name}`}
+								for={`tag-${idFrom(tag.slug || tag.name)}`}
 								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
 								>{tag.name}</label
 							>
@@ -281,14 +289,14 @@
 					{#each filterState.filteredTags as tag}
 						<div class="flex flex-row items-center gap-2">
 							<Checkbox
-								id={`tag-${tag.slug || tag.name}`}
+								id={`tag-${idFrom(tag.slug || tag.name)}`}
 								checked={filterState.selectedTags.find((t: any) => t.name === tag.name) ? true : false}
 								onCheckedChange={(checked) => {
 									filterState.handleTagChange({ tag, checked })
 								}}
 							/>
 							<label
-								for={`tag-${tag.slug || tag.name}`}
+								for={`tag-${idFrom(tag.slug || tag.name)}`}
 								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
 								>{tag.name}</label
 							>
@@ -535,7 +543,7 @@
 	/* Quiet uppercase section labels */
 	:global([data-theme='default']) .ed-df__label {
 		font-family: var(--ed-body);
-		font-size: 0.6875rem;
+		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
@@ -562,7 +570,7 @@
 	:global([data-theme='default'] .ed-df__more) {
 		color: var(--ed-soft);
 		font-family: var(--ed-body);
-		font-size: 0.6875rem;
+		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
@@ -640,7 +648,7 @@
 
 	:global([data-theme='default'] .ed-df__prices label) {
 		font-family: var(--ed-body);
-		font-size: 0.72rem;
+		font-size: 0.75rem;
 		font-weight: 500;
 		letter-spacing: 0.04em;
 		color: var(--ed-soft);

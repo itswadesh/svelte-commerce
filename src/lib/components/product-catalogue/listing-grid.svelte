@@ -217,7 +217,7 @@
 						e.preventDefault()
 						loadNextPage()
 					}}
-					class="text-xs font-semibold uppercase tracking-[0.16em] {loadFailed
+					class="inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.16em] md:min-h-8 {loadFailed
 						? 'ed-empty__link text-primary underline underline-offset-4'
 						: 'ed-more text-muted-foreground'}"
 				>

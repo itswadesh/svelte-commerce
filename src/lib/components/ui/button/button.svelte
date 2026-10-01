@@ -23,9 +23,9 @@
 				plain: ''
 			},
 			size: {
-				default: 'h-9 px-4 py-2',
-				sm: 'h-8 rounded-radius px-3 text-xs',
-				lg: 'h-10 rounded-radius px-8',
+				default: 'h-9 px-4 py-2 max-md:min-h-11',
+				sm: 'h-8 rounded-radius px-3 text-xs max-md:min-h-11',
+				lg: 'h-10 rounded-radius px-8 max-md:min-h-11',
 				// An icon button is the whole target, so it carries the density rule itself: 44px on
 				// phones for header, card, stepper and checkout actions, the compact 36px box from md
 				// up. Written as a `max-md:` bump on top of h-9/w-9 rather than the mobile-first pair,

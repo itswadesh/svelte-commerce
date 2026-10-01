@@ -802,23 +802,48 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
+		/* The buttons carry the spacing now: each 7px dot sits in its own 24px target. */
+		gap: 0;
 	}
 
 	/* Pause/play sits with the dots so the control is where the motion is. */
+	/* A 20px disc, as before, inside a target sized for the pointer: 44px on touch, 24px under a
+	   mouse. The disc is drawn behind the icon so the button itself can grow without looking bigger. */
 	.ed-slider__playpause {
+		position: relative;
+		isolation: isolate;
 		display: grid;
 		place-items: center;
-		width: 20px;
-		height: 20px;
-		margin-left: 4px;
+		width: 44px;
+		height: 44px;
+		margin: -10px -10px -10px -6px;
 		padding: 0;
 		border: 0;
-		border-radius: 99px;
 		cursor: pointer;
 		color: var(--ed-ink);
+		background: transparent;
+	}
+
+	.ed-slider__playpause::before {
+		content: '';
+		position: absolute;
+		inset: 12px;
+		z-index: -1;
+		border-radius: 99px;
 		background: rgb(255 255 255 / 0.85);
 		box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.ed-slider__playpause {
+			width: 24px;
+			height: 24px;
+			margin: -2px -2px -2px 2px;
+		}
+
+		.ed-slider__playpause::before {
+			inset: 2px;
+		}
 	}
 
 	.ed-slider :global(.ed-slider__playpause-icon) {
@@ -826,20 +851,33 @@
 		height: 11px;
 	}
 
+	/* The button is the 24px target WCAG 2.2 asks for; the 7px dot is drawn inside it. */
 	.ed-dot {
-		width: 7px;
-		height: 7px;
+		position: relative;
+		width: 24px;
+		height: 24px;
 		padding: 0;
 		border: 0;
-		border-radius: 99px;
+		background: transparent;
 		cursor: pointer;
+	}
+
+	.ed-dot::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 7px;
+		height: 7px;
+		border-radius: 99px;
 		background: rgb(255 255 255 / 0.6);
 		box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12);
+		transform: translate(-50%, -50%);
 		/* The active dot widens instantly; only its colour fades. Width is layout. */
 		transition: background var(--motion-fast) var(--motion-ease);
 	}
 
-	.ed-dot[aria-current='true'] {
+	.ed-dot[aria-current='true']::before {
 		width: 22px;
 		background: #fff;
 	}
@@ -892,9 +930,9 @@
 	}
 
 	.ed-link {
-		/* 32px tall so a standalone call to action clears the WCAG 2.2 target minimum; these sit
-		   beside buttons, not inside a sentence, so the inline exception does not apply. */
-		min-height: 32px;
+		/* A standalone call to action, not a link inside a sentence: 44px on touch, 32px under a
+		   mouse (below), both clear of the WCAG 2.2 minimum. */
+		min-height: 44px;
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
@@ -904,6 +942,12 @@
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
 		white-space: nowrap;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.ed-link {
+			min-height: 32px;
+		}
 	}
 
 	.ed-link :global(.ed-link__icon) {
@@ -1259,7 +1303,8 @@
 		background: var(--ed-canvas);
 		color: var(--ed-ink);
 		font-family: inherit;
-		font-size: 0.95rem;
+		/* 16px: smaller makes iOS zoom the page when the field takes focus. */
+		font-size: 1rem;
 	}
 
 	.ed-news__form input:focus {

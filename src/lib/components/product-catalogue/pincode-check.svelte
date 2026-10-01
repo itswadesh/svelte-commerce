@@ -24,6 +24,7 @@
 						class="w-full rounded-md border-input bg-background p-2 [appearance:textfield] placeholder:text-muted-foreground/80 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
 						placeholder="Enter Pincode"
 						aria-label="Enter Pincode"
+						aria-labelledby="pdp-delivery-label"
 					/>
 					<Button disabled={!(pincode && pincode > 0) || loading} onclick={checkPincode} class="min-w-[80px]">
 						{#if loading}

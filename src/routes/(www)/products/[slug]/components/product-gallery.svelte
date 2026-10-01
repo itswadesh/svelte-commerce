@@ -240,13 +240,12 @@
 			</div>
 
 			<!-- Mobile Pagination Dots -->
-			<div class="mt-4 flex justify-center gap-1.5 sm:hidden">
+			<div class="mt-4 flex justify-center sm:hidden">
 				{#each images as _, i}
-					<button
-						class="h-1.5 rounded-full transition-colors duration-fast {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-gray-300'}"
-						onclick={() => mainCarouselApi?.scrollTo(i)}
-						aria-label="Go to slide {i + 1}"
-					></button>
+					<!-- The button is the 24px target; the 6px dot inside it is the indicator. -->
+					<button class="grid h-6 min-w-6 place-items-center" onclick={() => mainCarouselApi?.scrollTo(i)} aria-label="Go to slide {i + 1}">
+						<span class="h-1.5 rounded-full transition-colors duration-fast {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-gray-300'}"></span>
+					</button>
 				{/each}
 			</div>
 		</Carousel.Root>

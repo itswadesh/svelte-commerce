@@ -43,6 +43,8 @@ function auditPage(isPhone) {
 				.trim()
 		const text = (el.innerText || '').trim()
 		if (text) return text
+		const labelled = [...(el.labels || [])].map((l) => l.innerText.trim()).join(' ')
+		if (labelled) return labelled
 		const img = el.querySelector('img[alt]:not([alt=""]), svg[aria-label], [role="img"][aria-label]')
 		if (img) return img.getAttribute('alt') || img.getAttribute('aria-label')
 		return el.getAttribute('title')?.trim() || ''
@@ -177,6 +179,25 @@ function auditPage(isPhone) {
 	].filter(visible)
 	const tiny = []
 	const small = []
+	const big = (el, limit) => {
+		const r = el.getBoundingClientRect()
+		return r.width >= limit && r.height >= limit
+	}
+	// WCAG 2.2's "equivalent" exception: the same action is available through a target that is big
+	// enough. A checkbox whose label also toggles it; a card's title link beside the card's image link.
+	const hasEquivalent = (el, limit) => {
+		const label = el.id && document.querySelector(`label[for="${CSS.escape(el.id)}"]`)
+		if (label && label.getBoundingClientRect().height >= Math.min(limit, 24)) return true
+		const href = el.tagName === 'A' && el.getAttribute('href')
+		const scope = el.closest('article, li, section')
+		if (!href || !scope) return false
+		return [...scope.querySelectorAll('a[href]')].some((a) => a !== el && a.getAttribute('href') === href && big(a, limit))
+	}
+	// The phone's 44px rule is for controls a shopper acts with. Secondary navigation (breadcrumbs,
+	// carousel dot indicators) keeps the 24px WCAG floor: 44px dots overflow a phone row at nine
+	// slides, and a 44px breadcrumb row costs the product page its fold. docs/UX_SYSTEM.md, density.
+	const secondary = (el) =>
+		!!el.closest('nav[aria-label*="readcrumb" i], [data-target="secondary"]') || /^Go to slide/i.test(el.getAttribute('aria-label') || '')
 	for (const el of controls) {
 		const r = el.getBoundingClientRect()
 		// Visually hidden until focused (a skip link): not a pointer target.
@@ -184,8 +205,9 @@ function auditPage(isPhone) {
 		const inline =
 			el.tagName === 'A' && getComputedStyle(el).display === 'inline' && el.parentElement && /P|LI|SPAN|TD/.test(el.parentElement.tagName)
 		if (inline) continue
-		if (r.width < 24 || r.height < 24) tiny.push(`${Math.round(r.width)}×${Math.round(r.height)} ${describe(el)}`)
-		else if (isPhone && (r.width < 44 || r.height < 44)) small.push(`${Math.round(r.width)}×${Math.round(r.height)} ${describe(el)}`)
+		if ((r.width < 24 || r.height < 24) && !hasEquivalent(el, 24)) tiny.push(`${Math.round(r.width)}×${Math.round(r.height)} ${describe(el)}`)
+		else if (isPhone && (r.width < 44 || r.height < 44) && !secondary(el) && !hasEquivalent(el, 44))
+			small.push(`${Math.round(r.width)}×${Math.round(r.height)} ${describe(el)}`)
 	}
 	if (tiny.length) add('web-target-size', 'critical', `${tiny.length} targets under 24×24px`, tiny.slice(0, 5).join(' | '))
 	if (small.length) add('touch-target-size', 'high', `${small.length} phone targets under 44×44px`, small.slice(0, 5).join(' | '))
@@ -243,10 +265,14 @@ function auditPage(isPhone) {
 
 	// 9. image-dimension and lazy-load-below-fold.
 	const imgs = [...document.querySelectorAll('img')].filter(visible)
-	const unsized = imgs.filter(
-		(i) =>
-			!i.getAttribute('width') && !i.getAttribute('height') && getComputedStyle(i).aspectRatio === 'auto' && !i.closest('[style*="aspect-ratio"]')
-	)
+	// A box within five levels that sets its own aspect-ratio reserves the space just as well.
+	const boxed = (i) => {
+		for (let n = i, depth = 0; n && depth < 6; n = n.parentElement, depth++) {
+			if (getComputedStyle(n).aspectRatio !== 'auto') return true
+		}
+		return false
+	}
+	const unsized = imgs.filter((i) => !i.getAttribute('width') && !i.getAttribute('height') && !boxed(i))
 	if (unsized.length)
 		add(
 			'image-dimension',
@@ -296,7 +322,10 @@ const browser = await chromium.launch({ channel: 'chrome' })
 let productPath = null
 
 for (const { label, width, height } of WIDTHS) {
-	const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' })
+	// The phone pass is a touch device: without it Chrome reports a fine pointer at any width, and
+	// every `(pointer: fine)` desktop size applies to the "phone".
+	const phone = label === 'phone'
+	const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce', hasTouch: phone, isMobile: phone })
 	for (const route of ROUTES) {
 		const page = await context.newPage()
 		const errors = []

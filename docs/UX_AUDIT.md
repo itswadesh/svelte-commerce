@@ -40,6 +40,7 @@ Updated 2026-09-03. The design plan below is being worked in order; these commit
 | Homepage type scale, brand palette on first paint, responsive images | `3c05e9e2` |
 | Motion layer: tokens, route crossfade + product morph, feedback on every control, reduced motion that fades instead of snapping | `d29de4c4`, `c047b3cd` |
 | Browser `/api` calls reach the backend on adapter-node; connector fetch no longer throws "Illegal invocation" | `5fd11bb8`, `6bddd628` |
+| UI/UX Pro Max audit: targets, contrast, labels, skip link, 16px fields, 12px floor, tabular prices — 16/16 route×width clean | this commit |
 
 **Verified after each change**, on the default theme against the local GoCommerce store: every
 route returns 200 at 390px and 1280px, no horizontal overflow, exactly one `h1` per route, no

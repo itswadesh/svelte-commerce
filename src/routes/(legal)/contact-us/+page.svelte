@@ -115,7 +115,7 @@
 											{#if method.href}
 												<!-- A phone number the shopper cannot tap is a phone number they have to
 												     retype. 32px keeps the standalone link above the WCAG 2.2 target floor. -->
-												<a href={method.href} class="mt-0.5 inline-flex min-h-[32px] items-center font-medium text-primary hover:underline">
+												<a href={method.href} class="mt-0.5 inline-flex min-h-11 items-center font-medium text-primary hover:underline md:min-h-8">
 													{method.value}
 												</a>
 											{:else}
