@@ -454,15 +454,20 @@
 		color: hsl(var(--primary));
 	}
 
-	/* Price, was-price and saving on one row. They wrapped onto a second line on a 171px phone
-	   card, which made two cards in the same row different heights for no reason; a step down in
-	   each of the three sizes fits the longest price this catalogue produces on one line. */
+	/* Two fixed lines: price and was-price, then the saving on its own line. Squeezing all three onto
+	   one line only worked for some prices at some card widths, so cards in one row came out at
+	   different heights depending on how many digits a price had. Reserving both lines also keeps a
+	   product with no saving level with its neighbours. Nothing is hidden at any width. */
 	.dpc__price {
 		display: flex;
-		font-variant-numeric: tabular-nums;
-		align-items: baseline;
 		flex-wrap: wrap;
-		gap: 5px;
+		align-items: baseline;
+		align-content: flex-start;
+		column-gap: 5px;
+		row-gap: 2px;
+		min-height: calc(0.875rem * 1.25 + 0.75rem * 1.25 + 2px);
+		line-height: 1.25;
+		font-variant-numeric: tabular-nums;
 	}
 
 	.dpc__price-from {
@@ -484,6 +489,7 @@
 	}
 
 	.dpc__price-off {
+		flex-basis: 100%;
 		font-size: 0.75rem;
 		font-weight: 600;
 		letter-spacing: 0.02em;
@@ -492,13 +498,11 @@
 		color: hsl(var(--success));
 	}
 
-	/* Below ~172px the three price facts no longer fit on one line at full size, and the row
-	   wrapped — so two cards side by side came out different heights because one price happened to
-	   be a character shorter. A step down on the price and the saving holds the line to 165px;
-	   narrower than that, the next rule takes the was-price out of the row. Nothing drops below 12px. */
+	/* Narrow cards (three per row at 768px, a 360px phone) step the price down so price and
+	   was-price keep to the first line. Nothing drops below 12px. */
 	@container (max-width: 172px) {
 		.dpc__price {
-			gap: 4px;
+			column-gap: 4px;
 		}
 
 		.dpc__price-now {
@@ -507,21 +511,6 @@
 
 		.dpc__price-off {
 			font-size: 0.75rem;
-		}
-	}
-
-	/* Below 165px (three cards per row at 768px) the three facts no longer fit one line at 12px, and a
-	   wrapped price makes cards in one row different heights. The struck-through was-price steps out
-	   of sight here (the saving still says how much is off) but stays readable to screen readers. A
-	   390px phone card is 170px wide and keeps it. */
-	@container (max-width: 164px) {
-		.dpc__price-mrp {
-			position: absolute;
-			width: 1px;
-			height: 1px;
-			overflow: hidden;
-			clip: rect(0 0 0 0);
-			white-space: nowrap;
 		}
 	}
 

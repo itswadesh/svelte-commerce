@@ -8,9 +8,13 @@ import { chromium } from '@playwright/test'
 import fs from 'node:fs'
 
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3100'
+// phone: a touch phone, where the 44px rule applies. reflow: 1280px at 400% zoom (WCAG 1.4.10), a
+// mouse at 320 CSS px. landscape: a touch phone turned sideways, checked for layout, not 44px targets.
 const WIDTHS = [
 	{ label: 'phone', width: 390, height: 844 },
-	{ label: 'desktop', width: 1280, height: 900 }
+	{ label: 'desktop', width: 1280, height: 900 },
+	{ label: 'reflow', width: 320, height: 640 },
+	{ label: 'landscape', width: 844, height: 390 }
 ]
 
 // Routes worth a shopper's journey. The product page is found from the homepage at run time.
@@ -295,6 +299,22 @@ function auditPage(isPhone) {
 				.join(', ')
 		)
 
+	// 9b. icon-context: an icon beside visible text is decoration and must be hidden from assistive tech.
+	const exposed = [...document.querySelectorAll('a, button, [role="button"]')]
+		.filter((el) => visible(el) && (el.innerText || '').trim())
+		.flatMap((el) =>
+			[...el.querySelectorAll('svg')]
+				.filter((s) => s.getAttribute('aria-hidden') !== 'true' && !s.closest('[aria-hidden="true"]') && s.getAttribute('role') !== 'img')
+				.map(() => describe(el))
+		)
+	if (exposed.length)
+		add(
+			'icon-context',
+			'low',
+			`${exposed.length} decorative icons beside visible text are not aria-hidden`,
+			[...new Set(exposed)].slice(0, 4).join(' | ')
+		)
+
 	// 10. no-emoji-icons.
 	const emoji = [...document.querySelectorAll('button, a, [role="button"]')].filter(
 		(el) => visible(el) && /\p{Extended_Pictographic}/u.test(el.innerText || '')
@@ -324,8 +344,8 @@ let productPath = null
 for (const { label, width, height } of WIDTHS) {
 	// The phone pass is a touch device: without it Chrome reports a fine pointer at any width, and
 	// every `(pointer: fine)` desktop size applies to the "phone".
-	const phone = label === 'phone'
-	const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce', hasTouch: phone, isMobile: phone })
+	const touch = label === 'phone' || label === 'landscape'
+	const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce', hasTouch: touch, isMobile: touch })
 	for (const route of ROUTES) {
 		const page = await context.newPage()
 		const errors = []
@@ -364,32 +384,58 @@ for (const { label, width, height } of WIDTHS) {
 		if (cls > 0.1) findings.push({ rule: 'content-jumping', severity: 'high', detail: `cumulative layout shift ${cls.toFixed(3)} (want < 0.1)` })
 		else if (cls > 0.05) findings.push({ rule: 'content-jumping', severity: 'low', detail: `cumulative layout shift ${cls.toFixed(3)}` })
 
-		// focus-states: the first 12 tab stops must each show a visible indicator.
+		// focus-states and focus-not-obscured (WCAG 2.4.11): tab through the page (up to 60 stops). Each
+		// stop must show an indicator, and must be the topmost thing at its own centre, not under the
+		// sticky header, the bottom bar or an overlay.
 		const invisible = []
+		const obscured = []
+		const seenStops = new Set()
 		await page.evaluate(() => document.activeElement?.blur())
-		for (let i = 0; i < 12; i++) {
+		for (let i = 0; i < 60; i++) {
 			await page.keyboard.press('Tab')
+			await page.waitForTimeout(30)
 			const r = await page.evaluate(() => {
 				const el = document.activeElement
 				if (!el || el === document.body) return null
 				const s = getComputedStyle(el)
+				// A range input is focused at its thumb, which the box's centre point does not locate.
+				const ranged = el.matches('input[type="range"]')
 				const ring = (s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0) || (s.boxShadow && s.boxShadow !== 'none')
-				const r = el.getBoundingClientRect()
+				const box = el.getBoundingClientRect()
+				const x = Math.min(Math.max(box.left + box.width / 2, 1), innerWidth - 1)
+				const y = Math.min(Math.max(box.top + box.height / 2, 1), innerHeight - 1)
+				const top = document.elementFromPoint(x, y)
+				const visibleHere = box.bottom > 0 && box.top < innerHeight && box.width > 1
+				const hidden = !ranged && visibleHere && top && top !== el && !el.contains(top) && !top.contains(el)
+				const key = el.tagName + (el.id || '') + Math.round(box.top + scrollY) + Math.round(box.left)
 				return {
+					key,
 					ring,
-					onScreen: r.bottom > 0 && r.top < innerHeight,
-					desc: `<${el.tagName.toLowerCase()}> ${(el.getAttribute('aria-label') || el.innerText || '').trim().slice(0, 30)}`
+					hidden,
+					offScreen: !visibleHere && box.width > 1,
+					by: hidden ? `${top.tagName.toLowerCase()}.${(top.getAttribute('class') || '').split(' ')[0]}` : '',
+					desc: `<${el.tagName.toLowerCase()}> ${(el.getAttribute('aria-label') || el.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 30)}`
 				}
 			})
-			if (r && !r.ring) invisible.push(r.desc)
-			if (r && !r.onScreen)
-				findings.push({ rule: 'focus-not-obscured', severity: 'high', detail: 'a focused control is off screen or under sticky UI', sample: r.desc })
+			if (!r) continue
+			if (seenStops.has(r.key)) break // wrapped round to the start
+			seenStops.add(r.key)
+			if (!r.ring) invisible.push(r.desc)
+			if (r.hidden) obscured.push(`${r.desc} under ${r.by}`)
+			else if (r.offScreen) obscured.push(`${r.desc} off screen`)
 		}
+		if (obscured.length)
+			findings.push({
+				rule: 'focus-not-obscured',
+				severity: 'high',
+				detail: `${obscured.length} focused controls hidden by sticky UI or off screen`,
+				sample: obscured.slice(0, 4).join(' | ')
+			})
 		if (invisible.length)
 			findings.push({
 				rule: 'focus-states',
 				severity: 'critical',
-				detail: `${invisible.length} of the first 12 tab stops show no focus indicator`,
+				detail: `${invisible.length} of ${seenStops.size} tab stops show no focus indicator`,
 				sample: invisible.slice(0, 4).join(' | ')
 			})
 		// A route that is meant to 404 logs its own document's 404; that is not an error.
