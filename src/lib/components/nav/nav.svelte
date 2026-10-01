@@ -32,6 +32,10 @@
 	// the cycle repeats. The gap must exceed the height lost on collapse (hello bar +
 	// row-height change ≈ 56px).
 	let isScrolled = $state(false)
+	// Height of the announcement or hello bar, if one renders. The sticky header sits this far above
+	// the viewport, so the bar scrolls away with the page and the rest of the header sticks:
+	// ordinary scrolling, with no animated height and no transform to trap the fixed drawers inside.
+	let barHeight = $state(0)
 
 	// Background scroll lock for the menu drawer. Without it the page behind the open drawer still
 	// scrolls under a touch drag, so closing the menu returned the shopper somewhere they never
@@ -126,14 +130,16 @@
 {:else}
 	<header
 		class:ed={activeThemeName === 'default'}
+		style:top={barHeight ? `-${barHeight}px` : undefined}
 		class="{navModule.isProductListingPage
 			? 'max-sm:border-b'
-			: ''} vt-site-header sticky top-0 z-50 w-full flex-col items-center justify-between bg-background shadow-xs transition-all duration-200"
+			: ''} vt-site-header sticky top-0 z-50 w-full flex-col items-center justify-between bg-background shadow-xs"
 	>
-		<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
+		<!-- Both bars sit in one always-mounted box, so its height drops to 0 on pages without one. -->
+		<div bind:clientHeight={barHeight}>
+			<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
 		     content wins -->
-		{#if !helloBarHasContent && themeAnnouncement && isHomepage}
-			<div class="grid transition-[grid-template-rows] duration-300 ease-in-out {isScrolled ? 'grid-rows-[0fr]' : 'grid-rows-[1fr]'}">
+			{#if !helloBarHasContent && themeAnnouncement && isHomepage}
 				<div class="overflow-hidden">
 					<div class="max-w-none bg-primary px-4 py-2.5 text-center text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground">
 						{#if themeHeader?.announcementHref}
@@ -145,18 +151,15 @@
 						{/if}
 					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 
-		<!-- Hello bar (only when the plugin actually has content — an active-but-empty
+			<!-- Hello bar (only when the plugin actually has content — an active-but-empty
 		     plugin used to render a stray empty dark band) -->
-		{#if helloBarHasContent && isHomepage}
-			<!-- <div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
+			{#if helloBarHasContent && isHomepage}
+				<!-- <div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
 				{@html helloBarPlugin?.content}
 			</div> -->
 
-			<!-- Grid-rows 1fr→0fr collapse animates to zero without a magic max-height. -->
-			<div class="grid transition-[grid-template-rows] duration-300 ease-in-out {isScrolled ? 'grid-rows-[0fr]' : 'grid-rows-[1fr]'}">
 				<div class="overflow-hidden">
 					{#if navModule.helloBarPlugin?.content}
 						<div class="max-w-none bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
@@ -178,14 +181,11 @@
 						</div>
 					{/if}
 				</div>
-			</div>
-		{/if}
-		<!-- Fixed heights stand in for vertical padding here, so the scroll slimming transitions height instead. -->
-		<div
-			class="ed-row page-width flex items-center justify-between bg-background transition-[height] duration-300 ease-in-out {isScrolled
-				? 'h-12'
-				: 'h-16 sm:h-14'}"
-		>
+			{/if}
+		</div>
+		<!-- One fixed height: the row no longer slims on scroll, because animating height re-lays-out
+		     the page on every scroll frame. -->
+		<div class="ed-row page-width flex h-14 items-center justify-between bg-background">
 			<div class="hidden justify-center gap-3 sm:flex">
 				<!-- `lg:hidden`, not `md:hidden`: MainNav only reveals its inline links at `lg`, so
 				     hiding this button at `md` left 768-1023px with no way to reach any category —
