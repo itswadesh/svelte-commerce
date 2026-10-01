@@ -4,7 +4,7 @@
 	import { getImageCDNUrl } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
-	import { fade, fly, motionMs } from '$lib/motion'
+	import { fade } from '$lib/motion'
 	import { onMount } from 'svelte'
 
 	// Slim variant for the scrolled header: drops the menu list's vertical padding.
@@ -135,8 +135,7 @@
 
 						{#if toggleMenuItemChildren[index] && childrenOf(category)?.length}
 							<div
-								transition:fly={{ y: -4, duration: motionMs('fast') }}
-								class="ed-mm-panel mega-menu ease-out-expo absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-all duration-500"
+								class="ed-mm-panel mega-menu absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-[opacity,transform,visibility] duration-fast ease-standard"
 							>
 								<div class="flex">
 									<div class="grid max-h-[70vh] flex-1 grid-cols-4 gap-x-8 gap-y-2 overflow-y-auto px-10 py-7 scrollbar-thin">
@@ -305,7 +304,7 @@
 	.mega-menu {
 		visibility: hidden;
 		opacity: 0;
-		transform: translate(-50%, 10px);
+		transform: translate(-50%, 4px);
 		z-index: 9999;
 	}
 
@@ -320,5 +319,12 @@
 
 	.hoverable {
 		position: static;
+	}
+
+	/* The panel still fades in, but no longer drops. */
+	@media (prefers-reduced-motion: reduce) {
+		.mega-menu {
+			transform: translate(-50%, 0);
+		}
 	}
 </style>

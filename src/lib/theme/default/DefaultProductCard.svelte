@@ -103,7 +103,7 @@
 			<a data-testid="product-card-link" class="dpc__media-link" href="/products/{product.slug}" aria-label="View details of {displayName}">
 				<figure title={displayName} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: {mediaRatio};">
 					{#if imageSrc && !imageFailed}
-						<div class="dpc__frame" use:trackImage onloadcapture={() => (imageLoaded = true)} onerrorcapture={() => (imageFailed = true)}>
+						<div class="dpc__frame" data-vt-product-media={product.slug} use:trackImage onloadcapture={() => (imageLoaded = true)} onerrorcapture={() => (imageFailed = true)}>
 							<LazyImg
 								src={imageSrc}
 								alt="{displayName} product image"

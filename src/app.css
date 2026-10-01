@@ -506,6 +506,37 @@
 }
 
 /* ------------------------------------------------------------------ *
+ * Route transitions — src/lib/motion/route-transition.ts
+ *
+ * The page crossfades; the header, footer and bottom nav hold still because they carry names of
+ * their own; the clicked product image morphs into the gallery through `product-media`.
+ * ------------------------------------------------------------------ */
+::view-transition-old(root) {
+	animation-duration: var(--motion-exit);
+	animation-timing-function: var(--motion-ease-exit);
+}
+::view-transition-new(root) {
+	animation-duration: var(--motion-panel);
+	animation-timing-function: var(--motion-ease);
+}
+::view-transition-group(product-media) {
+	animation-duration: var(--motion-emphasis);
+	animation-timing-function: var(--motion-ease);
+}
+[data-vt-morph] {
+	view-transition-name: product-media;
+}
+.vt-site-header {
+	view-transition-name: site-header;
+}
+.vt-site-footer {
+	view-transition-name: site-footer;
+}
+.vt-bottom-nav {
+	view-transition-name: bottom-nav;
+}
+
+/* ------------------------------------------------------------------ *
  * Reduced motion
  *
  * This block used to cover .ed-btn-base and nothing else, and even that at

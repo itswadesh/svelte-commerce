@@ -128,7 +128,7 @@
 		class:ed={activeThemeName === 'default'}
 		class="{navModule.isProductListingPage
 			? 'max-sm:border-b'
-			: ''} sticky top-0 z-50 w-full flex-col items-center justify-between bg-background shadow-xs transition-all duration-200"
+			: ''} vt-site-header sticky top-0 z-50 w-full flex-col items-center justify-between bg-background shadow-xs transition-all duration-200"
 	>
 		<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
 		     content wins -->
