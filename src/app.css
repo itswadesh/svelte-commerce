@@ -176,10 +176,13 @@
 		--wine-green: #047857;
 		--wine-gold: #d97706;
 		/* Refined Editorial type system — applies wherever a default-theme component uses
-		   --font-heading / --font-body (nav, footer, product cards, PLP, PDP, homepage). */
-		--font-heading: 'Bodoni Moda', 'Times New Roman', serif;
-		--font-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
-		--font-primary: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+		   --font-heading / --font-body (nav, footer, product cards, PLP, PDP, homepage).
+		   Lora and Inter, for legibility: Bodoni Moda's hairline strokes broke up at the sizes product
+		   titles and section headings use, so headings take a moderate-contrast serif made for
+		   screens, and body text a UI face that stays clear down to 12px. */
+		--font-heading: 'Lora', Georgia, 'Times New Roman', serif;
+		--font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+		--font-primary: 'Inter', ui-sans-serif, system-ui, sans-serif;
 		/* Editorial vocabulary, step 1 of 2. Each --ed-* name below is now an alias of
 		   the semantic token that owns the same role, so there is one source of truth
 		   per role instead of two. The ~310 `var(--ed-*)` call sites keep working
@@ -204,9 +207,9 @@
 		   design decision for the homepage slice; until then this stays a literal. */
 		--ed-canvas: #f6f3ee;
 		/* Follows the shell's --font-body so the store's admin-set font applies; the theme's own
-		   Hanken Grotesk is the fallback. (This block is the ONE definition of the --ed-* set —
+		   Inter is the fallback. (This block is the ONE definition of the --ed-* set —
 		   DefaultHomepage used to restate it locally with slightly different contents.) */
-		--ed-body: var(--font-body, 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif);
+		--ed-body: var(--font-body, 'Inter', ui-sans-serif, system-ui, sans-serif);
 		--container-max: 1240px;
 		--container-gutter: clamp(20px, 5vw, 48px);
 		/* Editorial alias — kept so existing `var(--ed-gutter)` rules keep working, but it is
@@ -345,6 +348,19 @@
 	html {
 		overflow-anchor: none;
 		scroll-behavior: smooth;
+		/* Focus not obscured (WCAG 2.4.11): when Tab scrolls a control into view, keep it clear of the
+		   sticky header above and of the fixed bars below (the phone sort/filter bar, the WhatsApp
+		   button). Without this a focused link could land underneath them. */
+		scroll-padding-top: 6.5rem;
+		scroll-padding-bottom: 6rem;
+	}
+
+	/* On a phone the WhatsApp button floats 80–136px above the bottom edge, inside 6rem of padding;
+	   a focused link in that band counted as visible and stayed under it. */
+	@media (max-width: 639px) {
+		html {
+			scroll-padding-bottom: 9.5rem;
+		}
 	}
 
 	body {

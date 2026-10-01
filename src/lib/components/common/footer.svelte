@@ -34,6 +34,11 @@
 	// The toggle the merchant sets is the answer. It used to be overridden to `true`, so a store that
 	// had switched social links off still rendered whatever handles happened to be on the record.
 	const socialSharing = $derived(storeData?.plugins?.socialSharingButtons)
+
+	// The WhatsApp button floats over the bottom-left corner of a phone screen (80px up, 56px tall).
+	// The last footer links cannot scroll out from under it, so the footer reserves that corner
+	// whenever the button is shown — the same condition whatsapp-chat-button.svelte renders on.
+	const whatsappShown = $derived(!!(storeData?.plugins?.whatsappChatButton?.active && storeData?.plugins?.whatsappChatButton?.phone))
 	// Screen readers used to hear the raw config key — "linkedin", "twitter" — as the link name.
 	const SOCIAL_NAMES: Record<string, string> = {
 		twitter: 'X',
@@ -117,7 +122,7 @@
 		{/if}
 		<!-- The footer used to re-declare the rail formula in its own <style> block, giving the single
 		     content rail two definitions that could drift. `.page-width` from app.css is the one. -->
-		<footer class:ed={activeThemeName === 'default'} aria-label="Site footer" data-build={version}>
+		<footer class={whatsappShown ? 'max-sm:pb-36' : ''} class:ed={activeThemeName === 'default'} aria-label="Site footer" data-build={version}>
 			<div class="page-width w-full xl:pb-2">
 				{#if shouldCollapseOnMobile}
 					<Button

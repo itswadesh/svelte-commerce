@@ -132,7 +132,7 @@
 						onclick={() => filterState.toggleCategorySearch()}
 						aria-label="Toggle category search"
 					>
-						<svg
+						<svg aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							width="16"
 							height="16"
@@ -241,7 +241,7 @@
 						size="icon"
 						onclick={() => filterState.toggleTagSearch()}
 					>
-						<svg
+						<svg aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							width="16"
 							height="16"
