@@ -56,11 +56,17 @@
 		   1px field or card edge meets WCAG 1.4.11. --border stays the quiet separator. */
 		--border-strong: 0 0% 52%;
 
-		/* Motion. 120-180ms for feedback, 180-240ms for panels. --motion-ease carries
-		   the curve that used to sit unused in --ease. */
-		--motion-fast: 140ms;
-		--motion-panel: 200ms;
+		/* Motion. One scale for the storefront — see
+		   docs/superpowers/specs/2026-10-01-motion-layer-design.md. Fast is feedback; panel is
+		   drawers, dialogs and the route crossfade; emphasis is the product morph, success marks and
+		   card-image hover. Panels exit at --motion-exit, and nothing exits under 150ms.
+		   src/lib/motion/index.ts mirrors these numbers for script-driven transitions. */
+		--motion-fast: 150ms;
+		--motion-panel: 220ms;
+		--motion-emphasis: 300ms;
+		--motion-exit: 160ms;
 		--motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+		--motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
 		/* One z-index scale. Every overlay reads these — through the Tailwind
 		   `z-sticky … z-skip` utilities, or through var() where a utility cannot

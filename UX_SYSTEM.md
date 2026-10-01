@@ -85,8 +85,8 @@ genuinely missing.
 | focus | `--ring` · global `:focus-visible` ring in `src/app.css` |
 
 Known foundation gaps to close through the design system, not inside pages: no `warning` token,
-no `primary-hover` token, no named z-index scale (arbitrary `z-[…]` values compete), no
-motion-duration tokens, `dark:` utilities are emitted without a dark token set, and
+no `primary-hover` token, no named z-index scale (arbitrary `z-[…]` values compete),
+`dark:` utilities are emitted without a dark token set, and
 `src/routes/styles.css` is an unused SvelteKit starter stylesheet. `docs/UX_AUDIT.md` holds the
 current state and priorities.
 
@@ -138,7 +138,12 @@ structure incrementally.
   `--radius`-derived scale (`rounded-sm/md/lg/xl`) so square themes stay square. No arbitrary radii.
 - Elevation: borders for normal grouping; shadows only for floating layers (dialogs, menus,
   drawers, sticky controls).
-- Motion: 120–180ms for feedback, 180–240ms for panels. Respect `prefers-reduced-motion`.
+- Motion: `duration-fast` 150ms (feedback), `duration-panel` 220ms (panels, route crossfade),
+  `duration-emphasis` 300ms (product morph, success, card-image hover), `duration-exit` 160ms
+  (panel exits); `ease-standard` / `ease-exit`. Move with `transform` and `opacity` only. Script
+  transitions come from `$lib/motion`, never `svelte/transition`. Under reduced motion nothing
+  moves and nothing snaps: movement becomes a fade of the same length. Contract:
+  `docs/superpowers/specs/2026-10-01-motion-layer-design.md`.
 
 ### Density rules
 
