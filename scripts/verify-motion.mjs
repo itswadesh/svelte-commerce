@@ -169,6 +169,29 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
 		}
 		await page.mouse.move(5, 600)
 		await page.waitForTimeout(400)
+
+		// A pointer resting on a trigger opens the panel once and keeps it open. The backdrop used to
+		// paint over the triggers, so a still pointer opened and closed the menu in a loop.
+		await page.evaluate(() => {
+			window.__mega = { opens: 0, closes: 0 }
+			new MutationObserver((list) => {
+				for (const m of list) {
+					for (const n of m.addedNodes) if (n.nodeType === 1 && n.matches?.('.ed-mm-panel')) window.__mega.opens++
+					for (const n of m.removedNodes) if (n.nodeType === 1 && n.matches?.('.ed-mm-panel')) window.__mega.closes++
+				}
+			}).observe(document.body, { childList: true, subtree: true })
+		})
+		const triggerBox = await megaLink.boundingBox()
+		for (let i = 0; i < 12; i++) {
+			await page.mouse.move(triggerBox.x + triggerBox.width / 2 + (i % 2), triggerBox.y + triggerBox.height / 2)
+			await page.waitForTimeout(100)
+		}
+		const resting = await page.evaluate(() => window.__mega)
+		check(resting.opens === 1 && resting.closes === 0, `[${mode}] mega-menu holds open under a resting pointer (opened ${resting.opens}, closed ${resting.closes})`)
+		await page.mouse.move(5, 600)
+		await page.waitForTimeout(500)
+		const left = await page.evaluate(() => window.__mega.closes)
+		check(left === 1, `[${mode}] mega-menu closes once the pointer leaves (closed ${left})`)
 	} else {
 		report.push(`SKIP  [${mode}] mega-menu: no category with children in this store`)
 	}

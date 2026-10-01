@@ -6,6 +6,7 @@
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import { fade, fly, motionMs } from '$lib/motion'
 	import { onMount } from 'svelte'
+	import { Portal } from 'bits-ui'
 
 	// Slim variant for the scrolled header: drops the menu list's vertical padding.
 	// (jws also dropped the list's margin and border here; this list carries neither.)
@@ -118,6 +119,7 @@
 
 							{#if childrenOf(category)?.length}
 								<svg
+									aria-hidden="true"
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"
 									fill="currentColor"
@@ -170,7 +172,7 @@
 															<li>
 																<a
 																	href={c1.link || '/' + c1.slug}
-																	class="ed-mm-sub flex items-center gap-2 text-[13px] font-medium text-gray-700 transition-all motion-safe:hover:translate-x-1 hover:text-primary"
+																	class="ed-mm-sub flex items-center gap-2 text-[13px] font-medium text-gray-700 transition-all hover:text-primary motion-safe:hover:translate-x-1"
 																	onclick={() => closeChildMenu(index, false)}
 																>
 																	{#if c1?.thumbnail}
@@ -217,25 +219,32 @@
 				{/each}
 			</ul>
 			<!-- Backdrop. Deliberately a sibling of the <ul>, not a child of the hovered <li>, so it
-			     cannot keep the panel open. It sits at z-overlay, below the sticky header's z-index,
-			     so the header row stays undimmed and clickable while everything below it recedes.
-			     Without this a 90vw white panel dropped onto a live hero and a mis-aimed click hit a
-			     call to action instead of dismissing the menu. -->
+			     cannot keep the panel open. Without it a 90vw white panel dropped onto a live hero and a
+			     mis-aimed click hit a call to action instead of dismissing the menu.
+			     Portalled to <body> on purpose. Rendered here, inside the sticky header, its z-overlay was
+			     measured against the header's own children (the header is a stacking context), so it
+			     painted over the category triggers: hovering one opened the panel, the backdrop slid
+			     under the pointer, the trigger saw a mouseleave and closed it, the backdrop went, the
+			     trigger was under the pointer again — open, close, open, for as long as the pointer
+			     stayed. From <body>, z-overlay sits below the header's z-50: the whole header stays
+			     undimmed and clickable while the page recedes. -->
 			{#if selectedCategory}
-				<div
-					class="fixed inset-0 z-overlay bg-black/40"
-					aria-hidden="true"
-					transition:fade
-					onclick={() => {
-						cancelPendingClose()
-						// Close by the index that is actually open: closeChildMenu clears
-						// toggleMenuItemChildren[index], so a hardcoded 0 would blank the selected
-						// category while leaving another index's panel mounted.
-						toggleMenuItemChildren.forEach((isOpen, i) => {
-							if (isOpen) closeChildMenu(i, true)
-						})
-					}}
-				></div>
+				<Portal>
+					<div
+						class="fixed inset-0 z-overlay bg-black/40"
+						aria-hidden="true"
+						transition:fade
+						onclick={() => {
+							cancelPendingClose()
+							// Close by the index that is actually open: closeChildMenu clears
+							// toggleMenuItemChildren[index], so a hardcoded 0 would blank the selected
+							// category while leaving another index's panel mounted.
+							toggleMenuItemChildren.forEach((isOpen, i) => {
+								if (isOpen) closeChildMenu(i, true)
+							})
+						}}
+					></div>
+				</Portal>
 			{/if}
 		{:else if headerMenuItems === undefined && !megamenuSettled}
 			<!-- Only while the category megamenu is still loading; a settled-but-empty menu renders nothing. -->
