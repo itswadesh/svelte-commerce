@@ -27,7 +27,7 @@
 							alt={category.name}
 							loading="lazy"
 							decoding="async"
-							class="h-full w-full object-cover transition-transform duration-emphasis ease-standard group-hover:scale-105"
+							class="h-full w-full object-cover transition-transform duration-emphasis ease-standard motion-safe:group-hover:scale-105"
 						/>
 					{:else}
 						<!-- `+page.server.ts` blanks the core loader's guessed litekart.in S3 URLs, so a

@@ -44,9 +44,18 @@ function mark(el: Element | null): boolean {
 	return true
 }
 
+// Both axes: a carousel moves slides sideways out of view, a scroll moves them off the top or bottom.
+// An element out of view would fly in from off-screen, so it is never an end of the morph.
 function onScreen(el: Element, win: Window | null): boolean {
 	const box = el.getBoundingClientRect()
-	return box.width > 0 && box.height > 0 && box.bottom > 0 && box.top < (win?.innerHeight ?? Infinity)
+	return (
+		box.width > 0 &&
+		box.height > 0 &&
+		box.bottom > 0 &&
+		box.right > 0 &&
+		box.top < (win?.innerHeight ?? Infinity) &&
+		box.left < (win?.innerWidth ?? Infinity)
+	)
 }
 
 function cardFor(slug: string, doc: Document): Element | null {
@@ -56,7 +65,10 @@ function cardFor(slug: string, doc: Document): Element | null {
 	return null
 }
 
-const galleryOf = (doc: Document) => doc.querySelector('[data-vt-gallery-primary]')
+const galleryOf = (doc: Document) => {
+	const el = doc.querySelector('[data-vt-gallery-primary]')
+	return el && onScreen(el, doc.defaultView) ? el : null
+}
 
 // Starting a transition skips the running one, whose `finished` then settles late. Only the newest
 // transition may clear names, or the old one strips the morph from the new one mid-flight.

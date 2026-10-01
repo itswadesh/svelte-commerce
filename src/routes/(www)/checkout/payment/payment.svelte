@@ -187,7 +187,7 @@
 								{#each paymentModule.shippingRates?.data as rate}
 									<label
 										for={rate.id}
-										class="flex items-center justify-between rounded-lg border bg-background p-5 transition-[transform,border-color,background-color] duration-fast ease-standard active:scale-[0.99] {cartState
+										class="flex items-center justify-between rounded-lg border bg-background p-5 transition-[transform,border-color,background-color] duration-fast ease-standard motion-safe:active:scale-[0.99] {cartState
 											?.cart?.shippingRateId === rate.id
 											? ''
 											: 'shadow-sm'}"

@@ -32,7 +32,7 @@
 		<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
 			<h1 class="text-xl font-bold uppercase text-foreground" style="font-family: var(--font-body);">Review Your Order</h1>
 			<Button variant="outline" onclick={onback} class="group flex w-fit items-center gap-2">
-				<ChevronLeft class="size-4 transition-transform duration-fast ease-standard group-hover:-translate-x-1" /> Back to Payment
+				<ChevronLeft class="size-4 transition-transform duration-fast ease-standard motion-safe:group-hover:-translate-x-1" /> Back to Payment
 			</Button>
 		</div>
 

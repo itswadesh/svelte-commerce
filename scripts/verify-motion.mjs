@@ -78,6 +78,9 @@ const transitionOf = async (page, action) => {
 	return page.evaluate(() => window.__vt.at(-1))
 }
 
+/** No transform, or the identity matrix a finished transition leaves behind. */
+const still = (transform) => transform === 'none' || transform === 'matrix(1, 0, 0, 1, 0, 0)'
+
 const sameOrigin = (url) => {
 	try {
 		return new URL(url).host === new URL(BASE).host
@@ -144,17 +147,124 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
 	smooth(`[${mode}] cart drawer open/close`, await sampling)
 	if (!closed) await page.locator('[role="dialog"][aria-modal="true"] button[aria-label="Close cart"]').click()
 
-	// 5. Mega-menu open, only when the store has a category with children.
+	// 5. Mega-menu open, only when the store has a category with children. The panel fades in at
+	//    both settings (a fade is feedback, not movement); a child link nudges only at full motion.
+	await page.evaluate(() => window.scrollTo(0, 0))
 	const megaLink = page.locator('.ed-mm-link[aria-haspopup="true"]').first()
 	if (await megaLink.count()) {
 		sampling = page.evaluate(() => window.__sampleFrames(500))
 		await megaLink.hover()
+		const opening = await page.evaluate(() => {
+			const panel = document.querySelector('.ed-mm-panel')
+			return panel ? Number(getComputedStyle(panel).opacity) : -1
+		})
+		check(opening >= 0 && opening < 1, `[${mode}] mega-menu panel fades in (opacity ${opening} just after hover)`)
 		smooth(`[${mode}] mega-menu open`, await sampling)
+		const child = page.locator('.ed-mm-panel a[href]').nth(1)
+		if (await child.count()) {
+			await child.hover()
+			await page.waitForTimeout(250)
+			const nudge = await child.evaluate((el) => getComputedStyle(el).transform)
+			check(mode === 'full' ? !still(nudge) : still(nudge), `[${mode}] mega-menu child link hover transform ${nudge}`)
+		}
+		await page.mouse.move(5, 600)
+		await page.waitForTimeout(400)
 	} else {
 		report.push(`SKIP  [${mode}] mega-menu: no category with children in this store`)
 	}
 
+	// 6. Overlays (tailwindcss-animate): zoom and slide at full motion, a pure fade under reduced.
+	await page.locator('[aria-label="Open search"]').first().click()
+	const dialog = page.locator('[role="dialog"]').first()
+	await dialog.waitFor()
+	const enterScale = await dialog.evaluate((el) => getComputedStyle(el).getPropertyValue('--tw-enter-scale').trim())
+	check(mode === 'full' ? enterScale !== '1' : enterScale === '1', `[${mode}] search dialog --tw-enter-scale ${enterScale}`)
+	await page.keyboard.press('Escape')
+	await dialog.waitFor({ state: 'detached', timeout: 2000 }).catch(() => {})
+
+	// 7. A primary button lifts on hover and gives on press at full motion; neither under reduced.
+	const button = page.locator('.ed-sub-btn').first()
+	if (await button.count()) {
+		await button.scrollIntoViewIfNeeded()
+		await button.hover()
+		await page.waitForTimeout(250)
+		const lift = await button.evaluate((el) => getComputedStyle(el).transform)
+		await page.mouse.down()
+		await page.waitForTimeout(250)
+		const press = await button.evaluate((el) => getComputedStyle(el).transform)
+		// Release away from the button, so this is not a click that submits the form.
+		await page.mouse.move(5, 5)
+		await page.mouse.up()
+		check(mode === 'full' ? !still(lift) && !still(press) : still(lift) && still(press), `[${mode}] primary button lift ${lift}, press ${press}`)
+	}
+
+	// 8. A homepage category tile zooms its image at full motion only.
+	const tile = page.locator('.ed-cat').first()
+	if (await tile.count()) {
+		await tile.scrollIntoViewIfNeeded()
+		await tile.hover()
+		await page.waitForTimeout(400)
+		const zoom = await tile
+			.locator('.ed-cat__media img, .ed-cat__placeholder')
+			.first()
+			.evaluate((el) => getComputedStyle(el).transform)
+		check(mode === 'full' ? !still(zoom) : still(zoom), `[${mode}] category tile hover transform ${zoom}`)
+	}
+
+	// 9. Header menu links give on press, and the press is a transition, not a snap.
+	const navLink = page.locator('.ed-nav-link').first()
+	if (await navLink.count()) {
+		const property = await navLink.evaluate((el) => getComputedStyle(el).transitionProperty)
+		check(property.includes('transform'), `[${mode}] header link transitions transform (${property})`)
+	}
+
 	check(errors.length === 0, `[${mode}] no console errors${errors.length ? `: ${errors.join(' | ')}` : ''}`)
+	await browser.close()
+
+	// 10. vaul drawers (phone width): on the motion tokens, and a fade rather than a slide under reduced.
+	const phone = await chromium.launch({ channel: 'chrome' })
+	const mobile = await (await phone.newContext({ reducedMotion, viewport: { width: 390, height: 844 } })).newPage()
+	// The listing's sort drawer is always there on a phone, whatever the catalogue holds.
+	await mobile.goto(BASE + '/products', { waitUntil: 'networkidle' })
+	const trigger = mobile.getByRole('button', { name: /sort/i }).first()
+	if (await trigger.isVisible().catch(() => false)) {
+		await trigger.click()
+		const vaul = mobile.locator('[data-vaul-drawer]').first()
+		await vaul.waitFor()
+		await mobile.waitForTimeout(400)
+		const open = await vaul.evaluate((el) => {
+			const s = getComputedStyle(el)
+			return { duration: s.transitionDuration.split(',')[0].trim(), property: s.transitionProperty, transform: s.transform }
+		})
+		check(open.duration === '0.22s', `[${mode}] vaul drawer duration ${open.duration}`)
+		// At full motion the drawer is placed by a translate (a matrix once open); under reduced motion
+		// the transform is removed outright and only opacity transitions.
+		check(
+			mode === 'full'
+				? open.transform !== 'none' && open.property.includes('transform')
+				: open.transform === 'none' && open.property.includes('opacity'),
+			`[${mode}] vaul drawer transform ${open.transform}, transitions ${open.property}`
+		)
+	} else {
+		report.push(`SKIP  [${mode}] vaul drawer: no sort trigger on /products at phone width`)
+	}
+	await phone.close()
+}
+
+// 11. Reported, not gated: the card → product page transition on a 4× slowed CPU.
+{
+	const browser = await chromium.launch({ channel: 'chrome' })
+	const context = await browser.newContext({ viewport: { width: 1280, height: 900 } })
+	const page = await context.newPage()
+	await page.addInitScript(instrument)
+	await page.goto(BASE + START, { waitUntil: 'networkidle' })
+	const cdp = await context.newCDPSession(page)
+	await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 })
+	const vt = await transitionOf(page, () => page.locator('a:has([data-vt-product-media])').first().click())
+	const usable = vt.frames.slice(1)
+	const worst = Math.round(Math.max(0, ...usable))
+	const fps = Math.round(1000 / (usable.reduce((a, b) => a + b, 0) / Math.max(1, usable.length)))
+	report.push(`INFO  [full, 4× CPU] card → PDP animation: worst frame ${worst}ms, ${fps}fps (reported, not gated)`)
 	await browser.close()
 }
 
