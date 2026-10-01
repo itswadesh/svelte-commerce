@@ -164,14 +164,18 @@ const config: Config = {
 				toast: 'var(--z-toast)',
 				skip: 'var(--z-skip)'
 			},
-			// `duration-fast` for feedback (120-180ms), `duration-panel` for panels
-			// (180-240ms), `ease-standard` for both.
+			// The motion tokens from src/app.css. tailwindcss-animate copies transitionDuration and
+			// transitionTimingFunction into its animation utilities, so `duration-panel` on an
+			// `animate-in` overlay sets its animation length too.
 			transitionDuration: {
 				fast: 'var(--motion-fast)',
-				panel: 'var(--motion-panel)'
+				panel: 'var(--motion-panel)',
+				emphasis: 'var(--motion-emphasis)',
+				exit: 'var(--motion-exit)'
 			},
 			transitionTimingFunction: {
-				standard: 'var(--motion-ease)'
+				standard: 'var(--motion-ease)',
+				exit: 'var(--motion-ease-exit)'
 			}
 		}
 	},
