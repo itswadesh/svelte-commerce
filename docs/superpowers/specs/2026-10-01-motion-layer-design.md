@@ -116,15 +116,15 @@ onNavigate((navigation) => startRouteTransition(navigation))
 Otherwise it wraps the DOM update in `document.startViewTransition` and resolves once
 `navigation.complete` settles. This is the standard SvelteKit pattern.
 
-**Crossfade:** `::view-transition-old(root)` and `::view-transition-new(root)` run
-`--motion-panel` with the standard and exit eases. These elements carry static names, so they hold
-still instead of fading:
-- `site-header` on `nav.svelte`'s `<header>`
-- `site-footer` on `footer.svelte`'s `<footer>`
-- `bottom-nav` on the mobile bottom nav
+**Crossfade:** `::view-transition-old(root)` and `::view-transition-new(root)` both run
+`--motion-panel` with the standard ease, and the root group's own (no-op) animation is off.
 
-Checkout has its own chrome without them, which is fine: names only need to be unique, not
-present.
+*Revised during implementation.* The header, footer and bottom nav were first given names of their
+own so they would hold still. Measurement showed the cost: each named group runs a main-thread size
+animation every frame, and the footer travelled, since it sits at a different height on every page.
+The names were dropped. The old and new pages blend with plus-lighter, so chrome that is identical
+on both stays visually still as long as both halves share one duration and easing. Measured on the
+GPU-less dev VM, a full-motion navigation went from 39fps to 48fps.
 
 **Product morph.** Names are assigned **only by the hook, never in markup**. A static name on the
 PDP gallery would collide with a clicked related-product card on the same page, and a duplicate
