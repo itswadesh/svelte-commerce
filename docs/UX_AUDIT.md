@@ -38,6 +38,8 @@ Updated 2026-09-03. The design plan below is being worked in order; these commit
 | Listing and search: real dialogs, real history, grouped panel | `f1191aad` |
 | Footer, account and plugins: stop offering actions the store cannot perform | `84b11245` |
 | Homepage type scale, brand palette on first paint, responsive images | `3c05e9e2` |
+| Motion layer: tokens, route crossfade + product morph, feedback on every control, reduced motion that fades instead of snapping | `d29de4c4`, `c047b3cd` |
+| Browser `/api` calls reach the backend on adapter-node; connector fetch no longer throws "Illegal invocation" | `5fd11bb8`, `6bddd628` |
 
 **Verified after each change**, on the default theme against the local GoCommerce store: every
 route returns 200 at 390px and 1280px, no horizontal overflow, exactly one `h1` per route, no
