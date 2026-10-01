@@ -4,6 +4,7 @@ import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
 import { initActiveConnector } from '$lib/core/connectors/init'
 import { resolveStorefrontTheme } from '$lib/theme/index.js'
+import { isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 
 export const init = initActiveConnector
 
@@ -20,6 +21,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// would pull a perfectly healthy container out of the load balancer.
 	if (url.pathname === '/health') {
 		return resolve(event)
+	}
+
+	// Browser-side `/api/*` calls: the production counterpart of the vite dev proxy. See api-proxy.ts.
+	if (env.PUBLIC_LITEKART_API_URL && isApiPath(url.pathname)) {
+		return proxyApiRequest(event.request, env.PUBLIC_LITEKART_API_URL)
 	}
 
 	if (url.protocol === 'http:' && !isLocalOrIP) {
