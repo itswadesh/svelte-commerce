@@ -1,6 +1,6 @@
 # Motion layer: design
 
-Date: 2026-10-01 · Sub-project 1 of "UI/UX Pro Max for svelte-commerce" · Status: awaiting review
+Date: 2026-10-01 · Sub-project 1 of "UI/UX Pro Max for svelte-commerce" · Status: approved 2026-10-01; revised the same day after the code survey for the plan
 
 Sub-project 2, the Pro Max audit-and-fix pass over accessibility, touch, layout, forms and
 navigation, gets its own spec once this one ships. It builds on the tokens and module defined here.
@@ -53,7 +53,7 @@ keeps running in that mode, slowed.
 | `--motion-fast` | 150ms | feedback: hover, press, focus state, toggles, popovers | `duration-fast` |
 | `--motion-panel` | 220ms | panels: drawers, dialogs, accordions, route crossfade | `duration-panel` |
 | `--motion-emphasis` | 300ms | the product morph, success check, heart pop, card image hover | `duration-emphasis` |
-| `--motion-exit-ratio` | 0.7 | exits run at 70% of their enter duration | — |
+| `--motion-exit` | 160ms | panel exits (drawers, dialogs, route fade-out); fast elements exit at `--motion-fast`, since nothing may exit under 150ms | `duration-exit` |
 | `--motion-ease` | `cubic-bezier(0.22, 0.61, 0.36, 1)` (unchanged) | enter and state changes | `ease-standard` |
 | `--motion-ease-exit` | `cubic-bezier(0.4, 0, 1, 1)` | exits | `ease-exit` |
 
@@ -61,13 +61,20 @@ All three durations sit inside the user's 150–300ms rule and the `UX_SYSTEM.md
 120–180, panels 180–240). `UX_SYSTEM.md` §4 gains a short motion contract pointing here, and the
 stale "no motion-duration tokens" gap note is removed.
 
-**What may animate:** movement only through `transform` and `opacity`. Colour, background and
-border-colour transitions are allowed, because they repaint without layout. Never `width`,
+**What may animate:** movement only through `transform` and `opacity`. Colour, background,
+border-colour, fill and box-shadow transitions are allowed, because they repaint without layout. Never `width`,
 `height`, `top`/`left`, `margin` or `padding`. One consequence: accordions stop animating height.
-Their content fades and rises 4px while the space opens at once (see §2, `slide`).
+Their content fades and rises 4px while the space opens at once (see §2, `slide`). Another: the
+header's collapse-on-scroll (`nav.svelte`, today `grid-template-rows` and `height` transitions
+running during scroll) goes. The sticky header's `top` becomes minus the announcement bar's height,
+so the bar scrolls away with the page and the rest of the header sticks, with nothing animated. A
+`transform` on the header was rejected: it would make the header the containing block for the
+fixed cart and menu drawers inside it. The header row keeps one fixed height (56px) instead of
+slimming from 64px to 48px.
 
 **Sweep rule:** on interactive elements, raw `duration-300/500/700/1000` becomes the matching
-token. Long timings that are not feedback stay as they are: hero autoplay intervals, skeleton
+token, and so do the 44 hard-coded durations in component `<style>` blocks (`0.15s`–`0.6s` with
+ad-hoc curves). Long timings that are not feedback stay as they are: hero autoplay intervals, skeleton
 pulse, carousel scroll. Every replaced class goes in the change list in the plan, file by file.
 
 ### 2. `$lib/motion` (new, `src/lib/motion/index.ts`)
@@ -76,11 +83,14 @@ Drop-in replacements for `svelte/transition`, reading the tokens and honouring r
 
 ```ts
 export { fade, fly, slide, scale } // same call signatures as svelte/transition
+export { drawer } // edge panels: translate from `left` | `right` | `bottom`; a fade under reduced motion
 export const prefersReducedMotion: { readonly current: boolean } // live, SSR-safe (false on server)
 ```
 
 - Default durations come from the tokens: `fade` and `scale` use fast, `fly` and `slide` use
-  panel. The `out` direction gets the exit ratio and exit ease. An explicit `duration` from the
+  panel. When used as `out:`, panel-length transitions take `--motion-exit` and the exit ease.
+  A bidirectional `transition:` reverses at its enter duration, because Svelte computes its config
+  once for both directions. An explicit `duration` from the
   caller still wins, which keeps call sites honest during the sweep.
 - **Reduced motion:** `fly`, `slide` and `scale` return a `fade` of the same duration. Nothing
   becomes 0ms.
@@ -120,6 +130,8 @@ present.
 PDP gallery would collide with a clicked related-product card on the same page, and a duplicate
 name aborts the whole transition.
 
+- The name is applied through an attribute, `data-vt-morph`, matched by one CSS rule
+  (`[data-vt-morph] { view-transition-name: product-media }`), so the hook stays testable in jsdom.
 - Elements opt in with data attributes:
   - `data-vt-product-media="<slug>"` on the card media wrapper, in `DefaultProductCard.svelte` and
     the shared `product-card.svelte`
@@ -149,9 +161,9 @@ form.
 | Buttons (`.ed-btn-base`, `ui/button`) | hover colour/opacity (fast); filled CTAs lift 2px; press `scale(.97)` (fast) | colour/opacity only |
 | Icon buttons (header, wishlist, close) | hover background (fast); press `scale(.92)` | background only |
 | Text links in nav, mega-menu, footer | underline via `::after` `scaleX(0→1)` from the left (fast) | underline fades in |
-| Product card | image `scale(1.03)` (emphasis); quick-add fades in and rises 4px (fast); press `scale(.98)` | quick-add fades; no scale |
+| Product card | image `scale(1.03)` (emphasis); the hover-revealed wishlist heart fades in and drops 4px (fast); media press `scale(.98)`; add button press `scale(.97)` | heart fades; no scale |
 | Wishlist toggle | heart `scale(1→1.2→1)` (emphasis), fill crossfades | fill crossfade only |
-| Add to cart | idle → spinner → check (held 1.2s) → idle, labels crossfading (fast); check pops `scale(.6→1)` | crossfades; spinner keeps turning (1.6s) |
+| Add to cart | idle → spinner → check (held for the existing 2.2s) → idle, labels crossfading (fast); check pops `scale(.6→1)` | crossfades; spinner keeps turning (1.6s) |
 | Cart count badge | `scale(1→1.15→1)` on change (panel) | number crossfades |
 | Inputs, selects | border colour and ring on focus (fast); error text fades in and rises 2px | colour; error fades |
 | Checkbox / radio / switch | mark `scale(.6→1)`; switch thumb `translateX` (fast) | mark fades; thumb moves instantly, track colour fades |
@@ -176,7 +188,9 @@ Rewrite the global block's rules so that:
 - The existing spinner and pulse slow-downs and the hero entrance override stay.
 
 Component `<style>` blocks that already have their own reduced-motion rules are aligned to this
-contract during the sweep (listed in the plan), not left divergent.
+contract during the sweep (listed in the plan), not left divergent. Blocks that only cancel colour
+transitions are deleted, because colour feedback stays under reduced motion; blocks that cancel a
+hover transform keep the colour transition and drop only the transform.
 
 ### 6. Out of scope
 
