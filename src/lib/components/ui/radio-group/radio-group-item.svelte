@@ -20,7 +20,7 @@
 	{#snippet children({ checked })}
 		<div class="flex items-center justify-center">
 			{#if checked}
-				<Circle class="size-3.5 fill-primary" />
+				<Circle class="motion-pop-in size-3.5 fill-primary" />
 			{/if}
 		</div>
 	{/snippet}

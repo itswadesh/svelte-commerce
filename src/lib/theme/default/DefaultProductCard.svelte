@@ -65,6 +65,8 @@
 	// broken presentations in one grid. Load and error are caught in the capture phase (neither
 	// event bubbles) so the card can swap in the shared empty surface instead.
 	let imageLoaded = $state(false)
+	// Restarts the heart pop on each toggle; 0 means "not touched yet", so a page load does not pop.
+	let popKey = $state(0)
 	let imageFailed = $state(false)
 
 	// An image that finished before hydration fires neither event, so its final state is read
@@ -153,14 +155,13 @@
 							onclick={(e) => {
 								e.stopPropagation()
 								e.preventDefault()
+								popKey++
 								toggleWishlist()
 							}}
 						>
-							{#if isWishlisted}
-								<Heart class="dpc__wish-icon is-on" />
-							{:else}
-								<Heart class="dpc__wish-icon" />
-							{/if}
+							{#key popKey}
+								<Heart class="dpc__wish-icon {isWishlisted ? 'is-on' : ''} {popKey && isWishlisted ? 'motion-pop' : ''}" />
+							{/key}
 						</button>
 					{/if}
 				</figure>
@@ -520,9 +521,6 @@
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		cursor: pointer;
-		transition:
-			background var(--motion-fast) var(--motion-ease),
-			color var(--motion-fast) var(--motion-ease);
 	}
 
 	.dpc__add:hover:not(:disabled) {
@@ -586,12 +584,48 @@
 		font-weight: 600;
 	}
 
+	/* Hover lifts the photograph a little; a press gives under the finger. Pointer-only for the zoom,
+	   because a phone has no hover and a tap would leave it stuck. */
+	.dpc__frame {
+		transition: transform var(--motion-emphasis) var(--motion-ease);
+	}
+	.dpc__media {
+		transition: transform var(--motion-fast) var(--motion-ease);
+	}
+	@media (hover: hover) and (pointer: fine) {
+		.dpc:hover .dpc__frame {
+			transform: scale(1.03);
+		}
+	}
+	.dpc__media-link:active .dpc__media {
+		transform: scale(0.98);
+	}
+	.dpc__add {
+		transition:
+			background var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease),
+			transform var(--motion-fast) var(--motion-ease);
+	}
+	.dpc__add:active:not(:disabled),
+	.dpc__qty button:active:not(:disabled) {
+		transform: scale(0.97);
+	}
+	.dpc :global(.dpc__wish-icon) {
+		transition:
+			fill var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
+	}
+
 	@media (prefers-reduced-motion: reduce) {
-		.dpc :global(.dpc__img),
-		.dpc :global(.dpc__skeleton),
-		.dpc__wish {
-			transition: none;
+		.dpc :global(.dpc__skeleton) {
 			animation: none;
+		}
+		.dpc__frame,
+		.dpc__media,
+		.dpc__wish,
+		.dpc__add,
+		.dpc__qty button {
+			transform: none !important;
 		}
 	}
 </style>

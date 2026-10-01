@@ -13,7 +13,7 @@
 
 <CheckboxPrimitive.Root
 	class={cn(
-		'peer box-content size-4 shrink-0 rounded-sm border border-primary shadow data-[disabled=true]:cursor-not-allowed data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[disabled=true]:opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
+		'peer box-content size-4 shrink-0 rounded-sm border border-primary shadow transition-colors duration-fast data-[disabled=true]:cursor-not-allowed data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[disabled=true]:opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
 		className
 	)}
 	bind:checked
@@ -25,7 +25,12 @@
 			{#if restProps.indeterminate}
 				<Minus class="size-3.5" />
 			{:else}
-				<Check class={cn('size-3.5', !checked && 'text-transparent')} />
+				<Check
+					class={cn(
+						'size-3.5 transition-[transform,opacity] duration-fast ease-standard motion-reduce:transform-none',
+						!checked && 'scale-50 opacity-0'
+					)}
+				/>
 			{/if}
 		</span>
 	{/snippet}
