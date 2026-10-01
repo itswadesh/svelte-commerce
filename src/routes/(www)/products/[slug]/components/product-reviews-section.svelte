@@ -8,8 +8,7 @@
 	import { productService, uploadService } from '$lib/core/services/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Textarea } from '$lib/components/ui/textarea/index.js'
-	import { fade, scale } from 'svelte/transition'
-	import { quintOut } from 'svelte/easing'
+	import { fade, scale } from '$lib/motion'
 
 	const productState = useProductState()
 
@@ -244,7 +243,7 @@
 		     invisible full-screen node that blocks all clicks. -->
 		<div
 			class="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 p-4"
-			in:fade={{ duration: 150 }}
+			in:fade
 			onclick={() => (lightbox = null)}
 			onkeydown={(e) => {
 				if (e.key === 'Escape') lightbox = null
@@ -310,10 +309,10 @@
 
 	<!-- Review Form Modal -->
 	{#if productState.showReviewForm}
-		<div class="fixed inset-0 z-[100] flex items-center justify-center bg-foreground/70 backdrop-blur-sm sm:p-4" transition:fade={{ duration: 200 }}>
+		<div class="fixed inset-0 z-[100] flex items-center justify-center bg-foreground/70 backdrop-blur-sm sm:p-4" transition:fade>
 			<div
 				class="relative h-full w-full overflow-hidden bg-background sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-radius sm:shadow-2xl"
-				transition:scale={{ start: 0.95, duration: 300, easing: quintOut }}
+				transition:scale={{ start: 0.96 }}
 			>
 				<div class="sticky top-0 z-10 flex items-center justify-between border-b border-border px-6 py-4 backdrop-blur-md sm:px-8 sm:py-5">
 					<div>
@@ -355,7 +354,7 @@
 										class="rounded-full px-4 py-1.5 text-xs font-black ring-1 ring-inset {ratingLabels[productState.select - 1].color
 											.replace('text-', 'bg-')
 											.replace('-500', '-50')} {ratingLabels[productState.select - 1].color}"
-										in:scale={{ start: 0.9, duration: 200 }}
+										in:scale={{ start: 0.9 }}
 									>
 										{ratingLabels[productState.select - 1].text}
 									</div>

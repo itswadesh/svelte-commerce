@@ -4,18 +4,13 @@
 	import QrCodeDisplayer from '$lib/core/components/common/qr-code.svelte'
 	import { page } from '$app/state'
 	import { ChevronDown } from '@lucide/svelte'
-	import { slide } from 'svelte/transition'
-	import { prefersReducedMotion } from 'svelte/motion'
+	import { slide } from '$lib/motion'
 
 	const productState = useProductState()
 	const settingState = getSettingState()
 	const data = $derived(page.data)
 
 	let isOpen = $state(true)
-
-	// Same panel budget and the same reduced-motion escape as product-description.svelte, so both
-	// accordions on this page open at identical speed.
-	const panelMs = $derived(prefersReducedMotion.current ? 0 : 200)
 
 	// Every value is "selected variant, else the product record" — resolved once here instead of
 	// repeating the pair inside the markup, where it was written out twelve times and made the
@@ -72,7 +67,7 @@
 		</button>
 
 		{#if isOpen}
-			<div id="product-specifications-panel" class="overflow-hidden" transition:slide={{ duration: panelMs }}>
+			<div id="product-specifications-panel" class="overflow-hidden" transition:slide>
 				<!-- A definition list, because that is what this is: it gives assistive technology the
 				     label/value pairing that a grid of loose <p> tags did not. -->
 				<dl class="grid grid-cols-2 gap-x-4 gap-y-3 pb-3 lg:grid-cols-3">

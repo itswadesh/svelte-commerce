@@ -20,7 +20,7 @@
 	import { date, formatPrice } from '$lib/core/utils'
 	import { orderService } from '$lib/core/services/index.js'
 	import Pagination from '$lib/components/common/pagination.svelte'
-	import { fade, fly } from 'svelte/transition'
+	import { fade, fly } from '$lib/motion'
 
 	// Fetched here rather than through MyOrdersRenderer: that renderer swallows failures (leaving
 	// `orders.data` undefined for the {#each}) and always requests page 1.
@@ -128,7 +128,7 @@
 						{@const payment = getPaymentStatusStyles(order.paymentStatus)}
 
 						<div
-							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
+							in:fly={{ y: 12, delay: Math.min(i, 5) * 40 }}
 							class="overflow-hidden rounded-md border border-muted/30 bg-background"
 						>
 							<!-- Order Header -->

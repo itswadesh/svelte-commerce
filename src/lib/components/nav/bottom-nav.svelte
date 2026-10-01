@@ -3,7 +3,7 @@
 	import { page } from '$app/state'
 	import { goto } from '$app/navigation'
 	import { onDestroy, onMount } from 'svelte'
-	import { slide } from 'svelte/transition'
+	import { drawer } from '$lib/motion'
 	import { getCartState } from '$lib/core/stores/index.js'
 	import { ArrowLeft, Compass, Grid, Heart, Home, Play, ShoppingBag } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
@@ -140,7 +140,7 @@
 </nav>
 
 {#if showCartModal}
-	<div class="fixed inset-0 z-[1000001] bg-white" transition:slide={{ duration: 300 }}>
+	<div class="fixed inset-0 z-[1000001] bg-white" in:drawer={{ edge: 'bottom' }} out:drawer={{ edge: 'bottom' }}>
 		<div class="flex h-full flex-col">
 			<header class="flex items-center gap-4 border-b p-4">
 				<Button variant="ghost" size="icon" class="rounded-full" onclick={() => (showCartModal = false)}>

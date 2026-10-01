@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page as sveltePage } from '$app/state'
-	import { fly } from 'svelte/transition'
+	import { fly } from '$lib/motion'
 	import { X } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
@@ -219,7 +219,7 @@
      The typed block designer (page.layouts) still has no storefront renderer. -->
 
 {#if homepageModule.showRecentOrderPopup}
-	<div transition:fly={{ x: 50, duration: 150 }} class="fixed bottom-20 right-4 z-50">
+	<div transition:fly={{ x: 24 }} class="fixed bottom-20 right-4 z-50">
 		<div class="flex max-w-[320px] gap-3 border-l-4 border-primary bg-white p-3.5 shadow-lg">
 			<a href="/products/{homepageModule.selectedRecentOrder?.slug || ''}" class="flex gap-3 text-foreground">
 				<img

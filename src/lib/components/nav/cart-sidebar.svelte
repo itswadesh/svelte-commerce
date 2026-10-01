@@ -6,7 +6,7 @@
 	import { goto } from '$app/navigation'
 	import { formatPrice } from '$lib/core/utils'
 	import { getCartState } from '@misiki/kitcommerce-core/stores'
-	import { cubicOut } from 'svelte/easing'
+	import { drawer, fade } from '$lib/motion'
 	import { page } from '$app/state'
 	import { onDestroy, onMount } from 'svelte'
 	import { dialog } from '$lib/actions/dialog.js'
@@ -88,19 +88,6 @@
 		prevShowCheckout = showCheckout
 	})
 
-	// A panel slides in from the edge it is anchored to; it does not squash. The previous transition
-	// animated `scaleX` from a top-right origin over 500ms, which stretched every price and button
-	// inside it horizontally for half a second. `prefers-reduced-motion` collapses it to a fade.
-	function slideInFromRight(node: Element, params: { duration?: number } = {}) {
-		const reduced = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-
-		return {
-			duration: reduced ? 0 : (params.duration ?? 220),
-			easing: cubicOut,
-			css: (t: number, u: number) => `transform: translateX(${u * 100}%); opacity: ${Math.min(1, t * 1.5)};`
-		}
-	}
-
 	async function proceedToCart() {
 		isNavigatingFromCart = true
 		if (typeof window !== 'undefined' && history.state?.[modalHistoryKey] === true) {
@@ -137,27 +124,31 @@
 		{/if}
 	</button>
 	{#if cartState?.isOpen}
-		<!-- close cart backdrop -->
-		<Button
-			variant="ghost"
-			class="fixed inset-0 z-overlay h-svh w-full rounded-none border-0 bg-foreground/40 hover:bg-foreground/40"
-			aria-label="Close cart"
-			onclick={closeCart}
-		>
-			<style>
-				body {
-					overflow: hidden;
-				}
-			</style>
-			<span class="sr-only">Close cart</span>
-		</Button>
+		<!-- close cart backdrop. Wrapped because transition directives only work on elements, not on
+		     the <Button> component; the wrapper is static, so the fixed button still covers the page. -->
+		<div transition:fade>
+			<Button
+				variant="ghost"
+				class="fixed inset-0 z-overlay h-svh w-full rounded-none border-0 bg-foreground/40 hover:bg-foreground/40"
+				aria-label="Close cart"
+				onclick={closeCart}
+			>
+				<style>
+					body {
+						overflow: hidden;
+					}
+				</style>
+				<span class="sr-only">Close cart</span>
+			</Button>
+		</div>
 
 		<!-- Named z step instead of `z-[10000000]`, tokens instead of `bg-white`: the theme wrapper
 		     now sits on <html>, so a panel painted in `bg-background` follows the active theme
 		     rather than freezing the default palette into the drawer. -->
 		<div
 			class="fixed right-0 top-0 z-modal flex h-svh w-full flex-col bg-background shadow-z-10 sm:w-[26rem]"
-			transition:slideInFromRight={{ duration: 220 }}
+			in:drawer={{ edge: 'right' }}
+			out:drawer={{ edge: 'right' }}
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby={titleId}

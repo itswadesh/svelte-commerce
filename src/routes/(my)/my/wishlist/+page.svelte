@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { MyWishlistRenderer } from '$lib/core/composables/index.js'
 	import { Heart, ArrowRight, LoaderCircle, Trash2, ShoppingBag } from '@lucide/svelte'
-	import { fade, fly } from 'svelte/transition'
+	import { fade, fly } from '$lib/motion'
 	import { page } from '$app/state'
 	import { formatPrice, toast } from '$lib/core/utils/index.js'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
@@ -65,7 +65,7 @@
 				<div class="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-3 lg:gap-10">
 					{#each wishlistItems as item, i}
 						<div
-							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
+							in:fly={{ y: 12, delay: Math.min(i, 5) * 40 }}
 							class="group relative flex h-full w-full flex-col overflow-hidden bg-white transition-all duration-300 dark:bg-gray-800"
 						>
 							<!-- Product Image -->

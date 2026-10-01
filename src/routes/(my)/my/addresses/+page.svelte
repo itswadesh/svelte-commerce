@@ -5,7 +5,7 @@
 	import * as Dialog from '$lib/components/ui/dialog'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import { MyAddressesModule, MyOrdersRenderer } from '$lib/core/composables/index.js'
-	import { fade, fly } from 'svelte/transition'
+	import { fade, fly } from '$lib/motion'
 
 	const addressesModule = new MyAddressesModule()
 
@@ -63,7 +63,7 @@
 			{:else}
 				{#each addressesModule.addresses?.data as address, i (address.id)}
 					<div
-						in:fly={{ y: 20, duration: 400, delay: i * 50 }}
+						in:fly={{ y: 12, delay: Math.min(i, 5) * 40 }}
 						class="group relative flex flex-col overflow-hidden rounded-md border border-gray-200 bg-white transition-all duration-300 "
 					>
 						<!-- Address Details -->

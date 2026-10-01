@@ -26,8 +26,7 @@
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button/index.js'
-	import { fly } from 'svelte/transition'
-	import { prefersReducedMotion } from 'svelte/motion'
+	import { fly } from '$lib/motion'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
@@ -393,7 +392,7 @@
 {#if showStickyBar}
 	<div
 		bind:this={stickyBarEl}
-		transition:fly={{ y: 24, duration: prefersReducedMotion.current ? 0 : 180 }}
+		transition:fly={{ y: 24 }}
 		class="edp-mobilebar fixed inset-x-0 bottom-0 z-sticky border-t bg-background px-4 py-3 shadow-z-2 sm:hidden"
 	>
 		<ProductCartAndWishlistButtons showWishlist={false} compact />

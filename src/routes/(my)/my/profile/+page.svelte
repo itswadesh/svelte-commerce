@@ -4,7 +4,7 @@
 	import { Save, ArrowLeft, InfoIcon, Loader, User, Mail, Phone, Trash2, AlertCircle } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 	import { MyProfileModule } from '$lib/core/composables/index.js'
-	import { fly, fade } from 'svelte/transition'
+	import { fly, fade } from '$lib/motion'
 
 	const profileModule = new MyProfileModule()
 </script>
@@ -14,7 +14,7 @@
 </svelte:head>
 
 <div class="mx-auto max-w-6xl md:py-8 md:py-12">
-	<div in:fly={{ y: 20, duration: 600 }} class="space-y-10">
+	<div in:fly={{ y: 12 }} class="space-y-10">
 		<!-- Profile Header -->
 		<div class="flex items-center justify-between">
 			<div>
@@ -103,7 +103,7 @@
 
 <!-- Floating Save Bar -->
 {#if profileModule.detailsChanged}
-	<div in:fly={{ y: 50, duration: 400 }} out:fade={{ duration: 200 }} class="fixed bottom-8 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 px-4">
+	<div in:fly={{ y: 24 }} out:fade class="fixed bottom-8 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 px-4">
 		<div class="flex items-center justify-between gap-4 rounded-md border border-gray-200 bg-white/90 p-4 shadow-2xl backdrop-blur-md">
 			<div class="flex items-center gap-3 px-2">
 				<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">

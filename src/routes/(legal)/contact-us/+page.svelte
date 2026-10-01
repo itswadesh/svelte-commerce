@@ -10,7 +10,7 @@
 	import { page } from '$app/state'
 	import { ContactUsRenderer } from '$lib/core/composables/index.js'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
-	import { fade } from 'svelte/transition'
+	import { fade } from '$lib/motion'
 
 	let info = $state({
 		name: '',
@@ -19,13 +19,6 @@
 	})
 
 	const store = $derived(page?.data?.store)
-
-	// The two columns used to slide in over 600ms and the success tick sat behind a pulsing ring,
-	// none of it suppressible from the one reduced-motion block in app.css because they are
-	// JavaScript transitions. The entrances are gone; what remains is a fade inside the feedback
-	// budget, and nothing at all for a visitor who asked for reduced motion.
-	const reducedMotion = typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-	const feedbackFade = { duration: reducedMotion ? 0 : 140 }
 
 	// Only real, store-configured contact details — no template fallback address and no
 	// invented live-chat SLA. Anything the store record does not carry simply is not shown.
@@ -182,7 +175,7 @@
 								</p>
 							</div>
 						{:else if success}
-							<div in:fade={feedbackFade} class="rounded-lg border bg-card p-8 text-center shadow-xs md:p-12">
+							<div in:fade class="rounded-lg border bg-card p-8 text-center shadow-xs md:p-12">
 								<!-- A static success mark. The pulsing ring that used to sit behind it is this
 								     codebase's loading language, and it ignored reduced motion. -->
 								<div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
@@ -208,7 +201,7 @@
 								<form class="space-y-6 p-6 md:p-8" onsubmit={handleSubmit}>
 									{#if error}
 										<!-- role="alert": the failure used to be a red box nobody was told about. -->
-										<div role="alert" in:fade={feedbackFade} class="flex items-center gap-3 rounded-md bg-destructive/10 p-4 text-destructive">
+										<div role="alert" in:fade class="flex items-center gap-3 rounded-md bg-destructive/10 p-4 text-destructive">
 											<AlertCircle class="h-5 w-5 shrink-0" />
 											<p class="text-sm font-medium">{error}</p>
 										</div>
