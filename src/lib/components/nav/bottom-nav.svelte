@@ -95,7 +95,7 @@
 	}
 </script>
 
-<nav class={cn('pb-safe fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white font-sans md:hidden', className)}>
+<nav class={cn('vt-bottom-nav pb-safe fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white font-sans md:hidden', className)}>
 	<div class="flex h-16 items-center justify-around px-3">
 		{#each navItems as item}
 			{#if item.href}

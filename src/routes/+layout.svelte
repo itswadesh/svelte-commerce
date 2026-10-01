@@ -7,7 +7,7 @@
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
 	import { navigating } from '$app/stores'
 	import { updated } from '$app/state'
-	import { afterNavigate, beforeNavigate } from '$app/navigation'
+	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation'
 	import { browser } from '$app/environment'
 	import { Loader } from '@lucide/svelte'
 	import { type Snippet } from 'svelte'
@@ -16,6 +16,7 @@
 	import StoreFont from '$lib/components/common/store-font.svelte'
 	import StorePalette from '$lib/components/common/store-palette.svelte'
 	import { guardStorePalette } from '$lib/components/common/store-palette-guard.js'
+	import { startRouteTransition } from '$lib/motion/route-transition'
 
 	interface LayoutData {
 		store: StoreData
@@ -29,6 +30,9 @@
 	}
 	let { children, data }: { children: Snippet; data: LayoutData } = $props()
 	setUserState()
+
+	// Every page change crossfades; opening a product morphs its image. See route-transition.ts.
+	onNavigate((navigation) => startRouteTransition(navigation))
 
 	const themeName = $derived(data?.theme?.name || 'default')
 	const themeFontsUrl = $derived(getThemeFontsUrl(themeName))

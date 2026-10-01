@@ -92,7 +92,7 @@
 				<a data-testid="product-card-link" class="w-full cursor-pointer" href="/products/{product.slug}" aria-label="View details of {displayName}">
 					<figure title={displayName} data-testid="product-card-image-container" class="relative">
 						{#if imageSrc && !imageFailed}
-							<div onloadcapture={() => (imageFailed = false)} onerrorcapture={() => (imageFailed = true)}>
+							<div data-vt-product-media={product.slug} onloadcapture={() => (imageFailed = false)} onerrorcapture={() => (imageFailed = true)}>
 								<LazyImg
 									src={imageSrc}
 									alt="{displayName} product image"

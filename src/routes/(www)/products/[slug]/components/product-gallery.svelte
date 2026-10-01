@@ -189,6 +189,7 @@
 					{@const youtubeId = getYoutubeId(img)}
 					<Carousel.Item>
 						<div
+							data-vt-gallery-primary={index === 0 ? '' : undefined}
 							class="sm:mb-5 sm:cursor-pointer"
 							role="button"
 							tabindex="0"

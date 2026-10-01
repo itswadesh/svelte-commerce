@@ -117,7 +117,7 @@
 		{/if}
 		<!-- The footer used to re-declare the rail formula in its own <style> block, giving the single
 		     content rail two definitions that could drift. `.page-width` from app.css is the one. -->
-		<footer class:ed={activeThemeName === 'default'} aria-label="Site footer" data-build={version}>
+		<footer class="vt-site-footer" class:ed={activeThemeName === 'default'} aria-label="Site footer" data-build={version}>
 			<div class="page-width w-full xl:pb-2">
 				{#if shouldCollapseOnMobile}
 					<Button
