@@ -21,7 +21,7 @@
 				src={image}
 				alt="{title} storefront"
 				sizes="(min-width: 1024px) 25vw, (min-width: 768px) 38vw, 50vw"
-				class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+				class="h-full w-full object-cover transition-transform duration-emphasis ease-standard group-hover:scale-105"
 				{priority}
 			/>
 		{:else}

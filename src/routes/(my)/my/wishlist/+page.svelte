@@ -66,7 +66,7 @@
 					{#each wishlistItems as item, i}
 						<div
 							in:fly={{ y: 12, delay: Math.min(i, 5) * 40 }}
-							class="group relative flex h-full w-full flex-col overflow-hidden bg-white transition-all duration-300 dark:bg-gray-800"
+							class="group relative flex h-full w-full flex-col overflow-hidden bg-white transition-[transform,box-shadow] duration-fast dark:bg-gray-800"
 						>
 							<!-- Product Image -->
 							<a
@@ -76,7 +76,7 @@
 								<LazyImg
 									src={item?.product?.thumbnail ?? undefined}
 									alt={item?.product?.title}
-									class="w-full rounded-md object-cover transition-transform duration-500"
+									class="w-full rounded-md object-cover transition-transform duration-emphasis"
 									style="aspect-ratio: 4 / 5; border-radius: 8px;"
 								/>
 							</a>

@@ -17,7 +17,7 @@
 <style>
 	:global([data-theme='default'] .ed-pd-trigger) {
 		color: var(--ed-ink);
-		transition: color 0.25s ease;
+		transition: color var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default'] .ed-pd-trigger:hover) {
@@ -48,12 +48,6 @@
 
 	:global([data-theme='default'] .ed-pd-sep) {
 		background: var(--ed-line);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .ed-pd-trigger) {
-			transition: none;
-		}
 	}
 </style>
 

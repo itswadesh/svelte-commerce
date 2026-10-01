@@ -288,10 +288,4 @@
 	:global([data-theme='default'] .edp-swatch:disabled) {
 		opacity: 0.45 !important;
 	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .edp-pill) {
-			transition: none;
-		}
-	}
 </style>

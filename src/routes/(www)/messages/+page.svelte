@@ -36,7 +36,7 @@
 
 				<button
 					type="button"
-					class="text-primary-500 hover:text-primary-700 transition duration-300 focus:outline-none"
+					class="text-primary-500 hover:text-primary-700 transition-colors duration-fast focus:outline-none"
 					onclick={() => {
 						messagesModule.selectedChat = null
 						messagesModule.getAllChats()
@@ -79,7 +79,7 @@
 
 			<button
 				type="button"
-				class="text-primary-500 hover:text-primary-700 transition duration-300 focus:outline-none"
+				class="text-primary-500 hover:text-primary-700 transition-colors duration-fast focus:outline-none"
 				onclick={() => {
 					messagesModule.showChatInbox = false
 					messagesModule.selectedChat = null
@@ -199,7 +199,7 @@
 					<li>
 						<button
 							type="button"
-							class="hover:bg-primary-50 flex w-full items-center justify-between gap-5 px-5 py-3 text-left transition duration-300 focus:outline-none"
+							class="hover:bg-primary-50 flex w-full items-center justify-between gap-5 px-5 py-3 text-left transition-colors duration-fast focus:outline-none"
 							onclick={() => messagesModule.handleSelectedChatInbox(chat)}
 						>
 							{#if chat}
@@ -284,7 +284,7 @@
 						<li>
 							<button
 								type="button"
-								class="hover:bg-primary-50 flex w-full items-center justify-between gap-5 px-5 py-3 text-left transition duration-300 focus:outline-none"
+								class="hover:bg-primary-50 flex w-full items-center justify-between gap-5 px-5 py-3 text-left transition-colors duration-fast focus:outline-none"
 								onclick={() => messagesModule.handleSelectedChatInbox(chat)}
 							>
 								{#if chat}

@@ -568,10 +568,4 @@
 		letter-spacing: 0.04em;
 		color: var(--ed-soft);
 	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .ed-mf__apply) {
-			transition: none;
-		}
-	}
 </style>

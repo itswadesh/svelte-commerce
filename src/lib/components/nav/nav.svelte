@@ -436,7 +436,7 @@
 												aria-expanded={mobileNestOpen[i] ? 'true' : 'false'}
 												onclick={() => toggleMobileNest(i)}
 											>
-												<ChevronDown class="h-4 w-4 transition-transform duration-300 {mobileNestOpen[i] ? '-rotate-180' : ''}" />
+												<ChevronDown class="h-4 w-4 transition-transform duration-panel ease-standard {mobileNestOpen[i] ? '-rotate-180' : ''}" />
 											</button>
 										</div>
 										{#if mobileNestOpen[i]}
@@ -573,7 +573,7 @@
 	/* Header action icons (wishlist, account) — ink, accent on hover */
 	.ed .ed-action {
 		color: var(--ed-ink);
-		transition: color 0.25s ease;
+		transition: color var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed .ed-action:hover {
@@ -614,8 +614,8 @@
 		font-family: var(--ed-body);
 		border-radius: var(--ed-radius);
 		transition:
-			background 0.2s ease,
-			color 0.2s ease;
+			background var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed .ed-drawer-link:hover {
@@ -625,7 +625,7 @@
 
 	.ed .ed-drawer-link :global(svg) {
 		color: var(--ed-soft);
-		transition: color 0.2s ease;
+		transition: color var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed .ed-drawer-link:hover :global(svg) {
@@ -634,7 +634,7 @@
 
 	.ed .ed-contact {
 		color: var(--ed-soft);
-		transition: color 0.2s ease;
+		transition: color var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed .ed-contact:hover {
@@ -643,15 +643,6 @@
 
 	.ed .ed-contact :global(svg) {
 		color: var(--ed-soft);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.ed .ed-action,
-		.ed .ed-drawer-link,
-		.ed .ed-drawer-link :global(svg),
-		.ed .ed-contact {
-			transition: none;
-		}
 	}
 
 	.sliding-list {

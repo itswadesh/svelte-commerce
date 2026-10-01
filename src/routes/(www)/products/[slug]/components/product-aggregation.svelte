@@ -79,9 +79,9 @@
 		text-transform: none;
 		box-shadow: none !important;
 		transition:
-			border-color 0.2s ease,
-			background 0.2s ease,
-			color 0.2s ease;
+			border-color var(--motion-fast) var(--motion-ease),
+			background var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default'] .edp-aggregation .edp-pill:hover:not(:disabled)) {

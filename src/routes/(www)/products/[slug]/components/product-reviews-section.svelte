@@ -139,7 +139,10 @@
 							<div class="flex items-center gap-3">
 								<span class="w-12 shrink-0 text-right text-sm text-muted-foreground">{row.stars} star</span>
 								<div class="relative h-3.5 flex-1 overflow-hidden rounded-full border border-primary/40 bg-background">
-									<div class="absolute inset-y-0 left-0 bg-primary transition-all duration-700 ease-out" style="width: {row.pct}%"></div>
+									<div
+										class="absolute inset-y-0 left-0 w-full origin-left bg-primary transition-transform duration-emphasis ease-standard"
+										style="transform: scaleX({row.pct / 100})"
+									></div>
 								</div>
 								<span class="w-10 shrink-0 text-sm text-muted-foreground">{row.pct}%</span>
 							</div>
@@ -159,7 +162,7 @@
 									<img
 										src={photo}
 										alt="Customer review"
-										class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+										class="h-full w-full object-cover transition-transform duration-emphasis group-hover:scale-105"
 										loading="lazy"
 									/>
 									{#if i === PHOTO_STRIP - 1 && allPhotos.length > PHOTO_STRIP}
@@ -213,7 +216,7 @@
 											<img
 												src={photo}
 												alt=""
-												class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+												class="h-full w-full object-cover transition-transform duration-emphasis group-hover:scale-105"
 												loading="lazy"
 											/>
 										</button>

@@ -128,7 +128,7 @@
 						onclick={() => (isExpanded = !isExpanded)}
 					>
 						<span class="text-sm font-bold uppercase tracking-widest">More about {storeData?.name}</span>
-						<ChevronDown size={20} class="transition-transform duration-300 {isExpanded ? 'rotate-180' : ''}" />
+						<ChevronDown size={20} class="transition-transform duration-panel ease-standard {isExpanded ? 'rotate-180' : ''}" />
 					</Button>
 				{/if}
 

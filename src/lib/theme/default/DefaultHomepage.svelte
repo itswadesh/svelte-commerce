@@ -774,8 +774,8 @@
 		box-shadow: 0 2px 10px rgb(0 0 0 / 0.14);
 		transform: translateY(-50%);
 		transition:
-			background 0.25s ease,
-			box-shadow 0.25s ease;
+			background var(--motion-fast) var(--motion-ease),
+			box-shadow var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed-slider__arrow:hover {
@@ -835,9 +835,8 @@
 		cursor: pointer;
 		background: rgb(255 255 255 / 0.6);
 		box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12);
-		transition:
-			width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-			background 0.35s ease;
+		/* The active dot widens instantly; only its colour fades. Width is layout. */
+		transition: background var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed-dot[aria-current='true'] {
@@ -865,8 +864,8 @@
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		transition:
-			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-			opacity 0.25s ease;
+			transform var(--motion-fast) var(--motion-ease),
+			opacity var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed-btn:hover {
@@ -910,7 +909,7 @@
 	.ed-link :global(.ed-link__icon) {
 		width: 16px;
 		height: 16px;
-		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: transform var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed-link:hover :global(.ed-link__icon) {
@@ -998,7 +997,7 @@
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: transform var(--motion-emphasis) var(--motion-ease);
 	}
 
 	.ed-cat__placeholder {
@@ -1024,7 +1023,7 @@
 		width: 16px;
 		height: 16px;
 		color: var(--ed-soft);
-		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: transform var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed-cat:hover :global(.ed-cat__icon) {
@@ -1080,7 +1079,7 @@
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: transform var(--motion-emphasis) var(--motion-ease);
 	}
 
 	a.ed-band__item:hover .ed-band__media img {
@@ -1281,7 +1280,7 @@
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		cursor: pointer;
-		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: transform var(--motion-fast) var(--motion-ease);
 	}
 
 	.ed-news__form button:hover {
@@ -1444,12 +1443,19 @@
 		.ed-cat__media img,
 		.ed-cat__placeholder,
 		.ed-band__media img,
-		.ed-dot,
 		.ed-slider__arrow,
 		.ed-btn,
 		.ed-news__form button,
 		.ed-link :global(.ed-link__icon) {
-			transition: none;
+			transition-property: background-color, color, border-color, opacity, box-shadow;
+		}
+		.ed-cat:hover .ed-cat__placeholder,
+		a.ed-band__item:hover .ed-band__media img,
+		.ed-btn:hover,
+		.ed-news__form button:hover,
+		.ed-link:hover :global(.ed-link__icon),
+		.ed-cat__media:hover img {
+			transform: none;
 		}
 		/* The hero slider deliberately keeps gliding here: its slide is the point of the
 		   component, and it is driven by a scrollLeft tween rather than CSS scrolling, so this

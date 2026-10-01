@@ -256,7 +256,7 @@
 								</div>
 
 								{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
-									<div class="grid grid-cols-1 gap-6 p-6 transition-all duration-500 sm:grid-cols-2">
+									<div class="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2">
 										<div class="flex flex-col gap-1">
 											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Email Address</p>
 											<p class="text-sm font-medium text-foreground">{cartState.cart.email}</p>
@@ -267,7 +267,7 @@
 										</div>
 									</div>
 								{:else if !isEmailOk || !isPhoneOk || addressModule.editEmail}
-									<form class="space-y-4 p-5 transition-all duration-500" onsubmit={saveContactInfo}>
+									<form class="space-y-4 p-5" onsubmit={saveContactInfo}>
 										<div class="space-y-1">
 											<label for="email" class="block text-sm font-medium text-foreground">
 												Email address {#if !addressModule.isEmailRequired}<span class="text-muted-foreground">(optional)</span>{/if}
@@ -341,7 +341,7 @@
 												<Skeleton class="h-[100px] w-full rounded-lg" />
 											</div>
 										{:else}
-											<div class="p-6 transition-all duration-500">
+											<div class="p-6">
 												<div class="mb-4 flex items-center">
 													<MapPin class="mr-2 h-4 w-4 text-primary" />
 													<h3 class="text-sm font-bold uppercase tracking-tight text-foreground">
@@ -397,7 +397,7 @@
 							</div>
 
 							{#if !addressModule.isBillingAddressSameAsShipping}
-								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm transition-all duration-300">
+								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
 											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Billing Address</h2>
@@ -416,7 +416,7 @@
 												<Skeleton class="h-[100px] w-full rounded-lg" />
 											</div>
 										{:else if cartState.cart?.billingAddress?.address_1}
-											<div class="p-6 transition-all duration-500">
+											<div class="p-6">
 												<div class="mb-4 flex items-center">
 													<MapPin class="mr-2 h-4 w-4 text-primary" />
 													<h3 class="text-sm font-bold uppercase tracking-tight text-foreground">
@@ -438,7 +438,7 @@
 												</div>
 											</div>
 										{:else}
-											<div class="bg-background p-8 text-center transition-all duration-500">
+											<div class="bg-background p-8 text-center">
 												<p class="text-sm text-muted-foreground">No billing address saved.</p>
 											</div>
 										{/if}

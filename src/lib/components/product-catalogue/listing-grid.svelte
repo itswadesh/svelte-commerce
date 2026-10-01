@@ -310,9 +310,9 @@
 		font-weight: 500;
 		box-shadow: none;
 		transition:
-			border-color 0.2s ease,
-			background 0.2s ease,
-			color 0.2s ease;
+			border-color var(--motion-fast) var(--motion-ease),
+			background var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
 	}
 
 	:global([data-theme='default'] .ed-pagination a:hover),
@@ -330,12 +330,5 @@
 
 	:global([data-theme='default'] .ed-pagination button:disabled) {
 		opacity: 0.45;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global([data-theme='default'] .ed-pagination a),
-		:global([data-theme='default'] .ed-pagination button) {
-			transition: none;
-		}
 	}
 </style>

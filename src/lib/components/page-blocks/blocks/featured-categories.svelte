@@ -58,16 +58,16 @@
 		{:else}
 			{#each categories as { slug, name, link, thumbnail } (slug)}
 				<a href={link ? link : slug ? `/${slug}` : `/products`} class="group flex flex-col items-center focus:outline-none">
-					<div class="relative w-full overflow-hidden bg-muted shadow-sm transition-all duration-500 ease-out">
+					<div class="relative w-full overflow-hidden bg-muted shadow-sm">
 						<LazyImg
 							src={thumbnail || ''}
 							aspectRatio={block.metadata.aspectRatio}
 							alt={name}
-							class="h-full w-full object-contain transition-transform duration-700 ease-in-out"
+							class="h-full w-full object-contain transition-transform duration-emphasis ease-standard"
 						/>
 					</div>
 					{#if !block?.metadata?.hideCategoryName}
-						<span class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-300 lg:text-base">
+						<span class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-fast lg:text-base">
 							{name}
 						</span>
 					{/if}
