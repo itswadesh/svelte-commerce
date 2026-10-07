@@ -312,13 +312,17 @@ supported backends:
 
 ## Deployment
 
-Click on the button to directly deploy to Netlify or Vercel. Zero configuration required.
+Click on the button to directly deploy to Netlify, Vercel or ZopDay. Zero configuration required.
 
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce" aria-label="Click to deploy into netlify">
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN)
+
+<a href="https://zop.dev/zopday/app/deploy?image=ghcr.io/itswadesh/svelte-commerce:latest&amp;port=3000&amp;name=svelte-commerce" aria-label="Click to deploy into ZopDay">
+<img src="https://zop.dev/deploytozopday-inkhard.svg" alt="Deploy to ZopDay" height="32">
+</a>
 
 ### Docker
 
