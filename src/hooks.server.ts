@@ -13,6 +13,13 @@ export const init = async () => {
     services.BaseService.BASE_URL = env.PUBLIC_MEDUSA_API_URL
     services.BaseService.REGION_ID = env.PUBLIC_MEDUSA_REGION_ID
   }
+
+  if (env.PUBLIC_SALEOR_API_URL) {
+    const services = await import('@misiki/kitcommerce-core/services')
+    if (!services.BaseService)
+      throw new Error("PUBLIC_SALEOR_API_URL is set but saleor-connector is not being used")
+    services.BaseService.SALEOR_API_URL = env.PUBLIC_SALEOR_API_URL
+  }
 }
 
 // Function to check if a URL is a local/IP address
