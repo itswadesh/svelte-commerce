@@ -6,17 +6,22 @@
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
 	import { Textarea } from '$lib/components/ui/textarea'
-	import { Check, AlertCircle, Mail, Phone, MapPin, Send } from '@lucide/svelte'
+	import { Check, Mail, Phone, MapPin, Send } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { ContactUsRenderer } from '$lib/core/composables/index.js'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import ErrorSummary from '$lib/components/form/error-summary.svelte'
+	import { trackGenerateLead } from '$lib/analytics'
 	import { fade } from '$lib/motion'
+	import { tick } from 'svelte'
 
 	let info = $state({
 		name: '',
 		email: '',
 		message: ''
 	})
+
+	let summary = $state<ErrorSummary | null>(null)
 
 	const store = $derived(page?.data?.store)
 
@@ -198,14 +203,29 @@
 									<p class="mt-1 text-sm text-muted-foreground">Required fields are marked with an asterisk (*)</p>
 								</div>
 
-								<form class="space-y-6 p-6 md:p-8" onsubmit={handleSubmit}>
-									{#if error}
-										<!-- role="alert": the failure used to be a red box nobody was told about. -->
-										<div role="alert" in:fade class="flex items-center gap-3 rounded-md bg-destructive/10 p-4 text-destructive">
-											<AlertCircle class="h-5 w-5 shrink-0" />
-											<p class="text-sm font-medium">{error}</p>
-										</div>
-									{/if}
+								<!-- `novalidate` hands every check to the renderer's schema, so an empty field and a
+								     malformed one report the same way: in the summary, which takes focus after a
+								     failed submit, and under the field itself. Typed values stay in place. The
+								     renderer sets `success` only once the server has accepted the message. -->
+								<form
+									class="space-y-6 p-6 md:p-8"
+									novalidate
+									onsubmit={async (e) => {
+										await handleSubmit(e)
+										await tick()
+										if (success) trackGenerateLead('contact')
+										else summary?.focus()
+									}}
+								>
+									<ErrorSummary
+										bind:this={summary}
+										items={[
+											...(nameError ? [{ field: 'name', message: nameError }] : []),
+											...(emailError ? [{ field: 'email', message: emailError }] : []),
+											...(messageError ? [{ field: 'message', message: messageError }] : []),
+											...(error ? [{ message: error }] : [])
+										]}
+									/>
 
 									<div class="grid gap-6 sm:grid-cols-2">
 										<div class="space-y-2">

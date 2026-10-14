@@ -8,6 +8,7 @@
 	import { fade, fly } from '$lib/motion'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import { toast } from 'svelte-sonner'
+	import { isOutOfStock } from '$lib/product/stock'
 
 	/**
 	 * `compact` is the sticky mobile bar: CTA only, no secondary link, no wishlist.
@@ -23,11 +24,10 @@
 	// the CTA is correct during SSR too. It used to be gated on `productState.isLoading`, which is
 	// true for the whole server render, so the label carried no availability at all until
 	// hydration finished.
+	// The rule itself is shared with the product schema (src/lib/product/stock.ts).
 	const variant = $derived(productState.selectedVariant?.id ? productState.selectedVariant : null)
 	const stockSource = $derived<Record<string, any> | null>(variant ?? page.data?.product ?? null)
-	const outOfStock = $derived(
-		!!stockSource && stockSource.manageInventory !== false && !stockSource.allowBackorder && Number(stockSource.stock ?? 0) <= 0
-	)
+	const outOfStock = $derived(isOutOfStock(stockSource))
 
 	const cartCount = $derived(productState.cartState?.cart?.lineItems?.length ?? 0)
 	const thumbnail = $derived(productState.selectedVariant?.img || productState.selectedVariant?.image || page.data?.product?.thumbnail || '')
@@ -47,8 +47,18 @@
 	$effect(() => () => clearTimeout(resetTimer))
 
 	async function addToBag() {
+		// Core's cart store catches a failed add itself (it shows the error toast) and
+		// handleAddToCart still resolves true, so the store's own flag is the success signal:
+		// `showCheckout` turns on only once the cart has accepted the line. It is cleared first so a
+		// success from an earlier add, still inside its five-second window, cannot vouch for this one.
+		const cartState = productState.cartState
+		if (cartState) cartState.showCheckout = false
 		const added = await productState.handleAddToCart()
-		if (!added) return
+		if (!added || !cartState?.showCheckout) {
+			// handleAddToCart raises its desktop "Added to bag" card whenever it resolves true.
+			productState.showAddToCartMessage = false
+			return
+		}
 
 		justAdded = true
 		clearTimeout(resetTimer)

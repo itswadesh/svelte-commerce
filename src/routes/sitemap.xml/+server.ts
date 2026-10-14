@@ -23,7 +23,8 @@ export const GET: RequestHandler = async ({ fetch, cookies }) => {
     return new Response(xmlError, {
       status: 404,
       headers: {
-        'Content-Type': 'application/xml; charset=utf-8'
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'no-store'
       }
     })
   }
@@ -50,6 +51,11 @@ export const GET: RequestHandler = async ({ fetch, cookies }) => {
     const headers = new Headers(response.headers)
     headers.delete('content-encoding')
     headers.delete('content-length')
+    // The upstream Cache-Control is the bucket's (a one-year max-age on a production store), which
+    // lets crawlers and CDNs keep a stale index long after the catalogue changes. Our own short
+    // lifetime replaces it; an error is never cached.
+    headers.delete('expires')
+    headers.set('cache-control', response.ok ? 'public, max-age=3600' : 'no-store')
 
     return new Response(response.body, {
       status: response.status,
@@ -57,7 +63,7 @@ export const GET: RequestHandler = async ({ fetch, cookies }) => {
     })
   } catch (error) {
     console.error('Failed to fetch sitemap:', error)
-    return new Response('Sitemap not found', { status: 404 })
+    return new Response('Sitemap not found', { status: 404, headers: { 'Cache-Control': 'no-store' } })
   }
 }
 

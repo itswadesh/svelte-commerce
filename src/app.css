@@ -707,6 +707,35 @@ html [data-vaul-overlay] {
 }
 
 /* ------------------------------------------------------------------ *
+ * Checkout bar — src/lib/components/buttons/checkout-button.svelte
+ *
+ * Below 640px (Tailwind's `max-sm`) each checkout step's forward action is pinned to the bottom of
+ * the screen; the component's own utilities place it. It slides up into place as it appears, and
+ * under reduced motion it fades in instead. While a bar is on the page the body gains its height,
+ * so the end of the page still scrolls clear of it, and a step that shows no bar keeps no reserve.
+ * From 640px up none of this applies and the button sits in the summary card.
+ * ------------------------------------------------------------------ */
+@keyframes checkout-bar-in {
+	from {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+}
+@media (max-width: 639.98px) {
+	.checkout-bar {
+		animation: checkout-bar-in var(--motion-panel) var(--motion-ease) both;
+	}
+	body:has(.checkout-bar) {
+		padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	html .checkout-bar {
+		animation-name: motion-fade-in;
+	}
+}
+
+/* ------------------------------------------------------------------ *
  * Reduced motion
  *
  * This block used to cover .ed-btn-base and nothing else, and even that at

@@ -9,10 +9,12 @@
 	const products = $derived((collection?.collectionvalues || []).map((value: any) => value?.products).filter(Boolean))
 </script>
 
+<!-- An empty collection is a thin page; it stays out of the index until it has products. -->
 <SeoHeader
 	metaTitle={collection?.title || collection?.name || 'Collection'}
 	metaDescription={collection?.subTitle || collection?.description}
 	image={collection?.img || collection?.images?.[0]}
+	noindex={!products.length}
 />
 
 <div class="container mx-auto mt-2 min-h-screen max-md:px-4">
