@@ -8,6 +8,7 @@
 	import { page } from '$app/state'
 	import { fly } from '$lib/motion'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
+	import { trackOrderPlaced } from '$lib/purchase-tracking'
 
 	const userState = getUserState()
 	const cartState = getCartState()
@@ -67,6 +68,9 @@
 		}).format(date)
 	})
 	onMount(async () => {
+		// Before the cart refresh, so an error there can't swallow the purchase event
+		trackOrderPlaced(orders, currencyCode)
+
 		if (!cartState) return
 
 		const prevCartId = localStorage.getItem('prev_cart_id')
