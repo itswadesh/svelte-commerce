@@ -13,12 +13,6 @@
 	scopeListingFilters()
 
 	const data = $derived(page.data)
-
-	// SeoHeader falls back to origin + pathname, which canonicalises /products?page=7 to /products
-	// and gets every deep listing page dropped as a duplicate of page 1. Keep `page` (and only
-	// `page` — facets and sort really do belong on page 1's canonical).
-	const pageParam = $derived(page.url.searchParams.get('page'))
-	const canonicalUrl = $derived(page.url.origin + page.url.pathname + (pageParam && pageParam !== '1' ? `?page=${pageParam}` : ''))
 </script>
 
 <ListingScehma />
@@ -34,7 +28,6 @@
 	metaDescription={data.page?.metaDescription || data.store?.description || ''}
 	metaKeywords={data.page?.metaKeywords ?? ''}
 	image={data.page?.logo || data.store?.logo || ''}
-	{canonicalUrl}
 />
 
 <ListingPage />

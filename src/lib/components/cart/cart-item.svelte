@@ -59,15 +59,21 @@
 	async function increase(e: Event) {
 		e.stopPropagation()
 		const me = userState?.user
-		fireGTagEvent('add_to_cart', {
-			items: [{ ...analyticsProduct(), qty: cartProduct?.qty + 1 }],
-			total: cartProduct?.price * (cartProduct?.qty + 1),
-			qty: cartProduct?.qty + 1,
+		const lineId = cartProduct.id
+		const next = cartProduct.qty + 1
+		const payload = {
+			items: [{ ...analyticsProduct(), qty: next }],
+			total: cartProduct?.price * next,
+			qty: next,
 			vendorBusinessName: cartProduct?.vendor?.businessName,
 			// Only the pseudonymous id: name and email are PII and must not reach GA4.
 			user: { id: me?._id || me?.id }
-		})
-		await setQty(cartProduct.qty + 1)
+		}
+		await setQty(next)
+		// The store catches a failed update itself and resolves anyway, so the event waits until the
+		// returned cart carries the new quantity for this line.
+		const line = cartState?.cart?.lineItems?.find((item: any) => item?.id === lineId)
+		if (line?.qty === next) fireGTagEvent('add_to_cart', payload)
 	}
 
 	async function remove(e: Event) {

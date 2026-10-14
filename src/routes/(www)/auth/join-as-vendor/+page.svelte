@@ -33,18 +33,20 @@
 				<Textbox
 					name="firstName"
 					bind:value={joinAsVendorModule.firstName}
+					autocomplete="given-name"
 					placeholder="John"
 					schema={schemas.firstName}
 					label="First Name"
 					required
 				/>
 
-				<Textbox name="lastName" bind:value={joinAsVendorModule.lastName} placeholder="Doe" schema={schemas.lastName} label="Last Name" required />
+				<Textbox name="lastName" autocomplete="family-name" bind:value={joinAsVendorModule.lastName} placeholder="Doe" schema={schemas.lastName} label="Last Name" required />
 
 				<Textbox
 					name="email"
 					type="email"
 					bind:value={joinAsVendorModule.email}
+					autocomplete="email"
 					placeholder="m@example.com"
 					schema={schemas.email}
 					label="Email"
@@ -55,6 +57,7 @@
 					name="phone"
 					type="tel"
 					bind:value={joinAsVendorModule.phone}
+					autocomplete="tel"
 					placeholder="+1234567890"
 					schema={schemas.phone}
 					label="Phone"
@@ -64,6 +67,7 @@
 				<Textbox
 					name="businessName"
 					bind:value={joinAsVendorModule.businessName}
+					autocomplete="organization"
 					placeholder="e.g., Varni Jewels"
 					schema={schemas.businessName}
 					label="Business Name"
@@ -74,6 +78,7 @@
 					name="password"
 					type="password"
 					bind:value={joinAsVendorModule.password}
+					autocomplete="new-password"
 					placeholder="••••••••"
 					schema={schemas.password}
 					label="Password"
@@ -84,6 +89,7 @@
 					name="confirmPassword"
 					type="password"
 					bind:value={joinAsVendorModule.confirmPassword}
+					autocomplete="new-password"
 					placeholder="••••••••"
 					schema={schemas.confirmPassword}
 					label="Confirm Password"

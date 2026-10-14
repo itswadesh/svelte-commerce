@@ -5,6 +5,7 @@
 	import { setUserState } from '$lib/core/stores/index.js'
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
+	import ConsentBanner from '$lib/components/common/consent-banner.svelte'
 	import { navigating } from '$app/stores'
 	import { updated } from '$app/state'
 	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation'
@@ -263,4 +264,5 @@
 	<!-- Inside the wrapper on purpose: svelte-sonner renders where it is mounted, so out here it
 	     used to paint every toast in the root fallback palette and font. -->
 	<Toaster position="top-center" />
+	<ConsentBanner />
 </div>

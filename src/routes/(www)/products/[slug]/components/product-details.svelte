@@ -1,10 +1,11 @@
 <script lang="ts">
 	import LoginModal from '$lib/components/auth/login-modal.svelte'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
-	import { GoogleStructuredDataBreadcrumb, GoogleStructuredVideoSchema } from '$lib/core/components/index.js'
+	import { GoogleStructuredDataBreadcrumb } from '$lib/core/components/index.js'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
-	import { availabilityUrl } from '$lib/components/seo/schema.js'
+	import { stockAvailabilityUrl } from '$lib/components/seo/schema.js'
+	import { RETURN_WINDOW_DAYS } from '$lib/config/policy'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
@@ -109,13 +110,6 @@
 		return ''
 	})
 
-	// Video URLs mixed into the product image list (YouTube or hosted mp4/webm) get a VideoObject schema.
-	const productVideoUrls = $derived(
-		productState.productImagesArray?.filter(
-			(img: string) => img.includes('youtube.com') || img.includes('youtu.be') || img.endsWith('.mp4') || img.endsWith('.webm')
-		) || []
-	)
-
 	// GA4 view_item — fires once per product (also on client-side navigation). Reads
 	// window.gtag at call time (defined by the GoogleAnalytics loader in the root layout,
 	// driven by the store's googleTagManager plugin); safe no-op when analytics is off.
@@ -155,23 +149,163 @@
 
 	const priceValidUntil = new Date(Date.now() + 100 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
 
-	// Product JSON-LD, built here from SSR load data.
-	//
-	// `productState.structuredData` is assembled inside a `$effect` in the core composable, and
-	// `$effect` never runs during SSR — so the server-rendered ld+json was an empty husk for every
-	// product (no name, no price, no availability) for every non-JS crawler. A `$derived` off
-	// `data.product` is server-visible. It also lets the fields the page already has actually
-	// reach the markup: gtin13 (barcode), weight, category and the real customer reviews.
+	/*
+	 * Structured data, derived from the load data alone so it is in the server-rendered HTML.
+	 * `productState.structuredData` is assembled inside a `$effect` in the core composable, and
+	 * `$effect` never runs during SSR, so it cannot be the source.
+	 */
+	const productUrl = $derived(page.url.origin + page.url.pathname)
+	const currencyCode = $derived(data?.store?.currency?.code)
+
+	// The gallery field mixes images and videos (YouTube or Vimeo links, hosted video files). Schema
+	// `image` must list image files only; the videos get their own VideoObject below.
+	const EMBED_URL = /youtube\.com|youtu\.be|vimeo\.com/i
+	const VIDEO_FILE = /\.(mp4|webm|mov|m4v|ogv)(\?|#|$)/i
+	const isVideo = (url: string) => VIDEO_FILE.test(url) || EMBED_URL.test(url)
+	const splitMedia = (value: unknown): string[] =>
+		String(value || '')
+			.split(',')
+			.map((m) => m.trim())
+			.filter(Boolean)
+	const productMedia = $derived(splitMedia(data?.product?.images))
+	const productImages = $derived.by(() => {
+		const images = productMedia.filter((m) => !isVideo(m))
+		return images.length ? images : [data?.product?.thumbnail].filter(Boolean)
+	})
+	const productVideos = $derived([...new Set(productMedia.filter(isVideo))])
+
+	// Destinations and rates come from the store's own shipping zones, so the markup states what
+	// checkout charges. A zone counts only when it and one of its rates are active and it names at
+	// least one country.
+	const shippingZones = $derived<{ rate: any; countries: string[] }[]>(
+		(data?.store?.shippingZones || []).flatMap((zone: any) => {
+			const rate = zone?.active ? zone.shippingRates?.find((r: any) => r?.active) : null
+			const countries: string[] = (zone?.countries || []).map((c: any) => c?.countryCode).filter(Boolean)
+			return rate && countries.length ? [{ rate, countries }] : []
+		})
+	)
+	const shippingCountries = $derived([...new Set(shippingZones.flatMap((zone) => zone.countries))])
+	const shippingDetails = $derived(
+		shippingZones.map(({ rate, countries }) => ({
+			'@type': 'OfferShippingDetails',
+			shippingDestination: countries.map((addressCountry) => ({ '@type': 'DefinedRegion', addressCountry })),
+			// Only a rate that does not depend on the cart (its weight, its value, a free-shipping
+			// threshold) can be stated for one product; any other rate is left out.
+			...(!Number(rate.ratePerWeight) && !Number(rate.ratePerPrice) && !Number(rate.freeShippingThreshold)
+				? {
+						shippingRate: {
+							'@type': 'MonetaryAmount',
+							value: Number(rate.baseRate || 0) + Number(rate.handlingFee || 0),
+							currency: currencyCode
+						}
+					}
+				: {}),
+			// The rate carries its transit estimate; the store records no handling time, so none is stated.
+			...(rate.estimatedMinDays != null && rate.estimatedMaxDays != null
+				? {
+						deliveryTime: {
+							'@type': 'ShippingDeliveryTime',
+							transitTime: {
+								'@type': 'QuantitativeValue',
+								minValue: Number(rate.estimatedMinDays),
+								maxValue: Number(rate.estimatedMaxDays),
+								unitCode: 'DAY'
+							}
+						}
+					}
+				: {})
+		}))
+	)
+
+	// Stated only when the store publishes a refund policy, the same rule the purchase panel follows
+	// for its returns link. The window comes from src/lib/config/policy.ts.
+	const returnPolicy = $derived(
+		hasRefundPolicy
+			? {
+					'@type': 'MerchantReturnPolicy',
+					applicableCountry: shippingCountries.length ? shippingCountries : data?.store?.country?.iso2,
+					returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+					merchantReturnDays: RETURN_WINDOW_DAYS,
+					merchantReturnLink: `${page.url.origin}/refund-policy`
+				}
+			: undefined
+	)
+
+	// Shipping and returns the API carries for the product itself win over the store-level ones.
+	const offerFor = (item: { url: string; price?: number; availability: string }) => {
+		const p = data?.product
+		const shipping = p?.shippingDetails
+			? { '@type': 'OfferShippingDetails', ...p.shippingDetails }
+			: shippingDetails.length
+				? shippingDetails
+				: undefined
+		const returns = p?.hasMerchantReturnPolicy ? { '@type': 'MerchantReturnPolicy', ...returnPolicy, ...p.hasMerchantReturnPolicy } : returnPolicy
+		return {
+			'@type': 'Offer',
+			url: item.url,
+			priceCurrency: currencyCode,
+			price: item.price,
+			availability: item.availability,
+			priceValidUntil,
+			itemCondition: 'https://schema.org/NewCondition',
+			...(shipping ? { shippingDetails: shipping } : {}),
+			...(returns ? { hasMerchantReturnPolicy: returns } : {})
+		}
+	}
+
+	// Variant axes, limited to the ones Google accepts in variesBy, and only when the product's
+	// options actually name one.
+	type Axis = 'size' | 'color' | 'material'
+	const AXES: [RegExp, Axis][] = [
+		[/size/i, 'size'],
+		[/colou?r/i, 'color'],
+		[/metal|material/i, 'material']
+	]
+	const axisOf = (name: unknown) => AXES.find(([re]) => re.test(String(name ?? '')))?.[1]
+	const optionAxes = $derived<(readonly [string, Axis])[]>(
+		(data?.product?.options || []).flatMap((option: any) => {
+			const axis = axisOf(option?.title)
+			return axis ? [[option.id, axis] as const] : []
+		})
+	)
+
+	// A product with more than one real variant is a ProductGroup. Its ID is the family's grouped SKU,
+	// or the parent SKU, which stays the same whichever variant is selected. Each variant carries its
+	// own name, SKU, URL, image and offer, with availability from the same rule as the Add to bag button.
+	const productGroup = $derived.by(() => {
+		const p = data?.product
+		const variants = (p?.variants || []).filter((v: any) => v?.id && v.title && v.title !== 'default')
+		const groupId = p?.groupedSku || p?.sku
+		if (!groupId || variants.length < 2) return null
+		return {
+			productGroupID: String(groupId),
+			...(optionAxes.length ? { variesBy: [...new Set(optionAxes.map(([, axis]) => `https://schema.org/${axis}`))] } : {}),
+			hasVariant: variants.map((v: any) => {
+				const url = `${productUrl}?variant_id=${v.id}`
+				const image = v.thumbnail || v.img || splitMedia(v.images).find((m) => !isVideo(m))
+				const axes = Object.fromEntries(
+					optionAxes.flatMap(([optionId, axis]) => {
+						const value = v.options?.find((o: any) => o?.optionId === optionId)?.value
+						return value ? [[axis, value]] : []
+					})
+				)
+				return {
+					'@type': 'Product',
+					name: v.title,
+					...(v.sku ? { sku: String(v.sku) } : {}),
+					...(v.barcode ? { gtin13: String(v.barcode) } : {}),
+					image: image || productImages,
+					...axes,
+					url,
+					offers: offerFor({ url, price: v.price ?? p.price, availability: stockAvailabilityUrl(v) })
+				}
+			})
+		}
+	})
+
 	const productSchema = $derived.by(() => {
 		const p = data?.product
 		if (!p) return ''
-
-		const images = p.images
-			? String(p.images)
-					.split(',')
-					.map((i: string) => i.trim())
-					.filter(Boolean)
-			: [p.thumbnail].filter(Boolean)
 
 		const ratings: any[] = p.ratings ?? []
 		const scored = ratings.filter((r: any) => Number(r?.rating) > 0)
@@ -186,12 +320,12 @@
 
 		return {
 			'@context': 'https://schema.org/',
-			'@type': 'Product',
+			'@type': productGroup ? 'ProductGroup' : 'Product',
+			'@id': `${productUrl}#product`,
 			name: p.title,
-			image: images,
+			image: productImages,
+			url: productUrl,
 			...(description ? { description } : {}),
-			...(p.sku ? { sku: p.sku } : {}),
-			...(p.barcode ? { gtin13: String(p.barcode) } : {}),
 			...(category ? { category } : {}),
 			...(p.weight
 				? {
@@ -230,27 +364,29 @@
 						}))
 					}
 				: {}),
-			offers: {
-				'@type': 'Offer',
-				url: page.url.href,
-				priceCurrency: data?.store?.currency?.code,
-				price: p.price,
-				availability: availabilityUrl(p.stock),
-				priceValidUntil,
-				// Emitted only when the API carries them — a type-only husk with none of the
-				// required properties is a validation error, not a partial win.
-				...(p.shippingDetails ? { shippingDetails: { '@type': 'OfferShippingDetails', ...p.shippingDetails } } : {}),
-				...(p.hasMerchantReturnPolicy
-					? {
-							hasMerchantReturnPolicy: {
-								'@type': 'MerchantReturnPolicy',
-								...p.hasMerchantReturnPolicy
-							}
-						}
-					: {})
-			}
+			...(productGroup ?? {
+				...(p.sku ? { sku: p.sku } : {}),
+				...(p.barcode ? { gtin13: String(p.barcode) } : {}),
+				offers: offerFor({ url: productUrl, price: p.price, availability: stockAvailabilityUrl(p) })
+			})
 		}
 	})
+
+	// The catalogue keeps no per-video date, so the product's creation date is the only real upload
+	// date a video can carry; without one no VideoObject is emitted.
+	const videoSchemas = $derived(
+		data?.product?.createdAt
+			? productVideos.map((videoUrl) => ({
+					'@context': 'https://schema.org',
+					'@type': 'VideoObject',
+					name: data.product.title,
+					description: cleanHtmlText(data.product.description) || data.product.title,
+					thumbnailUrl: data.product.thumbnail,
+					uploadDate: data.product.createdAt,
+					...(EMBED_URL.test(videoUrl) ? { embedUrl: videoUrl } : { contentUrl: videoUrl })
+				}))
+			: []
+	)
 </script>
 
 <SeoHeader {metaTitle} {metaDescription} metaKeywords={data?.product?.keywords || ''} image={data?.product?.thumbnail || ''} />
@@ -263,18 +399,9 @@
      single-category products emitted no BreadcrumbList at all. -->
 <GoogleStructuredDataBreadcrumb categoryHierarchy={data?.product?.categoryHierarchy || []} />
 
-{#if data?.product}
-	{#each productVideoUrls as videoUrl}
-		<GoogleStructuredVideoSchema
-			name={data.product.title}
-			description={cleanHtmlText(data.product.description) || data.product.title}
-			thumbnailUrl={data.product.thumbnail}
-			uploadDate={data.product.updatedAt || new Date().toISOString()}
-			embedUrl={videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? videoUrl : undefined}
-			contentUrl={videoUrl.endsWith('.mp4') || videoUrl.endsWith('.webm') ? videoUrl : undefined}
-		/>
-	{/each}
-{/if}
+{#each videoSchemas as videoSchema}
+	<StructuredData schema={videoSchema} />
+{/each}
 
 <!-- <ProductRenderer bind:data>
 {#snippet content(productState)} -->

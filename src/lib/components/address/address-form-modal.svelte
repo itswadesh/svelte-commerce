@@ -55,6 +55,7 @@
 							<Textbox
 								name="firstName"
 								bind:value={address.firstName}
+								autocomplete="given-name"
 								placeholder="First Name"
 								schema={AddressSchema.firstName}
 								label="First Name"
@@ -63,6 +64,7 @@
 							<Textbox
 								name="lastName"
 								bind:value={address.lastName}
+								autocomplete="family-name"
 								placeholder="Last Name"
 								schema={AddressSchema.lastName}
 								label="Last Name"
@@ -75,6 +77,7 @@
 							name="phone"
 							type="tel"
 							bind:value={address.phone}
+							autocomplete="tel"
 							placeholder="+1234567890"
 							schema={AddressSchema.phone}
 							label="Phone"
@@ -82,15 +85,38 @@
 						<Textbox
 							name="address_1"
 							bind:value={address.address_1}
+							autocomplete="address-line1"
 							placeholder="Street Address"
 							schema={AddressSchema.address_1}
 							label="Address Line 1"
 							required
 						/>
-						<Textbox name="address_2" bind:value={address.address_2} placeholder="Apartment, suite, etc." label="Address Line 2" />
+						<Textbox
+							name="address_2"
+							autocomplete="address-line2"
+							bind:value={address.address_2}
+							placeholder="Apartment, suite, etc."
+							label="Address Line 2"
+						/>
 						<div class="grid grid-cols-2 gap-x-2">
-							<Textbox name="city" bind:value={address.city} placeholder="City" schema={AddressSchema.city} label="City" required />
-							<Textbox name="state" bind:value={address.state} placeholder="State" schema={AddressSchema.state} label="State" required />
+							<Textbox
+								name="city"
+								autocomplete="address-level2"
+								bind:value={address.city}
+								placeholder="City"
+								schema={AddressSchema.city}
+								label="City"
+								required
+							/>
+							<Textbox
+								name="state"
+								autocomplete="address-level1"
+								bind:value={address.state}
+								placeholder="State"
+								schema={AddressSchema.state}
+								label="State"
+								required
+							/>
 							<Select
 								id="countryCode"
 								title="Select Country"
@@ -103,7 +129,15 @@
 									address.countryCode = v
 								}}
 							/>
-							<Textbox name="zip" bind:value={address.zip} placeholder="12345" schema={AddressSchema.zip} label="ZIP Code" required />
+							<Textbox
+								name="zip"
+								autocomplete="postal-code"
+								bind:value={address.zip}
+								placeholder="12345"
+								schema={AddressSchema.zip}
+								label="ZIP Code"
+								required
+							/>
 						</div>
 					</div>
 					<div class="flex flex-col gap-2 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] pt-3">

@@ -2,6 +2,9 @@
 	import { Button } from '$lib/components/ui/button'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { Textarea } from '$lib/components/ui/textarea'
+	import { Label } from '$lib/components/ui/label'
+	import ErrorSummary from '$lib/components/form/error-summary.svelte'
+	import { trackGenerateLead } from '$lib/analytics'
 	import { LoaderCircle, X } from '@lucide/svelte'
 	import { enquiryService, EnquiryService } from '$lib/core/services'
 	import { z } from 'zod'
@@ -9,7 +12,7 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import { dialog } from '$lib/actions/dialog.js'
-	import { onDestroy, onMount } from 'svelte'
+	import { onDestroy, onMount, tick } from 'svelte'
 
 	let { isOpen = false, productId = '', productTitle = '', onClose = () => {} } = $props()
 
@@ -20,6 +23,8 @@
 	let phone = $state('')
 	let message = $state('')
 	let loading = $state(false)
+	let submitError = $state('')
+	let summary = $state<ErrorSummary | null>(null)
 	const modalHistoryKey = '__svelteCommerceEnquiryModal'
 	let ownsHistoryEntry = false
 
@@ -69,15 +74,21 @@
 	async function handleSubmit() {
 		try {
 			loading = true
+			submitError = ''
 			await enquiryService.create({ name, email, phone, message, productId })
+			// Sent once the server has accepted the enquiry; product context only, nothing typed.
+			trackGenerateLead('product_enquiry', { item_id: productId, item_name: productTitle })
 			toast.success('Enquiry submitted successfully')
 			// Close only on success. Closing in a `finally` threw away the name, phone and message the
-			// shopper had just typed the moment the request failed, so the retry the toast invites
-			// meant typing all of it again.
+			// shopper had just typed the moment the request failed, so the retry meant typing all of
+			// it again.
 			onClose()
 			await goto('/enquiry/success')
 		} catch (e: any) {
-			toast.error(e?.message || 'Failed to submit enquiry')
+			// Shown inside the dialog, where focus is trapped, and focused so the failure is announced.
+			submitError = e?.message || 'Failed to submit enquiry'
+			await tick()
+			summary?.focus()
 		} finally {
 			loading = false
 		}
@@ -117,20 +128,24 @@
 				}}
 				class="space-y-4"
 			>
+				<ErrorSummary bind:this={summary} items={submitError ? [{ message: submitError }] : []} />
+
 				<div>
-					<Textbox schema={schema.name} type="text" label="Your Name" bind:value={name} required />
+					<Textbox schema={schema.name} type="text" label="Your Name" autocomplete="name" bind:value={name} required />
 				</div>
 
 				<div>
-					<Textbox schema={schema.email} type="email" label="Your Email" bind:value={email} required />
+					<Textbox schema={schema.email} type="email" label="Your Email" autocomplete="email" bind:value={email} required />
 				</div>
 
 				<div>
-					<Textbox schema={schema.phone} type="tel" label="Your Phone" bind:value={phone} required />
+					<Textbox schema={schema.phone} type="tel" label="Your Phone" autocomplete="tel" bind:value={phone} required />
 				</div>
 
-				<div>
-					<Textarea placeholder="Your Message" bind:value={message} required rows={4} />
+				<!-- Labelled like the fields above; a placeholder disappears as soon as the shopper types. -->
+				<div class="space-y-2">
+					<Label for="enquiry-message" class="block text-sm font-medium">Your Message</Label>
+					<Textarea id="enquiry-message" bind:value={message} required rows={4} />
 				</div>
 
 				<Button type="submit" class="w-full" disabled={loading}>

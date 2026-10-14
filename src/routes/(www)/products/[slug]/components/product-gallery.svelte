@@ -1,3 +1,12 @@
+<script lang="ts" module>
+	/**
+	 * The main image's rendered width: the full content column on phones and tablets, half of it
+	 * from 1024px where the purchase panel sits beside the gallery. Exported so the LCP preload in
+	 * product-gallery-section.svelte offers the same candidates and sizes as the image itself.
+	 */
+	export const GALLERY_IMAGE_SIZES = '(min-width: 1024px) 50vw, 100vw'
+</script>
+
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
@@ -225,6 +234,7 @@
 										src={img}
 										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
 										class="w-full rounded-radius object-contain"
+										sizes={GALLERY_IMAGE_SIZES}
 										priority={index === 0}
 										eager={preloadRest}
 									/>

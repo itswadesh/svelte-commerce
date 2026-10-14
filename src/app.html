@@ -12,6 +12,81 @@
 		<script>
 			document.documentElement.classList.add('js')
 		</script>
+		<!-- Google Consent Mode v2 defaults, set before any tag loads. Regions that require opt-in
+		     (EEA, UK, Switzerland) start denied until the visitor chooses in the cookie banner
+		     (consent-banner.svelte); the region-specific default wins over the general one. A
+		     returning visitor's saved choice is re-applied here too, so tags never run on the default
+		     first. -->
+		<script>
+			window.dataLayer = window.dataLayer || []
+			function gtag() {
+				dataLayer.push(arguments)
+			}
+			gtag('consent', 'default', {
+				ad_storage: 'denied',
+				ad_user_data: 'denied',
+				ad_personalization: 'denied',
+				analytics_storage: 'denied',
+				personalization_storage: 'denied',
+				functionality_storage: 'granted',
+				security_storage: 'granted',
+				region: [
+					'AT',
+					'BE',
+					'BG',
+					'HR',
+					'CY',
+					'CZ',
+					'DK',
+					'EE',
+					'FI',
+					'FR',
+					'DE',
+					'GR',
+					'HU',
+					'IE',
+					'IT',
+					'LV',
+					'LT',
+					'LU',
+					'MT',
+					'NL',
+					'PL',
+					'PT',
+					'RO',
+					'SK',
+					'SI',
+					'ES',
+					'SE',
+					'IS',
+					'LI',
+					'NO',
+					'GB',
+					'CH'
+				]
+			})
+			gtag('consent', 'default', {
+				ad_storage: 'granted',
+				ad_user_data: 'granted',
+				ad_personalization: 'granted',
+				analytics_storage: 'granted',
+				personalization_storage: 'granted',
+				functionality_storage: 'granted',
+				security_storage: 'granted'
+			})
+			try {
+				var savedConsent = JSON.parse(localStorage.getItem('user_consent') || 'null')
+				if (savedConsent) {
+					gtag('consent', 'update', {
+						ad_storage: savedConsent.ad_storage,
+						ad_user_data: savedConsent.ad_storage,
+						ad_personalization: savedConsent.ad_storage,
+						analytics_storage: savedConsent.analytics_storage,
+						personalization_storage: savedConsent.analytics_storage
+					})
+				}
+			} catch (e) {}
+		</script>
 		%sveltekit.head%
 	</head>
 

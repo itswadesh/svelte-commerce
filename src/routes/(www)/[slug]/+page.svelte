@@ -27,15 +27,11 @@
 			.join(' ')
 	)
 
-	// +page.ts now 404s an unresolvable slug outright, so this only catches the narrowed case it
-	// deliberately lets through: a real listing filtered down to nothing (/pendant?price=999999).
-	// Those must stay crawlable-but-unindexed rather than becoming thin duplicates of the category.
-	const unresolved = $derived(!category && !data?.products?.data?.length)
-
-	// SeoHeader otherwise falls back to origin + pathname, canonicalising /pendant?page=3 to
-	// /pendant and getting every deep listing page dropped as a duplicate of page 1.
-	const pageParam = $derived(page.url.searchParams.get('page'))
-	const canonicalUrl = $derived(page.url.origin + page.url.pathname + (pageParam && pageParam !== '1' ? `?page=${pageParam}` : ''))
+	// +page.ts 404s an unresolvable slug outright. What reaches here with no products is either a
+	// real category that has none yet, or a real listing filtered down to nothing
+	// (/pendant?price=999999). Both stay crawlable but unindexed: a thin "no results" page must not
+	// compete with the category once it has stock.
+	const empty = $derived(!data?.products?.data?.length)
 </script>
 
 <ListingScehma />
@@ -44,8 +40,7 @@
 	metaDescription={category?.metaDescription}
 	metaKeywords={category?.metaKeywords}
 	image={category?.banner || data?.store?.logo || ''}
-	{canonicalUrl}
-	noindex={unresolved}
+	noindex={empty}
 />
 
 <ListingPage />

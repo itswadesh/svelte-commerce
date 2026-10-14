@@ -73,6 +73,7 @@
 						name="email"
 						type="email"
 						bind:value={forgotPasswordModule.email}
+						autocomplete="email"
 						placeholder="you@example.com"
 						schema={schemas.email}
 						label="Email address"

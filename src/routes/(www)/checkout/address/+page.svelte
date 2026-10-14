@@ -151,7 +151,7 @@
 	<title>Address - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
-<div class="min-h-screen py-8 max-sm:pb-[calc(9rem_+_env(safe-area-inset-bottom))]">
+<div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={2} />
 
@@ -269,11 +269,13 @@
 								{:else if !isEmailOk || !isPhoneOk || addressModule.editEmail}
 									<form class="space-y-4 p-5" onsubmit={saveContactInfo}>
 										<div class="space-y-1">
-											<label for="email" class="block text-sm font-medium text-foreground">
+											<label for="checkout-email" class="block text-sm font-medium text-foreground">
 												Email address {#if !addressModule.isEmailRequired}<span class="text-muted-foreground">(optional)</span>{/if}
 											</label>
 											<Textbox
+												id="checkout-email"
 												type="email"
+												autocomplete="email"
 												bind:value={addressModule.email}
 												required={addressModule.isEmailRequired}
 												class="w-full"
@@ -283,11 +285,13 @@
 											<p class="mt-1 text-xs text-muted-foreground">We'll send order confirmation to this email</p>
 										</div>
 										<div class="space-y-1">
-											<label for="phone" class="block text-sm font-medium text-foreground">
+											<label for="checkout-phone" class="block text-sm font-medium text-foreground">
 												Phone number {#if !addressModule.isPhoneRequired}<span class="text-muted-foreground">(optional)</span>{/if}
 											</label>
 											<Textbox
+												id="checkout-phone"
 												type="tel"
+												autocomplete="tel"
 												bind:value={addressModule.phone}
 												required={addressModule.isPhoneRequired}
 												class="w-full"

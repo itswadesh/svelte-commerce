@@ -7,6 +7,8 @@
 	import type { LayoutProps } from './$types'
 	import { page } from '$app/state'
 	import { hasConfiguredSupportChat } from '$lib/components/common/store-capabilities.js'
+	import { onFirstInteraction } from '$lib/utils/on-first-interaction'
+	import { onMount } from 'svelte'
 
 	const { children }: LayoutProps = $props()
 
@@ -21,6 +23,11 @@
 	const isCheckout = $derived(page.url.pathname.startsWith('/checkout'))
 
 	const supportChatConfigured = $derived(hasConfiguredSupportChat(page.data?.store?.plugins))
+
+	// The chat widget's scripts load on the visitor's first interaction rather than with the page,
+	// so they never compete with first paint. StorePlugins injects them as soon as it mounts.
+	let interacted = $state(false)
+	onMount(() => onFirstInteraction(() => (interacted = true)))
 
 	setCartState()
 	setProductState()
@@ -54,7 +61,7 @@
 	{/if}
 </div>
 
-{#if supportChatConfigured}
+{#if supportChatConfigured && interacted}
 	<StorePlugins />
 {/if}
 

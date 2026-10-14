@@ -8,12 +8,13 @@
 </script>
 
 {#if metadataEntries.length}
+	<!-- Each key is an h2: these sit directly under the product's h1, with no section heading between. -->
 	<div class="edp-meta">
 		<div class="grid grid-cols-1 gap-3 md:grid-cols-2">
 			{#each metadataEntries as [key, value]}
 				<div class="card edp-meta-item">
 					<div class="card-header">
-						<h3 class="card-title edp-meta-key">{key}</h3>
+						<h2 class="card-title edp-meta-key">{key}</h2>
 					</div>
 					<div class="card-content edp-meta-val">
 						<p>{value}</p>

@@ -1,7 +1,24 @@
+<script lang="ts" module>
+	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
+
+	// Candidate widths offered to the browser when `sizes` is set. The browser picks the
+	// smallest one that satisfies the rendered size at the device's pixel density, so image
+	// resolution adapts to the device instead of always fetching the 1280px fallback.
+	const SRCSET_WIDTHS = [160, 240, 320, 480, 640, 768, 1024, 1280]
+
+	/**
+	 * The width-descriptor srcset this component emits when it is given `sizes`. Exported so a
+	 * preload of the same image (the product page's LCP preload) offers the browser identical
+	 * candidates, and the image is downloaded once.
+	 */
+	export function lazyImgSrcset(src: string): string {
+		return SRCSET_WIDTHS.map((sw) => `${getImageCDNUrl(src, sw, 0)} ${sw}w`).join(', ')
+	}
+</script>
+
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { page } from '$app/state'
-	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 
 	let {
 		class: klass,
@@ -49,27 +66,22 @@
 	// width. Without it the CDN URL omits width=/height= and serves the full-res original.
 	const DEFAULT_CDN_WIDTH = 1280
 
-	// Candidate widths offered to the browser when `sizes` is set. The browser picks the
-	// smallest one that satisfies the rendered size at the device's pixel density, so image
-	// resolution adapts to the device instead of always fetching DEFAULT_CDN_WIDTH.
-	const SRCSET_WIDTHS = [160, 240, 320, 480, 640, 768, 1024, 1280]
+	const [aspectWidth, aspectHeight] = $derived(aspectRatio?.split(':') || ['1', '1'])
 
 	const h = $derived(height === 'auto' ? '0' : +height * 2)
 	const w = $derived(width === 'auto' ? '0' : +width * 2)
-	// Intrinsic-size ATTRIBUTES, as opposed to the CDN resize hints above. Omitted entirely when
-	// the caller sizes the image responsively (`auto`, the default used by every product card):
-	// `width="0" height="0"` is what Lighthouse, axe and crawlers read as the real intrinsic
-	// size, and browsers that infer a ratio from the pair get 0/0 — defeating the very CLS
-	// protection the surrounding aspect-ratio box exists to provide.
-	const attrW = $derived(width === 'auto' ? undefined : +w)
-	const attrH = $derived(height === 'auto' ? undefined : +h)
 	// Width fed to the CDN URL builder: real width when given, else the fallback.
 	const cdnW = $derived(width === 'auto' ? DEFAULT_CDN_WIDTH : +width * 2)
+	// Intrinsic-size ATTRIBUTES, as opposed to the CDN resize hints above. A responsively sized
+	// (`auto`) image, the default for every product card and the gallery, states the rendition it
+	// requests: the CDN width, and a height in the frame's aspect ratio. Lighthouse, axe and the
+	// browser then read real dimensions and the right ratio before the file arrives. Never `0`:
+	// a browser that infers a ratio from a 0/0 pair defeats the aspect-ratio box's CLS protection.
+	const attrW = $derived(width === 'auto' ? cdnW : +w)
+	const attrH = $derived(height === 'auto' ? Math.round((cdnW * +aspectHeight) / +aspectWidth) || cdnW : +h)
 	// Device-responsive srcset (width descriptors) built from the CDN. Only emitted when a
 	// caller supplies `sizes`, so existing single-src usage is unchanged.
-	const cdnSrcset = $derived(sizes ? SRCSET_WIDTHS.map((sw) => `${getImageCDNUrl(src, sw, 0)} ${sw}w`).join(', ') : undefined)
-
-	const [aspectWidth, aspectHeight] = $derived(aspectRatio?.split(':') || ['1', '1'])
+	const cdnSrcset = $derived(sizes ? lazyImgSrcset(src) : undefined)
 
 	const extension = $derived(src?.split('.').pop())
 
