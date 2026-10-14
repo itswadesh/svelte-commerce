@@ -4,7 +4,8 @@
 	import { useProductState } from '$lib/core/composables/index.js'
 	import * as Drawer from '$lib/components/ui/drawer/index.js'
 	import * as Carousel from '$lib/components/ui/carousel/index.js'
-	import ProductGallery from './product-gallery.svelte'
+	import ProductGallery, { GALLERY_IMAGE_SIZES } from './product-gallery.svelte'
+	import { lazyImgSrcset } from '$lib/core/components/image/lazy-img.svelte'
 	import ShareButton from '$lib/core/components/plugins/share-button.svelte'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
@@ -23,21 +24,26 @@
 	//   without preload  LCP image request starts 1615ms after TTFB
 	//   with preload     LCP image request starts   48ms after TTFB
 	//
-	// The href MUST match what the gallery's main image renders — getImageCDNUrl(src, 1280, 0), the
-	// cdnW/h defaults LazyImg uses for an auto-sized image — or the browser downloads it twice.
-	// No imagesrcset/imagesizes: the main image deliberately carries no srcset (only the 96px
-	// thumbnails do). If one is ever added there, this tag needs matching attributes.
+	// The preload MUST resolve to the file the gallery's main image renders, or the browser downloads
+	// it twice: href is its src (getImageCDNUrl(src, 1280, 0), the cdnW/h defaults LazyImg uses for an
+	// auto-sized image), and imagesrcset/imagesizes are the srcset and sizes it emits. LazyImg emits a
+	// srcset only through an active image CDN; without one, href alone matches its plain src.
 	const videoURLRegex = /mp4$|webm$/
 	const lcpImage = $derived.by(() => {
 		const first = productState.productImagesArray?.[0]
 		if (!first || videoURLRegex.test(first) || /youtube\.com|youtu\.be/.test(first)) return null
-		return getImageCDNUrl(first, 1280, 0)
+		const responsive = !!page.data?.store?.plugins?.imageCdn?.active
+		return {
+			href: getImageCDNUrl(first, 1280, 0),
+			srcset: responsive ? lazyImgSrcset(first) : undefined,
+			sizes: responsive ? GALLERY_IMAGE_SIZES : undefined
+		}
 	})
 </script>
 
 <svelte:head>
 	{#if lcpImage}
-		<link rel="preload" as="image" fetchpriority="high" href={lcpImage} />
+		<link rel="preload" as="image" fetchpriority="high" href={lcpImage.href} imagesrcset={lcpImage.srcset} imagesizes={lcpImage.sizes} />
 	{/if}
 </svelte:head>
 

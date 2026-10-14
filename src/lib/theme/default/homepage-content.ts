@@ -1,5 +1,6 @@
 import type { ThemeHomepageContent } from '../types.js'
 import { taxonomy } from '$lib/core/connectors/taxonomy'
+import { RETURN_WINDOW_DAYS } from '$lib/config/policy'
 
 export const defaultContent: ThemeHomepageContent = {
   description: "Discover featured products, curated collections, and a smooth shopping experience.",
@@ -53,7 +54,7 @@ export const defaultContent: ThemeHomepageContent = {
   // Announcement bar above the nav; admin overrides merge over this (blank = keep default,
   // hideAnnouncement: true = bar off).
   header: {
-    announcement: "Free shipping on your first order · Easy 7-day returns",
+    announcement: `Free shipping on your first order · Easy ${RETURN_WINDOW_DAYS}-day returns`,
     announcementHref: "/products"
   },
   footer: {
@@ -102,9 +103,9 @@ export const defaultContent: ThemeHomepageContent = {
       secondaryHref: "/products",
       image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400&q=80&auto=format&fit=crop",
       imageAlt: "Editorial lifestyle photograph",
-      note: "Free shipping on your first order · Easy 7-day returns"
+      note: `Free shipping on your first order · Easy ${RETURN_WINDOW_DAYS}-day returns`
     },
-    marquee: ["Free shipping on your first order", "7-day easy returns", "Secure checkout", "New arrivals every week"],
+    marquee: ["Free shipping on your first order", `${RETURN_WINDOW_DAYS}-day easy returns`, "Secure checkout", "New arrivals every week"],
     categories: {
       eyebrow: "Browse",
       title: `Shop by ${taxonomy.oneLower}`,
@@ -129,7 +130,7 @@ export const defaultContent: ThemeHomepageContent = {
     },
     assurances: [
       { icon: "truck", title: "Free shipping", text: "On your qualifying orders" },
-      { icon: "returns", title: "Easy returns", text: "7-day, hassle-free" },
+      { icon: "returns", title: "Easy returns", text: `${RETURN_WINDOW_DAYS}-day, hassle-free` },
       { icon: "shield", title: "Secure checkout", text: "Encrypted & protected" },
       { icon: "support", title: "Here to help", text: "Support when you need it" }
     ],

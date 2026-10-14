@@ -25,7 +25,7 @@
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-<div class="min-h-screen py-8 max-sm:pb-[calc(9rem_+_env(safe-area-inset-bottom))]">
+<div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={3} />
 

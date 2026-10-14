@@ -299,6 +299,7 @@
 							name="identifier"
 							label={identifierLabel}
 							bind:value={loginModule.identifier}
+							autocomplete="username"
 							placeholder={loginModule.isPhoneNumber ? '+91 234 567 890' : 'you@example.com'}
 							type={loginModule.isPhoneNumber ? 'tel' : 'email'}
 							schema={loginModule.isPhoneNumber ? customPhoneSchema : schemas.email}
@@ -330,6 +331,7 @@
 							label="Password"
 							type="password"
 							bind:value={loginModule.password}
+							autocomplete="current-password"
 							placeholder="Enter your password"
 							schema={schemas.password}
 							class="h-11 md:h-10"

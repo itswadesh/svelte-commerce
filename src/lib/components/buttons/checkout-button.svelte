@@ -20,10 +20,11 @@
 <!-- Below sm this is the checkout step's only visible CTA: the summary card it lives in sits under
      the whole item/payment list in the single-column layout, so it is pinned to the viewport.
      `pb-[env(safe-area-inset-bottom)]` keeps the tap area clear of the iOS home indicator — without
-     it the bottom ~34px of the button is unreachable. Each step page reserves matching bottom
-     padding so trailing content is not left underneath. -->
+     it the bottom ~34px of the button is unreachable. `.checkout-bar` (src/app.css) slides it up
+     as it appears and gives the body matching bottom padding while it is on the page, so trailing
+     content is not left underneath. -->
 <div
-	class="w-full max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-sticky max-sm:border-t max-sm:border-border max-sm:bg-background max-sm:pb-[env(safe-area-inset-bottom)] max-sm:shadow-z-2 {className}"
+	class="checkout-bar w-full max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-sticky max-sm:border-t max-sm:border-border max-sm:bg-background max-sm:pb-[env(safe-area-inset-bottom)] max-sm:shadow-z-2 {className}"
 >
 	{#if total}
 		<!-- The order total is in the summary card the shopper has just scrolled past on mobile;

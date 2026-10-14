@@ -213,7 +213,7 @@
 	<title>Cart - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
-<div class="py-8 max-sm:pb-[calc(7rem_+_env(safe-area-inset-bottom))]">
+<div class="py-8">
 	<div class="page-width">
 		<CheckoutHeader step={1} />
 
