@@ -38,6 +38,12 @@ describe('proxyApiRequest', () => {
 		expect(fetchFn.mock.calls[0][0]).toBe('https://api.litekart.in/api/menu')
 	})
 
+	it('cuts the storefront-side mount off before forwarding', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		await proxyApiRequest(new Request('https://shop.example/backend/api/carts?x=1'), 'https://engine.example/', fetchFn, '/backend')
+		expect(fetchFn.mock.calls[0][0]).toBe('https://engine.example/api/carts?x=1')
+	})
+
 	it('forwards the body and method of a write', async () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}', { status: 201 }))
 		const request = new Request('https://demo.litekart.in/api/carts/add-to-cart', {

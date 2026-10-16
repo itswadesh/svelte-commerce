@@ -84,7 +84,10 @@ export default defineConfig(({ command, mode }) => {
 			__CONNECTOR_NAME__: JSON.stringify(connectorShortName(connector))
 		},
 		resolve: {
-			alias: [{ find: /^\$connector$/, replacement: connector }],
+			alias: [
+				{ find: '$connector', replacement: connector },
+				{ find: /^\$connector$/, replacement: connector }
+			],
 			// @misiki/kitcommerce-core ships its own nested copy of svelte-sonner, so its components
 			// (the address form renderer, the cart store, …) called `toast()` on a different module
 			// instance from the `<Toaster />` mounted in src/routes/+layout.svelte. Every error routed
@@ -94,6 +97,9 @@ export default defineConfig(({ command, mode }) => {
 		},
 		ssr: {
 			noExternal: ['bits-ui']
+		},
+		optimizeDeps: {
+			exclude: ['$connector', 'kitcommerce.config']
 		},
 		//preview: { port: 80, strictPort: true, host: true },
 		server: {

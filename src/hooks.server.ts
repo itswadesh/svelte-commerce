@@ -2,7 +2,7 @@ import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
-import { initActiveConnector } from '$lib/core/connectors/init'
+import { activeBackendProxy, initActiveConnector } from '$lib/core/connectors/init'
 import { resolveStorefrontTheme } from '$lib/theme/index.js'
 import { isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 
@@ -21,6 +21,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// would pull a perfectly healthy container out of the load balancer.
 	if (url.pathname === '/health') {
 		return resolve(event)
+	}
+
+	// The active connector's browser calls, for a backend that answers no CORS. Runs under vite dev
+	// too, so no dev-proxy entry is needed. See activeBackendProxy.
+	const backend = activeBackendProxy()
+	if (backend && (url.pathname === backend.path || url.pathname.startsWith(`${backend.path}/`))) {
+		return proxyApiRequest(event.request, backend.apiUrl, fetch, backend.path)
 	}
 
 	// Browser-side `/api/*` calls: the production counterpart of the vite dev proxy. See api-proxy.ts.

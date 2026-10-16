@@ -78,6 +78,20 @@ export const requiredEnvFor = (connectorName: string | undefined): readonly stri
 }
 
 /**
+ * Where the active connector's browser calls go when its backend answers no CORS: it sends them to
+ * `PUBLIC_<NAME>_PROXY_PATH` on this origin, and `handle` forwards them to `PUBLIC_<NAME>_API_URL`.
+ * Same env convention as the credentials, so any connector gets a proxy by setting the variable.
+ */
+export const activeBackendProxy = (): { path: string; apiUrl: string } | undefined => {
+	const name = active.connectorName
+	if (!name) return undefined
+	const prefix = envPrefix(name)
+	const path = read(`${prefix}_PROXY_PATH`)?.replace(/\/+$/, '')
+	const apiUrl = read(`${prefix}_API_URL`)
+	return path && path.startsWith('/') && apiUrl ? { path, apiUrl } : undefined
+}
+
+/**
  * Hands the connector every `<PREFIX>_*` variable that is actually set, camelCased.
  *
  * Reading the environment rather than a per-connector key list is what lets a backend this repo has
