@@ -23,6 +23,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return resolve(event)
 	}
 
+	// GoCommerce's browser calls go to PUBLIC_GOCOMMERCE_PROXY_PATH: the production counterpart of the
+	// vite dev proxy's `/gocommerce` entry, through the same forwarder as Litekart's `/api`.
+	const goCommercePrefix = env.PUBLIC_GOCOMMERCE_PROXY_PATH?.replace(/\/+$/, '')
+	if (env.PUBLIC_GOCOMMERCE_API_URL && goCommercePrefix && (url.pathname === goCommercePrefix || url.pathname.startsWith(`${goCommercePrefix}/`))) {
+		return proxyApiRequest(event.request, env.PUBLIC_GOCOMMERCE_API_URL, fetch, goCommercePrefix)
+	}
+
 	// Browser-side `/api/*` calls: the production counterpart of the vite dev proxy. See api-proxy.ts.
 	if (env.PUBLIC_LITEKART_API_URL && isApiPath(url.pathname)) {
 		return proxyApiRequest(event.request, env.PUBLIC_LITEKART_API_URL)
