@@ -40,7 +40,7 @@ describe('proxyApiRequest', () => {
 
 	it('cuts the storefront-side mount off before forwarding', async () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
-		await proxyApiRequest(new Request('https://shop.example/gocommerce/api/carts?x=1'), 'https://engine.example/', fetchFn, '/gocommerce')
+		await proxyApiRequest(new Request('https://shop.example/backend/api/carts?x=1'), 'https://engine.example/', fetchFn, '/backend')
 		expect(fetchFn.mock.calls[0][0]).toBe('https://engine.example/api/carts?x=1')
 	})
 

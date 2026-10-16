@@ -2,7 +2,7 @@ import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
-import { initActiveConnector } from '$lib/core/connectors/init'
+import { activeBackendProxy, initActiveConnector } from '$lib/core/connectors/init'
 import { resolveStorefrontTheme } from '$lib/theme/index.js'
 import { isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 
@@ -23,11 +23,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return resolve(event)
 	}
 
-	// GoCommerce's browser calls go to PUBLIC_GOCOMMERCE_PROXY_PATH: the production counterpart of the
-	// vite dev proxy's `/gocommerce` entry, through the same forwarder as Litekart's `/api`.
-	const goCommercePrefix = env.PUBLIC_GOCOMMERCE_PROXY_PATH?.replace(/\/+$/, '')
-	if (env.PUBLIC_GOCOMMERCE_API_URL && goCommercePrefix && (url.pathname === goCommercePrefix || url.pathname.startsWith(`${goCommercePrefix}/`))) {
-		return proxyApiRequest(event.request, env.PUBLIC_GOCOMMERCE_API_URL, fetch, goCommercePrefix)
+	// The active connector's browser calls, for a backend that answers no CORS. Runs under vite dev
+	// too, so no dev-proxy entry is needed. See activeBackendProxy.
+	const backend = activeBackendProxy()
+	if (backend && (url.pathname === backend.path || url.pathname.startsWith(`${backend.path}/`))) {
+		return proxyApiRequest(event.request, backend.apiUrl, fetch, backend.path)
 	}
 
 	// Browser-side `/api/*` calls: the production counterpart of the vite dev proxy. See api-proxy.ts.

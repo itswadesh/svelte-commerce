@@ -10,7 +10,7 @@ export const isApiPath = (pathname: string) => pathname === '/api' || pathname.s
 // request still carrying the storefront zone's `cdn-loop` / `cf-*` headers reads to it as a loop.
 const DROPPED_REQUEST_HEADERS = ['host', 'connection', 'accept-encoding', 'content-length', 'cdn-loop']
 
-/** `stripPrefix` is the storefront-side mount, cut off before forwarding: `/gocommerce/api/carts` → `/api/carts`. */
+/** `stripPrefix` is the storefront-side mount, cut off before forwarding: `/backend/api/carts` → `/api/carts`. */
 export const proxyApiRequest = async (request: Request, apiBase: string, fetchFn: typeof fetch = fetch, stripPrefix = ''): Promise<Response> => {
 	const source = new URL(request.url)
 	const target = `${apiBase.replace(/\/+$/, '')}${source.pathname.slice(stripPrefix.length)}${source.search}`
