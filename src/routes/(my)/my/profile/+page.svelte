@@ -1,12 +1,71 @@
 <script lang="ts">
 	import Input from '$lib/components/form/textbox.svelte'
 	import { Button } from '$lib/components/ui/button'
-	import { Save, ArrowLeft, InfoIcon, Loader, User, Mail, Phone, Trash2, AlertCircle } from '@lucide/svelte'
+	import { Save, ArrowLeft, InfoIcon, Loader, User, Mail, Phone, Trash2, AlertCircle, CheckCircle } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
+	import { page } from '$app/state'
+	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
 	import { MyProfileModule } from '$lib/core/composables/index.js'
+	import { profileService } from '$lib/core/services/index.js'
 	import { fly, fade } from '$lib/motion'
 
 	const profileModule = new MyProfileModule()
+
+	// A phone proved with a code signs in to this account too (D118), when the
+	// store signs customers in by phone. The phone typed on the profile is only
+	// a contact detail until then.
+	const phoneSignIn = $derived(['PHONE', 'BOTH'].includes(page.data.store?.loginType))
+	const emailSignIn = $derived(page.data.store?.loginType !== 'PHONE')
+	let provedPhone = $state('')
+	$effect(() => {
+		if (profileModule.profile?.phoneVerified && profileModule.profile?.phone) provedPhone = profileModule.profile.phone
+	})
+	const phoneProved = $derived(!!profileModule.profile?.phone && profileModule.profile.phone === provedPhone)
+
+	let codeSent = $state(false)
+	let otp = $state('')
+	let busy = $state(false)
+	let phoneError = $state('')
+
+	const message = (e: unknown) => (e as { message?: string })?.message || 'Something went wrong. Please try again.'
+
+	async function sendPhoneCode() {
+		if (busy || !profileModule.profile?.phone) return
+		busy = true
+		phoneError = ''
+		try {
+			await profileService.requestPhoneLink({ phone: profileModule.profile.phone })
+			otp = ''
+			codeSent = true
+		} catch (e) {
+			phoneError = message(e)
+		} finally {
+			busy = false
+		}
+	}
+
+	async function verifyPhone() {
+		if (busy || otp.length !== 4) return
+		busy = true
+		phoneError = ''
+		try {
+			const me = await profileService.verifyPhoneLink({ phone: profileModule.profile.phone, otp })
+			profileModule.profile.phone = me.phone
+			profileModule.profile.phoneVerified = true
+			provedPhone = me.phone
+			codeSent = false
+		} catch (e) {
+			phoneError = message(e)
+			otp = ''
+		} finally {
+			busy = false
+		}
+	}
+
+	// The fourth digit checks the code, as on the sign-in form.
+	$effect(() => {
+		if (otp.length === 4) verifyPhone()
+	})
 </script>
 
 <svelte:head>
@@ -53,6 +112,44 @@
 								bind:value={profileModule.profile.phone}
 								class="h-12"
 							/>
+							{#if phoneProved}
+								<p class="flex items-center gap-1.5 text-sm text-green-700" in:fade>
+									<CheckCircle class="size-4 shrink-0" aria-hidden="true" />
+									Verified. You can sign in with this phone.
+								</p>
+							{:else if phoneSignIn && profileModule.profile.phone}
+								{#if !codeSent}
+									<Button type="button" variant="outline" size="sm" disabled={busy} onclick={sendPhoneCode}>
+										{busy ? 'Sending…' : 'Verify this phone'}
+									</Button>
+									<p class="text-xs text-gray-500">Verify it to sign in with your phone as well. Include the country code, such as +91.</p>
+								{:else}
+									<div class="space-y-2" in:fade>
+										<p class="text-sm text-gray-600">Enter the 4-digit code we texted to {profileModule.profile.phone}.</p>
+										<InputOTP.Root aria-label="Four digit code" maxlength={4} pattern="\d*" bind:value={otp} disabled={busy}>
+											{#snippet children({ cells })}
+												<InputOTP.Group class="gap-2">
+													{#each cells as cell}
+														<InputOTP.Slot
+															{cell}
+															class="h-12 w-11 rounded-radius border bg-background text-lg font-semibold transition-colors {cell.isActive
+																? 'border-primary ring-2 ring-ring/35'
+																: ''}"
+														/>
+													{/each}
+												</InputOTP.Group>
+											{/snippet}
+										</InputOTP.Root>
+										<div class="flex gap-3 text-sm">
+											<button type="button" class="underline" disabled={busy} onclick={sendPhoneCode}>Send a new code</button>
+											<button type="button" class="underline" onclick={() => ((codeSent = false), (phoneError = ''))}>Cancel</button>
+										</div>
+									</div>
+								{/if}
+							{/if}
+							{#if phoneError}
+								<p class="text-sm text-red-600" role="alert">{phoneError}</p>
+							{/if}
 						</div>
 						<div class="space-y-2">
 							<Input
@@ -62,9 +159,14 @@
 								label="Email Address"
 								bind:value={profileModule.profile.email}
 								placeholder="Enter Email"
-								required
+								required={!profileModule.profile?.phoneVerified}
 								class="h-12"
 							/>
+							{#if profileModule.profile?.phoneVerified && emailSignIn}
+								<p class="text-xs text-gray-500">
+									To sign in with your email too, save it here, then choose "Forgot password" on the email sign-in to set a password.
+								</p>
+							{/if}
 						</div>
 					</div>
 				</form>
