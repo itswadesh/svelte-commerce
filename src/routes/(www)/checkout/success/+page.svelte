@@ -9,13 +9,20 @@
 	import { fly } from '$lib/motion'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import { trackOrderPlaced } from '$lib/purchase-tracking'
+	import { orderService } from '$lib/core/services/index.js'
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 
 	const userState = getUserState()
 	const cartState = getCartState()
 
 	let { data } = $props()
 
-	const orders = $derived(data.orders?.data || [])
+	// Some backends can only answer this lookup in the browser that placed the order: the guest order
+	// token lives in its localStorage, out of reach of the server load. When the server came back
+	// empty, the browser asks again before the page says the details are unavailable.
+	let browserOrders = $state<any[]>([])
+	let browserLookupDone = $state(false)
+	const orders = $derived(data.orders?.data?.length ? data.orders.data : browserOrders)
 	const firstOrder = $derived(orders[0])
 	const useremail = $derived(firstOrder?.userEmail || firstOrder?.shippingAddress?.email)
 	const orderNo = $derived(page.url.searchParams.get('order_no') || firstOrder?.orderNo)
@@ -68,6 +75,16 @@
 		}).format(date)
 	})
 	onMount(async () => {
+		const cartId = page.url.searchParams.get('cart_id')
+		if (!orders.length && (orderNo || cartId)) {
+			try {
+				browserOrders = (await orderService.listOrdersByParent({ orderNo, cartId }))?.data || []
+			} catch (e) {
+				console.error('order lookup from the browser failed', e)
+			}
+		}
+		browserLookupDone = true
+
 		// Before the cart refresh, so an error there can't swallow the purchase event
 		trackOrderPlaced(orders, currencyCode)
 
@@ -301,6 +318,12 @@
 							</p>
 						</div>
 					</div>
+				</div>
+			{:else if hasOrderReference && !browserLookupDone}
+				<div class="space-y-3 border-b border-muted/30 p-6 md:p-12" aria-busy="true" aria-label="Loading order details">
+					<Skeleton class="h-6 w-40" />
+					<Skeleton class="h-16 w-full" />
+					<Skeleton class="h-16 w-full" />
 				</div>
 			{:else if hasOrderReference}
 				<div class="border-b border-muted/30 p-6 md:p-12">
