@@ -48,7 +48,7 @@
 		</div>
 
 		{#if notFound}
-			<h1 class="mb-2 text-5xl font-semibold tracking-tight text-foreground">404</h1>
+			<h1 class="page-heading mb-2">404</h1>
 			<h2 class="mb-4 text-xl font-medium text-foreground">Product not found</h2>
 			<p class="mb-8 text-sm text-muted-foreground">The product you're looking for doesn't exist.</p>
 

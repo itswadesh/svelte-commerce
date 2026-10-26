@@ -15,7 +15,7 @@
 	<div class="py-8 w-full">
 		<div class="mb-6 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 			<div class="text-center md:text-left">
-				<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">Top {taxonomy.many}</h2>
+				<h2 class="section-heading">Top {taxonomy.many}</h2>
 				<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
 				<p class="mt-4 text-sm font-medium text-muted-foreground">Discover our curated range of products by category</p>
 			</div>
@@ -48,7 +48,7 @@
 				{#each categories as { slug, icon, color, name, link, thumbnail, parentCategoryId } (slug)}
 					<a href={link ? link : slug ? `/${slug}` : `/products`} class="group flex flex-col items-center focus:outline-none">
 						<div
-							class="relative aspect-square w-full overflow-hidden bg-red-200 bg-muted shadow-sm"
+							class="relative aspect-square w-full overflow-hidden bg-destructive/10 bg-muted"
 						>
 							<LazyImg
 								src={thumbnail}

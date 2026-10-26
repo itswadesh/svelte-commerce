@@ -21,7 +21,7 @@
 
 <section class="page-width py-10 md:py-16">
 	<div class="mx-auto max-w-3xl">
-		<h1 class="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{title}</h1>
+		<h1 class="page-heading">{title}</h1>
 		<hr class="mt-4 w-20 border-t-4 border-border" />
 
 		{#if content}

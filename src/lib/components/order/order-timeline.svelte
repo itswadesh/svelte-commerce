@@ -29,14 +29,14 @@
 						{#each [...comments, ...systemGeneratedMessages] as item}
 							<div class="relative pl-8 sm:pl-10">
 								<div
-									class="absolute left-[18px] top-2 box-content h-[9px] w-[9px] -translate-x-[50%] rounded-full border-[3px] border-white bg-[#515151]"
+									class="absolute left-[18px] top-2 box-content h-[9px] w-[9px] -translate-x-[50%] rounded-full border-[3px] border-background bg-muted-foreground"
 								></div>
 
 								{#if 'avatar' in item}
 									<!-- Comment item -->
-									<div class="mb-2 rounded-lg border bg-card p-3 shadow-sm sm:p-4">
+									<div class="mb-2 rounded-lg border bg-card p-3 sm:p-4">
 										<div class="flex items-start gap-2 sm:gap-3">
-											<Avatar class="flex h-8 w-8 items-center justify-center bg-gray-200 text-black sm:h-12 sm:w-12">
+											<Avatar class="flex h-8 w-8 items-center justify-center bg-muted text-foreground sm:h-12 sm:w-12">
 												<span class="text-base sm:text-lg">{item.avatar}</span>
 											</Avatar>
 											<div class="min-w-0 flex-1">
@@ -49,7 +49,7 @@
 									<!-- Timeline entry -->
 									<div class="group flex flex-col gap-1 sm:flex-row sm:gap-0">
 										<div class="min-w-0 flex-1">
-											<p class="whitespace-pre-line break-words text-xs text-gray-700 sm:text-sm">{@html item.message}</p>
+											<p class="whitespace-pre-line break-words text-xs text-foreground sm:text-sm">{@html item.message}</p>
 											{#if item.comment}
 												<div class="break-words text-xs text-muted-foreground sm:text-sm">{@html item.comment}</div>
 											{/if}

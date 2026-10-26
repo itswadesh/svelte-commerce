@@ -58,11 +58,11 @@
 			<h1 class="text-2xl font-bold capitalize">
 				{page.url.searchParams.get('search') || 'All Vendors'}
 			</h1>
-			<span class="text-sm text-gray-400">{vendors?.count} Vendors found</span>
+			<span class="text-sm text-muted-foreground">{vendors?.count} Vendors found</span>
 		</div>
 
 		<div class="hidden flex-row items-center gap-2 md:flex">
-			<span class="text-sm font-normal text-gray-400">Sort by:</span>
+			<span class="text-sm font-normal text-muted-foreground">Sort by:</span>
 			<Select
 				class="!mb-0"
 				id="sort-by"

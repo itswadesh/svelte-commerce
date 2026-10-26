@@ -46,9 +46,9 @@
 	})
 
 	function getRatingColor(rating: number) {
-		if (rating >= 4) return 'text-green-500'
-		if (rating >= 3) return 'text-yellow-500'
-		return 'text-red-500'
+		if (rating >= 4) return 'text-success'
+		if (rating >= 3) return 'text-warning'
+		return 'text-destructive'
 	}
 
 	const sendMessageToChat = async (chatId: string, vendorId: string, message: string) => {
@@ -94,7 +94,7 @@
 		</div>
 
 		<!-- Rating Summary Skeleton -->
-		<div class="mb-8 rounded-lg bg-gray-50 p-6 dark:bg-gray-800">
+		<div class="mb-8 rounded-lg bg-muted p-6">
 			<div class="flex items-center justify-between">
 				<div class="space-y-3">
 					<Skeleton class="h-6 w-32" />
@@ -140,7 +140,7 @@
 		</div>
 
 		<!-- Rating and Reviews Section -->
-		<!-- <div class="mb-8 rounded-lg bg-gray-50 p-6 dark:bg-gray-800">
+		<!-- <div class="mb-8 rounded-lg bg-muted p-6">
 			<div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 				<div class="space-y-2">
 					<h3 class="text-lg font-semibold">Store Rating & Reviews</h3>
@@ -154,18 +154,18 @@
 						<div class="flex items-center gap-2">
 							<div class="flex">
 								{#each Array(5) as _, i}
-									<Star class={i < (data?.vendor?.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'} size={20} />
+									<Star class={i < (data?.vendor?.rating || 0) ? 'fill-warning text-warning' : 'fill-muted text-border-strong'} size={20} />
 								{/each}
 							</div>
 							<span class={getRatingColor(data?.vendor?.rating || 0)}>
 								{data?.vendor?.rating || 0} / 5
 							</span>
-							<span class="text-sm text-gray-500">({reviews?.length || 0} reviews)</span>
+							<span class="text-sm text-muted-foreground">({reviews?.length || 0} reviews)</span>
 						</div>
 					{/if}
 				</div>
 				<button
-					class="rounded-lg bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100"
+					class="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
 				>
 					Write a Review
 				</button>
@@ -175,7 +175,7 @@
 			{#if loadingReviews}
 				<div class="mt-6 space-y-4">
 					{#each Array(3) as _}
-						<div class="space-y-3 rounded-lg bg-white p-4 dark:bg-gray-700">
+						<div class="space-y-3 rounded-lg bg-card p-4">
 							<div class="flex items-center gap-3">
 								<Skeleton class="h-10 w-10 rounded-full" />
 								<div class="space-y-2">
@@ -195,26 +195,26 @@
 			{:else if reviews?.length > 0}
 				<div class="mt-6 space-y-4">
 					{#each reviews as review}
-						<div class="rounded-lg bg-white p-4 dark:bg-gray-700">
+						<div class="rounded-lg bg-card p-4">
 							<div class="flex items-center gap-3">
-								<div class="h-10 w-10 rounded-full bg-gray-200">
+								<div class="h-10 w-10 rounded-full bg-muted">
 									// User Avatar
 								</div>
 								<div>
 									<p class="font-medium">{review.userName}</p>
 									<div class="flex gap-1">
 										{#each Array(5) as _, i}
-											<Star size={16} class={i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'} />
+											<Star size={16} class={i < review.rating ? 'fill-warning text-warning' : 'fill-muted text-border-strong'} />
 										{/each}
 									</div>
 								</div>
 							</div>
-							<p class="mt-2 text-gray-600 dark:text-gray-300">{review.comment}</p>
+							<p class="mt-2 text-muted-foreground">{review.comment}</p>
 						</div>
 					{/each}
 				</div>
 			{:else}
-				<p class="mt-6 text-center text-gray-500">No reviews yet. Be the first to review!</p>
+				<p class="mt-6 text-center text-muted-foreground">No reviews yet. Be the first to review!</p>
 			{/if}
 		</div> -->
 

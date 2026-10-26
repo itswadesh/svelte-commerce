@@ -262,7 +262,7 @@
 			     navigations still pending after 700ms get the overlay. -->
 			{#await new Promise((resolve) => setTimeout(resolve, 700)) then _}
 				<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm" role="status">
-					<div class="rounded-lg bg-white p-4">
+					<div class="rounded-lg bg-card p-4">
 						<Loader class="animate-spin" />
 						<span class="sr-only">Loading</span>
 					</div>

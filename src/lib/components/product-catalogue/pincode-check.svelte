@@ -45,7 +45,7 @@
 		{#if resultText}
 			<div aria-live="polite" aria-atomic="true" class="min-h-[20px]">
 				{#if selectedWarehouse}
-					<p class="mt-1 text-sm font-medium text-green-600 dark:text-green-400">
+					<p class="mt-1 text-sm font-medium text-success">
 						Available in your area. Ships in {selectedWarehouse.leadTime} business days
 					</p>
 				{:else}

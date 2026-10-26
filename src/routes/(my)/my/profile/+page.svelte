@@ -77,19 +77,19 @@
 		<!-- Profile Header -->
 		<div class="flex items-center justify-between">
 			<div>
-				<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Profile Settings</h1>
-				<p class="mt-2 text-sm text-gray-500">Manage your personal information and account security.</p>
+				<h1 class="text-lg font-bold tracking-tight text-foreground md:text-xl">Profile Settings</h1>
+				<p class="mt-2 text-sm text-muted-foreground">Manage your personal information and account security.</p>
 			</div>
 		</div>
 
 		<!-- Main Profile Form -->
-		<div class="overflow-hidden bg-white">
-			<!-- <div class="border-b pb-5 border-gray-100 bg-gray-50/50 ">
+		<div class="overflow-hidden bg-card">
+			<!-- <div class="border-b pb-5 border-border bg-muted/50 ">
 				<div class="flex items-center gap-3">
 					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
 						<User class="h-5 w-5" />
 					</div>
-					<h2 class="text-xl font-bold text-gray-900">Personal Information</h2>
+					<h2 class="text-xl font-bold text-foreground">Personal Information</h2>
 				</div>
 			</div> -->
 
@@ -113,7 +113,7 @@
 								class="h-12"
 							/>
 							{#if phoneProved}
-								<p class="flex items-center gap-1.5 text-sm text-green-700" in:fade>
+								<p class="flex items-center gap-1.5 text-sm text-success" in:fade>
 									<CheckCircle class="size-4 shrink-0" aria-hidden="true" />
 									Verified. You can sign in with this phone.
 								</p>
@@ -122,10 +122,10 @@
 									<Button type="button" variant="outline" size="sm" disabled={busy} onclick={sendPhoneCode}>
 										{busy ? 'Sending…' : 'Verify this phone'}
 									</Button>
-									<p class="text-xs text-gray-500">Verify it to sign in with your phone as well. Include the country code, such as +91.</p>
+									<p class="text-xs text-muted-foreground">Verify it to sign in with your phone as well. Include the country code, such as +91.</p>
 								{:else}
 									<div class="space-y-2" in:fade>
-										<p class="text-sm text-gray-600">Enter the 4-digit code we texted to {profileModule.profile.phone}.</p>
+										<p class="text-sm text-muted-foreground">Enter the 4-digit code we texted to {profileModule.profile.phone}.</p>
 										<InputOTP.Root aria-label="Four digit code" maxlength={4} pattern="\d*" bind:value={otp} disabled={busy}>
 											{#snippet children({ cells })}
 												<InputOTP.Group class="gap-2">
@@ -148,7 +148,7 @@
 								{/if}
 							{/if}
 							{#if phoneError}
-								<p class="text-sm text-red-600" role="alert">{phoneError}</p>
+								<p class="text-sm text-destructive" role="alert">{phoneError}</p>
 							{/if}
 						</div>
 						<div class="space-y-2">
@@ -163,7 +163,7 @@
 								class="h-12"
 							/>
 							{#if profileModule.profile?.phoneVerified && emailSignIn}
-								<p class="text-xs text-gray-500">
+								<p class="text-xs text-muted-foreground">
 									To sign in with your email too, save it here, then choose "Forgot password" on the email sign-in to set a password.
 								</p>
 							{/if}
@@ -174,21 +174,21 @@
 		</div>
 
 		<!-- Danger Zone -->
-		<div class="overflow-hidden rounded-md border border-red-100 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-			<div class="border-b border-red-50 bg-red-50/30 p-6 md:p-8">
+		<div class="overflow-hidden rounded-md border border-destructive/30 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+			<div class="border-b border-destructive/30 bg-destructive/10 p-6 md:p-8">
 				<div class="flex items-center gap-3">
-					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-600">
+					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10 text-destructive">
 						<AlertCircle class="h-5 w-5" />
 					</div>
-					<h2 class="text-xl font-bold text-red-600">Danger Zone</h2>
+					<h2 class="text-xl font-bold text-destructive">Danger Zone</h2>
 				</div>
 			</div>
 
 			<div class="p-6 md:p-8">
 				<div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
 					<div class="max-w-md">
-						<h3 class="text-lg font-bold text-gray-900">Delete Account</h3>
-						<p class="mt-1 text-sm text-gray-500">Permanently delete your account and all associated data. This action cannot be undone.</p>
+						<h3 class="text-lg font-bold text-foreground">Delete Account</h3>
+						<p class="mt-1 text-sm text-muted-foreground">Permanently delete your account and all associated data. This action cannot be undone.</p>
 					</div>
 					<Button
 						variant="destructive"
@@ -206,12 +206,12 @@
 <!-- Floating Save Bar -->
 {#if profileModule.detailsChanged}
 	<div in:fly={{ y: 24 }} out:fade class="fixed bottom-8 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 px-4">
-		<div class="flex items-center justify-between gap-4 rounded-md border border-gray-200 bg-white/90 p-4 shadow-2xl backdrop-blur-md">
+		<div class="flex items-center justify-between gap-4 rounded-md border border-border bg-card p-4">
 			<div class="flex items-center gap-3 px-2">
 				<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
 					<InfoIcon class="h-4 w-4" />
 				</div>
-				<span class="text-sm font-semibold text-gray-900">Unsaved changes</span>
+				<span class="text-sm font-semibold text-foreground">Unsaved changes</span>
 			</div>
 
 			<Button onclick={profileModule.saveProfile} class="h-10 px-6">
@@ -227,8 +227,3 @@
 	</div>
 {/if}
 
-<style>
-	:global(body) {
-		background-color: #fafafa;
-	}
-</style>

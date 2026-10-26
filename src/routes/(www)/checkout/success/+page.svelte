@@ -137,7 +137,7 @@
 							</div>
 						</div>
 					</div>
-					<h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">Thank you for your order</h1>
+					<h1 class="mb-3 page-heading">Thank you for your order</h1>
 					{#if firstOrder}
 						<p class="mx-auto max-w-lg text-sm text-muted-foreground">We've received your order and we'll notify you as soon as it's on its way.</p>
 					{:else}
@@ -194,7 +194,7 @@
 					<div class="mx-auto mb-5 flex size-14 items-center justify-center rounded-full bg-muted/30">
 						<SearchX class="size-7 text-muted-foreground" aria-hidden="true" />
 					</div>
-					<h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">We can't find that order</h1>
+					<h1 class="mb-3 page-heading">We can't find that order</h1>
 					<p class="mx-auto max-w-lg text-sm leading-relaxed text-muted-foreground">
 						This link doesn't carry an order reference, so there's nothing to show. If you have just paid, check your email for the confirmation — it
 						carries the order number.

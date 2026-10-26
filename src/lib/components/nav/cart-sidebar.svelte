@@ -169,7 +169,7 @@
 			</Button>
 		</div>
 
-		<!-- Named z step instead of `z-[10000000]`, tokens instead of `bg-white`: the theme wrapper
+		<!-- Named z step instead of `z-[10000000]`, tokens instead of `bg-card`: the theme wrapper
 		     now sits on <html>, so a panel painted in `bg-background` follows the active theme
 		     rather than freezing the default palette into the drawer. -->
 		<div

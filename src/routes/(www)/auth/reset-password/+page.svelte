@@ -52,7 +52,7 @@
 							type="password"
 							autocomplete="new-password"
 							disabled={!!userState.loading}
-							class="bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
+							class="bg-card text-foreground"
 						/>
 					</div>
 					<div class="space-y-2">
@@ -64,11 +64,11 @@
 							type="password"
 							autocomplete="new-password"
 							disabled={!!userState.loading}
-							class="bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
+							class="bg-card text-foreground"
 						/>
 					</div>
 					{#if error || resetPasswordModule.error}
-						<div class="flex items-center space-x-2 text-red-600" role="alert">
+						<div class="flex items-center space-x-2 text-destructive" role="alert">
 							<AlertCircle size={16} />
 							<span class="text-sm">{error || resetPasswordModule.error}</span>
 						</div>

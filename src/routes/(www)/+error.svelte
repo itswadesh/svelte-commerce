@@ -13,9 +13,9 @@
 		<div class="mb-4 flex justify-center">
 			<ShoppingBag class="h-24 w-24 animate-bounce text-primary" />
 		</div>
-		<h1 class="mb-2 text-6xl font-bold text-primary">{page.status}</h1>
-		<h2 class="mb-8 text-2xl font-semibold text-gray-600">{page.error?.message || 'Something went wrong'}</h2>
-		<p class="mb-8 text-gray-500">
+		<h1 class="page-heading mb-2">{page.status}</h1>
+		<h2 class="mb-8 text-2xl font-semibold text-muted-foreground">{page.error?.message || 'Something went wrong'}</h2>
+		<p class="mb-8 text-muted-foreground">
 			{#if page.status === 404}
 				The page you're looking for doesn't exist.
 			{:else}

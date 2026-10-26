@@ -25,7 +25,7 @@
 			{#if block.metadata.showHeader}
 				<div class="mb-6 text-center md:text-left">
 					{#if collection.name}
-						<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">{collection.name}</h2>
+						<h2 class="section-heading">{collection.name}</h2>
 						<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
 					{/if}
 					{#if collection.subTitle}

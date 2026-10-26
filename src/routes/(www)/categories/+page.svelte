@@ -17,7 +17,7 @@
 		{#each data.categories as category}
 			<a
 				href="/{category.slug}"
-				class="group flex flex-col overflow-hidden rounded-lg border bg-white transition-all hover:border-primary hover:shadow-lg"
+				class="group flex flex-col overflow-hidden rounded-lg border bg-card transition-all hover:border-primary hover:border-border-strong"
 			>
 				<!-- Image Container -->
 				<div class="relative aspect-square overflow-hidden bg-muted">
@@ -43,7 +43,7 @@
 					<!-- Subcategories -->
 					<div class="mt-1 space-y-0.5">
 						{#each category.children.slice(0, 2) as child}
-							<div class="text-xs text-gray-600">{child.name}</div>
+							<div class="text-xs text-muted-foreground">{child.name}</div>
 						{/each}
 						{#if category.children.length > 2}
 							<div class="flex items-center gap-0.5 text-xs text-primary">

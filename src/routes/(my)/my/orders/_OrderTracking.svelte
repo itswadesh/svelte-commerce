@@ -21,9 +21,9 @@
 				<div class="mb-2 flex items-start gap-4">
 					<div class="h-5 w-5 shrink-0 overflow-hidden rounded-full">
 						{#if t.icon}
-							<LazyImg src={t.icon} width="20" height="20" alt="{t.title} icon" class="h-full w-full bg-zinc-100 object-contain object-center" />
+							<LazyImg src={t.icon} width="20" height="20" alt="{t.title} icon" class="h-full w-full bg-muted object-contain object-center" />
 						{:else}
-							<div class="h-full w-full bg-zinc-200"></div>
+							<div class="h-full w-full bg-muted"></div>
 						{/if}
 					</div>
 
@@ -36,7 +36,7 @@
 					<!-- This is required for gray straight line -->
 
 					<div class="flex w-5 items-center justify-center">
-						<div class="h-full min-h-[24px] w-[2px] bg-zinc-200"></div>
+						<div class="h-full min-h-[24px] w-[2px] bg-muted"></div>
 					</div>
 
 					<div class="flex flex-1 flex-col gap-1">
@@ -46,7 +46,7 @@
 							</p>
 						{/if}
 
-						<span class="text-xs text-zinc-500">{date(t.time)}</span>
+						<span class="text-xs text-muted-foreground">{date(t.time)}</span>
 					</div>
 				</div>
 			</div>
@@ -64,10 +64,10 @@
 						<div class="flex w-full gap-2">
 							<div class="flex flex-1 flex-col xl:items-center xl:justify-center">
 								{#if t.time}
-									<div class="relative h-10 w-10 rounded-full bg-primary-500">
+									<div class="relative h-10 w-10 rounded-full bg-primary">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
-											class="absolute inset-0 m-1.5 h-7 w-7 text-white"
+											class="absolute inset-0 m-1.5 h-7 w-7 text-primary-foreground"
 											fill="none"
 											viewBox="0 0 24 24"
 											stroke="currentColor">
@@ -80,7 +80,7 @@
 									</div>
 								{:else}
 									<div
-										class="relative h-10 w-10 rounded-full border border-black border-opacity-40 bg-white">
+										class="relative h-10 w-10 rounded-full border border-foreground border-opacity-40 bg-card">
 										<LazyImg
 											src="{t.icon}"
 											alt=""
@@ -95,7 +95,7 @@
 									{t.time ? 'opacity-100' : 'opacity-40'} ">
 									<h5>{t.status}</h5>
 
-									<h6 class="mt-1 text-zinc-500">
+									<h6 class="mt-1 text-muted-foreground">
 										{#if t.time}
 											<span>
 												{date(t.time)}
@@ -110,7 +110,7 @@
 							{#if tx < 4}
 								<div
 									class="mt-4 h-2 w-full rounded-full
-									{t.time ? 'bg-primary-500' : 'bg-zinc-400'}">
+									{t.time ? 'bg-primary' : 'bg-muted-foreground'}">
 								</div>
 							{/if}
 						</div>

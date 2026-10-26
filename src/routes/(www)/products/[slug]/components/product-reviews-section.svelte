@@ -97,25 +97,25 @@
 	}
 
 	const ratingLabels = [
-		{ text: 'Very Disappointed', color: 'text-red-500' },
-		{ text: 'Slightly Disappointed', color: 'text-orange-500' },
-		{ text: 'Good', color: 'text-emerald-500' },
-		{ text: 'Very Good', color: 'text-emerald-600' },
-		{ text: 'Excellent', color: 'text-emerald-700' }
+		{ text: 'Very Disappointed', color: 'text-destructive' },
+		{ text: 'Slightly Disappointed', color: 'text-warning' },
+		{ text: 'Good', color: 'text-success' },
+		{ text: 'Very Good', color: 'text-success' },
+		{ text: 'Excellent', color: 'text-success' }
 	]
 </script>
 
 <!-- Customer Ratings -->
 {#if page.data.store?.plugins?.isProductReviewsAndRatings?.active}
 	<section class="edp-rev">
-		<h2 class="edp-rev-title mb-6 border-b border-border pb-4 text-3xl font-bold tracking-tight text-foreground">Customer Ratings</h2>
+		<h2 class="edp-rev-title section-heading mb-6 border-b border-border pb-4">Customer Ratings</h2>
 
 		{#if ratings.length}
 			<!-- Summary: average / distribution / customer photos -->
 			<div class="grid grid-cols-1 gap-8 border-b border-border pb-8 md:grid-cols-2 lg:grid-cols-12 lg:gap-10">
 				<div class="flex flex-col items-center text-center lg:col-span-3 lg:items-start lg:text-left">
 					<div class="flex items-baseline gap-1">
-						<span class="edp-rev-score text-5xl font-black text-foreground">{accRating || '0.0'}</span>
+						<span class="edp-rev-score text-3xl font-semibold text-foreground">{accRating || '0.0'}</span>
 						<span class="text-xl font-semibold text-muted-foreground">/5</span>
 					</div>
 					<div class="mt-2 flex items-center gap-0.5">
@@ -319,7 +319,7 @@
 			>
 				<div class="sticky top-0 z-10 flex items-center justify-between border-b border-border px-6 py-4 backdrop-blur-md sm:px-8 sm:py-5">
 					<div>
-						<h3 class="text-xl font-black tracking-tight text-foreground sm:text-2xl">Write a Review</h3>
+						<h3 class="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">Write a Review</h3>
 						<p class="text-xs font-medium text-muted-foreground sm:text-sm">Share your experience with us</p>
 					</div>
 					<Button variant="ghost" size="icon" onclick={() => (productState.showReviewForm = false)} class="rounded-full">
@@ -354,7 +354,7 @@
 								</div>
 								{#if productState.select !== null}
 									<div
-										class="rounded-full px-4 py-1.5 text-xs font-black ring-1 ring-inset {ratingLabels[productState.select - 1].color
+										class="rounded-full px-4 py-1.5 text-xs font-semibold ring-1 ring-inset {ratingLabels[productState.select - 1].color
 											.replace('text-', 'bg-')
 											.replace('-500', '-50')} {ratingLabels[productState.select - 1].color}"
 										in:scale={{ start: 0.9 }}
@@ -408,7 +408,7 @@
 					</div>
 				</div>
 
-				<div class="border-t border-border bg-background/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-5">
+				<div class="border-t border-border bg-card px-6 py-4 sm:px-8 sm:py-5">
 					<div class="flex items-center justify-end gap-3">
 						<Button variant="ghost" onclick={() => (productState.showReviewForm = false)} class="h-11 px-5">Discard</Button>
 						<Button disabled={productState.select === null || !productState.reviewMessage || submitting} class="h-11 px-8" onclick={submitReview}>

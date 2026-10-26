@@ -48,11 +48,11 @@
 		<CheckoutHeader step={3} />
 
 		<div class="mx-auto flex max-w-2xl flex-col gap-6">
-			<div class="rounded-lg border border-border bg-card p-6 text-center shadow-sm sm:p-8">
+			<div class="rounded-lg border border-border bg-card p-6 text-center sm:p-8">
 				<div class="mx-auto mb-5 flex size-14 items-center justify-center rounded-full bg-destructive/10">
 					<AlertCircle class="size-7 text-destructive" aria-hidden="true" />
 				</div>
-				<h1 class="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Payment not completed</h1>
+				<h1 class="page-heading">Payment not completed</h1>
 				<p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
 					We weren't able to process your payment. Your order has not been placed and you have not been charged — your bag is exactly as you left it.
 				</p>
@@ -80,7 +80,7 @@
 			</div>
 
 			{#if items.length}
-				<div class="rounded-lg border border-border bg-card p-6 shadow-sm">
+				<div class="rounded-lg border border-border bg-card p-6">
 					<h2 class="text-base font-bold uppercase text-foreground">Order summary</h2>
 					<ul class="mt-4 divide-y divide-border">
 						{#each items as item (item.id ?? item.slug)}
@@ -122,7 +122,7 @@
 					</div>
 				</div>
 			{:else}
-				<div class="flex flex-col items-center gap-3 rounded-lg border border-border bg-card p-8 text-center shadow-sm">
+				<div class="flex flex-col items-center gap-3 rounded-lg border border-border bg-card p-8 text-center">
 					<ShoppingBag class="size-6 text-muted-foreground" aria-hidden="true" />
 					<p class="text-sm text-muted-foreground">There is nothing in your bag right now.</p>
 					<Button variant="outline" href="/products" class="h-11">Continue shopping</Button>

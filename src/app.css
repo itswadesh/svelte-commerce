@@ -424,8 +424,14 @@
 	@apply pt-2 sm:pt-4;
 }
 
+/* The one page-title and section-title style, so no page restates sizes (UX_SYSTEM type scale:
+   page title 20-28px, section title 18-24px). */
 .page-heading {
-	@apply text-xl font-bold text-foreground sm:text-xl;
+	@apply text-xl font-semibold tracking-tight text-foreground sm:text-2xl;
+}
+
+.section-heading {
+	@apply text-lg font-semibold tracking-tight text-foreground sm:text-xl;
 }
 
 /* The single container rail — see --container-max / --container-gutter in :root. Was

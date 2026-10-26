@@ -94,20 +94,20 @@
 	{:else if order && order?.orderNo}
 		<section class="container mx-auto">
 			<div class="my-5 overflow-hidden rounded-lg border sm:mb-10">
-				<div class="flex flex-wrap items-center justify-between rounded-lg rounded-b-none border-b bg-gray-50 px-5 py-3">
+				<div class="flex flex-wrap items-center justify-between rounded-lg rounded-b-none border-b bg-muted px-5 py-3">
 					<div class="flex items-center gap-4">
 						<h6>Order No : #{order?.orderNo}</h6>
 						<StatusCell value={order?.status} />
 					</div>
 
-					<h6 class="mt-2 text-sm text-gray-500 sm:mt-0">Order Date : {date(order?.createdAt)}</h6>
+					<h6 class="mt-2 text-sm text-muted-foreground sm:mt-0">Order Date : {date(order?.createdAt)}</h6>
 				</div>
 
 				<!-- Order detail  -->
 				<div class="flex flex-col lg:grid lg:grid-cols-2 lg:divide-x">
 					<div class="order-1 flex flex-col divide-y lg:order-none">
 						{#if order?.lineItems}
-							<div class="divide-y divide-dashed text-xs text-zinc-500">
+							<div class="divide-y divide-dashed text-xs text-muted-foreground">
 								{#each order?.lineItems as item}
 									{#if item}
 										<div class="flex gap-2 p-5 lg:gap-5">
@@ -187,12 +187,12 @@
 												<div class="flex flex-wrap items-center gap-1">
 													Item price :
 
-													<span class="whitespace-nowrap font-bold text-zinc-800">
+													<span class="whitespace-nowrap font-bold text-foreground">
 														{formatPrice(item.price, page?.data?.store?.currency?.code)}
 													</span>
 
 													{#if item?.mrp > item?.price}
-														<span class="whitespace-nowrap text-zinc-500 line-through">
+														<span class="whitespace-nowrap text-muted-foreground line-through">
 															<strike>
 																{formatPrice(item.mrp, page?.data?.store?.currency?.code)}
 															</strike>
@@ -209,12 +209,12 @@
 												<div class="flex flex-wrap items-center gap-1">
 													Sub Total :
 
-													<span class="whitespace-nowrap font-bold text-zinc-800">
+													<span class="whitespace-nowrap font-bold text-foreground">
 														{formatPrice(item.subtotal, page?.data?.store?.currency?.code)}
 													</span>
 
 													{#if item?.total > item?.subtotal}
-														<span class="whitespace-nowrap text-zinc-500 line-through">
+														<span class="whitespace-nowrap text-muted-foreground line-through">
 															<strike>
 																{formatPrice(item.total, page?.data?.store?.currency?.code)}
 															</strike>
@@ -251,7 +251,7 @@
 														<a
 															href="/products/{item?.slug}#review"
 															aria-label="Click to visit rate & review product"
-															class="max-w-max whitespace-nowrap font-semibold text-indigo-500 hover:underline focus:outline-none"
+															class="max-w-max whitespace-nowrap font-semibold text-primary hover:underline focus:outline-none"
 														>
 															Rate & Review Product
 														</a>
@@ -305,7 +305,7 @@
 								<h5 class="font-semibold">Billing Address</h5>
 								{#if order?.billingAddressId === order?.shippingAddressId}
 									<div class="flex items-center gap-2 text-sm text-muted-foreground">
-										<CheckCircle class="h-4 w-4 text-green-500" />
+										<CheckCircle class="h-4 w-4 text-success" />
 										<span>Same as shipping address</span>
 									</div>
 								{:else if order?.billingAddress}
@@ -341,7 +341,7 @@
 						</div>
 					</div>
 
-					<div class="order-3 col-span-full flex justify-end !border-0 !border-t border-gray-200 bg-gray-50 p-5">
+					<div class="order-3 col-span-full flex justify-end !border-0 !border-t border-border bg-muted p-5">
 						<div class="flex w-full max-w-md flex-col items-start gap-2">
 							<p class="flex items-center">
 								<span class="mr-2 w-32">Subtotal</span>
@@ -388,9 +388,9 @@
 								</p>
 							{/if}
 
-							<hr class="w-full border-t border-zinc-200" />
+							<hr class="w-full border-t border-border" />
 
-							<div class="flex items-center text-sm font-bold text-zinc-800">
+							<div class="flex items-center text-sm font-bold text-foreground">
 								<span class="mr-2 w-32">Total</span>
 
 								<span>
@@ -409,9 +409,9 @@
 		</section>
 	{:else}
 		<section class="mx-auto flex min-h-[60vh] w-full max-w-sm flex-col justify-center px-4 py-10">
-			<h2 class="mb-1 text-2xl font-semibold text-gray-800">Track your order</h2>
+			<h2 class="mb-1 text-2xl font-semibold text-foreground">Track your order</h2>
 			{#if step === 'ask'}
-				<p class="mb-6 text-sm text-gray-600">Enter your order number and the email or phone you ordered with. We will send you a 4-digit code.</p>
+				<p class="mb-6 text-sm text-muted-foreground">Enter your order number and the email or phone you ordered with. We will send you a 4-digit code.</p>
 				<form class="flex flex-col gap-4" onsubmit={sendCode} in:fade={{ duration: 200 }}>
 					<div class="flex flex-col gap-1.5">
 						<Label for="order-no">Order number</Label>
@@ -422,13 +422,13 @@
 						<Input id="order-contact" bind:value={contact} autocomplete="email" required />
 					</div>
 					{#if error}
-						<p class="text-sm text-red-600" role="alert">{error}</p>
+						<p class="text-sm text-destructive" role="alert">{error}</p>
 					{/if}
 					<Button type="submit" class="w-full" disabled={busy}>{busy ? 'Sending…' : 'Send code'}</Button>
 				</form>
 			{:else}
 				<div class="flex flex-col gap-4" in:fade={{ duration: 200 }}>
-					<p class="text-sm text-gray-600">
+					<p class="text-sm text-muted-foreground">
 						If {contact} is on order {orderNo}, a 4-digit code is on its way. It works for {minutes} minutes.
 					</p>
 					<InputOTP.Root aria-label="Four digit code" maxlength={4} pattern="\d*" bind:value={otp} disabled={busy}>
@@ -446,10 +446,10 @@
 						{/snippet}
 					</InputOTP.Root>
 					{#if busy}
-						<p class="text-sm text-gray-600" role="status">Checking…</p>
+						<p class="text-sm text-muted-foreground" role="status">Checking…</p>
 					{/if}
 					{#if error}
-						<p class="text-sm text-red-600" role="alert">{error}</p>
+						<p class="text-sm text-destructive" role="alert">{error}</p>
 					{/if}
 					<div class="flex gap-3 text-sm">
 						<button type="button" class="underline" disabled={busy} onclick={() => sendCode()}>Send a new code</button>

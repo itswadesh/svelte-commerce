@@ -24,14 +24,14 @@
 						/>
 					{:else}
 						<!-- Fallback div when no image is provided -->
-						<div class="flex h-full w-full items-center justify-center bg-gray-200 text-gray-500">No Image Available</div>
+						<div class="h-full w-full bg-muted" aria-hidden="true"></div>
 					{/if}
 				</div>
 				<div class="content mt-2 flex flex-grow flex-col px-4 text-center">
-					<h3 class="mb-2 text-[20px] text-black dark:text-gray-100">
-						<a href={card.link} class="hover:text-gray-600 dark:hover:text-gray-300">{card.title}</a>
+					<h3 class="mb-2 text-[20px] text-foreground">
+						<a href={card.link} class="hover:text-muted-foreground">{card.title}</a>
 					</h3>
-					<p class="mb-4 flex-grow text-[12px] text-gray-700 dark:text-gray-300">{card.description}</p>
+					<p class="mb-4 flex-grow text-[12px] text-muted-foreground">{card.description}</p>
 					<div class="mt-auto">
 						<a href={card.link} class="inline-block">
 							<button

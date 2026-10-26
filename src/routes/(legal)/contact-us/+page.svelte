@@ -100,7 +100,7 @@
 					<!-- Left column: who we are and how else to reach us -->
 					<div class={twoColumn ? 'lg:col-span-5' : ''}>
 						<div class="mb-10">
-							<h1 class="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+							<h1 class="page-heading">
 								Let's start a <span class="text-primary">conversation</span>
 							</h1>
 							<p class="mt-4 text-lg leading-relaxed text-muted-foreground">
@@ -146,7 +146,7 @@
 					<div class={twoColumn ? 'lg:col-span-7' : ''}>
 						{#if !formAvailable}
 							<div class="rounded-lg border bg-card p-8 shadow-xs md:p-10">
-								<h2 class="text-2xl font-bold text-foreground">Reach us directly</h2>
+								<h2 class="page-heading">Reach us directly</h2>
 								<p class="mt-2 text-muted-foreground">
 									{#if contactEmail || contactPhone}
 										This store takes enquiries over email and phone rather than through a form.
@@ -186,7 +186,7 @@
 								<div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
 									<Check class="h-8 w-8 text-success" />
 								</div>
-								<h2 class="text-2xl font-bold text-foreground">Message sent</h2>
+								<h2 class="page-heading">Message sent</h2>
 								<p class="mx-auto mt-3 max-w-sm text-muted-foreground">
 									Thank you for reaching out. A member of our team will get back to you shortly.
 								</p>
@@ -199,7 +199,7 @@
 						{:else}
 							<div class="overflow-hidden rounded-lg border bg-card shadow-xs">
 								<div class="border-b bg-muted/40 p-6 md:p-8">
-									<h2 class="text-2xl font-bold text-foreground">Send us a message</h2>
+									<h2 class="page-heading">Send us a message</h2>
 									<p class="mt-1 text-sm text-muted-foreground">Required fields are marked with an asterisk (*)</p>
 								</div>
 

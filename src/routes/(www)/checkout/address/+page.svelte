@@ -215,15 +215,15 @@
 						{#await userState.hasLoaded then _}
 							<!-- Every logged-out visitor sees the guest-checkout banner. -->
 							{#if !userState.user?.userId}
-								<div class="rounded-lg border border-blue-100 bg-blue-50 p-4">
+								<div class="rounded-lg border border-primary/30 bg-primary/10 p-4">
 									<div class="flex items-start gap-3">
-										<ShoppingBag class="mt-0.5 size-5 shrink-0 text-blue-600" />
+										<ShoppingBag class="mt-0.5 size-5 shrink-0 text-primary" />
 										<div>
-											<p class="text-sm font-semibold text-blue-900">You're checking out as a guest</p>
-											<p class="mt-1 text-sm text-blue-800">
+											<p class="text-sm font-semibold text-primary">You're checking out as a guest</p>
+											<p class="mt-1 text-sm text-primary">
 												No account needed — just enter your details below. Optionally,
 												<button
-													class="font-bold underline hover:text-blue-900"
+													class="font-bold underline hover:text-primary"
 													onclick={() => {
 														showAuthModal('login')
 													}}
@@ -242,7 +242,7 @@
 						     for them in a separate Contact Details step first made guests fill two forms with
 						     the same fields. -->
 						{#if !isGuestCheckout && (addressModule.isPhoneRequired || addressModule.isEmailRequired)}
-							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
+							<div class="overflow-hidden rounded-lg border border-border bg-background">
 								<div class="flex items-center justify-between border-b border-border px-5 py-4">
 									<div class="flex items-center space-x-3">
 										<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Contact Details</h2>
@@ -320,7 +320,7 @@
 						     of this form, so gating it on `isEmailOk && isPhoneOk` would hide the only place
 						     they can be entered. -->
 						{#if isGuestCheckout || (isEmailOk && isPhoneOk)}
-							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
+							<div class="overflow-hidden rounded-lg border border-border bg-background">
 								{#if isGuestCheckout}
 									<!-- Guest checkout: inline address form, no login required -->
 									<div class="p-6">
@@ -401,7 +401,7 @@
 							</div>
 
 							{#if !addressModule.isBillingAddressSameAsShipping}
-								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
+								<div class="overflow-hidden rounded-lg border border-border bg-background">
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
 											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Billing Address</h2>
@@ -466,7 +466,7 @@
 
 					<!-- Right Column - Order Summary -->
 					<div class="space-y-4">
-						<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 							<div class="mb-6 flex flex-col gap-1">
 								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price Summary</h2>
 								<div class="h-1 w-12 bg-primary"></div>

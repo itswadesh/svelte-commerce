@@ -36,7 +36,7 @@
 
 				<button
 					type="button"
-					class="text-primary-500 hover:text-primary-700 transition-colors duration-fast focus:outline-none"
+					class="text-primary hover:underline transition-colors duration-fast focus:outline-none"
 					onclick={() => {
 						messagesModule.selectedChat = null
 						messagesModule.getAllChats()
@@ -79,7 +79,7 @@
 
 			<button
 				type="button"
-				class="text-primary-500 hover:text-primary-700 transition-colors duration-fast focus:outline-none"
+				class="text-primary hover:underline transition-colors duration-fast focus:outline-none"
 				onclick={() => {
 					messagesModule.showChatInbox = false
 					messagesModule.selectedChat = null
@@ -109,12 +109,12 @@
 							{#if m?.message?.message}
 								<div
 									class="max-w-[70%] rounded-md px-3 py-1.5 text-sm min-w-[{date(m?.message?.created_at).length + 10}px] flex flex-col border shadow
-									{m?.message?.from === messagesModule.me?.id ? 'bg-gray-50' : 'text-primary-700 bg-inherit'}"
+									{m?.message?.from === messagesModule.me?.id ? 'bg-muted' : 'text-primary bg-inherit'}"
 								>
 									<div class={m?.message?.from == messagesModule.me?.id ? 'self-end' : 'self-start'}>
 										{@html m?.message?.message}
 									</div>
-									<div class="ml-auto text-xs text-gray-400 {m?.message?.from == messagesModule.me?.id ? 'self-end' : 'self-start'}">
+									<div class="ml-auto text-xs text-muted-foreground {m?.message?.from == messagesModule.me?.id ? 'self-end' : 'self-start'}">
 										{date(m?.message?.created_at)}
 									</div>
 
@@ -368,12 +368,12 @@
 								{#if m.message?.message}
 									<div
 										class="max-w-[70%] rounded-md px-3 py-1.5 text-sm min-w-[{date(m.message?.updatedAt).length + 10}px] flex flex-col border shadow
-									{m.message?.from === messagesModule.me?.id ? 'bg-gray-50' : 'text-primary-700 bg-inherit'}"
+									{m.message?.from === messagesModule.me?.id ? 'bg-muted' : 'text-primary bg-inherit'}"
 									>
 										<div class={m.message?.from == messagesModule.me?.id ? 'self-end' : 'self-start'}>
 											{@html m.message?.message}
 										</div>
-										<div class="ml-auto text-xs text-gray-400 {m.message?.from == messagesModule.me?.id ? 'self-end' : 'self-start'}">
+										<div class="ml-auto text-xs text-muted-foreground {m.message?.from == messagesModule.me?.id ? 'self-end' : 'self-start'}">
 											{date(m.message?.updatedAt)}
 										</div>
 
