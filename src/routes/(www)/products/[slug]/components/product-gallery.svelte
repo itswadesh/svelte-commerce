@@ -254,7 +254,7 @@
 				{#each images as _, i}
 					<!-- The button is the 24px target; the 6px dot inside it is the indicator. -->
 					<button class="grid h-6 min-w-6 place-items-center" onclick={() => mainCarouselApi?.scrollTo(i)} aria-label="Go to slide {i + 1}">
-						<span class="h-1.5 rounded-full transition-colors duration-fast {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-gray-300'}"></span>
+						<span class="h-1.5 rounded-full transition-colors duration-fast {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-border-strong'}"></span>
 					</button>
 				{/each}
 			</div>
@@ -375,11 +375,6 @@
 	/* Refined Editorial — default theme only. Clean gallery: warm media wells,
 	   editorial radius, hairline thumbnail borders (selected keeps primary). */
 	:global([data-theme='default'] .edp-gallery .rounded-radius) {
-		border-radius: var(--ed-radius);
-	}
-
-	:global([data-theme='default'] .edp-gallery .bg-gray-50) {
-		background-color: #f0ece4;
 		border-radius: var(--ed-radius);
 	}
 

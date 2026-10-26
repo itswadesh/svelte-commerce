@@ -32,64 +32,64 @@
 {#if value}
 	<span
 		class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium uppercase {isPositiveStatus
-			? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
+			? 'bg-success/10 text-success ring-1 ring-inset ring-success/20'
 			: isWarningStatus
-				? 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'
+				? 'bg-warning/10 text-warning ring-1 ring-inset ring-warning/20'
 				: isPartiallyPaid
-					? 'bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-600/20'
+					? 'bg-primary/10 text-primary ring-1 ring-inset ring-primary/20'
 					: isAuthorized
-						? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20'
+						? 'bg-primary/10 text-primary ring-1 ring-inset ring-primary/20'
 						: isPending
-							? 'bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20'
+							? 'bg-muted text-foreground ring-1 ring-inset ring-border'
 							: isFulfilling
-								? 'bg-purple-50 text-purple-700 ring-1 ring-inset ring-purple-600/20'
+								? 'bg-primary/10 text-primary ring-1 ring-inset ring-primary/20'
 								: isInfoStatus
-									? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20'
+									? 'bg-primary/10 text-primary ring-1 ring-inset ring-primary/20'
 									: isErrorStatus
-										? 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'
+										? 'bg-destructive/10 text-destructive ring-1 ring-inset ring-destructive/20'
 										: isRefunded
-											? 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/20'
-											: 'bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20'}"
+											? 'bg-warning/10 text-warning ring-1 ring-inset ring-warning/20'
+											: 'bg-muted text-foreground ring-1 ring-inset ring-border'}"
 	>
 		{#if isRefunded}
-			<Undo class="h-3 w-3 text-orange-600" />
+			<Undo class="h-3 w-3 text-warning" />
 		{:else if isFulfilling}
-			<Package2 class="h-3 w-3 text-purple-600" />
+			<Package2 class="h-3 w-3 text-primary" />
 		{:else}
 			<span class="relative mr-1 flex h-1.5 w-1.5">
 				<span
 					class="absolute inline-flex h-full w-full animate-ping rounded-full {isPositiveStatus
-						? 'bg-green-400'
+						? 'bg-success'
 						: isWarningStatus
-							? 'bg-yellow-400'
+							? 'bg-warning'
 							: isPartiallyPaid
-								? 'bg-indigo-400'
+								? 'bg-primary'
 								: isAuthorized
-									? 'bg-blue-400'
+									? 'bg-primary'
 									: isPending
-										? 'bg-gray-400'
+										? 'bg-muted-foreground'
 										: isInfoStatus
-											? 'bg-blue-400'
+											? 'bg-primary'
 											: isErrorStatus
-												? 'bg-red-400'
-												: 'bg-gray-400'} opacity-75"
+												? 'bg-destructive'
+												: 'bg-muted-foreground'} opacity-75"
 				></span>
 				<span
 					class="relative inline-flex h-1.5 w-1.5 rounded-full {isPositiveStatus
-						? 'bg-green-500'
+						? 'bg-success'
 						: isWarningStatus
-							? 'bg-yellow-500'
+							? 'bg-warning'
 							: isPartiallyPaid
-								? 'bg-indigo-500'
+								? 'bg-primary'
 								: isAuthorized
-									? 'bg-blue-500'
+									? 'bg-primary'
 									: isPending
-										? 'bg-gray-500'
+										? 'bg-muted-foreground'
 										: isInfoStatus
-											? 'bg-blue-500'
+											? 'bg-primary'
 											: isErrorStatus
-												? 'bg-red-500'
-												: 'bg-gray-500'}"
+												? 'bg-destructive'
+												: 'bg-muted-foreground'}"
 				></span>
 			</span>
 		{/if}

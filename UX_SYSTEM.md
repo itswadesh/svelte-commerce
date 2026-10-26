@@ -63,7 +63,7 @@ Performance target: fast, stable pages with visible loading states and no avoida
 | Core (from the npm package) | `@misiki/kitcommerce-core` via `$lib/core/*` | Services, stores (cart/wishlist/user/product), composables, load functions, SEO and analytics plugins, `LazyImg`, `getImageCDNUrl`. Not editable here; the UI is. |
 | Tests | `tests/*.test.ts` (vitest + testing-library), `tests/*.spec.ts` (Playwright, baseURL `http://localhost:3000`) | Keep `data-testid` hooks stable. |
 
-Commands: `bun run dev` · `bun run check` (svelte-check) · `bun run test:unit` · `bun run test` (Playwright) · `bun run format`.
+Commands: `bun run dev` · `bun run check` (svelte-check) · `bun run test:unit` · `bun run test` (Playwright) · `bun run format` · `node scripts/check-tokens.mjs` (fails on any colour outside the tokens).
 
 The semantic token names used in this document map onto the existing variables. Do not add a
 second token vocabulary; extend `src/app.css` and `tailwind.config.ts` when a primitive is

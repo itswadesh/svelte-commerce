@@ -108,14 +108,14 @@
 						<div class="mb-4 rounded-radius border border-destructive/40 bg-destructive/5 p-4 text-sm font-medium text-destructive">
 							We currently deliver only to
 							{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
-								<span class="font-black">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
+								<span class="font-semibold">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
 									{' '}
 								{/if}
 							{/each}.
 
 							{#if paymentModule.shippingRates?.error?.moreCountriesCount}
-								<span class="font-black"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
-							{/if} Your selected country is <span class="font-black">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
+								<span class="font-semibold"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
+							{/if} Your selected country is <span class="font-semibold">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
 						</div>
 					{/if}
 
@@ -134,7 +134,7 @@
 										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-background px-6 py-5 {paymentModule.selectedPGCode ==
 											method?.code && paymentModule.listOfPaymentMethods?.length !== 1
 											? 'border-primary ring-1 ring-primary'
-											: 'border-border shadow-sm'}"
+											: 'border-border'}"
 									>
 										<div class="flex items-center gap-4">
 											<div class="relative flex h-5 w-5 items-center justify-center">
@@ -150,7 +150,7 @@
 											</div>
 
 											<div class="flex items-center gap-3">
-												<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-background p-1 shadow-sm">
+												<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-background p-1">
 													<img src={method?.img || localPaymentIcon(method)} alt={method?.name} class="h-full w-full object-contain" />
 												</div>
 												<div class="flex flex-col">
@@ -250,7 +250,7 @@
 					{/if}
 
 					{#if cartState?.cart?.shippingAddress}
-						<div class="overflow-hidden rounded-lg border border-border bg-background text-left shadow-sm">
+						<div class="overflow-hidden rounded-lg border border-border bg-background text-left">
 							<Button variant="plain" class="flex h-auto w-full items-center justify-between px-6 py-4" onclick={() => (showAddress = !showAddress)}>
 								<div class="flex flex-col items-start">
 									<span class="text-sm font-medium text-muted-foreground">Delivering Order to</span>
@@ -297,7 +297,7 @@
 					{/if}
 
 					<div class="space-y-4">
-						<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 							<div class="mb-6 flex flex-col gap-1">
 								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price Summary</h2>
 								<div class="h-1 w-12 bg-primary"></div>

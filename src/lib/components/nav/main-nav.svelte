@@ -36,8 +36,8 @@
 				<!-- {#if page?.url?.pathname !== '/'}
 				<a
 					href="/"
-					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
-					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full motion-safe:active:scale-95"
+					class="relative text-sm font-bold uppercase tracking-widest text-muted-foreground transition-all
+					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-foreground hover:after:w-full motion-safe:active:scale-95"
 					style="font-family: var(--font-body);"
 				>
 					<Home />

@@ -20,12 +20,12 @@
 					{#if image}
 						<LazyImg src={image} alt="Featured brand partner logo" class="h-full w-full rounded-none object-cover" />
 					{:else}
-						<div class="flex h-full w-full items-center justify-center rounded-none bg-gray-200 text-gray-500">No Image</div>
+						<div class="flex h-full w-full items-center justify-center rounded-none bg-muted text-muted-foreground">No Image</div>
 					{/if}
 				</div>
 			</CarouselItem>
 		{/each}
 	</CarouselContent>
-	<CarouselPrevious class="absolute left-0 top-1/2 z-30 m-[5px] h-10 w-10 -translate-y-1/2 transform bg-white text-black sm:-left-4" />
-	<CarouselNext class="absolute right-0 top-1/2 z-30 m-[5px] h-10 w-10 -translate-y-1/2 transform bg-white text-black sm:-right-4" />
+	<CarouselPrevious class="absolute left-0 top-1/2 z-30 m-[5px] h-10 w-10 -translate-y-1/2 transform bg-card text-foreground sm:-left-4" />
+	<CarouselNext class="absolute right-0 top-1/2 z-30 m-[5px] h-10 w-10 -translate-y-1/2 transform bg-card text-foreground sm:-right-4" />
 </Carousel>

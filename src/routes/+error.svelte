@@ -26,7 +26,7 @@
 		<div class="mb-6 flex justify-center">
 			<ShoppingBag class="h-16 w-16 text-muted-foreground" aria-hidden="true" />
 		</div>
-		<h1 class="mb-2 text-5xl font-semibold tracking-tight text-foreground">{page.status}</h1>
+		<h1 class="page-heading mb-2">{page.status}</h1>
 		<h2 class="mb-4 text-xl font-medium text-foreground">{page.error?.message || 'Something went wrong'}</h2>
 		<p class="mb-8 text-sm text-muted-foreground">
 			{#if page.status === 404}

@@ -40,6 +40,6 @@
 		/>
 	{:else}
 		<!-- Fallback placeholder when imgSrc is not provided -->
-		<div class="flex h-[660px] w-full items-center justify-center bg-gray-300 text-gray-500 sm:h-full sm:w-full">Image Not Available</div>
+		<div class="h-[660px] w-full bg-muted sm:h-full sm:w-full" aria-hidden="true"></div>
 	{/if}
 </div>

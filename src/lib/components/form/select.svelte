@@ -36,7 +36,7 @@
 	{#snippet content({ filteredData, selectedValue, closeAndFocusTrigger })}
 		<div class={cn('mb-3 space-y-2', klass)}>
 			{#if label}
-				<Label class="block text-sm font-medium text-gray-700">
+				<Label class="block text-sm font-medium text-foreground">
 					{label}
 					{#if optional}<span class="text-xs text-muted-foreground">(Optional)</span>{/if}
 				</Label>
@@ -97,7 +97,7 @@
 			</div>
 		</div>
 		{#if errors && errors[id]}
-			<span class="text-red-500">{errors[id]}</span>
+			<span class="text-destructive">{errors[id]}</span>
 		{/if}
 	{/snippet}
 </FormSelectRenderer>

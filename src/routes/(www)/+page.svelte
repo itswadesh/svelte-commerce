@@ -220,7 +220,7 @@
 
 {#if homepageModule.showRecentOrderPopup}
 	<div transition:fly={{ x: 24 }} class="fixed bottom-20 right-4 z-50">
-		<div class="flex max-w-[320px] gap-3 border-l-4 border-primary bg-white p-3.5 shadow-lg">
+		<div class="border flex max-w-[320px] gap-3 border-l-4 border-primary bg-card p-3.5">
 			<a href="/products/{homepageModule.selectedRecentOrder?.slug || ''}" class="flex gap-3 text-foreground">
 				<img
 					src={homepageModule.selectedRecentOrder?.image || homepageModule.selectedRecentOrder?.img || homepageModule.selectedRecentOrder?.thumbnail}
@@ -228,11 +228,11 @@
 					class="h-[58px] w-[58px] object-cover"
 				/>
 				<div>
-					<p class="text-xs text-gray-500">
+					<p class="text-xs text-muted-foreground">
 						{homepageModule.selectedRecentOrder?.first_name || 'Someone'} from {homepageModule.selectedRecentOrder?.city || 'nearby'}
 					</p>
 					<strong class="block text-sm text-primary">{homepageModule.selectedRecentOrder?.title || 'a menu item'}</strong>
-					<span class="text-xs text-gray-500">
+					<span class="text-xs text-muted-foreground">
 						{timestampToAgo(homepageModule.selectedRecentOrder?.created_at || homepageModule.selectedRecentOrder?.createdAt || '')}
 					</span>
 				</div>

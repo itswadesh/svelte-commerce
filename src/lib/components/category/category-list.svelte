@@ -19,7 +19,7 @@
 	{#each categories.filter((category) => category.parentCategoryId === null) as { slug, icon, color, name, link, thumbnail } (slug)}
 		<Button variant="plain" onclick={() => navigateToCategory(slug, link)} class="flex flex-col items-center gap-2">
 			<LazyImg src={thumbnail} alt="Shop {name} category" class="overflow-hidden truncate rounded-full" width="72" height="72" />
-			<span class="h-4 w-24 text-xs text-gray-600">{name}</span>
+			<span class="h-4 w-24 text-xs text-muted-foreground">{name}</span>
 		</Button>
 	{/each}
 </div>

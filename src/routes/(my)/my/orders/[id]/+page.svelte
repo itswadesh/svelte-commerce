@@ -59,9 +59,9 @@
 					<!-- Header Section -->
 					<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 						<div>
-							<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Order #{orderNumberOf(order)}</h1>
-							<p class="mt-2 text-sm text-gray-500">
-								Placed on <span class="font-medium text-gray-900">{date(order?.createdAt)}</span>
+							<h1 class="text-lg font-bold tracking-tight text-foreground md:text-xl">Order #{orderNumberOf(order)}</h1>
+							<p class="mt-2 text-sm text-muted-foreground">
+								Placed on <span class="font-medium text-foreground">{date(order?.createdAt)}</span>
 							</p>
 						</div>
 						<div class="flex items-center gap-3">
@@ -80,15 +80,15 @@
 							<!-- Order Status Banner -->
 							<div class="rounded-md border border-muted/20 bg-muted/5 p-6">
 								<div class="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-									<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-background shadow-sm ring-1 ring-muted/20">
+									<div class="border flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-muted/20">
 										<Package class="h-6 w-6 text-primary" />
 									</div>
 									<div class="flex-1">
 										<div class="flex items-center gap-4">
-											<h3 class="text-base font-bold text-gray-900">Order Status</h3>
+											<h3 class="text-base font-bold text-foreground">Order Status</h3>
 											<StatusCell value={order?.status || 'processing'} />
 										</div>
-										<p class="mt-2 text-sm text-gray-500">
+										<p class="mt-2 text-sm text-muted-foreground">
 											Your order is currently {order?.status || 'being processed'}.
 										</p>
 										<!-- No connector supplies a shipping rate, so the seven-day fallback that used to sit
@@ -108,13 +108,13 @@
 							</div>
 
 							<!-- Items List -->
-							<div class="overflow-hidden rounded-xl border border-muted/20 bg-background shadow-sm">
+							<div class="overflow-hidden rounded-xl border border-muted/20 bg-background">
 								<div class="px-3 py-4 sm:px-6">
-									<h3 class="font-medium text-gray-900">Order Items ({order?.lineItems?.length || 0})</h3>
+									<h3 class="font-medium text-foreground">Order Items ({order?.lineItems?.length || 0})</h3>
 								</div>
-								<div class="divide-y divide-gray-100">
+								<div class="divide-y divide-border">
 									{#each order?.lineItems || [] as item}
-										<div class="p-3 transition-colors hover:bg-gray-50/30 sm:p-6">
+										<div class="p-3 transition-colors hover:bg-muted/30 sm:p-6">
 											<div class="flex gap-6">
 												<a href="/products/{item.slug}" class="relative shrink-0 overflow-hidden">
 													<!-- <LazyImg
@@ -134,27 +134,27 @@
 													<div class="flex flex-col justify-between gap-1 sm:flex-row sm:items-start sm:gap-4">
 														<div class="flex-1">
 															<a href="/products/{item.slug}" class="group">
-																<h4 class="text-base font-semibold text-gray-900 transition-colors">
+																<h4 class="text-base font-semibold text-foreground transition-colors">
 																	{item.title}
 																</h4>
 															</a>
-															<div class="mt-2 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-wider text-gray-400">
+															<div class="mt-2 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">
 																<span class="flex items-center gap-1.5">
 																	<Tag class="h-3.5 w-3.5" />
 																	Qty: {item.qty}
 																</span>
 																{#if item.size}
-																	<span class="h-1 w-1 self-center rounded-full bg-gray-300"></span>
+																	<span class="h-1 w-1 self-center rounded-full bg-muted"></span>
 																	<span>Size: {item.size}</span>
 																{/if}
 																{#if item.variantTitle}
-																	<span class="h-1 w-1 self-center rounded-full bg-gray-300"></span>
+																	<span class="h-1 w-1 self-center rounded-full bg-muted"></span>
 																	<span>{item.variantTitle}</span>
 																{/if}
 															</div>
 														</div>
 														<div class="mt-2 sm:mt-0 sm:text-right">
-															<p class="text-base font-semibold text-gray-900">
+															<p class="text-base font-semibold text-foreground">
 																{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 															</p>
 															{#if item?.mrp > item?.price}
@@ -194,22 +194,22 @@
 
 							<!-- Fulfillments Timeline -->
 							{#if order.fulfillments?.length}
-								<div class="overflow-hidden rounded-xl border border-muted/20 bg-background shadow-sm">
-									<div class="border-b border-gray-100 bg-gray-50/50 px-3 py-4 sm:px-6">
-										<h3 class="font-bold text-gray-900">Shipments</h3>
+								<div class="overflow-hidden rounded-xl border border-muted/20 bg-background">
+									<div class="border-b border-border bg-muted/50 px-3 py-4 sm:px-6">
+										<h3 class="font-bold text-foreground">Shipments</h3>
 									</div>
-									<div class="divide-y divide-gray-100">
+									<div class="divide-y divide-border">
 										{#each order.fulfillments as fulfillment, ix}
 											<div class="p-6">
 												<div class="flex flex-col gap-6 sm:flex-row sm:items-center">
 													<div class="flex-1">
 														<div class="flex items-center gap-3">
-															<span class="text-sm font-bold text-gray-900">Shipment {ix + 1}</span>
+															<span class="text-sm font-bold text-foreground">Shipment {ix + 1}</span>
 															<StatusCell value={fulfillment?.status} />
 														</div>
 														<div class="mt-4 flex flex-wrap gap-2">
 															{#each fulfillment?.lineItems || [] as item}
-																<div class="h-12 w-10 shrink-0 overflow-hidden rounded border border-gray-100">
+																<div class="h-12 w-10 shrink-0 overflow-hidden rounded border border-border">
 																	<LazyImg src={item.thumbnail || item.img} alt={item.title} class="h-full w-full object-cover" />
 																</div>
 															{/each}
@@ -232,19 +232,19 @@
 						<!-- Sidebar (Details) -->
 						<div class="space-y-6">
 							<!-- Address Cards -->
-							<div class="overflow-hidden rounded-md border border-muted/20 bg-background shadow-sm">
+							<div class="overflow-hidden rounded-md border border-muted/20 bg-background">
 								<div class="bg-muted/20 px-6 py-3">
-									<h3 class="font-semibold text-gray-900">Address Details</h3>
+									<h3 class="font-semibold text-foreground">Address Details</h3>
 								</div>
 								<div class="space-y-8 p-3 sm:p-6">
 									<!-- Shipping -->
 									<div>
 										<div class="mb-3 flex items-center gap-2">
-											<MapPin class="h-4 w-4 text-gray-400" />
-											<h4 class="text-sm font-bold uppercase tracking-tight text-gray-900">Shipping Address</h4>
+											<MapPin class="h-4 w-4 text-muted-foreground" />
+											<h4 class="text-sm font-bold uppercase tracking-tight text-foreground">Shipping Address</h4>
 										</div>
-										<div class="text-sm leading-relaxed text-gray-600">
-											<p class="font-bold text-gray-900">
+										<div class="text-sm leading-relaxed text-muted-foreground">
+											<p class="font-bold text-foreground">
 												{order?.shippingAddress?.firstName}
 												{order?.shippingAddress?.lastName}
 											</p>
@@ -255,7 +255,7 @@
 											<p>{order?.shippingAddress?.city}, {order?.shippingAddress?.state}</p>
 											<p>{order?.shippingAddress?.country || order?.shippingAddress?.countryCode} - {order?.shippingAddress?.zip}</p>
 											{#if order?.shippingAddress?.phone}
-												<p class="mt-2 font-medium text-gray-900">{order?.shippingAddress?.phone}</p>
+												<p class="mt-2 font-medium text-foreground">{order?.shippingAddress?.phone}</p>
 											{/if}
 										</div>
 									</div>
@@ -264,11 +264,11 @@
 									{#if order?.billingAddress}
 										<div class="pt-0">
 											<div class="mb-3 flex items-center gap-2">
-												<ReceiptText class="h-4 w-4 text-gray-400" />
-												<h4 class="text-sm font-bold uppercase tracking-tight text-gray-900">Billing Address</h4>
+												<ReceiptText class="h-4 w-4 text-muted-foreground" />
+												<h4 class="text-sm font-bold uppercase tracking-tight text-foreground">Billing Address</h4>
 											</div>
-											<div class="text-sm leading-relaxed text-gray-600">
-												<p class="font-bold text-gray-900">
+											<div class="text-sm leading-relaxed text-muted-foreground">
+												<p class="font-bold text-foreground">
 													{order?.billingAddress?.firstName}
 													{order?.billingAddress?.lastName}
 												</p>
@@ -281,23 +281,23 @@
 							</div>
 
 							<!-- Summary Card -->
-							<div class="overflow-hidden rounded-md border border-muted/20 bg-background shadow-sm">
+							<div class="overflow-hidden rounded-md border border-muted/20 bg-background">
 								<div class=" bg-muted/20 px-3 py-4 sm:px-6">
-									<h3 class="font-semibold text-gray-900">Payment Summary</h3>
+									<h3 class="font-semibold text-foreground">Payment Summary</h3>
 								</div>
 								<div class="p-6">
 									<div class="space-y-2">
 										<div class="flex justify-between text-sm">
-											<span class="text-gray-500">Subtotal</span>
+											<span class="text-muted-foreground">Subtotal</span>
 											{#if money(order?.subtotal)}
-												<span class="font-medium text-gray-900">{money(order?.subtotal)}</span>
+												<span class="font-medium text-foreground">{money(order?.subtotal)}</span>
 											{:else}
 												<span class="font-medium text-muted-foreground">&mdash;</span>
 											{/if}
 										</div>
 
 										{#if order?.discount > 0}
-											<div class="flex justify-between text-sm text-green-600">
+											<div class="flex justify-between text-sm text-success">
 												<span>Discount</span>
 												<span>-{formatPrice(order?.discount, page?.data?.store?.currency?.code)}</span>
 											</div>
@@ -311,23 +311,23 @@
 										{/if}
 
 										<div class="flex justify-between text-sm">
-											<span class="text-gray-500">Shipping</span>
-											<span class="font-medium text-gray-900">
+											<span class="text-muted-foreground">Shipping</span>
+											<span class="font-medium text-foreground">
 												{order?.shippingCharges > 0 ? formatPrice(order.shippingCharges, page?.data?.store?.currency?.code) : 'FREE'}
 											</span>
 										</div>
 
 										{#if order?.codCharges}
 											<div class="flex justify-between text-sm">
-												<span class="text-gray-500">COD Charges</span>
-												<span class="font-medium text-gray-900">{formatPrice(order.codCharges, page?.data?.store?.currency?.code)}</span>
+												<span class="text-muted-foreground">COD Charges</span>
+												<span class="font-medium text-foreground">{formatPrice(order.codCharges, page?.data?.store?.currency?.code)}</span>
 											</div>
 										{/if}
 
 										<div class="flex items-baseline justify-between pt-1">
-											<span class="text-base font-bold text-gray-900">Total</span>
+											<span class="text-base font-bold text-foreground">Total</span>
 											{#if money(order?.total)}
-												<span class="text-base font-bold text-gray-900">
+												<span class="text-base font-bold text-foreground">
 													{money(order?.total)}
 												</span>
 											{:else}
@@ -335,10 +335,10 @@
 											{/if}
 										</div>
 
-										<div class="mt-6 flex items-center justify-between gap-2 border-t border-gray-100 pt-6">
+										<div class="mt-6 flex items-center justify-between gap-2 border-t border-border pt-6">
 											<div class="flex items-center gap-2">
-												<CreditCardIcon class="h-4 w-4 text-gray-400" />
-												<span class="text-xs font-bold uppercase tracking-tight text-gray-400">Payment Status</span>
+												<CreditCardIcon class="h-4 w-4 text-muted-foreground" />
+												<span class="text-xs font-bold uppercase tracking-tight text-muted-foreground">Payment Status</span>
 											</div>
 											<span
 												class="text-xs font-bold uppercase tracking-wider {!order?.paymentStatus
@@ -377,8 +377,8 @@
 					<div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted/10">
 						<ShoppingBag class="h-10 w-10 text-muted-foreground/50" />
 					</div>
-					<h2 class="text-2xl font-bold text-gray-900">Order not found</h2>
-					<p class="mt-2 text-gray-500">We couldn't find the order details you're looking for.</p>
+					<h2 class="text-2xl font-bold text-foreground">Order not found</h2>
+					<p class="mt-2 text-muted-foreground">We couldn't find the order details you're looking for.</p>
 					<Button href="/my/orders" class="mt-8 h-12 px-8">View All Orders</Button>
 				</div>
 			{/if}
@@ -386,8 +386,3 @@
 	{/snippet}
 </MyOrdersIdRenderer>
 
-<style>
-	:global(body) {
-		background-color: #fafafa;
-	}
-</style>

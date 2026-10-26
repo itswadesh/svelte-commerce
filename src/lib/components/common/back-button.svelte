@@ -26,13 +26,13 @@
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="h-5 w-5 text-black"
+			class="h-5 w-5 text-foreground"
 		>
 			<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"></path>
 		</svg>
 
 		<div class="flex flex-col text-left leading-3">
-			<span class="hidden font-medium text-gray-600 sm:block"> Prev </span>
+			<span class="hidden font-medium text-muted-foreground sm:block"> Prev </span>
 
 			<span class="font-semibold text-xs pt-1">{title}</span>
 		</div>

@@ -150,7 +150,7 @@
 								<Button
 									variant="ghost"
 									size="icon"
-									class="size-11 rounded-full bg-card/80 shadow-sm backdrop-blur-sm hover:bg-card md:size-9"
+									class="border size-11 rounded-full bg-card/80 backdrop-blur-sm hover:bg-card md:size-9"
 									data-testid="wishlist-button"
 									onclick={(e) => {
 										e.stopPropagation()

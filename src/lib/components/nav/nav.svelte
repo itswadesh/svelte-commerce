@@ -156,7 +156,7 @@
 			<!-- Hello bar (only when the plugin actually has content — an active-but-empty
 		     plugin used to render a stray empty dark band) -->
 			{#if helloBarHasContent && isHomepage}
-				<!-- <div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
+				<!-- <div class="bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
 				{@html helloBarPlugin?.content}
 			</div> -->
 
@@ -331,7 +331,7 @@
 					     32px tall. Served raw it can be the heaviest above-the-fold asset on a store. -->
 						<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
-						<span class="text-base font-black uppercase tracking-wider text-foreground">
+						<span class="text-base font-semibold uppercase tracking-wider text-foreground">
 							{page?.data?.store?.name || 'Svelte Commerce'}
 						</span>
 					{/if}

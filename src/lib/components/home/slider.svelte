@@ -27,13 +27,13 @@
 
 {#if newsTickerPlugin?.active}
 	<div class="relative w-full">
-		<div bind:this={emblaNode} class="embla flex h-12 w-full gap-4 bg-black text-white">
+		<div bind:this={emblaNode} class="embla flex h-12 w-full gap-4 bg-primary text-primary-foreground">
 			<div class="embla__container">
 				{#each { length: 10 } as _, idx}
 					<div class="embla__slide flex items-center justify-between whitespace-nowrap text-center">
 						<p>{@html newsTickerPlugin.html}</p>
 						<div class="flex flex-grow justify-evenly">
-							<div class="h-[1px] w-[60%] border-[2px] border-b border-gray-300"></div>
+							<div class="h-[1px] w-[60%] border-[2px] border-b border-border-strong"></div>
 						</div>
 					</div>
 				{/each}

@@ -63,8 +63,8 @@
 			{/if}
 
 			<header class="mb-8">
-				<h1 class="mb-4 text-4xl font-bold text-gray-900">{blog.title}</h1>
-				<div class="flex items-center gap-4 text-gray-600">
+				<h1 class="mb-4 page-heading">{blog.title}</h1>
+				<div class="flex items-center gap-4 text-muted-foreground">
 					{#if blog.author}
 						<div class="flex items-center gap-2">
 							<span class="font-medium">{blog.author}</span>
@@ -80,7 +80,7 @@
 			{#if blog.tags?.length}
 				<div class="mb-8">
 					{#each blog.tags as tag}
-						<span class="mr-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
+						<span class="mr-2 inline-block rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">
 							{tag}
 						</span>
 					{/each}
@@ -93,12 +93,12 @@
 		</article>
 
 		<div class="mt-12 border-t pt-8">
-			<a href="/blog" class="inline-flex items-center text-blue-600 transition-colors hover:text-blue-800"> ← Back to Blog </a>
+			<a href="/blog" class="inline-flex items-center text-primary transition-colors hover:text-primary"> ← Back to Blog </a>
 		</div>
 	{:else}
-		<div class="py-8 text-center text-gray-500">
+		<div class="py-8 text-center text-muted-foreground">
 			<p>Blog post not found.</p>
-			<a href="/blog" class="mt-4 inline-block text-blue-600 transition-colors hover:text-blue-800"> ← Back to Blog </a>
+			<a href="/blog" class="mt-4 inline-block text-primary transition-colors hover:text-primary"> ← Back to Blog </a>
 		</div>
 	{/if}
 </div>

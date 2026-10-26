@@ -40,15 +40,15 @@
 
 <div class="mx-auto max-w-7xl px-0 md:py-8 md:py-12">
 	{#if userState?.user}
-		<div class="mb-12 rounded-md border border-gray-200 bg-white p-6 shadow-sm md:p-8">
+		<div class="mb-12 rounded-md border border-border bg-card p-6 md:p-8">
 			<div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
 				<div class="flex items-center gap-4">
-					<div class="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-2xl font-bold text-primary">
+					<div class="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-2xl font-bold text-primary">
 						{userState.user.firstName?.charAt(0) || 'U'}
 					</div>
 					<div>
-						<h2 class="text-2xl font-bold text-gray-900">Hi, {userState.user.firstName || 'User'}!</h2>
-						<div class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
+						<h2 class="page-heading">Hi, {userState.user.firstName || 'User'}!</h2>
+						<div class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
 							{#if userState.user.email}
 								<div class="flex items-center gap-1.5">
 									<Mail class="h-3.5 w-3.5" />
@@ -73,26 +73,26 @@
 	{/if}
 
 	<!-- <div class="mb-12">
-		<h1 class="text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">Account Dashboard</h1>
+		<h1 class="page-heading">Account Dashboard</h1>
 		<p class="mt-2 text-lg text-muted-foreground">Manage your orders, wishlist, and profile settings.</p>
 	</div> -->
 	<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 		{#each importOptions as option}
 			<a
 				href={option.href}
-				class="flex flex-col rounded-md border border-gray-200 bg-white p-6 shadow-sm transition-all"
+				class="flex flex-col rounded-md border border-border bg-card p-6 transition-all"
 			>
-				<div class="mb-4 flex h-12 w-12 items-center justify-center rounded bg-gray-100 text-gray-700 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+				<div class="mb-4 flex h-12 w-12 items-center justify-center rounded bg-muted text-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary">
 					<svelte:component this={option.icon} class="h-6 w-6" />
 				</div>
 
 				<div class="flex items-start justify-between">
-					<h3 class="mb-1 text-lg font-bold text-gray-900">
+					<h3 class="mb-1 text-lg font-bold text-foreground">
 						{option.title}
 					</h3>
-					<ArrowRight class="h-4 w-4 text-gray-300 transition-transform motion-safe:group-hover:translate-x-1 group-hover:text-primary" />
+					<ArrowRight class="h-4 w-4 text-muted-foreground transition-transform motion-safe:group-hover:translate-x-1 group-hover:text-primary" />
 				</div>
-				<p class="text-sm text-gray-500">
+				<p class="text-sm text-muted-foreground">
 					{option.description}
 				</p>
 			</a>
