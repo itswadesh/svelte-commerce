@@ -24,5 +24,13 @@ export const load: LayoutServerLoad = async ({ cookies, setHeaders, url }) => {
 		})
 	}
 
+	// A home-page draft opened through a preview key: never stored by a cache, never indexed.
+	if (url.pathname === '/' && url.searchParams.has('preview')) {
+		setHeaders({
+			'Cache-Control': 'no-store',
+			'X-Robots-Tag': 'noindex, nofollow'
+		})
+	}
+
 	return {}
 }
