@@ -14,6 +14,7 @@
 	import { themeHomepages } from '$lib/theme/homepages.js'
 	import ThemeSections from '$lib/theme/ThemeSections.svelte'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
+	import HomeComposer from '$lib/composer/HomeComposer.svelte'
 
 	let { data } = $props()
 
@@ -65,6 +66,9 @@
 	// rendered with the shared section library. Themes that still have a bespoke component fall
 	// back to it, so both kinds work side by side while themes are migrated.
 	const themeLayout = $derived(data?.store?.themeLayout)
+	// The page the merchant composed in the panel wins over both; without one, everything below
+	// renders exactly as it did before the composer existed.
+	const composedLayout = $derived(data?.layout)
 	const sectionContext = $derived({
 		content: themeContent,
 		brandName,
@@ -186,7 +190,16 @@
 	image={themeContent.seoImage || page?.logo || data?.store?.logo}
 />
 
-{#if themeLayout?.sections?.length}
+<!-- A draft seen through a preview key is for the merchant, never for a search engine. -->
+<svelte:head>
+	{#if composedLayout?.preview}
+		<meta name="robots" content="noindex, nofollow" />
+	{/if}
+</svelte:head>
+
+{#if composedLayout?.sections?.length}
+	<HomeComposer layout={composedLayout} {brandName} aspectRatio="{aspectWidth} / {aspectHeight}" />
+{:else if themeLayout?.sections?.length}
 	<ThemeSections layout={themeLayout} ctx={sectionContext} />
 {:else}
 	<svelte:component
