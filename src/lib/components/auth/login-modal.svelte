@@ -232,16 +232,19 @@
 
 	let triedOtp = $state('')
 
-	// userState.verifyOtp ends in a hardcoded `goto('/')` for the USER role and never reads
-	// `?redirect=`, so every shopper who logged in by phone — including from the "log in to use
-	// your saved addresses" prompt at checkout, and anyone bounced off /my/* — was dumped on the
-	// homepage and had to find their way back. The password path already honours `redirect`; this
-	// re-applies it for OTP. Issuing the second goto as soon as verification resolves supersedes
-	// the in-flight one rather than landing on the homepage first.
+	// userState.verifyOtp ends in a hardcoded `goto('/')` for the USER role, never reads
+	// `?redirect=`, and nothing closed the modal, so a shopper signed in by phone stayed behind the
+	// code entry screen. This finishes the way the password path does: back to `redirect` or the
+	// page they were on, auth params cleared, modal closed. Issuing the second goto as soon as
+	// verification resolves supersedes the core's in-flight one to the homepage.
 	async function verifyOtpThenRedirect() {
-		const redirectTo = new URLSearchParams(window.location.search).get('redirect')
+		const { pathname, search } = window.location
+		const redirectTo = new URLSearchParams(search).get('redirect')
 		await loginModule.handleVerifyOtp()
-		if (redirectTo && userState.user) goto(decodeURIComponent(redirectTo))
+		if (!userState.user) return
+		goto(decodeURIComponent(redirectTo || '') || pathname, { replaceState: true, invalidateAll: true })
+		loginModule.removeUrlParams()
+		show = false
 	}
 
 	// Phone first, as Myntra signs in (engine D123). On a store that takes both ways, a phone the
