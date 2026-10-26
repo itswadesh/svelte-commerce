@@ -71,6 +71,7 @@
 				return
 			}
 			await authService.getOtp({ phone: loginModule.identifier })
+			triedOtp = ''
 			toast.success('OTP resent successfully')
 			startResendCooldown()
 		} catch (e: any) {
@@ -96,6 +97,7 @@
 			startResendCooldown()
 		} else if (loginModule.step !== 2) {
 			otpCooldownStarted = false
+			triedOtp = ''
 		}
 	})
 
@@ -122,7 +124,7 @@
 			loginModule.step = 1
 			loginModule.otp = ''
 			loginModule.identifier = ''
-			verifiedOtp = ''
+			triedOtp = ''
 		}
 	})
 
@@ -183,7 +185,7 @@
 		if (resendTimer) clearInterval(resendTimer)
 	})
 
-	let verifiedOtp = $state('')
+	let triedOtp = $state('')
 
 	// userState.verifyOtp ends in a hardcoded `goto('/')` for the USER role and never reads
 	// `?redirect=`, so every shopper who logged in by phone — including from the "log in to use
@@ -217,7 +219,18 @@
 	}
 
 	async function verifyCode() {
-		if (!asksIfNew) return verifyOtpThenRedirect()
+		// One check at a time: a code is spent by the check that signs in, so a second one sent
+		// alongside it answers "invalid code" over a shopper who is already signed in.
+		if (busy) return
+		triedOtp = loginModule.otp
+		if (!asksIfNew) {
+			busy = true
+			try {
+				return await verifyOtpThenRedirect()
+			} finally {
+				busy = false
+			}
+		}
 		busy = true
 		try {
 			const res = await authService.verifyOtp({ phone: loginModule.identifier, otp: loginModule.otp, askIfNew: true })
@@ -262,12 +275,13 @@
 		}
 	}
 
+	// The code is checked as soon as its fourth digit is in, once. A code already tried is not
+	// sent again by itself: autofill on a phone can fill the boxes, clear them and fill them again
+	// with the same code, and forgetting the code when the boxes emptied sent it twice. Continue
+	// still checks it on purpose; a new code (resent, or a new number) can be checked as it lands.
 	$effect(() => {
-		if (loginModule.step === 2 && loginModule.otp.length === 4 && loginModule.otp !== verifiedOtp && !loginModule.isLoading && !userState.loading && !busy) {
-			verifiedOtp = loginModule.otp
+		if (loginModule.step === 2 && loginModule.otp.length === 4 && loginModule.otp !== triedOtp && !loginModule.isLoading && !userState.loading && !busy) {
 			verifyCode()
-		} else if (loginModule.otp.length !== 4) {
-			verifiedOtp = ''
 		}
 	})
 </script>
