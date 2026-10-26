@@ -178,10 +178,75 @@
 		if (redirectTo && userState.user) goto(decodeURIComponent(redirectTo))
 	}
 
+	// Phone first, as Myntra signs in (engine D123). On a store that takes both ways, a phone the
+	// store has never seen does not open an account straight away: the shopper is asked whether they
+	// already have one, so somebody who signed up by email is not handed a second, empty account.
+	// Signing in with the email adds the phone to it; otherwise a new account opens on the phone.
+	const asksIfNew = $derived(page.data.store?.loginType === 'BOTH')
+	let phoneToken = $state('')
+	let haveAccount = $state(false)
+	let linkEmail = $state('')
+	let linkPassword = $state('')
+	let busy = $state(false)
+
+	function finishSignIn(me: User) {
+		const redirectTo = new URLSearchParams(window.location.search).get('redirect')
+		userState.user = me
+		loginModule.removeUrlParams()
+		show = false
+		if (redirectTo) goto(decodeURIComponent(redirectTo))
+	}
+
+	async function verifyCode() {
+		if (!asksIfNew) return verifyOtpThenRedirect()
+		busy = true
+		try {
+			const res = await authService.verifyOtp({ phone: loginModule.identifier, otp: loginModule.otp, askIfNew: true })
+			if (res && 'newPhone' in res && res.newPhone) {
+				phoneToken = res.phoneToken
+				haveAccount = false
+				linkEmail = ''
+				linkPassword = ''
+				loginModule.step = 3
+			} else {
+				finishSignIn(res as User)
+			}
+		} catch (e: any) {
+			toast.error(e.message || 'Could not check the code')
+		} finally {
+			busy = false
+		}
+	}
+
+	async function addPhoneToEmailAccount(e: SubmitEvent) {
+		e.preventDefault()
+		busy = true
+		try {
+			finishSignIn(
+				await authService.login({ email: linkEmail, password: linkPassword, phone: loginModule.identifier, phoneToken })
+			)
+		} catch (err: any) {
+			toast.error(err.message || 'Could not sign in')
+		} finally {
+			busy = false
+		}
+	}
+
+	async function openNewAccount() {
+		busy = true
+		try {
+			finishSignIn(await authService.openPhoneAccount({ phone: loginModule.identifier, phoneToken }))
+		} catch (err: any) {
+			toast.error(err.message || 'Could not create the account')
+		} finally {
+			busy = false
+		}
+	}
+
 	$effect(() => {
-		if (loginModule.otp.length === 4 && loginModule.otp !== verifiedOtp && !loginModule.isLoading && !userState.loading) {
+		if (loginModule.step === 2 && loginModule.otp.length === 4 && loginModule.otp !== verifiedOtp && !loginModule.isLoading && !userState.loading && !busy) {
 			verifiedOtp = loginModule.otp
-			verifyOtpThenRedirect()
+			verifyCode()
 		} else if (loginModule.otp.length !== 4) {
 			verifiedOtp = ''
 		}
@@ -453,10 +518,10 @@
 				<div class="space-y-3">
 					<Button
 						class="h-11 w-full text-sm font-semibold md:h-10"
-						onclick={loginModule.handleVerifyOtp}
-						disabled={loginModule.otp.length !== 4 || userState.loading}
+						onclick={verifyCode}
+						disabled={loginModule.otp.length !== 4 || userState.loading || busy}
 					>
-						{#if userState.loading}
+						{#if userState.loading || busy}
 							<LoaderIcon class="mr-2 size-4 animate-spin" /> Verifying…
 						{:else}
 							Continue
@@ -474,6 +539,86 @@
 						{/if}
 					</p>
 				</div>
+			</div>
+		{:else if loginModule.step === 3}
+			<div class="space-y-5 max-sm:flex max-sm:flex-1 max-sm:flex-col">
+				<div>
+					<button
+						type="button"
+						class="-ml-2 inline-flex h-9 items-center gap-1 rounded-radius px-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground max-md:h-11"
+						onclick={() => (haveAccount ? (haveAccount = false) : (loginModule.step = 1))}
+					>
+						<ArrowLeft class="size-4" />
+						{haveAccount ? 'Back' : 'Change number'}
+					</button>
+				</div>
+
+				<div>
+					<h2 class="text-xl font-semibold">Already have an account?</h2>
+					<p class="mt-1 text-sm text-muted-foreground">
+						<span class="font-medium text-foreground">{loginModule.identifier}</span> is verified but not on an account here yet.
+						{haveAccount ? 'Sign in with your email to add this number to your account.' : 'If you signed up with your email, sign in with it to keep your orders and addresses together.'}
+					</p>
+				</div>
+
+				{#if haveAccount}
+					<form onsubmit={addPhoneToEmailAccount} class="space-y-4">
+						<div class="space-y-3 [&>div]:mb-0">
+							<Textbox
+								name="email"
+								label="Email address"
+								type="email"
+								bind:value={linkEmail}
+								autocomplete="username"
+								placeholder="you@example.com"
+								schema={schemas.email}
+								class="h-11 md:h-10"
+								required
+							/>
+							<Textbox
+								name="password"
+								label="Password"
+								type="password"
+								bind:value={linkPassword}
+								autocomplete="current-password"
+								placeholder="Enter your password"
+								schema={schemas.password}
+								class="h-11 md:h-10"
+								required
+							/>
+							<div class="flex justify-end">
+								<AuthButton
+									type="forgot-password"
+									extraqueries={{ email: linkEmail }}
+									aria-label="Reset your password"
+									class="inline-flex cursor-pointer items-center rounded-radius text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+								>
+									Forgot password?
+								</AuthButton>
+							</div>
+						</div>
+						<Button type="submit" class="h-11 w-full text-sm font-semibold md:h-10" disabled={busy}>
+							{#if busy}
+								<LoaderIcon class="mr-2 size-4 animate-spin" /> Signing in…
+							{:else}
+								Sign in and add this number
+							{/if}
+						</Button>
+					</form>
+				{:else}
+					<div class="space-y-3">
+						<Button class="h-11 w-full text-sm font-semibold md:h-10" disabled={busy} onclick={() => (haveAccount = true)}>
+							<Mail class="mr-2 size-4" /> Yes, sign in with email
+						</Button>
+						<Button variant="outline" class="h-11 w-full text-sm font-semibold md:h-10" disabled={busy} onclick={openNewAccount}>
+							{#if busy}
+								<LoaderIcon class="mr-2 size-4 animate-spin" /> Creating your account…
+							{:else}
+								No, I'm new here
+							{/if}
+						</Button>
+					</div>
+				{/if}
 			</div>
 		{/if}
 	</div>
