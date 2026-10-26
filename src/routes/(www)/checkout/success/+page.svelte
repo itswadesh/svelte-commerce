@@ -227,10 +227,10 @@
 													{item.title}
 												</a>
 											</h3>
-											<p class="ml-4">{formatPrice(item.subtotal, page?.data?.store?.currency?.code)}</p>
+											<p class="ml-4">{formatPrice(item.subtotal, currencyCode)}</p>
 										</div>
 										<p class="mt-1 text-sm text-muted-foreground">
-											{formatPrice(item.price, page?.data?.store?.currency?.code)} × {item.qty}
+											{formatPrice(item.price, currencyCode)} × {item.qty}
 										</p>
 										{#if item.variantTitle}
 											<p class="mt-1 text-xs text-muted-foreground">{item.variantTitle}</p>
