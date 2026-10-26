@@ -16,7 +16,10 @@ type LayoutHook = { layoutService?: { getHomeLayout(args?: { preview?: string })
  * failure too: the built-in page is always a better answer than an error page.
  */
 async function homeLayout(preview: string | null): Promise<ComposerLayout | null> {
-	const layouts = (services as unknown as LayoutHook).layoutService
+	// Reflect.get, not `services.layoutService`: Rollup turns a property read on an imported
+	// namespace into a named import, which a connector without the service fails at load — the
+	// very version skew this guard is for. Passing the namespace whole keeps it an object.
+	const layouts = Reflect.get(services as object, 'layoutService') as LayoutHook['layoutService']
 	if (!layouts?.getHomeLayout) return null
 	try {
 		const layout = await layouts.getHomeLayout(preview ? { preview } : {})
