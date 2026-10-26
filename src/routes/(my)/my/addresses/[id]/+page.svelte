@@ -77,9 +77,9 @@
 </script>
 
 <svelte:head>
-	<title>Address Page</title>
+	<title>Address page</title>
 </svelte:head>
-<div class="flex min-h-screen items-center justify-center">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
 	<div class="border w-full max-w-4xl transform space-y-6 rounded-xl bg-card p-8 transition-all">
 		<div class="space-y-2 text-center">
 			<!-- <h1 class="text-3xl font-bold text-foreground">Update Vendor: {address.name}</h1> -->
@@ -93,7 +93,7 @@
 						id="firstName"
 						name="firstName"
 						bind:value={address.firstName}
-						placeholder="Enter First Name"
+						placeholder="Enter first name"
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
@@ -103,7 +103,7 @@
 						id="lastName"
 						name="lastName"
 						bind:value={address.lastName}
-						placeholder="Enter Last Name"
+						placeholder="Enter last name"
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
@@ -134,7 +134,7 @@
 						id="city"
 						name="city"
 						bind:value={address.city}
-						placeholder="Enter City"
+						placeholder="Enter city"
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
@@ -165,12 +165,12 @@
 						id="country"
 						name="country"
 						bind:value={address.country}
-						placeholder="Enter Country"
+						placeholder="Enter country"
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/> -->
 					<!-- <Select
 						id="country"
-						title="Select Country"
+						title="Select country"
 						errors={null}
 						label=""
 						value={address.country}
@@ -200,7 +200,7 @@
 						type="phone"
 						name="phone"
 						bind:value={address.phone}
-						placeholder="Enter Business Phone"
+						placeholder="Enter business phone"
 						required
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
@@ -213,7 +213,7 @@
 						type="email"
 						name="email"
 						bind:value={address.email}
-						placeholder="Enter Business Email"
+						placeholder="Enter business email"
 						required
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
@@ -228,7 +228,7 @@
 						type="number"
 						name="lat"
 						bind:value={address.lat}
-						placeholder="Enter Latitude"
+						placeholder="Enter latitude"
 						required
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
@@ -240,7 +240,7 @@
 						type="number"
 						name="lng"
 						bind:value={address.lng}
-						placeholder="Enter Longitude"
+						placeholder="Enter longitude"
 						required
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
@@ -255,7 +255,7 @@
 						type="checkbox"
 						name="isPrimary"
 						bind:checked={address.isPrimary}
-						placeholder="Is Deafult Location"
+						placeholder="Is deafult location"
 						required
 						class="border mt-1 block h-[20px] w-[20px] rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
@@ -289,7 +289,7 @@
 						id="locality"
 						name="locality"
 						bind:value={address.locality}
-						placeholder="Enter Locality"
+						placeholder="Enter locality"
 						required
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>

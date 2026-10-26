@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>Forgot Password</title>
+	<title>Forgot password</title>
 </svelte:head>
 
 <Modal

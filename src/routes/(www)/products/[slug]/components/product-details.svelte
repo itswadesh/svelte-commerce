@@ -414,7 +414,7 @@
 		<div class="flex h-80 flex-col items-center justify-center gap-3">
 			<h2 class="page-heading edp-empty-title">Product not found</h2>
 			<a href="/products" class="edp-empty-link text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4"
-				>Browse All Products</a
+				>Browse all products</a
 			>
 		</div>
 	{:else}

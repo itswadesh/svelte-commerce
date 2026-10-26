@@ -56,18 +56,18 @@
 								name="firstName"
 								bind:value={address.firstName}
 								autocomplete="given-name"
-								placeholder="First Name"
+								placeholder="First name"
 								schema={AddressSchema.firstName}
-								label="First Name"
+								label="First name"
 								required
 							/>
 							<Textbox
 								name="lastName"
 								bind:value={address.lastName}
 								autocomplete="family-name"
-								placeholder="Last Name"
+								placeholder="Last name"
 								schema={AddressSchema.lastName}
-								label="Last Name"
+								label="Last name"
 								required
 							/>
 						</div>
@@ -86,7 +86,7 @@
 							name="address_1"
 							bind:value={address.address_1}
 							autocomplete="address-line1"
-							placeholder="Street Address"
+							placeholder="Street address"
 							schema={AddressSchema.address_1}
 							label="Address Line 1"
 							required
@@ -119,7 +119,7 @@
 							/>
 							<Select
 								id="countryCode"
-								title="Select Country"
+								title="Select country"
 								label="Country"
 								showSearch={true}
 								value={address.countryCode || page?.data?.store?.country?.code || 'AU'}

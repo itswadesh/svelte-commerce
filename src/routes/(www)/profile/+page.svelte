@@ -76,10 +76,10 @@
 <svelte:head>
 	<title>Profile</title>
 </svelte:head>
-<div class="flex min-h-screen items-center justify-center">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
 	<div class="border w-full max-w-md transform space-y-6 rounded-xl bg-card p-8 transition-all">
 		<div class="space-y-2 text-center">
-			<p class="text-muted-foreground">Update Profile Details</p>
+			<p class="text-muted-foreground">Update profile details</p>
 		</div>
 
 		{#if loadError}
@@ -102,17 +102,17 @@
 			<Textbox
 				name="firstName"
 				bind:value={user.firstName}
-				placeholder="Enter Your First Name"
+				placeholder="Enter your first name"
 				schema={schemas.firstName}
-				label="First Name"
+				label="First name"
 				required
 			/>
 
 			<!-- Last Name Input -->
-			<Textbox name="lastName" bind:value={user.lastName} placeholder="Enter Your Last Name" schema={schemas.lastName} label="Last Name" required />
+			<Textbox name="lastName" bind:value={user.lastName} placeholder="Enter your last name" schema={schemas.lastName} label="Last name" required />
 
 			<!-- Email Input -->
-			<Textbox name="email" type="email" bind:value={user.email} placeholder="Enter Your Email" schema={schemas.email} label="Email" required />
+			<Textbox name="email" type="email" bind:value={user.email} placeholder="Enter your email" schema={schemas.email} label="Email" required />
 
 			<!-- Phone Input -->
 			<Textbox name="phone" type="tel" bind:value={user.phone} placeholder="+1234567890" schema={schemas.phone} label="Phone" required />

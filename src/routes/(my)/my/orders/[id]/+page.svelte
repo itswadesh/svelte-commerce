@@ -53,13 +53,13 @@
 				<section class="space-y-5 lg:pt-8">
 					<!-- Back Navigation -->
 					<div class="flex items-center gap-4">
-						<BackButton to="/my/orders" title="Order History" />
+						<BackButton to="/my/orders" title="Order history" />
 					</div>
 
 					<!-- Header Section -->
 					<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 						<div>
-							<h1 class="text-lg font-bold tracking-tight text-foreground md:text-xl">Order #{orderNumberOf(order)}</h1>
+							<h1 class="page-heading">Order #{orderNumberOf(order)}</h1>
 							<p class="mt-2 text-sm text-muted-foreground">
 								Placed on <span class="font-medium text-foreground">{date(order?.createdAt)}</span>
 							</p>
@@ -85,7 +85,7 @@
 									</div>
 									<div class="flex-1">
 										<div class="flex items-center gap-4">
-											<h3 class="text-base font-bold text-foreground">Order Status</h3>
+											<h3 class="text-base font-bold text-foreground">Order status</h3>
 											<StatusCell value={order?.status || 'processing'} />
 										</div>
 										<p class="mt-2 text-sm text-muted-foreground">
@@ -234,14 +234,14 @@
 							<!-- Address Cards -->
 							<div class="overflow-hidden rounded-md border border-muted/20 bg-background">
 								<div class="bg-muted/20 px-6 py-3">
-									<h3 class="font-semibold text-foreground">Address Details</h3>
+									<h3 class="font-semibold text-foreground">Address details</h3>
 								</div>
 								<div class="space-y-8 p-3 sm:p-6">
 									<!-- Shipping -->
 									<div>
 										<div class="mb-3 flex items-center gap-2">
 											<MapPin class="h-4 w-4 text-muted-foreground" />
-											<h4 class="text-sm font-bold uppercase tracking-tight text-foreground">Shipping Address</h4>
+											<h4 class="text-sm font-bold uppercase tracking-tight text-foreground">Shipping address</h4>
 										</div>
 										<div class="text-sm leading-relaxed text-muted-foreground">
 											<p class="font-bold text-foreground">
@@ -265,7 +265,7 @@
 										<div class="pt-0">
 											<div class="mb-3 flex items-center gap-2">
 												<ReceiptText class="h-4 w-4 text-muted-foreground" />
-												<h4 class="text-sm font-bold uppercase tracking-tight text-foreground">Billing Address</h4>
+												<h4 class="text-sm font-bold uppercase tracking-tight text-foreground">Billing address</h4>
 											</div>
 											<div class="text-sm leading-relaxed text-muted-foreground">
 												<p class="font-bold text-foreground">
@@ -283,7 +283,7 @@
 							<!-- Summary Card -->
 							<div class="overflow-hidden rounded-md border border-muted/20 bg-background">
 								<div class=" bg-muted/20 px-3 py-4 sm:px-6">
-									<h3 class="font-semibold text-foreground">Payment Summary</h3>
+									<h3 class="font-semibold text-foreground">Payment summary</h3>
 								</div>
 								<div class="p-6">
 									<div class="space-y-2">
@@ -338,7 +338,7 @@
 										<div class="mt-6 flex items-center justify-between gap-2 border-t border-border pt-6">
 											<div class="flex items-center gap-2">
 												<CreditCardIcon class="h-4 w-4 text-muted-foreground" />
-												<span class="text-xs font-bold uppercase tracking-tight text-muted-foreground">Payment Status</span>
+												<span class="text-xs font-bold uppercase tracking-tight text-muted-foreground">Payment status</span>
 											</div>
 											<span
 												class="text-xs font-bold uppercase tracking-wider {!order?.paymentStatus
@@ -379,7 +379,7 @@
 					</div>
 					<h2 class="text-2xl font-bold text-foreground">Order not found</h2>
 					<p class="mt-2 text-muted-foreground">We couldn't find the order details you're looking for.</p>
-					<Button href="/my/orders" class="mt-8 h-12 px-8">View All Orders</Button>
+					<Button href="/my/orders" class="mt-8 h-12 px-8">View all orders</Button>
 				</div>
 			{/if}
 		</div>

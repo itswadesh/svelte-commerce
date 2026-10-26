@@ -90,7 +90,7 @@
 	<meta name="description" content="Create your account at {page?.data?.store?.name} to start shopping and discover amazing products." />
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center border bg-muted p-3 sm:p-4">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
 	<div class="w-full max-w-[420px] space-y-4 rounded-radius border bg-card p-5 sm:p-6">
 		<div class="space-y-1 text-center">
 			<h2 class="text-2xl font-bold tracking-tight text-foreground">Create account</h2>

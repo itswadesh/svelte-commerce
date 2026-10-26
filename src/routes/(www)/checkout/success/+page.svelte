@@ -117,7 +117,7 @@
 
 <svelte:head>
 	<!-- Order number stays out of the title so it cannot leak through referrers or screenshots. -->
-	<title>Order Confirmed</title>
+	<title>Order confirmed</title>
 </svelte:head>
 
 <div class="min-h-screen bg-muted/20 py-12 md:py-5">
@@ -212,7 +212,7 @@
 			{#if firstOrder}
 				<!-- Items List -->
 				<div class="border-b border-muted/30 p-2 pb-6 md:p-12">
-					<h2 class="mb-6 text-lg font-bold text-foreground">Order Summary</h2>
+					<h2 class="mb-6 text-lg font-bold text-foreground">Order summary</h2>
 					<div class="divide-y divide-border">
 						{#each orders as { lineItems }}
 							{#each lineItems || [] as item}
@@ -271,7 +271,7 @@
 					<div class="border-b border-muted/30 p-4 sm:border-b-0 sm:border-r md:p-6">
 						<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
 							<MapPin class="h-5 w-5 text-primary" />
-							<h3>Shipping Address</h3>
+							<h3>Shipping address</h3>
 						</div>
 						<!-- Every line is conditional. The city/state/zip line was interpolated unconditionally,
 					     so an order whose address the backend does not return rendered as a lone comma
@@ -304,7 +304,7 @@
 					<div class="p-4 md:p-6">
 						<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
 							<Calendar class="h-5 w-5 text-primary" />
-							<h3>Estimated Delivery</h3>
+							<h3>Estimated delivery</h3>
 						</div>
 						<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
 						<div class="flex items-start gap-3 rounded-radius border border-border bg-card p-2">
@@ -354,7 +354,7 @@
 						<ArrowRight class="ml-2 h-4 w-4" />
 					</Button>
 					{#if userState?.user?.role}
-						<Button variant="outline" href="/my/orders" class="order-2 h-14 flex-1 sm:order-1">Track My Order</Button>
+						<Button variant="outline" href="/my/orders" class="order-2 h-14 flex-1 sm:order-1">Track my order</Button>
 					{/if}
 				</div>
 				<div class="mt-8 text-center">

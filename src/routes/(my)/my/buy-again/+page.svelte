@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-	<title>Buy Again</title>
+	<title>Buy again</title>
 </svelte:head>
 <section class="flex flex-col gap-10">
 	<h3 class="capitalize">Orders</h3>

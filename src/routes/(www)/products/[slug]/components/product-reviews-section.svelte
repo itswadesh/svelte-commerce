@@ -108,7 +108,7 @@
 <!-- Customer Ratings -->
 {#if page.data.store?.plugins?.isProductReviewsAndRatings?.active}
 	<section class="edp-rev">
-		<h2 class="edp-rev-title section-heading mb-6 border-b border-border pb-4">Customer Ratings</h2>
+		<h2 class="edp-rev-title section-heading mb-6 border-b border-border pb-4">Customer ratings</h2>
 
 		{#if ratings.length}
 			<!-- Summary: average / distribution / customer photos -->
@@ -331,7 +331,7 @@
 					<div class="space-y-8">
 						<!-- Rating Selection -->
 						<div class="space-y-3">
-							<span class="block text-base font-bold text-foreground">Overall Rating</span>
+							<span class="block text-base font-bold text-foreground">Overall rating</span>
 							<div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
 								<div class="flex items-center gap-1">
 									{#each { length: 5 } as _, i}
@@ -367,7 +367,7 @@
 
 						<!-- Review Message -->
 						<div class="space-y-3">
-							<label for="review" class="block text-base font-bold text-foreground">Your Story</label>
+							<label for="review" class="block text-base font-bold text-foreground">Your story</label>
 							<Textarea
 								id="review"
 								placeholder="What did you love? What could be better? We're all ears."
@@ -379,7 +379,7 @@
 						<!-- Photos -->
 						<div class="space-y-3">
 							<span class="block text-base font-bold text-foreground"
-								>Add Photos <span class="text-sm font-normal text-muted-foreground">(optional, up to 5)</span></span
+								>Add photos <span class="text-sm font-normal text-muted-foreground">(optional, up to 5)</span></span
 							>
 							<div class="flex flex-wrap gap-3">
 								{#each pendingPhotos as photo, i}

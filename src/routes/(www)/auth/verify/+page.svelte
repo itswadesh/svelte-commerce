@@ -46,7 +46,7 @@
 </script>
 
 <svelte:head>
-	<title>Email Verification Successful</title>
+	<title>Email verification successful</title>
 </svelte:head>
 
 {#if status === 'loading'}
@@ -68,7 +68,7 @@
 			</div>
 
 			<div class="pt-4">
-				<Button onclick={() => goto('/')} variant="default">Continue Shopping</Button>
+				<Button onclick={() => goto('/')} variant="default">Continue shopping</Button>
 			</div>
 		</div>
 	</div>

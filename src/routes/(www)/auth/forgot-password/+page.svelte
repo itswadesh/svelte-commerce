@@ -9,14 +9,14 @@
 </script>
 
 <svelte:head>
-	<title>Forgot Password</title>
+	<title>Forgot password</title>
 </svelte:head>
-<div class="flex min-h-screen items-center justify-center bg-background">
-	<div class="-mt-24 flex w-full items-center justify-center gap-8 p-4">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
+	<div class="flex w-full items-center justify-center gap-8 p-4">
 		<!-- Left side - Illustration and message -->
 		<!-- <div class="hidden space-y-6 p-8 md:block">
 			<div class="space-y-4">
-				<h1 class="page-heading">Reset Password</h1>
+				<h1 class="page-heading">Reset password</h1>
 				<p class="text-lg text-muted-foreground">Don't worry! It happens to the best of us.</p>
 			</div>
 			<div class="space-y-4">
@@ -64,7 +64,7 @@
 		<!-- Right side - Form -->
 		<div class="w-full max-w-md transform space-y-6 rounded-lg border bg-card p-8 transition-all">
 			<div class="space-y-2 text-center">
-				<h2 class="page-heading">Forgot Password?</h2>
+				<h2 class="page-heading">Forgot password?</h2>
 				<p class="text-muted-foreground">Enter your email to receive reset instructions</p>
 			</div>
 

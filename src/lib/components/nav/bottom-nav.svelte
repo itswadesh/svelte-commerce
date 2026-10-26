@@ -146,7 +146,7 @@
 				<Button variant="ghost" size="icon" class="rounded-full" onclick={() => (showCartModal = false)}>
 					<ArrowLeft size={24} />
 				</Button>
-				<h2 class="text-lg font-medium">Your Cart</h2>
+				<h2 class="text-lg font-medium">Your cart</h2>
 			</header>
 
 			<div class="flex-1 overflow-auto p-4">

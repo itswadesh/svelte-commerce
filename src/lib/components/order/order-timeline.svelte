@@ -73,7 +73,7 @@
 			</div>
 		</div>
 
-		<Modal loading={false} show={showEmailPreviewFromTimeline} title="Email Preview" hideFooter close={hideEmailPreview}>
+		<Modal loading={false} show={showEmailPreviewFromTimeline} title="Email preview" hideFooter close={hideEmailPreview}>
 			<div class="p-5">
 				{@html selectedEmailFromTimeline}
 			</div>

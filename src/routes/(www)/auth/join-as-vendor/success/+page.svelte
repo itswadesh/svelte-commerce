@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>Signup Successful</title>
+	<title>Signup successful</title>
 </svelte:head>
 <div class="flex min-h-[70vh] items-center justify-center">
 	<div class="border w-full max-w-md space-y-8 rounded-lg bg-card p-6 text-center">

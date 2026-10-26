@@ -104,7 +104,7 @@
 <SeoHeader metaTitle="Reels | Shop Your Fashion" />
 
 <div class="fixed inset-0 bg-black">
-	<h1 class="sr-only">Fashion Reels</h1>
+	<h1 class="sr-only">Fashion reels</h1>
 	<div class="relative h-full w-full" bind:this={emblaNode}>
 		<div class="h-full">
 			{#each reels as reel}

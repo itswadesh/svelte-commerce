@@ -27,7 +27,7 @@
 <Dialog bind:open={show}>
 	<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
 		<DialogHeader>
-			<DialogTitle>Select Address</DialogTitle>
+			<DialogTitle>Select address</DialogTitle>
 		</DialogHeader>
 		<div class="grid max-h-[400px] gap-4 overflow-y-auto py-4">
 			<Button variant="outline" class="w-full" onclick={addressState.handleAddNew}>

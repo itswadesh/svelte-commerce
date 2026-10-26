@@ -35,7 +35,7 @@
 </script>
 
 <svelte:head>
-	<title>My Dashboard</title>
+	<title>My dashboard</title>
 </svelte:head>
 
 <div class="mx-auto max-w-7xl px-0 md:py-8 md:py-12">
@@ -73,7 +73,7 @@
 	{/if}
 
 	<!-- <div class="mb-12">
-		<h1 class="page-heading">Account Dashboard</h1>
+		<h1 class="page-heading">Account dashboard</h1>
 		<p class="mt-2 text-lg text-muted-foreground">Manage your orders, wishlist, and profile settings.</p>
 	</div> -->
 	<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

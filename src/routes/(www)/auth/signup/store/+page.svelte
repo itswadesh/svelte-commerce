@@ -59,7 +59,7 @@
 </svelte:head>
 
 <div
-	class="flex min-h-screen items-center justify-center bg-background p-4"
+	class="flex justify-center bg-background px-4 py-8 sm:py-16"
 	role="main"
 >
 	<div class="grid w-full max-w-4xl items-center gap-8 md:grid-cols-2">
@@ -127,12 +127,12 @@
 					autocomplete="email"
 				/>
 
-				<Button type="submit" class="w-full" disabled={isLoading} aria-label={isLoading ? 'Creating store...' : 'Signup'}>
+				<Button type="submit" class="w-full" disabled={isLoading} aria-label={isLoading ? 'Creating store...' : 'Sign up'}>
 					{#if isLoading}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
 						<span class="sr-only">Creating store...</span>
 					{/if}
-					{isLoading ? 'Creating store...' : 'Signup'}
+					{isLoading ? 'Creating store...' : 'Sign up'}
 				</Button>
 			</form>
 

@@ -18,7 +18,7 @@
 
 <div class="mx-auto max-w-3xl py-8 md:py-12">
 	<div class="mb-10">
-		<h1 class="page-heading">Delete Account</h1>
+		<h1 class="page-heading">Delete account</h1>
 		<p class="mt-2 text-lg text-muted-foreground">We're sorry to see you go. Please review the following information carefully.</p>
 	</div>
 
@@ -44,7 +44,7 @@
 				<li class="flex gap-4">
 					<div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-destructive/10 text-[10px] font-bold text-destructive">2</div>
 					<div class="space-y-1">
-						<p class="font-bold text-foreground">Pending Transactions</p>
+						<p class="font-bold text-foreground">Pending transactions</p>
 						<p class="text-sm leading-relaxed text-muted-foreground">
 							Any pending orders, exchanges, returns, or refunds will no longer be accessible via your account. We will attempt to complete open
 							transactions within 30 days.
@@ -54,7 +54,7 @@
 				<li class="flex gap-4">
 					<div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-destructive/10 text-[10px] font-bold text-destructive">3</div>
 					<div class="space-y-1">
-						<p class="font-bold text-foreground">Coupon Restrictions</p>
+						<p class="font-bold text-foreground">Coupon restrictions</p>
 						<p class="text-sm leading-relaxed text-muted-foreground">
 							We may not extend New User coupons if a new account is created with the same mobile number or email ID.
 						</p>
@@ -63,7 +63,7 @@
 				<li class="flex gap-4">
 					<div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-destructive/10 text-[10px] font-bold text-destructive">4</div>
 					<div class="space-y-1">
-						<p class="font-bold text-foreground">Data Retention</p>
+						<p class="font-bold text-foreground">Data retention</p>
 						<p class="text-sm leading-relaxed text-muted-foreground">
 							Certain data may be retained for legitimate reasons such as security, fraud prevention, and regulatory compliance.
 						</p>

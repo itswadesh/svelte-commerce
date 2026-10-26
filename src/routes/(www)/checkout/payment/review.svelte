@@ -30,7 +30,7 @@
 		<CheckoutHeader step={3} />
 
 		<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-			<h1 class="text-xl font-bold uppercase text-foreground" style="font-family: var(--font-body);">Review Your Order</h1>
+			<h1 class="text-xl font-bold uppercase text-foreground" style="font-family: var(--font-body);">Review your order</h1>
 			<Button variant="outline" onclick={onback} class="group flex w-fit items-center gap-2">
 				<ChevronLeft class="size-4 transition-transform duration-fast ease-standard motion-safe:group-hover:-translate-x-1" /> Back to Payment
 			</Button>
@@ -187,7 +187,7 @@
 			<div class="flex h-fit flex-col gap-3">
 				<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 					<div class="mb-6 flex flex-col gap-1">
-						<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price Summary</h2>
+						<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price summary</h2>
 						<div class="h-1 w-12 bg-primary"></div>
 					</div>
 					<div class="space-y-4">

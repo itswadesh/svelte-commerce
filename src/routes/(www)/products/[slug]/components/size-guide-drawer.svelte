@@ -55,7 +55,7 @@
 	<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-[100dvh] sm:w-fit sm:max-w-md [&>div:first-child]:hidden">
 		<div in:fade class="mx-auto w-full max-w-md pb-8 sm:flex sm:h-[100dvh] sm:flex-col sm:pb-0">
 			<Drawer.Header class="text-left">
-				<Drawer.Title>Ring Size Guide</Drawer.Title>
+				<Drawer.Title>Ring size guide</Drawer.Title>
 				<Drawer.Description class="text-sm text-muted-foreground">Find your perfect fit using the chart below or measure at home.</Drawer.Description>
 				<Drawer.Close
 					class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
@@ -67,7 +67,7 @@
 
 			<Tabs.Root value="chart" class="flex flex-1 flex-col overflow-hidden px-4">
 				<Tabs.List class="grid w-full grid-cols-2 rounded-md bg-muted p-1">
-					<Tabs.Trigger value="chart">Size Chart</Tabs.Trigger>
+					<Tabs.Trigger value="chart">Size chart</Tabs.Trigger>
 					<Tabs.Trigger value="measure">How to Measure</Tabs.Trigger>
 				</Tabs.List>
 

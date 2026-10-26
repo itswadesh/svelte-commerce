@@ -152,9 +152,9 @@
 					error={fieldErrors.firstName}
 					autocomplete="given-name"
 					bind:value={address.firstName}
-					placeholder="First Name"
+					placeholder="First name"
 					schema={AddressSchema.firstName}
-					label="First Name"
+					label="First name"
 					required
 				/>
 				<Textbox
@@ -162,9 +162,9 @@
 					error={fieldErrors.lastName}
 					autocomplete="family-name"
 					bind:value={address.lastName}
-					placeholder="Last Name"
+					placeholder="Last name"
 					schema={AddressSchema.lastName}
-					label="Last Name"
+					label="Last name"
 					required
 				/>
 			</div>
@@ -197,7 +197,7 @@
 				error={fieldErrors.address_1}
 				autocomplete="address-line1"
 				bind:value={address.address_1}
-				placeholder="Street Address"
+				placeholder="Street address"
 				schema={AddressSchema.address_1}
 				label="Address Line 1"
 				required

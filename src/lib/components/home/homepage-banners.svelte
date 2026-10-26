@@ -58,7 +58,7 @@
 											{#if banner.title}
 												<div class="absolute bottom-6 left-6 text-white">
 													<h3 class="text-xl font-bold">{banner.title}</h3>
-													<p class="mt-1 text-sm font-medium text-white/80">Explore Collection</p>
+													<p class="mt-1 text-sm font-medium text-white/80">Explore collection</p>
 												</div>
 											{/if}
 										</div>

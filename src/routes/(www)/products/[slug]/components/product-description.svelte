@@ -29,7 +29,7 @@
 			aria-controls="product-description-panel"
 			onclick={() => (isOpen = !isOpen)}
 		>
-			<span class="edp-acc-label text-sm font-semibold text-foreground">Product Description</span>
+			<span class="edp-acc-label text-sm font-semibold text-foreground">Product description</span>
 
 			<!-- One chevron that rotates, not two that swap: the swap gave the icon no state to
 			     animate between, which is what read as "no animation". -->

@@ -120,7 +120,7 @@
 					{/if}
 
 					<div class="h-fit space-y-6">
-						<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Select Payment Method</h2>
+						<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Select payment method</h2>
 						{#if paymentModule.showError}
 							<div class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">
 								{paymentModule.errorMessage}
@@ -181,7 +181,7 @@
 
 					{#if paymentModule.shippingRates?.data?.length}
 						<div class="grid h-fit grid-cols-1 space-y-6 pt-4">
-							<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Select Shipping Method</h2>
+							<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Select shipping method</h2>
 
 							<div class="flex flex-col gap-3">
 								{#each paymentModule.shippingRates?.data as rate}
@@ -237,7 +237,7 @@
 					<!-- coupon applied-->
 					{#if cartState.cart.couponCode}
 						<div class="flex items-center justify-between px-1 text-sm sm:text-base">
-							<p class="font-medium">Coupon Applied</p>
+							<p class="font-medium">Coupon applied</p>
 							<div class="flex items-center gap-2 rounded-radius border border-border bg-background p-2 px-3">
 								<p class="text-sm font-medium text-muted-foreground">
 									{cartState.cart.couponCode}
@@ -299,7 +299,7 @@
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price Summary</h2>
+								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price summary</h2>
 								<div class="h-1 w-12 bg-primary"></div>
 							</div>
 							{#if paymentModule.loadingForCart}

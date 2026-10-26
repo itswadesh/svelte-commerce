@@ -56,7 +56,7 @@
 			aria-controls="product-specifications-panel"
 			onclick={() => (isOpen = !isOpen)}
 		>
-			<span class="edp-acc-label text-sm font-semibold text-foreground">Product Specifications</span>
+			<span class="edp-acc-label text-sm font-semibold text-foreground">Product specifications</span>
 
 			<ChevronDown
 				class="size-4 shrink-0 text-muted-foreground transition-transform duration-panel ease-standard motion-reduce:transition-none {isOpen

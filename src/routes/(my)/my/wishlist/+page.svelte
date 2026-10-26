@@ -27,7 +27,7 @@
 			<!-- Header -->
 			<div class="mb-10 flex items-center justify-between">
 				<div>
-					<h1 class="text-lg font-bold tracking-tight text-foreground md:text-xl">My Wishlist</h1>
+					<h1 class="page-heading">My wishlist</h1>
 					<p class="mt-2 text-sm text-muted-foreground">Items you've saved for later.</p>
 				</div>
 				<!-- {#if wishlistItems.length > 0}

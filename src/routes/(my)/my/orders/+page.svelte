@@ -85,7 +85,7 @@
 		<div class="mx-auto max-w-6xl px-0 md:py-8 md:py-12">
 			<!-- Header -->
 			<div class="mb-7">
-				<h1 class="text-lg font-bold tracking-tight text-foreground md:text-xl">Order History</h1>
+				<h1 class="page-heading">Order history</h1>
 				<p class="mt-2 text-sm text-muted-foreground">Check the status of recent orders and manage returns.</p>
 			</div>
 
@@ -136,17 +136,17 @@
 								<div class="flex flex-wrap items-center justify-between gap-6">
 									<div class="flex items-center gap-8">
 										<div>
-											<p class="text-xs font-bold   text-muted-foreground">Order Number</p>
+											<p class="text-xs font-bold   text-muted-foreground">Order number</p>
 											<p class="mt-1.5 text-sm font-semibold text-foreground">#{order.orderNo || '_'}</p>
 										</div>
 										<div class="h-10 w-px bg-muted"></div>
 										<div>
-											<p class="text-xs font-bold   text-muted-foreground">Date Placed</p>
+											<p class="text-xs font-bold   text-muted-foreground">Date placed</p>
 											<p class="mt-1.5 text-sm font-semibold text-foreground">{date(order.createdAt)}</p>
 										</div>
 										<div class="hidden h-10 w-px bg-muted sm:block"></div>
 										<div class="hidden sm:block">
-											<p class="text-xs font-bold   text-muted-foreground">Total Amount</p>
+											<p class="text-xs font-bold   text-muted-foreground">Total amount</p>
 											<p class="mt-1.5 text-sm font-semibold text-foreground">
 												{formatPrice(
 													order.lineItems.reduce((acc: number, item: any) => acc + item.total, 0),
