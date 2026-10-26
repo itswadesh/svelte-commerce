@@ -15,6 +15,7 @@
 	import { z } from 'zod'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { authService, type User } from '$lib/core/services/index.js'
+	import { withDialCode } from '$lib/utils/phone-number'
 
 	let { show = $bindable(false), manageHistory = true } = $props()
 
@@ -326,12 +327,7 @@
 			<form
 				onsubmit={async (e) => {
 					if (loginModule.isPhoneNumber) {
-						let phone = loginModule.identifier.replace(/\s+/g, '')
-						if (phone && !phone.startsWith('+')) {
-							const dialCode = page?.data?.store?.storeCountry?.dialCode || '+91'
-							phone = dialCode + phone
-						}
-						loginModule.identifier = phone
+						loginModule.identifier = withDialCode(loginModule.identifier, page?.data?.store?.storeCountry?.dialCode || '+91')
 					}
 					const success = await loginModule.handleSubmit(e)
 					if (success) {
