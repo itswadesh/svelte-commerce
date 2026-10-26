@@ -76,10 +76,10 @@
 <svelte:head>
 	<title>Profile</title>
 </svelte:head>
-<div class="flex min-h-screen items-center justify-center">
-	<div class="w-full max-w-md transform space-y-6 rounded-xl bg-white p-8 shadow-2xl transition-all dark:bg-gray-800">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
+	<div class="border w-full max-w-md transform space-y-6 rounded-xl bg-card p-8 transition-all">
 		<div class="space-y-2 text-center">
-			<p class="text-gray-500 dark:text-gray-400">Update Profile Details</p>
+			<p class="text-muted-foreground">Update profile details</p>
 		</div>
 
 		{#if loadError}
@@ -91,7 +91,7 @@
 		<form onsubmit={handleUpdate} class="grid grid-cols-2 gap-4" oninput={handleDetailsChange}>
 			<!-- Image Upload - occupies the full width of the first row -->
 			<div class="col-span-2">
-				<h2 class="text-1xl font-bold text-gray-900 dark:text-white">Avatar:</h2>
+				<h2 class="text-1xl font-bold text-foreground">Avatar:</h2>
 				<div class="mt-3 flex w-full flex-row items-center justify-start">
 					<!-- <ImageUpload {onUploadComplete} single /> -->
 					<LazyImg src={user.avatar} alt={`Avatar Image`} width={70} height={70} class="ml-5 rounded-lg" />
@@ -102,17 +102,17 @@
 			<Textbox
 				name="firstName"
 				bind:value={user.firstName}
-				placeholder="Enter Your First Name"
+				placeholder="Enter your first name"
 				schema={schemas.firstName}
-				label="First Name"
+				label="First name"
 				required
 			/>
 
 			<!-- Last Name Input -->
-			<Textbox name="lastName" bind:value={user.lastName} placeholder="Enter Your Last Name" schema={schemas.lastName} label="Last Name" required />
+			<Textbox name="lastName" bind:value={user.lastName} placeholder="Enter your last name" schema={schemas.lastName} label="Last name" required />
 
 			<!-- Email Input -->
-			<Textbox name="email" type="email" bind:value={user.email} placeholder="Enter Your Email" schema={schemas.email} label="Email" required />
+			<Textbox name="email" type="email" bind:value={user.email} placeholder="Enter your email" schema={schemas.email} label="Email" required />
 
 			<!-- Phone Input -->
 			<Textbox name="phone" type="tel" bind:value={user.phone} placeholder="+1234567890" schema={schemas.phone} label="Phone" required />
@@ -123,7 +123,7 @@
 					disabled={isLoading}
 					onclick={handleUpdate}
 					type="submit"
-					class="flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+					class="flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
 				>
 					{#if isLoading}
 						<Loader class="mr-2 h-4 w-4 animate-spin" />
@@ -135,14 +135,14 @@
 	</div>
 </div>
 <div
-	class="ease-[cubic-bezier(1,.32,.52,.67)] fixed left-0 right-0 top-10 z-50 mx-auto flex w-1/2 max-w-[1000px] flex-row justify-between rounded-lg border border-gray-300 bg-gray-50 p-2 text-xs font-semibold text-black shadow transition-all duration-150 hover:bg-gray-100"
+	class="ease-[cubic-bezier(1,.32,.52,.67)] fixed left-0 right-0 top-10 z-50 mx-auto flex w-1/2 max-w-[1000px] flex-row justify-between rounded-lg border border-border-strong bg-muted p-2 text-xs font-semibold text-foreground shadow transition-all duration-150 hover:bg-muted"
 	style={detailsChanged ? 'display: flex' : 'display: none'}
 >
 	<div class="flex flex-row items-center gap-2">
 		<InfoIcon class="h-4 w-4" />
 		<span>Unsaved changes</span>
 	</div>
-	<button onclick={handleUpdate} class="rounded bg-white px-2 py-1 text-xs text-black shadow">
+	<button onclick={handleUpdate} class="rounded bg-card px-2 py-1 text-xs text-foreground shadow">
 		{#if isLoading}
 			<Loader class="h-4 w-4 animate-spin" />
 		{:else}

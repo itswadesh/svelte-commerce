@@ -9,13 +9,20 @@
 	import { fly } from '$lib/motion'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import { trackOrderPlaced } from '$lib/purchase-tracking'
+	import { orderService } from '$lib/core/services/index.js'
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 
 	const userState = getUserState()
 	const cartState = getCartState()
 
 	let { data } = $props()
 
-	const orders = $derived(data.orders?.data || [])
+	// Some backends can only answer this lookup in the browser that placed the order: the guest order
+	// token lives in its localStorage, out of reach of the server load. When the server came back
+	// empty, the browser asks again before the page says the details are unavailable.
+	let browserOrders = $state<any[]>([])
+	let browserLookupDone = $state(false)
+	const orders = $derived(data.orders?.data?.length ? data.orders.data : browserOrders)
 	const firstOrder = $derived(orders[0])
 	const useremail = $derived(firstOrder?.userEmail || firstOrder?.shippingAddress?.email)
 	const orderNo = $derived(page.url.searchParams.get('order_no') || firstOrder?.orderNo)
@@ -68,6 +75,16 @@
 		}).format(date)
 	})
 	onMount(async () => {
+		const cartId = page.url.searchParams.get('cart_id')
+		if (!orders.length && (orderNo || cartId)) {
+			try {
+				browserOrders = (await orderService.listOrdersByParent({ orderNo, cartId }))?.data || []
+			} catch (e) {
+				console.error('order lookup from the browser failed', e)
+			}
+		}
+		browserLookupDone = true
+
 		// Before the cart refresh, so an error there can't swallow the purchase event
 		trackOrderPlaced(orders, currencyCode)
 
@@ -100,7 +117,7 @@
 
 <svelte:head>
 	<!-- Order number stays out of the title so it cannot leak through referrers or screenshots. -->
-	<title>Order Confirmed</title>
+	<title>Order confirmed</title>
 </svelte:head>
 
 <div class="min-h-screen bg-muted/20 py-12 md:py-5">
@@ -120,7 +137,7 @@
 							</div>
 						</div>
 					</div>
-					<h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">Thank you for your order</h1>
+					<h1 class="mb-3 page-heading">Thank you for your order</h1>
 					{#if firstOrder}
 						<p class="mx-auto max-w-lg text-sm text-muted-foreground">We've received your order and we'll notify you as soon as it's on its way.</p>
 					{:else}
@@ -177,7 +194,7 @@
 					<div class="mx-auto mb-5 flex size-14 items-center justify-center rounded-full bg-muted/30">
 						<SearchX class="size-7 text-muted-foreground" aria-hidden="true" />
 					</div>
-					<h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">We can't find that order</h1>
+					<h1 class="mb-3 page-heading">We can't find that order</h1>
 					<p class="mx-auto max-w-lg text-sm leading-relaxed text-muted-foreground">
 						This link doesn't carry an order reference, so there's nothing to show. If you have just paid, check your email for the confirmation — it
 						carries the order number.
@@ -195,7 +212,7 @@
 			{#if firstOrder}
 				<!-- Items List -->
 				<div class="border-b border-muted/30 p-2 pb-6 md:p-12">
-					<h2 class="mb-6 text-lg font-bold text-foreground">Order Summary</h2>
+					<h2 class="mb-6 text-lg font-bold text-foreground">Order summary</h2>
 					<div class="divide-y divide-border">
 						{#each orders as { lineItems }}
 							{#each lineItems || [] as item}
@@ -210,10 +227,10 @@
 													{item.title}
 												</a>
 											</h3>
-											<p class="ml-4">{formatPrice(item.subtotal, page?.data?.store?.currency?.code)}</p>
+											<p class="ml-4">{formatPrice(item.subtotal, currencyCode)}</p>
 										</div>
 										<p class="mt-1 text-sm text-muted-foreground">
-											{formatPrice(item.price, page?.data?.store?.currency?.code)} × {item.qty}
+											{formatPrice(item.price, currencyCode)} × {item.qty}
 										</p>
 										{#if item.variantTitle}
 											<p class="mt-1 text-xs text-muted-foreground">{item.variantTitle}</p>
@@ -254,7 +271,7 @@
 					<div class="border-b border-muted/30 p-4 sm:border-b-0 sm:border-r md:p-6">
 						<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
 							<MapPin class="h-5 w-5 text-primary" />
-							<h3>Shipping Address</h3>
+							<h3>Shipping address</h3>
 						</div>
 						<!-- Every line is conditional. The city/state/zip line was interpolated unconditionally,
 					     so an order whose address the backend does not return rendered as a lone comma
@@ -287,7 +304,7 @@
 					<div class="p-4 md:p-6">
 						<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
 							<Calendar class="h-5 w-5 text-primary" />
-							<h3>Estimated Delivery</h3>
+							<h3>Estimated delivery</h3>
 						</div>
 						<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
 						<div class="flex items-start gap-3 rounded-radius border border-border bg-card p-2">
@@ -301,6 +318,12 @@
 							</p>
 						</div>
 					</div>
+				</div>
+			{:else if hasOrderReference && !browserLookupDone}
+				<div class="space-y-3 border-b border-muted/30 p-6 md:p-12" aria-busy="true" aria-label="Loading order details">
+					<Skeleton class="h-6 w-40" />
+					<Skeleton class="h-16 w-full" />
+					<Skeleton class="h-16 w-full" />
 				</div>
 			{:else if hasOrderReference}
 				<div class="border-b border-muted/30 p-6 md:p-12">
@@ -331,7 +354,7 @@
 						<ArrowRight class="ml-2 h-4 w-4" />
 					</Button>
 					{#if userState?.user?.role}
-						<Button variant="outline" href="/my/orders" class="order-2 h-14 flex-1 sm:order-1">Track My Order</Button>
+						<Button variant="outline" href="/my/orders" class="order-2 h-14 flex-1 sm:order-1">Track my order</Button>
 					{/if}
 				</div>
 				<div class="mt-8 text-center">

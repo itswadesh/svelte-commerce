@@ -27,12 +27,12 @@
 			<!-- Header -->
 			<div class="mb-10 flex items-center justify-between">
 				<div>
-					<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">My Wishlist</h1>
-					<p class="mt-2 text-sm text-gray-500">Items you've saved for later.</p>
+					<h1 class="page-heading">My wishlist</h1>
+					<p class="mt-2 text-sm text-muted-foreground">Items you've saved for later.</p>
 				</div>
 				<!-- {#if wishlistItems.length > 0}
 					<div class="hidden md:block">
-						<span class="rounded-full border border-gray-200 bg-gray-100 px-4 py-1.5 text-sm font-semibold text-gray-600">
+						<span class="rounded-full border border-border bg-muted px-4 py-1.5 text-sm font-semibold text-muted-foreground">
 							{wishlistItems.length}
 							{wishlistItems.length === 1 ? 'Item' : 'Items'}
 						</span>
@@ -47,13 +47,13 @@
 			{:else if wishlistItems.length === 0}
 				<div in:fade class="flex flex-col items-center justify-center py-20 text-center">
 					<div class="relative mb-6">
-						<div class="absolute inset-0 scale-150 animate-pulse rounded-full bg-gray-50"></div>
-						<div class="relative flex h-24 w-24 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm">
-							<Heart class="h-10 w-10 text-gray-300" />
+						<div class="absolute inset-0 scale-150 animate-pulse rounded-full bg-muted"></div>
+						<div class="relative flex h-24 w-24 items-center justify-center rounded-full border border-border bg-card">
+							<Heart class="h-10 w-10 text-muted-foreground" />
 						</div>
 					</div>
-					<h2 class="text-2xl font-bold text-gray-900">Your wishlist is empty</h2>
-					<p class="mt-2 max-w-xs text-gray-500">Save items you like to keep track of them and buy them later.</p>
+					<h2 class="text-2xl font-bold text-foreground">Your wishlist is empty</h2>
+					<p class="mt-2 max-w-xs text-muted-foreground">Save items you like to keep track of them and buy them later.</p>
 					<div class="mt-8">
 						<Button href="/products" class="h-12 px-8">
 							Browse Products
@@ -66,7 +66,7 @@
 					{#each wishlistItems as item, i}
 						<div
 							in:fly={{ y: 12, delay: Math.min(i, 5) * 40 }}
-							class="group relative flex h-full w-full flex-col overflow-hidden bg-white transition-[transform,box-shadow] duration-fast dark:bg-gray-800"
+							class="group relative flex h-full w-full flex-col overflow-hidden bg-card transition-[transform,box-shadow] duration-fast"
 						>
 							<!-- Product Image -->
 							<a
@@ -84,20 +84,20 @@
 							<!-- Product Info -->
 							<div class="flex flex-1 flex-col pt-4">
 								<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="block overflow-hidden">
-									<span class="block w-[95%] truncate text-sm font-medium text-gray-700 lg:text-sm" title={item?.product?.title}>
+									<span class="block w-[95%] truncate text-sm font-medium text-foreground lg:text-sm" title={item?.product?.title}>
 										{item?.product?.title}
 									</span>
 								</a>
 
 								<div class="mt-1 flex items-center gap-2">
-									<span class="text-base font-bold text-gray-900">
+									<span class="text-base font-bold text-foreground">
 										{formatPrice(item?.product?.price, page?.data?.store?.currency?.code)}
 									</span>
 									{#if item?.product?.mrp > item?.product?.price}
-										<span class="text-xs text-gray-400 line-through">
+										<span class="text-xs text-muted-foreground line-through">
 											{formatPrice(item?.product?.mrp, page?.data?.store?.currency?.code)}
 										</span>
-										<span class="hidden text-xs font-bold uppercase text-green-600 md:block lg:text-sm">
+										<span class="hidden text-xs font-bold uppercase text-success md:block lg:text-sm">
 											{Math.round(((item?.product?.mrp - item?.product?.price) / item?.product?.mrp) * 100)}% OFF
 										</span>
 									{/if}
@@ -168,8 +168,3 @@
 	{/snippet}
 </MyWishlistRenderer>
 
-<style>
-	:global(body) {
-		background-color: #fafafa;
-	}
-</style>

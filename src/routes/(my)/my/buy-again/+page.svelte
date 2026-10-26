@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-	<title>Buy Again</title>
+	<title>Buy again</title>
 </svelte:head>
 <section class="flex flex-col gap-10">
 	<h3 class="capitalize">Orders</h3>
@@ -58,7 +58,7 @@
 							<div class="flex flex-wrap items-center gap-1">
 								Total :
 
-								<span class="text-primary-700 whitespace-nowrap font-bold">
+								<span class="text-primary whitespace-nowrap font-bold">
 									{formatPrice(item.price, page?.data?.store?.currency?.code)}
 								</span>
 							</div>
@@ -127,7 +127,7 @@
 									<div class="flex flex-wrap items-center gap-1">
 										Total :
 
-										<span class="text-primary-700 whitespace-nowrap font-bold">
+										<span class="text-primary whitespace-nowrap font-bold">
 											{formatPrice(item.price, page?.data?.store?.currency?.code)}
 										</span>
 									</div>

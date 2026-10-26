@@ -33,7 +33,17 @@
 	setUserState()
 
 	// Every page change crossfades; opening a product morphs its image. See route-transition.ts.
-	onNavigate((navigation) => startRouteTransition(navigation))
+	onNavigate((navigation) => {
+		// Land at the top the moment the new page is in the DOM, ahead of the crossfade's snapshot of
+		// it. The `afterNavigate` reset below waits for the product page's own `?variant_id=` reload
+		// (~600ms on a phone), so a product opened from down a listing showed its bottom, then jumped.
+		// Back keeps its position: the listing restores it in its own `afterNavigate`.
+		if (navigation.type !== 'popstate') {
+			const land = () => landAt(navigation.to?.url.pathname)
+			navigation.complete.then(land, land)
+		}
+		return startRouteTransition(navigation)
+	})
 
 	const themeName = $derived(data?.theme?.name || 'default')
 	const themeFontsUrl = $derived(getThemeFontsUrl(themeName))
@@ -166,16 +176,18 @@
 		// product page. Comparing against the last settled path sidesteps that entirely.
 		//
 		// Query-only changes keep their position on purpose: those are the filter and variant updates.
-		const path = to?.url.pathname
-		if (!path) return
-		if (path === landedPath) return
+		landAt(to?.url.pathname)
+	})
+
+	function landAt(path: string | undefined) {
+		if (!path || path === landedPath) return
 		landedPath = path
 
 		// `behavior: 'instant'` is the other half of the fix. app.css sets `html { scroll-behavior: smooth }`, so a
 		// plain scrollTo animates — and the product page replaces its URL (`?variant_id=…`) while that
 		// animation is still running, which cancels it and leaves the shopper at the listing's offset.
 		window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
-	})
+	}
 
 	// Origin serving product imagery — usually the LCP element and always a different host from
 	// the document, so without a preconnect the browser pays DNS + TCP + TLS before the fetch can
@@ -250,7 +262,7 @@
 			     navigations still pending after 700ms get the overlay. -->
 			{#await new Promise((resolve) => setTimeout(resolve, 700)) then _}
 				<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm" role="status">
-					<div class="rounded-lg bg-white p-4">
+					<div class="rounded-lg bg-card p-4">
 						<Loader class="animate-spin" />
 						<span class="sr-only">Loading</span>
 					</div>

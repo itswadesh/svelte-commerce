@@ -15,6 +15,7 @@
 	import { z } from 'zod'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { authService, type User } from '$lib/core/services/index.js'
+	import { withDialCode } from '$lib/utils/phone-number'
 
 	let { show = $bindable(false), manageHistory = true } = $props()
 
@@ -49,8 +50,19 @@
 					: 'Email address'
 	)
 
+	// The engine sends a phone one code a minute (ext/identity's loginCodeGap). A shorter wait here
+	// offered "Resend code" that the engine then refused with "a code was sent a moment ago".
+	const RESEND_WAIT_SECONDS = 60
+
+	// "A code was sent a moment ago": the earlier code is on its way and still works, so the
+	// shopper is better on the code step, waiting out the minute, than stuck in front of a refusal.
+	// The daily limit answers the same status but says "tomorrow", and stays a refusal.
+	function codeAlreadySent(e: any) {
+		return e?.status === 429 && e?.code === 'too_many_requests' && !/tomorrow/i.test(String(e?.message ?? ''))
+	}
+
 	function startResendCooldown() {
-		resendSeconds = 30
+		resendSeconds = RESEND_WAIT_SECONDS
 		if (resendTimer) clearInterval(resendTimer)
 		resendTimer = setInterval(() => {
 			resendSeconds = Math.max(0, resendSeconds - 1)
@@ -59,6 +71,30 @@
 				resendTimer = undefined
 			}
 		}, 1000)
+	}
+
+	// Send code, on the phone step. What LoginModule.handleSubmit does for a phone, except that a
+	// code sent a moment ago moves the shopper on to the code step instead of stopping them here.
+	async function sendCode() {
+		loginModule.isLoading = true
+		try {
+			await authService.getOtp({ phone: loginModule.identifier })
+		} catch (e: any) {
+			if (!codeAlreadySent(e)) {
+				toast.error(e.message || 'Could not send the code')
+				return
+			}
+			toast.info(e.message)
+		} finally {
+			loginModule.isLoading = false
+		}
+		try {
+			// LoginModule.handleSubmit passes the phone the same way; the type names only an email.
+			await (loginModule.cartState as any)?.updateEmail({ phone: loginModule.identifier })
+		} catch {
+			// The cart's contact is a convenience; the sign-in goes on without it.
+		}
+		loginModule.step = 2
 	}
 
 	async function handleResendOtp() {
@@ -70,9 +106,15 @@
 				return
 			}
 			await authService.getOtp({ phone: loginModule.identifier })
+			triedOtp = ''
 			toast.success('OTP resent successfully')
 			startResendCooldown()
 		} catch (e: any) {
+			if (codeAlreadySent(e)) {
+				toast.info(e.message)
+				startResendCooldown()
+				return
+			}
 			toast.error(e.message || 'Failed to resend OTP')
 		}
 	}
@@ -95,7 +137,31 @@
 			startResendCooldown()
 		} else if (loginModule.step !== 2) {
 			otpCooldownStarted = false
+			triedOtp = ''
 		}
+	})
+
+	// Chrome on Android fills the code in from the text when it ends "@<this site> #<code>"
+	// (the Web OTP API; the engine adds that line only for the store's own site, D124). The
+	// shopper is asked once to allow it; declined, unsupported or a text without the line, the
+	// boxes are typed as before. iPhones offer the code above the keyboard on their own, from
+	// the boxes' autocomplete="one-time-code". Leaving the step stops listening.
+	//
+	// Off unless PUBLIC_WEB_OTP is "true": Chrome asks the shopper to allow it either way, and the
+	// texts only carry that last line once the store's DLT template ends with it. Asked to allow
+	// something that then reads nothing, a shopper is worse off than not being asked.
+	const webOtp = env.PUBLIC_WEB_OTP === 'true'
+	$effect(() => {
+		if (!webOtp || loginModule.step !== 2 || typeof window === 'undefined' || !('OTPCredential' in window)) return
+		const listening = new AbortController()
+		navigator.credentials
+			.get({ otp: { transport: ['sms'] }, signal: listening.signal } as CredentialRequestOptions)
+			.then((credential) => {
+				const code = (credential as (Credential & { code?: string }) | null)?.code
+				if (code && /^\d{4}$/.test(code) && loginModule.step === 2) loginModule.otp = code
+			})
+			.catch(() => {})
+		return () => listening.abort()
 	})
 
 	$effect(() => {
@@ -103,7 +169,7 @@
 			loginModule.step = 1
 			loginModule.otp = ''
 			loginModule.identifier = ''
-			verifiedOtp = ''
+			triedOtp = ''
 		}
 	})
 
@@ -164,26 +230,106 @@
 		if (resendTimer) clearInterval(resendTimer)
 	})
 
-	let verifiedOtp = $state('')
+	let triedOtp = $state('')
 
-	// userState.verifyOtp ends in a hardcoded `goto('/')` for the USER role and never reads
-	// `?redirect=`, so every shopper who logged in by phone — including from the "log in to use
-	// your saved addresses" prompt at checkout, and anyone bounced off /my/* — was dumped on the
-	// homepage and had to find their way back. The password path already honours `redirect`; this
-	// re-applies it for OTP. Issuing the second goto as soon as verification resolves supersedes
-	// the in-flight one rather than landing on the homepage first.
+	// userState.verifyOtp ends in a hardcoded `goto('/')` for the USER role, never reads
+	// `?redirect=`, and nothing closed the modal, so a shopper signed in by phone stayed behind the
+	// code entry screen. This finishes the way the password path does: back to `redirect` or the
+	// page they were on, auth params cleared, modal closed. Issuing the second goto as soon as
+	// verification resolves supersedes the core's in-flight one to the homepage.
 	async function verifyOtpThenRedirect() {
-		const redirectTo = new URLSearchParams(window.location.search).get('redirect')
+		const { pathname, search } = window.location
+		const redirectTo = new URLSearchParams(search).get('redirect')
 		await loginModule.handleVerifyOtp()
-		if (redirectTo && userState.user) goto(decodeURIComponent(redirectTo))
+		if (!userState.user) return
+		goto(decodeURIComponent(redirectTo || '') || pathname, { replaceState: true, invalidateAll: true })
+		loginModule.removeUrlParams()
+		show = false
 	}
 
+	// Phone first, as Myntra signs in (engine D123). On a store that takes both ways, a phone the
+	// store has never seen does not open an account straight away: the shopper is asked whether they
+	// already have one, so somebody who signed up by email is not handed a second, empty account.
+	// Signing in with the email adds the phone to it; otherwise a new account opens on the phone.
+	const asksIfNew = $derived(page.data.store?.loginType === 'BOTH')
+	let phoneToken = $state('')
+	let haveAccount = $state(false)
+	let linkEmail = $state('')
+	let linkPassword = $state('')
+	let busy = $state(false)
+
+	function finishSignIn(me: User) {
+		const redirectTo = new URLSearchParams(window.location.search).get('redirect')
+		userState.user = me
+		loginModule.removeUrlParams()
+		show = false
+		if (redirectTo) goto(decodeURIComponent(redirectTo))
+	}
+
+	async function verifyCode() {
+		// One check at a time: a code is spent by the check that signs in, so a second one sent
+		// alongside it answers "invalid code" over a shopper who is already signed in.
+		if (busy) return
+		triedOtp = loginModule.otp
+		if (!asksIfNew) {
+			busy = true
+			try {
+				return await verifyOtpThenRedirect()
+			} finally {
+				busy = false
+			}
+		}
+		busy = true
+		try {
+			const res = await authService.verifyOtp({ phone: loginModule.identifier, otp: loginModule.otp, askIfNew: true })
+			if (res && 'newPhone' in res && res.newPhone) {
+				phoneToken = res.phoneToken
+				haveAccount = false
+				linkEmail = ''
+				linkPassword = ''
+				loginModule.step = 3
+			} else {
+				finishSignIn(res as User)
+			}
+		} catch (e: any) {
+			toast.error(e.message || 'Could not check the code')
+		} finally {
+			busy = false
+		}
+	}
+
+	async function addPhoneToEmailAccount(e: SubmitEvent) {
+		e.preventDefault()
+		busy = true
+		try {
+			finishSignIn(
+				await authService.login({ email: linkEmail, password: linkPassword, phone: loginModule.identifier, phoneToken })
+			)
+		} catch (err: any) {
+			toast.error(err.message || 'Could not sign in')
+		} finally {
+			busy = false
+		}
+	}
+
+	async function openNewAccount() {
+		busy = true
+		try {
+			finishSignIn(await authService.openPhoneAccount({ phone: loginModule.identifier, phoneToken }))
+		} catch (err: any) {
+			toast.error(err.message || 'Could not create the account')
+		} finally {
+			busy = false
+		}
+	}
+
+	// The code is checked as soon as its fourth digit is in, once. A code already tried is not
+	// sent again by itself: autofill on a phone can fill the boxes, clear them and fill them again
+	// with the same code, and forgetting the code when the boxes emptied sent it twice. Continue
+	// still checks it on purpose; a new code (resent, or a new number) can be checked as it lands.
 	$effect(() => {
-		if (loginModule.otp.length === 4 && loginModule.otp !== verifiedOtp && !loginModule.isLoading && !userState.loading) {
-			verifiedOtp = loginModule.otp
-			verifyOtpThenRedirect()
-		} else if (loginModule.otp.length !== 4) {
-			verifiedOtp = ''
+		if (loginModule.step === 2 && loginModule.otp.length === 4 && loginModule.otp !== triedOtp && !loginModule.isLoading && !userState.loading && !busy) {
+			verifyCode()
 		}
 	})
 </script>
@@ -243,12 +389,10 @@
 			<form
 				onsubmit={async (e) => {
 					if (loginModule.isPhoneNumber) {
-						let phone = loginModule.identifier.replace(/\s+/g, '')
-						if (phone && !phone.startsWith('+')) {
-							const dialCode = page?.data?.store?.storeCountry?.dialCode || '+91'
-							phone = dialCode + phone
-						}
-						loginModule.identifier = phone
+						e.preventDefault()
+						loginModule.identifier = withDialCode(loginModule.identifier, page?.data?.store?.storeCountry?.dialCode || '+91')
+						await sendCode()
+						return
 					}
 					const success = await loginModule.handleSubmit(e)
 					if (success) {
@@ -453,10 +597,10 @@
 				<div class="space-y-3">
 					<Button
 						class="h-11 w-full text-sm font-semibold md:h-10"
-						onclick={loginModule.handleVerifyOtp}
-						disabled={loginModule.otp.length !== 4 || userState.loading}
+						onclick={verifyCode}
+						disabled={loginModule.otp.length !== 4 || userState.loading || busy}
 					>
-						{#if userState.loading}
+						{#if userState.loading || busy}
 							<LoaderIcon class="mr-2 size-4 animate-spin" /> Verifying…
 						{:else}
 							Continue
@@ -474,6 +618,86 @@
 						{/if}
 					</p>
 				</div>
+			</div>
+		{:else if loginModule.step === 3}
+			<div class="space-y-5 max-sm:flex max-sm:flex-1 max-sm:flex-col">
+				<div>
+					<button
+						type="button"
+						class="-ml-2 inline-flex h-9 items-center gap-1 rounded-radius px-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground max-md:h-11"
+						onclick={() => (haveAccount ? (haveAccount = false) : (loginModule.step = 1))}
+					>
+						<ArrowLeft class="size-4" />
+						{haveAccount ? 'Back' : 'Change number'}
+					</button>
+				</div>
+
+				<div>
+					<h2 class="text-xl font-semibold">Already have an account?</h2>
+					<p class="mt-1 text-sm text-muted-foreground">
+						<span class="font-medium text-foreground">{loginModule.identifier}</span> is verified but not on an account here yet.
+						{haveAccount ? 'Sign in with your email to add this number to your account.' : 'If you signed up with your email, sign in with it to keep your orders and addresses together.'}
+					</p>
+				</div>
+
+				{#if haveAccount}
+					<form onsubmit={addPhoneToEmailAccount} class="space-y-4">
+						<div class="space-y-3 [&>div]:mb-0">
+							<Textbox
+								name="email"
+								label="Email address"
+								type="email"
+								bind:value={linkEmail}
+								autocomplete="username"
+								placeholder="you@example.com"
+								schema={schemas.email}
+								class="h-11 md:h-10"
+								required
+							/>
+							<Textbox
+								name="password"
+								label="Password"
+								type="password"
+								bind:value={linkPassword}
+								autocomplete="current-password"
+								placeholder="Enter your password"
+								schema={schemas.password}
+								class="h-11 md:h-10"
+								required
+							/>
+							<div class="flex justify-end">
+								<AuthButton
+									type="forgot-password"
+									extraqueries={{ email: linkEmail }}
+									aria-label="Reset your password"
+									class="inline-flex cursor-pointer items-center rounded-radius text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+								>
+									Forgot password?
+								</AuthButton>
+							</div>
+						</div>
+						<Button type="submit" class="h-11 w-full text-sm font-semibold md:h-10" disabled={busy}>
+							{#if busy}
+								<LoaderIcon class="mr-2 size-4 animate-spin" /> Signing in…
+							{:else}
+								Sign in and add this number
+							{/if}
+						</Button>
+					</form>
+				{:else}
+					<div class="space-y-3">
+						<Button class="h-11 w-full text-sm font-semibold md:h-10" disabled={busy} onclick={() => (haveAccount = true)}>
+							<Mail class="mr-2 size-4" /> Yes, sign in with email
+						</Button>
+						<Button variant="outline" class="h-11 w-full text-sm font-semibold md:h-10" disabled={busy} onclick={openNewAccount}>
+							{#if busy}
+								<LoaderIcon class="mr-2 size-4 animate-spin" /> Creating your account…
+							{:else}
+								No, I'm new here
+							{/if}
+						</Button>
+					</div>
+				{/if}
 			</div>
 		{/if}
 	</div>

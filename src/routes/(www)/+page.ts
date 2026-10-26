@@ -1,6 +1,33 @@
 import { wwwLoad } from '$lib/core/load-functions/index.js'
 import { categoryService, productService } from '$lib/core/services/index.js'
+import { services } from 'kitcommerce.config'
+import type { ComposerLayout } from '$lib/composer/helpers.js'
 import type { PageLoad } from './$types'
+
+// The home page the merchant composed in the panel (GoCommerce's ext/layouts), when the connector
+// can fetch one. Reached through a cast like every other connector-specific hook: other connectors,
+// and GoCommerce connectors older than 0.6.0, have no layoutService, and a bare named import of it
+// would fail the whole module.
+type LayoutHook = { layoutService?: { getHomeLayout(args?: { preview?: string }): Promise<ComposerLayout | null> } }
+
+/**
+ * The composed layout, or null for the built-in home page. Null covers the plugin being off,
+ * nothing published, a bad or expired preview key and a connector without the service — and any
+ * failure too: the built-in page is always a better answer than an error page.
+ */
+async function homeLayout(preview: string | null): Promise<ComposerLayout | null> {
+	// Reflect.get, not `services.layoutService`: Rollup turns a property read on an imported
+	// namespace into a named import, which a connector without the service fails at load — the
+	// very version skew this guard is for. Passing the namespace whole keeps it an object.
+	const layouts = Reflect.get(services as object, 'layoutService') as LayoutHook['layoutService']
+	if (!layouts?.getHomeLayout) return null
+	try {
+		const layout = await layouts.getHomeLayout(preview ? { preview } : {})
+		return layout?.sections?.length ? layout : null
+	} catch {
+		return null
+	}
+}
 
 // HomepageModule fetches the featured products in a `$effect` and the featured categories in an
 // `onMount` — neither runs on the server. The homepage is the highest-authority page on the site
@@ -14,7 +41,7 @@ import type { PageLoad } from './$types'
 export const load: PageLoad = async (event) => {
 	const base = await wwwLoad(event)
 
-	const [featuredProducts, featuredCategories] = await Promise.all([
+	const [featuredProducts, featuredCategories, layout] = await Promise.all([
 		productService
 			.listFeaturedProducts({ page: 1, sort: '-createdAt' })
 			.then((r: { data?: unknown[] } | undefined) => r?.data ?? [])
@@ -22,8 +49,9 @@ export const load: PageLoad = async (event) => {
 		categoryService
 			.fetchFeaturedCategories({ limit: 18 })
 			.then((r: { data?: unknown[] } | undefined) => r?.data ?? [])
-			.catch(() => [])
+			.catch(() => []),
+		homeLayout(event.url.searchParams.get('preview'))
 	])
 
-	return { ...base, featuredProducts, featuredCategories }
+	return { ...base, featuredProducts, featuredCategories, layout }
 }

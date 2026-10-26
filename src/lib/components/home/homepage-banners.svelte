@@ -31,7 +31,7 @@
 				<div class="py-12">
 					{#if title}
 						<div class="mb-10 flex flex-col items-center text-center">
-							<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
+							<h2 class="section-heading">
 								{title}
 							</h2>
 							<div class="mt-4 h-1 w-12 bg-primary"></div>
@@ -43,7 +43,7 @@
 								<a
 									href={banner.link || link}
 									aria-label={banner.title || banner.link}
-									class="group relative block w-full overflow-hidden rounded-none shadow-sm transition-shadow duration-panel hover:shadow-xl"
+									class="border group relative block w-full overflow-hidden rounded-none transition-shadow duration-panel hover:border-border-strong"
 								>
 									<div class="relative overflow-hidden">
 										<LazyImg
@@ -58,7 +58,7 @@
 											{#if banner.title}
 												<div class="absolute bottom-6 left-6 text-white">
 													<h3 class="text-xl font-bold">{banner.title}</h3>
-													<p class="mt-1 text-sm font-medium text-white/80">Explore Collection</p>
+													<p class="mt-1 text-sm font-medium text-white/80">Explore collection</p>
 												</div>
 											{/if}
 										</div>

@@ -159,7 +159,7 @@
 		<h1 class="sr-only">Delivery address</h1>
 		<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
 		  <div>
-				<p class="font-semibold tracking-tight text-xl">My Addresses</p>
+				<p class="font-semibold tracking-tight text-xl">My addresses</p>
 			</div>
 			<Button variant="link" onclick={() => {
 				goto("/checkout/cart")
@@ -203,7 +203,7 @@
 			{:else if cartState?.cart?.lineItems?.length === 0 && !cartState?.isUpdatingCart}
 				<div class="flex h-96 flex-col items-center justify-center gap-3">
 					<p class="text-xl text-muted-foreground">Your cart is empty</p>
-					<Button variant="outline" href="/">Continue Shopping</Button>
+					<Button variant="outline" href="/">Continue shopping</Button>
 				</div>
 			{:else}
 				<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
@@ -215,15 +215,15 @@
 						{#await userState.hasLoaded then _}
 							<!-- Every logged-out visitor sees the guest-checkout banner. -->
 							{#if !userState.user?.userId}
-								<div class="rounded-lg border border-blue-100 bg-blue-50 p-4">
+								<div class="rounded-lg border border-primary/30 bg-primary/10 p-4">
 									<div class="flex items-start gap-3">
-										<ShoppingBag class="mt-0.5 size-5 shrink-0 text-blue-600" />
+										<ShoppingBag class="mt-0.5 size-5 shrink-0 text-primary" />
 										<div>
-											<p class="text-sm font-semibold text-blue-900">You're checking out as a guest</p>
-											<p class="mt-1 text-sm text-blue-800">
+											<p class="text-sm font-semibold text-primary">You're checking out as a guest</p>
+											<p class="mt-1 text-sm text-primary">
 												No account needed — just enter your details below. Optionally,
 												<button
-													class="font-bold underline hover:text-blue-900"
+													class="font-bold underline hover:text-primary"
 													onclick={() => {
 														showAuthModal('login')
 													}}
@@ -242,10 +242,10 @@
 						     for them in a separate Contact Details step first made guests fill two forms with
 						     the same fields. -->
 						{#if !isGuestCheckout && (addressModule.isPhoneRequired || addressModule.isEmailRequired)}
-							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
+							<div class="overflow-hidden rounded-lg border border-border bg-background">
 								<div class="flex items-center justify-between border-b border-border px-5 py-4">
 									<div class="flex items-center space-x-3">
-										<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Contact Details</h2>
+										<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Contact details</h2>
 									</div>
 									{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
 										<Button onclick={addressModule.handleEditEmail} variant="ghost" size="sm" class="h-8">
@@ -258,11 +258,11 @@
 								{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
 									<div class="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2">
 										<div class="flex flex-col gap-1">
-											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Email Address</p>
+											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Email address</p>
 											<p class="text-sm font-medium text-foreground">{cartState.cart.email}</p>
 										</div>
 										<div class="flex flex-col gap-1">
-											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Phone Number</p>
+											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Phone number</p>
 											<p class="text-sm font-medium text-foreground">{cartState.cart.phone}</p>
 										</div>
 									</div>
@@ -320,12 +320,12 @@
 						     of this form, so gating it on `isEmailOk && isPhoneOk` would hide the only place
 						     they can be entered. -->
 						{#if isGuestCheckout || (isEmailOk && isPhoneOk)}
-							<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
+							<div class="overflow-hidden rounded-lg border border-border bg-background">
 								{#if isGuestCheckout}
 									<!-- Guest checkout: inline address form, no login required -->
 									<div class="p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Delivery Address</h2>
+											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Delivery address</h2>
 											<Button variant="link" onclick={() => showAuthModal('login')} class="h-auto whitespace-normal p-0 text-left">
 												Login to view your saved addresses
 											</Button>
@@ -335,7 +335,7 @@
 								{:else if cartState.cart.shippingAddress}
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Delivery Address</h2>
+											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Delivery address</h2>
 											{#if !addressModule.loadingForSaveToCart}
 												<Button onclick={addressModule.handleAddressChangeClick} variant="ghost" class="h-8">Change</Button>
 											{/if}
@@ -392,7 +392,7 @@
 													class="flex flex-col items-center justify-center rounded-lg border border-dashed border-border bg-background py-8 text-center"
 												>
 													<p class="mb-6 text-sm text-muted-foreground">No shipping address selected</p>
-													<Button type="button" variant="default" class="px-8" onclick={addressModule.handleAddNewAddress}>Add New Address</Button>
+													<Button type="button" variant="default" class="px-8" onclick={addressModule.handleAddNewAddress}>Add new address</Button>
 												</div>
 											{/if}
 										</form>
@@ -401,10 +401,10 @@
 							</div>
 
 							{#if !addressModule.isBillingAddressSameAsShipping}
-								<div class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
+								<div class="overflow-hidden rounded-lg border border-border bg-background">
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Billing Address</h2>
+											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Billing address</h2>
 											{#if !addressModule.loadingForSaveToCart}
 												<Button onclick={addressModule.handleBilingAddOrChangeClick} variant="ghost" class="h-8">
 													{#if cartState.cart.billingAddress?.address_1}
@@ -466,9 +466,9 @@
 
 					<!-- Right Column - Order Summary -->
 					<div class="space-y-4">
-						<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price Summary</h2>
+								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price summary</h2>
 								<div class="h-1 w-12 bg-primary"></div>
 							</div>
 							{#if addressModule.loadingForCart}

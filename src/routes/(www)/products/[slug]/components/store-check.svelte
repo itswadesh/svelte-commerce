@@ -16,12 +16,12 @@
 				<span class="edp-store-title font-semibold">Looking to pickup this item?</span>
 			</div>
 
-			<span class="edp-store-text text-sm text-gray-500">
+			<span class="edp-store-text text-sm text-muted-foreground">
 				You can pick up this item from our store. Please check the availability of this item at your nearest store.
 			</span>
 
 			<Sheet.Trigger>
-				<Button variant="link" class="h-auto self-start p-0">Check Availability</Button>
+				<Button variant="link" class="h-auto self-start p-0">Check availability</Button>
 			</Sheet.Trigger>
 		</div>
 
@@ -35,16 +35,16 @@
 					<div class="flex items-center justify-between p-6 py-4">
 						<div class="flex w-full flex-col gap-2">
 							<div class="flex w-full items-center justify-between gap-2">
-								<h3 class="text-lg font-semibold text-gray-900">{house.name}</h3>
+								<h3 class="text-lg font-semibold text-foreground">{house.name}</h3>
 
 								{#if Number(house.stock) > 0}
-									<span class="flex w-fit items-center gap-1 self-start rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-600">
+									<span class="flex w-fit items-center gap-1 self-start rounded-full bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
 										<Check size={12} />
 
-										<span class="whitespace-nowrap">In Stock</span>
+										<span class="whitespace-nowrap">In stock</span>
 									</span>
 								{:else}
-									<span class="flex w-fit items-center gap-1 self-start rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-600">
+									<span class="flex w-fit items-center gap-1 self-start rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">
 										<AlertTriangle size={12} />
 
 										<span class="whitespace-nowrap">Out of Stock</span>
@@ -55,21 +55,21 @@
 							<!-- Address Information -->
 
 							<div class="flex flex-col gap-1 text-sm">
-								<div class="flex items-center gap-1 text-gray-500">
+								<div class="flex items-center gap-1 text-muted-foreground">
 									<MapPin size={12} />
 
-									<span class="text-gray-700">{house.address_1}{house.address_2 ? `, ${house.address_2}` : ''}</span>
+									<span class="text-foreground">{house.address_1}{house.address_2 ? `, ${house.address_2}` : ''}</span>
 								</div>
 
-								<div class="flex items-center gap-1 pl-4 text-gray-500">
+								<div class="flex items-center gap-1 pl-4 text-muted-foreground">
 									<span>{house.city}, {house.state} {house.zip}</span>
 								</div>
 							</div>
 
-							<div class="mt-1 flex items-center gap-1 text-sm text-gray-500">
+							<div class="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
 								<Clock size={12} />
 
-								<span>Lead Time: <span class="font-medium text-gray-700">{house.leadTime} hours</span></span>
+								<span>Lead Time: <span class="font-medium text-foreground">{house.leadTime} hours</span></span>
 							</div>
 						</div>
 					</div>

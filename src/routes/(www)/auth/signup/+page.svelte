@@ -90,11 +90,11 @@
 	<meta name="description" content="Create your account at {page?.data?.store?.name} to start shopping and discover amazing products." />
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center border bg-gray-50 p-3 dark:bg-gray-950 sm:p-4">
-	<div class="w-full max-w-[420px] space-y-4 rounded-radius border bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
+	<div class="w-full max-w-[420px] space-y-4 rounded-radius border bg-card p-5 sm:p-6">
 		<div class="space-y-1 text-center">
-			<h2 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white">Create account</h2>
-			<p class="text-sm text-gray-600 dark:text-gray-300">Save details for faster checkout.</p>
+			<h2 class="text-2xl font-bold tracking-tight text-foreground">Create account</h2>
+			<p class="text-sm text-muted-foreground">Save details for faster checkout.</p>
 		</div>
 
 		<form class="space-y-3" onsubmit={handleSubmit} aria-label="Sign up form">
@@ -164,7 +164,7 @@
 
 			<Button
 				type="submit"
-				class="h-12 w-full text-wrap px-4 py-2 text-base font-semibold shadow-sm transition-colors"
+				class="h-12 w-full text-wrap px-4 py-2 text-base font-semibold transition-colors"
 				disabled={isLoading}
 				aria-label={isLoading ? 'Creating account...' : 'Create account'}
 			>
@@ -176,12 +176,12 @@
 		</form>
 
 		<div class="text-center">
-			<p class="text-sm text-gray-600 dark:text-gray-300">
+			<p class="text-sm text-muted-foreground">
 				Already have an account?
 				<AuthButton type="login">
 					<Button
 						variant="link"
-						class="ml-1 inline-flex min-h-10 px-0 font-semibold text-gray-950 transition-colors hover:underline dark:text-white"
+						class="ml-1 inline-flex min-h-10 px-0 font-semibold text-foreground transition-colors hover:underline"
 						aria-label="Sign in to your account"
 					>
 						Sign in
@@ -194,16 +194,16 @@
 			<div class="space-y-3">
 				<div class="relative">
 					<div class="absolute inset-0 flex items-center">
-						<div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
+						<div class="w-full border-t border-border"></div>
 					</div>
 					<div class="relative flex justify-center text-xs">
-						<span class="bg-white px-2 text-gray-500 dark:bg-gray-900 dark:text-gray-400">or</span>
+						<span class="bg-card px-2 text-muted-foreground">or</span>
 					</div>
 				</div>
 
 				<a
 					href="/auth/join-as-vendor"
-					class="inline-flex min-h-11 w-full items-center justify-center rounded-radius border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-950 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+					class="inline-flex min-h-11 w-full items-center justify-center rounded-radius border border-border-strong px-4 py-2 text-center text-sm font-semibold text-foreground transition-colors hover:bg-muted hover:text-foreground"
 					aria-label="Join as a vendor"
 				>
 					Join as a Vendor

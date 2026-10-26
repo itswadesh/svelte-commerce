@@ -59,7 +59,7 @@
 <PaginationRenderer bind:noOfPage {paginateProducts}>
 	{#snippet content({ pageSize, count })}
 		{#if count && cappedNoOfPage > 1}
-			<div class="mt-5 flex flex-col items-center gap-6 border-gray-200 pt-5">
+			<div class="mt-5 flex flex-col items-center gap-6 border-border pt-5">
 				<Pagination.Root count={Math.min(count, LAST_REACHABLE_PAGE * (pageSize || 1))} perPage={pageSize} page={activePage}>
 					{#snippet children({ pages })}
 						<Pagination.Content class="gap-1">
@@ -115,9 +115,9 @@
 								{/each}
 							</div>
 
-							<div class="flex items-center px-6 text-[10px] font-bold uppercase tracking-widest text-gray-900 md:hidden">
-								<span class="mr-2 text-gray-400">Page</span>
-								{activePage} <span class="mx-2 text-gray-300">/</span>
+							<div class="flex items-center px-6 text-[10px] font-bold uppercase tracking-widest text-foreground md:hidden">
+								<span class="mr-2 text-muted-foreground">Page</span>
+								{activePage} <span class="mx-2 text-muted-foreground">/</span>
 								{noOfPage}
 							</div>
 

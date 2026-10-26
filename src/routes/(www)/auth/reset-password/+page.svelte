@@ -31,12 +31,12 @@
 </script>
 
 <svelte:head>
-	<title>Reset Password</title>
+	<title>Reset password</title>
 </svelte:head>
 
 <Card class="mx-auto w-full max-w-md">
 	<CardHeader>
-		<CardTitle>Reset Password</CardTitle>
+		<CardTitle>Reset password</CardTitle>
 		<CardDescription>Enter your new password to set.</CardDescription>
 	</CardHeader>
 	<CardContent>
@@ -44,7 +44,7 @@
 			<form onsubmit={handleSubmit}>
 				<div class="space-y-4">
 					<div class="space-y-2">
-						<Label for="password">New Password</Label>
+						<Label for="password">New password</Label>
 						<Input
 							id="password"
 							bind:value={resetPasswordModule.password}
@@ -52,11 +52,11 @@
 							type="password"
 							autocomplete="new-password"
 							disabled={!!userState.loading}
-							class="bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
+							class="bg-card text-foreground"
 						/>
 					</div>
 					<div class="space-y-2">
-						<Label for="retypepassword">Confirm Password</Label>
+						<Label for="retypepassword">Confirm password</Label>
 						<Input
 							id="retypepassword"
 							bind:value={resetPasswordModule.retype}
@@ -64,11 +64,11 @@
 							type="password"
 							autocomplete="new-password"
 							disabled={!!userState.loading}
-							class="bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
+							class="bg-card text-foreground"
 						/>
 					</div>
 					{#if error || resetPasswordModule.error}
-						<div class="flex items-center space-x-2 text-red-600" role="alert">
+						<div class="flex items-center space-x-2 text-destructive" role="alert">
 							<AlertCircle size={16} />
 							<span class="text-sm">{error || resetPasswordModule.error}</span>
 						</div>

@@ -95,7 +95,7 @@
 	}
 </script>
 
-<nav class={cn('pb-safe fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white font-sans md:hidden', className)}>
+<nav class={cn('pb-safe fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card font-sans md:hidden', className)}>
 	<div class="flex h-16 items-center justify-around px-3">
 		{#each navItems as item}
 			{#if item.href}
@@ -103,14 +103,14 @@
 					<div
 						class="relative flex h-7 w-7 items-center justify-center transition-colors duration-200 {isActive(item.href)
 							? 'text-primary'
-							: 'text-gray-600'}"
+							: 'text-muted-foreground'}"
 					>
 						<item.icon size={20} class="stroke-[1.6]" />
 					</div>
 					<span
 						class="truncate text-[9px] font-bold uppercase tracking-wider transition-colors duration-200 {isActive(item.href)
-							? 'font-black text-black'
-							: 'text-gray-600'}"
+							? 'font-semibold text-foreground'
+							: 'text-muted-foreground'}"
 					>
 						{item.label}
 					</span>
@@ -120,17 +120,17 @@
 				</a>
 			{:else}
 				<button onclick={item.onClick} class="flex h-full flex-1 flex-col items-center justify-center transition-all duration-200">
-					<div class="relative flex h-7 w-7 items-center justify-center text-gray-600">
+					<div class="relative flex h-7 w-7 items-center justify-center text-muted-foreground">
 						<item.icon size={20} class="stroke-[1.6]" />
 						{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
 							<span
-								class="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-primary text-[8px] font-bold text-black"
+								class="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full border border-background bg-primary text-[8px] font-bold text-primary-foreground"
 							>
 								{cartState?.cart?.qty}
 							</span>
 						{/if}
 					</div>
-					<span class="truncate text-[9px] font-bold uppercase tracking-wider text-gray-600">
+					<span class="truncate text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
 						{item.label}
 					</span>
 				</button>
@@ -140,27 +140,27 @@
 </nav>
 
 {#if showCartModal}
-	<div class="fixed inset-0 z-[1000001] bg-white" in:drawer={{ edge: 'bottom' }} out:drawer={{ edge: 'bottom' }}>
+	<div class="fixed inset-0 z-[1000001] bg-card" in:drawer={{ edge: 'bottom' }} out:drawer={{ edge: 'bottom' }}>
 		<div class="flex h-full flex-col">
 			<header class="flex items-center gap-4 border-b p-4">
 				<Button variant="ghost" size="icon" class="rounded-full" onclick={() => (showCartModal = false)}>
 					<ArrowLeft size={24} />
 				</Button>
-				<h2 class="text-lg font-medium">Your Cart</h2>
+				<h2 class="text-lg font-medium">Your cart</h2>
 			</header>
 
 			<div class="flex-1 overflow-auto p-4">
 				{#if cartState?.cart?.lineItems?.length}
 					<div class="space-y-4">
 						{#each cartState.cart.lineItems || [] as _, i}
-							<div class="rounded-lg border border-gray-100 p-2 transition-colors duration-fast hover:bg-gray-50">
+							<div class="rounded-lg border border-border p-2 transition-colors duration-fast hover:bg-muted">
 								<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={() => {}} />
 							</div>
 						{/each}
 					</div>
 				{:else}
 					<div class="flex h-full flex-col items-center justify-center">
-						<p class="mb-4 text-gray-500">Your cart is empty</p>
+						<p class="mb-4 text-muted-foreground">Your cart is empty</p>
 						<Button
 							onclick={() => {
 								showCartModal = false
@@ -174,7 +174,7 @@
 			</div>
 
 			{#if cartState?.cart?.lineItems?.length}
-				<div class="border-t bg-white p-4">
+				<div class="border-t bg-card p-4">
 					<div class="space-y-4">
 						<div class="flex justify-between text-sm">
 							<span>Subtotal</span>
@@ -195,7 +195,7 @@
 								goto('/checkout/cart')
 							}}
 							size="lg"
-							class="w-full rounded-pill bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors duration-fast hover:bg-emerald-900"
+							class="w-full rounded-pill bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors duration-fast hover:bg-primary-hover"
 						>
 							Proceed to Checkout
 						</Button>

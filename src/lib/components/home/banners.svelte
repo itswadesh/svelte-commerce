@@ -14,7 +14,7 @@
 		<Carousel.Content class="-ml-5">
 			{#each sliderBannersDesktop as b, ix}
 				<Carousel.Item class="">
-					<div class="relative w-full overflow-hidden rounded-none shadow-2xl">
+					<div class="border relative w-full overflow-hidden rounded-none">
 						{#if b.url}
 							<!-- Banner -->
 							<a href={b.link} aria-label="Click to visit banner related products page" class="group block h-full" data-sveltekit-preload-data>
@@ -37,10 +37,10 @@
 											class="absolute inset-0 flex flex-col items-center justify-center bg-black/10 transition-colors duration-fast group-hover:bg-black/20"
 										>
 											<div class="motion-safe:translate-y-4 opacity-0 transition-[transform,opacity] duration-panel ease-standard motion-safe:group-hover:translate-y-0 group-hover:opacity-100">
-												<span class="mb-6 block text-center text-sm font-black uppercase tracking-[0.4em] text-white/90">Curated for you</span>
+												<span class="mb-6 block text-center text-sm font-semibold uppercase tracking-[0.4em] text-white/90">Curated for you</span>
 												<a
 													href="/products"
-													class="relative overflow-hidden rounded-full bg-white px-10 py-4 text-center text-sm font-black uppercase tracking-widest text-black shadow-2xl transition-all motion-safe:hover:scale-105 motion-safe:active:scale-95"
+													class="border relative overflow-hidden rounded-full bg-white px-10 py-4 text-center text-sm font-semibold uppercase tracking-widest text-black transition-all motion-safe:hover:scale-105 motion-safe:active:scale-95"
 												>
 													Shop Now
 												</a>
@@ -63,7 +63,7 @@
 		<Carousel.Content class="-ml-5">
 			{#each sliderBannersMobile as b, ix}
 				<Carousel.Item class="h-full">
-					<div class="relative w-full overflow-hidden rounded-none shadow-lg">
+					<div class="border relative w-full overflow-hidden rounded-none">
 						{#if b.url}
 							<!-- Banner -->
 							<a href={b.link} aria-label="Click to visit banner related products page" class="group block h-full" data-sveltekit-preload-data>
@@ -84,7 +84,7 @@
 										/>
 										<!-- <div class="absolute inset-0 flex items-center justify-center">
 											<div
-												class="rounded-full bg-white/90 px-6 py-2.5 text-xs font-black uppercase tracking-widest text-black shadow-xl backdrop-blur-sm"
+												class="border rounded-full bg-white/90 px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-black backdrop-blur-sm"
 											>
 												Shop Now
 											</div>

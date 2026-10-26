@@ -21,17 +21,17 @@
 					{#if image}
 						<LazyImg src={image} alt="Image" class="h-full w-full rounded-none object-cover" />
 					{:else}
-						<div class="flex h-full w-full items-center justify-center rounded-none bg-gray-200 text-gray-500">No Image</div>
+						<div class="flex h-full w-full items-center justify-center rounded-none bg-muted text-muted-foreground">No image</div>
 					{/if}
 				</div>
 			</CarouselItem>
 		{/each}
 	</CarouselContent>
 	<div class="absolute left-2 top-1/2 z-30 -translate-y-1/2 translate-x-10 transform">
-		<CarouselPrevious class="rounded-full bg-white p-2 text-black shadow-md hover:bg-gray-100" />
+		<CarouselPrevious class="border rounded-full bg-card p-2 text-foreground hover:bg-muted" />
 	</div>
 
 	<div class="absolute right-2 top-1/2 z-30 -translate-x-10 -translate-y-1/2 transform">
-		<CarouselNext class="rounded-full bg-white p-2 text-black shadow-md hover:bg-gray-100" />
+		<CarouselNext class="border rounded-full bg-card p-2 text-foreground hover:bg-muted" />
 	</div>
 </Carousel>

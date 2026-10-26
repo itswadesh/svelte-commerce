@@ -38,7 +38,7 @@
 
 <div class="page-width py-10 md:py-16">
 	<div class="mx-auto max-w-3xl">
-		<h1 class="mb-8 text-center text-3xl font-bold tracking-tight text-foreground md:text-4xl">Frequently asked questions</h1>
+		<h1 class="mb-8 text-center page-heading">Frequently asked questions</h1>
 
 		{#if faqs.length}
 			<div class="space-y-4">

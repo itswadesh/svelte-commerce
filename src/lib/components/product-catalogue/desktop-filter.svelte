@@ -71,9 +71,9 @@
 		<div class="ed-df__rule w-full border-b border-border"></div>
 
 		<!-- Applied filters -->
-		<!-- <div class="flex w-full max-w-56 flex-col flex-wrap intra-gap text-[11px] text-gray-600">
+		<!-- <div class="flex w-full max-w-56 flex-col flex-wrap intra-gap text-[11px] text-muted-foreground">
 			{#if filterState.selectedTags.length > 0}
-				<div class="flex flex-row flex-wrap items-center bg-gray-50 p-2 rounded">
+				<div class="flex flex-row flex-wrap items-center bg-muted p-2 rounded">
 					<span class="mr-1 font-bold uppercase tracking-tighter">Tags: </span>
 					{#each filterState.selectedTags as tag, idx}
 						<span class="whitespace-nowrap capitalize">{tag.name}</span>
@@ -85,7 +85,7 @@
 			{/if}
 
 			{#each Object.keys(filterState.selectedGeneralFilters) as key, idx}
-				<div class="flex flex-wrap bg-gray-50 p-2 rounded">
+				<div class="flex flex-wrap bg-muted p-2 rounded">
 					<span class="mr-1 whitespace-nowrap font-bold tracking-tighter capitalize">{key?.includes?.('.') ? key?.split('.')[1] : key}:</span>
 					{#each filterState.selectedGeneralFilters[key] as value, idx_i}
 						<div class="flex flex-row flex-wrap items-center">
@@ -101,7 +101,7 @@
 
 		<!-- Category list -->
 		{#if filterState.categories.length > 0}
-			<!-- <div class="mt-4 pt-4 border-t border-gray-100"></div> -->
+			<!-- <div class="mt-4 pt-4 border-t border-border"></div> -->
 			{#if filterState.showCategorySearch}
 				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 8 }}>
 					<input
@@ -316,7 +316,7 @@
 		     Min/Max boxes that filtered nothing, so the whole block is dropped unless the facets
 		     carry a real range. `max > min` also keeps the slider maths off a zero-width range. -->
 		{#if priceFilterSupported}
-			<p class="ed-df__label text-sm font-bold uppercase text-foreground">Price Range</p>
+			<p class="ed-df__label text-sm font-bold uppercase text-foreground">Price range</p>
 
 			<div class="ed-df__slider relative mr-5 mt-3">
 				<!-- Range slider track -->

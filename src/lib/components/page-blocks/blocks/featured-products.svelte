@@ -34,7 +34,7 @@
 		<div class="mb-6 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 			<div class="text-center md:text-left">
 				{#if block.metadata.title}
-					<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">{block.metadata.title}</h2>
+					<h2 class="section-heading">{block.metadata.title}</h2>
 					<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
 				{/if}
 				{#if block.metadata.subtitle}

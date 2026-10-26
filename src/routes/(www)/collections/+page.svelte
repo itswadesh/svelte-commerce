@@ -22,7 +22,7 @@
 <div class="container mx-auto mt-2 flex h-full min-h-screen flex-col max-md:px-4 md:gap-2">
 	<div class="flex-1">
 		<div class="mb-4 flex flex-col items-start gap-2">
-			<h1 class="text-2xl font-bold">All Collections</h1>
+			<h1 class="text-2xl font-bold">All collections</h1>
 			<span class="text-sm text-muted-foreground">{count} {count === 1 ? 'Collection' : 'Collections'} found</span>
 		</div>
 

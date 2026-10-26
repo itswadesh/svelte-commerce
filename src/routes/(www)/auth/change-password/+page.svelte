@@ -16,17 +16,17 @@
 </script>
 
 <svelte:head>
-	<title>Change Password</title>
+	<title>Change password</title>
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-	<div class="w-full max-w-md transform space-y-6 rounded-xl bg-white p-8 shadow-2xl transition-all dark:bg-gray-800">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
+	<div class="border w-full max-w-md transform space-y-6 rounded-xl bg-card p-8 transition-all">
 		<div class="text-center">
 			<div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
 				<KeyRound class="h-6 w-6 text-primary" />
 			</div>
-			<h1 class="text-2xl font-bold text-gray-900 dark:text-white">Change Password</h1>
-			<p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Please enter your old password and choose a new one</p>
+			<h1 class="page-heading">Change password</h1>
+			<p class="mt-2 text-sm text-muted-foreground">Please enter your old password and choose a new one</p>
 		</div>
 
 		<form
@@ -39,10 +39,10 @@
 			}}
 		>
 			<div>
-				<label for="old" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Old Password</label>
+				<label for="old" class="mb-2 block text-sm font-medium text-foreground">Old password</label>
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-						<Lock class="h-5 w-5 text-gray-400" />
+						<Lock class="h-5 w-5 text-muted-foreground" />
 					</div>
 					<Input
 						id="old"
@@ -76,10 +76,10 @@
 			</div>
 
 			<div>
-				<label for="password" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">New Password</label>
+				<label for="password" class="mb-2 block text-sm font-medium text-foreground">New password</label>
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-						<Lock class="h-5 w-5 text-gray-400" />
+						<Lock class="h-5 w-5 text-muted-foreground" />
 					</div>
 					<Input
 						id="password"
@@ -113,10 +113,10 @@
 			</div>
 
 			<div>
-				<label for="retype" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm New Password</label>
+				<label for="retype" class="mb-2 block text-sm font-medium text-foreground">Confirm new password</label>
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-						<Lock class="h-5 w-5 text-gray-400" />
+						<Lock class="h-5 w-5 text-muted-foreground" />
 					</div>
 					<Input
 						id="retype"
@@ -151,7 +151,7 @@
 
 			<Button type="submit" class="w-full" disabled={!changePasswordModule.isValid || changePasswordModule.loading}>
 				{#if changePasswordModule.loading}
-					<div class="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+					<div class="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></div>
 				{/if}
 				{changePasswordModule.loading ? 'Changing Password...' : 'Change Password'}
 			</Button>

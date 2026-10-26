@@ -20,13 +20,13 @@
 	<title>Signup</title>
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
 	<div class="w-full max-w-md space-y-8">
-		<div class="space-y-6 rounded-lg bg-white p-8 shadow dark:bg-gray-800">
+		<div class="space-y-6 rounded-lg bg-card p-8 shadow">
 			<div class="space-y-2 text-center">
-				<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Create your vendor account</h2>
+				<h2 class="page-heading">Create your vendor account</h2>
 
-				<p class="text-gray-500 dark:text-gray-400">Start selling on {page?.data?.store?.name} today</p>
+				<p class="text-muted-foreground">Start selling on {page?.data?.store?.name} today</p>
 			</div>
 
 			<form class="space-y-4" onsubmit={joinAsVendorModule.handleSubmit}>
@@ -36,11 +36,11 @@
 					autocomplete="given-name"
 					placeholder="John"
 					schema={schemas.firstName}
-					label="First Name"
+					label="First name"
 					required
 				/>
 
-				<Textbox name="lastName" autocomplete="family-name" bind:value={joinAsVendorModule.lastName} placeholder="Doe" schema={schemas.lastName} label="Last Name" required />
+				<Textbox name="lastName" autocomplete="family-name" bind:value={joinAsVendorModule.lastName} placeholder="Doe" schema={schemas.lastName} label="Last name" required />
 
 				<Textbox
 					name="email"
@@ -70,7 +70,7 @@
 					autocomplete="organization"
 					placeholder="e.g., Varni Jewels"
 					schema={schemas.businessName}
-					label="Business Name"
+					label="Business name"
 					required
 				/>
 
@@ -92,7 +92,7 @@
 					autocomplete="new-password"
 					placeholder="••••••••"
 					schema={schemas.confirmPassword}
-					label="Confirm Password"
+					label="Confirm password"
 					required
 				/>
 
@@ -105,11 +105,11 @@
 				</Button>
 			</form>
 
-			<div class="text-center text-sm text-gray-600">
+			<div class="text-center text-sm text-muted-foreground">
 				Already have an account?{' '}
 
 				<AuthButton type="login">
-					<Button variant="link" class="text-primary-600 hover:text-primary-500 h-auto p-0">Sign in</Button>
+					<Button variant="link" class="text-primary hover:underline h-auto p-0">Sign in</Button>
 				</AuthButton>
 			</div>
 		</div>

@@ -59,28 +59,28 @@
 </svelte:head>
 
 <div
-	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800"
+	class="flex justify-center bg-background px-4 py-8 sm:py-16"
 	role="main"
 >
 	<div class="grid w-full max-w-4xl items-center gap-8 md:grid-cols-2">
 		<!-- Left side - Welcome message -->
 		<div class="hidden space-y-6 p-8 md:block" aria-hidden="true">
 			<div class="space-y-4">
-				<h1 class="text-4xl font-bold tracking-tighter text-[#1E293B] sm:text-5xl xl:text-6xl/none">Start your business journey</h1>
-				<p class="text-lg text-gray-600 dark:text-gray-300">Create your online store and start selling to customers worldwide.</p>
+				<h1 class="page-heading">Start your business journey</h1>
+				<p class="text-lg text-muted-foreground">Create your online store and start selling to customers worldwide.</p>
 			</div>
 			<div class="space-y-4">
 				<div class="flex items-center space-x-3">
-					<div class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-900">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
 						</svg>
 					</div>
-					<p class="text-gray-600 dark:text-gray-300">Reach millions of customers</p>
+					<p class="text-muted-foreground">Reach millions of customers</p>
 				</div>
 				<div class="flex items-center space-x-3">
-					<div class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-900">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -89,11 +89,11 @@
 							/>
 						</svg>
 					</div>
-					<p class="text-gray-600 dark:text-gray-300">Powerful tools to grow your business</p>
+					<p class="text-muted-foreground">Powerful tools to grow your business</p>
 				</div>
 				<div class="flex items-center space-x-3">
-					<div class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-900">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -102,16 +102,16 @@
 							/>
 						</svg>
 					</div>
-					<p class="text-gray-600 dark:text-gray-300">Secure and reliable platform</p>
+					<p class="text-muted-foreground">Secure and reliable platform</p>
 				</div>
 			</div>
 		</div>
 
 		<!-- Right side - Email form -->
-		<div class="w-full max-w-md transform space-y-6 rounded-xl bg-white/80 p-8 shadow-2xl backdrop-blur-sm transition-all dark:bg-gray-800/90">
+		<div class="border w-full max-w-md transform space-y-6 rounded-xl bg-card p-8 transition-all">
 			<div class="space-y-2">
-				<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Create your store</h2>
-				<p class="text-gray-500 dark:text-gray-400">Enter your email to get started</p>
+				<h2 class="page-heading">Create your store</h2>
+				<p class="text-muted-foreground">Enter your email to get started</p>
 			</div>
 
 			<form class="space-y-4" onsubmit={handleSubmit} aria-label="Store creation form">
@@ -127,21 +127,21 @@
 					autocomplete="email"
 				/>
 
-				<Button type="submit" class="w-full" disabled={isLoading} aria-label={isLoading ? 'Creating store...' : 'Signup'}>
+				<Button type="submit" class="w-full" disabled={isLoading} aria-label={isLoading ? 'Creating store...' : 'Sign up'}>
 					{#if isLoading}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
 						<span class="sr-only">Creating store...</span>
 					{/if}
-					{isLoading ? 'Creating store...' : 'Signup'}
+					{isLoading ? 'Creating store...' : 'Sign up'}
 				</Button>
 			</form>
 
 			<div class="space-y-4 text-center">
-				<p class="text-sm text-gray-500">Already have a store?</p>
+				<p class="text-sm text-muted-foreground">Already have a store?</p>
 
 				<AuthButton type="login">
 					<button
-						class="inline-block text-gray-600 transition-colors hover:text-gray-900 dark:hover:text-gray-300"
+						class="inline-block text-muted-foreground transition-colors hover:text-foreground"
 						aria-label="Sign in to your store"
 					>
 						Sign in to your store
@@ -150,12 +150,12 @@
 			</div>
 
 			{#if storeTermsOk || storePrivacyOk}
-				<div class="text-center text-xs text-gray-500">
+				<div class="text-center text-xs text-muted-foreground">
 					<p>By creating a store, you agree to our</p>
 					<div class="space-x-1">
-						{#if storeTermsOk}<PolicyLink href="/terms-and-conditions" class="text-gray-600 hover:text-gray-900">Terms of Service</PolicyLink>{/if}
+						{#if storeTermsOk}<PolicyLink href="/terms-and-conditions" class="text-muted-foreground hover:text-foreground">Terms of Service</PolicyLink>{/if}
 						{#if storeTermsOk && storePrivacyOk}<span>and</span>{/if}
-						{#if storePrivacyOk}<PolicyLink href="/privacy-policy" class="text-gray-600 hover:text-gray-900">Privacy Policy</PolicyLink>{/if}
+						{#if storePrivacyOk}<PolicyLink href="/privacy-policy" class="text-muted-foreground hover:text-foreground">Privacy Policy</PolicyLink>{/if}
 					</div>
 				</div>
 			{/if}

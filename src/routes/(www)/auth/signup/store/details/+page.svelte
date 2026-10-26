@@ -103,21 +103,21 @@
 </svelte:head>
 
 <div
-	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800"
+	class="flex justify-center bg-background px-4 py-8 sm:py-16"
 	role="main"
 >
 	<div class="grid w-full max-w-4xl items-center gap-8 md:grid-cols-2">
 		<!-- Left side - Progress -->
 		<div class="hidden space-y-6 p-8 md:block" aria-hidden="true">
 			<div class="space-y-4">
-				<h1 class="text-4xl font-bold tracking-tighter text-[#1E293B] sm:text-5xl xl:text-6xl/none">Almost there!</h1>
-				<p class="text-lg text-gray-600 dark:text-gray-300">Complete your account details to start setting up your store.</p>
+				<h1 class="page-heading">Almost there!</h1>
+				<p class="text-lg text-muted-foreground">Complete your account details to start setting up your store.</p>
 			</div>
 
 			<div class="space-y-8">
 				<div class="relative">
 					<div class="flex items-center space-x-4">
-						<div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white">
+						<div class="flex h-8 w-8 items-center justify-center rounded-full bg-success text-primary-foreground">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 								<path
 									fill-rule="evenodd"
@@ -127,20 +127,20 @@
 							</svg>
 						</div>
 						<div>
-							<p class="font-medium text-gray-900 dark:text-white">Email verification</p>
-							<p class="text-sm text-gray-500">{email}</p>
+							<p class="font-medium text-foreground">Email verification</p>
+							<p class="text-sm text-muted-foreground">{email}</p>
 						</div>
 					</div>
 				</div>
 
 				<div class="relative">
 					<div class="flex items-center space-x-4">
-						<div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white">
+						<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
 							<span class="text-sm font-bold">2</span>
 						</div>
 						<div>
-							<p class="font-medium text-gray-900 dark:text-white">Account setup</p>
-							<p class="text-sm text-gray-500">Create your login credentials</p>
+							<p class="font-medium text-foreground">Account setup</p>
+							<p class="text-sm text-muted-foreground">Create your login credentials</p>
 						</div>
 					</div>
 				</div>
@@ -148,10 +148,10 @@
 		</div>
 
 		<!-- Right side - Details form -->
-		<div class="w-full max-w-md transform space-y-6 rounded-xl bg-white/80 p-8 shadow-2xl backdrop-blur-sm transition-all dark:bg-gray-800/90">
+		<div class="border w-full max-w-md transform space-y-6 rounded-xl bg-card p-8 transition-all">
 			<div class="space-y-2">
-				<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Complete your details</h2>
-				<p class="text-gray-500 dark:text-gray-400">Fill in your information to create your store</p>
+				<h2 class="page-heading">Complete your details</h2>
+				<p class="text-muted-foreground">Fill in your information to create your store</p>
 			</div>
 
 			<form class="space-y-4" on:submit={handleSubmit} aria-label="Store details form">
@@ -161,7 +161,7 @@
 						bind:value={firstName}
 						placeholder="John"
 						schema={schemas.firstName}
-						label="First Name"
+						label="First name"
 						required
 						aria-label="First name"
 						autocomplete="given-name"
@@ -171,7 +171,7 @@
 						bind:value={lastName}
 						placeholder="Doe"
 						schema={schemas.lastName}
-						label="Last Name"
+						label="Last name"
 						required
 						aria-label="Last name"
 						autocomplete="family-name"
@@ -224,7 +224,7 @@
 			</form>
 
 			<div class="text-center">
-				<button class="text-sm text-gray-500 hover:text-gray-700" on:click={() => (window.location.href = '/auth/signup/store')}>
+				<button class="text-sm text-muted-foreground hover:text-foreground" on:click={() => (window.location.href = '/auth/signup/store')}>
 					← Back to email
 				</button>
 			</div>

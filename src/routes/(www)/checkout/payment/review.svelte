@@ -30,7 +30,7 @@
 		<CheckoutHeader step={3} />
 
 		<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-			<h1 class="text-xl font-bold uppercase text-foreground" style="font-family: var(--font-body);">Review Your Order</h1>
+			<h1 class="text-xl font-bold uppercase text-foreground" style="font-family: var(--font-body);">Review your order</h1>
 			<Button variant="outline" onclick={onback} class="group flex w-fit items-center gap-2">
 				<ChevronLeft class="size-4 transition-transform duration-fast ease-standard motion-safe:group-hover:-translate-x-1" /> Back to Payment
 			</Button>
@@ -41,7 +41,7 @@
 			     the viewport and scrolling the page sideways on a phone. -->
 			<div class="flex min-w-0 flex-col gap-4">
 				<!-- Items -->
-				<div class="rounded-lg border border-border bg-background p-6 shadow-sm">
+				<div class="rounded-lg border border-border bg-background p-6">
 					<div class="flex items-center justify-between border-b border-border pb-3">
 						<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">
 							Items ({selectedItems.length})
@@ -79,7 +79,7 @@
 
 				<!-- Contact -->
 				{#if cartState.cart?.email || cartState.cart?.phone}
-					<div class="rounded-lg border border-border bg-background p-6 shadow-sm">
+					<div class="rounded-lg border border-border bg-background p-6">
 						<div class="flex items-center justify-between border-b border-border pb-3">
 							<h2 class="flex items-center gap-2 text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">
 								<Mail class="size-4 text-primary" /> Contact
@@ -101,7 +101,7 @@
 
 				<!-- Delivery Address -->
 				{#if cartState.cart?.shippingAddress}
-					<div class="rounded-lg border border-border bg-background p-6 shadow-sm">
+					<div class="rounded-lg border border-border bg-background p-6">
 						<div class="flex items-center justify-between border-b border-border pb-3">
 							<h2 class="flex items-center gap-2 text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">
 								<MapPin class="size-4 text-primary" /> Delivery Address
@@ -132,7 +132,7 @@
 
 				<!-- Shipping Method -->
 				{#if selectedShippingRate}
-					<div class="rounded-lg border border-border bg-background p-6 shadow-sm">
+					<div class="rounded-lg border border-border bg-background p-6">
 						<div class="flex items-center justify-between border-b border-border pb-3">
 							<h2 class="flex items-center gap-2 text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">
 								<Truck class="size-4 text-primary" /> Shipping Method
@@ -161,7 +161,7 @@
 				{/if}
 
 				<!-- Payment Method -->
-				<div class="rounded-lg border border-border bg-background p-6 shadow-sm">
+				<div class="rounded-lg border border-border bg-background p-6">
 					<div class="flex items-center justify-between border-b border-border pb-3">
 						<h2 class="flex items-center gap-2 text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">
 							<CreditCard class="size-4 text-primary" /> Payment Method
@@ -172,7 +172,7 @@
 					</div>
 					<div class="flex items-center gap-3 pt-3">
 						{#if selectedPaymentMethod?.img}
-							<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-background p-1 shadow-sm">
+							<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-background p-1">
 								<img src={selectedPaymentMethod.img} alt={selectedPaymentMethod?.name} class="h-full w-full object-contain" />
 							</div>
 						{/if}
@@ -185,9 +185,9 @@
 
 			<!-- Right Column - Price Summary -->
 			<div class="flex h-fit flex-col gap-3">
-				<div class="space-y-4 rounded-lg border border-border bg-background p-6 shadow-sm">
+				<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 					<div class="mb-6 flex flex-col gap-1">
-						<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price Summary</h2>
+						<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price summary</h2>
 						<div class="h-1 w-12 bg-primary"></div>
 					</div>
 					<div class="space-y-4">

@@ -15,11 +15,11 @@
 
 <div class="flex min-h-[60vh] w-full items-center justify-center bg-background px-4 py-16">
 	<div class="w-full max-w-lg text-center">
-		<div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-50">
-			<MailCheck class="h-10 w-10 text-green-600" />
+		<div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-success/10">
+			<MailCheck class="h-10 w-10 text-success" />
 		</div>
 
-		<h1 class="mb-3 text-3xl font-bold tracking-tight text-foreground">Subscription Successful</h1>
+		<h1 class="mb-3 page-heading">Subscription successful</h1>
 
 		<p class="mb-2 text-base text-muted-foreground">
 			{#if email}
@@ -33,6 +33,6 @@
 			minutes, check your spam or promotions folder.
 		</p>
 
-		<Button href="/" class="h-12 px-8">Continue Shopping</Button>
+		<Button href="/" class="h-12 px-8">Continue shopping</Button>
 	</div>
 </div>

@@ -17,13 +17,13 @@
 	<div class="edp-related mb-12" data-testid="related-products">
 		<header class="edp-related-head">
 			<span class="edp-related-eyebrow">More to explore</span>
-			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">Related Products</h2>
+			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">Related products</h2>
 		</header>
 
 		{#if productState.isLoadingRelatedProducts}
 			<!-- Skeleton cards in the real grid, not a centred spinner: the rail keeps its height,
 			     so nothing below it jumps when the products arrive. The spinner this replaces was
-			     also invisible — `border-primary-500` is not a class this project defines, so it
+			     also invisible — `border-primary` is not a class this project defines, so it
 			     rendered as a transparent ring. -->
 			<div class="edp-related-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6" aria-hidden="true">
 				{#each { length: 6 } as _}

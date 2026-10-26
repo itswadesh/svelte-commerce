@@ -34,8 +34,8 @@
 	<!-- Header -->
 	<div class="mb-10 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
 		<div>
-			<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Your Addresses</h1>
-			<p class="mt-2 text-sm text-gray-500">Manage your shipping and billing addresses.</p>
+			<h1 class="page-heading">Your addresses</h1>
+			<p class="mt-2 text-sm text-muted-foreground">Manage your shipping and billing addresses.</p>
 		</div>
 		<Button onclick={addressesModule.handleAddNew} class="h-12 px-6">
 			<Plus class="mr-2 h-4 w-4" />
@@ -52,50 +52,50 @@
 			{#if addressesModule.addresses?.data?.length === 0}
 				<div class="col-span-full flex flex-col items-center justify-center py-20 text-center">
 					<div class="relative mb-6">
-						<div class="absolute inset-0 scale-150 animate-pulse rounded-full bg-gray-50"></div>
-						<div class="relative flex h-24 w-24 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm">
-							<MapPin class="h-10 w-10 text-gray-300" />
+						<div class="absolute inset-0 scale-150 animate-pulse rounded-full bg-muted"></div>
+						<div class="relative flex h-24 w-24 items-center justify-center rounded-full border border-border bg-card">
+							<MapPin class="h-10 w-10 text-muted-foreground" />
 						</div>
 					</div>
-					<h2 class="text-2xl font-bold text-gray-900">No addresses yet</h2>
-					<p class="mt-2 max-w-xs text-gray-500">Add an address to speed up your checkout process.</p>
+					<h2 class="text-2xl font-bold text-foreground">No addresses yet</h2>
+					<p class="mt-2 max-w-xs text-muted-foreground">Add an address to speed up your checkout process.</p>
 				</div>
 			{:else}
 				{#each addressesModule.addresses?.data as address, i (address.id)}
 					<div
 						in:fly={{ y: 12, delay: Math.min(i, 5) * 40 }}
-						class="group relative flex flex-col overflow-hidden rounded-md border border-gray-200 bg-white transition-[border-color,box-shadow] duration-fast"
+						class="group relative flex flex-col overflow-hidden rounded-md border border-border bg-card transition-[border-color,box-shadow] duration-fast"
 					>
 						<!-- Address Details -->
 						<div class="flex flex-1 flex-col p-6 pb-4">
 							<div class="mb-4 flex items-start justify-between">
 								<div>
-									<p class="text-sm font-bold uppercase tracking-widest text-gray-900">{address.firstName} {address.lastName}</p>
+									<p class="text-sm font-bold uppercase tracking-widest text-foreground">{address.firstName} {address.lastName}</p>
 								</div>
 							</div>
 
-							<div class="space-y-1 text-sm font-medium leading-relaxed text-gray-500">
+							<div class="space-y-1 text-sm font-medium leading-relaxed text-muted-foreground">
 								<p>
 									{address.address_1}
 									{#if address.address_2}
 										, {address.address_2}
 									{/if}
 								</p>
-								<p class="text-gray-900">{address.city}, {address.state} {address.zip}</p>
+								<p class="text-foreground">{address.city}, {address.state} {address.zip}</p>
 								<p>{address.country}</p>
 							</div>
 
-							<div class="mt-6 flex items-center gap-2 text-xs font-bold text-gray-400">
+							<div class="mt-6 flex items-center gap-2 text-xs font-bold text-muted-foreground">
 								<Phone class="h-3.5 w-3.5" />
 								{address.phone}
 							</div>
 						</div>
 
-						<div class="flex border-t border-gray-100">
+						<div class="flex border-t border-border">
 							<Button
 								variant="ghost"
 								onclick={() => addressesModule.handleEdit(address)}
-								class="flex-1 h-auto py-3 rounded-none border-r border-gray-100"
+								class="flex-1 h-auto py-3 rounded-none border-r border-border"
 							>
 								<Pencil class="h-3 w-3 mr-2" />
 								Edit
@@ -103,7 +103,7 @@
 							<Button
 								variant="ghost"
 								onclick={() => confirmDelete(address)}
-								class="flex-1 h-auto py-3 rounded-none text-red-500"
+								class="flex-1 h-auto py-3 rounded-none text-destructive"
 							>
 								<Trash2 class="h-3 w-3 mr-2" />
 								Delete
@@ -133,7 +133,7 @@
 	<Dialog.Root bind:open={showDeleteConfirmation}>
 		<Dialog.Content class="sm:max-w-[425px]">
 			<Dialog.Header>
-				<Dialog.Title>Delete Address</Dialog.Title>
+				<Dialog.Title>Delete address</Dialog.Title>
 				<Dialog.Description>Are you sure you want to delete this address? This action cannot be undone.</Dialog.Description>
 			</Dialog.Header>
 			<Dialog.Footer class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
@@ -144,8 +144,3 @@
 	</Dialog.Root>
 </div>
 
-<style>
-	:global(body) {
-		background-color: #fafafa;
-	}
-</style>

@@ -100,7 +100,7 @@
 				<span class="text-xs font-bold text-foreground">{avgRating}</span>
 				<span class="h-1 w-1 rounded-full bg-border-strong"></span>
 				<span class="text-xs text-muted-foreground">{reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}</span>
-				<Button variant="link" class="h-auto p-0 text-xs font-medium">View Reviews</Button>
+				<Button variant="link" class="h-auto p-0 text-xs font-medium">View reviews</Button>
 			</div>
 		</div>
 	{:else if reviewsEnabled}

@@ -109,7 +109,7 @@
 							href={category.link || '/' + category.slug}
 							class="ed-mm-link motion-underline flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap [--underline-offset:0px] {slim
 								? 'py-1.5'
-								: 'py-3'} text-sm font-semibold uppercase text-gray-900 transition-[color,transform] duration-fast ease-standard hover:text-gray-900 motion-safe:active:scale-95
+								: 'py-3'} text-sm font-semibold uppercase text-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95
 								{selectedCategory === category.name ? 'text-primary' : ''}"
 							data-current={selectedCategory === category.name}
 							style="font-family: var(--font-body);"
@@ -140,7 +140,7 @@
 							     the script one does. Closing keeps the CSS fade inside the grace period. -->
 							<div
 								in:fly={{ y: 4, duration: motionMs('fast') }}
-								class="ed-mm-panel mega-menu absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-[opacity,transform,visibility] duration-fast ease-standard"
+								class="ed-mm-panel mega-menu absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-border bg-card shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-[opacity,transform,visibility] duration-fast ease-standard"
 							>
 								<div class="flex">
 									<div class="grid max-h-[70vh] flex-1 grid-cols-4 gap-x-8 gap-y-2 overflow-y-auto px-10 py-7 scrollbar-thin">
@@ -148,7 +148,7 @@
 											<div class="flex flex-col gap-2">
 												<a
 													href={c.link || '/' + c.slug}
-													class="ed-mm-cat flex items-center gap-2 text-sm font-semibold text-gray-900 transition-all motion-safe:hover:translate-x-1"
+													class="ed-mm-cat flex items-center gap-2 text-sm font-semibold text-foreground transition-all motion-safe:hover:translate-x-1"
 													onclick={() => closeChildMenu(index, false)}
 												>
 													{#if c?.thumbnail}
@@ -172,7 +172,7 @@
 															<li>
 																<a
 																	href={c1.link || '/' + c1.slug}
-																	class="ed-mm-sub flex items-center gap-2 text-[13px] font-medium text-gray-700 transition-all hover:text-primary motion-safe:hover:translate-x-1"
+																	class="ed-mm-sub flex items-center gap-2 text-[13px] font-medium text-foreground transition-all hover:text-primary motion-safe:hover:translate-x-1"
 																	onclick={() => closeChildMenu(index, false)}
 																>
 																	{#if c1?.thumbnail}
@@ -208,7 +208,7 @@
 									{/if}
 								</div>
 
-								<div class="ed-mm-foot border-t border-gray-100 bg-gray-50 px-10 py-4">
+								<div class="ed-mm-foot border-t border-border bg-muted px-10 py-4">
 									<a href={category.link || '/' + category.slug} class="ed-mm-viewall text-xs font-semibold text-muted-foreground transition-colors">
 										View all {category.name}
 									</a>

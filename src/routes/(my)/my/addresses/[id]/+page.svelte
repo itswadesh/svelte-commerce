@@ -77,100 +77,100 @@
 </script>
 
 <svelte:head>
-	<title>Address Page</title>
+	<title>Address page</title>
 </svelte:head>
-<div class="flex min-h-screen items-center justify-center">
-	<div class="w-full max-w-4xl transform space-y-6 rounded-xl bg-white p-8 shadow-2xl transition-all dark:bg-gray-800">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
+	<div class="border w-full max-w-4xl transform space-y-6 rounded-xl bg-card p-8 transition-all">
 		<div class="space-y-2 text-center">
-			<!-- <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Update Vendor: {address.name}</h1> -->
+			<!-- <h1 class="text-3xl font-bold text-foreground">Update Vendor: {address.name}</h1> -->
 		</div>
 		<form onsubmit={saveAddress} class="w-full space-y-4" oninput={handleDetailsChange}>
-			<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Address:</h2>
+			<h2 class="text-2xl font-bold text-foreground">Address:</h2>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div>
-					<label for="firstName" class="text-gray-700 dark:text-gray-300"> First Name: </label>
+					<label for="firstName" class="text-foreground"> First Name: </label>
 					<Input
 						id="firstName"
 						name="firstName"
 						bind:value={address.firstName}
-						placeholder="Enter First Name"
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						placeholder="Enter first name"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div>
-					<label for="lastName" class="text-gray-700 dark:text-gray-300"> Last Name: </label>
+					<label for="lastName" class="text-foreground"> Last Name: </label>
 					<Input
 						id="lastName"
 						name="lastName"
 						bind:value={address.lastName}
-						placeholder="Enter Last Name"
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						placeholder="Enter last name"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div>
-					<label for="address1" class="text-gray-700 dark:text-gray-300"> Address 1: </label>
+					<label for="address1" class="text-foreground"> Address 1: </label>
 					<Input
 						id="address1"
 						name="address1"
 						bind:value={address.address_1}
 						placeholder="Enter Address 1"
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 
 				<div>
-					<label for="address2" class="text-gray-700 dark:text-gray-300"> Address 2: </label>
+					<label for="address2" class="text-foreground"> Address 2: </label>
 					<Input
 						id="address2"
 						name="address2"
 						bind:value={address.address_2}
 						placeholder="Enter Address 2"
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div>
-					<label for="city" class="text-gray-700 dark:text-gray-300">City: </label>
+					<label for="city" class="text-foreground">City: </label>
 					<Input
 						id="city"
 						name="city"
 						bind:value={address.city}
-						placeholder="Enter City"
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						placeholder="Enter city"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div>
-					<label for="state" class="text-gray-700 dark:text-gray-300">State/Province: </label>
+					<label for="state" class="text-foreground">State/Province: </label>
 					<Input
 						id="state"
 						name="state"
 						bind:value={address.state}
 						placeholder="Enter State/Province"
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 
 				<div>
-					<label for="zip" class="text-gray-700 dark:text-gray-300">Zip/Postal Code: </label>
+					<label for="zip" class="text-foreground">Zip/Postal Code: </label>
 					<Input
 						id="zip"
 						name="zip"
 						bind:value={address.zip}
 						placeholder="Enter Zip/Postal Code"
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div>
-					<label for="country" class="text-gray-700 dark:text-gray-300">Country: </label>
+					<label for="country" class="text-foreground">Country: </label>
 					<!-- <Input
 						id="country"
 						name="country"
 						bind:value={address.country}
-						placeholder="Enter Country"
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						placeholder="Enter country"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/> -->
 					<!-- <Select
 						id="country"
-						title="Select Country"
+						title="Select country"
 						errors={null}
 						label=""
 						value={address.country}
@@ -183,7 +183,7 @@
 					<select
 						bind:value={address.country}
 						id="country"
-						class="mt-1 block h-10 w-full rounded-md bg-background px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block h-10 w-full rounded-md bg-background px-3 py-2 focus:outline-none sm:text-sm"
 					>
 						{#each countries as country}
 							<option value={country.value}>{country.name}</option>
@@ -191,77 +191,77 @@
 					</select>
 				</div>
 			</div>
-			<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Contact Details:</h2>
+			<h2 class="text-2xl font-bold text-foreground">Contact Details:</h2>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div>
-					<label for="phone" class="text-gray-700 dark:text-gray-300">Business phone:</label>
+					<label for="phone" class="text-foreground">Business phone:</label>
 					<Input
 						id="phone"
 						type="phone"
 						name="phone"
 						bind:value={address.phone}
-						placeholder="Enter Business Phone"
+						placeholder="Enter business phone"
 						required
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 
 				<div>
-					<label for="email" class="text-gray-700 dark:text-gray-300">Business email:</label>
+					<label for="email" class="text-foreground">Business email:</label>
 					<Input
 						id="email"
 						type="email"
 						name="email"
 						bind:value={address.email}
-						placeholder="Enter Business Email"
+						placeholder="Enter business email"
 						required
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 			</div>
-			<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Location Details:</h2>
+			<h2 class="text-2xl font-bold text-foreground">Location Details:</h2>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div>
-					<label for="lat" class="text-gray-700 dark:text-gray-300">Latitude:</label>
+					<label for="lat" class="text-foreground">Latitude:</label>
 					<Input
 						id="lat"
 						type="number"
 						name="lat"
 						bind:value={address.lat}
-						placeholder="Enter Latitude"
+						placeholder="Enter latitude"
 						required
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div>
-					<label for="lng" class="text-gray-700 dark:text-gray-300">Longitude:</label>
+					<label for="lng" class="text-foreground">Longitude:</label>
 					<Input
 						id="lng"
 						type="number"
 						name="lng"
 						bind:value={address.lng}
-						placeholder="Enter Longitude"
+						placeholder="Enter longitude"
 						required
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 			</div>
-			<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Additional Details:</h2>
+			<h2 class="text-2xl font-bold text-foreground">Additional Details:</h2>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
 				<div>
-					<label for="isPrimary" class="text-gray-700 dark:text-gray-300">Is Default Location:</label>
+					<label for="isPrimary" class="text-foreground">Is Default Location:</label>
 					<input
 						id="isPrimary"
 						type="checkbox"
 						name="isPrimary"
 						bind:checked={address.isPrimary}
-						placeholder="Is Deafult Location"
+						placeholder="Is deafult location"
 						required
-						class="mt-1 block h-[20px] w-[20px] rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block h-[20px] w-[20px] rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div>
-					<label for="isResiddential" class="text-gray-700 dark:text-gray-300">Is Resident:</label>
+					<label for="isResiddential" class="text-foreground">Is Resident:</label>
 					<input
 						id="isResiddential"
 						type="checkbox"
@@ -269,29 +269,29 @@
 						bind:checked={address.isResiddential}
 						placeholder="Is Resident:"
 						required
-						class="mt-1 block h-[20px] w-[20px] rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block h-[20px] w-[20px] rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 				<div class="md:col-span-3">
-					<label for="deliveryInstructions" class="text-gray-700 dark:text-gray-300">Delivery Instructions:</label>
+					<label for="deliveryInstructions" class="text-foreground">Delivery Instructions:</label>
 					<textarea
 						id="deliveryInstructions"
 						name="deliveryInstructions"
 						bind:value={address.deliveryInstructions}
 						placeholder="Instructions for Delivery"
 						required
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					></textarea>
 				</div>
 				<div>
-					<label for="locality" class="text-gray-700 dark:text-gray-300">Locality:</label>
+					<label for="locality" class="text-foreground">Locality:</label>
 					<Input
 						id="locality"
 						name="locality"
 						bind:value={address.locality}
-						placeholder="Enter Locality"
+						placeholder="Enter locality"
 						required
-						class="mt-1 block w-full rounded-md px-3 py-2 shadow-sm focus:outline-none sm:text-sm"
+						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					/>
 				</div>
 			</div>
@@ -300,7 +300,7 @@
 </div>
 
 <div
-	class="ease-[cubic-bezier(1,.32,.52,.67)] fixed left-0 right-0 top-10 z-50 mx-auto flex w-1/2 max-w-[1000px] flex-row justify-between rounded-lg border border-gray-300 bg-gray-50 p-2 text-xs font-semibold text-black shadow transition-all duration-150 hover:bg-gray-100"
+	class="ease-[cubic-bezier(1,.32,.52,.67)] fixed left-0 right-0 top-10 z-50 mx-auto flex w-1/2 max-w-[1000px] flex-row justify-between rounded-lg border border-border-strong bg-muted p-2 text-xs font-semibold text-foreground shadow transition-all duration-150 hover:bg-muted"
 	style={detailsChanged ? 'display: flex' : 'display: none'}
 >
 	<div class="flex flex-row items-center gap-2">

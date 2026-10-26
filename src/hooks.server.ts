@@ -5,8 +5,24 @@ import { getStore } from '@misiki/kitcommerce-core/utils'
 import { activeBackendProxy, initActiveConnector } from '$lib/core/connectors/init'
 import { resolveStorefrontTheme } from '$lib/theme/index.js'
 import { isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
+import { getRequestEvent } from '$app/server'
+import { services } from 'kitcommerce.config'
 
 export const init = initActiveConnector
+
+// A connector serving many stores from one deployment (GoCommerce's PUBLIC_GOCOMMERCE_BASE_DOMAIN:
+// `acme.shopnx.in` is store `acme`) needs the current request's host, and SSR shares one process
+// across concurrent requests, so it reads the host per call rather than being handed one. Reached
+// through a cast like every other connector hook (see connectors/active.ts), since most connectors
+// have no such hook. Outside a request (a hook invoked at boot) getRequestEvent throws; no host
+// then means the connector's static store, which is what it would have used anyway.
+;(services as { setRequestHost?: (fn: () => string | undefined) => void }).setRequestHost?.(() => {
+	try {
+		return getRequestEvent().url.hostname
+	} catch {
+		return undefined
+	}
+})
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
