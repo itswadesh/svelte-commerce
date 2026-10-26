@@ -146,8 +146,13 @@
 	// shopper is asked once to allow it; declined, unsupported or a text without the line, the
 	// boxes are typed as before. iPhones offer the code above the keyboard on their own, from
 	// the boxes' autocomplete="one-time-code". Leaving the step stops listening.
+	//
+	// Off unless PUBLIC_WEB_OTP is "true": Chrome asks the shopper to allow it either way, and the
+	// texts only carry that last line once the store's DLT template ends with it. Asked to allow
+	// something that then reads nothing, a shopper is worse off than not being asked.
+	const webOtp = env.PUBLIC_WEB_OTP === 'true'
 	$effect(() => {
-		if (loginModule.step !== 2 || typeof window === 'undefined' || !('OTPCredential' in window)) return
+		if (!webOtp || loginModule.step !== 2 || typeof window === 'undefined' || !('OTPCredential' in window)) return
 		const listening = new AbortController()
 		navigator.credentials
 			.get({ otp: { transport: ['sms'] }, signal: listening.signal } as CredentialRequestOptions)
