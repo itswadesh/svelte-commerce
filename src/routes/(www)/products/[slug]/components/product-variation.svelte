@@ -226,8 +226,6 @@
 		/* 12px floor for supporting text. The row is min-h-6, so this does not reflow. */
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
 		color: var(--ed-soft);
 	}
 

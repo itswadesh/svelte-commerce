@@ -97,10 +97,10 @@
 	}
 
 	const ratingLabels = [
-		{ text: 'Very Disappointed', color: 'text-destructive' },
-		{ text: 'Slightly Disappointed', color: 'text-warning' },
+		{ text: 'Very disappointed', color: 'text-destructive' },
+		{ text: 'Slightly disappointed', color: 'text-warning' },
 		{ text: 'Good', color: 'text-success' },
-		{ text: 'Very Good', color: 'text-success' },
+		{ text: 'Very good', color: 'text-success' },
 		{ text: 'Excellent', color: 'text-success' }
 	]
 </script>
@@ -130,7 +130,7 @@
 						Based on {ratings.length}
 						{ratings.length === 1 ? 'review' : 'reviews'}
 					</p>
-					<Button class="mt-4" onclick={() => (productState.showReviewForm = true)}>Write a Review</Button>
+					<Button class="mt-4" onclick={() => (productState.showReviewForm = true)}>Write a review</Button>
 				</div>
 
 				<div class="lg:col-span-5">
@@ -235,7 +235,7 @@
 				</div>
 				<h3 class="mb-2 text-2xl font-bold tracking-tight text-foreground">No reviews yet</h3>
 				<p class="mb-8 max-w-sm text-muted-foreground">Be the first to share your thoughts on this product and help other shoppers.</p>
-				<Button class="h-12 px-8" onclick={() => (productState.showReviewForm = true)}>Write the First Review</Button>
+				<Button class="h-12 px-8" onclick={() => (productState.showReviewForm = true)}>Write the first review</Button>
 			</div>
 		{/if}
 	</section>
@@ -319,7 +319,7 @@
 			>
 				<div class="sticky top-0 z-10 flex items-center justify-between border-b border-border px-6 py-4 backdrop-blur-md sm:px-8 sm:py-5">
 					<div>
-						<h3 class="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">Write a Review</h3>
+						<h3 class="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">Write a review</h3>
 						<p class="text-xs font-medium text-muted-foreground sm:text-sm">Share your experience with us</p>
 					</div>
 					<Button variant="ghost" size="icon" onclick={() => (productState.showReviewForm = false)} class="rounded-full">
@@ -412,7 +412,7 @@
 					<div class="flex items-center justify-end gap-3">
 						<Button variant="ghost" onclick={() => (productState.showReviewForm = false)} class="h-11 px-5">Discard</Button>
 						<Button disabled={productState.select === null || !productState.reviewMessage || submitting} class="h-11 px-8" onclick={submitReview}>
-							{submitting ? 'Posting…' : 'Post Review'}
+							{submitting ? 'Posting…' : 'Post review'}
 						</Button>
 					</div>
 				</div>

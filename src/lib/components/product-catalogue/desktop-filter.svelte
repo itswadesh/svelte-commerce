@@ -74,7 +74,7 @@
 		<!-- <div class="flex w-full max-w-56 flex-col flex-wrap intra-gap text-[11px] text-muted-foreground">
 			{#if filterState.selectedTags.length > 0}
 				<div class="flex flex-row flex-wrap items-center bg-muted p-2 rounded">
-					<span class="mr-1 font-bold uppercase tracking-tighter">Tags: </span>
+					<span class="mr-1 font-bold tracking-tighter">Tags: </span>
 					{#each filterState.selectedTags as tag, idx}
 						<span class="whitespace-nowrap capitalize">{tag.name}</span>
 						{#if idx < filterState.selectedTags.length - 1}
@@ -124,7 +124,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="ed-df__label text-sm font-bold uppercase text-foreground" in:fade>{taxonomy.many}</p>
+					<p class="ed-df__label text-sm font-bold text-foreground" in:fade>{taxonomy.many}</p>
 					<Button
 						variant="ghost"
 						size="icon"
@@ -234,7 +234,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="ed-df__label text-sm font-bold uppercase text-foreground" in:fade>Tags</p>
+					<p class="ed-df__label text-sm font-bold text-foreground" in:fade>Tags</p>
 					<Button
 						class="flex w-8 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground"
 						variant="ghost"
@@ -316,7 +316,7 @@
 		     Min/Max boxes that filtered nothing, so the whole block is dropped unless the facets
 		     carry a real range. `max > min` also keeps the slider maths off a zero-width range. -->
 		{#if priceFilterSupported}
-			<p class="ed-df__label text-sm font-bold uppercase text-foreground">Price range</p>
+			<p class="ed-df__label text-sm font-bold text-foreground">Price range</p>
 
 			<div class="ed-df__slider relative mr-5 mt-3">
 				<!-- Range slider track -->
@@ -373,7 +373,7 @@
 				<div class="ed-df__rule w-full border-b border-border"></div>
 
 				<div class="ed-df__group intra-gap flex flex-col">
-					<p class="ed-df__label text-sm font-bold uppercase text-foreground">
+					<p class="ed-df__label text-sm font-bold text-foreground">
 						{filterState.formatFilterName(key)}
 					</p>
 
@@ -519,8 +519,6 @@
 		font-family: var(--ed-body);
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
 		color: var(--ed-ink);
 	}
 
@@ -528,7 +526,6 @@
 		color: var(--ed-soft);
 		font-family: var(--ed-body);
 		font-weight: 600;
-		letter-spacing: 0.04em;
 	}
 
 	:global([data-theme='default'] .ed-df__clear:hover) {
@@ -540,13 +537,11 @@
 		border-color: var(--ed-line);
 	}
 
-	/* Quiet uppercase section labels */
+	/* Quiet section labels */
 	:global([data-theme='default']) .ed-df__label {
 		font-family: var(--ed-body);
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
 		color: var(--ed-soft);
 	}
 
@@ -572,8 +567,6 @@
 		font-family: var(--ed-body);
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		text-decoration: none;
 	}
 
@@ -650,7 +643,6 @@
 		font-family: var(--ed-body);
 		font-size: 0.75rem;
 		font-weight: 500;
-		letter-spacing: 0.04em;
 		color: var(--ed-soft);
 	}
 </style>

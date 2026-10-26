@@ -21,7 +21,7 @@
 					showAuthModal('login')
 				}}
 			>
-				Go to Login
+				Go to login
 			</Button>
 		</div>
 	</div>

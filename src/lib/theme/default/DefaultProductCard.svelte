@@ -221,7 +221,7 @@
 								{#if cartState?.isUpdatingCart}
 									<LoadingDots />
 								{:else}
-									Quick Add
+									Quick add
 								{/if}
 							</button>
 						{/if}
@@ -329,8 +329,6 @@
 		color: var(--ed-ink);
 		font-size: 0.6875rem;
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		border-radius: 2px;
 	}
 
@@ -492,8 +490,6 @@
 		flex-basis: 100%;
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.02em;
-		text-transform: uppercase;
 		white-space: nowrap;
 		color: hsl(var(--success));
 	}
@@ -528,8 +524,6 @@
 		font-family: var(--ed-body);
 		font-size: 0.74rem;
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		cursor: pointer;
 	}
 

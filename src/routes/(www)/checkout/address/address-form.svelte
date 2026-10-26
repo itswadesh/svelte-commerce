@@ -284,7 +284,7 @@
 						<Spinner label="Saving address" />
 					{:else}
 						<Save class="mr-2 h-4 w-4" />
-						Save Address
+						Save address
 					{/if}
 				</Button>
 			</div>

@@ -31,7 +31,7 @@
 
 {#if value}
 	<span
-		class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium uppercase {isPositiveStatus
+		class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium {isPositiveStatus
 			? 'bg-success/10 text-success ring-1 ring-inset ring-success/20'
 			: isWarningStatus
 				? 'bg-warning/10 text-warning ring-1 ring-inset ring-warning/20'

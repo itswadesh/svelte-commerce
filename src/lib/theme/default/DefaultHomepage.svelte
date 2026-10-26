@@ -604,8 +604,6 @@
 		   at 0.2em tracking — it was the smallest, hardest-to-read text on the page. */
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
 	}
 
 	/* ---------- HERO ---------- */
@@ -899,8 +897,6 @@
 		   Three uppercase button labels at 0.8 / 0.82 / 0.85rem is drift, not hierarchy. */
 		font-size: 0.8rem;
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		transition:
 			transform var(--motion-fast) var(--motion-ease),
 			opacity var(--motion-fast) var(--motion-ease);
@@ -939,8 +935,6 @@
 		color: var(--ed-ink);
 		font-size: 0.82rem;
 		font-weight: 600;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
 		white-space: nowrap;
 	}
 
@@ -978,8 +972,6 @@
 		/* This wraps to three lines on a 390px screen; at 16px padding and a 14px row gap the
 		   assurance strip was 122px tall, taller than any product title it sits above. */
 		line-height: 1.4;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 	}
 
 	.ed-ribbon__dot {
@@ -1322,8 +1314,6 @@
 		font-family: inherit;
 		font-size: 0.82rem;
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		cursor: pointer;
 		transition: transform var(--motion-fast) var(--motion-ease);
 	}

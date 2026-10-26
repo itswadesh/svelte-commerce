@@ -84,15 +84,13 @@
 		/* 12px floor for supporting text; 11.2px all-caps at 0.2em tracking sits under it. */
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
 		color: var(--ed-soft);
 	}
 
 	/* Was clamp(1.8rem, 3.4vw, 2.8rem) — a 44.8px section heading at 1440, well past the 32px
 	   ceiling and larger than the product's own h1. The clamp below is the storefront's section-
 	   title step, identical to .ed-head__title / .ed-banner__title / .ed-news__title on the
-	   homepage: 22px on a phone, 28px on a desktop. "Related Products" and "Featured pieces" are
+	   homepage: 22px on a phone, 28px on a desktop. "Related products" and "Featured pieces" are
 	   the same thing — a serif heading introducing a grid of product cards — so they get the same
 	   size instead of 20/25.6 here and 22/28 there. */
 	:global([data-theme='default'] .edp-related-title) {

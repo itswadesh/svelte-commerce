@@ -177,8 +177,8 @@
 									<step.icon class="h-5 w-5" />
 								</div>
 								<span
-									class="mt-3 text-xs font-semibold uppercase tracking-wider
-									{step.completed || step.current ? 'text-foreground' : 'text-muted-foreground'}"
+									class="mt-3 text-xs font-semibold
+									{step.completed || step.current ? 'text-foreground': 'text-muted-foreground'}"
 								>
 									{step.label}
 								</span>
@@ -350,7 +350,7 @@
 			<div class="bg-card p-8 md:p-12">
 				<div class="flex flex-col gap-4 sm:flex-row">
 					<Button href="/products" class="group order-1 h-14 flex-1 sm:order-2">
-						Continue Shopping
+						Continue shopping
 						<ArrowRight class="ml-2 h-4 w-4" />
 					</Button>
 					{#if userState?.user?.role}

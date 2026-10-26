@@ -8,7 +8,7 @@
 		class="absolute right-0 top-[47%] z-10 flex h-fit w-auto -translate-y-[47%] transform flex-col items-center justify-center p-[25px] text-center mobilem:w-[375px] mobilel:w-[425px] tablet:right-[50px] laptop:right-[10%] laptop:-translate-x-[10%]"
 	>
 		<div class="mb-[15px] flex flex-col mobiles:mb-[20px]">
-			<h2 class="pb-[5px] text-[24px] font-bold uppercase tracking-wider text-white mobiles:pb-[12px] tablet:text-black laptop:text-[40px]">
+			<h2 class="pb-[5px] text-[24px] font-bold text-white mobiles:pb-[12px] tablet:text-black laptop:text-[40px]">
 				{title}
 			</h2>
 			<div class="mx-auto h-[2px] w-[40px] bg-white tablet:bg-black laptop:h-[2.5px]"></div>
@@ -18,7 +18,7 @@
 		</p>
 		<a href={link} class="inline-block">
 			<button
-				class="w-[180px] border border-black bg-black px-[15px] py-[10px] text-[14px] font-semibold uppercase text-white transition-colors duration-fast hover:bg-white hover:text-black"
+				class="w-[180px] border border-black bg-black px-[15px] py-[10px] text-[14px] font-semibold text-white transition-colors duration-fast hover:bg-white hover:text-black"
 			>
 				{buttonText}
 			</button>

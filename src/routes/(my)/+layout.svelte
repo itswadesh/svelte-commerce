@@ -56,10 +56,10 @@
 			.filter(Boolean)
 			.map((path, index, arr) => {
 				const href = `/${arr.slice(0, index + 1).join('/')}`
-				// Convert path to readable label (e.g., 'my-orders' -> 'My Orders')
+				// Convert path to readable label (e.g., 'my-orders' -> 'My orders')
 				const label = path
 					.split('-')
-					.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+					.map((word, i) => (i ? word : word.charAt(0).toUpperCase() + word.slice(1)))
 					.join(' ')
 				return { label, href }
 			})
@@ -150,7 +150,7 @@
 			class="relative z-10 flex h-full w-[80%] max-w-xs flex-col overflow-y-auto border-r bg-background shadow-z-10"
 		>
 			<div class="flex items-center justify-between border-b px-5 py-4">
-				<h2 id="account-menu-drawer-title" class="text-sm font-bold uppercase tracking-widest text-foreground">My account</h2>
+				<h2 id="account-menu-drawer-title" class="text-sm font-bold text-foreground">My account</h2>
 				<Button
 					variant="ghost"
 					size="icon"

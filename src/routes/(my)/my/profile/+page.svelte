@@ -195,7 +195,7 @@
 						class="h-12 px-6"
 						onclick={() => goto('/my/profile/delete')}
 					>
-						Request Deletion
+						Request deletion
 					</Button>
 				</div>
 			</div>
@@ -220,7 +220,7 @@
 					Saving...
 				{:else}
 					<Save class="mr-2 h-4 w-4" />
-					Save Changes
+					Save changes
 				{/if}
 			</Button>
 		</div>

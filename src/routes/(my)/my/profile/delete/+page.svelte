@@ -83,7 +83,7 @@
 
 			<div class="mt-8 flex justify-end">
 				<Button onclick={deleteModule.deleteUser} variant="destructive" class="h-12 px-10" disabled={!deleteModule.iAgree}>
-					Permanently Delete My Account
+					Permanently delete my account
 				</Button>
 			</div>
 		</div>
