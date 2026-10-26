@@ -98,6 +98,24 @@
 		}
 	})
 
+	// Chrome on Android fills the code in from the text when it ends "@<this site> #<code>"
+	// (the Web OTP API; the engine adds that line only for the store's own site, D124). The
+	// shopper is asked once to allow it; declined, unsupported or a text without the line, the
+	// boxes are typed as before. iPhones offer the code above the keyboard on their own, from
+	// the boxes' autocomplete="one-time-code". Leaving the step stops listening.
+	$effect(() => {
+		if (loginModule.step !== 2 || typeof window === 'undefined' || !('OTPCredential' in window)) return
+		const listening = new AbortController()
+		navigator.credentials
+			.get({ otp: { transport: ['sms'] }, signal: listening.signal } as CredentialRequestOptions)
+			.then((credential) => {
+				const code = (credential as (Credential & { code?: string }) | null)?.code
+				if (code && /^\d{4}$/.test(code) && loginModule.step === 2) loginModule.otp = code
+			})
+			.catch(() => {})
+		return () => listening.abort()
+	})
+
 	$effect(() => {
 		if (show) {
 			loginModule.step = 1
