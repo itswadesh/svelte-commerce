@@ -135,7 +135,7 @@
 		<div class="mb-8 flex flex-row justify-center space-x-3">
 			<h2 class="text-2xl font-semibold tracking-tight">Products of {data?.vendor?.businessName}</h2>
 			<!-- <button class="rounded-lg border border-input px-3 py-1.5 text-sm" onclick={() => initiateChatWithVendor(data.vendor?.id)}>
-				Initiate Chat
+				Initiate chat
 			</button> -->
 		</div>
 
@@ -143,7 +143,7 @@
 		<!-- <div class="mb-8 rounded-lg bg-muted p-6">
 			<div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 				<div class="space-y-2">
-					<h3 class="text-lg font-semibold">Store Rating & Reviews</h3>
+					<h3 class="text-lg font-semibold">Store rating & reviews</h3>
 					{#if loadingReviews}
 						<div class="flex gap-2">
 							{#each Array(5) as _}
@@ -167,7 +167,7 @@
 				<button
 					class="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
 				>
-					Write a Review
+					Write a review
 				</button>
 			</div>
 

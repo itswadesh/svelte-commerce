@@ -63,8 +63,6 @@
 		font-family: var(--ed-body);
 		font-size: 0.78rem;
 		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
 		color: var(--ed-ink);
 	}
 

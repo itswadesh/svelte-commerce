@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="pt-4">
-				<Button class="w-full" onclick={() => goto('/')}>Back to Home</Button>
+				<Button class="w-full" onclick={() => goto('/')}>Back to home</Button>
 			</div>
 		</div>
 	</div>

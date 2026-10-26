@@ -80,10 +80,10 @@
 			</div>
 			<div class="overflow-hidden">
 				<p class="truncate text-sm font-semibold text-foreground">
-					{userState.user?.firstName || userState.user?.name || 'My Account'}
+					{userState.user?.firstName || userState.user?.name || 'My account'}
 				</p>
-				<p class="truncate text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-					{userState.user?.email || 'Logged In'}
+				<p class="truncate text-[10px] font-bold text-muted-foreground">
+					{userState.user?.email || 'Logged in'}
 				</p>
 			</div>
 		</div>
@@ -96,7 +96,7 @@
 					<div class="ed-pd-ico flex h-8 w-8 items-center justify-center bg-muted transition-colors group-hover:bg-card">
 						<UserCircle class="h-4 w-4" />
 					</div>
-					Profile Settings
+					Profile settings
 				</DropdownMenu.Item>
 			</a>
 			<a href="/my/orders" class="block w-full">
@@ -106,7 +106,7 @@
 					<div class="ed-pd-ico flex h-8 w-8 items-center justify-center bg-muted">
 						<ShoppingBag class="h-4 w-4" />
 					</div>
-					Order History
+					Order history
 				</DropdownMenu.Item>
 			</a>
 			<a href="/my/addresses" class="block w-full">
@@ -116,7 +116,7 @@
 					<div class="ed-pd-ico flex h-8 w-8 items-center justify-center bg-muted">
 						<MapPin class="h-4 w-4" />
 					</div>
-					My Addresses
+					My addresses
 				</DropdownMenu.Item>
 			</a>
       {#if wishlistPlugin?.active}
@@ -127,7 +127,7 @@
 			 		<div class="flex h-8 w-8 items-center justify-center bg-muted">
 			 			<Heart class="h-4 w-4" />
 			 		</div>
-			 		My Wishlist
+			 		My wishlist
 			 	</DropdownMenu.Item>
 			  </a>
       {/if}
@@ -144,7 +144,7 @@
 				<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-destructive/10">
 					<ArrowRightCircleIcon class="h-4 w-4" />
 				</div>
-				Sign Out
+				Sign out
 			</Button>
 		</DropdownMenu.Item>
 	</DropdownMenu.Content>

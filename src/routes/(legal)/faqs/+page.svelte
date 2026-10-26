@@ -32,7 +32,7 @@
 	})
 </script>
 
-<SeoHeader metaTitle="Frequently Asked Questions" />
+<SeoHeader metaTitle="Frequently asked questions" />
 
 <StructuredData schema={faqSchema} />
 

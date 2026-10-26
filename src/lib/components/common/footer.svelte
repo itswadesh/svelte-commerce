@@ -132,7 +132,7 @@
 						class="flex h-auto w-full items-center justify-between border-b bg-muted/30 p-4 md:hidden"
 						onclick={() => (isExpanded = !isExpanded)}
 					>
-						<span class="text-sm font-bold uppercase tracking-widest">More about {storeData?.name}</span>
+						<span class="text-sm font-bold">More about {storeData?.name}</span>
 						<ChevronDown size={20} class="transition-transform duration-panel ease-standard {isExpanded ? 'rotate-180' : ''}" />
 					</Button>
 				{/if}

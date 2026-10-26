@@ -28,7 +28,7 @@
 			{:else if data.products?.categoryHierarchy?.length > 0}
 				{data.products.categoryHierarchy[data.products.categoryHierarchy.length - 1].name}
 			{:else}
-				All Products
+				All products
 			{/if}
 		</h1>
 
@@ -42,7 +42,7 @@
 		     shopper could filter but never re-order. The sidebar is already visible from md, so the
 		     bar stays hidden and there is exactly one sort affordance at every width. -->
 		<div class="ed-lh__sort hidden items-center gap-1.5 md:flex">
-			<span id="sort-by-label" class="ed-lh__sortlabel text-xs font-semibold uppercase tracking-widest text-muted-foreground">Sort by</span>
+			<span id="sort-by-label" class="ed-lh__sortlabel text-xs font-semibold text-muted-foreground">Sort by</span>
 			<!-- The shadcn/bits-ui select, not the project's custom combobox. That one opens a popover
 			     whose command list has no focusable input when search is off, so nothing consumed the
 			     arrow keys, Enter was swallowed, and only Escape closed it: a keyboard or switch user
@@ -126,7 +126,6 @@
 
 	:global([data-theme='default']) .ed-lh__sortlabel {
 		color: var(--ed-soft);
-		letter-spacing: 0.18em;
 	}
 
 	:global([data-theme='default']) .ed-lh__desc {

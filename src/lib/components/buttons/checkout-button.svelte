@@ -7,7 +7,7 @@
 		onclick,
 		disabled = false,
 		loading = false,
-		text = 'Proceed to Shipping',
+		text = 'Proceed to shipping',
 		disabledText = '',
 		total = '',
 		// The pinned bar repeats the summary's bottom line, so it has to repeat the summary's
@@ -40,7 +40,7 @@
 	     muted-on-muted. -->
 	<Button
 		data-testid="checkout-button"
-		class="group w-full bg-primary py-6 text-sm font-semibold tracking-wide shadow-z-1 transition-colors duration-150 hover:bg-primary-hover disabled:border disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100 disabled:shadow-none max-sm:h-14 max-sm:rounded-none {loading
+		class="group w-full bg-primary py-6 text-sm font-semibold shadow-z-1 transition-colors duration-150 hover:bg-primary-hover disabled:border disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100 disabled:shadow-none max-sm:h-14 max-sm:rounded-none {loading
 			? 'disabled:border-0 disabled:bg-primary disabled:text-primary-foreground disabled:shadow-z-1'
 			: ''}"
 		disabled={disabled || loading}

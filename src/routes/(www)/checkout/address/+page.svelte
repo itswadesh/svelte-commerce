@@ -164,7 +164,7 @@
 			<Button variant="link" onclick={() => {
 				goto("/checkout/cart")
 			}} >
-				Back to Cart
+				Back to cart
 			</Button>
 		</div> -->
 
@@ -245,7 +245,7 @@
 							<div class="overflow-hidden rounded-lg border border-border bg-background">
 								<div class="flex items-center justify-between border-b border-border px-5 py-4">
 									<div class="flex items-center space-x-3">
-										<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Contact details</h2>
+										<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Contact details</h2>
 									</div>
 									{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
 										<Button onclick={addressModule.handleEditEmail} variant="ghost" size="sm" class="h-8">
@@ -258,11 +258,11 @@
 								{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
 									<div class="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2">
 										<div class="flex flex-col gap-1">
-											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Email address</p>
+											<p class="text-[10px] font-bold tracking-tighter text-muted-foreground">Email address</p>
 											<p class="text-sm font-medium text-foreground">{cartState.cart.email}</p>
 										</div>
 										<div class="flex flex-col gap-1">
-											<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Phone number</p>
+											<p class="text-[10px] font-bold tracking-tighter text-muted-foreground">Phone number</p>
 											<p class="text-sm font-medium text-foreground">{cartState.cart.phone}</p>
 										</div>
 									</div>
@@ -308,7 +308,7 @@
 												{#if cartState.isUpdatingCart}
 													<Spinner label="Saving contact details" />
 												{:else}
-													Save Contact
+													Save contact
 												{/if}
 											</Button>
 										</div>
@@ -325,7 +325,7 @@
 									<!-- Guest checkout: inline address form, no login required -->
 									<div class="p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Delivery address</h2>
+											<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Delivery address</h2>
 											<Button variant="link" onclick={() => showAuthModal('login')} class="h-auto whitespace-normal p-0 text-left">
 												Login to view your saved addresses
 											</Button>
@@ -335,7 +335,7 @@
 								{:else if cartState.cart.shippingAddress}
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Delivery address</h2>
+											<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Delivery address</h2>
 											{#if !addressModule.loadingForSaveToCart}
 												<Button onclick={addressModule.handleAddressChangeClick} variant="ghost" class="h-8">Change</Button>
 											{/if}
@@ -348,7 +348,7 @@
 											<div class="p-6">
 												<div class="mb-4 flex items-center">
 													<MapPin class="mr-2 h-4 w-4 text-primary" />
-													<h3 class="text-sm font-bold uppercase tracking-tight text-foreground">
+													<h3 class="text-sm font-bold tracking-tight text-foreground">
 														{cartState.cart.shippingAddress?.firstName}
 														{cartState.cart.shippingAddress?.lastName}
 													</h3>
@@ -366,7 +366,7 @@
 														{cartState.cart.shippingAddress?.zip}
 													</p>
 													<p class="mt-4 border-border pt-4 font-medium">
-														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Phone</span>
+														<span class="mr-2 text-[10px] font-bold tracking-tighter text-muted-foreground">Phone</span>
 														{cartState.cart.shippingAddress?.phone}
 													</p>
 												</div>
@@ -376,9 +376,7 @@
 								{:else}
 									<div class="p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold uppercase tracking-widest text-foreground" style="font-family: var(--font-body);">
-												Shipping Address
-											</h2>
+											<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Shipping address</h2>
 
 											{#if !userState?.user?.role}
 												<Button variant="link" onclick={() => showAuthModal('login')} class="h-auto p-0">Login to view saved addresses</Button>
@@ -404,13 +402,13 @@
 								<div class="overflow-hidden rounded-lg border border-border bg-background">
 									<div class="">
 										<div class="flex items-center justify-between border-b border-border px-5 py-4">
-											<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Billing address</h2>
+											<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Billing address</h2>
 											{#if !addressModule.loadingForSaveToCart}
 												<Button onclick={addressModule.handleBilingAddOrChangeClick} variant="ghost" class="h-8">
 													{#if cartState.cart.billingAddress?.address_1}
 														Change
 													{:else}
-														Add Address
+														Add address
 													{/if}
 												</Button>
 											{/if}
@@ -423,7 +421,7 @@
 											<div class="p-6">
 												<div class="mb-4 flex items-center">
 													<MapPin class="mr-2 h-4 w-4 text-primary" />
-													<h3 class="text-sm font-bold uppercase tracking-tight text-foreground">
+													<h3 class="text-sm font-bold tracking-tight text-foreground">
 														{cartState.cart.billingAddress?.firstName}
 														{cartState.cart.billingAddress?.lastName}
 													</h3>
@@ -436,7 +434,7 @@
 													<p>{cartState.cart.billingAddress?.city}, {cartState.cart.billingAddress?.state}</p>
 													<p>{cartState.cart.billingAddress?.countryCode} {cartState.cart.billingAddress?.zip}</p>
 													<p class="mt-4 border-t border-border pt-4 font-medium">
-														<span class="mr-2 text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">Phone</span>
+														<span class="mr-2 text-[10px] font-bold tracking-tighter text-muted-foreground">Phone</span>
 														{cartState.cart.billingAddress?.phone}
 													</p>
 												</div>
@@ -456,7 +454,7 @@
 										onCheckedChange={addressModule?.handleBillingAddressSameCheck}
 										id="isBillingAddressSameAsShipping"
 									/>
-									<label for="isBillingAddressSameAsShipping" class="cursor-pointer text-xs font-bold uppercase tracking-tight text-foreground"
+									<label for="isBillingAddressSameAsShipping" class="cursor-pointer text-xs font-bold tracking-tight text-foreground"
 										>Billing address same as shipping</label
 									>
 								</div>
@@ -468,7 +466,7 @@
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price summary</h2>
+								<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Price summary</h2>
 								<div class="h-1 w-12 bg-primary"></div>
 							</div>
 							{#if addressModule.loadingForCart}
@@ -493,7 +491,7 @@
 
 									<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3">
 										<LockKeyhole class="h-3.5 w-3.5 text-muted-foreground" />
-										<p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Secure 256-bit encryption</p>
+										<p class="text-[10px] font-bold text-muted-foreground">Secure 256-bit encryption</p>
 									</div>
 
 									{#if !addressModule.showAddressList && !addressModule.showAddressForm}
@@ -502,7 +500,7 @@
 											     order on, so the two full-width buttons on the step no longer carry the same
 											     label in the same weight (UX-081). -->
 											<CheckoutButton
-												text="Save & Continue"
+												text="Save & continue"
 												onclick={submitAddressForm}
 												loading={loadingForGuestCheckout}
 												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
@@ -512,7 +510,7 @@
 												<p class="text-sm text-muted-foreground">{continueBlocker}</p>
 											{/if}
 											<CheckoutButton
-												text="Continue to Payment"
+												text="Continue to payment"
 												disabled={!!continueBlocker}
 												onclick={addressModule.handleProceedToPayment}
 												loading={addressModule.loadingForCheckout}

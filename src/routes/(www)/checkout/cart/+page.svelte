@@ -409,7 +409,7 @@
 						{/if}
 
 						<div class="rounded-radius border border-border bg-background p-4 shadow-xs md:p-5">
-							<h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-foreground">Price summary</h2>
+							<h2 class="mb-4 text-sm font-semibold text-foreground">Price summary</h2>
 
 							<!-- The four hand-written copies of this block had drifted; this is the shared one, and
 							     it is what moves the bottom line to "Estimated total" while shipping is unknown. -->

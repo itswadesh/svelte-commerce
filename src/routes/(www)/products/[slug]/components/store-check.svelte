@@ -27,7 +27,7 @@
 
 		<Sheet.Content class="p-0">
 			<Sheet.Header class="p-6 pb-0">
-				<Sheet.Title>Availability at Stores</Sheet.Title>
+				<Sheet.Title>Availability at stores</Sheet.Title>
 			</Sheet.Header>
 
 			<div class="mt-5 flex flex-col divide-y border-y">
@@ -47,7 +47,7 @@
 									<span class="flex w-fit items-center gap-1 self-start rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">
 										<AlertTriangle size={12} />
 
-										<span class="whitespace-nowrap">Out of Stock</span>
+										<span class="whitespace-nowrap">Out of stock</span>
 									</span>
 								{/if}
 							</div>

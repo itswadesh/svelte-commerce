@@ -18,12 +18,12 @@
 	// (there is no data.page here); the last entry is the current category.
 	const category = $derived(data?.products?.categoryHierarchy?.at(-1))
 
-	// Readable fallback derived from the URL slug (e.g. "engagement-rings" -> "Engagement Rings")
+	// Readable fallback derived from the URL slug (e.g. "engagement-rings" -> "Engagement rings")
 	const slugTitle = $derived(
 		(page.params.slug || '')
 			.split(/[-_]/)
 			.filter(Boolean)
-			.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+			.map((w, i) => (i ? w : w.charAt(0).toUpperCase() + w.slice(1)))
 			.join(' ')
 	)
 

@@ -75,7 +75,7 @@
 			<Button variant="link" onclick={() => {
 				goto("/checkout/address")
 			}} >
-				Back to Address
+				Back to address
 			</Button>
 		</div> -->
 
@@ -120,7 +120,7 @@
 					{/if}
 
 					<div class="h-fit space-y-6">
-						<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Select payment method</h2>
+						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Select payment method</h2>
 						{#if paymentModule.showError}
 							<div class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">
 								{paymentModule.errorMessage}
@@ -154,9 +154,9 @@
 													<img src={method?.img || localPaymentIcon(method)} alt={method?.name} class="h-full w-full object-contain" />
 												</div>
 												<div class="flex flex-col">
-													<span class="text-sm font-bold uppercase tracking-tight text-foreground">{method?.name}</span>
+													<span class="text-sm font-bold tracking-tight text-foreground">{method?.name}</span>
 													{#if method?.description}
-														<span class="text-[10px] font-medium uppercase tracking-tighter text-muted-foreground">{@html method?.description}</span>
+														<span class="text-[10px] font-medium tracking-tighter text-muted-foreground">{@html method?.description}</span>
 													{/if}
 												</div>
 											</div>
@@ -165,9 +165,7 @@
 										{#if method?.badges?.length}
 											<div class="flex gap-2">
 												{#each method.badges as badge}
-													<span
-														class="rounded-radius bg-background px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-muted-foreground ring-1 ring-border"
-													>
+													<span class="rounded-radius bg-background px-2 py-0.5 text-[9px] font-bold text-muted-foreground ring-1 ring-border">
 														{badge}
 													</span>
 												{/each}
@@ -181,7 +179,7 @@
 
 					{#if paymentModule.shippingRates?.data?.length}
 						<div class="grid h-fit grid-cols-1 space-y-6 pt-4">
-							<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Select shipping method</h2>
+							<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Select shipping method</h2>
 
 							<div class="flex flex-col gap-3">
 								{#each paymentModule.shippingRates?.data as rate}
@@ -206,17 +204,17 @@
 											</div>
 
 											<div class="flex flex-col gap-0.5">
-												<span class="text-sm font-bold uppercase tracking-tight text-foreground">
+												<span class="text-sm font-bold tracking-tight text-foreground">
 													{rate.name}
 												</span>
 												<div class="flex items-center gap-2">
 													{#if !Number.isNaN(Number.parseFloat(rate?.estimated_min_days)) && !Number.isNaN(Number.parseFloat(rate?.estimated_max_days))}
-														<span class="text-[10px] font-bold uppercase tracking-tighter text-primary">
+														<span class="text-[10px] font-bold tracking-tighter text-primary">
 															{rate?.estimated_min_days} - {rate?.estimated_max_days} Days
 														</span>
 														<span class="h-1 w-1 rounded-full bg-border"></span>
 													{/if}
-													<span class="text-[10px] font-medium uppercase tracking-tighter text-muted-foreground">{rate.description}</span>
+													<span class="text-[10px] font-medium tracking-tighter text-muted-foreground">{rate.description}</span>
 												</div>
 											</div>
 										</div>
@@ -253,8 +251,8 @@
 						<div class="overflow-hidden rounded-lg border border-border bg-background text-left">
 							<Button variant="plain" class="flex h-auto w-full items-center justify-between px-6 py-4" onclick={() => (showAddress = !showAddress)}>
 								<div class="flex flex-col items-start">
-									<span class="text-sm font-medium text-muted-foreground">Delivering Order to</span>
-									<span class="text-sm font-bold uppercase tracking-tight text-foreground">
+									<span class="text-sm font-medium text-muted-foreground">Delivering order to</span>
+									<span class="text-sm font-bold tracking-tight text-foreground">
 										{cartState.cart.shippingAddress.firstName}
 										{cartState.cart.shippingAddress.lastName}
 									</span>
@@ -299,7 +297,7 @@
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase text-foreground" style="font-family: var(--font-body);">Price summary</h2>
+								<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Price summary</h2>
 								<div class="h-1 w-12 bg-primary"></div>
 							</div>
 							{#if paymentModule.loadingForCart}
@@ -318,7 +316,7 @@
 
 									<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3">
 										<LockKeyhole class="h-3.5 w-3.5 text-muted-foreground" />
-										<p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Secure 256-bit encryption</p>
+										<p class="text-[10px] font-bold text-muted-foreground">Secure 256-bit encryption</p>
 									</div>
 
 									{#if missingDetails.length === 0}
@@ -326,7 +324,7 @@
 											<p class="text-sm text-muted-foreground">{reviewBlocker}</p>
 										{/if}
 										<CheckoutButton
-											text="Review Order"
+											text="Review order"
 											onclick={onreview}
 											disabled={!!reviewBlocker}
 											loading={paymentModule.paymentLoader}

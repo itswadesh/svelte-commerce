@@ -32,7 +32,7 @@
 		<div class="grid max-h-[400px] gap-4 overflow-y-auto py-4">
 			<Button variant="outline" class="w-full" onclick={addressState.handleAddNew}>
 				<Plus class="mr-2 h-4 w-4" />
-				Add New Address
+				Add new address
 			</Button>
 			{#each addresses as address (address.id)}
 				<div class="group flex items-center justify-between rounded-lg border p-4">

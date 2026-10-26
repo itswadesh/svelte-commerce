@@ -121,9 +121,7 @@
 		font-size: 0.75rem;
 		font-weight: 600;
 		font-style: normal;
-		letter-spacing: 0.18em;
 		line-height: 1.2;
-		text-transform: uppercase;
 		color: var(--ed-soft);
 	}
 
@@ -134,7 +132,7 @@
 		/* Was clamp(1.55rem, 2.6vw, 2.3rem) — 24.8px on a phone and 36.8px at 1440, where a
 		   37px serif name in a half-width column dwarfed the price and every control under it.
 		   The floor is 1.5rem rather than 1.4rem: at 22.4px this h1 was only 2.4px larger than the
-		   20px price beside it, and 5.6px SMALLER than the listing page's own "All Products" title
+		   20px price beside it, and 5.6px SMALLER than the listing page's own "All products" title
 		   one tap earlier — a product name that shrinks when you open the product. 24px restores
 		   both gaps. The ceiling stays one deliberate step under the 28-36px page-title ramp on the
 		   homepage and listing, because this heading sits in a ~550px column, not the full rail. */

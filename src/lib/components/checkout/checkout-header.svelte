@@ -28,7 +28,7 @@
 			>
 				1
 			</div>
-			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 1 ? '' : 'hidden sm:inline'}">Cart</span>
+			<span class="ml-2 text-xs font-bold {step === 1 ? '' : 'hidden sm:inline'}">Cart</span>
 		</Button>
 
 		<div class="h-px w-4 bg-border sm:w-8 md:w-16"></div>
@@ -51,7 +51,7 @@
 			>
 				2
 			</div>
-			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 2 ? '' : 'hidden sm:inline'}">Address</span>
+			<span class="ml-2 text-xs font-bold {step === 2 ? '' : 'hidden sm:inline'}">Address</span>
 		</Button>
 
 		<div class="h-px w-4 bg-border sm:w-8 md:w-16"></div>
@@ -73,7 +73,7 @@
 			>
 				3
 			</div>
-			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 3 ? '' : 'hidden sm:inline'}">Payment</span>
+			<span class="ml-2 text-xs font-bold {step === 3 ? '' : 'hidden sm:inline'}">Payment</span>
 		</Button>
 
 		<div class="h-px w-4 bg-border sm:w-8 md:w-16"></div>
@@ -95,7 +95,7 @@
 			>
 				4
 			</div>
-			<span class="ml-2 text-xs font-bold uppercase tracking-widest {step === 4 ? '' : 'hidden sm:inline'}">Placed</span>
+			<span class="ml-2 text-xs font-bold {step === 4 ? '' : 'hidden sm:inline'}">Placed</span>
 		</Button>
 	</div>
 </div>

@@ -182,6 +182,8 @@ never from the product, the information a shopper decides on, or a touch target.
 - Section title: 18–24px.
 - Product price: prominent, but not larger than the product title hierarchy requires.
 - Weights: 400, 500, 600 and one display weight.
+- Sentence case everywhere, buttons and labels included. No all-caps styling (`uppercase`,
+  `text-transform: uppercase`) on the default theme; owner decision, `docs/decisions.md`.
 
 ---
 

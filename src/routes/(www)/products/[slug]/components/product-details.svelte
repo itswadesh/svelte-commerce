@@ -413,9 +413,7 @@
 	{#if !data?.product && !productState.isLoading}
 		<div class="flex h-80 flex-col items-center justify-center gap-3">
 			<h2 class="page-heading edp-empty-title">Product not found</h2>
-			<a href="/products" class="edp-empty-link text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4"
-				>Browse all products</a
-			>
+			<a href="/products" class="edp-empty-link text-sm font-bold text-primary underline underline-offset-4">Browse all products</a>
 		</div>
 	{:else}
 		<div class="inter-gap edp-grid relative grid grid-cols-1 items-start lg:grid-cols-2" data-testid="product-detail">
@@ -574,8 +572,6 @@
 
 	:global([data-theme='default'] .edp-empty-link) {
 		color: var(--ed-ink);
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
 		font-size: 0.75rem;
 		text-decoration: none;
 		border-bottom: 1px solid var(--ed-ink);

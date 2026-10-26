@@ -109,7 +109,7 @@
 							href={category.link || '/' + category.slug}
 							class="ed-mm-link motion-underline flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap [--underline-offset:0px] {slim
 								? 'py-1.5'
-								: 'py-3'} text-sm font-semibold uppercase text-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95
+								: 'py-3'} text-sm font-semibold text-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95
 								{selectedCategory === category.name ? 'text-primary' : ''}"
 							data-current={selectedCategory === category.name}
 							style="font-family: var(--font-body);"
@@ -265,7 +265,6 @@
 		color: var(--ed-soft);
 		font-weight: 600;
 		font-size: 0.78rem;
-		letter-spacing: 0.18em;
 		font-family: var(--ed-body);
 	}
 
@@ -305,8 +304,6 @@
 
 	:global([data-theme='default'] .ed-mm-viewall) {
 		color: var(--ed-soft);
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
 	}
 
 	:global([data-theme='default'] .ed-mm-viewall:hover) {

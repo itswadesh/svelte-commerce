@@ -278,7 +278,7 @@
 						id="deliveryInstructions"
 						name="deliveryInstructions"
 						bind:value={address.deliveryInstructions}
-						placeholder="Instructions for Delivery"
+						placeholder="Instructions for delivery"
 						required
 						class="border mt-1 block w-full rounded-md px-3 py-2 focus:outline-none sm:text-sm"
 					></textarea>

@@ -33,11 +33,11 @@
 				}}
 			>
 				<ArrowLeft class="h-4 w-4" />
-				Go Back
+				Go back
 			</Button>
 			<Button class="gap-2" onclick={() => goto('/')}>
 				<Home class="h-4 w-4" />
-				Return Home
+				Return home
 			</Button>
 		</div>
 	</div>

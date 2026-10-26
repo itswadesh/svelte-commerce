@@ -39,7 +39,7 @@
 		</div>
 		<Button onclick={addressesModule.handleAddNew} class="h-12 px-6">
 			<Plus class="mr-2 h-4 w-4" />
-			Add New Address
+			Add new address
 		</Button>
 	</div>
 
@@ -70,7 +70,7 @@
 						<div class="flex flex-1 flex-col p-6 pb-4">
 							<div class="mb-4 flex items-start justify-between">
 								<div>
-									<p class="text-sm font-bold uppercase tracking-widest text-foreground">{address.firstName} {address.lastName}</p>
+									<p class="text-sm font-bold text-foreground">{address.firstName} {address.lastName}</p>
 								</div>
 							</div>
 

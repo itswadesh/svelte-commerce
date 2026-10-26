@@ -36,7 +36,7 @@
 				<!-- {#if page?.url?.pathname !== '/'}
 				<a
 					href="/"
-					class="relative text-sm font-bold uppercase tracking-widest text-muted-foreground transition-all
+					class="relative text-sm font-bold text-muted-foreground transition-all
 					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-foreground hover:after:w-full motion-safe:active:scale-95"
 					style="font-family: var(--font-body);"
 				>
@@ -50,7 +50,7 @@
 				{#each page?.data?.store?.menu?.find?.((menu: Menu) => menu?.menuId === 'header')?.items || [] as item}
 					<a
 						href={item.link}
-						class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center text-sm font-bold uppercase tracking-widest text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"
+						class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center text-sm font-bold text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"
 						style="font-family: var(--font-body);"
 					>
 						{item?.name}
@@ -77,7 +77,6 @@
 		color: var(--ed-soft);
 		font-weight: 600;
 		font-size: 0.75rem;
-		letter-spacing: 0.18em;
 		transition:
 			color var(--motion-fast) var(--motion-ease),
 			transform var(--motion-fast) var(--motion-ease);

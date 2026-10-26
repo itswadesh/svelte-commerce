@@ -485,7 +485,7 @@
 
 /* ── Unified editorial buttons ─────────────────────────────────────────────────
    Every shadcn <Button> carries `.ed-btn-base`. On the default theme they all get
-   one editorial look — sharp radius, uppercase tracked label, flat (no shadow) —
+   one editorial look — sharp radius, sentence-case label, flat (no shadow) —
    to match the homepage / product-card / footer buttons. Variant colours
    (bg-primary, ghost, outline…) are preserved; filled CTAs also lift on hover.
    Unlayered so these win over Tailwind's utility layer without !important. */
@@ -493,8 +493,6 @@
 	border-radius: var(--ed-radius);
 	font-family: var(--font-body);
 	font-weight: 600;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
 	transition:
 		transform var(--motion-fast) var(--motion-ease),
 		background-color var(--motion-fast) var(--motion-ease),

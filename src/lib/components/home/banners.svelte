@@ -37,12 +37,12 @@
 											class="absolute inset-0 flex flex-col items-center justify-center bg-black/10 transition-colors duration-fast group-hover:bg-black/20"
 										>
 											<div class="motion-safe:translate-y-4 opacity-0 transition-[transform,opacity] duration-panel ease-standard motion-safe:group-hover:translate-y-0 group-hover:opacity-100">
-												<span class="mb-6 block text-center text-sm font-semibold uppercase tracking-[0.4em] text-white/90">Curated for you</span>
+												<span class="mb-6 block text-center text-sm font-semibold text-white/90">Curated for you</span>
 												<a
 													href="/products"
-													class="border relative overflow-hidden rounded-full bg-white px-10 py-4 text-center text-sm font-semibold uppercase tracking-widest text-black transition-all motion-safe:hover:scale-105 motion-safe:active:scale-95"
+													class="border relative overflow-hidden rounded-full bg-white px-10 py-4 text-center text-sm font-semibold text-black transition-all motion-safe:hover:scale-105 motion-safe:active:scale-95"
 												>
-													Shop Now
+													Shop now
 												</a>
 											</div>
 										</div> -->
@@ -84,9 +84,9 @@
 										/>
 										<!-- <div class="absolute inset-0 flex items-center justify-center">
 											<div
-												class="border rounded-full bg-white/90 px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-black backdrop-blur-sm"
+												class="border rounded-full bg-white/90 px-6 py-2.5 text-xs font-semibold text-black backdrop-blur-sm"
 											>
-												Shop Now
+												Shop now
 											</div>
 										</div> -->
 									</div>

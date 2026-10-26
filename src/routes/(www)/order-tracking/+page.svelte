@@ -234,7 +234,7 @@
 															<li>
 																<a href={file} download>
 																	<Button class="text-xs">
-																		Download File
+																		Download file
 
 																		{#if item?.files?.length > 1}
 																			{fx + 1}
@@ -253,7 +253,7 @@
 															aria-label="Click to visit rate & review product"
 															class="max-w-max whitespace-nowrap font-semibold text-primary hover:underline focus:outline-none"
 														>
-															Rate & Review Product
+															Rate & review product
 														</a>
 													</div>
 												{/if}
@@ -287,7 +287,7 @@
 										, {order?.shippingAddress?.city}
 										<br />
 										{order?.shippingAddress?.state},
-										<span class="uppercase"
+										<span class=""
 											>{order?.shippingAddress?.country || order?.shippingAddress?.countryCode}</span
 										>,
 										{order?.shippingAddress?.zip}
@@ -324,7 +324,7 @@
 											, {order?.billingAddress?.city}
 											<br />
 											{order?.billingAddress?.state},
-											<span class="uppercase"
+											<span class=""
 												>{order?.billingAddress?.country || order?.billingAddress?.countryCode}</span
 											>,
 											{order?.billingAddress?.zip}

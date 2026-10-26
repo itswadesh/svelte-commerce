@@ -85,7 +85,7 @@
 </script>
 
 <SeoHeader
-	metaTitle={store?.name ? `Contact Us | ${store.name}` : 'Contact Us'}
+	metaTitle={store?.name ? `Contact Us | ${store.name}` : 'Contact us'}
 	metaDescription={`Get in touch with ${store?.name || 'us'} about orders, delivery, returns and product questions.`}
 />
 

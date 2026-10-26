@@ -72,7 +72,7 @@
 		{#snippet content({ loadingForSubmitting })}
 			<div class="flex flex-col gap-2 sm:gap-3">
 				<div class="space-y-1.5">
-					<h2 class="text-sm font-bold uppercase tracking-widest text-foreground">{plugin?.heading || 'Newsletter'}</h2>
+					<h2 class="text-sm font-bold text-foreground">{plugin?.heading || 'Newsletter'}</h2>
 					<p class="text-sm text-muted-foreground">{plugin?.subheading || 'Subscribe to get the latest arrivals and offers.'}</p>
 				</div>
 
@@ -127,7 +127,7 @@
 {/if}
 
 <style>
-	/* Match the editorial buttons on the homepage (.ed-btn): sharp radius, uppercase, tracked,
+	/* Match the editorial buttons on the homepage (.ed-btn): sharp radius, sentence case,
 	   primary fill with a subtle lift on hover. Default theme only. */
 	:global([data-theme='default']) .ed-sub-btn {
 		border: 1px solid hsl(var(--primary));
@@ -135,8 +135,6 @@
 		font-family: var(--ed-body);
 		font-weight: 600;
 		font-size: 0.76rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		transition:
 			transform var(--motion-fast) var(--motion-ease),
 			opacity var(--motion-fast) var(--motion-ease);

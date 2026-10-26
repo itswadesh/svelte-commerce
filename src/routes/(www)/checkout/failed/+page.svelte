@@ -81,7 +81,7 @@
 
 			{#if items.length}
 				<div class="rounded-lg border border-border bg-card p-6">
-					<h2 class="text-base font-bold uppercase text-foreground">Order summary</h2>
+					<h2 class="text-base font-bold text-foreground">Order summary</h2>
 					<ul class="mt-4 divide-y divide-border">
 						{#each items as item (item.id ?? item.slug)}
 							<li class="flex gap-3 py-3 text-sm">

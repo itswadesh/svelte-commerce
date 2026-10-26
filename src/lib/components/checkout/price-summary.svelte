@@ -91,11 +91,7 @@
 					{#if !shippingResolved}
 						<span class="font-medium text-muted-foreground">{unresolvedShippingText}</span>
 					{:else if isFreeShipping}
-						<span
-							class="rounded-radius bg-success/5 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-success ring-1 ring-inset ring-success/30"
-						>
-							Free
-						</span>
+						<span class="rounded-radius bg-success/5 px-2 py-0.5 text-xs font-bold text-success ring-1 ring-inset ring-success/30"> Free </span>
 					{:else}
 						{money(shipping)}
 					{/if}
@@ -114,7 +110,7 @@
 		<dl class="pt-2">
 			<div class="flex items-start justify-between gap-4">
 				<dt class="flex flex-col gap-1">
-					<span class="text-sm font-bold uppercase text-foreground">{totalLabel}</span>
+					<span class="text-sm font-bold text-foreground">{totalLabel}</span>
 					{#if !shippingResolved}
 						<span class="text-xs font-normal text-muted-foreground">{estimatedNote}</span>
 					{/if}

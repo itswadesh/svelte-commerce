@@ -153,7 +153,7 @@
 				{#if changePasswordModule.loading}
 					<div class="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></div>
 				{/if}
-				{changePasswordModule.loading ? 'Changing Password...' : 'Change Password'}
+				{changePasswordModule.loading ? 'Changing Password...' : 'Change password'}
 			</Button>
 		</form>
 	</div>

@@ -109,7 +109,7 @@
 {/snippet}
 
 <!-- Adding to the bag also opens the cart drawer, which shows the same line item with the same
-     "View Bag" affordance. Two confirmations of one action, stacked on top of each other, so this
+     "View bag" affordance. Two confirmations of one action, stacked on top of each other, so this
      card stands down whenever the drawer is the thing on screen. -->
 {#if productState.showAddToCartMessage && !productState.cartState?.isOpen && !compact}
 	<div
@@ -162,7 +162,7 @@
 				     never a different button in its place. -->
 				<Button
 					data-testid="add-to-cart-button"
-					class="edp-atc flex h-full w-full items-center justify-center gap-2 text-sm font-semibold uppercase {justAdded
+					class="edp-atc flex h-full w-full items-center justify-center gap-2 text-sm font-semibold {justAdded
 						? 'bg-success text-success-foreground hover:bg-success'
 						: ''}"
 					size="lg"
@@ -208,7 +208,6 @@
 		border-radius: var(--ed-radius) !important;
 		font-size: 0.8rem !important;
 		font-weight: 600;
-		letter-spacing: 0.08em;
 		transition:
 			transform var(--motion-fast) var(--motion-ease),
 			opacity var(--motion-fast) var(--motion-ease),

@@ -84,7 +84,7 @@
 					{#if forgotPasswordModule.isLoading}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
 					{/if}
-					Send Reset Link
+					Send reset link
 				</Button>
 			</form>
 
@@ -92,7 +92,7 @@
 				<div class="absolute inset-0 flex items-center">
 					<span class="w-full border-t"></span>
 				</div>
-				<div class="relative flex justify-center text-xs uppercase">
+				<div class="relative flex justify-center text-xs">
 					<span class="bg-card px-2 text-muted-foreground">Or</span>
 				</div>
 			</div>
@@ -103,7 +103,7 @@
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
 						</svg>
-						Back to Login
+						Back to login
 					</Button>
 				</AuthButton>
 			</div>

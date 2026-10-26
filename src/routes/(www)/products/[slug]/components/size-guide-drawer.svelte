@@ -48,7 +48,7 @@
 	<Drawer.Trigger>
 		<span class="edp-sizeguide inline-flex items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline">
 			<Ruler class="h-3.5 w-3.5" />
-			Size Guide
+			Size guide
 		</span>
 	</Drawer.Trigger>
 
@@ -68,13 +68,13 @@
 			<Tabs.Root value="chart" class="flex flex-1 flex-col overflow-hidden px-4">
 				<Tabs.List class="grid w-full grid-cols-2 rounded-md bg-muted p-1">
 					<Tabs.Trigger value="chart">Size chart</Tabs.Trigger>
-					<Tabs.Trigger value="measure">How to Measure</Tabs.Trigger>
+					<Tabs.Trigger value="measure">How to measure</Tabs.Trigger>
 				</Tabs.List>
 
 				<Tabs.Content value="chart" class="mt-4 flex-1 overflow-y-auto pb-4">
 					<div class="overflow-hidden rounded-lg border">
 						<table class="w-full text-sm">
-							<thead class="bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
+							<thead class="bg-muted/60 text-xs text-muted-foreground">
 								<tr>
 									<th class="px-4 py-3 text-left font-semibold">US Size</th>
 									<th class="px-4 py-3 text-right font-semibold">Circumference (mm)</th>
@@ -128,7 +128,5 @@
 		color: var(--ed-ink);
 		font-size: 0.72rem;
 		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
 	}
 </style>

@@ -163,7 +163,7 @@
 		     restore to the trigger. -->
 		<Sheet.Content side="left" class="ed-mf__panel flex w-full max-w-none flex-col gap-0 p-0 sm:max-w-none">
 			<Sheet.Header class="ed-mf__phead shrink-0 space-y-0 border-b px-4 py-4 pr-14 text-left">
-				<Sheet.Title class="ed-mf__ptitle text-xs font-bold uppercase tracking-widest">Filters</Sheet.Title>
+				<Sheet.Title class="ed-mf__ptitle text-xs font-bold">Filters</Sheet.Title>
 				<Sheet.Description class="sr-only">Narrow the product list by category, price and product attributes.</Sheet.Description>
 			</Sheet.Header>
 
@@ -179,7 +179,7 @@
 							aria-current={filterModule.selectedSection === item.id ? 'true' : undefined}
 							onclick={() => (filterModule.selectedSection = item.id)}
 						>
-							<span class="text-left text-[11px] font-bold uppercase tracking-widest">
+							<span class="text-left text-[11px] font-bold">
 								{filterModule.formatFilterName(item.label)}
 							</span>
 							{#if filterModule.appliedFiltersCountByKey[item.id]}
@@ -272,7 +272,7 @@
 						{/if}
 					{:else if filterModule.selectedSection === 'price'}
 						<div class="w-full">
-							<p class="ed-mf__label text-xs font-bold uppercase tracking-widest text-foreground">Price range</p>
+							<p class="ed-mf__label text-xs font-bold text-foreground">Price range</p>
 
 							<!-- h-5: every child of this wrapper is absolutely positioned, so it used to be a zero-height
 							      box. Its own top margin then collapsed straight through with the price block's, which put
@@ -402,7 +402,7 @@
 				{#if filterModule.anyFilterApplied}
 					<Button variant="outline" class="h-11 flex-1" onclick={filterModule.clearFilters}>Clear all</Button>
 				{/if}
-				<Button class="ed-mf__apply h-11 flex-[2] text-xs font-bold uppercase tracking-widest" onclick={filterModule.handleApply}>Apply</Button>
+				<Button class="ed-mf__apply h-11 flex-[2] text-xs font-bold" onclick={filterModule.handleApply}>Apply</Button>
 			</div>
 		</Sheet.Content>
 	</Sheet.Root>
@@ -450,7 +450,6 @@
 
 	:global([data-theme='default'] .ed-mf__ptitle) {
 		font-family: var(--ed-body);
-		letter-spacing: 0.18em;
 		color: var(--ed-ink);
 	}
 
@@ -459,7 +458,6 @@
 		background: hsl(var(--primary));
 		color: hsl(var(--primary-foreground));
 		border-radius: var(--ed-radius);
-		letter-spacing: 0.12em;
 	}
 
 	:global([data-theme='default'] .ed-mf__apply:hover) {
@@ -477,10 +475,6 @@
 	:global([data-theme='default'] .ed-mf__tab) {
 		color: var(--ed-soft);
 		font-family: var(--ed-body);
-	}
-
-	:global([data-theme='default'] .ed-mf__tab span) {
-		letter-spacing: 0.14em;
 	}
 
 	:global([data-theme='default'] .ed-mf__content) {
@@ -503,7 +497,6 @@
 	/* Labels + options */
 	:global([data-theme='default'] .ed-mf__label) {
 		font-family: var(--ed-body);
-		letter-spacing: 0.18em;
 		color: var(--ed-soft);
 	}
 
@@ -565,7 +558,6 @@
 		font-family: var(--ed-body);
 		font-size: 0.72rem;
 		font-weight: 500;
-		letter-spacing: 0.04em;
 		color: var(--ed-soft);
 	}
 </style>

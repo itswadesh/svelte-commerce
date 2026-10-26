@@ -19,7 +19,7 @@
 		<Drawer.Root {open} direction={innerWidth.current && innerWidth.current > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
 			<Drawer.Trigger class="w-full {className ? 'h-full' : ''}">
 				<Button variant="outline" class="group w-full justify-between !px-6 !py-5 {className}">
-					Apply Promo Code
+					Apply promo code
 					<span class="text-muted-foreground">
 						<ChevronRight class="h-4 w-4" />
 					</span>
