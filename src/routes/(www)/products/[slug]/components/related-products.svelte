@@ -17,7 +17,7 @@
 	<div class="edp-related mb-12" data-testid="related-products">
 		<header class="edp-related-head">
 			<span class="edp-related-eyebrow">More to explore</span>
-			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">Related Products</h2>
+			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">Related products</h2>
 		</header>
 
 		{#if productState.isLoadingRelatedProducts}

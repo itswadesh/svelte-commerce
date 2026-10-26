@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Enquiry Submitted Successfully</title>
+	<title>Enquiry submitted successfully</title>
 </svelte:head>
 
 <div class="min-h-screen bg-muted py-12">
@@ -22,7 +22,7 @@
 				</div>
 				<h1 class="mb-2 page-heading">{enquiryPlugin?.successHeader || 'Thank You For Your Enquiry!'}</h1>
 				<p class="text-muted-foreground">{enquiryPlugin?.successMessage || 'We will get back to you soon!'}</p>
-				<Button class="mt-5" onclick={() => goto('/products')}>Continue Shopping</Button>
+				<Button class="mt-5" onclick={() => goto('/products')}>Continue shopping</Button>
 			</div>
 		</div>
 	</div>

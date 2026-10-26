@@ -20,7 +20,7 @@
 	<title>Signup</title>
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
 	<div class="w-full max-w-md space-y-8">
 		<div class="space-y-6 rounded-lg bg-card p-8 shadow">
 			<div class="space-y-2 text-center">
@@ -36,11 +36,11 @@
 					autocomplete="given-name"
 					placeholder="John"
 					schema={schemas.firstName}
-					label="First Name"
+					label="First name"
 					required
 				/>
 
-				<Textbox name="lastName" autocomplete="family-name" bind:value={joinAsVendorModule.lastName} placeholder="Doe" schema={schemas.lastName} label="Last Name" required />
+				<Textbox name="lastName" autocomplete="family-name" bind:value={joinAsVendorModule.lastName} placeholder="Doe" schema={schemas.lastName} label="Last name" required />
 
 				<Textbox
 					name="email"
@@ -70,7 +70,7 @@
 					autocomplete="organization"
 					placeholder="e.g., Varni Jewels"
 					schema={schemas.businessName}
-					label="Business Name"
+					label="Business name"
 					required
 				/>
 
@@ -92,7 +92,7 @@
 					autocomplete="new-password"
 					placeholder="••••••••"
 					schema={schemas.confirmPassword}
-					label="Confirm Password"
+					label="Confirm password"
 					required
 				/>
 

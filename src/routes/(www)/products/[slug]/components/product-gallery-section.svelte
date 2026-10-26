@@ -87,7 +87,7 @@
 			{/if}
 			<Drawer.Content class="">
 				<Drawer.Header class="text-left">
-					<Drawer.Title>You May Also Like</Drawer.Title>
+					<Drawer.Title>You may also like</Drawer.Title>
 				</Drawer.Header>
 				{#if productState.productsOfSameCategory?.length}
 					<Carousel.Root class="px-4">

@@ -270,7 +270,7 @@
 					<div class="order-2 p-5 lg:order-none">
 						<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-5">
 							<div class="space-y-2">
-								<h5 class="font-semibold">Delivery Address</h5>
+								<h5 class="font-semibold">Delivery address</h5>
 
 								<p class="flex flex-col text-sm">
 									<span>
@@ -302,7 +302,7 @@
 							</div>
 
 							<div class="space-y-2">
-								<h5 class="font-semibold">Billing Address</h5>
+								<h5 class="font-semibold">Billing address</h5>
 								{#if order?.billingAddressId === order?.shippingAddressId}
 									<div class="flex items-center gap-2 text-sm text-muted-foreground">
 										<CheckCircle class="h-4 w-4 text-success" />

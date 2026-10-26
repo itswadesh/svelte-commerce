@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>Forgot Password</title>
+	<title>Forgot password</title>
 </svelte:head>
 <div class="container mx-auto flex min-h-[calc(100vh-4rem)] max-w-lg flex-col items-center justify-center px-4">
 	<div class="w-full space-y-6 text-center">

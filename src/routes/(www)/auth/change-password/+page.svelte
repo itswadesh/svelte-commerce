@@ -16,16 +16,16 @@
 </script>
 
 <svelte:head>
-	<title>Change Password</title>
+	<title>Change password</title>
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center bg-muted">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
 	<div class="border w-full max-w-md transform space-y-6 rounded-xl bg-card p-8 transition-all">
 		<div class="text-center">
 			<div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
 				<KeyRound class="h-6 w-6 text-primary" />
 			</div>
-			<h1 class="text-2xl font-bold text-foreground">Change Password</h1>
+			<h1 class="page-heading">Change password</h1>
 			<p class="mt-2 text-sm text-muted-foreground">Please enter your old password and choose a new one</p>
 		</div>
 
@@ -39,7 +39,7 @@
 			}}
 		>
 			<div>
-				<label for="old" class="mb-2 block text-sm font-medium text-foreground">Old Password</label>
+				<label for="old" class="mb-2 block text-sm font-medium text-foreground">Old password</label>
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 						<Lock class="h-5 w-5 text-muted-foreground" />
@@ -76,7 +76,7 @@
 			</div>
 
 			<div>
-				<label for="password" class="mb-2 block text-sm font-medium text-foreground">New Password</label>
+				<label for="password" class="mb-2 block text-sm font-medium text-foreground">New password</label>
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 						<Lock class="h-5 w-5 text-muted-foreground" />
@@ -113,7 +113,7 @@
 			</div>
 
 			<div>
-				<label for="retype" class="mb-2 block text-sm font-medium text-foreground">Confirm New Password</label>
+				<label for="retype" class="mb-2 block text-sm font-medium text-foreground">Confirm new password</label>
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 						<Lock class="h-5 w-5 text-muted-foreground" />

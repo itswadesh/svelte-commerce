@@ -19,7 +19,7 @@
 			<MailCheck class="h-10 w-10 text-success" />
 		</div>
 
-		<h1 class="mb-3 page-heading">Subscription Successful</h1>
+		<h1 class="mb-3 page-heading">Subscription successful</h1>
 
 		<p class="mb-2 text-base text-muted-foreground">
 			{#if email}
@@ -33,6 +33,6 @@
 			minutes, check your spam or promotions folder.
 		</p>
 
-		<Button href="/" class="h-12 px-8">Continue Shopping</Button>
+		<Button href="/" class="h-12 px-8">Continue shopping</Button>
 	</div>
 </div>

@@ -103,7 +103,7 @@
 </svelte:head>
 
 <div
-	class="flex min-h-screen items-center justify-center bg-background p-4"
+	class="flex justify-center bg-background px-4 py-8 sm:py-16"
 	role="main"
 >
 	<div class="grid w-full max-w-4xl items-center gap-8 md:grid-cols-2">
@@ -161,7 +161,7 @@
 						bind:value={firstName}
 						placeholder="John"
 						schema={schemas.firstName}
-						label="First Name"
+						label="First name"
 						required
 						aria-label="First name"
 						autocomplete="given-name"
@@ -171,7 +171,7 @@
 						bind:value={lastName}
 						placeholder="Doe"
 						schema={schemas.lastName}
-						label="Last Name"
+						label="Last name"
 						required
 						aria-label="Last name"
 						autocomplete="family-name"

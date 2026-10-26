@@ -185,7 +185,7 @@
 				type="text"
 				name=""
 				id=""
-				placeholder="Search Messages"
+				placeholder="Search messages"
 				class="h-full w-full bg-inherit py-3 pr-5 focus:outline-none"
 				bind:value={messagesModule.searchValue}
 			/>
@@ -269,7 +269,7 @@
 				type="text"
 				name=""
 				id=""
-				placeholder="Search Messages"
+				placeholder="Search messages"
 				class="h-full w-full bg-inherit py-3 pr-5 focus:outline-none"
 				bind:value={messagesModule.searchValue}
 			/>

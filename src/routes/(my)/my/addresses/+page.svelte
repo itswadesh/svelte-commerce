@@ -34,7 +34,7 @@
 	<!-- Header -->
 	<div class="mb-10 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
 		<div>
-			<h1 class="text-lg font-bold tracking-tight text-foreground md:text-xl">Your Addresses</h1>
+			<h1 class="page-heading">Your addresses</h1>
 			<p class="mt-2 text-sm text-muted-foreground">Manage your shipping and billing addresses.</p>
 		</div>
 		<Button onclick={addressesModule.handleAddNew} class="h-12 px-6">
@@ -133,7 +133,7 @@
 	<Dialog.Root bind:open={showDeleteConfirmation}>
 		<Dialog.Content class="sm:max-w-[425px]">
 			<Dialog.Header>
-				<Dialog.Title>Delete Address</Dialog.Title>
+				<Dialog.Title>Delete address</Dialog.Title>
 				<Dialog.Description>Are you sure you want to delete this address? This action cannot be undone.</Dialog.Description>
 			</Dialog.Header>
 			<Dialog.Footer class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">

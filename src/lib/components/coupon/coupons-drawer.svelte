@@ -28,7 +28,7 @@
 			<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-[100dvh] sm:w-fit sm:max-w-xl [&>div:first-child]:hidden">
 				<div in:fade class="mx-auto w-full max-w-4xl pb-20 sm:pb-0">
 					<Drawer.Header class="text-left">
-						<Drawer.Title>Apply Promo Code</Drawer.Title>
+						<Drawer.Title>Apply promo code</Drawer.Title>
 						<Drawer.Close
 							class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
 						>

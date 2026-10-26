@@ -21,7 +21,7 @@
 			</span>
 
 			<Sheet.Trigger>
-				<Button variant="link" class="h-auto self-start p-0">Check Availability</Button>
+				<Button variant="link" class="h-auto self-start p-0">Check availability</Button>
 			</Sheet.Trigger>
 		</div>
 
@@ -41,7 +41,7 @@
 									<span class="flex w-fit items-center gap-1 self-start rounded-full bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
 										<Check size={12} />
 
-										<span class="whitespace-nowrap">In Stock</span>
+										<span class="whitespace-nowrap">In stock</span>
 									</span>
 								{:else}
 									<span class="flex w-fit items-center gap-1 self-start rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">

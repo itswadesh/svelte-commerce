@@ -266,7 +266,7 @@
 <div class="fixed left-0 top-0 z-[100] {displayCarousel} h-[100dvh] w-screen flex-col items-center justify-start overflow-hidden bg-black">
 	<!-- Background overlay -->
 	<Button variant="ghost" class="absolute left-0 top-0 h-full w-full rounded-none hover:bg-transparent" onclick={hideCarousel}>
-		<span class="sr-only">Close Carousel</span>
+		<span class="sr-only">Close carousel</span>
 	</Button>
 
 	<div class="relative mx-auto flex h-full w-full max-w-[1200px] items-center gap-4 px-4 py-[5vh]">

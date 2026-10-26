@@ -369,7 +369,7 @@
 					</div>
 				{:else}
 					<div class="flex flex-col gap-1.5">
-						<span class="ed-drawer-label text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Welcome Guest</span>
+						<span class="ed-drawer-label text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Welcome guest</span>
 						<AuthButton aria-label="Login" type="login">
 							<div
 								class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all duration-200 hover:bg-primary/95"
@@ -406,7 +406,7 @@
 								onclick={() => (navModule.openSidebar = false)}
 							>
 								<Tag class="h-4 w-4 text-muted-foreground" />
-								<span>All Products</span>
+								<span>All products</span>
 							</a>
 						</li>
 					</ul>
@@ -415,7 +415,7 @@
 				<!-- NavMenu Section -->
 				{#if navModule.navMenu?.length}
 					<div>
-						<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Quick Links</span>
+						<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Quick links</span>
 						<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 							{#each navModule.navMenu as menuItem, i}
 								<li>
@@ -472,7 +472,7 @@
 
 				<!-- Account Section -->
 				<div>
-					<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">My Account</span>
+					<span class="ed-drawer-label mb-3 block text-[10px] font-bold uppercase tracking-wider text-muted-foreground">My account</span>
 					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 						{#if menuItemsUser?.length}
 							{#each menuItemsUser as m}
@@ -509,7 +509,7 @@
 									}}
 								>
 									<LogOut class="h-4 w-4 text-destructive/70" />
-									<span>Sign Out</span>
+									<span>Sign out</span>
 								</button>
 							</li>
 						{/if}
@@ -520,7 +520,7 @@
 			<!-- Footer Contact Box -->
 			{#if page?.data?.store?.businessEmail || page?.data?.store?.businessPhone}
 				<div class="ed-drawer-foot border-t border-border bg-muted/50 p-5">
-					<span class="ed-drawer-label mb-2 block text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Support Contact</span>
+					<span class="ed-drawer-label mb-2 block text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Support contact</span>
 					<div class="flex flex-col gap-2">
 						{#if page?.data?.store?.businessEmail}
 							<a

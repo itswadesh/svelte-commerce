@@ -316,7 +316,7 @@
 		     Min/Max boxes that filtered nothing, so the whole block is dropped unless the facets
 		     carry a real range. `max > min` also keeps the slider maths off a zero-width range. -->
 		{#if priceFilterSupported}
-			<p class="ed-df__label text-sm font-bold uppercase text-foreground">Price Range</p>
+			<p class="ed-df__label text-sm font-bold uppercase text-foreground">Price range</p>
 
 			<div class="ed-df__slider relative mr-5 mt-3">
 				<!-- Range slider track -->

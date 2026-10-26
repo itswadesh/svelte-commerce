@@ -47,7 +47,7 @@
 						{/each}
 						{#if category.children.length > 2}
 							<div class="flex items-center gap-0.5 text-xs text-primary">
-								<span>View All</span>
+								<span>View all</span>
 								<ChevronRight class="h-3 w-3" />
 							</div>
 						{/if}

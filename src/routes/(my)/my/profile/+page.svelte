@@ -77,7 +77,7 @@
 		<!-- Profile Header -->
 		<div class="flex items-center justify-between">
 			<div>
-				<h1 class="text-lg font-bold tracking-tight text-foreground md:text-xl">Profile Settings</h1>
+				<h1 class="page-heading">Profile settings</h1>
 				<p class="mt-2 text-sm text-muted-foreground">Manage your personal information and account security.</p>
 			</div>
 		</div>
@@ -89,7 +89,7 @@
 					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
 						<User class="h-5 w-5" />
 					</div>
-					<h2 class="text-xl font-bold text-foreground">Personal Information</h2>
+					<h2 class="section-heading">Personal information</h2>
 				</div>
 			</div> -->
 
@@ -97,16 +97,16 @@
 				<form onsubmit={profileModule.saveProfile} class="space-y-8" oninput={profileModule.handleDetailsChange}>
 					<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
 						<div class="space-y-2">
-							<Input label="First Name" placeholder="Enter first name" bind:value={profileModule.profile.firstName} class="h-12" />
+							<Input label="First name" placeholder="Enter first name" bind:value={profileModule.profile.firstName} class="h-12" />
 						</div>
 						<div class="space-y-2">
-							<Input label="Last Name" placeholder="Enter last name" bind:value={profileModule.profile.lastName} class="h-12" />
+							<Input label="Last name" placeholder="Enter last name" bind:value={profileModule.profile.lastName} class="h-12" />
 						</div>
 						<div class="space-y-2">
 							<Input
 								id="phone"
 								name="phone"
-								label="Phone Number"
+								label="Phone number"
 								type="phone"
 								placeholder="Enter phone number"
 								bind:value={profileModule.profile.phone}
@@ -156,9 +156,9 @@
 								id="email"
 								type="email"
 								name="email"
-								label="Email Address"
+								label="Email address"
 								bind:value={profileModule.profile.email}
-								placeholder="Enter Email"
+								placeholder="Enter email"
 								required={!profileModule.profile?.phoneVerified}
 								class="h-12"
 							/>
@@ -180,14 +180,14 @@
 					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10 text-destructive">
 						<AlertCircle class="h-5 w-5" />
 					</div>
-					<h2 class="text-xl font-bold text-destructive">Danger Zone</h2>
+					<h2 class="text-xl font-bold text-destructive">Danger zone</h2>
 				</div>
 			</div>
 
 			<div class="p-6 md:p-8">
 				<div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
 					<div class="max-w-md">
-						<h3 class="text-lg font-bold text-foreground">Delete Account</h3>
+						<h3 class="text-lg font-bold text-foreground">Delete account</h3>
 						<p class="mt-1 text-sm text-muted-foreground">Permanently delete your account and all associated data. This action cannot be undone.</p>
 					</div>
 					<Button

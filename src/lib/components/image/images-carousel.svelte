@@ -21,7 +21,7 @@
 					{#if image}
 						<LazyImg src={image} alt="Image" class="h-full w-full rounded-none object-cover" />
 					{:else}
-						<div class="flex h-full w-full items-center justify-center rounded-none bg-muted text-muted-foreground">No Image</div>
+						<div class="flex h-full w-full items-center justify-center rounded-none bg-muted text-muted-foreground">No image</div>
 					{/if}
 				</div>
 			</CarouselItem>

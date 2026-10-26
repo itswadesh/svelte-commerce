@@ -9,7 +9,7 @@
 	<meta name="description" content="Thank you for signing up! Please verify your email to complete registration." />
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center bg-background p-4">
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
 	<div class="border w-full max-w-md space-y-8 rounded-lg bg-card p-8 text-center">
 		<div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-success/10">
 			<svg

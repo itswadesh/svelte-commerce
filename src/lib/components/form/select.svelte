@@ -46,7 +46,7 @@
 					<Popover.Trigger bind:ref={triggerRef}>
 						{#snippet child({ props })}
 							<Button
-								aria-label="Open Select Options"
+								aria-label="Open select options"
 								variant="outline"
 								class="w-full justify-between font-normal"
 								{...props}
