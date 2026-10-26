@@ -50,8 +50,19 @@
 					: 'Email address'
 	)
 
+	// The engine sends a phone one code a minute (ext/identity's loginCodeGap). A shorter wait here
+	// offered "Resend code" that the engine then refused with "a code was sent a moment ago".
+	const RESEND_WAIT_SECONDS = 60
+
+	// "A code was sent a moment ago": the earlier code is on its way and still works, so the
+	// shopper is better on the code step, waiting out the minute, than stuck in front of a refusal.
+	// The daily limit answers the same status but says "tomorrow", and stays a refusal.
+	function codeAlreadySent(e: any) {
+		return e?.status === 429 && e?.code === 'too_many_requests' && !/tomorrow/i.test(String(e?.message ?? ''))
+	}
+
 	function startResendCooldown() {
-		resendSeconds = 30
+		resendSeconds = RESEND_WAIT_SECONDS
 		if (resendTimer) clearInterval(resendTimer)
 		resendTimer = setInterval(() => {
 			resendSeconds = Math.max(0, resendSeconds - 1)
@@ -60,6 +71,30 @@
 				resendTimer = undefined
 			}
 		}, 1000)
+	}
+
+	// Send code, on the phone step. What LoginModule.handleSubmit does for a phone, except that a
+	// code sent a moment ago moves the shopper on to the code step instead of stopping them here.
+	async function sendCode() {
+		loginModule.isLoading = true
+		try {
+			await authService.getOtp({ phone: loginModule.identifier })
+		} catch (e: any) {
+			if (!codeAlreadySent(e)) {
+				toast.error(e.message || 'Could not send the code')
+				return
+			}
+			toast.info(e.message)
+		} finally {
+			loginModule.isLoading = false
+		}
+		try {
+			// LoginModule.handleSubmit passes the phone the same way; the type names only an email.
+			await (loginModule.cartState as any)?.updateEmail({ phone: loginModule.identifier })
+		} catch {
+			// The cart's contact is a convenience; the sign-in goes on without it.
+		}
+		loginModule.step = 2
 	}
 
 	async function handleResendOtp() {
@@ -75,6 +110,11 @@
 			toast.success('OTP resent successfully')
 			startResendCooldown()
 		} catch (e: any) {
+			if (codeAlreadySent(e)) {
+				toast.info(e.message)
+				startResendCooldown()
+				return
+			}
 			toast.error(e.message || 'Failed to resend OTP')
 		}
 	}
@@ -341,7 +381,10 @@
 			<form
 				onsubmit={async (e) => {
 					if (loginModule.isPhoneNumber) {
+						e.preventDefault()
 						loginModule.identifier = withDialCode(loginModule.identifier, page?.data?.store?.storeCountry?.dialCode || '+91')
+						await sendCode()
+						return
 					}
 					const success = await loginModule.handleSubmit(e)
 					if (success) {
