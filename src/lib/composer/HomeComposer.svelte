@@ -4,6 +4,7 @@
 	import { SECTIONS } from './registry.js'
 	import { knownSections, pageHeadingSection, type ComposerLayout } from './helpers.js'
 	import { draftSections, editorMessage, storefrontMessage, LAYOUT_DEPENDENCY, type DraftDocument } from './editor-bridge.js'
+	import { themeFontsHref, themeTokenCss } from './theme-tokens.js'
 
 	/**
 	 * The home page the merchant composed in the panel: the engine's sections, in the engine's
@@ -31,7 +32,17 @@
 	const sections = $derived(knownSections(source, SECTIONS, dev ? (m) => console.warn(m) : undefined))
 	const headingId = $derived(pageHeadingSection(sections))
 	// The section whose picture is first on the screen loads at once; every later one waits.
-	const firstHero = $derived(sections.findIndex((s) => s.type === 'hero'))
+	const firstHero = $derived(sections.findIndex((s) => s.type === 'hero' || s.type === 'slideshow'))
+
+	// A preview draws its own theme settings (D127): the draft's as the panel posts them, else the
+	// saved draft's. The root layout leaves the published ones out of a preview, so a setting the
+	// draft cleared shows the storefront's own value, as it will once published. A shopper's page
+	// gets the published ones from the root layout instead.
+	const previewTokens = $derived(editing && draft ? (draft.theme_settings ?? {}) : layout?.preview ? (layout.themeSettings ?? {}) : null)
+	const tokenCss = $derived(previewTokens ? themeTokenCss(previewTokens, 3) : '')
+	const tokenFonts = $derived(previewTokens ? themeFontsHref(previewTokens) : '')
+	// Split so the compiler does not take the literal for this component's own stylesheet.
+	const tokenStyle = $derived(tokenCss ? '<sty' + 'le id="theme-tokens-preview">' + tokenCss + '</sty' + 'le>' : '')
 
 	function post(message: object) {
 		if (editorOrigin) window.parent.postMessage(message, editorOrigin)
@@ -82,6 +93,11 @@
 		post(storefrontMessage('select', id))
 	}
 </script>
+
+<svelte:head>
+	{#if tokenFonts}<link href={tokenFonts} rel="stylesheet" />{/if}
+	{#if tokenStyle}{@html tokenStyle}{/if}
+</svelte:head>
 
 <div class="cmp-home" class:cmp-home--editing={editing}>
 	{#if !headingId && brandName}
