@@ -9,6 +9,9 @@
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import { toast } from 'svelte-sonner'
 	import { isOutOfStock } from '$lib/product/stock'
+	import { cartService } from '$lib/core/services'
+	import { addOnPicks, takePicks } from '$lib/product/add-on-picks.svelte'
+	import { bumpTotal } from '$lib/product/upsells'
 
 	/**
 	 * `compact` is the sticky mobile bar: CTA only, no secondary link, no wishlist.
@@ -30,6 +33,32 @@
 	const outOfStock = $derived(isOutOfStock(stockSource))
 
 	const cartCount = $derived(productState.cartState?.cart?.lineItems?.length ?? 0)
+
+	// The figure on the button: the chosen variant's price and every add-on ticked in "Complete the
+	// set" (D132), so the sticky bar on a phone says what the tap will cost.
+	const productId = $derived(String(page.data?.product?.id ?? ''))
+	const picked = $derived(addOnPicks.productId === productId ? addOnPicks.items : [])
+	const unitPrice = $derived(Number(productState.selectedVariant?.price || page.data?.product?.price) || 0)
+	const buttonPrice = $derived(unitPrice > 0 ? formatPrice(bumpTotal(unitPrice, picked), page.data?.store?.currency?.code) : '')
+
+	/**
+	 * The ticked add-ons go in after the product, because the engine prices one only beside it.
+	 * One failing (sold out since the page loaded, say) leaves the others and the product in the
+	 * bag and says which, rather than undoing a purchase the shopper asked for.
+	 */
+	async function addPicked() {
+		const items = takePicks(productId)
+		const svc = cartService as unknown as { addAddOn?: (q: { addOnId: string }) => Promise<any> }
+		if (!items.length || typeof svc.addAddOn !== 'function') return
+		for (const item of items) {
+			try {
+				const cart = await svc.addAddOn({ addOnId: item.id })
+				if (cart && productState.cartState) productState.cartState.cart = cart
+			} catch (err) {
+				toast.error(`Could not add ${item.title}`, { description: (err as Error)?.message })
+			}
+		}
+	}
 	const thumbnail = $derived(productState.selectedVariant?.img || productState.selectedVariant?.image || page.data?.product?.thumbnail || '')
 
 	// Success is owned here rather than read from `cartState.addToCartMessage`. The store never
@@ -59,6 +88,8 @@
 			productState.showAddToCartMessage = false
 			return
 		}
+
+		await addPicked()
 
 		justAdded = true
 		clearTimeout(resetTimer)
@@ -183,6 +214,10 @@
 							{:else}
 								<ShoppingBag class="h-4 w-4" aria-hidden="true" />
 								<span>Add to bag</span>
+								{#if buttonPrice}
+									<span class="tabular-nums" aria-hidden="true">· {buttonPrice}</span>
+									<span class="sr-only">for {buttonPrice}</span>
+								{/if}
 							{/if}
 						</span>
 					{/key}

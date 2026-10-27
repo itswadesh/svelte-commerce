@@ -24,6 +24,8 @@
 	import ProductTitleSection from './product-title-section.svelte'
 	import ProductVariation from './product-variation.svelte'
 	import RelatedProducts from './related-products.svelte'
+	import CompleteTheSet from './complete-the-set.svelte'
+	import CrossSells from './cross-sells.svelte'
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
 	import { invalidate } from '$app/navigation'
@@ -466,6 +468,9 @@
 				<!-- In flow on every viewport. The mobile CTA used to exist only inside the sticky
 				     bar, which is why that bar had to be pinned from first paint. The wrapper exists
 				     only as the IntersectionObserver target, so it sets no spacing of its own. -->
+				<!-- The order bump sits right above the button that buys it (GoCommerce D132). -->
+				<CompleteTheSet />
+
 				<div bind:this={inFlowCta}>
 					<ProductCartAndWishlistButtons />
 				</div>
@@ -549,6 +554,12 @@
 	</div>
 {/snippet}
 
+{#snippet crossSells(section: ComposerSection)}
+	<div class="page-width mt-2 sm:mt-4">
+		<CrossSells heading={text(section.settings, 'heading')} />
+	</div>
+{/snippet}
+
 {#snippet related(section: ComposerSection)}
 	<div class="page-width mt-2 sm:mt-4">
 		<RelatedProducts heading={text(section.settings, 'heading')} />
@@ -559,7 +570,7 @@
 	<PageComposer
 		layout={template}
 		page="product"
-		parts={{ 'main-product': mainProduct, 'product-reviews': reviews, 'related-products': related }}
+		parts={{ 'main-product': mainProduct, 'cross-sells': crossSells, 'product-reviews': reviews, 'related-products': related }}
 		aspectRatio="{aspectWidth} / {aspectHeight}"
 		editorOrigin={data?.editorOrigin ?? null}
 		onsaved={() => invalidate(LAYOUT_DEPENDENCY)}
@@ -568,6 +579,8 @@
 	{@render breadcrumbs()}
 	<div class="page-width intra-gap edp-root flex flex-col">
 		{@render core()}
+
+		<CrossSells />
 
 		<ProductReviewsSection />
 
