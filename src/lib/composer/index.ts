@@ -1,3 +1,5 @@
 export { default as HomeComposer } from './HomeComposer.svelte'
+export { default as PageComposer } from './PageComposer.svelte'
 export { SECTIONS } from './registry.js'
 export * from './helpers.js'
+export * from './page-layout.js'
