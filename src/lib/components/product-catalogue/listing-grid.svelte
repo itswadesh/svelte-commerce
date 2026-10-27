@@ -203,7 +203,7 @@
 				<div class="intra-gap grid w-full grid-cols-2" aria-label="Loading more products">
 					{#each Array(2) as _}
 						<div class="flex flex-col gap-2">
-							<Skeleton class="w-full rounded-md" style="aspect-ratio: {cardRatio};" />
+							<Skeleton class="w-full rounded-md" style="aspect-ratio: var(--product-image-ratio, {cardRatio});" />
 							<Skeleton class="h-3 w-3/4" />
 							<Skeleton class="h-3 w-1/3" />
 						</div>

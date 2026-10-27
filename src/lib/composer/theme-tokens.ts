@@ -14,7 +14,10 @@
  */
 
 export type ThemeSettings = Partial<
-	Record<'background' | 'text' | 'accent' | 'accent_text' | 'muted' | 'heading_font' | 'body_font' | 'radius', unknown>
+	Record<
+		'background' | 'text' | 'accent' | 'accent_text' | 'muted' | 'heading_font' | 'body_font' | 'radius' | 'product_image_ratio' | 'product_image_fit',
+		unknown
+	>
 >
 
 type Font = { family: string; google: string }
@@ -39,6 +42,10 @@ export const FONTS: Record<string, Font> = {
 }
 
 const RADII: Record<string, string> = { none: '0px', small: '4px', medium: '8px', large: '16px' }
+
+// Product cards read these as --product-image-ratio and --product-image-fit (D128).
+const RATIOS: Record<string, string> = { square: '1 / 1', portrait: '3 / 4', tall: '2 / 3', landscape: '4 / 3' }
+const FITS: Record<string, string> = { fill: 'cover', whole: 'contain' }
 
 const HEX = /^#[0-9a-f]{6}$/i
 
@@ -143,6 +150,9 @@ export function themeTokenDeclarations(settings: ThemeSettings | null | undefine
 		out['--font-primary'] = body.family
 	}
 	if (typeof s.radius === 'string' && Object.hasOwn(RADII, s.radius)) out['--radius'] = RADII[s.radius]
+	if (typeof s.product_image_ratio === 'string' && Object.hasOwn(RATIOS, s.product_image_ratio))
+		out['--product-image-ratio'] = RATIOS[s.product_image_ratio]
+	if (typeof s.product_image_fit === 'string' && Object.hasOwn(FITS, s.product_image_fit)) out['--product-image-fit'] = FITS[s.product_image_fit]
 	return out
 }
 

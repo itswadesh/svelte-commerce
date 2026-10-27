@@ -63,9 +63,22 @@ describe('theme tokens', () => {
 			accent: '#abc',
 			heading_font: 'toString',
 			body_font: "Inter'; }",
-			radius: 'huge'
+			radius: 'huge',
+			product_image_ratio: '1 / 1',
+			product_image_fit: 'cover'
 		})
 		expect(d).toEqual({})
+	})
+
+	it('maps the product picture shape and fit from their lists', () => {
+		expect(themeTokenDeclarations({ product_image_ratio: 'square', product_image_fit: 'fill' })).toEqual({
+			'--product-image-ratio': '1 / 1',
+			'--product-image-fit': 'cover'
+		})
+		expect(themeTokenDeclarations({ product_image_ratio: 'tall', product_image_fit: 'whole' })).toEqual({
+			'--product-image-ratio': '2 / 3',
+			'--product-image-fit': 'contain'
+		})
 	})
 
 	it('maps fonts and rounding from their lists', () => {
