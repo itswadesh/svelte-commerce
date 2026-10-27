@@ -19,6 +19,7 @@
 	import StorePalette from '$lib/components/common/store-palette.svelte'
 	import { guardStorePalette } from '$lib/components/common/store-palette-guard.js'
 	import { startRouteTransition } from '$lib/motion/route-transition'
+	import ChromeEditorBridge from '$lib/composer/ChromeEditorBridge.svelte'
 
 	interface LayoutData {
 		store: StoreData
@@ -30,6 +31,8 @@
 		timestamp: number
 		/** The theme editor's published colours, fonts and rounding (GoCommerce D127), or null. */
 		themeSettings?: Record<string, unknown> | null
+		/** The theme editor framing a preview of the header or footer (GoCommerce D131), or null. */
+		chromeEditor?: { origin: string; part: 'header' | 'footer' } | null
 		error?: string
 	}
 	let { children, data }: { children: Snippet; data: LayoutData } = $props()
@@ -267,6 +270,10 @@
 		{@html data?.store?.plugins?.headerScripts?.html}
 	{/if}
 </svelte:head>
+
+{#if browser && data?.chromeEditor}
+	<ChromeEditorBridge editorOrigin={data.chromeEditor.origin} part={data.chromeEditor.part} />
+{/if}
 
 <ColorPalette />
 <StorePalette />

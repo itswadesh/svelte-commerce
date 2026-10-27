@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { Home } from '@lucide/svelte'
-	import type { Menu } from '$lib/core/types/index.js'
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
+	import { chromeMenuItems } from '$lib/composer/chrome-draft.svelte.js'
+
+	// The store's header menu: the one the shop chose in the theme editor's header (D131), which the
+	// connector already files under `header`, or a draft's choice while the editor is open.
+	const headerItems = $derived(chromeMenuItems('header', page?.data?.store?.menu))
 </script>
 
 <div class="mr-4 md:flex">
@@ -47,7 +51,7 @@
 				<!-- Dynamic menu items. The 32px box is deliberate: these are standalone navigation
 				     targets, not links inside a sentence, so WCAG 2.2's inline exception does not cover
 				     them and a bare 20px text link misses the 24px minimum. -->
-				{#each page?.data?.store?.menu?.find?.((menu: Menu) => menu?.menuId === 'header')?.items || [] as item}
+				{#each headerItems as item}
 					<a
 						href={item.link}
 						class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center text-sm font-bold text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"

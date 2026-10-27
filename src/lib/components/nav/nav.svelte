@@ -20,6 +20,8 @@
 	import LimeNav from '$lib/theme/lime/LimeNav.svelte'
 	import { resolveThemeContent } from '$lib/theme/index.js'
 	import { dialog } from '$lib/actions/dialog.js'
+	import { chromeSettings } from '$lib/composer/chrome-draft.svelte.js'
+	import { headerView } from '$lib/composer/site-chrome.js'
 
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
@@ -105,6 +107,21 @@
 	const themeContent = $derived(resolveThemeContent(activeThemeName, page.data?.store))
 	const themeHeader = $derived(themeContent?.header)
 	const themeAnnouncement = $derived(themeHeader?.hideAnnouncement === true ? '' : themeHeader?.announcement || '')
+	// The header the shop set in the theme editor (GoCommerce D131), published or a draft being
+	// edited, decides the strip once there is one: its words, its link, and whether it shows on
+	// every page. Until then the theme's strip, on the home page, exactly as before.
+	const chromeHeader = $derived.by(() => {
+		const settings = chromeSettings('header', page.data)
+		return settings ? headerView(settings) : null
+	})
+	const announcement = $derived(
+		chromeHeader
+			? chromeHeader.announcement
+			: themeAnnouncement
+				? { text: themeAnnouncement, link: themeHeader?.announcementHref || null, everyPage: false }
+				: null
+	)
+	const announcementShown = $derived(!!announcement && (announcement.everyPage || isHomepage))
 	const helloBarHasContent = $derived(
 		!!(
 			navModule.helloBarPlugin?.active &&
@@ -139,15 +156,15 @@
 		<div bind:clientHeight={barHeight}>
 			<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
 		     content wins -->
-			{#if !helloBarHasContent && themeAnnouncement && isHomepage}
+			{#if !helloBarHasContent && announcement && announcementShown}
 				<div class="overflow-hidden">
 					<div class="max-w-none bg-primary px-4 py-2.5 text-center text-xs font-semibold text-primary-foreground">
-						{#if themeHeader?.announcementHref}
-							<a href={themeHeader.announcementHref} class="inline-flex min-h-[32px] items-center transition-opacity hover:opacity-80"
-								>{themeAnnouncement}</a
+						{#if announcement.link}
+							<a href={announcement.link} class="inline-flex min-h-[32px] items-center transition-opacity hover:opacity-80"
+								>{announcement.text}</a
 							>
 						{:else}
-							{themeAnnouncement}
+							{announcement.text}
 						{/if}
 					</div>
 				</div>
