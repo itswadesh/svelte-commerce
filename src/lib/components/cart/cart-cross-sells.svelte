@@ -8,7 +8,7 @@
 	import Spinner from '$lib/components/common/spinner.svelte'
 
 	/**
-	 * "You may be interested in" (GoCommerce D132): what the bag's products suggest, less what it
+	 * "You may be interested in" (GoCommerce D133): what the bag's products suggest, less what it
 	 * already holds, with a + that adds one. With nothing curated the connector answers the first
 	 * item's related products. Re-asked when the bag's products change.
 	 */

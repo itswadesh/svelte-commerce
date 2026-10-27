@@ -104,7 +104,7 @@
 	)
 	const totalSavings = $derived(mrpSaving + (cartState.cart?.discountAmount || 0))
 
-	// The bag's products, as a key the suggestions are re-asked on (D132).
+	// The bag's products, as a key the suggestions are re-asked on (D133).
 	const bagProducts = $derived(
 		(cartState.cart?.lineItems || [])
 			.map((item: any) => item.productId)
@@ -367,7 +367,7 @@
 										<!-- Supporting text at 12px in the muted *text* token. The unit price used to render
 										     at 10px in a 2.54:1 grey, and in two different greys depending on breakpoint. -->
 										{#if (item as any).addOnId}
-											<!-- Bought from Complete the set (D132): the engine keeps this price while the product it came with is in the bag. -->
+											<!-- Bought from Complete the set (D133): the engine keeps this price while the product it came with is in the bag. -->
 											<p class="text-xs text-muted-foreground">
 												Offer price with {(cartState.cart?.lineItems || []).find((l: any) => l.productId === (item as any).addOnFor && !l.addOnId)?.title ?? 'its product'}
 											</p>

@@ -35,7 +35,7 @@
 	const cartCount = $derived(productState.cartState?.cart?.lineItems?.length ?? 0)
 
 	// The figure on the button: the chosen variant's price and every add-on ticked in "Complete the
-	// set" (D132), so the sticky bar on a phone says what the tap will cost.
+	// set" (D133), so the sticky bar on a phone says what the tap will cost.
 	const productId = $derived(String(page.data?.product?.id ?? ''))
 	const picked = $derived(addOnPicks.productId === productId ? addOnPicks.items : [])
 	const unitPrice = $derived(Number(productState.selectedVariant?.price || page.data?.product?.price) || 0)
