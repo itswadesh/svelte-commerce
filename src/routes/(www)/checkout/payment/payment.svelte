@@ -292,7 +292,7 @@
 					<!-- Same gate as the cart step: a store with no discount engine shows no promo box
 					     rather than one that refuses every code. -->
 					{#if discountCouponsPlugin?.active !== false}
-						<!-- The same offers the bag shows (D132), so a code can still be applied at the last step. -->
+						<!-- The same offers the bag shows (D133), so a code can still be applied at the last step. -->
 						<CartOffers subtotal={cartState?.cart?.subtotal} applied={cartState?.cart?.couponCode} apply={(code) => cartState.applyCoupon(code)} />
 						<CouponsDrawer />
 					{/if}

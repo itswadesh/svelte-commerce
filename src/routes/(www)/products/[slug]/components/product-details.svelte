@@ -468,7 +468,7 @@
 				<!-- In flow on every viewport. The mobile CTA used to exist only inside the sticky
 				     bar, which is why that bar had to be pinned from first paint. The wrapper exists
 				     only as the IntersectionObserver target, so it sets no spacing of its own. -->
-				<!-- The order bump sits right above the button that buys it (GoCommerce D132). -->
+				<!-- The order bump sits right above the button that buys it (GoCommerce D133). -->
 				<CompleteTheSet />
 
 				<div bind:this={inFlowCta}>

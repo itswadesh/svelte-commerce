@@ -9,7 +9,7 @@
 	import { toast } from 'svelte-sonner'
 
 	/**
-	 * The bag's offers (GoCommerce D132): the codes the shop chose to show, each with what it takes
+	 * The bag's offers (GoCommerce D133): the codes the shop chose to show, each with what it takes
 	 * off this bag or how much more the bag needs, and APPLY. Three show; the rest behind "Show all
 	 * offers". A code the shop did not list never appears, and the code box still takes it.
 	 */

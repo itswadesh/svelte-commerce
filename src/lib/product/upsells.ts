@@ -1,6 +1,6 @@
 /**
  * The arithmetic and wording behind the order bump, the free-delivery bar and
- * the bag's offers (GoCommerce D132). Pure, so it is tested without a page.
+ * the bag's offers (GoCommerce D133). Pure, so it is tested without a page.
  *
  * Every figure comes from the backend: the add-on's price is the offer the
  * engine will charge, the threshold is the store's own free-delivery rate, and
