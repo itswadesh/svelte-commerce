@@ -72,8 +72,8 @@ for name, logo, currency, menus, plugin toggles and theme CSS variables.
 ## Theme
 
 On Litekart the theme is chosen in the admin and the API serves that theme's content, layout and
-CSS — `store.theme` wins over `PUBLIC_STOREFRONT_THEME`. See the resolver in
-`src/lib/theme/index.ts` for the full precedence order.
+CSS, through `store.theme`. A backend with no theme feature gets the default theme. See the
+resolver in `src/lib/theme/index.ts`.
 
 ## Troubleshooting
 
