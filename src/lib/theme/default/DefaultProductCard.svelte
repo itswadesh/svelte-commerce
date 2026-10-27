@@ -233,18 +233,19 @@
 </ProductCardRenderer>
 
 <style>
+	/* Picture, title, price and cart are four rows of the grid the cards sit in (subgrid), so a
+	   row of cards shares one title height: one-line names leave no blank line under them, and a
+	   row with a two-line name still lines its prices up. Outside a grid the rows are just auto. */
 	.dpc {
 		position: relative;
-		display: flex;
+		display: grid;
+		grid-row: span 4;
+		grid-template-rows: subgrid;
+		row-gap: 0;
+		align-content: start;
 		width: 100%;
-		flex-direction: column;
 		font-family: var(--ed-body);
 		color: var(--ed-ink);
-		/* The caption sizes itself against the card, not the viewport. The same card is 170px wide
-		   in two columns on a phone and 154px in three columns on a tablet, so a viewport media
-		   query would tune the wrong one — a container query asks the only question that matters,
-		   which is how much room this card actually has. */
-		container-type: inline-size;
 	}
 
 	.dpc__media-link {
@@ -420,27 +421,24 @@
 	   photograph rather than three spaced rows. 8px from the image and 3px between the lines,
 	   against 12px and 6px: at four to five cards per row that is ~14px off every grid row. */
 	.dpc__info {
-		display: flex;
-		flex-direction: column;
-		gap: 3px;
-		padding-top: 8px;
+		display: contents;
 	}
 
 	.dpc__title-link {
 		display: block;
+		padding-top: 8px;
 		color: inherit;
 	}
 
 	/* Still two lines, deliberately: the catalogue is full of products whose names differ only in
 	   the tail ("…14k Rose Gold" against "…10k Yellow Gold"), and clamping to one would make
-	   neighbouring cards indistinguishable. The height is now RESERVED at two lines so a one-line
-	   name does not float its price up out of line with the card beside it — every price in a row
-	   sits on the same baseline, which is what makes a dense grid scannable rather than ragged. */
+	   neighbouring cards indistinguishable. No reserved height: the card's subgrid row takes the
+	   tallest name in the grid row, so prices share a baseline without a blank line under every
+	   one-line name. */
 	.dpc__title {
 		font-size: 0.8125rem;
 		font-weight: 500;
 		line-height: 1.35;
-		min-height: 2.7em;
 		color: var(--ed-ink);
 		overflow: hidden;
 		display: -webkit-box;
@@ -453,10 +451,9 @@
 		color: hsl(var(--primary));
 	}
 
-	/* Two fixed lines: price and was-price, then the saving on its own line. Squeezing all three onto
-	   one line only worked for some prices at some card widths, so cards in one row came out at
-	   different heights depending on how many digits a price had. Reserving both lines also keeps a
-	   product with no saving level with its neighbours. Nothing is hidden at any width. */
+	/* Price and was-price, then the saving on its own line. Squeezing all three onto one line only
+	   worked for some prices at some card widths. The subgrid row keeps cards in one grid row level
+	   whichever of them has a saving. Nothing is hidden at any width. */
 	.dpc__price {
 		display: flex;
 		flex-wrap: wrap;
@@ -464,7 +461,11 @@
 		align-content: flex-start;
 		column-gap: 5px;
 		row-gap: 2px;
-		min-height: calc(0.875rem * 1.25 + 0.75rem * 1.25 + 2px);
+		margin-top: 3px;
+		/* The price sizes itself against the card, not the viewport: the same card is 170px wide in
+		   two columns on a phone and 154px in three on a tablet. The container is the price row, not
+		   the card, because a container is layout-contained and the card could not be a subgrid. */
+		container-type: inline-size;
 		line-height: 1.25;
 		font-variant-numeric: tabular-nums;
 	}
@@ -498,10 +499,6 @@
 	/* Narrow cards (three per row at 768px, a 360px phone) step the price down so price and
 	   was-price keep to the first line. Nothing drops below 12px. */
 	@container (max-width: 172px) {
-		.dpc__price {
-			column-gap: 4px;
-		}
-
 		.dpc__price-now {
 			font-size: 0.8125rem;
 		}
