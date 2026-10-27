@@ -7,6 +7,7 @@
 	import { fade, fly, motionMs } from '$lib/motion'
 	import { onMount } from 'svelte'
 	import { Portal } from 'bits-ui'
+	import { draftMenuItems } from '$lib/composer/chrome-draft.svelte.js'
 
 	// Slim variant for the scrolled header: drops the menu list's vertical padding.
 	// (jws also dropped the list's margin and border here; this list carries neither.)
@@ -14,7 +15,8 @@
 
 	// Admin-configured header menu takes priority over the raw category megamenu.
 	// Menu-builder nodes keep their children under `items`; category nodes use `children`.
-	const headerMenuItems = $derived(page.data.store?.menu?.find((x: any) => x.menuId === 'header')?.items)
+	// In the theme editor, the menu a header draft names stands in for it (D131).
+	const headerMenuItems = $derived(draftMenuItems('header') ?? page.data.store?.menu?.find((x: any) => x.menuId === 'header')?.items)
 
 	// The renderer doesn't expose loading state, so settle the same megamenu promise here
 	// to tell "still loading" (skeleton) apart from "loaded but empty" (empty nav).
