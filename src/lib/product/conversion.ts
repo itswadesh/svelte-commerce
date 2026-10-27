@@ -97,3 +97,25 @@ export function variantsWith<V extends VariantLike>(
 		return earlier.every(([id, v]) => opts.some((o) => same(o.optionId, id) && o.value === v))
 	})
 }
+
+/**
+ * The variant a choice lands on. It keeps every choice made on the options before this one, as
+ * `variantsWith` promised when it offered the value; keeps the later choices too when that
+ * combination exists; and otherwise moves the later ones to the first combination that can be
+ * bought, then to any. The kit's own lookup falls back to the first variant with the value at all,
+ * which could quietly change the size a shopper picked.
+ */
+export function variantFor<V extends VariantLike>(
+	variants: V[],
+	options: { id: unknown }[],
+	selection: [string, string][],
+	optionId: unknown,
+	value: string,
+	purchasable: (variant: V) => boolean
+): V | null {
+	const candidates = variantsWith(variants, options, selection, optionId, value)
+	const same = (a: unknown, b: unknown) => String(a) === String(b)
+	const others = selection.filter(([id]) => !same(id, optionId))
+	const exact = candidates.find((variant) => others.every(([id, v]) => (variant.options ?? []).some((o) => same(o.optionId, id) && o.value === v)))
+	return exact ?? candidates.find(purchasable) ?? candidates[0] ?? null
+}
