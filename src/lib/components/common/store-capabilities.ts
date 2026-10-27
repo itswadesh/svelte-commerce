@@ -39,8 +39,12 @@ export function servesStorefrontRestApi(): boolean {
 /** The contact form posts to `/api/contact-us`. */
 export const canSubmitContactForm = (): boolean => servesStorefrontRestApi()
 
-/** The newsletter form posts to `/api/newsletter/subscribe`. */
-export const canSubscribeToNewsletter = (): boolean => servesStorefrontRestApi()
+/**
+ * The newsletter form posts to `/api/newsletter/subscribe`: Litekart's REST API, or a connector that
+ * answers that path itself from its own newsletter service (GoCommerce's, through ext/newsletter).
+ */
+export const canSubscribeToNewsletter = (svc: object = services as object): boolean =>
+	servesStorefrontRestApi() || typeof (Reflect.get(svc, 'newsletterService') as { subscribe?: unknown } | undefined)?.subscribe === 'function'
 
 type SupportChatPlugins = {
 	tawkTo?: { active?: boolean; account?: string }
