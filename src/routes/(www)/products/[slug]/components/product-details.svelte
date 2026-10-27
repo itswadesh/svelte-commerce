@@ -26,6 +26,8 @@
 	import RelatedProducts from './related-products.svelte'
 	import CompleteTheSet from './complete-the-set.svelte'
 	import CrossSells from './cross-sells.svelte'
+	import ProductProof from './product-proof.svelte'
+	import ProductHighlights from './product-highlights.svelte'
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
 	import { invalidate } from '$app/navigation'
@@ -459,6 +461,9 @@
 
 				<ProductPricing />
 
+				<!-- How many have sold and the free gift note (GoCommerce D134), under the price. -->
+				<ProductProof />
+
 				<ProductAvailability />
 
 				<ProductAggregation />
@@ -522,6 +527,9 @@
 						{/if}
 					</div>
 				{/if}
+
+				<!-- The shop's highlights (GoCommerce D134), above the description they summarise. -->
+				<ProductHighlights />
 
 				<!-- The accordion stack is one region: each panel draws its own hairline rule, so the
 				     column gap must not also apply between them. -->
