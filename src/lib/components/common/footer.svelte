@@ -14,10 +14,20 @@
 	import { resolveThemeContent } from '$lib/theme/index.js'
 	import LimeFooter from '$lib/theme/lime/LimeFooter.svelte'
 	import NoorFooter from '$lib/theme/noor/NoorFooter.svelte'
+	import { chromeMenuItems, chromeSettings } from '$lib/composer/chrome-draft.svelte.js'
+	import { footerColumns, footerView, shownFooterColumns } from '$lib/composer/site-chrome.js'
 
 	// Derive store data to prevent unnecessary re-renders
 	const storeData = $derived(page?.data?.store || {})
-	const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
+	// The store's footer menu: the one the shop chose in the theme editor's footer (D131), which the
+	// connector files under `footer`, or a draft's choice while the editor is open.
+	const footerMenu = $derived(chromeMenuItems('footer', storeData?.menu))
+	// The footer the shop set in the theme editor, published or a draft; null leaves every part of
+	// the footer the storefront's own, and so does each setting left empty.
+	const chromeFooter = $derived.by(() => {
+		const settings = chromeSettings('footer', page.data)
+		return settings ? footerView(settings) : null
+	})
 
 	// The row used to be four hard-coded marks, so every store claimed Skrill and PayPal whether it
 	// accepted them or not. Build it from the methods the store actually configures; a store with
@@ -87,19 +97,30 @@
 			}))
 			.filter((column) => column.items.length)
 	)
-	// The fallback path needs the same treatment: the backend's own footer menu carries those five
-	// policy links too, so a store whose theme ships no footer columns re-introduced every dead link
-	// the filtering above had just removed.
+	// The store's footer menu gets the same treatment: it can carry those five policy links too. Each
+	// top-level link with links under it is a column, and the links with none share one more.
 	const resolvableFooterMenu = $derived(
-		(footerMenu || [])
-			.map((column: { name?: string; items?: { link?: string; name?: string }[] }) => ({
-				...column,
-				items: keepResolvableLinks(column?.items || [], publishedCms)
-			}))
-			.filter((column: { items: unknown[] }) => column.items.length)
+		footerColumns(footerMenu)
+			.map((column) => ({ ...column, items: keepResolvableLinks(column.items, publishedCms) }))
+			.filter((column) => column.items.length)
 	)
-	const renderedFooterMenu = $derived(themeFooterMenu.length ? themeFooterMenu : resolvableFooterMenu)
-	const footerDescription = $derived(activeThemeName === 'default' ? storeData?.description : themeContent?.description || storeData?.description)
+	const renderedFooterMenu = $derived(shownFooterColumns<{ name?: string; items: unknown[] }>(resolvableFooterMenu, themeFooterMenu))
+	const footerDescription = $derived(
+		chromeFooter?.about ?? (activeThemeName === 'default' ? storeData?.description : themeContent?.description || storeData?.description)
+	)
+	// Social links set in the theme editor's footer replace the plugin's; with none set there, the
+	// plugin's switch decides, as before.
+	const socialLinks = $derived(
+		chromeFooter?.social.length
+			? chromeFooter.social
+			: socialSharing?.active
+				? Object.entries(socialSharing || {})
+						.filter(([key, url]) => !['active', 'position'].includes(key) && typeof url === 'string' && url)
+						.map(([key, url]) => ({ key, url: url as string }))
+				: []
+	)
+	const newsletterShown = $derived(!!page.data?.store?.plugins?.newsletter?.active && (chromeFooter?.newsletter ?? true))
+	const copyright = $derived(chromeFooter?.copyright ?? themeFooter?.copyright ?? '')
 </script>
 
 <div class="mt-5">
@@ -155,14 +176,14 @@
 								</div>
 							{/if}
 
-							{#if socialSharing?.active}
+							{#if socialLinks.length}
 								<!-- `-ml-2.5` pulls the first icon's padding back so the row still starts on the
 								     logo's edge; the padding is what makes each 24px mark a 44px target. -->
 								<div class="-ml-2.5 flex flex-wrap items-center gap-1">
-									{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
-										{#if social}
+									{#each socialLinks as { key, url }}
+										{#if url}
 											<a
-												href={social as string}
+												href={url}
 												target="_blank"
 												rel="noopener noreferrer"
 												aria-label={SOCIAL_NAMES[key] ?? key}
@@ -237,7 +258,7 @@
 						</div>
 
 						<div class="flex flex-1 flex-col gap-10 lg:flex-row lg:justify-end lg:gap-20">
-							{#if page.data?.store?.plugins?.newsletter?.active}
+							{#if newsletterShown}
 								<Newsletter />
 							{/if}
 							<FooterMenu items={renderedFooterMenu} />
@@ -250,8 +271,8 @@
 							     stop rendered as "© 2026 TEST . ALL RIGHTS RESERVED."; the build stamp that used to sit
 							     here as sr-only text was read out to screen readers and is now the footer's data-build. -->
 							<span class="text-xs text-muted-foreground">
-								{#if themeFooter?.copyright}
-									{themeFooter.copyright}
+								{#if copyright}
+									{copyright}
 								{:else}
 									&copy; {new Date().getFullYear()}
 									<a href="/" class="text-foreground transition-colors hover:text-primary">{storeData?.name}</a>. All rights reserved.
