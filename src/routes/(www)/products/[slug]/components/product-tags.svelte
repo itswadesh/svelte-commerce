@@ -25,8 +25,6 @@
 		font-family: var(--ed-body);
 		font-size: 0.75rem;
 		font-weight: 500;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
 		padding: 4px 10px;
 	}
 </style>

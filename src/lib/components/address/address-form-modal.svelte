@@ -46,7 +46,7 @@
 						<Button variant="ghost" size="icon" aria-label="Back to address list" onclick={handleBack}>
 							<ArrowLeft class="h-4 w-4" />
 						</Button>
-						<DialogTitle>{isEdit ? 'Edit Address' : 'Add New Address'}</DialogTitle>
+						<DialogTitle>{isEdit ? 'Edit address' : 'Add new address'}</DialogTitle>
 					</div>
 				</DialogHeader>
 				<form onsubmit={handleSubmit} class="flex min-h-0 flex-col">
@@ -151,7 +151,7 @@
 						{#if isEdit}
 							<Button type="button" variant="link" onclick={handleDelete} class="w-full text-destructive">
 								<Trash2 class="h-4 w-4" />
-								Delete Address
+								Delete address
 							</Button>
 						{/if}
 					</div>

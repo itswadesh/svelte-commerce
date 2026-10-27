@@ -115,7 +115,7 @@
 								{/each}
 							</div>
 
-							<div class="flex items-center px-6 text-[10px] font-bold uppercase tracking-widest text-foreground md:hidden">
+							<div class="flex items-center px-6 text-[10px] font-bold text-foreground md:hidden">
 								<span class="mr-2 text-muted-foreground">Page</span>
 								{activePage} <span class="mx-2 text-muted-foreground">/</span>
 								{noOfPage}
@@ -132,7 +132,7 @@
 					{/snippet}
 				</Pagination.Root>
 
-				<div class="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+				<div class="text-xs font-bold text-muted-foreground">
 					Showing page {activePage} of {noOfPage}
 				</div>
 			</div>

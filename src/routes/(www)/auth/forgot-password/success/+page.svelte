@@ -21,7 +21,7 @@
 
 		<div class="space-y-4">
 			<AuthButton type="login">
-				<Button variant="outline" class="w-full">Back to Login</Button>
+				<Button variant="outline" class="w-full">Back to login</Button>
 			</AuthButton>
 		</div>
 	</div>

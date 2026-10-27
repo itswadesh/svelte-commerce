@@ -7,7 +7,8 @@
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
 	import ConsentBanner from '$lib/components/common/consent-banner.svelte'
 	import { navigating } from '$app/stores'
-	import { updated } from '$app/state'
+	import { page, updated } from '$app/state'
+	import { themeBackground, themeFontsHref, themeTokenCss } from '$lib/composer/theme-tokens.js'
 	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation'
 	import { browser } from '$app/environment'
 	import { Loader } from '@lucide/svelte'
@@ -23,10 +24,12 @@
 		store: StoreData
 		theme?: {
 			name: string
-			source: 'admin' | 'env' | 'default'
+			source: 'admin' | 'default'
 			available: string[]
 		}
 		timestamp: number
+		/** The theme editor's published colours, fonts and rounding (GoCommerce D127), or null. */
+		themeSettings?: Record<string, unknown> | null
 		error?: string
 	}
 	let { children, data }: { children: Snippet; data: LayoutData } = $props()
@@ -124,12 +127,29 @@
 		return STYLE_OPEN.replace('theme-css', 'store-palette') + "[data-theme='default'][data-theme] { " + declarations + ' }' + STYLE_CLOSE
 	})
 
+	// The theme editor's published tokens (GoCommerce ext/layouts, D127): over the theme and the store
+	// palette, in the SSR head so the first paint is already right. A preview of the home page draws
+	// its draft's tokens itself (PageComposer), and the published ones are left out there, so a token
+	// the draft cleared does not show through. A product or collection template's preview carries no
+	// tokens of its own (D128), so it keeps the published ones like any other page.
+	const publishedTokens = $derived.by(() => {
+		const layout = (page.data as { layout?: { preview?: boolean; page?: string } } | undefined)?.layout
+		return layout?.preview && (layout.page ?? 'home') === 'home' ? null : (data?.themeSettings ?? null)
+	})
+	const tokenStyleTag = $derived.by(() => {
+		const css = themeTokenCss(publishedTokens)
+		return css ? STYLE_OPEN.replace('theme-css', 'theme-tokens') + css + STYLE_CLOSE : ''
+	})
+	const tokenFontsUrl = $derived(themeFontsHref(publishedTokens))
+
 	// Mobile browsers paint their own chrome — the address-bar strip on Chrome for Android, the
 	// status-bar backdrop once the storefront is installed — in a default grey unless the page names
 	// a colour, so there was a visible seam above a header that is itself `bg-background`. Take the
 	// merchant override when there is one so a custom palette moves the chrome with it, and fall back
 	// to the theme value. Only the default theme is in scope; the others own their own backgrounds.
 	const themeColor = $derived.by(() => {
+		const tokenBackground = themeBackground(publishedTokens)
+		if (tokenBackground) return tokenBackground
 		if ((data?.theme?.name || 'default') !== 'default') return ''
 		// Read through entries rather than by key: `cssVariables` is typed `{}` upstream, so indexing it
 		// needs a cast. This is what paletteStyleTag above already does with the same object.
@@ -235,6 +255,13 @@
 	{/if}
 	{#if paletteStyleTag}
 		{@html paletteStyleTag}
+	{/if}
+	{#if tokenFontsUrl}
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link href={tokenFontsUrl} rel="stylesheet" />
+	{/if}
+	{#if tokenStyleTag}
+		{@html tokenStyleTag}
 	{/if}
 	{#if data?.store?.plugins?.headerScripts?.active}
 		{@html data?.store?.plugins?.headerScripts?.html}

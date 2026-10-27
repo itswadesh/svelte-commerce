@@ -139,7 +139,7 @@
 						{:else}
 							{#if !search.trim() && recentSearches.length}
 								<!-- Styled as a group heading rather than as its own thing. This row used to be
-								     `text-xs font-semibold uppercase tracking-wide` while the Categories and
+								     `text-xs font-semibold uppercase` while the Categories and
 								     Products headings below it came from `Command.Group heading` — two heading
 								     treatments in one short list, one of them shouting. -->
 								<div class="flex items-center justify-between gap-2 px-2.5 pb-1 pt-2">

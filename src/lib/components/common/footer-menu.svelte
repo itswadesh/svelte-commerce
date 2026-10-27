@@ -8,9 +8,9 @@
 			<div class="flex flex-col gap-3">
 				<!-- Backend menu groups can have no name; an empty heading is an axe empty-heading violation.
 				     <h2>, not <h4>: on a legal page whose only other heading is the <h1>, an h4 here made the
-				     outline jump two levels. The small uppercase look stays in the classes. -->
+				     outline jump two levels. -->
 				{#if item?.name}
-					<h2 class="text-xs font-bold uppercase tracking-widest text-foreground">{item.name}</h2>
+					<h2 class="text-xs font-bold text-foreground">{item.name}</h2>
 				{/if}
 				{#if item?.items?.length > 0}
 					<!-- `inline-flex` with a minimum height, not a bare inline link. These sit in a list

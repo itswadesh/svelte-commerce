@@ -203,7 +203,7 @@
 				<div class="intra-gap grid w-full grid-cols-2" aria-label="Loading more products">
 					{#each Array(2) as _}
 						<div class="flex flex-col gap-2">
-							<Skeleton class="w-full rounded-md" style="aspect-ratio: {cardRatio};" />
+							<Skeleton class="w-full rounded-md" style="aspect-ratio: var(--product-image-ratio, {cardRatio});" />
 							<Skeleton class="h-3 w-3/4" />
 							<Skeleton class="h-3 w-1/3" />
 						</div>
@@ -217,7 +217,7 @@
 						e.preventDefault()
 						loadNextPage()
 					}}
-					class="inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.16em] md:min-h-8 {loadFailed
+					class="inline-flex min-h-11 items-center text-xs font-semibold md:min-h-8 {loadFailed
 						? 'ed-empty__link text-primary underline underline-offset-4'
 						: 'ed-more text-muted-foreground'}"
 				>
@@ -226,7 +226,7 @@
 			{/if}
 		</div>
 	{:else if products.length > 0}
-		<p class="ed-end mt-4 text-center text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground lg:hidden">You've reached the end</p>
+		<p class="ed-end mt-4 text-center text-xs font-semibold text-muted-foreground lg:hidden">You've reached the end</p>
 	{/if}
 
 	<div class="ed-pagination hidden lg:block">

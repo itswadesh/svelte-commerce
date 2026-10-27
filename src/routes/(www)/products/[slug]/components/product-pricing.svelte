@@ -64,8 +64,6 @@
 	:global([data-theme='default'] .edp-off) {
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
 		color: hsl(var(--success));
 	}
 

@@ -58,13 +58,13 @@
             onclick={() => goto('/')}
 						class="inline-block w-full rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-medium text-primary-foreground hover:bg-primary-hover"
 					>
-						Continue Shopping
+						Continue shopping
 					</button>
 				<!-- <a
 					href="/"
 					class="inline-block w-full rounded-lg border border-border-strong px-4 py-2.5 text-center text-sm font-medium text-foreground hover:bg-muted"
 				>
-					Return to Home
+					Return to home
 				</a> -->
 			</div>
 		</div>

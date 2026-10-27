@@ -78,7 +78,7 @@
 							<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
 							Loading...
 						{:else}
-							Reset Password
+							Reset password
 						{/if}
 					</Button>
 				</div>
@@ -97,7 +97,7 @@
 		<AuthButton type="login">
 			<button class="flex items-center text-sm text-muted-foreground hover:text-primary">
 				<ArrowLeft size={16} class="mr-2" />
-				Back to Login
+				Back to login
 			</button>
 		</AuthButton>
 	</CardFooter>

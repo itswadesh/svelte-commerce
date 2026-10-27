@@ -197,8 +197,8 @@
 	{/if}
 </svelte:head>
 
-{#if composedLayout?.sections?.length}
-	<HomeComposer layout={composedLayout} {brandName} aspectRatio="{aspectWidth} / {aspectHeight}" />
+{#if composedLayout?.sections?.length || composedLayout?.preview}
+	<HomeComposer layout={composedLayout} {brandName} aspectRatio="{aspectWidth} / {aspectHeight}" editorOrigin={data?.editorOrigin ?? null} />
 {:else if themeLayout?.sections?.length}
 	<ThemeSections layout={themeLayout} ctx={sectionContext} />
 {:else}
@@ -233,7 +233,7 @@
 
 {#if homepageModule.showRecentOrderPopup}
 	<div transition:fly={{ x: 24 }} class="fixed bottom-20 right-4 z-50">
-		<div class="border flex max-w-[320px] gap-3 border-l-4 border-primary bg-card p-3.5">
+		<div class="flex max-w-[320px] gap-3 border border-l-4 border-primary bg-card p-3.5">
 			<a href="/products/{homepageModule.selectedRecentOrder?.slug || ''}" class="flex gap-3 text-foreground">
 				<img
 					src={homepageModule.selectedRecentOrder?.image || homepageModule.selectedRecentOrder?.img || homepageModule.selectedRecentOrder?.thumbnail}

@@ -3,6 +3,7 @@
 // so they never apply), or a hex colour in a class. Those are what made account, auth and order
 // pages look like a different shop from the catalogue. Use the semantic utilities in
 // UX_SYSTEM.md section 2 instead. White and black stay allowed: text over photos and image scrims.
+// It also fails on all-caps styling, which the owner ruled out (docs/decisions.md, 2026-10-26).
 //
 //   node scripts/check-tokens.mjs
 import { readdirSync, readFileSync, statSync } from 'node:fs'
@@ -15,6 +16,9 @@ const BAD = new RegExp(
 	String.raw`(?<![\w-])(?:[a-z-]+:)*(?:(?:bg|text|border|divide|ring|fill|stroke|from|via|to|placeholder|outline|shadow)-(?:${PALETTE})-\d{2,3}|dark:[^\s"'\x60}]+|(?:bg|text|border)-\[#[0-9a-fA-F]{3,8}\])`,
 	'g'
 )
+// Only where styling is set, so prose such as "one uppercase letter" in a message stays allowed.
+const CAPS = /(?<![\w:-])(?:(?!first-letter:)[a-z-]+:)*uppercase(?=[\s"'\x60}])|text-transform:\s*uppercase/g
+const STYLING = /class[=:]|text-transform/
 
 const files = (dir) =>
 	readdirSync(dir).flatMap((name) => {
@@ -28,14 +32,14 @@ for (const file of ROOTS.flatMap(files)) {
 		.split('\n')
 		.forEach((line, i) => {
 			if (/^\s*(\/\/|<!--|\*)/.test(line)) return
-			for (const [hit] of line.matchAll(BAD)) {
+			for (const [hit] of [...line.matchAll(BAD), ...(STYLING.test(line) ? line.matchAll(CAPS) : [])]) {
 				count++
 				console.log(`${file}:${i + 1}  ${hit}`)
 			}
 		})
 }
 if (count) {
-	console.error(`\n${count} off-token colour class(es). Map them to the semantic tokens (UX_SYSTEM.md section 2).`)
+	console.error(`\n${count} off-token colour or all-caps class(es). Use the semantic tokens (UX_SYSTEM.md section 2) and sentence case.`)
 	process.exit(1)
 }
-console.log('check-tokens: every storefront colour comes from the design tokens')
+console.log('check-tokens: every storefront colour comes from the design tokens, and no text is all caps')

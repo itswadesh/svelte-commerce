@@ -128,7 +128,7 @@
 					{#if isLoading}
 						<Loader class="mr-2 h-4 w-4 animate-spin" />
 					{/if}
-					Update Profile
+					Update profile
 				</Button>
 			</div>
 		</form>
