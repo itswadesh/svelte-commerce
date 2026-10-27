@@ -2,7 +2,8 @@ import { wwwLoad } from '$lib/core/load-functions/index.js'
 import { categoryService, productService } from '$lib/core/services/index.js'
 import { services } from 'kitcommerce.config'
 import type { ComposerLayout } from '$lib/composer/helpers.js'
-import { editorOrigin, LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
+import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
+import { allowEditorFrame } from '$lib/composer/page-layout.js'
 import type { PageLoad } from './$types'
 
 // The home page the merchant composed in the panel (GoCommerce's ext/layouts), when the connector
@@ -61,14 +62,7 @@ export const load: PageLoad = async (event) => {
 	// The panel's theme editor frames this page with ?editor=<its origin> (D126). Only a preview the
 	// engine accepted turns that on: the page may then be framed by that one origin, and listens to
 	// it. Without a valid key the parameter does nothing.
-	const editor = layout?.preview ? editorOrigin(event.url.searchParams.get('editor')) : null
-	if (editor) {
-		try {
-			event.setHeaders({ 'content-security-policy': `frame-ancestors ${editor}` })
-		} catch {
-			// setHeaders refuses a header already set by another load, and is a no-op in the browser.
-		}
-	}
+	const editor = allowEditorFrame(event, layout, event.url.searchParams.get('editor'))
 
 	return { ...base, featuredProducts, featuredCategories, layout, editorOrigin: editor }
 }

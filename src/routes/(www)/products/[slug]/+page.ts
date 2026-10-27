@@ -1,6 +1,10 @@
 import { wwwProductsSlugLoad } from '$lib/core/load-functions/index.js'
 import { error, isHttpError, isRedirect } from '@sveltejs/kit'
+import { services } from 'kitcommerce.config'
 import { productFailureStatus, watchProductRequest } from '$lib/product/product-load'
+import { browser } from '$app/environment'
+import { allowEditorFrame, fetchTemplate, previewParams } from '$lib/composer/page-layout.js'
+import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
 
 /**
  * Variant ids as strings, so selecting a variant works at all.
@@ -40,11 +44,25 @@ function withStringVariantIds<T>(product: T): T {
 // becomes a 503 the route's +error.svelte offers to retry. See $lib/product/product-load.ts.
 export const load = async (event: any) => {
 	const watch = watchProductRequest(event.fetch, event.params.slug)
+	// The theme editor re-reads the draft after each save: the template's product grids are resolved
+	// here.
+	event.depends(LAYOUT_DEPENDENCY)
+	// Untracked, for the reason below: reading the query would re-run this load on every
+	// ?variant_id= change. A preview's key and the editor's origin only change with a new frame, and
+	// survive that change through the tab (previewParams).
+	const { preview, editor } = event.untrack(() => previewParams('product', event.url, browser))
 	try {
 		// Only what the core load reads (fetch, params). Passing the whole event would read
 		// `event.url` and make this load re-run on every ?variant_id= change.
-		const data = await wwwProductsSlugLoad({ fetch: watch.fetch, params: event.params } as any)
-		return data?.product ? { ...data, product: withStringVariantIds(data.product) } : data
+		const [data, layout] = await Promise.all([
+			wwwProductsSlugLoad({ fetch: watch.fetch, params: event.params } as any),
+			// The shop's product page template (GoCommerce D128), or null for the built-in page.
+			fetchTemplate(services as object, 'product', preview)
+		])
+		const editorOrigin = allowEditorFrame(event, layout, editor)
+		if (!data?.product) return data
+		const previewKey = layout?.preview ? preview : null
+		return { ...data, product: withStringVariantIds(data.product), layout, editorOrigin, previewKey }
 	} catch (e) {
 		const reportedMissing = (isRedirect(e) && e.location === '/') || (isHttpError(e) && e.status === 404)
 		if (reportedMissing) {

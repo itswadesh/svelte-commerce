@@ -25,8 +25,10 @@ export const load: LayoutServerLoad = async ({ cookies, setHeaders, url }) => {
 		})
 	}
 
-	// A home-page draft opened through a preview key: never stored by a cache, never indexed.
-	if (url.pathname === '/' && url.searchParams.has('preview')) {
+	// A draft opened through a preview key — the home page, or a product or collection page drawn in
+	// its template's draft (D128): never stored by a cache, never indexed.
+	const arranged = url.pathname === '/' || url.pathname.startsWith('/products/') || url.pathname.startsWith('/collections/')
+	if (arranged && url.searchParams.has('preview')) {
 		setHeaders({
 			'Cache-Control': 'no-store',
 			'X-Robots-Tag': 'noindex, nofollow'

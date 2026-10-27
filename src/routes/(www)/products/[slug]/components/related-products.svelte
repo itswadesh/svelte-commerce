@@ -5,6 +5,9 @@
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 
+	// The shop's own heading from its product page template (GoCommerce D128); empty keeps this one.
+	let { heading = '' }: { heading?: string } = $props()
+
 	const productState = useProductState()
 
 	// Same ratio the cards below resolve to, so the skeleton reserves the height the products will
@@ -17,7 +20,7 @@
 	<div class="edp-related mb-12" data-testid="related-products">
 		<header class="edp-related-head">
 			<span class="edp-related-eyebrow">More to explore</span>
-			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">Related products</h2>
+			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">{heading || 'Related products'}</h2>
 		</header>
 
 		{#if productState.isLoadingRelatedProducts}
