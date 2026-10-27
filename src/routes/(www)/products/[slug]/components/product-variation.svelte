@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { afterNavigate } from '$app/navigation'
+	import { afterNavigate, goto } from '$app/navigation'
 	import { tick } from 'svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button'
 	import SizeGuideDrawer from './size-guide-drawer.svelte'
 	import OptionPicker from './option-picker.svelte'
-	import { pickerChoices, usesSearchablePicker, variantsWith } from '$lib/product/conversion'
+	import { pickerChoices, usesSearchablePicker, variantFor, variantsWith } from '$lib/product/conversion'
 
 	const productState = useProductState()
 
@@ -23,9 +23,20 @@
 	 */
 	let pendingFocus: HTMLElement | null = null
 
+	// The variant is chosen here rather than by the kit's `selectVariant` (GoCommerce D134): its
+	// lookup falls back to the first variant carrying the value at all, which could change a size the
+	// shopper had already picked. `variantFor` keeps the earlier choices, as the cross-filter that
+	// offered the value promised, and moves only the later ones.
+	const select = (option: Record<string, any>, value: Record<string, any>) => {
+		const target = variantFor(variants, options, selection, option.id, value.value, purchasable)
+		if (!target) return productState.selectVariant({ option, value })
+		productState.selectedVariant = target
+		goto(`?variant_id=${target.id}`, { replaceState: true, noScroll: true })
+	}
+
 	const choose = (event: Event, option: Record<string, any>, value: Record<string, any>) => {
 		pendingFocus = event.currentTarget as HTMLElement | null
-		productState.selectVariant({ option, value })
+		select(option, value)
 	}
 
 	// The searchable picker hands back its trigger, which is where focus belongs after the choice.
@@ -33,7 +44,7 @@
 		const v = (option.values ?? []).find((x: Record<string, any>) => x.value === value)
 		if (!v) return
 		pendingFocus = trigger
-		productState.selectVariant({ option, value: v })
+		select(option, v)
 	}
 
 	afterNavigate(async () => {

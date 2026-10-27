@@ -7,6 +7,7 @@ import {
 	pickerChoices,
 	soldLabel,
 	usesSearchablePicker,
+	variantFor,
 	variantsWith
 } from '../src/lib/product/conversion'
 
@@ -83,5 +84,50 @@ describe('the cross-filter between options', () => {
 	it('narrows a later option to what exists with the earlier ones', () => {
 		expect(variantsWith(variants, options, chosen, 'm', 'iPhone 16').map((x) => x.id)).toEqual(['2'])
 		expect(variantsWith(variants, options, chosen, 'm', 'Galaxy S24')).toEqual([])
+	})
+})
+
+describe('choosing a value', () => {
+	const options = [{ id: 's' }, { id: 'c' }, { id: 'm' }]
+	const v = (id: string, size: string, colour: string, material: string, stock = 5) => ({
+		id,
+		stock,
+		options: [
+			{ optionId: 's', value: size },
+			{ optionId: 'c', value: colour },
+			{ optionId: 'm', value: material }
+		]
+	})
+	const variants = [v('1', 'M', 'White', 'Silk'), v('2', 'S', 'Black', 'Cotton'), v('3', 'S', 'White', 'Linen', 0), v('4', 'S', 'White', 'Wool')]
+	const chosen: [string, string][] = [
+		['s', 'S'],
+		['c', 'Black'],
+		['m', 'Cotton']
+	]
+	const buyable = (x: { stock: number }) => x.stock > 0
+	it('keeps the earlier choices and moves only the later ones, preferring what can be bought', () => {
+		expect(variantFor(variants, options, chosen, 'c', 'White', buyable)?.id).toBe('4')
+	})
+	it('keeps every other choice when that combination exists', () => {
+		expect(
+			variantFor(
+				variants,
+				options,
+				[
+					['s', 'S'],
+					['c', 'White'],
+					['m', 'Linen']
+				],
+				'm',
+				'Wool',
+				buyable
+			)?.id
+		).toBe('4')
+	})
+	it('changes the later ones when an earlier value is chosen', () => {
+		expect(variantFor(variants, options, chosen, 's', 'M', buyable)?.id).toBe('1')
+	})
+	it('finds nothing for a value that does not exist with the earlier choices', () => {
+		expect(variantFor(variants, options, [['s', 'M']], 'm', 'Wool', buyable)).toBeNull()
 	})
 })
