@@ -181,7 +181,9 @@
 	// `image` must list image files only; the videos get their own VideoObject below.
 	const EMBED_URL = /youtube\.com|youtu\.be|vimeo\.com/i
 	const VIDEO_FILE = /\.(mp4|webm|mov|m4v|ogv)(\?|#|$)/i
-	const isVideo = (url: string) => VIDEO_FILE.test(url) || EMBED_URL.test(url)
+	// The connector's own list of videos (GoCommerce D134) wins over guessing from the address.
+	const knownVideos = $derived(new Set<string>(Array.isArray(data?.product?.videos) ? data.product.videos : []))
+	const isVideo = (url: string) => knownVideos.has(url) || VIDEO_FILE.test(url) || EMBED_URL.test(url)
 	const splitMedia = (value: unknown): string[] =>
 		String(value || '')
 			.split(',')
