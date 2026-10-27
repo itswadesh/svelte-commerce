@@ -9,6 +9,7 @@
 	import { z } from 'zod'
 	import * as Select from '$lib/components/ui/select/index.js'
 	import { Label } from '$lib/components/ui/label/index.js'
+	import PinAutofill from '$lib/components/address/pin-autofill.svelte'
 
 	let {
 		address = $bindable(),
@@ -114,6 +115,10 @@
 		[...(page?.data?.store?.countries ?? [])].filter((c: any) => c?.code && c?.name).sort((a: any, b: any) => a.name.localeCompare(b.name))
 	)
 
+	// India's postcode is a PIN code, and it comes first: six digits fill the city and state
+	// (GoCommerce D134), which only helps if they have not been typed already.
+	const isIndia = $derived(countryCode.toUpperCase() === 'IN')
+
 	// Seed the code so a shopper who never opens the select still saves a valid address.
 	$effect(() => {
 		if (address && !address.countryCode && page?.data?.store?.country?.code) {
@@ -211,6 +216,18 @@
 			/>
 			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 				<Textbox
+					name="zip"
+					error={fieldErrors.zip}
+					autocomplete="postal-code"
+					inputmode="numeric"
+					bind:value={address.zip}
+					placeholder={isIndia ? '6-digit PIN code' : '12345'}
+					schema={AddressSchema.zip}
+					label={isIndia ? 'PIN code' : 'ZIP Code'}
+					required
+				/>
+				<PinAutofill bind:address country={countryCode} />
+				<Textbox
 					name="city"
 					error={fieldErrors.city}
 					autocomplete="address-level2"
@@ -260,17 +277,6 @@
 						</p>
 					{/if}
 				</div>
-				<Textbox
-					name="zip"
-					error={fieldErrors.zip}
-					autocomplete="postal-code"
-					inputmode="numeric"
-					bind:value={address.zip}
-					placeholder="12345"
-					schema={AddressSchema.zip}
-					label="ZIP Code"
-					required
-				/>
 			</div>
 			<div class="mt-4 flex flex-col gap-2">
 				<!-- Outline, not a second full-width primary: the summary card's CTA is the one control
