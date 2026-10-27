@@ -1,11 +1,10 @@
-import { env } from '$env/dynamic/public'
 export { getThemeHomepageContent, resolveThemeContent, type ThemeHomepageContent } from './homepage-content.js'
 
 export type StorefrontThemeName = 'default' | 'wine' | 'organic' | 'lime' | string
 
 export interface StorefrontTheme {
 	name: StorefrontThemeName
-	source: 'admin' | 'env' | 'default'
+	source: 'admin' | 'default'
 	available: string[]
 }
 
@@ -19,7 +18,7 @@ const DEFAULT_THEME = 'default'
 
 const THEME_FONTS: Record<string, string> = {
 	default:
-		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap',
+		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
 	wine:
 		'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap',
 	organic:
@@ -33,16 +32,10 @@ export function getThemeFontsUrl(theme: string): string | null {
 }
 
 /**
- * Which theme to render, in precedence order:
- *
- *  1. the store record (`store.theme.name`) — how it works on Litekart, where the theme is chosen
- *     in the admin and the API also serves that theme's content, layout and CSS;
- *  2. `PUBLIC_STOREFRONT_THEME` — the mechanism for backends that serve no theme data (Medusa,
- *     Shopify), where the theme is fixed for the deployment and everything it needs is bundled;
- *  3. the default theme.
- *
- * Step 2 is why the env variable stays: without it a non-Litekart deployment could only ever run
- * the default theme.
+ * Which theme to render: the one the backend names on the store record (`store.theme.name`, as
+ * Litekart's admin sets it), else the default theme. A backend with no theme feature (Saleor,
+ * Medusa, Shopify) gets the default theme, and so does a name this build does not ship. Owner
+ * decision, docs/decisions.md 2026-10-27; there is deliberately no env override.
  */
 export function resolveStorefrontTheme(store: any): StorefrontTheme {
 	// `store.theme` is now a first-class object `{ name, content }`; older data may still be a
@@ -56,17 +49,17 @@ export function resolveStorefrontTheme(store: any): StorefrontTheme {
 		store?.settings?.theme ||
 		store?.plugins?.themeSettings?.theme ||
 		store?.plugins?.themeSettings?.activeTheme
-	const envTheme = env.PUBLIC_STOREFRONT_THEME || env.PUBLIC_THEME || env.PUBLIC_ACTIVE_THEME
-	const candidate = normalizeThemeName(adminTheme || envTheme || DEFAULT_THEME)
+	const requested = String(adminTheme || '').trim().toLowerCase()
+	const name = normalizeThemeName(requested)
 
 	return {
-		name: candidate,
-		source: adminTheme ? 'admin' : envTheme ? 'env' : 'default',
+		name,
+		source: name === requested ? 'admin' : 'default',
 		available: AVAILABLE_THEMES
 	}
 }
 
 export function normalizeThemeName(value: unknown): StorefrontThemeName {
 	const name = String(value || '').trim().toLowerCase()
-	return name || DEFAULT_THEME
+	return AVAILABLE_THEMES.includes(name) ? name : DEFAULT_THEME
 }

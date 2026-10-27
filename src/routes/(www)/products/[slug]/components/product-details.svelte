@@ -26,11 +26,27 @@
 	import RelatedProducts from './related-products.svelte'
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
+	import { invalidate } from '$app/navigation'
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { fly } from '$lib/motion'
+	import { untrack } from 'svelte'
+	import { browser } from '$app/environment'
+	import PageComposer from '$lib/composer/PageComposer.svelte'
+	import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
+	import { rememberPreview } from '$lib/composer/page-layout.js'
+	import { text, type ComposerLayout, type ComposerSection } from '$lib/composer/helpers.js'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
+	// The shop's product page template (GoCommerce D128): its sections around this page's core. Null
+	// — no template published, the editor off, an older connector — draws the page exactly as before.
+	const template = $derived((data?.layout as ComposerLayout | null | undefined) ?? null)
+	// A preview opened here keeps its key for the tab before anything rewrites the address (see
+	// rememberPreview): the product composable swaps the query for ?variant_id=… as it opens.
+	if (browser) {
+		untrack(() => data?.previewKey && rememberPreview('product', data.previewKey, data.editorOrigin ?? null))
+	}
+	const [aspectWidth, aspectHeight] = $derived(data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
 	const showPincodeCheck = $derived(productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
 
 	// Delivery and returns are stated only where the merchant has actually published the policy.
@@ -405,17 +421,26 @@
 
 <!-- <ProductRenderer bind:data>
 {#snippet content(productState)} -->
-<div class="intra-pt page-width hidden md:block">
-	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
-</div>
+<!-- A template's draft seen through a preview key is for the merchant, never for a search engine. -->
+<svelte:head>
+	{#if template?.preview}
+		<meta name="robots" content="noindex, nofollow" />
+	{/if}
+</svelte:head>
 
-<div class="page-width intra-gap edp-root flex flex-col">
+{#snippet breadcrumbs()}
+	<div class="intra-pt page-width hidden md:block">
+		<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
+	</div>
+{/snippet}
+
+<!-- The page's core: the gallery and the buy box. With a template it is one section among the
+     shop's, wherever the shop put it; without one it opens the page as it always has. -->
+{#snippet core()}
 	{#if !data?.product && !productState.isLoading}
 		<div class="flex h-80 flex-col items-center justify-center gap-3">
 			<h2 class="page-heading edp-empty-title">Product not found</h2>
-			<a href="/products" class="edp-empty-link text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4"
-				>Browse all products</a
-			>
+			<a href="/products" class="edp-empty-link text-sm font-bold text-primary underline underline-offset-4">Browse all products</a>
 		</div>
 	{:else}
 		<div class="inter-gap edp-grid relative grid grid-cols-1 items-start lg:grid-cols-2" data-testid="product-detail">
@@ -507,11 +532,48 @@
 			</div>
 		</div>
 	{/if}
+{/snippet}
 
-	<ProductReviewsSection />
+{#snippet mainProduct()}
+	{@render breadcrumbs()}
+	<div class="page-width intra-gap edp-root flex flex-col">
+		{@render core()}
+	</div>
+{/snippet}
 
-	<RelatedProducts />
-</div>
+<!-- The two parts the built-in page draws under the core, as sections a template can move or hide.
+     Each keeps the page's column and the gap the built-in page puts between them. -->
+{#snippet reviews()}
+	<div class="page-width mt-2 sm:mt-4">
+		<ProductReviewsSection />
+	</div>
+{/snippet}
+
+{#snippet related(section: ComposerSection)}
+	<div class="page-width mt-2 sm:mt-4">
+		<RelatedProducts heading={text(section.settings, 'heading')} />
+	</div>
+{/snippet}
+
+{#if template}
+	<PageComposer
+		layout={template}
+		page="product"
+		parts={{ 'main-product': mainProduct, 'product-reviews': reviews, 'related-products': related }}
+		aspectRatio="{aspectWidth} / {aspectHeight}"
+		editorOrigin={data?.editorOrigin ?? null}
+		onsaved={() => invalidate(LAYOUT_DEPENDENCY)}
+	/>
+{:else}
+	{@render breadcrumbs()}
+	<div class="page-width intra-gap edp-root flex flex-col">
+		{@render core()}
+
+		<ProductReviewsSection />
+
+		<RelatedProducts />
+	</div>
+{/if}
 
 <!-- Mobile purchase bar. Fixed, not sticky: stuck to the last flow element it rendered mid-screen
      on short pages and left the viewport entirely at the foot of the page, which is exactly where
@@ -574,8 +636,6 @@
 
 	:global([data-theme='default'] .edp-empty-link) {
 		color: var(--ed-ink);
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
 		font-size: 0.75rem;
 		text-decoration: none;
 		border-bottom: 1px solid var(--ed-ink);

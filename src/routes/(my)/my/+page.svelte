@@ -66,7 +66,7 @@
 				</div>
 				<Button href="/my/profile" variant="outline" class="flex items-center gap-2">
 					<Pencil class="h-4 w-4" />
-					Edit Profile
+					Edit profile
 				</Button>
 			</div>
 		</div>

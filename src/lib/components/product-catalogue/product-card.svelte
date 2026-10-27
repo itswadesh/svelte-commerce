@@ -137,7 +137,7 @@
 						{#if tag}
 							<div class="absolute left-2 top-2 z-10">
 								<div class="rounded-md bg-black/60 px-2 backdrop-blur-sm">
-									<span class="text-xs font-bold uppercase tracking-wider text-white">
+									<span class="text-xs font-bold text-white">
 										{tag}
 									</span>
 								</div>
@@ -188,7 +188,7 @@
 							<span class="text-xs text-muted-foreground line-through" data-testid="product-card-mrp">
 								{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
 							</span>
-							<span class="hidden text-xs font-bold uppercase text-success md:block lg:text-sm" data-testid="product-card-discount">
+							<span class="hidden text-xs font-bold text-success md:block lg:text-sm" data-testid="product-card-discount">
 								{discount}% OFF
 							</span>
 						{/if}
@@ -231,7 +231,7 @@
 									{#if cartState?.isUpdatingCart}
 										<Spinner label="Adding to bag" />
 									{:else}
-										Quick Add
+										Quick add
 									{/if}
 								</Button>
 							{/if}

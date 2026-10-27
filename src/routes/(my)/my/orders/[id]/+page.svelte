@@ -68,7 +68,7 @@
 							{#if order?.invoiceLink}
 								<Button variant="outline" href={order?.invoiceLink} target="_blank" class="h-11 gap-2">
 									<FileText class="h-4 w-4" />
-									Download Invoice
+									Download invoice
 								</Button>
 							{/if}
 						</div>
@@ -98,7 +98,7 @@
 											<div class="mt-4 flex w-fit items-center gap-2 rounded-lg bg-success/10 px-3 py-2 text-sm text-success ring-1 ring-success/20">
 												<Truck class="h-4 w-4" />
 												<span class="font-medium">Estimated Arrival:</span>
-												<span class="font-bold uppercase tracking-tight">
+												<span class="font-bold tracking-tight">
 													{date(order.createdAt + order.shippingRate.estimatedMaxDays * 86400000)}
 												</span>
 											</div>
@@ -138,7 +138,7 @@
 																	{item.title}
 																</h4>
 															</a>
-															<div class="mt-2 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+															<div class="mt-2 flex flex-wrap gap-4 text-xs font-bold text-muted-foreground">
 																<span class="flex items-center gap-1.5">
 																	<Tag class="h-3.5 w-3.5" />
 																	Qty: {item.qty}
@@ -169,7 +169,7 @@
 														<div class="flex flex-wrap gap-2">
 															{#if item?.status === 'delivered'}
 																<Button variant="ghost" size="sm" href="/products/{item?.slug}#review" class="h-8 gap-2 text-xs font-bold">
-																	Rate & Review
+																	Rate & review
 																</Button>
 															{/if}
 														</div>
@@ -218,7 +218,7 @@
 													{#if fulfillment?.trackingUrl}
 														<Button variant="outline" href={fulfillment.trackingUrl} target="_blank" class="h-10 gap-2">
 															<Truck class="h-4 w-4" />
-															Track Shipment
+															Track shipment
 														</Button>
 													{/if}
 												</div>
@@ -241,7 +241,7 @@
 									<div>
 										<div class="mb-3 flex items-center gap-2">
 											<MapPin class="h-4 w-4 text-muted-foreground" />
-											<h4 class="text-sm font-bold uppercase tracking-tight text-foreground">Shipping address</h4>
+											<h4 class="text-sm font-bold tracking-tight text-foreground">Shipping address</h4>
 										</div>
 										<div class="text-sm leading-relaxed text-muted-foreground">
 											<p class="font-bold text-foreground">
@@ -265,7 +265,7 @@
 										<div class="pt-0">
 											<div class="mb-3 flex items-center gap-2">
 												<ReceiptText class="h-4 w-4 text-muted-foreground" />
-												<h4 class="text-sm font-bold uppercase tracking-tight text-foreground">Billing address</h4>
+												<h4 class="text-sm font-bold tracking-tight text-foreground">Billing address</h4>
 											</div>
 											<div class="text-sm leading-relaxed text-muted-foreground">
 												<p class="font-bold text-foreground">
@@ -338,12 +338,11 @@
 										<div class="mt-6 flex items-center justify-between gap-2 border-t border-border pt-6">
 											<div class="flex items-center gap-2">
 												<CreditCardIcon class="h-4 w-4 text-muted-foreground" />
-												<span class="text-xs font-bold uppercase tracking-tight text-muted-foreground">Payment status</span>
+												<span class="text-xs font-bold tracking-tight text-muted-foreground">Payment status</span>
 											</div>
 											<span
-												class="text-xs font-bold uppercase tracking-wider {!order?.paymentStatus
-													? 'text-muted-foreground'
-													: order.paymentStatus === 'paid'
+												class="text-xs font-bold {!order?.paymentStatus
+													? 'text-muted-foreground': order.paymentStatus === 'paid'
 														? 'text-success'
 														: 'text-destructive'}"
 											>
@@ -358,7 +357,7 @@
 							{#if order?.replaceValidTill != null && new Date().getTime() <= order?.replaceValidTill && !order?.isReplaceOrReturn}
 								<Button variant="secondary" href="/my/exchange?orderId={order?.orderId}&itemId={order?.itemId}" class="h-12 w-full gap-2">
 									<RefreshCw class="h-4 w-4" />
-									Exchange or Return
+									Exchange or return
 								</Button>
 							{/if}
 						</div>
@@ -368,7 +367,7 @@
 					<div class="flex justify-center pt-10 lg:hidden">
 						<Button variant="ghost" href="/my/orders" class="gap-2">
 							<ChevronRight class="h-4 w-4 rotate-180" />
-							Back to All Orders
+							Back to all orders
 						</Button>
 					</div>
 				</section>

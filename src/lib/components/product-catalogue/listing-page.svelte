@@ -8,7 +8,7 @@
 	import ListingGrid from '$lib/components/product-catalogue/listing-grid.svelte'
 	import ListingHeader from './listing-header.svelte'
 	import { X } from '@lucide/svelte'
-	import { readAppliedFilters, urlWithoutAnyFilter, urlWithoutFilter } from './scope-filters.js'
+	import { hasFacetValues, readAppliedFilters, urlWithoutAnyFilter, urlWithoutFilter } from './scope-filters.js'
 
 	const data = $derived(page.data)
 
@@ -68,7 +68,7 @@
 		<!-- `w-`, not `max-w-`. As a max-width on a flex item whose content carried its own
 		     min-width, the rail measured 173px at 768px while the panel inside stayed 224px and spilled
 		     27px over the first column of products. -->
-		{#if Object.keys(data.products.facets || {}).length}
+		{#if hasFacetValues(data.products.facets)}
 			<div class="ed-plp__aside hidden w-1/4 min-w-0 border-input md:block">
 				<DesktopFilter />
 			</div>

@@ -108,9 +108,8 @@
 						<item.icon size={20} class="stroke-[1.6]" />
 					</div>
 					<span
-						class="truncate text-[9px] font-bold uppercase tracking-wider transition-colors duration-200 {isActive(item.href)
-							? 'font-semibold text-foreground'
-							: 'text-muted-foreground'}"
+						class="truncate text-[9px] font-bold transition-colors duration-200 {isActive(item.href)
+							? 'font-semibold text-foreground': 'text-muted-foreground'}"
 					>
 						{item.label}
 					</span>
@@ -130,7 +129,7 @@
 							</span>
 						{/if}
 					</div>
-					<span class="truncate text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
+					<span class="truncate text-[9px] font-bold text-muted-foreground">
 						{item.label}
 					</span>
 				</button>
@@ -167,7 +166,7 @@
 								goto('/products')
 							}}
 						>
-							Continue Shopping
+							Continue shopping
 						</Button>
 					</div>
 				{/if}
@@ -195,9 +194,9 @@
 								goto('/checkout/cart')
 							}}
 							size="lg"
-							class="w-full rounded-pill bg-primary px-8 py-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors duration-fast hover:bg-primary-hover"
+							class="w-full rounded-pill bg-primary px-8 py-4 text-xs font-bold text-primary-foreground transition-colors duration-fast hover:bg-primary-hover"
 						>
-							Proceed to Checkout
+							Proceed to checkout
 						</Button>
 					</div>
 				</div>

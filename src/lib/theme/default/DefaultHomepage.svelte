@@ -259,15 +259,6 @@
 	}
 </script>
 
-<svelte:head>
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link
-		rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
-	/>
-</svelte:head>
-
 {#if ed}
 	<div class="ed" class:is-in={inView}>
 		<!-- HOME PAGE SLIDER — the merchant's own banners, full-bleed above the hero. These are
@@ -604,8 +595,6 @@
 		   at 0.2em tracking — it was the smallest, hardest-to-read text on the page. */
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
 	}
 
 	/* ---------- HERO ---------- */
@@ -651,7 +640,7 @@
 
 	.ed-hero h1 em {
 		display: block;
-		font-style: italic;
+		font-style: normal;
 		color: hsl(var(--primary));
 	}
 
@@ -899,8 +888,6 @@
 		   Three uppercase button labels at 0.8 / 0.82 / 0.85rem is drift, not hierarchy. */
 		font-size: 0.8rem;
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		transition:
 			transform var(--motion-fast) var(--motion-ease),
 			opacity var(--motion-fast) var(--motion-ease);
@@ -939,8 +926,6 @@
 		color: var(--ed-ink);
 		font-size: 0.82rem;
 		font-weight: 600;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
 		white-space: nowrap;
 	}
 
@@ -978,8 +963,6 @@
 		/* This wraps to three lines on a 390px screen; at 16px padding and a 14px row gap the
 		   assurance strip was 122px tall, taller than any product title it sits above. */
 		line-height: 1.4;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 	}
 
 	.ed-ribbon__dot {
@@ -1322,8 +1305,6 @@
 		font-family: inherit;
 		font-size: 0.82rem;
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		cursor: pointer;
 		transition: transform var(--motion-fast) var(--motion-ease);
 	}

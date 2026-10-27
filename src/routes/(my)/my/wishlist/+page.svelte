@@ -56,7 +56,7 @@
 					<p class="mt-2 max-w-xs text-muted-foreground">Save items you like to keep track of them and buy them later.</p>
 					<div class="mt-8">
 						<Button href="/products" class="h-12 px-8">
-							Browse Products
+							Browse products
 							<ArrowRight class="ml-2 h-4 w-4" />
 						</Button>
 					</div>
@@ -97,7 +97,7 @@
 										<span class="text-xs text-muted-foreground line-through">
 											{formatPrice(item?.product?.mrp, page?.data?.store?.currency?.code)}
 										</span>
-										<span class="hidden text-xs font-bold uppercase text-success md:block lg:text-sm">
+										<span class="hidden text-xs font-bold text-success md:block lg:text-sm">
 											{Math.round(((item?.product?.mrp - item?.product?.price) / item?.product?.mrp) * 100)}% OFF
 										</span>
 									{/if}
@@ -129,7 +129,7 @@
 											toast('Item added to cart', 'success')
 										}}
 									>
-										Add to Cart
+										Add to cart
 									</Button>
 								</div>
 							</div>

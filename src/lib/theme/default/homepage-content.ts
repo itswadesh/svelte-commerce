@@ -73,6 +73,8 @@ export const defaultContent: ThemeHomepageContent = {
         title: "Support",
         links: [
           { label: "Contact Us", href: "/contact-us" },
+          // A guest who closed the checkout page has no other way back to their order.
+          { label: "Track Order", href: "/order-tracking" },
           { label: "Shipping Policy", href: "/shipping-policy" },
           { label: "Refund Policy", href: "/refund-policy" },
           { label: "FAQs", href: "/faqs" }
@@ -90,10 +92,10 @@ export const defaultContent: ThemeHomepageContent = {
     ]
   },
   contact: { label: "Contact", titleLead: "Contact", titleAccent: "Us", text: "", panelTitle: "Let us talk", panelText: "", addressLabel: "Address", phoneLabel: "Phone", emailLabel: "Email", hoursLabel: "Working Hours", address: "", phone: "", email: "", hours: "", cta: "Send Message" },
-  defaultHome: { eyebrow: "New season picks", primaryCta: "Shop Products", secondaryCta: `Browse ${taxonomy.many}`, featuredLabel: "Featured", featuredTitle: "Popular products", emptyTitle: "No products available", emptyText: "Products will appear here when they are returned by the API." },
+  defaultHome: { eyebrow: "New season picks", primaryCta: "Shop products", secondaryCta: `Browse ${taxonomy.many}`, featuredLabel: "Featured", featuredTitle: "Popular products", emptyTitle: "No products available", emptyText: "Products will appear here when they are returned by the API." },
   editorial: {
     hero: {
-      eyebrow: "New Season",
+      eyebrow: "New season",
       titleLead: "Considered goods for",
       titleAccent: "modern living",
       text: "A curated edit of pieces made to be kept — thoughtfully sourced, honestly priced, and ready to ship.",
@@ -112,15 +114,15 @@ export const defaultContent: ThemeHomepageContent = {
       viewAll: "View all",
       viewAllHref: "/products",
       tiles: [
-        { label: "New Arrivals", href: "/products", image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&q=80&auto=format&fit=crop" },
-        { label: "Best Sellers", href: "/products", image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80&auto=format&fit=crop" },
+        { label: "New arrivals", href: "/products", image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&q=80&auto=format&fit=crop" },
+        { label: "Best sellers", href: "/products", image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80&auto=format&fit=crop" },
         { label: "Essentials", href: "/products", image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80&auto=format&fit=crop" },
         { label: "The Edit", href: "/products", image: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&q=80&auto=format&fit=crop" }
       ]
     },
     featured: { eyebrow: "Handpicked", title: "Featured pieces", viewAll: "View all", viewAllHref: "/products" },
     banner: {
-      eyebrow: "The Lookbook",
+      eyebrow: "The lookbook",
       title: "Made to be lived in",
       text: "Pieces designed for the everyday — versatile, durable, and quietly beautiful. Discover the season's edit.",
       cta: "Discover more",

@@ -100,7 +100,7 @@
 					{#if joinAsVendorModule.isLoading}
 						<LoaderCircle class="animate-spin" />
 					{:else}
-						Create Account
+						Create account
 					{/if}
 				</Button>
 			</form>

@@ -116,7 +116,7 @@
 					<p class="mt-2 max-w-xs text-muted-foreground">Looks like you haven't placed any orders yet. Start shopping to see your history here.</p>
 					<div class="mt-8">
 						<Button href="/products" class="h-12 px-8">
-							Start Shopping
+							Start shopping
 							<ArrowRight class="ml-2 h-4 w-4" />
 						</Button>
 					</div>
@@ -163,7 +163,7 @@
 											href="/my/orders/{order.parentOrderNo}"
 											class="h-10 px-6"
 										>
-											View Details
+											View details
 										</Button>
 									</div>
 								</div>
@@ -171,13 +171,13 @@
 								<!-- Status Badges Mobile/Small -->
 								<div class="mt-6 flex flex-wrap gap-3">
 									<span
-										class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase  {status.bg} {status.text} ring-1 ring-inset {status.ring}"
+										class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold  {status.bg} {status.text} ring-1 ring-inset {status.ring}"
 									>
 										<status.icon class="h-3.5 w-3.5" />
 										{order.status}
 									</span>
 									<span
-										class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase  {payment.bg} {payment.text} ring-1 ring-inset {payment.ring}"
+										class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold  {payment.bg} {payment.text} ring-1 ring-inset {payment.ring}"
 									>
 										<CreditCard class="h-3.5 w-3.5" />
 										Payment: {order.paymentStatus}
@@ -223,7 +223,7 @@
 															{item.title || '_'}
 														</a>
 													</h3>
-													<div class="mt-2 flex items-center gap-4 text-xs font-bold uppercase text-muted-foreground">
+													<div class="mt-2 flex items-center gap-4 text-xs font-bold text-muted-foreground">
 														<span class="flex items-center gap-1.5">
 															<Tag class="h-3.5 w-3.5" />
 															Qty: {item.qty || '_'}

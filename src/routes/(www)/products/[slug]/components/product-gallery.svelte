@@ -232,7 +232,7 @@
 								{#key img}
 									<LazyImg
 										src={img}
-										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
+										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product image'} - View ${index + 1}`}
 										class="w-full rounded-radius object-contain"
 										sizes={GALLERY_IMAGE_SIZES}
 										priority={index === 0}
@@ -320,7 +320,7 @@
 								{:else}
 									<LazyImg
 										src={img}
-										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product Image'} - View ${index + 1}`}
+										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product image'} - View ${index + 1}`}
 										class="max-h-[90vh]"
 									/>
 								{/if}

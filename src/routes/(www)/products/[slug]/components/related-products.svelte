@@ -4,6 +4,10 @@
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
+	import { productService } from '$lib/core/services'
+
+	// The shop's own heading from its product page template (GoCommerce D128); empty keeps this one.
+	let { heading = '' }: { heading?: string } = $props()
 
 	const productState = useProductState()
 
@@ -11,16 +15,46 @@
 	// actually occupy. This grid used to force `aspectRatio="square"` on the card while the
 	// homepage grid honoured the store's 2:3 setting — one catalogue, two card shapes.
 	const mediaRatio = $derived(toCssRatio(page?.data?.store?.productImageAspectRatio, '1:1'))
+
+	// Same-category matches alone left a shop that never filled in categories with no related
+	// products on any product page. The connector answers the category first, then the
+	// product's collections, then the newest products. null while that is on its way.
+	let related = $state<any[] | null>(null)
+	const productId = $derived(page.data?.product?.id)
+	const productSlug = $derived(page.data?.product?.slug as string | undefined)
+	$effect(() => {
+		const slug = productSlug
+		if (!slug) return
+		let live = true
+		related = null
+		productService
+			.listRelatedProducts({ product: slug, limit: 12 } as any)
+			.then((res: any) => {
+				if (live) related = res?.data ?? []
+			})
+			.catch((error: unknown) => {
+				console.error('Error loading related products:', error)
+				if (live) related = []
+			})
+		return () => {
+			live = false
+		}
+	})
+	const loading = $derived(related === null)
+	// The category list still stands in when the connector answers nothing at all.
+	const products = $derived(
+		(related?.length ? related : productState.productsOfSameCategory).filter((x: any) => x.id !== productId)
+	)
 </script>
 
-{#if productState.isLoadingRelatedProducts || productState.productsOfSameCategory.length > 0}
+{#if loading || products.length > 0}
 	<div class="edp-related mb-12" data-testid="related-products">
 		<header class="edp-related-head">
 			<span class="edp-related-eyebrow">More to explore</span>
-			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">Related products</h2>
+			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">{heading || 'Related products'}</h2>
 		</header>
 
-		{#if productState.isLoadingRelatedProducts}
+		{#if loading}
 			<!-- Skeleton cards in the real grid, not a centred spinner: the rail keeps its height,
 			     so nothing below it jumps when the products arrive. The spinner this replaces was
 			     also invisible — `border-primary` is not a class this project defines, so it
@@ -36,7 +70,7 @@
 			</div>
 		{:else}
 			<div class="edp-related-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-				{#each productState.productsOfSameCategory as { id, slug, thumbnail, price, mrp, title, vendor, variants }}
+				{#each products as { id, slug, thumbnail, price, mrp, title, vendor, variants }}
 					<ProductCard
 						product={{
 							id,
@@ -84,15 +118,13 @@
 		/* 12px floor for supporting text; 11.2px all-caps at 0.2em tracking sits under it. */
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
 		color: var(--ed-soft);
 	}
 
 	/* Was clamp(1.8rem, 3.4vw, 2.8rem) — a 44.8px section heading at 1440, well past the 32px
 	   ceiling and larger than the product's own h1. The clamp below is the storefront's section-
 	   title step, identical to .ed-head__title / .ed-banner__title / .ed-news__title on the
-	   homepage: 22px on a phone, 28px on a desktop. "Related Products" and "Featured pieces" are
+	   homepage: 22px on a phone, 28px on a desktop. "Related products" and "Featured pieces" are
 	   the same thing — a serif heading introducing a grid of product cards — so they get the same
 	   size instead of 20/25.6 here and 22/28 there. */
 	:global([data-theme='default'] .edp-related-title) {

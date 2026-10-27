@@ -14,18 +14,21 @@ export const load: LayoutServerLoad = async ({ cookies, setHeaders, url }) => {
 		redirect(307, `/?${searchParams.toString()}`)
 	}
 
-	// /order-tracking authenticates from `?email=&otp=` and prints the customer's
+	// /order-tracking opens an order from `?order=&key=` (the order emails' link), and /cart/<token> a
+	// reminder's basket; the first prints the customer's
 	// address and phone. Until that becomes a cookie/POST exchange, at least keep
 	// the credential-bearing URL out of search indexes and outbound Referer headers.
-	if (url.pathname === '/order-tracking') {
+	if (url.pathname === '/order-tracking' || url.pathname.startsWith('/cart/')) {
 		setHeaders({
 			'X-Robots-Tag': 'noindex, nofollow',
 			'Referrer-Policy': 'no-referrer'
 		})
 	}
 
-	// A home-page draft opened through a preview key: never stored by a cache, never indexed.
-	if (url.pathname === '/' && url.searchParams.has('preview')) {
+	// A draft opened through a preview key — the home page, or a product or collection page drawn in
+	// its template's draft (D128): never stored by a cache, never indexed.
+	const arranged = url.pathname === '/' || url.pathname.startsWith('/products/') || url.pathname.startsWith('/collections/')
+	if (arranged && url.searchParams.has('preview')) {
 		setHeaders({
 			'Cache-Control': 'no-store',
 			'X-Robots-Tag': 'noindex, nofollow'

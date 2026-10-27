@@ -77,6 +77,21 @@ export function scopeListingFilters() {
 }
 
 /**
+ * Whether the backend sent anything to filter by. A backend without facet counts (GoCommerce)
+ * still sends the facet object, with every group empty, and the rail rendered as a bare
+ * "Filters" heading.
+ */
+export function hasFacetValues(facets: any): boolean {
+	const { categories, tags, allFilters, priceStat } = facets || {}
+	return Boolean(
+		categories?.length ||
+			tags?.length ||
+			Object.values(allFilters || {}).some((values) => values && Object.keys(values).length) ||
+			(Number.isFinite(priceStat?.min) && Number.isFinite(priceStat?.max) && priceStat.max > priceStat.min)
+	)
+}
+
+/**
  * The filters a shopper has actually applied, read from the URL rather than from the composable's
  * `selectedGeneralFilters` — which counts `sort`, `page` and `search` as facets, so a merely
  * sorted listing reports filters that do not exist.

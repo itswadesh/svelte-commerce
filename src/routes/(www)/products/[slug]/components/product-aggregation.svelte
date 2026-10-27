@@ -51,8 +51,6 @@
 		/* Same 12px floor as the variation labels this row sits beside. */
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
 		color: var(--ed-soft);
 	}
 
