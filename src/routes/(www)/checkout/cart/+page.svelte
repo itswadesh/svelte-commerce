@@ -17,6 +17,9 @@
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import { toast } from 'svelte-sonner'
 	import { onMount } from 'svelte'
+	import FreeDeliveryBar from '$lib/components/cart/free-delivery-bar.svelte'
+	import CartOffers from '$lib/components/cart/cart-offers.svelte'
+	import CartCrossSells from '$lib/components/cart/cart-cross-sells.svelte'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
@@ -95,9 +98,18 @@
 		})
 	}
 
-	const totalSavings = $derived(
-		(cartState.cart?.lineItems || []).reduce((acc, item) => acc + Math.max(0, (item.mrp || item.price) - item.price) * item.qty, 0) +
-			(cartState.cart?.discountAmount || 0)
+	// What the lines save on their MRP, apart from a code's discount, for the price breakup.
+	const mrpSaving = $derived(
+		(cartState.cart?.lineItems || []).reduce((acc, item) => acc + Math.max(0, (item.mrp || item.price) - item.price) * item.qty, 0)
+	)
+	const totalSavings = $derived(mrpSaving + (cartState.cart?.discountAmount || 0))
+
+	// The bag's products, as a key the suggestions are re-asked on (D132).
+	const bagProducts = $derived(
+		(cartState.cart?.lineItems || [])
+			.map((item: any) => item.productId)
+			.sort()
+			.join(',')
 	)
 
 	// Shown twice — the summary row and the pinned mobile bar — and `total` is absent from the
@@ -252,6 +264,8 @@
 					<!-- Left column. `min-w-0` keeps a wide min-content child from stretching the column
 					     past the viewport and scrolling the page sideways on a phone. -->
 					<div class="min-w-0">
+						<FreeDeliveryBar subtotal={cartState.cart?.subtotal} country={(cartState.cart as any)?.shippingAddress?.country ?? ''} />
+
 						{#if totalSavings > 0}
 							<div class="mb-4 flex items-center gap-2 rounded-radius border border-success/40 bg-success/5 px-4 py-3">
 								<Tag class="size-3.5 shrink-0 text-success" />
@@ -352,6 +366,12 @@
 
 										<!-- Supporting text at 12px in the muted *text* token. The unit price used to render
 										     at 10px in a 2.54:1 grey, and in two different greys depending on breakpoint. -->
+										{#if (item as any).addOnId}
+											<!-- Bought from Complete the set (D132): the engine keeps this price while the product it came with is in the bag. -->
+											<p class="text-xs text-muted-foreground">
+												Offer price with {(cartState.cart?.lineItems || []).find((l: any) => l.productId === (item as any).addOnFor && !l.addOnId)?.title ?? 'its product'}
+											</p>
+										{/if}
 										{#if item.mrp > item.price}
 											<p class="text-xs font-medium text-success">
 												You saved {formatPrice(item.mrp * item.qty - item.price * item.qty, currencyCode)}
@@ -374,6 +394,8 @@
 								</div>
 							{/each}
 						</div>
+
+						<CartCrossSells productIds={bagProducts} add={(p) => cartState.add({ qty: 1, productId: p.productId, variantId: p.variantId })} />
 					</div>
 
 					<!-- Right column - order summary -->
@@ -405,6 +427,7 @@
 						     discount engine sets `isDiscountCoupons.active` false and simply shows no box.
 						     `undefined` keeps the box, for stores that predate the toggle. -->
 						{#if discountCouponsPlugin?.active !== false}
+							<CartOffers subtotal={cartState.cart?.subtotal} applied={cartState.cart?.couponCode} apply={(code) => cartState.applyCoupon(code)} />
 							<CouponsDrawer />
 						{/if}
 
@@ -415,6 +438,7 @@
 							     it is what moves the bottom line to "Estimated total" while shipping is unknown. -->
 							<PriceSummary
 								subtotal={cartState.cart?.subtotal}
+								{mrpSaving}
 								discount={cartState.cart?.discountAmount}
 								discountLabel={cartState.cart?.couponCode ? `Discount (${cartState.cart.couponCode})` : 'Discount'}
 								shipping={cartState.cart?.shippingCharges}

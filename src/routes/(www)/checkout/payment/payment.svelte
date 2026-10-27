@@ -7,6 +7,7 @@
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
+	import CartOffers from '$lib/components/cart/cart-offers.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
@@ -291,6 +292,8 @@
 					<!-- Same gate as the cart step: a store with no discount engine shows no promo box
 					     rather than one that refuses every code. -->
 					{#if discountCouponsPlugin?.active !== false}
+						<!-- The same offers the bag shows (D132), so a code can still be applied at the last step. -->
+						<CartOffers subtotal={cartState?.cart?.subtotal} applied={cartState?.cart?.couponCode} apply={(code) => cartState.applyCoupon(code)} />
 						<CouponsDrawer />
 					{/if}
 
