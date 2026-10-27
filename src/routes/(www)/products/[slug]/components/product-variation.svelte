@@ -5,6 +5,8 @@
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button'
 	import SizeGuideDrawer from './size-guide-drawer.svelte'
+	import OptionPicker from './option-picker.svelte'
+	import { pickerChoices, usesSearchablePicker, variantsWith } from '$lib/product/conversion'
 
 	const productState = useProductState()
 
@@ -24,6 +26,14 @@
 	const choose = (event: Event, option: Record<string, any>, value: Record<string, any>) => {
 		pendingFocus = event.currentTarget as HTMLElement | null
 		productState.selectVariant({ option, value })
+	}
+
+	// The searchable picker hands back its trigger, which is where focus belongs after the choice.
+	const chooseValue = (option: Record<string, any>, value: string, trigger: HTMLElement | null) => {
+		const v = (option.values ?? []).find((x: Record<string, any>) => x.value === value)
+		if (!v) return
+		pendingFocus = trigger
+		productState.selectVariant({ option, value: v })
 	}
 
 	afterNavigate(async () => {
@@ -52,22 +62,17 @@
 	)
 
 	/**
-	 * Every variant that carries `value` for `optionId` and agrees with the current selection on
-	 * every *other* option. Empty means the combination does not exist: with S and Black chosen,
-	 * White returns nothing because there is no S / White, and the old code silently jumped the
-	 * shopper to M / White instead of saying so.
+	 * Every variant that carries `value` for `optionId` and agrees with what is chosen on the options
+	 * before it. Empty means the combination does not exist: with S chosen, White returns nothing
+	 * when there is no S / White, rather than silently jumping the shopper to M / White.
+	 *
+	 * Only the earlier options count (GoCommerce D134): judged against every other option, a chosen
+	 * model made every other brand unavailable, and "Brand then Model" could never change brand.
 	 *
 	 * Before hydration `selection` is empty, so every value that exists on any variant comes back
 	 * available and the server-rendered pills are enabled.
 	 */
-	const variantsFor = (optionId: unknown, value: string) =>
-		variants.filter((variant: any) => {
-			const opts: any[] = variant?.options ?? []
-			if (!opts.some((o) => sameId(o.optionId, optionId) && o.value === value)) return false
-			return selection.every(
-				([otherId, otherValue]) => sameId(otherId, optionId) || opts.some((o) => sameId(o.optionId, otherId) && o.value === otherValue)
-			)
-		})
+	const variantsFor = (optionId: unknown, value: string) => variantsWith(variants, options, selection, optionId, value)
 
 	const purchasable = (variant: any) => {
 		if (variant?.manageInventory === false) return true
@@ -168,51 +173,62 @@
 					{/if}
 				</div>
 
-				<!-- role="group" + aria-label ties the values to their option name, and aria-pressed is
+				{#if usesSearchablePicker(option.values)}
+					<!-- More values than a phone can show as pills (GoCommerce D134): a searchable list of
+					     the ones that exist with what is already chosen. -->
+					<OptionPicker
+						title={option.title}
+						selected={selectedValue ?? ''}
+						choices={pickerChoices(option.values, (value) => statusOf(option.id, value))}
+						onchoose={(value, trigger) => chooseValue(option, value, trigger)}
+					/>
+				{:else}
+					<!-- role="group" + aria-label ties the values to their option name, and aria-pressed is
 				     the only thing that tells assistive technology which one is active: the selected
 				     state is otherwise a class swap. -->
-				<div class="flex flex-wrap items-center gap-2" role="group" aria-label={option.title}>
-					{#each option.values || [] as v (v.id ?? v.value)}
-						{@const status = statusOf(option.id, v.value)}
-						{@const isSelected = status === 'selected'}
-						{@const isBlocked = status === 'unavailable' || status === 'soldout'}
-						{@const colour = option.type === 'Color' ? swatchColour(v) : null}
+					<div class="flex flex-wrap items-center gap-2" role="group" aria-label={option.title}>
+						{#each option.values || [] as v (v.id ?? v.value)}
+							{@const status = statusOf(option.id, v.value)}
+							{@const isSelected = status === 'selected'}
+							{@const isBlocked = status === 'unavailable' || status === 'soldout'}
+							{@const colour = option.type === 'Color' ? swatchColour(v) : null}
 
-						{#if colour}
-							<Button
-								variant="plain"
-								data-testid="variant-option"
-								aria-pressed={isSelected}
-								disabled={isBlocked}
-								title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : v.value}
-								class="edp-swatch relative size-11 rounded-full border border-border-strong p-1 md:size-10 {isSelected
-									? 'edp-on ring-2 ring-primary ring-offset-2'
-									: ''}"
-								onclick={(event) => choose(event, option, v)}
-							>
-								<span class="block h-full w-full rounded-full" style="background-color: {colour}"></span>
-								<span class="sr-only">{v.value}{isBlocked ? ` — ${unavailableReason(status)}` : ''}</span>
-							</Button>
-						{:else}
-							<Button
-								variant="plain"
-								data-testid="variant-option"
-								aria-pressed={isSelected}
-								disabled={isBlocked}
-								title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : undefined}
-								class="edp-pill h-11 min-w-[3.5rem] border px-4 text-sm font-medium md:h-10 {isSelected
-									? 'edp-on border-primary bg-primary text-primary-foreground'
-									: 'border-border-strong bg-background text-foreground hover:border-foreground'}"
-								onclick={(event) => choose(event, option, v)}
-							>
-								{v.value}
-								{#if isBlocked}
-									<span class="sr-only">— {unavailableReason(status)}</span>
-								{/if}
-							</Button>
-						{/if}
-					{/each}
-				</div>
+							{#if colour}
+								<Button
+									variant="plain"
+									data-testid="variant-option"
+									aria-pressed={isSelected}
+									disabled={isBlocked}
+									title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : v.value}
+									class="edp-swatch relative size-11 rounded-full border border-border-strong p-1 md:size-10 {isSelected
+										? 'edp-on ring-2 ring-primary ring-offset-2'
+										: ''}"
+									onclick={(event) => choose(event, option, v)}
+								>
+									<span class="block h-full w-full rounded-full" style="background-color: {colour}"></span>
+									<span class="sr-only">{v.value}{isBlocked ? ` — ${unavailableReason(status)}` : ''}</span>
+								</Button>
+							{:else}
+								<Button
+									variant="plain"
+									data-testid="variant-option"
+									aria-pressed={isSelected}
+									disabled={isBlocked}
+									title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : undefined}
+									class="edp-pill h-11 min-w-[3.5rem] border px-4 text-sm font-medium md:h-10 {isSelected
+										? 'edp-on border-primary bg-primary text-primary-foreground'
+										: 'border-border-strong bg-background text-foreground hover:border-foreground'}"
+									onclick={(event) => choose(event, option, v)}
+								>
+									{v.value}
+									{#if isBlocked}
+										<span class="sr-only">— {unavailableReason(status)}</span>
+									{/if}
+								</Button>
+							{/if}
+						{/each}
+					</div>
+				{/if}
 			</div>
 		{/each}
 	</div>

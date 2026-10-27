@@ -4,7 +4,18 @@
 
 	const productState = useProductState()
 	const data = $derived(page.data)
-	const metadataEntries = $derived(Object.entries(data?.product?.metadata || {}).filter(([key]) => !/^(product )?specifications?$/i.test(key.trim())))
+	// The highlights and the free gift note are drawn in the buy box (GoCommerce D134), and a value
+	// that is a list or an object has no line of text to show here ("[object Object]"), so neither
+	// is repeated as a raw key.
+	const DRAWN_ELSEWHERE = new Set(['highlights', 'free_gift'])
+	const metadataEntries = $derived(
+		Object.entries(data?.product?.metadata || {}).filter(
+			([key, value]) =>
+				!/^(product )?specifications?$/i.test(key.trim()) &&
+				!DRAWN_ELSEWHERE.has(key) &&
+				['string', 'number', 'boolean'].includes(typeof value)
+		)
+	)
 </script>
 
 {#if metadataEntries.length}
