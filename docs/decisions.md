@@ -3,6 +3,14 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-27: Product picture shape and fit are set in GoCommerce
+
+The shop sets the shape of product pictures (square, portrait 3:4, tall 2:3, landscape 4:3) and
+whether they fill the frame or show whole in the panel's theme settings (engine D128). They reach
+the cards as `--product-image-ratio` and `--product-image-fit` and win over any ratio a caller
+passes, so every card shows the shop's shape. Unset, the card falls back to the store record's
+`productImageAspectRatio` (square, from `kitcommerce.config.ts`) and shows the whole picture.
+
 ## 2026-10-27: The backend picks the theme, or it is the default
 
 A backend with a theme feature (Litekart, GoCommerce) decides the theme through the store record,

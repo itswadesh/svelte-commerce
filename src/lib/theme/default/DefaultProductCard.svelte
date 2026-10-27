@@ -103,7 +103,7 @@
 			     one product had two crawlable URLs and the image and title on a single card pointed
 			     at different ones. -->
 			<a data-testid="product-card-link" class="dpc__media-link" href="/products/{product.slug}" aria-label="View details of {displayName}">
-				<figure title={displayName} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: {mediaRatio};">
+				<figure title={displayName} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: var(--product-image-ratio, {mediaRatio});">
 					{#if imageSrc && !imageFailed}
 						<div
 							class="dpc__frame"
@@ -271,7 +271,8 @@
 	.dpc :global(.dpc__img) {
 		width: 100%;
 		height: 100%;
-		object-fit: contain;
+		/* --product-image-*: the shop's own choice from its theme settings (theme-tokens.ts). */
+		object-fit: var(--product-image-fit, contain);
 		display: block;
 	}
 
