@@ -11,6 +11,8 @@
 	// `onsave` and closed the dialog even when the save failed. See the file header.
 	import AddressFormRenderer from './address-form-renderer.svelte'
 	import Spinner from '$lib/components/common/spinner.svelte'
+	import PinAutofill from './pin-autofill.svelte'
+	import AddressLabelChips from './address-label-chips.svelte'
 
 	let {
 		show = $bindable(),
@@ -138,7 +140,10 @@
 								label="ZIP Code"
 								required
 							/>
+							<PinAutofill bind:address country={address?.countryCode || page?.data?.store?.country?.code || ''} />
 						</div>
+						<!-- The address book's name for it (GoCommerce D134); the connector saves it as the label. -->
+						<AddressLabelChips bind:value={address.label} />
 					</div>
 					<div class="flex flex-col gap-2 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] pt-3">
 						<Button type="submit" class="w-full" disabled={isSaving}>
