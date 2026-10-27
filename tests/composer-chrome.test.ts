@@ -172,3 +172,10 @@ describe('a preview of the header or footer', () => {
 		expect(draftChromeSettings(null, 'footer')).toBeNull()
 	})
 })
+
+describe("the footer's newsletter sign-up", () => {
+	it('is offered where the connector answers the sign-up itself', async () => {
+		const { canSubscribeToNewsletter } = await import('$lib/components/common/store-capabilities')
+		expect(canSubscribeToNewsletter({ newsletterService: { subscribe: async () => ({}) } })).toBe(true)
+	})
+})
