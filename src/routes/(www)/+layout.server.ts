@@ -14,10 +14,11 @@ export const load: LayoutServerLoad = async ({ cookies, setHeaders, url }) => {
 		redirect(307, `/?${searchParams.toString()}`)
 	}
 
-	// /order-tracking opens an order from `?order=&key=` (the order emails' link) and prints the customer's
+	// /order-tracking opens an order from `?order=&key=` (the order emails' link), and /cart/<token> a
+	// reminder's basket; the first prints the customer's
 	// address and phone. Until that becomes a cookie/POST exchange, at least keep
 	// the credential-bearing URL out of search indexes and outbound Referer headers.
-	if (url.pathname === '/order-tracking') {
+	if (url.pathname === '/order-tracking' || url.pathname.startsWith('/cart/')) {
 		setHeaders({
 			'X-Robots-Tag': 'noindex, nofollow',
 			'Referrer-Policy': 'no-referrer'
