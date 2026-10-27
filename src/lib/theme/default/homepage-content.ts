@@ -73,6 +73,8 @@ export const defaultContent: ThemeHomepageContent = {
         title: "Support",
         links: [
           { label: "Contact Us", href: "/contact-us" },
+          // A guest who closed the checkout page has no other way back to their order.
+          { label: "Track Order", href: "/order-tracking" },
           { label: "Shipping Policy", href: "/shipping-policy" },
           { label: "Refund Policy", href: "/refund-policy" },
           { label: "FAQs", href: "/faqs" }
