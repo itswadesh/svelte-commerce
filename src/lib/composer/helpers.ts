@@ -9,6 +9,9 @@
  * field, never the page.
  */
 
+/** A collection list's card, as the connector answers it. */
+export type ComposerCollection = { id: string; title: string; slug?: string; link: string; image: string | null }
+
 /** One section of a composed page, as the connector answers it. */
 export type ComposerSection = {
 	id: string
@@ -16,6 +19,8 @@ export type ComposerSection = {
 	settings: Record<string, unknown>
 	/** Product grids only: the grid's products, mapped like any other product card's. */
 	products?: any[]
+	/** Collection lists only: the collections the engine found, in the order picked. */
+	collections?: ComposerCollection[]
 }
 
 export type ComposerLayout = {
@@ -24,6 +29,8 @@ export type ComposerLayout = {
 	revision?: number
 	/** The saved draft, shown through a preview key: never indexed. */
 	preview?: boolean
+	/** The design tokens published with the page (connector 0.8.0 and later). */
+	themeSettings?: Record<string, unknown> | null
 	sections: ComposerSection[]
 }
 
@@ -119,4 +126,140 @@ export function benefitItems(value: unknown): { title: string; body: string }[] 
 		}))
 		.filter((item) => item.title)
 		.slice(0, 6)
+}
+
+const record = (v: unknown): Record<string, unknown> => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {})
+
+export type Slide = { image: string; mobileImage: string; heading: string; text: unknown; buttonText: string; buttonLink: unknown }
+
+/** A slideshow's slides that have a picture, at most eight, as the engine's schema allows. */
+export function slideItems(value: unknown): Slide[] {
+	if (!Array.isArray(value)) return []
+	return value
+		.map((raw) => {
+			const item = record(raw)
+			const mobileImage = safeHref(item.mobile_image)
+			return {
+				image: safeHref(item.image) || mobileImage,
+				mobileImage,
+				heading: text(item, 'heading'),
+				text: item.text,
+				buttonText: text(item, 'button_text'),
+				buttonLink: item.button_link
+			}
+		})
+		.filter((slide) => slide.image)
+		.slice(0, 8)
+}
+
+/** How long a slide stays when the slideshow moves by itself: three to ten seconds, five unless set. */
+export function slideInterval(value: unknown): number {
+	return intSetting(value, 3, 10, 5) * 1000
+}
+
+/** Questions that have both a question and an answer, at most thirty. */
+export function faqItems(value: unknown): { question: string; answer: string }[] {
+	if (!Array.isArray(value)) return []
+	return value
+		.map((raw) => {
+			const item = record(raw)
+			return { question: text(item, 'question'), answer: typeof item.answer === 'string' ? item.answer : '' }
+		})
+		.filter((item) => item.question && item.answer.trim())
+		.slice(0, 30)
+}
+
+export type Column = { image: string; heading: string; text: unknown; linkText: string; link: string }
+
+/** Columns that show something, at most four. */
+export function columnItems(value: unknown): Column[] {
+	if (!Array.isArray(value)) return []
+	return value
+		.map((raw) => {
+			const item = record(raw)
+			return {
+				image: safeHref(item.image),
+				heading: text(item, 'heading'),
+				text: item.text,
+				linkText: text(item, 'link_text'),
+				link: safeHref(item.link)
+			}
+		})
+		.filter((c) => c.image || c.heading || paragraphs(c.text).length)
+		.slice(0, 4)
+}
+
+/** Tailwind classes for columns side by side from the tablet up; written out in full for the scanner. */
+export function columnsClass(count: number): string {
+	switch (Math.min(4, Math.max(1, count))) {
+		case 1:
+			return 'grid-cols-1'
+		case 2:
+			return 'grid-cols-1 md:grid-cols-2'
+		case 3:
+			return 'grid-cols-1 md:grid-cols-3'
+		default:
+			return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+	}
+}
+
+/** A collection list's cards: those with a title and a link on this site. */
+export function collectionCards(section: ComposerSection): ComposerCollection[] {
+	return (section.collections ?? [])
+		.filter((c) => c && typeof c.title === 'string' && c.title.trim() && safeHref(c.link))
+		.map((c) => ({ ...c, link: safeHref(c.link), image: safeHref(c.image) || null }))
+		.slice(0, 12)
+}
+
+export type VideoEmbed = { kind: 'youtube' | 'vimeo'; id: string; embed: string }
+export type VideoSource = VideoEmbed | { kind: 'file'; src: string }
+
+const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/
+const VIMEO_ID = /^[0-9]{1,12}$/
+
+const youtube = (id: string): VideoEmbed | null =>
+	YOUTUBE_ID.test(id) ? { kind: 'youtube', id, embed: `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0` } : null
+const vimeo = (id: string): VideoEmbed | null =>
+	VIMEO_ID.test(id) ? { kind: 'vimeo', id, embed: `https://player.vimeo.com/video/${id}?autoplay=1&dnt=1` } : null
+
+/**
+ * The player a YouTube or Vimeo address is for, and the embed to load once the shopper presses
+ * play: youtube-nocookie.com, and Vimeo with do-not-track, so nothing is fetched from either
+ * before then. The engine's VideoEmbed rule; anything else is null. The embed is built from the
+ * id alone, so the address the merchant pasted never reaches a frame as written.
+ */
+export function videoEmbed(value: unknown): VideoEmbed | null {
+	if (typeof value !== 'string') return null
+	let url: URL
+	try {
+		url = new URL(value.trim())
+	} catch {
+		return null
+	}
+	if (url.protocol !== 'https:' && url.protocol !== 'http:') return null
+	const host = url.hostname.toLowerCase().replace(/^www\./, '')
+	const parts = url.pathname.replace(/^\/+|\/+$/g, '').split('/')
+	switch (host) {
+		case 'youtube.com':
+		case 'm.youtube.com':
+		case 'youtube-nocookie.com':
+			if (parts.length === 1 && parts[0] === 'watch') return youtube(url.searchParams.get('v') ?? '')
+			if (parts.length === 2 && ['shorts', 'embed', 'live'].includes(parts[0])) return youtube(parts[1])
+			return null
+		case 'youtu.be':
+			return parts.length === 1 ? youtube(parts[0]) : null
+		case 'vimeo.com':
+			return parts.length === 1 ? vimeo(parts[0]) : null
+		case 'player.vimeo.com':
+			return parts.length === 2 && parts[0] === 'video' ? vimeo(parts[1]) : null
+	}
+	return null
+}
+
+/** A video section's source: the link when it is a YouTube or Vimeo video, else the file. */
+export function videoSource(settings: Record<string, unknown> | null | undefined): VideoSource | null {
+	const embed = videoEmbed(settings?.video_url)
+	if (embed) return embed
+	const src = safeHref(settings?.video_file)
+	return src ? { kind: 'file', src } : null
 }

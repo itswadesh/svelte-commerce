@@ -1,9 +1,11 @@
 import { defineConfig } from 'vitest/config'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
+import { svelteTesting } from '@testing-library/svelte/vite'
 import { resolve } from 'node:path'
 
 export default defineConfig({
-	plugins: [svelte({ hot: false })],
+	// svelteTesting resolves Svelte's browser build, so a component can mount under jsdom.
+	plugins: [svelte({ hot: false }), svelteTesting()],
 	test: {
 		environment: 'jsdom',
 		setupFiles: ['./tests/test-setup.ts'],
@@ -30,7 +32,9 @@ export default defineConfig({
 		alias: {
 			$lib: resolve('./src/lib'),
 			$app: resolve('./src/app'),
-			$env: resolve('./src/env')
+			$env: resolve('./src/env'),
+			// The connector namespace (svelte.config.js aliases the real one for the app).
+			'kitcommerce.config': resolve('./tests/stubs/kitcommerce-config.ts')
 		}
 	}
 })
