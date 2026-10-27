@@ -96,7 +96,10 @@
 	}
 
 	const videoURLRegex = /mp4$|webm$/
-	const isVideoURL = (x: string) => videoURLRegex.test(x)
+	// A connector that knows which entries are videos says so (GoCommerce D134); a .mov upload or a
+	// link with no extension is still a video, never a broken <img>.
+	const knownVideos = $derived(new Set<string>(Array.isArray(page.data?.product?.videos) ? page.data.product.videos : []))
+	const isVideoURL = (x: string) => knownVideos.has(x) || videoURLRegex.test(x)
 </script>
 
 {#if displayCarousel !== 'hidden'}
