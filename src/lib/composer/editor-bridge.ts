@@ -41,6 +41,8 @@ export function editorOrigin(value: string | null | undefined): string | null {
 /** A draft as the panel posts it: the document, every section, hidden ones included. */
 export type DraftDocument = {
 	theme?: string
+	/** The draft's design tokens (D127), applied over the page as they are edited. */
+	theme_settings?: Record<string, unknown> | null
 	sections: { id: string; type: string; enabled?: boolean; settings?: Record<string, unknown> }[]
 }
 
@@ -77,16 +79,19 @@ export function editorMessage(
  * The sections to draw for a posted draft: the shown ones, in the draft's order, with settings as
  * posted. A product grid's products cannot come from the panel — prices and stock are the
  * catalogue's — so each grid keeps the products the engine last resolved for the same section id,
- * and the page re-reads them once the panel says the draft is saved.
+ * and the page re-reads them once the panel says the draft is saved. A collection list keeps its
+ * collections the same way.
  */
 export function draftSections(draft: DraftDocument | null | undefined, resolved: ComposerSection[] | null | undefined): ComposerSection[] {
 	const products = new Map((resolved ?? []).map((s) => [s.id, s.products]))
+	const collections = new Map((resolved ?? []).map((s) => [s.id, s.collections]))
 	const out: ComposerSection[] = []
 	for (const s of draft?.sections ?? []) {
 		if (!s || typeof s.id !== 'string' || typeof s.type !== 'string' || s.enabled === false) continue
 		const settings = s.settings && typeof s.settings === 'object' && !Array.isArray(s.settings) ? s.settings : {}
 		const section: ComposerSection = { id: s.id, type: s.type, settings }
 		if (s.type === 'product-grid') section.products = products.get(s.id) ?? []
+		if (s.type === 'collection-list') section.collections = collections.get(s.id) ?? []
 		out.push(section)
 	}
 	return out
