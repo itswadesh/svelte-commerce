@@ -130,8 +130,9 @@ structure incrementally.
 
 - Colours: `canvas`, `surface`, `surface-muted`, `text`, `text-muted`, `border`, `primary`,
   `primary-hover`, `accent`, `success`, `warning`, `danger`, `focus` (mapped in section 2).
-- Typography: `font-sans` (`--font-body`) for UI and commerce data; `font-serif` (`--font-heading`)
-  only for controlled editorial headings.
+- Typography: Inter everywhere on the default theme, headings included; `--font-heading` and
+  `--font-body` both resolve to it (owner decision, `docs/decisions.md`). `font-serif` is the
+  heading face, not a serif, on this theme.
 - Spacing: a 4px base scale of 4, 8, 12, 16, 20, 24, 32, 40, 48, 64 (Tailwind 1–16). Live in the
   4–24 range; 32 and above separate page regions, not elements.
 - Radius: 8px for controls, 12px for cards, 16px for large surfaces, expressed through the
