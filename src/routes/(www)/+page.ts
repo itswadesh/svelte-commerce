@@ -2,6 +2,7 @@ import { wwwLoad } from '$lib/core/load-functions/index.js'
 import { categoryService, productService } from '$lib/core/services/index.js'
 import { services } from 'kitcommerce.config'
 import type { ComposerLayout } from '$lib/composer/helpers.js'
+import { editorOrigin, LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
 import type { PageLoad } from './$types'
 
 // The home page the merchant composed in the panel (GoCommerce's ext/layouts), when the connector
@@ -23,7 +24,9 @@ async function homeLayout(preview: string | null): Promise<ComposerLayout | null
 	if (!layouts?.getHomeLayout) return null
 	try {
 		const layout = await layouts.getHomeLayout(preview ? { preview } : {})
-		return layout?.sections?.length ? layout : null
+		// A preview keeps even an empty page: the theme editor is showing the draft, and a page with
+		// every section hidden is a draft too, not the built-in page.
+		return layout?.sections?.length || (preview && layout?.preview) ? layout : null
 	} catch {
 		return null
 	}
@@ -40,6 +43,8 @@ async function homeLayout(preview: string | null): Promise<ComposerLayout | null
 // already renders empty/loading states for both, and the theme sections around them are static.
 export const load: PageLoad = async (event) => {
 	const base = await wwwLoad(event)
+	// The theme editor re-reads the draft after each save: its product grids are resolved here.
+	event.depends(LAYOUT_DEPENDENCY)
 
 	const [featuredProducts, featuredCategories, layout] = await Promise.all([
 		productService
@@ -53,5 +58,17 @@ export const load: PageLoad = async (event) => {
 		homeLayout(event.url.searchParams.get('preview'))
 	])
 
-	return { ...base, featuredProducts, featuredCategories, layout }
+	// The panel's theme editor frames this page with ?editor=<its origin> (D126). Only a preview the
+	// engine accepted turns that on: the page may then be framed by that one origin, and listens to
+	// it. Without a valid key the parameter does nothing.
+	const editor = layout?.preview ? editorOrigin(event.url.searchParams.get('editor')) : null
+	if (editor) {
+		try {
+			event.setHeaders({ 'content-security-policy': `frame-ancestors ${editor}` })
+		} catch {
+			// setHeaders refuses a header already set by another load, and is a no-op in the browser.
+		}
+	}
+
+	return { ...base, featuredProducts, featuredCategories, layout, editorOrigin: editor }
 }
