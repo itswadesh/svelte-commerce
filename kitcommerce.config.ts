@@ -21,4 +21,7 @@ export * as services from './src/lib/core/connectors/active'
 // it only defers the failure to the payment step — on Vendure, `State Transition Failed: Cannot
 // transition Order to the "ArrangingPayment" state without Customer details`, with the shopper
 // stranded there.
-export default {}
+export default {
+	// Product images on cards, listings and the product page. "1:1" square, "3:4" or "2:3" portrait.
+	productImageAspectRatio: '1:1'
+}
