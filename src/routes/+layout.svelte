@@ -23,7 +23,7 @@
 		store: StoreData
 		theme?: {
 			name: string
-			source: 'admin' | 'env' | 'default'
+			source: 'admin' | 'default'
 			available: string[]
 		}
 		timestamp: number

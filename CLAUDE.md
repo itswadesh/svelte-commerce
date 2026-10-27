@@ -28,8 +28,8 @@ the relevant ones in their prompts so each does not re-derive them.
 - Playwright: launch with `chromium.launch({ channel: 'chrome' })`. The bundled browser build is
   not installed. From Git Bash, prefix a route argument with `MSYS_NO_PATHCONV=1` or `/products`
   is rewritten into a Windows path.
-- `bun run dev` serves the default theme. `PUBLIC_STOREFRONT_THEME=<name>` overrides it, but only
-  when the store record carries no theme of its own.
+- The theme comes from the store record (`store.theme`) when the backend has one, else it is the
+  default theme. There is no env override (`docs/decisions.md`, 2026-10-27).
 
 **The local backend**
 

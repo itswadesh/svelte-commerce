@@ -3,6 +3,13 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-27: The backend picks the theme, or it is the default
+
+A backend with a theme feature (Litekart, GoCommerce) decides the theme through the store record,
+and the storefront uses it. A backend without one (Saleor, Medusa, Shopify) gets the default theme.
+A theme name this build does not ship also falls back to the default. `PUBLIC_STOREFRONT_THEME`
+was removed, so a deployment can no longer force a theme.
+
 ## 2026-10-27: Inter everywhere on the default theme
 
 Headings, body, buttons, the logo wordmark and portalled dialogs all use Inter. Lora, the former
