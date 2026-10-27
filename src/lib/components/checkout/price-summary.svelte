@@ -17,6 +17,7 @@
 	 */
 	let {
 		subtotal = 0,
+		mrpSaving = 0,
 		discount = 0,
 		discountLabel = 'Discount',
 		shipping = 0,
@@ -30,6 +31,8 @@
 		class: className = ''
 	}: {
 		subtotal?: number | null
+		/** What the lines save on their MRP (compare-at). Above zero, the MRP and its discount get rows of their own. */
+		mrpSaving?: number | null
 		discount?: number | null
 		/** Review names the code, e.g. `Discount (SAVE10)`; the other steps just say Discount. */
 		discountLabel?: string
@@ -48,6 +51,7 @@
 	const money = (value?: number | null) => formatPrice(Number(value) || 0, currencyCode)
 
 	const hasDiscount = $derived(Number(discount) > 0)
+	const hasMrpSaving = $derived(Number(mrpSaving) > 0)
 	const hasTax = $derived(Number(tax) > 0)
 	const isFreeShipping = $derived(shippingResolved && !Number(shipping))
 	const totalLabel = $derived(shippingResolved ? 'Total' : 'Estimated total')
@@ -72,6 +76,18 @@
 		<span class="sr-only">Loading order totals</span>
 	{:else}
 		<dl class="space-y-3 border-b border-border pb-6">
+			{#if hasMrpSaving}
+				<!-- The breakup a shopper in India expects: what the items list at, what comes off that,
+				     then what they cost. Only when the store set compare-at prices above the price. -->
+				<div class="flex items-center justify-between gap-4 text-sm">
+					<dt class="font-medium text-muted-foreground">Total MRP</dt>
+					<dd class="font-bold text-foreground">{money(Number(subtotal) + Number(mrpSaving))}</dd>
+				</div>
+				<div class="flex items-center justify-between gap-4 text-sm">
+					<dt class="font-medium text-muted-foreground">Discount on MRP</dt>
+					<dd class="font-bold text-success">-{money(mrpSaving)}</dd>
+				</div>
+			{/if}
 			<div class="flex items-center justify-between gap-4 text-sm">
 				<dt class="font-medium text-muted-foreground">Subtotal</dt>
 				<dd class="font-bold text-foreground">{money(subtotal)}</dd>
