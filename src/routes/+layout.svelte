@@ -129,11 +129,13 @@
 
 	// The theme editor's published tokens (GoCommerce ext/layouts, D127): over the theme and the store
 	// palette, in the SSR head so the first paint is already right. A preview of the home page draws
-	// its draft's tokens itself (HomeComposer), and the published ones are left out there, so a token
-	// the draft cleared does not show through.
-	const publishedTokens = $derived(
-		(page.data as { layout?: { preview?: boolean } } | undefined)?.layout?.preview ? null : (data?.themeSettings ?? null)
-	)
+	// its draft's tokens itself (PageComposer), and the published ones are left out there, so a token
+	// the draft cleared does not show through. A product or collection template's preview carries no
+	// tokens of its own (D128), so it keeps the published ones like any other page.
+	const publishedTokens = $derived.by(() => {
+		const layout = (page.data as { layout?: { preview?: boolean; page?: string } } | undefined)?.layout
+		return layout?.preview && (layout.page ?? 'home') === 'home' ? null : (data?.themeSettings ?? null)
+	})
 	const tokenStyleTag = $derived.by(() => {
 		const css = themeTokenCss(publishedTokens)
 		return css ? STYLE_OPEN.replace('theme-css', 'theme-tokens') + css + STYLE_CLOSE : ''
