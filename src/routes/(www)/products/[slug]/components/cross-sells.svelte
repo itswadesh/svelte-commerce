@@ -4,7 +4,7 @@
 	import { productService } from '$lib/core/services'
 
 	/**
-	 * "You may also like" (GoCommerce D132): the products the shop chose for this one, each with
+	 * "You may also like" (GoCommerce D133): the products the shop chose for this one, each with
 	 * a quick add that becomes a quantity once it is in the bag. Curated only: with none chosen it
 	 * draws nothing, and Related products below fills in from the category as before.
 	 */

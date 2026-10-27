@@ -7,7 +7,7 @@
 	import type { AddOnOption } from '$lib/product/upsells'
 
 	/**
-	 * "Complete the set" (GoCommerce D132): add-ons the shop offers with this product, ticked here
+	 * "Complete the set" (GoCommerce D133): add-ons the shop offers with this product, ticked here
 	 * and bought by the add button with it. Each shows its own price struck through and what
 	 * ticking it adds, which is the engine's offer price: the engine keeps that price only while
 	 * this product is in the bag, one for each, so the figure is never a promise the bag breaks.

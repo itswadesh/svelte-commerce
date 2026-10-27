@@ -7,7 +7,7 @@
 	import { Truck } from '@lucide/svelte'
 
 	/**
-	 * "Add ₹270 more for FREE delivery" (GoCommerce D132). The threshold is the store's own free
+	 * "Add ₹270 more for FREE delivery" (GoCommerce D133). The threshold is the store's own free
 	 * delivery rate, read by the engine for the bag's country; with no such rate there is no bar.
 	 * Re-asked whenever the subtotal moves.
 	 */
