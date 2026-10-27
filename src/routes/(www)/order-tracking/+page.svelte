@@ -9,22 +9,19 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
-	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
 	import OrderListSkeleton from '../../(my)/my/orders/_OrderListSkeleton.svelte'
 	import OrderTimeline from '$lib/components/order/order-timeline.svelte'
 	import StatusCell from '$lib/components/common/status-cell.svelte'
 	import { orderService } from '$lib/core/services/index.js'
 	import { CheckCircle } from '@lucide/svelte'
 
-	// A guest opens their order with its number and a 4-digit code sent to the
-	// email or phone on it. An order this browser already holds opens at once.
+	// A guest opens their order with its number and the email or phone on it.
+	// The link in the order emails carries the order's key as well, and opens
+	// it with nothing to type; an order this browser already holds opens at once.
 	let order = $state<any>(null)
 	let loading = $state(false)
-	let step = $state<'ask' | 'code'>('ask')
 	let orderNo = $state(page.url.searchParams.get('order') || '')
 	let contact = $state('')
-	let otp = $state('')
-	let minutes = $state(10)
 	let busy = $state(false)
 	let error = $state('')
 
@@ -32,52 +29,42 @@
 
 	onMount(async () => {
 		if (!orderNo) return
+		const key = page.url.searchParams.get('key')
 		loading = true
 		try {
-			order = await orderService.getOrder(orderNo)
-		} catch {
-			// Not held in this browser: the form below asks for a code.
+			if (key) {
+				order = (await orderService.openOrderWithKey({ orderNo, key })).data[0]
+			} else {
+				order = await orderService.getOrder(orderNo)
+			}
+		} catch (err) {
+			// A key that no longer matches says so; otherwise the form asks.
+			if (key) error = 'This link no longer opens the order. Enter your email or phone instead.'
 		} finally {
 			loading = false
+			// The key opens the order, so it leaves the address bar and the
+			// history once this browser holds it.
+			if (key) {
+				const url = new URL(location.href)
+				url.searchParams.delete('key')
+				history.replaceState(history.state, '', url)
+			}
 		}
 	})
 
-	async function sendCode(e?: SubmitEvent) {
+	async function open(e?: SubmitEvent) {
 		e?.preventDefault()
 		if (busy || !orderNo.trim() || !contact.trim()) return
 		busy = true
 		error = ''
 		try {
-			const sent = await orderService.requestOrderCode({ orderNo, contact })
-			minutes = sent.expiresInMinutes
-			otp = ''
-			step = 'code'
+			order = (await orderService.openOrder({ orderNo, contact })).data[0]
 		} catch (err) {
 			error = message(err)
 		} finally {
 			busy = false
 		}
 	}
-
-	async function verify() {
-		if (busy || otp.length !== 4) return
-		busy = true
-		error = ''
-		try {
-			const res = await orderService.getOrderByEmailAndOTP({ orderNo, otp })
-			order = res.data[0]
-		} catch (err) {
-			error = message(err)
-			otp = ''
-		} finally {
-			busy = false
-		}
-	}
-
-	// The fourth digit opens the order, as the sign-in code does.
-	$effect(() => {
-		if (otp.length === 4) verify()
-	})
 </script>
 
 <svelte:head>
@@ -410,53 +397,21 @@
 	{:else}
 		<section class="mx-auto flex min-h-[60vh] w-full max-w-sm flex-col justify-center px-4 py-10">
 			<h2 class="mb-1 text-2xl font-semibold text-foreground">Track your order</h2>
-			{#if step === 'ask'}
-				<p class="mb-6 text-sm text-muted-foreground">Enter your order number and the email or phone you ordered with. We will send you a 4-digit code.</p>
-				<form class="flex flex-col gap-4" onsubmit={sendCode} in:fade={{ duration: 200 }}>
-					<div class="flex flex-col gap-1.5">
-						<Label for="order-no">Order number</Label>
-						<Input id="order-no" bind:value={orderNo} placeholder="GC-000049" autocomplete="off" required />
-					</div>
-					<div class="flex flex-col gap-1.5">
-						<Label for="order-contact">Email or phone</Label>
-						<Input id="order-contact" bind:value={contact} autocomplete="email" required />
-					</div>
-					{#if error}
-						<p class="text-sm text-destructive" role="alert">{error}</p>
-					{/if}
-					<Button type="submit" class="w-full" disabled={busy}>{busy ? 'Sending…' : 'Send code'}</Button>
-				</form>
-			{:else}
-				<div class="flex flex-col gap-4" in:fade={{ duration: 200 }}>
-					<p class="text-sm text-muted-foreground">
-						If {contact} is on order {orderNo}, a 4-digit code is on its way. It works for {minutes} minutes.
-					</p>
-					<InputOTP.Root aria-label="Four digit code" maxlength={4} pattern="\d*" bind:value={otp} disabled={busy}>
-						{#snippet children({ cells })}
-							<InputOTP.Group class="gap-2">
-								{#each cells as cell}
-									<InputOTP.Slot
-										{cell}
-										class="h-12 w-11 rounded-radius border bg-background text-lg font-semibold transition-colors {cell.isActive
-											? 'border-primary ring-2 ring-ring/35'
-											: ''}"
-									/>
-								{/each}
-							</InputOTP.Group>
-						{/snippet}
-					</InputOTP.Root>
-					{#if busy}
-						<p class="text-sm text-muted-foreground" role="status">Checking…</p>
-					{/if}
-					{#if error}
-						<p class="text-sm text-destructive" role="alert">{error}</p>
-					{/if}
-					<div class="flex gap-3 text-sm">
-						<button type="button" class="underline" disabled={busy} onclick={() => sendCode()}>Send a new code</button>
-						<button type="button" class="underline" onclick={() => ((step = 'ask'), (error = ''))}>Change details</button>
-					</div>
+			<p class="mb-6 text-sm text-muted-foreground">Enter your order number and the email or phone you ordered with.</p>
+			<form class="flex flex-col gap-4" onsubmit={open} in:fade={{ duration: 200 }}>
+				<div class="flex flex-col gap-1.5">
+					<Label for="order-no">Order number</Label>
+					<Input id="order-no" bind:value={orderNo} placeholder="GC-000049" autocomplete="off" required />
 				</div>
-			{/if}
+				<div class="flex flex-col gap-1.5">
+					<Label for="order-contact">Email or phone</Label>
+					<Input id="order-contact" bind:value={contact} autocomplete="email" required />
+				</div>
+				{#if error}
+					<p class="text-sm text-destructive" role="alert">{error}</p>
+				{/if}
+				<Button type="submit" class="w-full" disabled={busy}>{busy ? 'Opening…' : 'Track order'}</Button>
+			</form>
 		</section>
 	{/if}
 </div>
