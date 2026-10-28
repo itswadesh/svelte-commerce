@@ -3,14 +3,33 @@
 	import { Star, StarIcon, X, Camera, ChevronLeft, ChevronRight, UserRound } from '@lucide/svelte'
 	import { date } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
-	import { invalidateAll } from '$app/navigation'
+	import { invalidateAll, replaceState } from '$app/navigation'
 	import { useProductState } from '$lib/core/composables/index.js'
+	import { showAuthModal } from '$lib/core/components/index.js'
 	import { productService, uploadService } from '$lib/core/services/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Textarea } from '$lib/components/ui/textarea/index.js'
 	import { fade, scale } from '$lib/motion'
+	import { REVIEW_PARAM, reviewReturnPath } from '$lib/utils/review-return'
 
 	const productState = useProductState()
+
+	const signedIn = $derived(!!productState.userState?.user?.userId)
+
+	function writeReview() {
+		if (signedIn) productState.showReviewForm = true
+		else showAuthModal('login', { redirect: reviewReturnPath(page.url) })
+	}
+
+	// Sign-in lands back here with ?review=1: open the form once, then drop the flag.
+	$effect(() => {
+		if (page.url.searchParams.get(REVIEW_PARAM) !== '1' || !signedIn) return
+		productState.showReviewForm = true
+		const url = new URL(page.url)
+		url.searchParams.delete(REVIEW_PARAM)
+		// On a cold load this effect can run before the router has started, when replaceState throws.
+		setTimeout(() => replaceState(url, page.state))
+	})
 
 	const ratings = $derived(page.data?.product?.ratings ?? [])
 
@@ -107,7 +126,7 @@
 
 <!-- Customer Ratings -->
 {#if page.data.store?.plugins?.isProductReviewsAndRatings?.active}
-	<section class="edp-rev">
+	<section id="reviews" class="edp-rev scroll-mt-24">
 		<h2 class="edp-rev-title section-heading mb-6 border-b border-border pb-4">Customer ratings</h2>
 
 		{#if ratings.length}
@@ -130,7 +149,7 @@
 						Based on {ratings.length}
 						{ratings.length === 1 ? 'review' : 'reviews'}
 					</p>
-					<Button class="mt-4" onclick={() => (productState.showReviewForm = true)}>Write a review</Button>
+					<Button class="mt-4" onclick={writeReview}>Write a review</Button>
 				</div>
 
 				<div class="lg:col-span-5">
@@ -235,7 +254,7 @@
 				</div>
 				<h3 class="mb-2 text-2xl font-bold tracking-tight text-foreground">No reviews yet</h3>
 				<p class="mb-8 max-w-sm text-muted-foreground">Be the first to share your thoughts on this product and help other shoppers.</p>
-				<Button class="h-12 px-8" onclick={() => (productState.showReviewForm = true)}>Write the first review</Button>
+				<Button class="h-12 px-8" onclick={writeReview}>Write the first review</Button>
 			</div>
 		{/if}
 	</section>
