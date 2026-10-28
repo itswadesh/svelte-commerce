@@ -5,6 +5,7 @@ import { getStore } from '@misiki/kitcommerce-core/utils'
 import { activeBackendProxy, initActiveConnector } from '$lib/core/connectors/init'
 import { resolveStorefrontTheme } from '$lib/theme/index.js'
 import { isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
+import { compressResponse } from '$lib/server/compress'
 import { getRequestEvent } from '$app/server'
 import { services } from 'kitcommerce.config'
 
@@ -29,7 +30,7 @@ function isLocalOrIpAddress(url: string): boolean {
 	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
 }
 
-export const handle: Handle = async ({ event, resolve }) => {
+const app: Handle = async ({ event, resolve }) => {
 	const url = new URL(event.request.url)
 	const isLocalOrIP = isLocalOrIpAddress(url.hostname)
 
@@ -135,6 +136,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
 	return response
 }
+
+export const handle: Handle = async (input) => compressResponse(input.event.request, await app(input))
 
 // Route server-side API calls straight to the backend (PUBLIC_LITEKART_API_URL) instead of letting
 // them hairpin through the public origin. When the storefront is behind a proxy/CDN (e.g. Cloudflare),
