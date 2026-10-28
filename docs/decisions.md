@@ -14,6 +14,14 @@ dark band with the page's text and background colours swapped. Headings are heav
 pictures are to be made with Google Gemini; until they exist a section without one draws its colour
 block. The built-in home page (no layout published) is unchanged.
 
+## 2026-10-28: Categories come from the Shopify taxonomy, switched on per store
+
+GoCommerce keeps Shopify's product taxonomy as the one master list of categories, and each store
+switches on the categories it wants from it. A new store gets no fixed starter list, and the full
+tree is not copied into every store. The owner chose this over starter sets per shop type and
+over keeping the taxonomy only as an optional whole-tree import. The storefront's filter and
+menus show only a store's active categories.
+
 ## 2026-10-27: Product picture shape and fit are set in GoCommerce
 
 The shop sets the shape of product pictures (square, portrait 3:4, tall 2:3, landscape 4:3) and
