@@ -158,18 +158,27 @@
 </div>
 
 <style>
+	/* One space between every two sections, whatever they are. Each section used to bring its own
+	   padding (bands 32-64px, the hero 12-32px, the benefits strip 28-48px), so the gaps on one page
+	   ran from 24px to over 100px depending on which pair met. */
 	.cmp-home {
+		--cmp-gap: clamp(24px, 3vw, 40px);
+		display: flex;
+		flex-direction: column;
+		gap: var(--cmp-gap);
+		padding-block: var(--cmp-gap);
 		color: hsl(var(--foreground));
 	}
 
-	/* The vocabulary every section shares, so the page has one rhythm and one heading step. */
-	.cmp-home :global(.cmp-band) {
-		padding-block: clamp(32px, 5vw, 64px);
+	/* A full-width strip at the very top or bottom meets the header or footer, as it always has. */
+	.cmp-home > :global(.cmp-announce:first-child),
+	.cmp-home > :global(.cmp-benefits-band:first-child) {
+		margin-top: calc(-1 * var(--cmp-gap));
 	}
 
-	/* Two plain bands in a row would stack both paddings; the second gives up its top. */
-	.cmp-home :global(.cmp-band + .cmp-band) {
-		padding-top: 0;
+	.cmp-home > :global(.cmp-announce:last-child),
+	.cmp-home > :global(.cmp-benefits-band:last-child) {
+		margin-bottom: calc(-1 * var(--cmp-gap));
 	}
 
 	.cmp-home :global(.cmp-head) {
@@ -273,11 +282,6 @@
 	.cmp-home :global(.cmp-edit:empty) {
 		min-height: 48px;
 		background: hsl(var(--muted));
-	}
-
-	/* The wrapper would hide one band from the next; the rhythm is the shopper's page. */
-	.cmp-home :global(.cmp-edit:has(> .cmp-band) + .cmp-edit > .cmp-band) {
-		padding-top: 0;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

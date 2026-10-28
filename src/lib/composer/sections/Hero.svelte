@@ -56,10 +56,6 @@
 {/if}
 
 <style>
-	.cmp-hero {
-		padding-block: clamp(12px, 2.5vw, 32px);
-	}
-
 	.cmp-hero__grid {
 		display: grid;
 		gap: 12px;
