@@ -13,9 +13,10 @@ import type { PageLoad } from './$types'
 type LayoutHook = { layoutService?: { getHomeLayout(args?: { preview?: string }): Promise<ComposerLayout | null> } }
 
 /**
- * The composed layout, or null for the built-in home page. Null covers the plugin being off,
- * nothing published, a bad or expired preview key and a connector without the service — and any
- * failure too: the built-in page is always a better answer than an error page.
+ * The composed layout, or null for the built-in home page. A GoCommerce home page never published
+ * comes back as the engine's starting page (D140), so null covers the plugin being off, a bad or
+ * expired preview key, a backend that answers 404 for an unpublished page, and a connector without
+ * the service — and any failure too: the built-in page is always a better answer than an error page.
  */
 async function homeLayout(preview: string | null): Promise<ComposerLayout | null> {
 	// Reflect.get, not `services.layoutService`: Rollup turns a property read on an imported

@@ -12,7 +12,7 @@ paragraphs become chunky rounded tiles two across on a phone with the whole tile
 picture-with-words section is one rounded block of the quiet colour, and the benefits strip is a
 dark band with the page's text and background colours swapped. Headings are heavier. The default
 pictures come with the engine's starting page and are served by the engine
-(`/x/layouts/starter/1/…`, made absolute by the connector like any `/media/…` picture): Unsplash
+(`/x/layouts/starter/1/…`, made absolute by the connector like any `/media/…` picture; the engine serves them without a store named, since a shopper's `<img>` names none): Unsplash
 photographs of Indian women for the hero and the picture beside words (the owner, 2026-10-28: "you
 can use unsplash royalty free images that include human (indian girls)", overriding the no-stock-photo
 rule for this theme) and Google Gemini pictures for the tiles. Tiles with a picture stay tiles, the
