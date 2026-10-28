@@ -12,6 +12,8 @@
 	const image = $derived(safeHref(s.image))
 	const imageRight = $derived(text(s, 'image_side') === 'right')
 	const hasWords = $derived(!!(heading || eyebrow || text(s, 'body')))
+	// What the picture shows, as the shop wrote it; the heading names it otherwise.
+	const alt = $derived(text(s, 'image_alt') || heading || eyebrow)
 </script>
 
 {#if image || hasWords}
@@ -21,7 +23,7 @@
 			<div class="cmp-iwt" class:cmp-iwt--split={image && hasWords} class:cmp-iwt--right={imageRight}>
 				{#if image}
 					<div class="cmp-iwt__media">
-						<img src={image} alt={heading || eyebrow} width="1000" height="800" loading="lazy" decoding="async" />
+						<img src={image} {alt} width="1000" height="800" loading="lazy" decoding="async" />
 					</div>
 				{/if}
 				{#if hasWords}

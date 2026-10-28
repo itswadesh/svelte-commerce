@@ -11,6 +11,8 @@ import Video from '$lib/composer/sections/Video.svelte'
 import Newsletter from '$lib/composer/sections/Newsletter.svelte'
 import Faq from '$lib/composer/sections/Faq.svelte'
 import MultiColumn from '$lib/composer/sections/MultiColumn.svelte'
+import Hero from '$lib/composer/sections/Hero.svelte'
+import ImageWithText from '$lib/composer/sections/ImageWithText.svelte'
 
 // The product grid draws the app's product card, which needs SvelteKit's runtime; not under test here.
 vi.mock('$lib/composer/sections/ProductGrid.svelte', () => ({ default: () => {} }))
@@ -420,6 +422,26 @@ describe('MultiColumn', () => {
 		expect(links[0].textContent).toContain('Shop all')
 	})
 
+	it('keeps a tile a tile when it has a picture, the picture inside the tile and silent beside its name', () => {
+		const { container } = render(MultiColumn, {
+			section: section('multi-column', {
+				heading: 'Start shopping',
+				items: [
+					{ image: '/x/layouts/starter/1/tile-shop-all.webp', heading: 'Shop all', link: '/products', link_text: 'See everything' },
+					{ image: '/x/layouts/starter/1/tile-track.webp', heading: 'Track an order', link: '/order-tracking', link_text: 'Find your order' }
+				]
+			})
+		})
+		expect(container.querySelector('.cmp-mc--tiles')).not.toBeNull()
+		const tiles = container.querySelectorAll('.cmp-mc__col')
+		expect(tiles.length).toBe(2)
+		const img = tiles[0].querySelector('.cmp-mc__media img')
+		expect(img?.getAttribute('src')).toBe('/x/layouts/starter/1/tile-shop-all.webp')
+		expect(img?.getAttribute('alt')).toBe('')
+		expect(img?.getAttribute('loading')).toBe('lazy')
+		expect(screen.getAllByRole('link').map((a) => a.textContent?.trim())).toEqual(['Shop all', 'Track an order'])
+	})
+
 	it('keeps columns as columns when one has no link, and never draws an unnamed link', () => {
 		const { container } = render(MultiColumn, {
 			section: section('multi-column', {
@@ -428,5 +450,32 @@ describe('MultiColumn', () => {
 		})
 		expect(container.querySelector('.cmp-mc--tiles')).toBeNull()
 		for (const a of screen.queryAllByRole('link')) expect(a.textContent?.trim()).not.toBe('')
+	})
+})
+
+// A photograph's description is the shop's (`image_alt`); without one the heading still names it.
+describe('picture descriptions', () => {
+	it('reads the hero picture its description, or its heading when there is none', () => {
+		const { container, unmount } = render(Hero, {
+			section: section('hero', { heading: 'Find your next favourite thing', image: '/h.webp', image_alt: 'A smiling woman holding up a dupatta' }),
+			priority: true
+		})
+		const img = container.querySelector('img')
+		expect(img?.getAttribute('alt')).toBe('A smiling woman holding up a dupatta')
+		expect(img?.getAttribute('loading')).toBe('eager')
+		expect(img?.getAttribute('fetchpriority')).toBe('high')
+		unmount()
+		const { container: plain } = render(Hero, { section: section('hero', { heading: 'Sale', image: '/h.webp' }) })
+		expect(plain.querySelector('img')?.getAttribute('alt')).toBe('Sale')
+	})
+
+	it('reads the picture beside words its description, or its heading when there is none', () => {
+		const { container, unmount } = render(ImageWithText, {
+			section: section('image-with-text', { heading: 'Good things', image: '/l.webp', image_alt: 'A woman looking into a handbag' })
+		})
+		expect(container.querySelector('img')?.getAttribute('alt')).toBe('A woman looking into a handbag')
+		unmount()
+		const { container: plain } = render(ImageWithText, { section: section('image-with-text', { heading: 'Good things', image: '/l.webp' }) })
+		expect(plain.querySelector('img')?.getAttribute('alt')).toBe('Good things')
 	})
 })
