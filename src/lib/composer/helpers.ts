@@ -116,13 +116,14 @@ export function pageHeadingSection(sections: ComposerSection[]): string | null {
 	return hero ? hero.id : null
 }
 
-/** Benefits items with a title, at most six, as the engine's schema allows. */
-export function benefitItems(value: unknown): { title: string; body: string }[] {
+/** Benefits items with a title, at most six, as the engine's schema allows; icon is a name from its set (D139). */
+export function benefitItems(value: unknown): { title: string; body: string; icon: string }[] {
 	if (!Array.isArray(value)) return []
 	return value
 		.map((item) => ({
 			title: text(item as Record<string, unknown>, 'title'),
-			body: typeof (item as Record<string, unknown>)?.body === 'string' ? ((item as Record<string, unknown>).body as string) : ''
+			body: typeof (item as Record<string, unknown>)?.body === 'string' ? ((item as Record<string, unknown>).body as string) : '',
+			icon: text(item as Record<string, unknown>, 'icon')
 		}))
 		.filter((item) => item.title)
 		.slice(0, 6)
