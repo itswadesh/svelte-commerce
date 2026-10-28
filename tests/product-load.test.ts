@@ -38,6 +38,49 @@ describe('watchProductRequest', () => {
 		expect(watch.outcome()).toBe(200)
 	})
 
+	// GoCommerce's connector asks for /api/products/slug/<slug>, then /sku/<slug>, through the
+	// storefront's proxy path. Unwatched, every missing or draft product read as a 503.
+	it('records the GoCommerce lookups, behind a proxy path, as one 404', async () => {
+		const watch = watchProductRequest(respond(404), 'gold-ring')
+		await watch.fetch('/gc-api/api/products/slug/gold-ring')
+		await watch.fetch('https://shop.test/gc-api/api/products/sku/gold-ring')
+		expect(watch.outcome()).toBe(404)
+	})
+
+	it('keeps a lookup that failed for another reason over a later 404', async () => {
+		const statuses = [502, 404]
+		const fetchFn = (async () => new Response('{}', { status: statuses.shift() })) as unknown as typeof fetch
+		const watch = watchProductRequest(fetchFn, 'gold-ring')
+		await watch.fetch('/api/products/slug/gold-ring')
+		await watch.fetch('/api/products/sku/gold-ring')
+		expect(watch.outcome()).toBe(502)
+	})
+
+	it('does not mistake another product or a collection for this one', async () => {
+		const watch = watchProductRequest(respond(404), 'gold-ring')
+		await watch.fetch('/gc-api/api/products/slug/other-ring')
+		await watch.fetch('/gc-api/api/collections/slug/gold-ring')
+		expect(watch.outcome()).toBeUndefined()
+	})
+
+	// On the server SvelteKit's fetch refuses the engine's cross-origin answer, and the connector asks
+	// again with Node's fetch. The watcher must see that second answer, not the refusal.
+	it('asks again with Node fetch when SvelteKit refuses a cross-origin answer', async () => {
+		const refusing = (async () => {
+			throw new Error('CORS error: No Access-Control-Allow-Origin header is present')
+		}) as unknown as typeof fetch
+		const real = globalThis.fetch
+		globalThis.fetch = (async () => new Response('{}', { status: 404 })) as unknown as typeof fetch
+		try {
+			const watch = watchProductRequest(refusing, 'gold-ring')
+			const res = await watch.fetch('https://engine.test/api/products/slug/gold-ring')
+			expect(res.status).toBe(404)
+			expect(watch.outcome()).toBe(404)
+		} finally {
+			globalThis.fetch = real
+		}
+	})
+
 	it('records a network failure and still throws it', async () => {
 		const failing = (async () => {
 			throw new TypeError('Failed to fetch')
