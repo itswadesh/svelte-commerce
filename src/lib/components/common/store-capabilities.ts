@@ -36,8 +36,14 @@ export function servesStorefrontRestApi(): boolean {
 	return (active?.connectorName ?? 'litekart') === 'litekart'
 }
 
-/** The contact form posts to `/api/contact-us`. */
-export const canSubmitContactForm = (): boolean => servesStorefrontRestApi()
+/**
+ * The contact form posts through the connector's contactService: to `/api/contact-us` on Litekart's
+ * REST API, or to an engine's own contact module, which takes messages only while its
+ * `contact-form` plugin is switched on (GoCommerce's ext/contact answers 404 otherwise). `plugins`
+ * is the store's enabled-plugin list, from `pluginsService.list()`.
+ */
+export const canSubmitContactForm = (plugins: Array<{ key?: string }> = []): boolean =>
+	servesStorefrontRestApi() || plugins.some((p) => p?.key === 'contact-form')
 
 /**
  * The newsletter form posts to `/api/newsletter/subscribe`: Litekart's REST API, or a connector that
