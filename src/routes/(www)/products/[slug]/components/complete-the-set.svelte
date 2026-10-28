@@ -46,7 +46,7 @@
 
 {#if options.length}
 	<fieldset class="cts rounded-radius border border-border p-3" transition:slide data-testid="complete-the-set">
-		<legend class="cts-legend px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Complete the set</legend>
+		<legend class="cts-legend px-1 text-sm font-semibold text-foreground">Complete the set</legend>
 		<ul class="flex flex-col">
 			{#each options as option (option.id)}
 				<li>
