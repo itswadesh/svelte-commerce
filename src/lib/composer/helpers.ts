@@ -205,9 +205,14 @@ export function columnItems(value: unknown): Column[] {
 		.slice(0, 4)
 }
 
-/** Tailwind classes for columns side by side from the tablet up; written out in full for the scanner. */
-export function columnsClass(count: number): string {
-	switch (Math.min(4, Math.max(1, count))) {
+/**
+ * Tailwind classes for columns side by side from the tablet up; written out in full for the scanner.
+ * `tiles` — columns with no paragraphs, a heading and a picture each — sit two across on a phone.
+ */
+export function columnsClass(count: number, tiles = false): string {
+	const n = Math.min(4, Math.max(1, count))
+	if (tiles) return n === 4 ? 'grid-cols-2 lg:grid-cols-4' : n === 3 ? 'grid-cols-2 md:grid-cols-3' : n === 2 ? 'grid-cols-2' : 'grid-cols-1'
+	switch (n) {
 		case 1:
 			return 'grid-cols-1'
 		case 2:
