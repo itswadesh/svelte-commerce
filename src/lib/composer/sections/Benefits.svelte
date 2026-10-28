@@ -12,15 +12,16 @@
 </script>
 
 {#if items.length}
-	<section class="cmp-band">
+	<!-- Bold and bright (D140): a dark band, the page's own text and background colours swapped. -->
+	<section class="cmp-benefits-band">
 		<div class="page-width">
 			{#if heading}
-				<header class="cmp-head"><h2 class="cmp-head__title">{heading}</h2></header>
+				<header class="cmp-head"><h2 class="cmp-head__title cmp-benefits__heading">{heading}</h2></header>
 			{/if}
 			<ul class="cmp-benefits" class:cmp-benefits--four={items.length === 4} class:cmp-benefits--icons={withIcons}>
 				{#each items as item, i (i)}
 					{@const Icon = benefitIcon(item.icon)}
-					<li class="cmp-benefit bg-card">
+					<li class="cmp-benefit">
 						{#if Icon}<Icon class="cmp-benefit__icon" aria-hidden="true" />{/if}
 						<div class="cmp-benefit__words">
 							<!-- An h3 only under a section heading; without one it would skip a level. -->
@@ -35,10 +36,21 @@
 {/if}
 
 <style>
+	/* A full-width band, not one of the page's plain bands: it keeps its own padding wherever it sits. */
+	.cmp-benefits-band {
+		padding-block: clamp(28px, 4vw, 48px);
+		background: hsl(var(--foreground));
+		color: hsl(var(--background));
+	}
+
+	.cmp-benefits__heading {
+		color: inherit;
+	}
+
 	.cmp-benefits {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: 12px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 20px 16px;
 		margin: 0;
 		padding: 0;
 		list-style: none;
@@ -47,20 +59,17 @@
 	.cmp-benefit {
 		display: flex;
 		align-items: flex-start;
-		gap: 14px;
-		padding: 18px;
-		border: 1px solid hsl(var(--border));
-		border-radius: var(--radius, 0.5rem);
+		gap: 12px;
 	}
 
-	/* The built-in home page's promise icons: line icons at 22px in the primary colour. */
+	/* Line icons at 22px in the band's own text colour: the accent can be too dark to see on it. */
 	.cmp-benefit :global(.cmp-benefit__icon) {
 		flex: none;
 		width: 22px;
 		height: 22px;
 		margin-top: 1px;
-		color: hsl(var(--primary));
-		stroke-width: 1.5;
+		color: currentColor;
+		stroke-width: 1.75;
 	}
 
 	.cmp-benefit__words {
@@ -68,29 +77,24 @@
 	}
 
 	.cmp-benefits--icons .cmp-benefit__words:first-child {
-		padding-left: 36px;
+		padding-left: 34px;
 	}
 
 	.cmp-benefit__title {
 		margin: 0;
-		font-size: 1rem;
-		font-weight: 600;
+		font-family: var(--font-heading, inherit);
+		font-size: 1.0625rem;
+		font-weight: 700;
 		line-height: 1.3;
 		overflow-wrap: anywhere;
 	}
 
 	.cmp-benefit__body {
 		margin: 6px 0 0;
-		color: hsl(var(--muted-foreground));
+		color: inherit;
 		font-size: 0.9rem;
 		line-height: 1.5;
 		overflow-wrap: anywhere;
-	}
-
-	@media (min-width: 640px) {
-		.cmp-benefits {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
 	}
 
 	@media (min-width: 1024px) {

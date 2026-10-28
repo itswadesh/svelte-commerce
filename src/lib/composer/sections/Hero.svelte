@@ -19,14 +19,16 @@
 </script>
 
 {#if heading}
+	<!-- Bold and bright (D140): the words on a block of the accent colour, the picture beside them
+	     from the tablet up and under them on a phone, so a phone opens on the headline. -->
 	<section class="cmp-hero" class:cmp-hero--media={!!image} class:cmp-hero--center={centered}>
 		<div class="page-width cmp-hero__grid">
 			<div class="cmp-hero__body">
-				{#if eyebrow}<span class="cmp-eyebrow">{eyebrow}</span>{/if}
+				{#if eyebrow}<span class="cmp-hero__eyebrow">{eyebrow}</span>{/if}
 				<svelte:element this={isPageHeading ? 'h1' : 'h2'} class="cmp-hero__title">{heading}</svelte:element>
 				<Paragraphs value={s.body} class="cmp-hero__text" />
 				<div class="cmp-hero__actions">
-					<ComposerButton href={s.button_link} label={text(s, 'button_text')} />
+					<ComposerButton href={s.button_link} label={text(s, 'button_text')} variant="inverse" />
 				</div>
 			</div>
 			{#if image}
@@ -53,42 +55,61 @@
 
 <style>
 	.cmp-hero {
-		background: var(--ed-canvas, hsl(var(--muted)));
-		color: hsl(var(--foreground));
+		padding-block: clamp(12px, 2.5vw, 32px);
 	}
 
 	.cmp-hero__grid {
 		display: grid;
-		gap: 24px;
-		padding-block: clamp(28px, 4vw, 56px);
+		gap: 12px;
 	}
 
+	/* The colour block. Its words take the accent's own text colour, the pair the theme editor
+	   checks for contrast, so a shop's colours restyle it without losing legibility. */
 	.cmp-hero__body {
 		display: grid;
-		gap: 14px;
+		gap: 16px;
 		align-content: center;
-		max-width: 36rem;
+		min-width: 0;
+		padding: clamp(28px, 6vw, 72px) clamp(22px, 5vw, 64px);
+		border-radius: calc(var(--radius, 0.5rem) * 1.5);
+		background: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
 	}
 
 	.cmp-hero--center .cmp-hero__body {
 		justify-items: center;
-		margin-inline: auto;
 		text-align: center;
+	}
+
+	.cmp-hero__eyebrow {
+		justify-self: start;
+		padding: 6px 12px;
+		border-radius: 999px;
+		background: hsl(var(--primary-foreground));
+		color: hsl(var(--primary));
+		font-size: 0.8125rem;
+		font-weight: 700;
+		overflow-wrap: anywhere;
+	}
+
+	.cmp-hero--center .cmp-hero__eyebrow {
+		justify-self: center;
 	}
 
 	.cmp-hero__title {
 		margin: 0;
+		max-width: 16ch;
 		font-family: var(--font-heading, inherit);
-		font-size: clamp(1.75rem, 4.6vw, 3.25rem);
-		font-weight: 500;
-		line-height: 1.08;
-		letter-spacing: -0.01em;
+		font-size: clamp(2.125rem, 6.4vw, 4.25rem);
+		font-weight: 800;
+		line-height: 1.02;
+		letter-spacing: -0.025em;
 		overflow-wrap: anywhere;
 	}
 
 	.cmp-hero__body :global(.cmp-hero__text) {
-		color: hsl(var(--muted-foreground));
-		font-size: 1rem;
+		max-width: 34rem;
+		font-size: clamp(1rem, 1.6vw, 1.125rem);
 		line-height: 1.6;
 	}
 
@@ -97,15 +118,13 @@
 	}
 
 	.cmp-hero__actions {
-		padding-top: 6px;
+		padding-top: 4px;
 	}
 
-	/* The picture comes first on a phone, so the page opens on it, and sits beside the words from
-	   the tablet up. Its box is fixed by aspect-ratio before the file arrives: no layout shift. */
+	/* The box is fixed by aspect-ratio before the file arrives: no layout shift. */
 	.cmp-hero__media {
-		order: -1;
 		overflow: hidden;
-		border-radius: var(--radius, 0.5rem);
+		border-radius: calc(var(--radius, 0.5rem) * 1.5);
 		aspect-ratio: 4 / 3;
 		background: hsl(var(--muted));
 	}
@@ -119,13 +138,19 @@
 
 	@media (min-width: 768px) {
 		.cmp-hero--media .cmp-hero__grid {
-			grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-			align-items: center;
-			gap: clamp(24px, 3.5vw, 48px);
+			grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+			align-items: stretch;
+			gap: 16px;
 		}
+		/* As tall as the block beside it: the picture fills the row rather than setting it. */
 		.cmp-hero__media {
-			order: 0;
-			aspect-ratio: 5 / 4;
+			position: relative;
+			aspect-ratio: auto;
+			min-height: 320px;
+		}
+		.cmp-hero__media img {
+			position: absolute;
+			inset: 0;
 		}
 	}
 </style>
