@@ -9,7 +9,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 
-const ROOTS = ['src/routes', 'src/lib/components', 'src/lib/theme/default']
+const ROOTS = ['src/routes', 'src/lib/components', 'src/lib/composer', 'src/lib/theme/default']
 const SKIP = /[\\/]components[\\/]ui[\\/]/
 const PALETTE = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose'
 const BAD = new RegExp(

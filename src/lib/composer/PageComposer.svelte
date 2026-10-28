@@ -208,8 +208,6 @@
 		color: hsl(var(--foreground));
 		font-size: 0.82rem;
 		font-weight: 600;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
 		white-space: nowrap;
 		transition: opacity var(--motion-fast, 150ms) var(--motion-ease, ease-out);
 	}
@@ -238,8 +236,6 @@
 		color: hsl(var(--muted-foreground));
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
 		overflow-wrap: anywhere;
 	}
 

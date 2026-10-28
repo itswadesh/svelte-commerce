@@ -136,8 +136,6 @@
 		color: hsl(var(--primary-foreground));
 		font-size: 0.8rem;
 		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		transition:
 			transform var(--motion-fast, 150ms) var(--motion-ease, ease-out),
 			opacity var(--motion-fast, 150ms) var(--motion-ease, ease-out);
