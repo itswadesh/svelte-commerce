@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import {
 	benefitItems,
+	firstPictureSection,
 	gridColumnsClass,
 	intSetting,
 	knownSections,
@@ -112,5 +113,23 @@ describe('pageHeadingSection', () => {
 
 	it('answers null when no hero can carry it', () => {
 		expect(pageHeadingSection([section('r', 'rich-text', { heading: 'About' })])).toBeNull()
+	})
+})
+
+describe('firstPictureSection', () => {
+	it('skips a hero without a picture and picks the product grid below it', () => {
+		const grid = { ...section('g', 'product-grid', {}), products: [{ id: 1 }] } as ComposerSection
+		expect(firstPictureSection([section('h', 'hero', { heading: 'Hi' }), grid])).toBe(1)
+	})
+
+	it('picks a hero that has a picture', () => {
+		expect(firstPictureSection([section('h', 'hero', { heading: 'Hi', image: 'https://x.test/a.jpg' })])).toBe(0)
+	})
+
+	it('answers -1 for an empty grid or a picture below the first three sections', () => {
+		const text4 = [0, 1, 2].map((i) => section(`r${i}`, 'rich-text', {}))
+		const grid = { ...section('g', 'product-grid', {}), products: [{ id: 1 }] } as ComposerSection
+		expect(firstPictureSection([section('g0', 'product-grid', {})])).toBe(-1)
+		expect(firstPictureSection([...text4, grid])).toBe(-1)
 	})
 })

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import { SECTIONS } from './registry.js'
-	import { knownSections, pageHeadingSection, type ComposerLayout, type ComposerSection } from './helpers.js'
+	import { firstPictureSection, knownSections, pageHeadingSection, type ComposerLayout, type ComposerSection } from './helpers.js'
 	import { draftSections, editorMessage, storefrontMessage, type DraftDocument } from './editor-bridge.js'
 	import { TEMPLATE_CORE, withCore } from './page-layout.js'
 	import { themeFontsHref, themeTokenCss } from './theme-tokens.js'
@@ -52,8 +52,7 @@
 	const sections = $derived(knownSections(source, { ...SECTIONS, ...parts }, import.meta.env.DEV ? (m) => console.warn(m) : undefined))
 	// On a template the core's own title is the h1; every section heading is an h2.
 	const headingId = $derived(home ? pageHeadingSection(sections) : null)
-	// The section whose picture is first on the screen loads at once; every later one waits.
-	const firstHero = $derived(sections.findIndex((s) => s.type === 'hero' || s.type === 'slideshow'))
+	const firstPicture = $derived(firstPictureSection(sections))
 
 	// A home-page preview draws its own theme settings (D127): the draft's as the panel posts them,
 	// else the saved draft's. The root layout leaves the published ones out of that preview, so a
@@ -129,7 +128,7 @@
 		{@render part(section)}
 	{:else}
 		{@const Section = SECTIONS[section.type]}
-		<Section {section} {aspectRatio} isPageHeading={section.id === headingId} priority={index === firstHero && index < 3} />
+		<Section {section} {aspectRatio} isPageHeading={section.id === headingId} priority={index === firstPicture} />
 	{/if}
 {/snippet}
 
