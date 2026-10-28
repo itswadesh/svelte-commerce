@@ -139,6 +139,13 @@
 	function toggleMobileNest(i: number) {
 		mobileNestOpen[i] = !mobileNestOpen[i]
 	}
+
+	// A number stored with its country code but no plus (Litekart's 91...) gets one; a local
+	// ten-digit number does not, or +98765 43210 dials a different country.
+	const storePhone = $derived.by(() => {
+		const raw = String(page?.data?.store?.businessPhone ?? '').replace(/[^\d+]/g, '')
+		return raw.startsWith('+') || raw.length <= 10 ? raw : `+${raw}`
+	})
 </script>
 
 <svelte:window bind:scrollY={navModule.scrollY} />
@@ -559,12 +566,12 @@
 
 						{#if page?.data?.store?.businessPhone}
 							<a
-								href="tel:+{page?.data?.store?.businessPhone}"
+								href="tel:{storePhone}"
 								aria-label="Call us"
 								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
 							>
 								<Phone class="h-3.5 w-3.5 text-muted-foreground" />
-								<span>+{page?.data?.store?.businessPhone}</span>
+								<span>{storePhone}</span>
 							</a>
 						{/if}
 					</div>
