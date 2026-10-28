@@ -7,6 +7,8 @@
 
 	const heading = $derived(text(section.settings, 'heading'))
 	const items = $derived(benefitItems(section.settings?.items))
+	// One icon in the strip keeps the icon column for every benefit, so titles line up.
+	const withIcons = $derived(items.some((item) => benefitIcon(item.icon)))
 </script>
 
 {#if items.length}
@@ -15,7 +17,7 @@
 			{#if heading}
 				<header class="cmp-head"><h2 class="cmp-head__title">{heading}</h2></header>
 			{/if}
-			<ul class="cmp-benefits" class:cmp-benefits--four={items.length === 4}>
+			<ul class="cmp-benefits" class:cmp-benefits--four={items.length === 4} class:cmp-benefits--icons={withIcons}>
 				{#each items as item, i (i)}
 					{@const Icon = benefitIcon(item.icon)}
 					<li class="cmp-benefit bg-card">
@@ -63,6 +65,10 @@
 
 	.cmp-benefit__words {
 		min-width: 0;
+	}
+
+	.cmp-benefits--icons .cmp-benefit__words:first-child {
+		padding-left: 36px;
 	}
 
 	.cmp-benefit__title {

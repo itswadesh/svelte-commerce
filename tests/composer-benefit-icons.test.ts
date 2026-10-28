@@ -44,5 +44,14 @@ describe('benefit icons', () => {
 		expect(items[1].querySelector('svg')).toBeNull()
 		expect(items[2].querySelector('svg')).toBeNull()
 		expect(items[0].textContent).toContain('Fast')
+		// Titles line up: one icon in the strip keeps the icon column for all.
+		expect(container.querySelector('ul')?.classList.contains('cmp-benefits--icons')).toBe(true)
+	})
+
+	it('keeps no icon column when no benefit has an icon', () => {
+		const { container } = render(Benefits, {
+			section: { id: 'b', type: 'benefits', settings: { items: [{ title: 'Plain' }, { title: 'Odd', icon: 'rocket' }] } }
+		})
+		expect(container.querySelector('ul')?.classList.contains('cmp-benefits--icons')).toBe(false)
 	})
 })
