@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { aliasedPath } from '$lib/server/path-aliases'
+import { aliasedPath } from '$lib/path-aliases'
 
 const at = (path: string) => aliasedPath(new URL(path, 'https://shop.test'))
 
