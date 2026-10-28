@@ -3,6 +3,17 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-28: The composed home page is "Bold and bright"
+
+The owner chose "Bold and bright" for the default theme (engine D140). The composer's sections draw
+it from the theme tokens, so a shop's colours restyle it: the hero's words sit on a block of the
+accent colour (`--primary` with `--primary-foreground`) beside the picture, columns without
+paragraphs become chunky rounded tiles two across on a phone with the whole tile one link, the
+picture-with-words section is one rounded block of the quiet colour, and the benefits strip is a
+dark band with the page's text and background colours swapped. Headings are heavier. Default
+pictures are to be made with Google Gemini; until they exist a section without one draws its colour
+block. The built-in home page (no layout published) is unchanged.
+
 ## 2026-10-27: Product picture shape and fit are set in GoCommerce
 
 The shop sets the shape of product pictures (square, portrait 3:4, tall 2:3, landscape 4:3) and

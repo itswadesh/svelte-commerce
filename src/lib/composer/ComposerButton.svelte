@@ -2,7 +2,7 @@
 	import { safeHref } from './helpers.js'
 
 	/** A section's call to action: always a link, rendered only when it has both words and a place to go. */
-	let { href, label, variant = 'primary' }: { href: unknown; label: string; variant?: 'primary' | 'outline' } = $props()
+	let { href, label, variant = 'primary' }: { href: unknown; label: string; variant?: 'primary' | 'outline' | 'inverse' } = $props()
 
 	const target = $derived(safeHref(href))
 </script>
@@ -35,6 +35,19 @@
 	.cmp-btn--primary {
 		background: hsl(var(--primary));
 		color: hsl(var(--primary-foreground));
+	}
+
+	/* On a block of the accent colour: the accent's own text colour as the fill. */
+	.cmp-btn--inverse {
+		border-color: hsl(var(--primary-foreground));
+		background: hsl(var(--primary-foreground));
+		color: hsl(var(--primary));
+	}
+
+	/* The page's accent ring would vanish on the accent block. */
+	.cmp-btn--inverse:focus-visible {
+		outline: 3px solid hsl(var(--primary-foreground));
+		outline-offset: 3px;
 	}
 
 	.cmp-btn--outline {

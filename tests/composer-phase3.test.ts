@@ -165,6 +165,10 @@ describe('new section helpers', () => {
 		expect(cols[0].link).toBe('')
 		expect(columnsClass(2)).toBe('grid-cols-1 md:grid-cols-2')
 		expect(columnsClass(9)).toBe('grid-cols-1 sm:grid-cols-2 lg:grid-cols-4')
+		// Tiles — no paragraphs in any column — sit two across on a phone.
+		expect(columnsClass(4, true)).toBe('grid-cols-2 lg:grid-cols-4')
+		expect(columnsClass(3, true)).toBe('grid-cols-2 md:grid-cols-3')
+		expect(columnsClass(2, true)).toBe('grid-cols-2')
 	})
 
 	it('keeps collection cards with a title and a link on this site', () => {
@@ -398,5 +402,31 @@ describe('MultiColumn', () => {
 		expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['Made here', 'Kept long'])
 		expect(screen.getByRole('link', { name: /Read more/ }).getAttribute('href')).toBe('/about')
 		expect(screen.queryByRole('link', { name: /Bad/ })).toBeNull()
+	})
+
+	it('draws columns without paragraphs as tiles, each one link named by its heading', () => {
+		const { container } = render(MultiColumn, {
+			section: section('multi-column', {
+				heading: 'Start shopping',
+				items: [
+					{ heading: 'Shop all', link: '/products', link_text: 'See everything' },
+					{ heading: 'Collections', link: '/collections', link_text: 'See collections' }
+				]
+			})
+		})
+		expect(container.querySelector('.cmp-mc--tiles')).not.toBeNull()
+		const links = screen.getAllByRole('link')
+		expect(links.map((a) => a.getAttribute('href'))).toEqual(['/products', '/collections'])
+		expect(links[0].textContent).toContain('Shop all')
+	})
+
+	it('keeps columns as columns when one has no link, and never draws an unnamed link', () => {
+		const { container } = render(MultiColumn, {
+			section: section('multi-column', {
+				items: [{ heading: 'Made here' }, { image: '/a.webp', link: '/products' }]
+			})
+		})
+		expect(container.querySelector('.cmp-mc--tiles')).toBeNull()
+		for (const a of screen.queryAllByRole('link')) expect(a.textContent?.trim()).not.toBe('')
 	})
 })

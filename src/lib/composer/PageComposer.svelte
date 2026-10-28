@@ -184,8 +184,8 @@
 	.cmp-home :global(.cmp-head__title) {
 		margin: 0;
 		font-family: var(--font-heading, inherit);
-		font-size: clamp(1.375rem, 2.4vw, 1.75rem);
-		font-weight: 500;
+		font-size: clamp(1.5rem, 3vw, 2.125rem);
+		font-weight: 700;
 		line-height: 1.15;
 		letter-spacing: -0.01em;
 		overflow-wrap: anywhere;
