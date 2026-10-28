@@ -28,14 +28,22 @@ export type Chrome = { header: SiteChrome | null; footer: SiteChrome | null }
 
 const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '')
 
-export type HeaderView = { announcement: { text: string; link: string | null; everyPage: boolean } | null }
+export type HeaderView = {
+	announcement: { text: string; link: string | null; everyPage: boolean } | null
+	/** False when the shop hid the header menu: no menu row, no phone menu button. */
+	menu: boolean
+}
 
-/** What the header draws from its settings: the strip, when it is on and has something to say. */
+/**
+ * What the header draws from its settings: the strip, when it is on and has something to say, and
+ * the menu unless the shop hid it — a header saved before `hide_menu` existed keeps its menu.
+ */
 export function headerView(settings: Record<string, unknown> | null | undefined): HeaderView {
 	const s = settings ?? {}
 	const text = str(s.announcement_text)
-	if (s.show_announcement !== true || !text) return { announcement: null }
-	return { announcement: { text, link: safeHref(s.announcement_link) || null, everyPage: s.announcement_pages !== 'home' } }
+	const menu = s.hide_menu !== true
+	if (s.show_announcement !== true || !text) return { announcement: null, menu }
+	return { announcement: { text, link: safeHref(s.announcement_link) || null, everyPage: s.announcement_pages !== 'home' }, menu }
 }
 
 /** The networks a footer links to, by the key the footer's marks are drawn under. */

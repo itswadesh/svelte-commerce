@@ -122,6 +122,9 @@
 				: null
 	)
 	const announcementShown = $derived(!!announcement && (announcement.everyPage || isHomepage))
+	// The shop can hide the header menu: then no menu row and no phone menu button, which is the
+	// only way into the drawer. Without a header page the menu shows, as before.
+	const menuShown = $derived(chromeHeader?.menu ?? true)
 	const helloBarHasContent = $derived(
 		!!(
 			navModule.helloBarPlugin?.active &&
@@ -208,20 +211,22 @@
 				     hiding this button at `md` left 768-1023px with no way to reach any category —
 				     no menu button, no links, and the category row below is plugin-gated. The two
 				     breakpoints now hand over to each other. -->
-				<Button
-					variant="ghost"
-					size="icon"
-					aria-label="Menu"
-					aria-expanded={navModule.openSidebar}
-					aria-controls="main-menu-drawer"
-					class="lg:hidden"
-					onclick={() => {
-						navModule.openSidebar = true
-					}}
-				>
-					<Menu class="text-foreground" />
-				</Button>
-				<MainNav />
+				{#if menuShown}
+					<Button
+						variant="ghost"
+						size="icon"
+						aria-label="Menu"
+						aria-expanded={navModule.openSidebar}
+						aria-controls="main-menu-drawer"
+						class="lg:hidden"
+						onclick={() => {
+							navModule.openSidebar = true
+						}}
+					>
+						<Menu class="text-foreground" />
+					</Button>
+				{/if}
+				<MainNav menu={menuShown} />
 			</div>
 
 			<!-- Below `sm` the header keeps the same shape on every route. It used to swap itself for a
@@ -230,22 +235,24 @@
 			     the one control there called history.back() — on a fresh tab that exits to
 			     about:blank. The listing already prints its own title and count in the page body. -->
 			<div class="flex items-center justify-center sm:hidden">
-				<Button
-					variant="ghost"
-					size="icon"
-					aria-label="Menu"
-					aria-expanded={navModule.openSidebar}
-					aria-controls="main-menu-drawer"
-					onclick={() => {
-						navModule.openSidebar = true
-					}}
-				>
-					<Menu class="text-foreground" />
-				</Button>
-				<MainNav />
+				{#if menuShown}
+					<Button
+						variant="ghost"
+						size="icon"
+						aria-label="Menu"
+						aria-expanded={navModule.openSidebar}
+						aria-controls="main-menu-drawer"
+						onclick={() => {
+							navModule.openSidebar = true
+						}}
+					>
+						<Menu class="text-foreground" />
+					</Button>
+				{/if}
+				<MainNav menu={menuShown} />
 			</div>
 
-			{#if navModule.megaMenuPluginActive}
+			{#if navModule.megaMenuPluginActive && menuShown}
 				<nav aria-label="Main navigation" class="hidden md:block">
 					<MegaMenu slim={isScrolled} />
 				</nav>
