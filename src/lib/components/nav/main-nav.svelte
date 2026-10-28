@@ -7,6 +7,9 @@
 	// The store's header menu: the one the shop chose in the theme editor's header (D131), which the
 	// connector already files under `header`, or a draft's choice while the editor is open.
 	const headerItems = $derived(chromeMenuItems('header', page?.data?.store?.menu))
+
+	// False when the shop hid the header menu: the logo stays, the links go.
+	let { menu = true }: { menu?: boolean } = $props()
 </script>
 
 <div class="mr-4 md:flex">
@@ -34,7 +37,7 @@
 		<!-- The header's navigation landmark. Exactly one renders: this list when the megamenu is
 		     off, and the MegaMenu's own <nav> when it is on, so a screen reader gets one "Main
 		     navigation" region either way. Before this the header exposed no landmark at all. -->
-		{#if !page?.data?.store?.plugins?.megamenu?.active}
+		{#if menu && !page?.data?.store?.plugins?.megamenu?.active}
 			<nav aria-label="Main navigation" class="ml-6 hidden items-center space-x-6 lg:flex">
 				<!-- Home link only when not on home page -->
 				<!-- {#if page?.url?.pathname !== '/'}

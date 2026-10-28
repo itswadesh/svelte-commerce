@@ -15,7 +15,8 @@ import {
 describe('the header the shop set', () => {
 	it('shows the announcement strip where the shop chose, with a link only when it is a safe one', () => {
 		expect(headerView({ show_announcement: true, announcement_text: ' Free returns ', announcement_link: '/products', announcement_pages: 'all' })).toEqual({
-			announcement: { text: 'Free returns', link: '/products', everyPage: true }
+			announcement: { text: 'Free returns', link: '/products', everyPage: true },
+			menu: true
 		})
 		expect(headerView({ show_announcement: true, announcement_text: 'Sale', announcement_pages: 'home' }).announcement).toEqual({
 			text: 'Sale',
@@ -29,6 +30,13 @@ describe('the header the shop set', () => {
 		expect(headerView({ show_announcement: false, announcement_text: 'Kept for later' }).announcement).toBeNull()
 		expect(headerView({ show_announcement: true }).announcement).toBeNull()
 		expect(headerView({}).announcement).toBeNull()
+	})
+
+	it('drops the menu only when the shop hid it; a header saved before the switch keeps it', () => {
+		expect(headerView({ hide_menu: true, menu: 'header' }).menu).toBe(false)
+		expect(headerView({ hide_menu: false }).menu).toBe(true)
+		expect(headerView({ menu: 'header' }).menu).toBe(true)
+		expect(headerView({ hide_menu: 'yes' }).menu).toBe(true)
 	})
 })
 
