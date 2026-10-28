@@ -16,6 +16,8 @@
 	// A phone-only picture still shows everywhere rather than leaving the hero bare on a computer.
 	const image = $derived(safeHref(s.image) || mobileImage)
 	const centered = $derived(text(s, 'align') === 'center')
+	// What the picture shows, as the shop wrote it; the heading names it otherwise.
+	const alt = $derived(text(s, 'image_alt') || heading)
 </script>
 
 {#if heading}
@@ -39,7 +41,7 @@
 						{/if}
 						<img
 							src={image}
-							alt={heading}
+							{alt}
 							width="1200"
 							height="900"
 							loading={priority ? 'eager' : 'lazy'}
