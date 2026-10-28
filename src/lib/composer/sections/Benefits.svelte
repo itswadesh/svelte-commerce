@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { benefitItems, text, type ComposerSection } from '../helpers.js'
+	import { benefitIcon } from '../benefit-icons.js'
 
-	/** Up to six short promises, each a title and a line. Statements, not links. */
+	/** Up to six short promises, each a title, a line and an optional icon. Statements, not links. */
 	let { section }: { section: ComposerSection } = $props()
 
 	const heading = $derived(text(section.settings, 'heading'))
@@ -16,10 +17,14 @@
 			{/if}
 			<ul class="cmp-benefits" class:cmp-benefits--four={items.length === 4}>
 				{#each items as item, i (i)}
+					{@const Icon = benefitIcon(item.icon)}
 					<li class="cmp-benefit bg-card">
-						<!-- An h3 only under a section heading; without one it would skip a level. -->
-						<svelte:element this={heading ? 'h3' : 'p'} class="cmp-benefit__title">{item.title}</svelte:element>
-						{#if item.body}<p class="cmp-benefit__body">{item.body}</p>{/if}
+						{#if Icon}<Icon class="cmp-benefit__icon" aria-hidden="true" />{/if}
+						<div class="cmp-benefit__words">
+							<!-- An h3 only under a section heading; without one it would skip a level. -->
+							<svelte:element this={heading ? 'h3' : 'p'} class="cmp-benefit__title">{item.title}</svelte:element>
+							{#if item.body}<p class="cmp-benefit__body">{item.body}</p>{/if}
+						</div>
 					</li>
 				{/each}
 			</ul>
@@ -38,9 +43,26 @@
 	}
 
 	.cmp-benefit {
+		display: flex;
+		align-items: flex-start;
+		gap: 14px;
 		padding: 18px;
 		border: 1px solid hsl(var(--border));
 		border-radius: var(--radius, 0.5rem);
+	}
+
+	/* The built-in home page's promise icons: line icons at 22px in the primary colour. */
+	.cmp-benefit :global(.cmp-benefit__icon) {
+		flex: none;
+		width: 22px;
+		height: 22px;
+		margin-top: 1px;
+		color: hsl(var(--primary));
+		stroke-width: 1.5;
+	}
+
+	.cmp-benefit__words {
+		min-width: 0;
 	}
 
 	.cmp-benefit__title {

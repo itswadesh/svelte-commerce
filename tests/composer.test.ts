@@ -95,7 +95,7 @@ describe('settings', () => {
 	it('keeps benefits with a title, at most six', () => {
 		const items = Array.from({ length: 8 }, (_, i) => ({ title: `T${i}`, body: 'b' }))
 		expect(benefitItems(items)).toHaveLength(6)
-		expect(benefitItems([{ title: '' }, { title: 'Kept', body: 7 }, 'junk'])).toEqual([{ title: 'Kept', body: '' }])
+		expect(benefitItems([{ title: '' }, { title: 'Kept', body: 7 }, 'junk'])).toEqual([{ title: 'Kept', body: '', icon: '' }])
 		expect(benefitItems(undefined)).toEqual([])
 	})
 })
