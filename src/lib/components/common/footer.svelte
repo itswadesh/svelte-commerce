@@ -275,7 +275,7 @@
 									{copyright}
 								{:else}
 									&copy; {new Date().getFullYear()}
-									<a href="/" class="text-foreground transition-colors hover:text-primary">{storeData?.name}</a>. All rights reserved.
+									<a href="/" class="text-foreground underline underline-offset-2 transition-colors hover:text-primary">{storeData?.name}</a>. All rights reserved.
 								{/if}
 								{#if creditLabel}
 									{#if creditLink}
