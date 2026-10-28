@@ -54,7 +54,8 @@ export async function load(event: any) {
 		theme: resolveStorefrontTheme(data?.store),
 		themeSettings,
 		// Which CMS-backed policy pages this store actually publishes, so the footer never links one
-		// that 404s. Resolved once per server process, and empty when the backend has no CMS.
-		cmsPages: await publishedCmsSlugs()
+		// that 404s — a page the store has only drafted included. Remembered per host for a minute,
+		// and empty when the backend has no CMS.
+		cmsPages: await publishedCmsSlugs(host)
 	}
 }

@@ -3,6 +3,16 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-28: A new store's footer links its standard pages, shown once published
+
+The owner asked that every new store get its mandatory pages, linked from the footer. GoCommerce
+now drafts About us, Contact us, Privacy policy, Terms and conditions, Shipping policy and Refund
+and returns policy for each new store and puts all six in its footer (engine decision D145). The
+footer hides a link to any of those pages until the store publishes it, under every name a menu
+uses for it (`/privacy-policy`, `/pages/privacy`, `/p/privacy-policy`), so a draft is never a dead
+link or placeholder text in front of shoppers. Contact us is the storefront's own form and always
+shows. Which pages a store publishes is remembered per store for a minute, not per server process.
+
 ## 2026-10-28: The composed home page is "Bold and bright"
 
 The owner chose "Bold and bright" for the default theme (engine D140). The composer's sections draw

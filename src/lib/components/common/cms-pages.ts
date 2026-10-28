@@ -1,4 +1,5 @@
 import { pageService } from '$lib/core/services/index.js'
+import { aliasedPath } from '$lib/path-aliases'
 
 /**
  * Which CMS-backed pages this store actually publishes.
@@ -23,10 +24,13 @@ function slugOf(path: string) {
 }
 
 /**
- * Resolved once per server process. The set changes only when a merchant authors a page, so a
- * per-request round trip would buy nothing; a deploy or restart picks up new pages.
+ * Remembered per store for a minute, as the connector remembers a store's menus. It used to be
+ * once per server process for every store: on a backend that serves many shops from one
+ * storefront, the first shop's pages decided every other shop's footer, and a page a merchant
+ * published stayed unlinked until a restart.
  */
-let cached: Promise<string[]> | null = null
+const TTL_MS = 60_000
+const cached = new Map<string, { at: number; slugs: Promise<string[]> }>()
 
 async function fetchPublishedSlugs(): Promise<string[]> {
 	const found: string[] = []
@@ -58,9 +62,33 @@ async function fetchPublishedSlugs(): Promise<string[]> {
 	return (await Promise.all(probes)).filter(Boolean) as string[]
 }
 
-export function publishedCmsSlugs(): Promise<string[]> {
-	cached ??= fetchPublishedSlugs().catch(() => [])
-	return cached
+/** `store` is whatever tells this request's shop apart — its host. */
+export function publishedCmsSlugs(store = ''): Promise<string[]> {
+	const hit = cached.get(store)
+	if (hit && Date.now() - hit.at < TTL_MS) return hit.slugs
+	const slugs = fetchPublishedSlugs().catch(() => [])
+	cached.set(store, { at: Date.now(), slugs })
+	return slugs
+}
+
+/**
+ * The CMS-backed path a link leads to, or null when it leads anywhere else. A link reaches those
+ * pages under other names too: a backend's own menus say `/pages/privacy` (redirected to
+ * `/privacy-policy`, see path-aliases.ts) or `/p/about-us`, the generic page route. Each of those
+ * 404s on an unpublished page exactly as the direct path does.
+ */
+function cmsPathOf(href: string): string | null {
+	if (!href.startsWith('/') || href.startsWith('//')) return null
+	let path: string
+	try {
+		const url = new URL(href, 'https://store.invalid')
+		path = aliasedPath(url) ?? (url.pathname.replace(/\/+$/, '') || '/')
+	} catch {
+		return null // a malformed escape in a merchant's link; the router will say what it is
+	}
+	const generic = /^\/p\/([^/]+)$/.exec(path)?.[1]
+	const target = generic ? `/${generic}` : path
+	return CMS_BACKED_PATHS.has(target) ? target : null
 }
 
 /**
@@ -72,19 +100,19 @@ export function publishedCmsSlugs(): Promise<string[]> {
  * shopper they agree to terms the store cannot show them is not something a working link would fix.
  */
 export function isCmsPageResolvable(href: string, published: Iterable<string>): boolean {
-	if (!CMS_BACKED_PATHS.has(href)) return true
-	return new Set(published).has(slugOf(href))
+	const path = cmsPathOf(href)
+	return !path || new Set(published).has(slugOf(path))
 }
 
 /**
- * Drop links to CMS pages this store does not publish. Anything that is not a CMS-backed path —
+ * Drop links to CMS pages this store does not publish, under any of their names (cmsPathOf), so a
+ * page a store has only drafted is never a footer link. Anything that is not a CMS-backed page —
  * `/products`, `/contact-us`, `/faqs`, `/blog`, an external URL — is left exactly as it is.
  */
 export function keepResolvableLinks<T extends { link?: string; href?: string }>(links: T[], published: Iterable<string>): T[] {
 	const available = new Set(published)
 	return links.filter((entry) => {
-		const href = entry?.link ?? entry?.href
-		if (!href || !CMS_BACKED_PATHS.has(href)) return true
-		return available.has(slugOf(href))
+		const path = cmsPathOf(entry?.link ?? entry?.href ?? '')
+		return !path || available.has(slugOf(path))
 	})
 }
