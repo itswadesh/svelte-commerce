@@ -116,6 +116,21 @@ export function pageHeadingSection(sections: ComposerSection[]): string | null {
 	return hero ? hero.id : null
 }
 
+/**
+ * The index of the first section that shows a picture, which loads with the page while every
+ * later one waits. A product grid counts: with no hero picture above it, its first card is what
+ * the shopper sees first. Only the first three sections qualify; anything lower starts off-screen.
+ */
+export function firstPictureSection(sections: ComposerSection[]): number {
+	const index = sections.findIndex((s) => {
+		const settings = s.settings ?? {}
+		if (s.type === 'hero') return !!text(settings, 'heading') && !!(safeHref(settings.image) || safeHref(settings.mobile_image))
+		if (s.type === 'slideshow') return slideItems(settings.slides).length > 0
+		return s.type === 'product-grid' && !!s.products?.length
+	})
+	return index < 3 ? index : -1
+}
+
 /** Benefits items with a title, at most six, as the engine's schema allows. */
 export function benefitItems(value: unknown): { title: string; body: string }[] {
 	if (!Array.isArray(value)) return []

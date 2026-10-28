@@ -8,7 +8,11 @@
 	 * A grid with nothing on sale renders nothing at all: an empty heading would promise products
 	 * the shopper cannot find.
 	 */
-	let { section, aspectRatio = '4 / 5' }: { section: ComposerSection; aspectRatio?: string } = $props()
+	let { section, aspectRatio = '4 / 5', priority = false }: { section: ComposerSection; aspectRatio?: string; priority?: boolean } = $props()
+
+	// Two rows of a phone grid are on screen at first. Their pictures come with the page instead of
+	// waiting for the script to wake them, which kept a phone's first product picture ~7 s late.
+	const PRIORITY_CARDS = 4
 
 	const s = $derived(section.settings ?? {})
 	const heading = $derived(text(s, 'heading'))
@@ -32,8 +36,8 @@
 				</header>
 			{/if}
 			<div class="grid gap-3 sm:gap-5 {columns}">
-				{#each products as product (product.id || product.slug)}
-					<ProductCard {product} {aspectRatio} />
+				{#each products as product, i (product.id || product.slug)}
+					<ProductCard {product} {aspectRatio} priority={priority && i < PRIORITY_CARDS} />
 				{/each}
 			</div>
 		</div>
