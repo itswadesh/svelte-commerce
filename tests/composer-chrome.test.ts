@@ -187,3 +187,11 @@ describe("the footer's newsletter sign-up", () => {
 		expect(canSubscribeToNewsletter({ newsletterService: { subscribe: async () => ({}) } })).toBe(true)
 	})
 })
+
+describe('the contact form', () => {
+	it("is offered where the engine's contact module is switched on, and otherwise only over the REST API", async () => {
+		const { canSubmitContactForm, servesStorefrontRestApi } = await import('$lib/components/common/store-capabilities')
+		expect(canSubmitContactForm([{ key: 'faq' }, { key: 'contact-form' }])).toBe(true)
+		expect(canSubmitContactForm([{ key: 'faq' }])).toBe(servesStorefrontRestApi())
+	})
+})
