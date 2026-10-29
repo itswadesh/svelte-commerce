@@ -3,6 +3,20 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-29: The contact page shows what the store published, and a map only on a tap
+
+The owner asked for a better contact page "can include a google map", as a feature every store gets
+from its own settings (engine decision D156). The page shows WhatsApp, call and email cards, the
+address, opening hours and a map, each only when the store set it; one it did not set is simply
+absent, and the JSON-LD asserts the same and nothing more. Google's map does not load with the page:
+a still map drawn in CSS with a "Show map" button stands in its place, and the frame, always on
+`www.google.com`, is put in when the shopper taps. "Open in Google Maps" is a plain link beside it.
+A map location the page cannot draw (a share link) is opened, never replaced by a map of the
+address it was set to correct. An Indian number reads as `+91 98765 43210` only when the store's
+published country is India; nothing is guessed from the currency or the template's default
+country. The page sends no CSP header of its own: a header on one page of a client-routed site
+stays for the rest of the visit and would block the YouTube and payment frames on later pages.
+
 ## 2026-10-29: One type and spacing scale on the default theme
 
 The owner asked for the default theme's font sizes, weights, alignment, spacing, density and line
