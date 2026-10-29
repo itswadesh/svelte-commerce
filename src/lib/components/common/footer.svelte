@@ -270,7 +270,7 @@
 							<!-- One sentence, sentence case. The uppercase treatment plus a line break before the full
 							     stop rendered as "© 2026 TEST . ALL RIGHTS RESERVED."; the build stamp that used to sit
 							     here as sr-only text was read out to screen readers and is now the footer's data-build. -->
-							<span class="text-xs text-muted-foreground">
+							<span class="ed-legal text-xs text-muted-foreground">
 								{#if copyright}
 									{copyright}
 								{:else}
@@ -340,8 +340,25 @@
 		color: var(--ed-soft);
 	}
 
+	/* Reading sizes from the type ladder, set here rather than in the markup so wine and organic,
+	   which share this footer, keep theirs. */
+	.ed :global(h2) {
+		font-size: var(--type-body);
+		font-weight: 600;
+		line-height: var(--leading-heading);
+	}
+
+	.ed :global(label) {
+		font-size: var(--type-ui);
+	}
+
+	.ed .ed-legal {
+		font-size: var(--type-dense);
+		line-height: var(--leading-ui);
+	}
+
 	.ed :global(a.hover\:text-foreground:hover),
 	.ed :global(a.hover\:text-primary:hover) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 </style>

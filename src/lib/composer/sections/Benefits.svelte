@@ -90,7 +90,7 @@
 		margin: 0;
 		font-family: var(--font-heading, inherit);
 		font-size: var(--type-heading, 1.0625rem);
-		font-weight: 700;
+		font-weight: var(--weight-heading, 700);
 		line-height: var(--leading-heading, 1.3);
 		overflow-wrap: anywhere;
 	}

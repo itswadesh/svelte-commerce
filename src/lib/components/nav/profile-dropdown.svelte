@@ -21,7 +21,7 @@
 	}
 
 	:global([data-theme='default'] .ed-pd-trigger:hover) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-pd-menu) {

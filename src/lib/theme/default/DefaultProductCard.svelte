@@ -9,12 +9,16 @@
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
+	import { themeOptions } from '$lib/composer/theme-options.js'
+	import { productBadge } from '$lib/product/badge.js'
 
 	const cartState = getCartState()
 
 	let { product, aspectRatio, hideCartControls = true, priority = false }: any = $props()
 
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
+	// What the card shows is the store's choice (its theme settings); unset, the defaults apply.
+	const options = $derived(themeOptions(page?.data?.themeSettings))
 
 	// The store's productImageAspectRatio is the fallback, not a hard-coded square. Only the
 	// homepage passed an explicit ratio, so the SAME three products rendered 2:3 portrait there
@@ -27,6 +31,7 @@
 	// label. A connector that normalises the product onto `name` used to leave the card with an
 	// image and a price and no title at all.
 	const displayName = $derived(product?.title || product?.name || '')
+	const vendor = $derived(options.card_vendor ? (product?.vendor?.businessName || product?.brand?.name || '').trim() : '')
 
 	// Variant-aware price. `product.price` is only the cheapest variant, so a product whose
 	// variants cost different amounts (a gift card at 25 or 50) advertised the low number as if
@@ -41,15 +46,19 @@
 	const maxPrice = $derived(variantPrices.length ? Math.max(...variantPrices) : product?.price)
 	const hasPriceRange = $derived(Number(maxPrice) > Number(minPrice))
 
-	const discount = $derived(product.mrp && product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0)
-	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
-	const tag = $derived(product?.material?.[0])
+	const discounted = $derived(options.card_discount && product.mrp && product.mrp > product.price)
+	const discount = $derived(discounted ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0)
+	const showWishlist = $derived(options.card_wishlist && page?.data?.store?.plugins?.isWishlist?.active)
+	const showCart = $derived(options.card_add_to_cart || !hideCartControls)
+
+	const badge = $derived(productBadge(product, options.card_badge))
 
 	// Score and count are different numbers. The badge used to print `ratings.length` whenever the
 	// backend sent reviews without a pre-computed score, so three one-star reviews read as a 3.
 	// Averaging matches the product page (product-title-section.svelte).
 	const ratingList = $derived(Array.isArray(product?.ratings) ? product.ratings : [])
 	const ratingScore = $derived.by(() => {
+		if (!options.card_rating) return 0
 		const direct = Number(product?.rating ?? (Array.isArray(product?.ratings) ? undefined : product?.ratings))
 		if (Number.isFinite(direct) && direct > 0) return Math.floor(direct * 10) / 10
 		const scores = ratingList.map((entry: any) => Number(entry?.rating)).filter((value: number) => Number.isFinite(value) && value > 0)
@@ -59,6 +68,15 @@
 	const ratingCount = $derived(ratingList.length || Number(product?.ratingCount) || 0)
 
 	const imageSrc = $derived(product.thumbnail || product?.image_url)
+	const secondSrc = $derived.by(() => {
+		if (!options.card_second_image) return ''
+		const list = Array.isArray(product?.imageList) ? product.imageList : String(product?.images ?? '').split(',')
+		return String(list.map((u: unknown) => String(u ?? '').trim()).find((u: string) => u && u !== imageSrc) ?? '')
+	})
+	// The second picture is fetched on the first mouse hover, not with the grid: a phone never
+	// hovers, so it never pays for a picture it cannot see.
+	let wantsSecond = $state(false)
+	let secondLoaded = $state(false)
 
 	// The image's own states. LazyImg keeps its pulsing placeholder up forever when a src 404s
 	// and shows the browser's broken-image glyph for priority images, which is two different
@@ -102,7 +120,15 @@
 			<!-- Same URL as the title link below. This used to append `?variant_id=`, often empty, so
 			     one product had two crawlable URLs and the image and title on a single card pointed
 			     at different ones. -->
-			<a data-testid="product-card-link" class="dpc__media-link" href="/products/{product.slug}" aria-label="View details of {displayName}">
+			<a
+				data-testid="product-card-link"
+				class="dpc__media-link"
+				href="/products/{product.slug}"
+				aria-label="View details of {displayName}"
+				onpointerenter={(e) => {
+					if (secondSrc && e.pointerType === 'mouse') wantsSecond = true
+				}}
+			>
 				<figure title={displayName} data-testid="product-card-image-container" class="dpc__media" style="aspect-ratio: var(--product-image-ratio, {mediaRatio});">
 					{#if imageSrc && !imageFailed}
 						<div
@@ -120,6 +146,11 @@
 								{priority}
 							/>
 						</div>
+						{#if wantsSecond}
+							<div class="dpc__frame dpc__second" class:is-ready={secondLoaded} aria-hidden="true" onloadcapture={() => (secondLoaded = true)}>
+								<LazyImg src={secondSrc} alt="" sizes="(min-width: 1280px) 14vw, (min-width: 1024px) 17vw, 21vw" class="dpc__img" />
+							</div>
+						{/if}
 						{#if !imageLoaded}
 							<!-- Covers LazyImg's own hard-coded grey pulse, and covers the gap a priority
 							     image leaves while it downloads, at the reserved size. -->
@@ -131,9 +162,9 @@
 						</div>
 					{/if}
 
-					{#if tag}
+					{#if badge}
 						<div class="dpc__tag">
-							<span data-testid="product-card-tag">{tag}</span>
+							<span data-testid="product-card-tag">{badge}</span>
 						</div>
 					{/if}
 
@@ -151,12 +182,28 @@
 							{/if}
 						</div>
 					{/if}
+				</figure>
+			</a>
 
-					{#if wishlistPlugin?.active}
+			<div data-testid="product-card-info-wrapper" class="dpc__info">
+				<!-- Name (with the brand above it when the store shows one) and the heart on one row,
+				     under the picture rather than over it, so it is on screen on a phone too. -->
+				<div class="dpc__head">
+					<a href="/products/{product.slug}" class="dpc__title-link">
+						{#if vendor}
+							<span class="dpc__vendor" data-testid="product-card-vendor">{vendor}</span>
+						{/if}
+						<span class="dpc__title" class:has-vendor={!!vendor} class:is-two={options.card_title_lines === 'two'} data-testid="product-title" title={displayName}
+							>{displayName}</span
+						>
+					</a>
+
+					{#if showWishlist}
 						<button
 							type="button"
 							class="dpc__wish"
 							data-testid="wishlist-button"
+							aria-pressed={!!isWishlisted}
 							aria-label={isWishlisted ? `Remove ${displayName} from wishlist` : `Add ${displayName} to wishlist`}
 							onclick={(e) => {
 								e.stopPropagation()
@@ -170,13 +217,7 @@
 							{/key}
 						</button>
 					{/if}
-				</figure>
-			</a>
-
-			<div data-testid="product-card-info-wrapper" class="dpc__info">
-				<a href="/products/{product.slug}" class="dpc__title-link">
-					<span class="dpc__title" data-testid="product-title" title={displayName}>{displayName}</span>
-				</a>
+				</div>
 
 				<div class="dpc__price" data-testid="product-card-price-container">
 					{#if hasPriceRange}
@@ -185,7 +226,7 @@
 					<span data-testid="product-card-selling-price" class="dpc__price-now">
 						{formatPrice(minPrice, currencyCode)}
 					</span>
-					{#if product.mrp && product.mrp > product.price}
+					{#if discounted}
 						<span class="dpc__price-mrp" data-testid="product-card-mrp">
 							{formatPrice(product.mrp, currencyCode)}
 						</span>
@@ -193,7 +234,7 @@
 					{/if}
 				</div>
 
-				{#if !hideCartControls}
+				{#if showCart}
 					<div class="dpc__cart">
 						{#if cartState?.cart?.lineItems?.some((item: CartLineItem) => item.productId === product.id)}
 							<div class="dpc__qty">
@@ -221,7 +262,7 @@
 								{#if cartState?.isUpdatingCart}
 									<LoadingDots />
 								{:else}
-									Quick add
+									Add to bag
 								{/if}
 							</button>
 						{/if}
@@ -233,9 +274,9 @@
 </ProductCardRenderer>
 
 <style>
-	/* Picture, title, price and cart are four rows of the grid the cards sit in (subgrid), so a
-	   row of cards shares one title height: one-line names leave no blank line under them, and a
-	   row with a two-line name still lines its prices up. Outside a grid the rows are just auto. */
+	/* Picture, name, price and cart are four rows of the grid the cards sit in (subgrid), so a
+	   row of cards shares one name height and its prices line up. Outside a grid the rows are
+	   just auto. */
 	.dpc {
 		position: relative;
 		display: grid;
@@ -277,6 +318,22 @@
 		display: block;
 	}
 
+	/* The second picture lies over the first and fades in under the pointer once it has loaded. */
+	.dpc__second {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		opacity: 0;
+		background: var(--ed-surface);
+		transition: opacity var(--motion-emphasis) var(--motion-ease);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.dpc__media-link:hover .dpc__second.is-ready {
+			opacity: 1;
+		}
+	}
+
 	/* LazyImg's own placeholder is a hard-coded grey pulse that never stops when a src 404s, and
 	   priority images skip it altogether. The card owns the loading and error surfaces instead —
 	   the package component is not edited, its placeholder is simply not used here. */
@@ -294,8 +351,8 @@
 	}
 
 	/* The card surface with a hairline, not the muted fill. A merchant palette can set --muted to a
-	   mid tone — this store ships 240 10% 70% — and a grid of mid-grey blocks where the photographs
-	   belong reads as broken images rather than as "no photo yet". Matches the product page. */
+	   mid tone, and a grid of mid-grey blocks where the photographs belong reads as broken images
+	   rather than as "no photo yet". Matches the product page. */
 	.dpc :global(.dpc__skeleton),
 	.dpc__empty {
 		background: hsl(var(--card));
@@ -321,17 +378,24 @@
 		position: absolute;
 		left: 8px;
 		top: 8px;
+		right: 8px;
 		z-index: 2;
+		display: flex;
 	}
 
+	/* 11px: the one size UX_SYSTEM reserves for a badge. */
 	.dpc__tag span {
-		display: inline-block;
-		padding: 3px 7px;
-		background: var(--ed-surface);
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		padding: 3px 6px;
+		background: hsl(var(--card) / 0.92);
 		color: var(--ed-ink);
 		font-size: 0.6875rem;
 		font-weight: 600;
-		border-radius: 2px;
+		line-height: 1.2;
+		border-radius: max(0px, calc(var(--radius) - 4px));
 	}
 
 	.dpc__rating {
@@ -342,12 +406,14 @@
 		display: flex;
 		align-items: center;
 		gap: 3px;
-		padding: 2px 6px;
-		background: var(--ed-surface);
+		padding: 3px 7px;
+		background: hsl(var(--card) / 0.92);
 		border-radius: 999px;
-		font-size: 0.6875rem;
+		font-size: var(--type-dense);
 		font-weight: 600;
+		line-height: 1.2;
 		color: var(--ed-ink);
+		font-variant-numeric: tabular-nums;
 	}
 
 	.dpc__rating svg {
@@ -359,152 +425,159 @@
 		color: var(--ed-soft);
 	}
 
-	.dpc__wish {
-		position: absolute;
-		right: 6px;
-		top: 6px;
-		z-index: 2;
-		display: grid;
-		place-items: center;
-		/* Touch first: a 44px box with the same 16px heart inside it, so the visual weight is
-		   unchanged and the target is not a 34px square sitting on top of the card link. */
-		width: 44px;
-		height: 44px;
-		border: 0;
-		border-radius: 999px;
-		background: hsl(var(--card) / 0.85);
-		backdrop-filter: blur(4px);
-		cursor: pointer;
-		transform: translateY(0);
-		transition:
-			opacity var(--motion-fast) var(--motion-ease),
-			transform var(--motion-fast) var(--motion-ease),
-			background var(--motion-fast) var(--motion-ease);
-	}
-
-	/* Reveal-on-hover is for pointers only. A phone has no hover, so the heart was never on
-	   screen for the majority audience and saving a product meant opening it first. */
-	@media (hover: hover) and (pointer: fine) {
-		.dpc__wish {
-			right: 8px;
-			top: 8px;
-			width: 32px;
-			height: 32px;
-			opacity: 0;
-			transform: translateY(-4px);
-		}
-
-		.dpc:hover .dpc__wish,
-		.dpc__wish:focus-visible {
-			opacity: 1;
-			transform: translateY(0);
-		}
-
-		.dpc__wish:hover {
-			background: hsl(var(--card));
-		}
-	}
-
-	.dpc :global(.dpc__wish-icon) {
-		width: 16px;
-		height: 16px;
-		stroke-width: 1.6;
-		color: var(--ed-ink);
-	}
-
-	.dpc :global(.dpc__wish-icon.is-on) {
-		fill: hsl(var(--primary));
-		color: hsl(var(--primary));
-	}
-
-	/* The caption is two facts — what it is, what it costs — so it is one tight block under the
-	   photograph rather than three spaced rows. 8px from the image and 3px between the lines,
-	   against 12px and 6px: at four to five cards per row that is ~14px off every grid row. */
 	.dpc__info {
 		display: contents;
 	}
 
-	.dpc__title-link {
-		display: block;
+	.dpc__head {
+		display: flex;
+		align-items: flex-start;
+		gap: 4px;
 		padding-top: 8px;
+	}
+
+	.dpc__title-link {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 1px;
+		min-width: 0;
 		color: inherit;
 	}
 
-	/* Still two lines, deliberately: the catalogue is full of products whose names differ only in
-	   the tail ("…14k Rose Gold" against "…10k Yellow Gold"), and clamping to one would make
-	   neighbouring cards indistinguishable. No reserved height: the card's subgrid row takes the
-	   tallest name in the grid row, so prices share a baseline without a blank line under every
-	   one-line name. */
+	.dpc__vendor {
+		overflow: hidden;
+		font-size: var(--type-ui);
+		font-weight: 700;
+		line-height: 1.35;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		color: var(--ed-ink);
+	}
+
+	/* One line or two is the store's choice (card_title_lines). Under a brand line the name is
+	   the supporting detail, so it steps back to the muted colour. */
 	.dpc__title {
-		font-size: 0.8125rem;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
+		-webkit-box-orient: vertical;
+		font-size: var(--type-ui);
 		font-weight: 500;
 		line-height: 1.35;
 		color: var(--ed-ink);
-		overflow: hidden;
-		display: -webkit-box;
+		text-underline-offset: 3px;
+	}
+
+	.dpc__title.is-two {
 		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		transition: color var(--motion-fast) var(--motion-ease);
+		line-clamp: 2;
 	}
 
-	.dpc:hover .dpc__title {
-		color: hsl(var(--primary));
+	.dpc__title.has-vendor {
+		font-weight: 400;
+		color: var(--ed-soft);
 	}
 
-	/* Price and was-price, then the saving on its own line. Squeezing all three onto one line only
-	   worked for some prices at some card widths. The subgrid row keeps cards in one grid row level
-	   whichever of them has a saving. Nothing is hidden at any width. */
+	.dpc__title-link:hover .dpc__title {
+		text-decoration: underline;
+	}
+
+	/* A 44px target on touch around a 20px heart; the negative margins keep it from making the name
+	   row taller. A mouse gets a 32px box. */
+	.dpc__wish {
+		display: grid;
+		flex: none;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		margin: -12px -12px -12px 0;
+		border: 0;
+		border-radius: 999px;
+		background: transparent;
+		color: var(--ed-ink);
+		cursor: pointer;
+		transition:
+			background var(--motion-fast) var(--motion-ease),
+			transform var(--motion-fast) var(--motion-ease);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.dpc__wish {
+			width: 32px;
+			height: 32px;
+			margin: -6px -6px -6px 0;
+		}
+
+		.dpc__wish:hover {
+			background: hsl(var(--muted));
+		}
+	}
+
+	.dpc__wish:active {
+		transform: scale(0.9);
+	}
+
+	.dpc :global(.dpc__wish-icon) {
+		width: 20px;
+		height: 20px;
+		stroke-width: 1.6;
+		transition: fill var(--motion-fast) var(--motion-ease);
+	}
+
+	.dpc :global(.dpc__wish-icon.is-on) {
+		fill: hsl(var(--primary-ink));
+		color: hsl(var(--primary-ink));
+	}
+
+	/* Price, was-price and saving on one line; it wraps only when a card is too narrow for all
+	   three. The subgrid row keeps a grid row's prices level whichever wraps. */
 	.dpc__price {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: baseline;
 		align-content: flex-start;
-		column-gap: 5px;
-		row-gap: 2px;
-		margin-top: 3px;
-		/* The price sizes itself against the card, not the viewport: the same card is 170px wide in
-		   two columns on a phone and 154px in three on a tablet. The container is the price row, not
+		column-gap: 6px;
+		row-gap: 0;
+		margin-top: 2px;
+		/* The price sizes itself against the card, not the viewport: the same card is ~160px wide in
+		   two columns on a phone and ~150px in three on a tablet. The container is the price row, not
 		   the card, because a container is layout-contained and the card could not be a subgrid. */
 		container-type: inline-size;
-		line-height: 1.25;
+		line-height: 1.35;
 		font-variant-numeric: tabular-nums;
 	}
 
 	.dpc__price-from {
-		font-size: 0.75rem;
+		font-size: var(--type-dense);
 		font-weight: 500;
 		color: var(--ed-soft);
 	}
 
 	.dpc__price-now {
-		font-size: 0.875rem;
+		font-size: var(--type-body);
 		font-weight: 700;
 		color: var(--ed-ink);
 	}
 
 	.dpc__price-mrp {
-		font-size: 0.75rem;
+		font-size: var(--type-dense);
 		color: var(--ed-soft);
 		text-decoration: line-through;
 	}
 
 	.dpc__price-off {
-		flex-basis: 100%;
-		font-size: 0.75rem;
-		font-weight: 600;
+		font-size: var(--type-dense);
+		font-weight: 700;
 		white-space: nowrap;
-		color: hsl(var(--success));
+		color: hsl(var(--sale));
 	}
 
-	/* Narrow cards (three per row at 768px, a 360px phone) step the price down so price and
-	   was-price keep to the first line. Nothing drops below 12px. */
+	/* Narrow cards step the price down a role so price and was-price keep to the first line. */
 	@container (max-width: 172px) {
 		.dpc__price-now {
-			font-size: 0.8125rem;
-		}
-
-		.dpc__price-off {
-			font-size: 0.75rem;
+			font-size: var(--type-ui);
 		}
 	}
 
@@ -515,7 +588,7 @@
 	.dpc__add {
 		width: 100%;
 		height: 44px;
-		border: 1px solid var(--ed-ink);
+		border: 1px solid var(--ed-line-strong);
 		border-radius: var(--ed-radius);
 		background: transparent;
 		color: var(--ed-ink);
@@ -526,8 +599,9 @@
 	}
 
 	.dpc__add:hover:not(:disabled) {
-		background: var(--ed-ink);
-		color: var(--ed-canvas);
+		border-color: hsl(var(--primary));
+		background: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
 	}
 
 	.dpc__add:disabled {
@@ -605,6 +679,7 @@
 	.dpc__add {
 		transition:
 			background var(--motion-fast) var(--motion-ease),
+			border-color var(--motion-fast) var(--motion-ease),
 			color var(--motion-fast) var(--motion-ease),
 			transform var(--motion-fast) var(--motion-ease);
 	}
@@ -612,12 +687,9 @@
 	.dpc__qty button:active:not(:disabled) {
 		transform: scale(0.97);
 	}
-	.dpc :global(.dpc__wish-icon) {
-		transition:
-			fill var(--motion-fast) var(--motion-ease),
-			color var(--motion-fast) var(--motion-ease);
-	}
 
+	/* Still: no zoom, press or pop. The second picture and the colour changes still fade, so every
+	   hover and tap still answers. */
 	@media (prefers-reduced-motion: reduce) {
 		.dpc :global(.dpc__skeleton) {
 			animation: none;

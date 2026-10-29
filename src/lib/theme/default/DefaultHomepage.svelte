@@ -641,7 +641,7 @@
 	.ed-hero h1 em {
 		display: block;
 		font-style: normal;
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	.ed-hero__text {
@@ -1055,7 +1055,7 @@
 
 	.ed-cat:hover :global(.ed-cat__icon) {
 		transform: translate(3px, -3px);
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	/* ---------- HOME PAGE GRIDS (merchant sections from the admin Home page) ---------- */
@@ -1233,7 +1233,7 @@
 		width: 22px;
 		height: 22px;
 		flex: none;
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 		stroke-width: 1.5;
 	}
 
@@ -1292,7 +1292,7 @@
 
 	.ed-news__form input:focus {
 		outline: none;
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 	}
 
 	.ed-news__form button {
@@ -1323,7 +1323,7 @@
 
 	.ed-news__thanks {
 		margin: 20px 0 0;
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 		font-size: 1rem;
 		font-weight: 600;
 	}

@@ -201,7 +201,7 @@
 		margin: 0;
 		font-family: var(--font-heading, inherit);
 		font-size: var(--type-section-title, clamp(1.5rem, 3vw, 2.125rem));
-		font-weight: 700;
+		font-weight: var(--weight-heading, 700);
 		line-height: var(--leading-title, 1.15);
 		letter-spacing: var(--tracking-title, -0.01em);
 		overflow-wrap: anywhere;
@@ -272,12 +272,12 @@
 	}
 
 	.cmp-home :global(.cmp-edit:hover::after) {
-		border-color: hsl(var(--primary) / 0.45);
+		border-color: hsl(var(--primary-ink) / 0.45);
 	}
 
 	.cmp-home :global(.cmp-edit:focus-visible::after),
 	.cmp-home :global(.cmp-edit--selected::after) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 	}
 
 	/* A section with nothing to show yet — a grid before its products are saved, a hero before its

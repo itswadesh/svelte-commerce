@@ -7,6 +7,8 @@
 	import SizeGuideDrawer from './size-guide-drawer.svelte'
 	import OptionPicker from './option-picker.svelte'
 	import { pickerChoices, usesSearchablePicker, variantFor, variantsWith } from '$lib/product/conversion'
+	import { themeOptions } from '$lib/composer/theme-options.js'
+	import { ChevronRight } from '@lucide/svelte'
 
 	const productState = useProductState()
 
@@ -101,6 +103,30 @@
 		return 'default'
 	}
 
+	const theme = $derived(themeOptions(page.data?.themeSettings))
+	const lowStockAt = $derived(theme.pdp_low_stock_at)
+	const sizeGuide = $derived(theme.pdp_size_guide)
+
+	const lowLeftOf = (variant: any) => {
+		if (variant?.manageInventory === false || variant?.allowBackorder) return 0
+		const n = Number(variant?.stock ?? 0)
+		return n > 0 && n <= lowStockAt ? n : 0
+	}
+
+	/**
+	 * "2 left" under a value of the last option, where a value names one variant: from that variant's
+	 * own stock, and only at or below the store's pdp_low_stock_at. The line is reserved whenever any
+	 * variant is that low, because the server renders before the selection is known, and a hint that
+	 * appeared at hydration would push the button down.
+	 */
+	const lastOptionId = $derived(options.at(-1)?.id)
+	const reservesHint = $derived(lowStockAt > 0 && variants.some((v) => lowLeftOf(v) > 0))
+	const leftFor = (optionId: unknown, value: string) => {
+		if (!reservesHint || !sameId(optionId, lastOptionId)) return 0
+		const candidates = variantsFor(optionId, value)
+		return candidates.length === 1 ? lowLeftOf(candidates[0]) : 0
+	}
+
 	const unavailableReason = (status: string) => {
 		if (status === 'soldout') return 'sold out'
 		if (status === 'unavailable') return 'unavailable with the current selection'
@@ -179,7 +205,15 @@
 						{/if}
 					</h2>
 
-					{#if option.type === 'Size'}
+					{#if sizeGuide && /size/i.test(option.title ?? '')}
+						<a
+							href={sizeGuide}
+							class="edp-sizeguide inline-flex min-h-6 items-center gap-0.5 text-[length:var(--type-ui,0.875rem)] font-semibold text-info"
+						>
+							Size guide
+							<ChevronRight class="size-4" aria-hidden="true" />
+						</a>
+					{:else if option.type === 'Size'}
 						<SizeGuideDrawer />
 					{/if}
 				</div>
@@ -220,22 +254,34 @@
 									<span class="sr-only">{v.value}{isBlocked ? ` — ${unavailableReason(status)}` : ''}</span>
 								</Button>
 							{:else}
-								<Button
-									variant="plain"
-									data-testid="variant-option"
-									aria-pressed={isSelected}
-									disabled={isBlocked}
-									title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : undefined}
-									class="edp-pill h-11 min-w-[3.5rem] border px-4 text-sm font-medium md:h-10 {isSelected
-										? 'edp-on border-primary bg-primary text-primary-foreground'
-										: 'border-border-strong bg-background text-foreground hover:border-foreground'}"
-									onclick={(event) => choose(event, option, v)}
-								>
-									{v.value}
-									{#if isBlocked}
-										<span class="sr-only">— {unavailableReason(status)}</span>
+								{@const left = isBlocked ? 0 : leftFor(option.id, v.value)}
+								<span class="inline-flex flex-col items-center gap-0.5">
+									<Button
+										variant="plain"
+										data-testid="variant-option"
+										aria-pressed={isSelected}
+										disabled={isBlocked}
+										title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : undefined}
+										class="edp-pill h-11 min-w-[3.5rem] border px-4 text-sm font-medium md:h-10 {isSelected
+											? 'edp-on border-primary bg-primary text-primary-foreground'
+											: 'border-border-strong bg-background text-foreground hover:border-foreground'}"
+										onclick={(event) => choose(event, option, v)}
+									>
+										{v.value}
+										{#if isBlocked}
+											<span class="sr-only">— {unavailableReason(status)}</span>
+										{:else if left}
+											<span class="sr-only">, {left} left</span>
+										{/if}
+									</Button>
+									{#if reservesHint && sameId(option.id, lastOptionId)}
+										<span
+											class="min-h-4 text-[length:var(--type-dense,0.8125rem)] font-semibold leading-4 text-warning"
+											aria-hidden="true"
+											data-testid="variant-low-stock">{left ? `${left} left` : ''}</span
+										>
 									{/if}
-								</Button>
+								</span>
 							{/if}
 						{/each}
 					</div>
@@ -279,7 +325,6 @@
 		font-size: var(--type-ui);
 		font-weight: 500;
 		text-transform: none;
-		box-shadow: none !important;
 		transition:
 			border-color var(--motion-fast) var(--motion-ease),
 			background var(--motion-fast) var(--motion-ease),
@@ -291,9 +336,20 @@
 	}
 
 	:global([data-theme='default'] .edp-pill.edp-on) {
-		border-color: hsl(var(--primary)) !important;
+		/* The fill alone is 1.44:1 on white, so the chosen value also takes a 2px ink edge. */
+		border-color: hsl(var(--primary-ink)) !important;
 		background: hsl(var(--primary)) !important;
 		color: hsl(var(--primary-foreground)) !important;
+	}
+
+	/* Flat at rest, and the inner edge only while not focused, so the global focus ring (a box
+	   shadow) still shows on a pill, the chosen one included. */
+	:global([data-theme='default'] .edp-pill:not(:focus-visible)) {
+		box-shadow: none !important;
+	}
+
+	:global([data-theme='default'] .edp-pill.edp-on:not(:focus-visible)) {
+		box-shadow: inset 0 0 0 1px hsl(var(--primary-ink)) !important;
 	}
 
 	/* Reserved for values the catalogue has actually excluded — a combination that does not exist
@@ -305,6 +361,10 @@
 
 	:global([data-theme='default'] .edp-swatch) {
 		border-color: var(--ed-line-strong) !important;
+	}
+
+	/* The chosen swatch is marked by its ring, so only an unchosen, unfocused one is flattened. */
+	:global([data-theme='default'] .edp-swatch:not(.edp-on):not(:focus-visible)) {
 		box-shadow: none !important;
 	}
 

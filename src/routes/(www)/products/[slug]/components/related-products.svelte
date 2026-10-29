@@ -131,7 +131,7 @@
 		margin: 4px 0 0;
 		text-align: start;
 		font-family: var(--ed-display);
-		font-weight: 700;
+		font-weight: var(--weight-heading);
 		letter-spacing: var(--tracking-title);
 		font-size: var(--type-section-title);
 		line-height: var(--leading-title);

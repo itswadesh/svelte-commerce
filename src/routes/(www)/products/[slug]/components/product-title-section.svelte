@@ -22,6 +22,8 @@
 	// the leaf carries no `category.name`, so the eyebrow rendered as an empty paragraph that still
 	// spent its 12px bottom margin — dead space at the very top of the buy box.
 	const categoryName = $derived(product?.categories?.[product.categories.length - 1]?.category?.name || '')
+	// The brand above the name, when the product names one.
+	const vendor = $derived(String(product?.vendor?.businessName || product?.brand?.name || '').trim())
 
 	// The selected variant, as a line under the heading. "default" is the connector's placeholder
 	// for a product with no real options, and a single-variant product has nothing to disambiguate,
@@ -35,7 +37,9 @@
 </script>
 
 <div class="edp-titlewrap relative">
-	{#if categoryName}
+	{#if vendor}
+		<p class="edp-vendor text-[length:var(--type-ui,0.875rem)] font-bold leading-tight text-foreground" data-testid="product-vendor">{vendor}</p>
+	{:else if categoryName}
 		<p class="edp-cat text-xs font-semibold leading-tight max-sm:hidden">{categoryName}</p>
 	{/if}
 
@@ -79,8 +83,10 @@
 		</div>
 	{/if}
 
+	<!-- Below 1024px the rating sits on the picture just above (product-gallery.svelte); beside the
+	     gallery on a desktop it is here, next to the name. -->
 	{#if reviewCount > 0}
-		<div class="edp-reviewrow mt-3 flex items-center gap-4">
+		<div class="edp-reviewrow mt-3 hidden items-center gap-4 lg:flex">
 			<div class="flex items-center gap-2">
 				<div class="relative flex items-center">
 					<div class="flex gap-0.5">
@@ -127,7 +133,7 @@
 
 	:global([data-theme='default'] .edp-title) {
 		font-family: var(--ed-display);
-		font-weight: 700;
+		font-weight: var(--weight-heading);
 		letter-spacing: var(--tracking-title);
 		/* The product-title step, 24px on a phone to 28px. Was clamp(1.55rem, 2.6vw, 2.3rem) —
 		   36.8px at 1440, where the name in a half-width column dwarfed the price and every control
