@@ -8,6 +8,8 @@ describe('themeOptions', () => {
 		expect(themeOptions(null)).toEqual(DEFAULT_THEME_OPTIONS)
 		expect(themeOptions({}).list_columns_desktop).toBe('five')
 		expect(themeOptions({}).pdp_low_stock_at).toBe(5)
+		expect(themeOptions({}).card_badge).toBe('product_badge')
+		expect(themeOptions({ card_badge: 'first_tag' }).card_badge).toBe('first_tag')
 	})
 
 	it("uses each setting the store made, from its list", () => {
@@ -45,7 +47,7 @@ describe('themeOptions', () => {
 			pdp_low_stock_at: 50,
 			pdp_size_guide: 'https://elsewhere.example/size'
 		})
-		expect(o.card_badge).toBe('first_tag')
+		expect(o.card_badge).toBe('product_badge')
 		expect(o.card_vendor).toBe(true)
 		expect(o.list_columns_desktop).toBe('five')
 		expect(o.pdp_low_stock_at).toBe(5)

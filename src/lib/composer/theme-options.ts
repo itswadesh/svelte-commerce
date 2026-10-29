@@ -10,7 +10,7 @@
  */
 
 const CHOICES = {
-	card_badge: ['none', 'first_tag', 'first_highlight'],
+	card_badge: ['none', 'product_badge', 'first_tag', 'first_highlight'],
 	card_title_lines: ['one', 'two'],
 	list_columns_mobile: ['one', 'two'],
 	list_columns_desktop: ['three', 'four', 'five'],
@@ -40,7 +40,7 @@ export type ThemeOptions = { [K in keyof typeof CHOICES]: Choice<K> } & {
 }
 
 export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
-	card_badge: 'first_tag',
+	card_badge: 'product_badge',
 	card_vendor: true,
 	card_title_lines: 'one',
 	card_rating: true,

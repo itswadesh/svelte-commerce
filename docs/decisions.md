@@ -3,6 +3,15 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-29: A product's own badge is the label on its picture
+
+GoCommerce gives each product a one-line Badge (engine metadata key `badge`), and the theme setting
+`card_badge` gains `product_badge`, the default for a new store. The storefront takes the same
+default when the setting is unset: a card and the product page's picture show the badge the
+merchant wrote for that product, and a product without one shows no label, rather than its first
+tag. `first_tag` and `first_highlight` still pick those sources, and `none` shows nothing. The
+storefront reads the product's `metadata.badge`, the way highlights and free gifts arrive (D134).
+
 ## 2026-10-29: Prices drop ".00" and group their digits the shopper's way
 
 Asked whether ₹2799.00 should read ₹2,799, the owner said "yes drop". A whole amount shows no
