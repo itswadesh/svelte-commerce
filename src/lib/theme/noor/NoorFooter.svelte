@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
 
 	type ThemeFooter = NonNullable<ThemeHomepageContent['footer']>
@@ -16,8 +17,8 @@
 
 <footer class="noor-footer">
 	<div class="noor-footer-brand">
-		{#if footer?.logo}
-			<img src={footer.logo} alt={footer.logoAlt || brandName} />
+		{#if footer?.logo || page.data?.store?.logo}
+			<img src={footer?.logo || page.data.store.logo} alt={footer?.logoAlt || brandName} />
 		{:else if brandName}
 			<!-- No uploaded logo: the brand name carries the mark, same as the header. -->
 			<p class="noor-footer-wordmark">{brandName}</p>
