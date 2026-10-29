@@ -162,7 +162,7 @@
 	   padding (bands 32-64px, the hero 12-32px, the benefits strip 28-48px), so the gaps on one page
 	   ran from 24px to over 100px depending on which pair met. */
 	.cmp-home {
-		--cmp-gap: clamp(24px, 3vw, 40px);
+		--cmp-gap: var(--section-gap);
 		display: flex;
 		flex-direction: column;
 		gap: var(--cmp-gap);

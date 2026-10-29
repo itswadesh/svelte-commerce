@@ -167,8 +167,16 @@ const config: Config = {
 			backdropBlur: {
 				xs: '4px'
 			},
+			// Type by role, from the --text-* ladder in src/app.css (the store's type_scale moves it).
 			fontSize: {
-				xxs: '10px'
+				xxs: '10px',
+				display: ['var(--text-display)', { lineHeight: '1.1', fontWeight: 'var(--heading-weight)' }],
+				'page-title': ['var(--text-page-title)', { lineHeight: '1.2', fontWeight: 'var(--heading-weight)' }],
+				section: ['var(--text-section)', { lineHeight: '1.25', fontWeight: 'var(--heading-weight)' }],
+				subsection: ['var(--text-subsection)', { lineHeight: '1.3', fontWeight: '600' }],
+				body: ['var(--text-body)', { lineHeight: '1.5' }],
+				supporting: ['var(--text-supporting)', { lineHeight: '1.45' }],
+				caption: ['var(--text-caption)', { lineHeight: '1.4' }]
 			},
 			// One named z-index scale, backed by the --z-* properties in src/app.css so the
 			// call sites a utility cannot reach — inline styles and component <style> blocks —

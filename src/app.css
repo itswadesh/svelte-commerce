@@ -119,6 +119,23 @@
 		   footer sit on the same rail instead of four different max-widths and gutter scales. */
 		--container-max: 1240px;
 		--container-gutter: clamp(16px, 4vw, 32px);
+
+		/* Type by role, the `standard` scale of src/lib/composer/theme-tokens.ts (a test holds the
+		   two to the same numbers). A store's `type_scale` and `heading_weight` settings replace
+		   them; Tailwind exposes each as `text-<role>`. */
+		--text-display: clamp(1.75rem, 1.2rem + 2.4vw, 2.25rem);
+		--text-page-title: clamp(1.375rem, 1.2rem + 0.8vw, 1.625rem);
+		--text-section: clamp(1.25rem, 1.15rem + 0.45vw, 1.375rem);
+		--text-subsection: 1.125rem;
+		--text-body: 1rem;
+		--text-supporting: 0.875rem;
+		--text-caption: 0.8125rem;
+		--heading-weight: 800;
+
+		/* Spacing, the `compact` density: the gap between page regions and the product grid's. */
+		--section-gap: clamp(24px, 3vw, 40px);
+		--grid-gap-x: clamp(10px, 1.1vw, 16px);
+		--grid-gap-y: clamp(14px, 1.4vw, 20px);
 	}
 
 	/* The action colour used as ink: text, icons, borders and rings (`text-primary`,
@@ -498,6 +515,12 @@
 [data-theme='lime'] [data-testid='product-card-selling-price'],
 [data-theme='lime'] [data-testid='product-card-mrp'] {
 	font-weight: 400;
+}
+
+/* Text that sets no size of its own follows the store's type scale. The shell, not <html>, so rem
+   keeps its meaning. */
+div[data-theme='default'] {
+	font-size: var(--text-body);
 }
 
 /* ── Unified editorial buttons ─────────────────────────────────────────────────

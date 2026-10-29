@@ -246,8 +246,8 @@
 	   apart on the homepage. Uniform, not split: the card's caption already separates one row from
 	   the next, so a taller row-gap only adds height. */
 	:global([data-theme='default']) .ed-grid {
-		column-gap: clamp(10px, 1.1vw, 16px);
-		row-gap: clamp(14px, 1.4vw, 20px);
+		column-gap: var(--grid-gap-x);
+		row-gap: var(--grid-gap-y);
 	}
 
 	/* A denser column ladder than the Tailwind classes above, and expressed here rather than on

@@ -15,7 +15,20 @@
 
 export type ThemeSettings = Partial<
 	Record<
-		'background' | 'text' | 'accent' | 'accent_text' | 'muted' | 'heading_font' | 'body_font' | 'radius' | 'product_image_ratio' | 'product_image_fit',
+		| 'background'
+		| 'text'
+		| 'accent'
+		| 'accent_text'
+		| 'muted'
+		| 'sale'
+		| 'heading_font'
+		| 'body_font'
+		| 'heading_weight'
+		| 'type_scale'
+		| 'density'
+		| 'radius'
+		| 'product_image_ratio'
+		| 'product_image_fit',
 		unknown
 	>
 >
@@ -24,7 +37,7 @@ type Font = { family: string; google: string }
 
 /** The engine's font list (ext/layouts registry.go `Fonts`), keyed alike. */
 export const FONTS: Record<string, Font> = {
-	inter: { family: "'Inter', ui-sans-serif, system-ui, sans-serif", google: 'Inter:wght@400;500;600;700' },
+	inter: { family: "'Inter', ui-sans-serif, system-ui, sans-serif", google: 'Inter:wght@400;500;600;700;800' },
 	roboto: { family: "'Roboto', ui-sans-serif, system-ui, sans-serif", google: 'Roboto:wght@400;500;700' },
 	poppins: { family: "'Poppins', ui-sans-serif, system-ui, sans-serif", google: 'Poppins:wght@400;500;600;700' },
 	montserrat: { family: "'Montserrat', ui-sans-serif, system-ui, sans-serif", google: 'Montserrat:wght@400;500;600;700' },
@@ -46,6 +59,65 @@ const RADII: Record<string, string> = { none: '0px', small: '4px', medium: '8px'
 // Product cards read these as --product-image-ratio and --product-image-fit (D128).
 const RATIOS: Record<string, string> = { square: '1 / 1', portrait: '3 / 4', tall: '2 / 3', landscape: '4 / 3' }
 const FITS: Record<string, string> = { fill: 'cover', whole: 'contain' }
+
+/**
+ * One type ladder by role, at three sizes. `standard` is the default theme's own (src/app.css,
+ * which a test holds to these numbers): a 16px body. `compact` is the 14px body UX_SYSTEM started
+ * from; `large` an 18px one. Components size text by role (`text-body`, `text-supporting` …).
+ */
+export const TYPE_SCALES: Record<string, Record<string, string>> = {
+	compact: {
+		'--text-display': 'clamp(1.5rem, 1.1rem + 1.8vw, 1.875rem)',
+		'--text-page-title': 'clamp(1.25rem, 1.15rem + 0.5vw, 1.375rem)',
+		'--text-section': 'clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem)',
+		'--text-subsection': '1rem',
+		'--text-body': '0.875rem',
+		'--text-supporting': '0.8125rem',
+		'--text-caption': '0.75rem'
+	},
+	standard: {
+		'--text-display': 'clamp(1.75rem, 1.2rem + 2.4vw, 2.25rem)',
+		'--text-page-title': 'clamp(1.375rem, 1.2rem + 0.8vw, 1.625rem)',
+		'--text-section': 'clamp(1.25rem, 1.15rem + 0.45vw, 1.375rem)',
+		'--text-subsection': '1.125rem',
+		'--text-body': '1rem',
+		'--text-supporting': '0.875rem',
+		'--text-caption': '0.8125rem'
+	},
+	large: {
+		'--text-display': 'clamp(2rem, 1.4rem + 2.6vw, 2.5rem)',
+		'--text-page-title': 'clamp(1.5rem, 1.3rem + 0.9vw, 1.75rem)',
+		'--text-section': 'clamp(1.375rem, 1.25rem + 0.5vw, 1.5rem)',
+		'--text-subsection': '1.1875rem',
+		'--text-body': '1.125rem',
+		'--text-supporting': '0.9375rem',
+		'--text-caption': '0.8125rem'
+	}
+}
+
+const HEADING_WEIGHTS: Record<string, string> = { medium: '500', semibold: '600', bold: '700', extrabold: '800' }
+
+/** Page gutters, the gap between page regions, and the product grid's gaps. `compact` is the default. */
+export const DENSITIES: Record<string, Record<string, string>> = {
+	compact: {
+		'--container-gutter': 'clamp(16px, 4vw, 48px)',
+		'--section-gap': 'clamp(24px, 3vw, 40px)',
+		'--grid-gap-x': 'clamp(10px, 1.1vw, 16px)',
+		'--grid-gap-y': 'clamp(14px, 1.4vw, 20px)'
+	},
+	comfortable: {
+		'--container-gutter': 'clamp(20px, 5vw, 56px)',
+		'--section-gap': 'clamp(32px, 4vw, 56px)',
+		'--grid-gap-x': 'clamp(14px, 1.5vw, 20px)',
+		'--grid-gap-y': 'clamp(20px, 2vw, 28px)'
+	},
+	spacious: {
+		'--container-gutter': 'clamp(24px, 6vw, 72px)',
+		'--section-gap': 'clamp(40px, 5vw, 72px)',
+		'--grid-gap-x': 'clamp(18px, 2vw, 28px)',
+		'--grid-gap-y': 'clamp(28px, 2.8vw, 40px)'
+	}
+}
 
 const HEX = /^#[0-9a-f]{6}$/i
 
@@ -119,6 +191,18 @@ export function contrast(a: string, b: string): number {
 	return (hi + 0.05) / (lo + 0.05)
 }
 
+/** The colour's own hue, darkened until it reads as text on `ground` (4.5:1). */
+function readableOn(hex: string, ground: string): string {
+	const [h, s, l] = hexToTriplet(hex).split(' ')
+	let light = parseFloat(l)
+	let colour = hex
+	while (contrast(colour, ground) < 4.5 && light > 0) {
+		light = Math.max(0, light - 2)
+		colour = tripletToHex(`${h} ${s} ${light}%`)
+	}
+	return colour
+}
+
 /** The same hue a step lighter or darker, whichever reads as a change on a hover. */
 function hoverTriplet(hex: string): string {
 	const [h, s, l] = hexToTriplet(hex).split(' ')
@@ -180,6 +264,11 @@ export function themeTokenDeclarations(settings: ThemeSettings | null | undefine
 		out['--font-body'] = body.family
 		out['--font-primary'] = body.family
 	}
+	const sale = colour(s.sale)
+	if (sale) out['--sale'] = hexToTriplet(readableOn(sale, ground))
+	if (typeof s.heading_weight === 'string' && Object.hasOwn(HEADING_WEIGHTS, s.heading_weight)) out['--heading-weight'] = HEADING_WEIGHTS[s.heading_weight]
+	if (typeof s.type_scale === 'string' && Object.hasOwn(TYPE_SCALES, s.type_scale)) Object.assign(out, TYPE_SCALES[s.type_scale])
+	if (typeof s.density === 'string' && Object.hasOwn(DENSITIES, s.density)) Object.assign(out, DENSITIES[s.density])
 	if (typeof s.radius === 'string' && Object.hasOwn(RADII, s.radius)) out['--radius'] = RADII[s.radius]
 	if (typeof s.product_image_ratio === 'string' && Object.hasOwn(RATIOS, s.product_image_ratio))
 		out['--product-image-ratio'] = RATIOS[s.product_image_ratio]
