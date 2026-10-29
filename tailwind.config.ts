@@ -64,7 +64,9 @@ const config: Config = {
 				foreground: 'hsl(var(--foreground) / <alpha-value>)',
 				primary: {
 					DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
-					foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
+					foreground: 'hsl(var(--primary-foreground) / <alpha-value>)',
+					// The accent as a line or a dot on the canvas, where a light fill would not show (src/app.css).
+					ink: 'hsl(var(--primary-ink) / <alpha-value>)'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',

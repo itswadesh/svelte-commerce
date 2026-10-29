@@ -34,7 +34,10 @@ copy: no logo, name, artwork, copy or pictures of theirs. What the default theme
   the action with dark text on it (12.2:1), green for savings (`--sale`, #198837, the engine's
   default for the `sale` setting), a calm blue for information (`--info`). Yellow cannot be ink
   (1.44:1 on white), so `text-primary`, `border-primary`, rings and the like read `--primary-ink`,
-  the text colour on this theme, and selected pills and the current page take a dark edge.
+  the text colour on this theme, and selected pills and the current page take a dark edge. A line,
+  bar or dot in the accent (slider fills, step bars, the bottom bar's active dot, a radio's dot, a
+  switch that is on) is drawn in the ink too (`bg-primary-ink`), so a store's light accent never
+  draws a faint line on white.
 - **Cards.** The label top left on the picture, the rating pill bottom left, the brand line in bold
   with the heart beside it under the picture, the name, then price, was-price and saving on one line.
 - **Listings.** Title and product count on one line, round sub-category pictures, filter chips that

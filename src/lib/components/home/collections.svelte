@@ -18,7 +18,7 @@
 								<h2 class="section-heading">
 									{data.name}
 								</h2>
-								<div class="mt-2 h-1 w-12 bg-primary"></div>
+								<div class="mt-2 h-1 w-12 bg-primary-ink"></div>
 								<!-- <p class="mt-4 text-sm font-medium text-muted-foreground">
 									Explore our handpicked selection of {data.name.toLowerCase()}
 								</p> -->

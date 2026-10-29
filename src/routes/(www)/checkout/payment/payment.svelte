@@ -147,7 +147,7 @@
 													onchange={() => (paymentModule.SELECTED_PG_CODE = method?.code)}
 													class="peer h-5 w-5 appearance-none rounded-full border-2 border-border transition-all checked:border-primary"
 												/>
-												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 transition-opacity peer-checked:opacity-100"></div>
+												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></div>
 											</div>
 
 											<div class="flex items-center gap-3">
@@ -201,7 +201,7 @@
 													onchange={() => paymentModule.handleShippingRateChange(rate)}
 													class="peer h-5 w-5 appearance-none rounded-full border-2 border-border transition-all checked:border-primary"
 												/>
-												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 transition-opacity peer-checked:opacity-100"></div>
+												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></div>
 											</div>
 
 											<div class="flex flex-col gap-0.5">

@@ -44,7 +44,7 @@
 				<a
 					href="/"
 					class="relative text-sm font-bold text-muted-foreground transition-all
-					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-foreground hover:after:w-full motion-safe:active:scale-95"
+					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary-ink after:transition-all hover:text-foreground hover:after:w-full motion-safe:active:scale-95"
 					style="font-family: var(--font-body);"
 				>
 					<Home />

@@ -34,7 +34,7 @@
 							<h2 class="section-heading">
 								{title}
 							</h2>
-							<div class="mt-4 h-1 w-12 bg-primary"></div>
+							<div class="mt-4 h-1 w-12 bg-primary-ink"></div>
 						</div>
 					{/if}
 					<div class="grid grid-cols-{itemsPerRow} gap-4 md:gap-8">

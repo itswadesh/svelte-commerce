@@ -78,7 +78,7 @@ genuinely missing.
 | text-muted | `--muted-foreground` · `text-muted-foreground` |
 | border | `--border` · `border` (default border colour) |
 | primary / primary-hover | `--primary` · `bg-primary` (the action colour as a fill); `--primary-hover` · `bg-primary-hover` |
-| primary ink | `--primary-ink` · `text-primary`, `border-primary`, `ring-primary` (the action colour as ink; the text colour where the fill does not read on the canvas, as the default theme's yellow does not) |
+| primary ink | `--primary-ink` · `text-primary`, `border-primary`, `ring-primary`, and `bg-primary-ink` for a line, bar or dot (the action colour as ink; the text colour where the fill does not read on the canvas, as the default theme's yellow does not) |
 | accent | `--accent` · `bg-accent` |
 | success | `--success` · `bg-success` |
 | sale | `--sale` · `text-sale` (savings: "% off", offer lines) |

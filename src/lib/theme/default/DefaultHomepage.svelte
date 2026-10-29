@@ -969,7 +969,7 @@
 		width: 4px;
 		height: 4px;
 		border-radius: 50%;
-		background: hsl(var(--primary));
+		background: hsl(var(--primary-ink));
 	}
 
 	/* ---------- SECTION HEADERS ---------- */
