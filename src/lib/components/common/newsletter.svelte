@@ -72,7 +72,10 @@
 		{#snippet content({ loadingForSubmitting })}
 			<div class="flex flex-col gap-2 sm:gap-3">
 				<div class="space-y-1.5">
-					<h2 class="text-sm font-bold text-foreground">{plugin?.heading || 'Newsletter'}</h2>
+					<!-- Same type as a footer-menu column heading (footer-menu.svelte: text-xs font-bold)
+					     so the four headings on the footer's one row sit on a shared baseline instead of
+					     this one standing a size taller. -->
+					<h2 class="text-xs font-bold text-foreground">{plugin?.heading || 'Newsletter'}</h2>
 					<p class="text-sm text-muted-foreground">{plugin?.subheading || 'Subscribe to get the latest arrivals and offers.'}</p>
 				</div>
 
