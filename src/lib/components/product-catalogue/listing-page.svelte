@@ -7,10 +7,15 @@
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
 	import ListingGrid from '$lib/components/product-catalogue/listing-grid.svelte'
 	import ListingHeader from './listing-header.svelte'
+	import SubcategoryRow from './subcategory-row.svelte'
+	import QuickFilters from './quick-filters.svelte'
+	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { X } from '@lucide/svelte'
 	import { hasFacetValues, readAppliedFilters, urlWithoutAnyFilter, urlWithoutFilter } from './scope-filters.js'
 
 	const data = $derived(page.data)
+	// The listing's layout is the store's choice (its theme settings); unset, the defaults apply.
+	const options = $derived(themeOptions(data?.themeSettings))
 
 	// The URL is the single source of truth for the sort, so every surface agrees after any
 	// navigation — including a Clear all that re-orders the grid, and a Back that undoes a sort.
@@ -64,20 +69,24 @@
 	     a short listing (or the last page of a long one) ended in several hundred pixels of void
 	     between the last card and the footer, with the filter rail's hairline running down through
 	     it. The rail is sticky and scrolls on its own; nothing here needed the floor. -->
-	<div class="page-width inter-gap ed-plp__row flex flex-row">
+	<div class="page-width inter-gap ed-plp__row flex flex-row" class:has-mobile-bar={options.list_mobile_bar}>
 		<!-- `w-`, not `max-w-`. As a max-width on a flex item whose content carried its own
 		     min-width, the rail measured 173px at 768px while the panel inside stayed 224px and spilled
 		     27px over the first column of products. -->
-		{#if hasFacetValues(data.products.facets)}
+		{#if options.list_filters_desktop === 'sidebar' && hasFacetValues(data.products.facets)}
 			<div class="ed-plp__aside hidden w-1/4 min-w-0 border-input md:block">
 				<DesktopFilter />
 			</div>
 		{/if}
 
-		<MobileFilter {selectedSort} onSortChange={applySort} />
-
 		<div class="ed-plp__main inter-gap flex min-w-0 flex-1 flex-col">
 			<ListingHeader {selectedSort} onSortChange={applySort} />
+
+			<SubcategoryRow />
+
+			<QuickFilters />
+
+			<MobileFilter {selectedSort} onSortChange={applySort} fixed={options.list_mobile_bar} />
 
 			<!-- Active filters. The row itself scrolls on a phone rather than the page, so a long
 			     set of chips can never introduce horizontal overflow. -->

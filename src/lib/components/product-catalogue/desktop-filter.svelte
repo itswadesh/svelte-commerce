@@ -63,7 +63,7 @@
 			{#if filterState.anyFilterApplied}
 				<Button variant="link" size="sm" class="ed-df__clear h-auto p-0" onclick={filterState.clearFilters}>
 					<X class="mr-1 h-3 w-3" />
-					Clear
+					Clear all
 				</Button>
 			{/if}
 		</div>
