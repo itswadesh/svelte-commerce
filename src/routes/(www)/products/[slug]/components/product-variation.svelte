@@ -260,10 +260,9 @@
 	   selection is data the shopper chose, not a section heading. */
 	:global([data-theme='default'] .edp-opt-value) {
 		font-family: var(--ed-body);
-		font-size: 0.85rem;
+		font-size: var(--type-ui);
 		font-weight: 600;
 		text-transform: none;
-		letter-spacing: 0.01em;
 		color: var(--ed-ink);
 	}
 
@@ -277,9 +276,8 @@
 		background: transparent !important;
 		color: var(--ed-ink) !important;
 		font-family: var(--ed-body);
-		font-size: 0.85rem;
+		font-size: var(--type-ui);
 		font-weight: 500;
-		letter-spacing: 0.02em;
 		text-transform: none;
 		box-shadow: none !important;
 		transition:

@@ -83,7 +83,9 @@
 	:global([data-theme='default'] .ed-nav-link) {
 		color: var(--ed-soft);
 		font-weight: 600;
-		font-size: 0.75rem;
+		/* The label step, 12px. One row holds every link of the store's menu, and at 13px a ten-link
+		   menu already broke its labels over two lines at 1280px. */
+		font-size: var(--type-label);
 		transition:
 			color var(--motion-fast) var(--motion-ease),
 			transform var(--motion-fast) var(--motion-ease);

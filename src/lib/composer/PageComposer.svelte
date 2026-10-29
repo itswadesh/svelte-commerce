@@ -162,12 +162,19 @@
 	   padding (bands 32-64px, the hero 12-32px, the benefits strip 28-48px), so the gaps on one page
 	   ran from 24px to over 100px depending on which pair met. */
 	.cmp-home {
-		--cmp-gap: clamp(24px, 3vw, 40px);
+		--cmp-gap: var(--space-section, clamp(24px, 3vw, 40px));
 		display: flex;
 		flex-direction: column;
 		gap: var(--cmp-gap);
 		padding-block: var(--cmp-gap);
 		color: hsl(var(--foreground));
+	}
+
+	/* The default theme's footer keeps this same gap above itself (footer.svelte), so the page draws
+	   none below its last section: the two used to add up to 60px, and left a 20px strip of page
+	   between a benefits band and the footer it is meant to meet. */
+	:global([data-theme='default']) .cmp-home {
+		padding-bottom: 0;
 	}
 
 	/* A full-width strip at the very top or bottom meets the header or footer, as it always has. */
@@ -187,16 +194,16 @@
 		align-items: flex-end;
 		justify-content: space-between;
 		gap: 8px 24px;
-		margin-bottom: clamp(16px, 2.4vw, 28px);
+		margin-bottom: var(--space-head, clamp(16px, 2.4vw, 28px));
 	}
 
 	.cmp-home :global(.cmp-head__title) {
 		margin: 0;
 		font-family: var(--font-heading, inherit);
-		font-size: clamp(1.5rem, 3vw, 2.125rem);
+		font-size: var(--type-section-title, clamp(1.5rem, 3vw, 2.125rem));
 		font-weight: 700;
-		line-height: 1.15;
-		letter-spacing: -0.01em;
+		line-height: var(--leading-title, 1.15);
+		letter-spacing: var(--tracking-title, -0.01em);
 		overflow-wrap: anywhere;
 	}
 
@@ -206,7 +213,7 @@
 		gap: 8px;
 		min-height: 44px;
 		color: hsl(var(--foreground));
-		font-size: 0.82rem;
+		font-size: var(--type-ui, 0.82rem);
 		font-weight: 600;
 		white-space: nowrap;
 		transition: opacity var(--motion-fast, 150ms) var(--motion-ease, ease-out);
@@ -234,15 +241,15 @@
 
 	.cmp-home :global(.cmp-eyebrow) {
 		color: hsl(var(--muted-foreground));
-		font-size: 0.75rem;
+		font-size: var(--type-label, 0.75rem);
 		font-weight: 600;
 		overflow-wrap: anywhere;
 	}
 
 	.cmp-home :global(.cmp-copy) {
 		color: hsl(var(--muted-foreground));
-		font-size: 1rem;
-		line-height: 1.65;
+		font-size: var(--type-body, 1rem);
+		line-height: var(--leading-body, 1.65);
 	}
 
 	/* The theme editor's frame (D126): the section under the pointer is outlined, the picked one

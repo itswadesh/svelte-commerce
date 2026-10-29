@@ -237,17 +237,13 @@
 <style>
 	/* ---- Refined Editorial · listing grid (default theme only) ---- */
 
-	/* One product-grid rhythm for the whole storefront: the homepage grid (.ed-products) and the
-	   PDP recommendations grid (.edp-related-grid) hold this identical clamp.
+	/* One product-grid rhythm for the whole storefront: --grid-gap-x / --grid-gap-y in app.css,
+	   which the home page's product shelves and the product page's related grid read too.
 	   Was clamp(16px, 2vw, 28px) / clamp(30px, 3.4vw, 52px) — a 49px trough between card rows at
-	   1440px, wider than the card's own title-plus-price block — then clamp(12px, 1.6vw, 24px) /
-	   clamp(22px, 2.2vw, 32px). All three grids already shared the 1.6vw middle term and had
-	   drifted only at the ends, so the same three products sat 22px apart vertically here and 14px
-	   apart on the homepage. Uniform, not split: the card's caption already separates one row from
-	   the next, so a taller row-gap only adds height. */
+	   1440px, wider than the card's own title-plus-price block. */
 	:global([data-theme='default']) .ed-grid {
-		column-gap: clamp(10px, 1.1vw, 16px);
-		row-gap: clamp(14px, 1.4vw, 20px);
+		column-gap: var(--grid-gap-x);
+		row-gap: var(--grid-gap-y);
 	}
 
 	/* A denser column ladder than the Tailwind classes above, and expressed here rather than on
@@ -275,9 +271,10 @@
 
 	:global([data-theme='default']) .ed-empty__title {
 		font-family: var(--ed-display);
-		font-weight: 500;
-		font-size: clamp(1.125rem, 1.4vw, 1.375rem);
-		letter-spacing: -0.01em;
+		font-weight: 700;
+		font-size: var(--type-page-title);
+		line-height: var(--leading-title);
+		letter-spacing: var(--tracking-title);
 		text-transform: none;
 		color: var(--ed-ink);
 	}
@@ -306,7 +303,7 @@
 		background: var(--ed-surface);
 		color: var(--ed-ink);
 		font-family: var(--ed-body);
-		font-size: 0.85rem;
+		font-size: var(--type-ui);
 		font-weight: 500;
 		box-shadow: none;
 		transition:

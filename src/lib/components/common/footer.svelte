@@ -123,7 +123,7 @@
 	const copyright = $derived(chromeFooter?.copyright ?? themeFooter?.copyright ?? '')
 </script>
 
-<div class="mt-5">
+<div class="ed-footer-gap mt-5">
 	{#if activeThemeName === 'lime'}
 		<!-- The store's own name wins over the theme's demo brand name. -->
 		<LimeFooter footer={themeFooter} brandName={storeData?.name || themeContent.brandName} />
@@ -312,6 +312,12 @@
 <WhatsappChatButton />
 
 <style>
+	/* The page's section gap above the footer, the same space the home page leaves between its
+	   sections; the home page draws none below its last one, so the two no longer add up. */
+	:global([data-theme='default']) .ed-footer-gap {
+		margin-top: var(--space-section);
+	}
+
 	/* Refined Editorial footer — scoped to the default theme via `.ed`, so wine/organic
 	   (which share this footer) are untouched. Fonts come from the global default-theme
 	   type system; here we set the warm surface, hairline rules, and quiet text. */

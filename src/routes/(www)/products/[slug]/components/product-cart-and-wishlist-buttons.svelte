@@ -241,7 +241,7 @@
 	/* Refined Editorial — default theme only. Primary fill CTA + bordered ghost wishlist. */
 	:global([data-theme='default'] .edp-atc) {
 		border-radius: var(--ed-radius) !important;
-		font-size: 0.8rem !important;
+		font-size: var(--type-ui) !important;
 		font-weight: 600;
 		transition:
 			transform var(--motion-fast) var(--motion-ease),

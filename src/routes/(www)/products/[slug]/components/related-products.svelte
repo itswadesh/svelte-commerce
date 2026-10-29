@@ -97,20 +97,23 @@
 
 	/* Refined Editorial — default theme only. Card itself is already editorial;
 	   this restyles the section heading and gutters only. */
-	/* Was margin-top clamp(48px, 8vw, 96px) + padding-top clamp(32px, 5vw, 56px) — up to 152px
-	   of empty page between the buy box and this heading, on top of the parent column gap. */
+	/* The page's section gap on both sides of the rule, as between the home page's sections. Was
+	   margin-top clamp(48px, 8vw, 96px) + padding-top clamp(32px, 5vw, 56px) — up to 152px of empty
+	   page between the buy box and this heading. */
 	:global([data-theme='default'] .edp-related) {
-		margin-top: clamp(32px, 5vw, 56px);
-		padding-top: clamp(20px, 3vw, 32px);
+		margin-top: var(--space-section);
+		margin-bottom: 0;
+		padding-top: var(--space-section);
 		border-top: 1px solid var(--ed-line);
 	}
 
+	/* On the rail's left edge, like the reviews heading above it and every shelf heading on the
+	   home page; centred, it was the one heading on the page that did not start where the text does. */
 	:global([data-theme='default'] .edp-related-head) {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		margin-bottom: clamp(16px, 2.5vw, 24px);
+		align-items: flex-start;
+		margin-bottom: var(--space-head);
 	}
 
 	:global([data-theme='default'] .edp-related-eyebrow) {
@@ -121,24 +124,23 @@
 		color: var(--ed-soft);
 	}
 
-	/* Was clamp(1.8rem, 3.4vw, 2.8rem) — a 44.8px section heading at 1440, well past the 32px
-	   ceiling and larger than the product's own h1. The clamp below is the storefront's section-
-	   title step, identical to .ed-head__title / .ed-banner__title / .ed-news__title on the
-	   homepage: 22px on a phone, 28px on a desktop. "Related products" and "Featured pieces" are
-	   the same thing — a serif heading introducing a grid of product cards — so they get the same
-	   size instead of 20/25.6 here and 22/28 there. */
+	/* The section-title step, the same as the home page's "New in": "Related products" is the same
+	   thing — a heading introducing a grid of product cards — so it gets the same size and weight.
+	   Was clamp(1.8rem, 3.4vw, 2.8rem), then 22-28px at weight 500 beside the home page's 700. */
 	:global([data-theme='default'] .edp-related-title) {
-		margin: 6px 0 0;
+		margin: 4px 0 0;
+		text-align: start;
 		font-family: var(--ed-display);
-		font-weight: 500;
-		letter-spacing: -0.01em;
-		font-size: clamp(1.375rem, 2.4vw, 1.75rem);
-		line-height: 1.15;
+		font-weight: 700;
+		letter-spacing: var(--tracking-title);
+		font-size: var(--type-section-title);
+		line-height: var(--leading-title);
 		color: var(--ed-ink);
 	}
 
-	/* The shared product-grid rhythm — see .ed-products (homepage) and .ed-grid (listing). */
+	/* The shared product-grid gap — see .product-grid in app.css. */
 	:global([data-theme='default'] .edp-related-grid) {
-		gap: clamp(14px, 1.6vw, 22px);
+		column-gap: var(--grid-gap-x);
+		row-gap: var(--grid-gap-y);
 	}
 </style>

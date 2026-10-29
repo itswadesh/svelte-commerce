@@ -444,22 +444,25 @@
 	/* Refined Editorial — default theme only. */
 	:global([data-theme='default'] .edp-rev) {
 		border-top: 1px solid var(--ed-line);
-		padding-top: clamp(32px, 5vw, 56px);
-		margin-top: clamp(32px, 5vw, 56px);
+		padding-top: var(--space-section);
+		margin-top: var(--space-section);
 	}
 
+	/* The section-title step, like "Related products" below it. Was 28.8-38.4px, the largest text
+	   on the page and bigger than the product's own name. */
 	:global([data-theme='default'] .edp-rev-title) {
 		font-family: var(--ed-display);
-		font-weight: 500;
-		letter-spacing: -0.01em;
-		font-size: clamp(1.8rem, 3vw, 2.4rem);
+		font-weight: 700;
+		letter-spacing: var(--tracking-title);
+		font-size: var(--type-section-title);
+		line-height: var(--leading-title);
 		color: var(--ed-ink);
 		border-color: var(--ed-line);
 	}
 
 	:global([data-theme='default'] .edp-rev-score) {
 		font-family: var(--ed-display);
-		font-weight: 500;
+		font-weight: 700;
 		color: var(--ed-ink);
 	}
 

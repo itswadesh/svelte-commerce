@@ -650,10 +650,12 @@
 
 	:global([data-theme='default'] .edp-empty-title) {
 		font-family: var(--ed-display);
-		font-weight: 500;
-		letter-spacing: -0.01em;
-		/* An error state does not need a 41.6px display heading. */
-		font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+		font-weight: 700;
+		letter-spacing: var(--tracking-title);
+		/* An error state does not need a 41.6px display heading: the page-title step, as the
+		   listing's empty state. */
+		font-size: var(--type-page-title);
+		line-height: var(--leading-title);
 		color: var(--ed-ink);
 	}
 
