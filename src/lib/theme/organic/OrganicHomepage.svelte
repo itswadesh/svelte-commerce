@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Heart, Minus, Plus, ShoppingCart, Truck, Shield, Leaf, Star, Tag, ArrowRight } from '@lucide/svelte'
-	import { formatPrice } from '$lib/core/utils/index.js'
+	import { formatPrice } from '$lib/utils/price'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
 	import { themeImage } from '../placeholder.js'
 

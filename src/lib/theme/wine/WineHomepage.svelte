@@ -28,7 +28,7 @@
 	} from '@lucide/svelte'
 	import { untrack } from 'svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { formatPrice } from '$lib/core/utils/index.js'
+	import { formatPrice } from '$lib/utils/price'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
 	import { themeImage } from '../placeholder.js'
 

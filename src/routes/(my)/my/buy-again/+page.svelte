@@ -2,7 +2,7 @@
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { getCartState } from '$lib/core/stores/index.js'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	const cartState = getCartState()
 
 	let data = $state([])

@@ -4,7 +4,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { goto } from '$app/navigation'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { getCartState } from '@misiki/kitcommerce-core/stores'
 	import { drawer, fade } from '$lib/motion'
 	import { page } from '$app/state'

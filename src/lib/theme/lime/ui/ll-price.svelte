@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 
 	/**
 	 * Lime price primitive.

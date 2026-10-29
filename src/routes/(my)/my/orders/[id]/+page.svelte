@@ -22,7 +22,8 @@
 		ReceiptText
 	} from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { date, formatPrice } from '$lib/core/utils'
+	import { date } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { MyOrdersIdRenderer } from '$lib/core/composables/index.js'
 
 	let { class: klass = '', data, ...rest } = $props()

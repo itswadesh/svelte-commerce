@@ -17,7 +17,8 @@
 		LoaderCircle
 	} from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { date, formatPrice } from '$lib/core/utils'
+	import { date } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { orderService } from '$lib/core/services/index.js'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import { fade, fly } from '$lib/motion'

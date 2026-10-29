@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { Check, HeartIcon, ShoppingBag } from '@lucide/svelte'
 	import { fade, fly } from '$lib/motion'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'

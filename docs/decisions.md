@@ -3,6 +3,16 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-29: Prices drop ".00" and group their digits the shopper's way
+
+Asked whether ₹2799.00 should read ₹2,799, the owner said "yes drop". A whole amount shows no
+`.00`, paise still show (₹499.50), and the digits are grouped for the currency: Indian grouping for
+rupees (₹12,999, ₹1,29,999), threes for every other currency. Core's `formatPrice` is
+package-owned, so the storefront wraps it once, in `src/lib/utils/price.ts`, and every price a
+shopper reads goes through it: cards, the product page, the bag, checkout, order pages, and the
+filter sheet's price range and price chip. Core's symbol and layout stay as they were. A test fails
+when a file imports core's `formatPrice` directly.
+
 ## 2026-10-29: The default theme shops like Bewakoof, and the store decides each part
 
 The owner: "for the default theme, take reference from https://www.bewakoof.com/", and then "dont
