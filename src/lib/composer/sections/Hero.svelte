@@ -85,7 +85,7 @@
 		border-radius: 999px;
 		background: hsl(var(--primary-foreground));
 		color: hsl(var(--primary));
-		font-size: 0.8125rem;
+		font-size: var(--type-label, 0.8125rem);
 		font-weight: 700;
 		overflow-wrap: anywhere;
 	}
@@ -98,17 +98,17 @@
 		margin: 0;
 		max-width: 16ch;
 		font-family: var(--font-heading, inherit);
-		font-size: clamp(2.125rem, 6.4vw, 4.25rem);
+		font-size: var(--type-display, clamp(2.125rem, 6.4vw, 4.25rem));
 		font-weight: 800;
-		line-height: 1.02;
-		letter-spacing: -0.025em;
+		line-height: var(--leading-display, 1.02);
+		letter-spacing: var(--tracking-display, -0.025em);
 		overflow-wrap: anywhere;
 	}
 
 	.cmp-hero__body :global(.cmp-hero__text) {
 		max-width: 34rem;
-		font-size: clamp(1rem, 1.6vw, 1.125rem);
-		line-height: 1.6;
+		font-size: var(--type-heading, clamp(1rem, 1.6vw, 1.125rem));
+		line-height: var(--leading-body, 1.6);
 	}
 
 	.cmp-hero__actions:empty {

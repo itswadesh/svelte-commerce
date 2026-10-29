@@ -134,7 +134,11 @@ structure incrementally.
   `--font-body` both resolve to it (owner decision, `docs/decisions.md`). `font-serif` is the
   heading face, not a serif, on this theme.
 - Spacing: a 4px base scale of 4, 8, 12, 16, 20, 24, 32, 40, 48, 64 (Tailwind 1–16). Live in the
-  4–24 range; 32 and above separate page regions, not elements.
+  4–24 range; 32 and above separate page regions, not elements. The page-level steps are tokens in
+  `src/app.css`: `--space-section` (24–40px) between page sections, inside a full-bleed band and
+  above the footer; `--space-head` (16–24px) from a section heading to its content;
+  `--grid-gap-x` / `--grid-gap-y` (10–16px / 14–20px) between product cards wherever they appear
+  (`.product-grid`).
 - Radius: 8px for controls, 12px for cards, 16px for large surfaces, expressed through the
   `--radius`-derived scale (`rounded-sm/md/lg/xl`) so square themes stay square. No arbitrary radii.
 - Elevation: borders for normal grouping; shadows only for floating layers (dialogs, menus,
@@ -174,15 +178,35 @@ never from the product, the information a shopper decides on, or a touch target.
 
 ### Type scale
 
-- Body: 13–15px, line-height 1.4–1.55.
-- Supporting text: 12–13px, never low-contrast merely to appear elegant. 11px is for a badge or
-  an eyebrow, never for a sentence.
-- Page title: 20–28px. A listing, account or checkout title sits at the bottom of that band — it
-  labels the content, it is not the page's message. One editorial hero headline per site may
-  reach 36px; nothing else does.
-- Section title: 18–24px.
-- Product price: prominent, but not larger than the product title hierarchy requires.
-- Weights: 400, 500, 600 and one display weight.
+One size per role, as `--type-*` tokens in `src/app.css` (with `--leading-*` and `--tracking-*`);
+a component reads the token for its role rather than restating a size. Fluid steps hold their phone
+size on phones and reach the desktop size near the 1240px rail. The tokens are declared on the
+default theme only; the composer's sections, which every theme shares, read them with their old
+values as the fallback, so another theme's composed page keeps its look.
+
+| Role | Token | Phone → desktop | Weight | Line height | Used for |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| Display | `--type-display` | 34 → 68px | 800 | 1.02, −0.025em | The hero headline only (D140) |
+| Section title | `--type-section-title` | 24 → 32px | 700 | 1.15, −0.015em | A heading over a band: home shelves, customer ratings, related products |
+| Product title | `--type-product-title` | 24 → 28px | 700 | 1.15, −0.015em | The product page h1, in its half-width column |
+| Page title | `--type-page-title` | 20 → 24px | 700 | 1.15, −0.015em | Listing, account and checkout titles (`.page-heading`), empty states, the product price (600) |
+| Heading | `--type-heading` | 16 → 18px | 700 | 1.3 | h3: tiles, columns, benefits; also the hero's lead line (400, 1.5) |
+| Body | `--type-body` | 16px | 400 | 1.5 | Paragraphs a shopper reads: section copy, product description |
+| UI | `--type-ui` | 14px | 400–600 | 1.4 | Links, buttons (600), controls, specs, supporting lines, the phone menu |
+| Dense | `--type-dense` | 13px | 500–600 | 1.35 | Product card names, a listing's description |
+| Label | `--type-label` | 12px | 500–700 | 1.3–1.5 | Eyebrows (the hero's pill at 700), column headings, counts, captions, the header's one-row navigation; the floor |
+
+- A heading that only labels a panel or a control — the cart's "Price summary", an option's name
+  on the product page — takes the UI or label step, not a title step.
+- 11px is for a badge only, never for a sentence. Nothing a shopper reads goes below 12px. Still
+  under it, in markup every theme shares: the filter sheet's section names, the phone pagination
+  count, labels on the checkout address and payment steps, and the search key hint.
+- Supporting text is never low-contrast merely to appear elegant.
+- A listing, account or checkout title sits at the bottom of the page-title band — it labels the
+  content, it is not the page's message. Only the hero is display-sized.
+- Product price: prominent, one step under the product title.
+- Weights: 400 body, 500 UI text, 600 labels and buttons, 700 headings, 800 the hero alone.
+- Headings carry no positive tracking; large titles tighten slightly (`--tracking-title`).
 - Sentence case everywhere, buttons and labels included. No all-caps styling (`uppercase`,
   `text-transform: uppercase`) on the default theme; owner decision, `docs/decisions.md`.
 

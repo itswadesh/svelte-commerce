@@ -562,7 +562,7 @@
 
 	:global([data-theme='default'] .ed-mf__prices label) {
 		font-family: var(--ed-body);
-		font-size: 0.72rem;
+		font-size: var(--type-label);
 		font-weight: 500;
 		color: var(--ed-soft);
 	}

@@ -61,17 +61,17 @@
 
 	:global([data-theme='default'] .edp-acc-label) {
 		font-family: var(--ed-body);
-		font-size: 0.78rem;
+		font-size: var(--type-ui);
 		font-weight: 600;
 		color: var(--ed-ink);
 	}
 
+	/* The body step, 16px at 1.5, as every paragraph a shopper reads on the home page. Was
+	   14.4px / 1.6, and before that 0.92rem/1.7, which read as a long loose column. */
 	:global([data-theme='default'] .edp-prose) {
 		color: var(--ed-soft);
-		/* 14.4px / 1.6 — inside the 14-16px body band. Was 0.92rem/1.7, which read as a long
-		   loose column next to a compact buy box. */
-		font-size: 0.9rem;
-		line-height: 1.6;
+		font-size: var(--type-body);
+		line-height: var(--leading-body);
 	}
 
 	:global([data-theme='default'] .edp-prose :is(h1, h2, h3, h4, strong)) {

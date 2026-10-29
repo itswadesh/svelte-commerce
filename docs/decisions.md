@@ -3,6 +3,19 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-29: One type and spacing scale on the default theme
+
+The owner asked for the default theme's font sizes, weights, alignment, spacing, density and line
+heights to be studied and made consistent. The scale is the role table in UX_SYSTEM section 4,
+held as `--type-*`, `--leading-*`, `--tracking-*`, `--space-*` and `--grid-gap-*` tokens in
+`src/app.css` on the default theme. What it settles: page and section titles are 700 on every
+page, the weight the composed home page (D140) set, and only the hero is 800; a heading over a band
+is the same size wherever it appears (home shelves, customer ratings, related products); paragraphs
+a shopper reads are 16px at 1.5 on phones and desktops, while card and control text stays on the
+compact 12–14px steps; headings carry no positive tracking; and 12px is the floor for anything a
+shopper reads (the phone menu, at 9–12px, now meets it). The lime, noor, wine and organic themes
+keep their type; the composer's shared sections fall back to their old values there.
+
 ## 2026-10-28: A new store's footer links its standard pages, shown once published
 
 The owner asked that every new store get its mandatory pages, linked from the footer. GoCommerce

@@ -102,25 +102,20 @@
 	   heading. */
 	:global([data-theme='default']) .ed-lh__count {
 		font-family: var(--ed-body);
-		font-size: 0.75rem;
+		font-size: var(--type-label);
 		font-weight: 500;
-		letter-spacing: 0.01em;
 		text-transform: none;
 		color: var(--ed-soft);
 	}
 
-	/* 20px on a phone, 24px at the widest, against 28-36px before. The bottom of the 20-28px
-	   page-title band in UX_SYSTEM section 4, which is where that section puts a listing title: it
-	   labels a grid of products rather than carrying the page's message, and at display scale it
-	   was the loudest thing on a screen whose job is to show merchandise. */
+	/* Size, weight, leading and tracking come from `.page-heading` in app.css, the page-title role:
+	   20px on a phone, 24px at the widest. The bottom of the 20-28px page-title band in UX_SYSTEM
+	   section 4, which is where that section puts a listing title: it labels a grid of products
+	   rather than carrying the page's message. */
 	:global([data-theme='default']) .ed-lh__title {
 		margin: 0;
 		min-width: 0;
 		font-family: var(--ed-display);
-		font-weight: 500;
-		font-size: clamp(1.25rem, 1.5vw, 1.5rem);
-		line-height: 1.15;
-		letter-spacing: -0.01em;
 		color: var(--ed-ink);
 	}
 
@@ -134,8 +129,8 @@
 		margin-top: 2px;
 		max-width: 70ch;
 		color: var(--ed-soft);
-		font-size: 0.8125rem;
-		line-height: 1.55;
+		font-size: var(--type-dense);
+		line-height: var(--leading-body);
 	}
 
 	/* Refined sort dropdown trigger. The selector used to be `.ed-lh__select button`, but
@@ -152,9 +147,8 @@
 		background: var(--ed-surface);
 		color: var(--ed-ink);
 		font-family: var(--ed-body);
-		font-size: 0.8rem;
+		font-size: var(--type-ui);
 		font-weight: 500;
-		letter-spacing: 0.01em;
 		transition: border-color var(--motion-fast) var(--motion-ease);
 	}
 
