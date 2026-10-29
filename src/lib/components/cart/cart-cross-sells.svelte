@@ -52,7 +52,7 @@
 {#if products.length}
 	<section class="mt-6" aria-labelledby="bag-suggestions-title" data-testid="cart-cross-sells">
 		<h2 id="bag-suggestions-title" class="mb-3 text-sm font-semibold text-foreground">You may be interested in</h2>
-		<ul class="ccs-rail -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+		<ul class="ccs-rail -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:scroll-px-0 sm:px-0">
 			{#each products as p (p.id)}
 				<li class="w-36 shrink-0 snap-start overflow-hidden rounded-radius border border-border bg-background" in:fade>
 					<a href={`/products/${p.slug}`} class="relative block aspect-square bg-muted" aria-label={p.title}>
