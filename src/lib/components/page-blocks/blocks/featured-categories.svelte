@@ -30,7 +30,7 @@
 			<div class="text-center md:text-left">
 				{#if block.metadata.title}
 					<h2 class="section-heading">{block.metadata.title}</h2>
-					<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
+					<div class="mx-auto mt-2 h-1 w-12 bg-primary-ink md:mx-0"></div>
 				{/if}
 				{#if block.metadata.subtitle}
 					<p class="mt-4 text-sm font-medium text-muted-foreground">{block.metadata.subtitle}</p>

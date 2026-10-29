@@ -90,7 +90,7 @@
 				{#each block.metadata.images || [] as _, i}
 					<!-- The button is the 24px target; the 6px dot inside it is the indicator. -->
 					<button class="grid h-6 min-w-6 place-items-center" onclick={() => mainCarouselApi?.scrollTo(i)} aria-label="Go to slide {i + 1}">
-						<span class="h-1.5 rounded-full transition-colors duration-fast {currentIndex === i ? 'w-6 bg-primary' : 'w-1.5 bg-muted'}"></span>
+						<span class="h-1.5 rounded-full transition-colors duration-fast {currentIndex === i ? 'w-6 bg-primary-ink' : 'w-1.5 bg-muted'}"></span>
 					</button>
 				{/each}
 			</div>

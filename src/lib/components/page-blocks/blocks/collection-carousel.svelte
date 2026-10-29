@@ -26,7 +26,7 @@
 				<div class="mb-6 text-center md:text-left">
 					{#if collection.name}
 						<h2 class="section-heading">{collection.name}</h2>
-						<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
+						<div class="mx-auto mt-2 h-1 w-12 bg-primary-ink md:mx-0"></div>
 					{/if}
 					{#if collection.subTitle}
 						<p class="mt-4 text-sm font-medium text-muted-foreground">{collection.subTitle}</p>

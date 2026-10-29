@@ -240,7 +240,7 @@
 													bind:group={filterModule.selectedDiscount}
 													class="peer h-5 w-5 appearance-none rounded-full border-2 border-input transition-colors checked:border-primary"
 												/>
-												<span class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 transition-opacity peer-checked:opacity-100"></span>
+												<span class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></span>
 											</span>
 											<span class="ed-mf__opt text-sm font-medium text-foreground transition-colors group-hover:text-primary">
 												{option.label}
@@ -305,7 +305,7 @@
 								<div class="ed-mf__slider relative mr-5 mt-3 h-5 px-2">
 									<div class="ed-mf__track absolute top-1/2 h-1 w-full -translate-y-1/2 rounded bg-muted">
 										<div
-											class="ed-mf__fill absolute h-1 bg-primary"
+											class="ed-mf__fill absolute h-1 bg-primary-ink"
 											style="left: {filterModule.priceSliderLeftPercentage}%; right: {filterModule.priceSliderRightPercentage}%"
 										></div>
 									</div>
@@ -555,7 +555,7 @@
 
 	:global([data-theme='default'] .ed-mf__fill) {
 		height: 3px;
-		background: hsl(var(--primary));
+		background: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-mf__slider input[type='range']::-webkit-slider-thumb) {

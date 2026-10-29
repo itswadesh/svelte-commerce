@@ -115,7 +115,7 @@
 						{item.label}
 					</span>
 					{#if isActive(item.href)}
-						<span class="absolute bottom-1.5 h-1 w-1 rounded-full bg-primary"></span>
+						<span class="absolute bottom-1.5 h-1 w-1 rounded-full bg-primary-ink"></span>
 					{/if}
 				</a>
 			{:else}

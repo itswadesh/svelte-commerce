@@ -16,7 +16,7 @@
 		<div class="mb-6 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 			<div class="text-center md:text-left">
 				<h2 class="section-heading">Top {taxonomy.many}</h2>
-				<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
+				<div class="mx-auto mt-2 h-1 w-12 bg-primary-ink md:mx-0"></div>
 				<p class="mt-4 text-sm font-medium text-muted-foreground">Discover our curated range of products by category</p>
 			</div>
 			<Button

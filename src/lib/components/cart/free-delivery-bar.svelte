@@ -48,7 +48,7 @@
 			{/if}
 		</p>
 		<div class="fdb-track mt-2 h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden="true">
-			<div class="fdb-fill h-full w-full origin-left rounded-full {bar.qualifies ? 'bg-success' : 'bg-primary'}" style="transform: scaleX({bar.progress})"></div>
+			<div class="fdb-fill h-full w-full origin-left rounded-full {bar.qualifies ? 'bg-success' : 'bg-primary-ink'}" style="transform: scaleX({bar.progress})"></div>
 		</div>
 	</div>
 {/if}

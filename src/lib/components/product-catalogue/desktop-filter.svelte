@@ -322,7 +322,7 @@
 				<!-- Range slider track -->
 				<div class="ed-df__track absolute h-1 w-full rounded bg-muted">
 					<div
-						class="ed-df__fill absolute h-1 bg-primary"
+						class="ed-df__fill absolute h-1 bg-primary-ink"
 						style="left: {filterState.priceSliderLeftPercentage}%; right: {filterState.priceSliderRightPercentage}%"
 					></div>
 				</div>
@@ -606,7 +606,7 @@
 
 	:global([data-theme='default']) .ed-df__fill {
 		height: 3px;
-		background: hsl(var(--primary));
+		background: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-df__slider input[type='range']::-webkit-slider-thumb) {
