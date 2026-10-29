@@ -8,6 +8,14 @@ describe('productBadge', () => {
 		expect(productBadge({ productTags: '', material: ['Gold'] }, 'first_tag')).toBe('Gold')
 	})
 
+	it("takes the merchant's own badge, and only that", () => {
+		expect(productBadge({ metadata: { badge: ' Bestseller ' }, productTags: 'cotton' }, 'product_badge')).toBe('Bestseller')
+		expect(productBadge({ metadata: { highlights: ['x'] }, productTags: 'cotton' }, 'product_badge')).toBe('')
+		expect(productBadge({ metadata: { badge: 42 } }, 'product_badge')).toBe('')
+		expect(productBadge({ metadata: null }, 'product_badge')).toBe('')
+		expect(productBadge(null, 'product_badge')).toBe('')
+	})
+
 	it('takes the first highlight line', () => {
 		expect(productBadge({ highlights: ['Oversized fit', 'Cotton'] }, 'first_highlight')).toBe('Oversized fit')
 	})
