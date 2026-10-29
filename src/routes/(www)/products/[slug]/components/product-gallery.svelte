@@ -496,6 +496,14 @@
 		transition: transform var(--motion-fast) var(--motion-ease);
 	}
 
+	/* From 640px each slide keeps a 20px margin under its picture (`sm:mb-5`); the pill stays on the
+	   picture, not on that margin. */
+	@media (min-width: 640px) {
+		.edp-gallery .edp-gallery__rating {
+			bottom: 32px;
+		}
+	}
+
 	.edp-gallery__rating svg {
 		color: hsl(var(--warning));
 	}

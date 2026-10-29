@@ -75,7 +75,6 @@
 		font-weight: 500;
 		letter-spacing: 0.02em;
 		text-transform: none;
-		box-shadow: none !important;
 		transition:
 			border-color var(--motion-fast) var(--motion-ease),
 			background var(--motion-fast) var(--motion-ease),
@@ -91,6 +90,14 @@
 		border-color: hsl(var(--primary-ink)) !important;
 		background: hsl(var(--primary)) !important;
 		color: hsl(var(--primary-foreground)) !important;
+	}
+
+	/* As on the variant pills: flat and edged only while not focused, so the focus ring shows. */
+	:global([data-theme='default'] .edp-aggregation .edp-pill:not(:focus-visible)) {
+		box-shadow: none !important;
+	}
+
+	:global([data-theme='default'] .edp-aggregation .edp-pill.edp-on:not(:focus-visible)) {
 		box-shadow: inset 0 0 0 1px hsl(var(--primary-ink)) !important;
 	}
 

@@ -322,7 +322,6 @@
 		font-weight: 500;
 		letter-spacing: 0.02em;
 		text-transform: none;
-		box-shadow: none !important;
 		transition:
 			border-color var(--motion-fast) var(--motion-ease),
 			background var(--motion-fast) var(--motion-ease),
@@ -338,6 +337,15 @@
 		border-color: hsl(var(--primary-ink)) !important;
 		background: hsl(var(--primary)) !important;
 		color: hsl(var(--primary-foreground)) !important;
+	}
+
+	/* Flat at rest, and the inner edge only while not focused, so the global focus ring (a box
+	   shadow) still shows on a pill, the chosen one included. */
+	:global([data-theme='default'] .edp-pill:not(:focus-visible)) {
+		box-shadow: none !important;
+	}
+
+	:global([data-theme='default'] .edp-pill.edp-on:not(:focus-visible)) {
 		box-shadow: inset 0 0 0 1px hsl(var(--primary-ink)) !important;
 	}
 
@@ -350,6 +358,10 @@
 
 	:global([data-theme='default'] .edp-swatch) {
 		border-color: var(--ed-line-strong) !important;
+	}
+
+	/* The chosen swatch is marked by its ring, so only an unchosen, unfocused one is flattened. */
+	:global([data-theme='default'] .edp-swatch:not(.edp-on):not(:focus-visible)) {
 		box-shadow: none !important;
 	}
 
