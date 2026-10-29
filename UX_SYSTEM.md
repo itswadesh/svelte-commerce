@@ -77,9 +77,12 @@ genuinely missing.
 | text | `--foreground` · `text-foreground` |
 | text-muted | `--muted-foreground` · `text-muted-foreground` |
 | border | `--border` · `border` (default border colour) |
-| primary / primary-hover | `--primary` · `bg-primary`; hover is `hover:bg-primary/90` until a dedicated token exists |
+| primary / primary-hover | `--primary` · `bg-primary` (the action colour as a fill); `--primary-hover` · `bg-primary-hover` |
+| primary ink | `--primary-ink` · `text-primary`, `border-primary`, `ring-primary` (the action colour as ink; the text colour where the fill does not read on the canvas, as the default theme's yellow does not) |
 | accent | `--accent` · `bg-accent` |
 | success | `--success` · `bg-success` |
+| sale | `--sale` · `text-sale` (savings: "% off", offer lines) |
+| info | `--info` · `bg-info`, `text-info` |
 | warning | not defined yet; add `--warning` / `--warning-foreground` in `src/app.css` and `tailwind.config.ts` before first use |
 | danger | `--destructive` · `bg-destructive` |
 | focus | `--ring` · global `:focus-visible` ring in `src/app.css` |
@@ -109,6 +112,17 @@ Use these products as references for principles, not as layouts to copy:
 - **Stripe:** clear information grouping, polished states, restrained visual depth.
 - **Linear:** compact density, consistent spacing, minimal interaction noise.
 - **Baymard research:** product discovery, filtering, product-page, cart and checkout behaviour.
+- **Bewakoof:** the default theme's merchandising patterns and density (owner, 2026-10-29): the
+  card's label, rating pill, brand line and one-line price; round sub-category pictures, filter
+  chips and the Sort | Filter bar on listings; the edge-to-edge picture, low-size hints and Key
+  highlights on the product page. Patterns only, never its brand, copy or imagery, and the owner's
+  settled decisions (sentence case, Inter, honest data) win where it differs.
+
+The store chooses each of those patterns in its GoCommerce theme settings (`card_*`, `list_*`,
+`pdp_*`, `type_scale`, `heading_weight`, `density`, `sale`); the defaults in
+`src/lib/composer/theme-options.ts` and `src/app.css` apply only where a store left a key unset.
+A new default-theme choice a merchant could reasonably want different is added as a setting, not
+hard-coded. `docs/decisions.md` (2026-10-29) lists them.
 
 The storefront must remain themeable for different merchants. Brand identity is expressed through
 tokens, media, typography and limited accent treatments, not page-specific CSS rewrites.
@@ -174,9 +188,13 @@ never from the product, the information a shopper decides on, or a touch target.
 
 ### Type scale
 
-- Body: 13–15px, line-height 1.4–1.55.
-- Supporting text: 12–13px, never low-contrast merely to appear elegant. 11px is for a badge or
-  an eyebrow, never for a sentence.
+- One ladder by role in `src/app.css` (`--text-display` … `--text-caption`, Tailwind
+  `text-display` … `text-caption`), sized by the store's `type_scale`. Size text by its role, not
+  with a one-off size.
+- Body: 16px on the default `standard` scale (owner, 2026-10-29); 14px on `compact`, 18px on
+  `large`. Line-height 1.4–1.55.
+- Supporting text: 14px on `standard` (13px on `compact`), never low-contrast merely to appear
+  elegant. Captions 12–13px. 11px is for a badge or an eyebrow, never for a sentence.
 - Page title: 20–28px. A listing, account or checkout title sits at the bottom of that band — it
   labels the content, it is not the page's message. One editorial hero headline per site may
   reach 36px; nothing else does.
@@ -237,7 +255,8 @@ never from the product, the information a shopper decides on, or a touch target.
   every price in a row shares one baseline — a ragged price column is what makes a dense grid
   hard to scan.
 - Do not hide the meaningful difference between similar products through aggressive truncation.
-  Two clamped lines beat one truncated line whenever names differ in the tail.
+  Two clamped lines beat one truncated line whenever names differ in the tail; the store picks
+  one or two (`card_title_lines`, one by default, as the owner's reference does).
 - Reserve image dimensions and show skeletons to prevent layout shift.
 
 ### Product page

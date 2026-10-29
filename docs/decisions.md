@@ -3,6 +3,47 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-29: The default theme shops like Bewakoof, and the store decides each part
+
+The owner: "for the default theme, take reference from https://www.bewakoof.com/", and then "dont
+leave everything for storefront to decide. keep maximum modifyable at admin".
+
+Bewakoof is the reference for the default theme's merchandising patterns and density, not a look to
+copy: no logo, name, artwork, copy or pictures of theirs. What the default theme took from it:
+
+- **Palette.** A white canvas, neutral near-black text, one yellow (`--primary`, 47 100% 60%) for
+  the action with dark text on it (12.2:1), green for savings (`--sale`, #198837, the engine's
+  default for the `sale` setting), a calm blue for information (`--info`). Yellow cannot be ink
+  (1.44:1 on white), so `text-primary`, `border-primary`, rings and the like read `--primary-ink`,
+  the text colour on this theme, and selected pills and the current page take a dark edge.
+- **Cards.** The label top left on the picture, the rating pill bottom left, the brand line in bold
+  with the heart beside it under the picture, the name, then price, was-price and saving on one line.
+- **Listings.** Title and product count on one line, round sub-category pictures, filter chips that
+  open the filter sheet, the sticky Sort | Filter bar on a phone, a filter rail on a desktop.
+- **Product page.** The picture edge to edge on a phone with the label and rating on it, the brand
+  line, "2 left" under a low size, a Key highlights card of attribute pairs, the sticky Add to bag.
+
+Every one of those choices is a key in the store's GoCommerce theme settings (engine PR #182), and
+the storefront's value applies only when the key is unset: `sale`, `type_scale`, `heading_weight`,
+`density`, the `card_*`, `list_*` and `pdp_*` keys. Visual keys become CSS variables in
+`src/lib/composer/theme-tokens.ts`; the rest are parsed and checked in
+`src/lib/composer/theme-options.ts`. A value outside its list is dropped, as with the colours.
+
+Kept from settled decisions where the reference differs: sentence case, not Bewakoof's capitals
+("Add to bag", not "ADD TO BAG"); Inter, at its 800 weight for headings, not a new face; the store's
+own colours over the theme's; nothing invented (no rating without reviews, no "N left" without the
+variant's own count, no offers, no "bestseller"); 2 / 3 / 4 / 5 product columns, not Bewakoof's
+three on a desktop (a store can choose three); the sticky Add to bag only once the in-page button has
+scrolled away. Bewakoof's free-shipping strip is not drawn: the engine gives the free-delivery
+threshold only for a cart, so there is no figure to show a shopper who has none.
+
+Two UX_SYSTEM rules change with this, both by the owner's settings: body text is 16px by default
+(`type_scale: standard`; the 13-15px of section 4 is `compact`), and a card's name is one line by
+default (`card_title_lines: one`; two lines is the other choice).
+
+The store defaults (`kitcommerce.config.ts`) no longer carry the Litekart demo shop's navy palette,
+which had painted every GoCommerce store in one merchant's colours over the theme's own.
+
 ## 2026-10-28: A new store's footer links its standard pages, shown once published
 
 The owner asked that every new store get its mandatory pages, linked from the footer. GoCommerce
