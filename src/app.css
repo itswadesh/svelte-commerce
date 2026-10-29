@@ -428,6 +428,12 @@
 		letter-spacing: 0.8px;
 	}
 
+	/* The 0.8px is a caps-era spacing, and the default theme sets no caps; its Inter headings read
+	   at their own spacing. In the base layer, so a component's own tracking still wins. */
+	[data-theme='default'] :where(h1, h2, h3, h4, h5, h6) {
+		letter-spacing: normal;
+	}
+
 	/* Accessibility: visible keyboard focus indicator on all interactive elements.
 	   Reads --ring, the token the design system names as the focus colour, not
 	   --primary: the two are separate values now, so re-branding cannot move focus. */
@@ -466,6 +472,20 @@
 
 .section-heading {
 	@apply text-lg font-semibold tracking-tight text-foreground sm:text-xl;
+}
+
+/* On the default theme both come from the role ladder, so the store's type scale and heading
+   weight move every page title and section title. */
+[data-theme='default'] .page-heading {
+	font-size: var(--text-page-title);
+	font-weight: var(--heading-weight);
+	line-height: 1.2;
+}
+
+[data-theme='default'] .section-heading {
+	font-size: var(--text-section);
+	font-weight: var(--heading-weight);
+	line-height: 1.25;
 }
 
 /* The single container rail — see --container-max / --container-gutter in :root. Was

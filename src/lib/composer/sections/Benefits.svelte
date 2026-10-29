@@ -83,8 +83,8 @@
 	.cmp-benefit__title {
 		margin: 0;
 		font-family: var(--font-heading, inherit);
-		font-size: 1.0625rem;
-		font-weight: 700;
+		font-size: var(--text-body);
+		font-weight: 600;
 		line-height: 1.3;
 		overflow-wrap: anywhere;
 	}
@@ -92,7 +92,7 @@
 	.cmp-benefit__body {
 		margin: 6px 0 0;
 		color: inherit;
-		font-size: 0.9rem;
+		font-size: var(--text-supporting);
 		line-height: 1.5;
 		overflow-wrap: anywhere;
 	}

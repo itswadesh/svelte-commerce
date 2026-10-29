@@ -168,7 +168,7 @@
 		     content wins -->
 			{#if !helloBarHasContent && announcement && announcementShown}
 				<div class="overflow-hidden">
-					<div class="max-w-none bg-primary px-4 py-2.5 text-center text-xs font-semibold text-primary-foreground">
+					<div class="ed-announce max-w-none bg-primary px-4 py-2.5 text-center text-xs font-semibold text-primary-foreground">
 						{#if announcement.link}
 							<a href={announcement.link} class="inline-flex min-h-[32px] items-center transition-opacity hover:opacity-80"
 								>{announcement.text}</a
@@ -599,6 +599,27 @@
 
 	.ed .ed-row {
 		background: transparent;
+	}
+
+	.ed .ed-announce {
+		font-size: var(--text-caption);
+		font-weight: 500;
+		line-height: 1.4;
+	}
+
+	/* The bar's 10px padding is taken back, so the link is a 44px target without the bar growing. */
+	.ed .ed-announce a {
+		min-height: 44px;
+		margin-block: -10px;
+	}
+
+	.ed .ed-announce a:active {
+		opacity: 0.6;
+	}
+
+	/* Inset: the bar's overflow-hidden wrapper clips the global ring, which is drawn outside the box. */
+	.ed .ed-announce a:focus-visible {
+		box-shadow: inset 0 0 0 2px hsl(var(--ring));
 	}
 
 	/* Header action icons (wishlist, account) — ink, accent on hover */
