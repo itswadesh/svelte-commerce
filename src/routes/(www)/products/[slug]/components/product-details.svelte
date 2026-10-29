@@ -39,6 +39,7 @@
 	import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
 	import { rememberPreview } from '$lib/composer/page-layout.js'
 	import { text, type ComposerLayout, type ComposerSection } from '$lib/composer/helpers.js'
+	import { themeOptions } from '$lib/composer/theme-options.js'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
@@ -51,7 +52,8 @@
 		untrack(() => data?.previewKey && rememberPreview('product', data.previewKey, data.editorOrigin ?? null))
 	}
 	const [aspectWidth, aspectHeight] = $derived(data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
-	const showPincodeCheck = $derived(productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
+	const options = $derived(themeOptions(data?.themeSettings))
+	const showPincodeCheck = $derived(options.pdp_delivery_check && productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
 
 	// Delivery and returns are stated only where the merchant has actually published the policy.
 	// The commented-out fallbacks this replaces promised free delivery over ₹999 and a 7-day
@@ -85,7 +87,7 @@
 		return () => observer.disconnect()
 	})
 
-	const showStickyBar = $derived(isCompactViewport && !ctaOnScreen)
+	const showStickyBar = $derived(options.pdp_sticky_buy && isCompactViewport && !ctaOnScreen)
 
 	// A fixed layer covers whatever is under it, and at the foot of the page that is the footer.
 	// The document gets exactly the bar's own height back as padding for as long as it is on

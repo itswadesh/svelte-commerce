@@ -10,6 +10,7 @@
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { themeOptions } from '$lib/composer/theme-options.js'
+	import { productBadge } from '$lib/product/badge.js'
 
 	const cartState = getCartState()
 
@@ -50,16 +51,7 @@
 	const showWishlist = $derived(options.card_wishlist && page?.data?.store?.plugins?.isWishlist?.active)
 	const showCart = $derived(options.card_add_to_cart || !hideCartControls)
 
-	// The label on the picture, from the product's own data only: its first tag (Litekart sends a
-	// material instead), or its first highlight line.
-	const badge = $derived.by(() => {
-		if (options.card_badge === 'first_highlight') return Array.isArray(product?.highlights) ? String(product.highlights[0] ?? '').trim() : ''
-		if (options.card_badge !== 'first_tag') return ''
-		const tags = Array.isArray(product?.tags) ? product.tags : String(product?.productTags ?? '').split(',')
-		const tag = String(tags.map((t: unknown) => String(t ?? '').trim()).find(Boolean) ?? product?.material?.[0] ?? '')
-		// A handle such as "new-arrival" reads as words on the picture.
-		return /\s/.test(tag) ? tag : tag.replace(/[-_]+/g, ' ').replace(/^./, (c) => c.toUpperCase())
-	})
+	const badge = $derived(productBadge(product, options.card_badge))
 
 	// Score and count are different numbers. The badge used to print `ratings.length` whenever the
 	// backend sent reviews without a pre-computed score, so three one-star reviews read as a 3.
