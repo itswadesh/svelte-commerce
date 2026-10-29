@@ -235,7 +235,9 @@
 	{#if imageCdnOrigin}
 		<link rel="preconnect" href={imageCdnOrigin} />
 	{/if}
+	<!-- The store's own icon when it has one (D148), for the tab and a phone's home screen. -->
 	<link rel="icon" href={data?.store?.favicon || '/favicon.png'} />
+	<link rel="apple-touch-icon" href={data?.store?.favicon || '/favicon.png'} />
 	{#if themeColor}
 		<meta name="theme-color" content={themeColor} />
 	{/if}

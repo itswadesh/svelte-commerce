@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { version } from '$app/environment'
+	import { page } from '$app/state'
 	import { Plus } from '@lucide/svelte'
 	import { onMount } from 'svelte'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
@@ -24,8 +25,9 @@
 </script>
 
 <footer class="lime-footer">
-	{#if footer?.logo}
-		<img src={footer.logo} alt={footer.logoAlt || brandName} />
+	<!-- This footer is dark, so the store's own logo shows here only in its dark version. -->
+	{#if footer?.logo || page.data?.store?.logoDark}
+		<img src={footer?.logo || page.data.store.logoDark} alt={footer?.logoAlt || brandName} />
 	{:else if brandName}
 		<!-- No uploaded logo: the brand name carries the mark, same as the header. -->
 		<p class="lime-footer-wordmark">{brandName}</p>

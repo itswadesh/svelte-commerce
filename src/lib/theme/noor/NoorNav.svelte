@@ -47,7 +47,7 @@
 
 		<a href="/" class="noor-logo" aria-label="{brandName} home">
 			{#if storeData?.logo}
-				<img src={storeData.logo} alt={brandName} />
+				<img src={storeData.logo} alt={brandName} width="120" height="30" />
 			{:else}
 				<span class="noor-wordmark">{brandName}</span>
 			{/if}
