@@ -360,7 +360,7 @@
 					{#if page?.data?.store?.logo}
 						<!-- Through the CDN: store logos are uploaded at full resolution and this renders
 					     32px tall. Served raw it can be the heaviest above-the-fold asset on a store. -->
-						<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
+						<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} width="128" height="32" class="h-8 w-auto object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
 						<span class="text-base font-semibold text-foreground">
 							{page?.data?.store?.name || 'Svelte Commerce'}

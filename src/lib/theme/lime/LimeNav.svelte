@@ -51,7 +51,7 @@
 
 	<a class="lime-logo" href="/">
 		{#if storeData?.logo}
-			<img src={storeData.logo} alt={brandName} />
+			<img src={storeData.logo} alt={brandName} width="200" height="50" />
 		{:else}
 			<span class="lime-wordmark">{brandName}</span>
 		{/if}
