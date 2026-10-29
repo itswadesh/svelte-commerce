@@ -54,8 +54,28 @@ describe('theme tokens', () => {
 	it('sets nothing the merchant did not: an unset token keeps the storefront look', () => {
 		expect(themeTokenDeclarations({})).toEqual({})
 		expect(themeTokenDeclarations(null)).toEqual({})
-		expect(Object.keys(themeTokenDeclarations({ accent: '#112233' })).sort()).toEqual(['--primary', '--primary-hover'])
+		expect(Object.keys(themeTokenDeclarations({ accent: '#112233' })).sort()).toEqual([
+			'--primary',
+			'--primary-foreground',
+			'--primary-hover',
+			'--primary-ink'
+		])
 		expect(themeTokenCss({})).toBe('')
+	})
+
+	it('keeps an accent readable as ink and under its label', () => {
+		const navy = themeTokenDeclarations({ accent: '#112233' })
+		expect(navy['--primary-ink']).toBe('210 50% 13.3%')
+		expect(navy['--primary-foreground']).toBe('0 0% 100%')
+
+		const yellow = themeTokenDeclarations({ accent: '#ffd233' })
+		expect(yellow['--primary-ink']).toBe('0 0% 10.2%')
+		expect(yellow['--primary-foreground']).toBe('0 0% 10.2%')
+
+		// The merchant's own label colour stands, and the ink follows their text colour.
+		const own = themeTokenDeclarations({ accent: '#ffd233', accent_text: '#ffffff', text: '#222222' })
+		expect(own['--primary-foreground']).toBe('0 0% 100%')
+		expect(own['--primary-ink']).toBe('0 0% 13.3%')
 	})
 
 	it('lets nothing but the exact shapes through, so a value can never write CSS of its own', () => {

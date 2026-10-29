@@ -5,6 +5,7 @@
 	import { page } from '$app/state'
 	import { ChevronDown } from '@lucide/svelte'
 	import { slide } from '$lib/motion'
+	import { themeOptions } from '$lib/composer/theme-options.js'
 
 	const productState = useProductState()
 	const settingState = getSettingState()
@@ -39,8 +40,10 @@
 	)
 
 	// `attributes` is optional on several connectors; iterating it raw threw on any product
-	// without one.
-	const attributes = $derived<{ name: string; value: string }[]>(product?.attributes ?? [])
+	// without one. With the store's highlights grid on, the Key highlights card lists them instead.
+	const attributes = $derived<{ name: string; value: string }[]>(
+		themeOptions(data?.themeSettings).pdp_highlights_grid ? [] : (product?.attributes ?? [])
+	)
 
 	// A bordered header reading "Product Specifications" over nothing at all is worse than no
 	// section, so the whole block stands down when the backend sent no specs.

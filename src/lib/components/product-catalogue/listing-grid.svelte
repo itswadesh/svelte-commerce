@@ -7,8 +7,11 @@
 	import { SearchService } from '$lib/core/services/index.js'
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { readAppliedFilters, urlWithoutAnyFilter } from './scope-filters.js'
+	import { themeOptions } from '$lib/composer/theme-options.js'
 
 	const data = $derived(page.data)
+	const options = $derived(themeOptions(data?.themeSettings))
+	const categoryName = $derived(data?.products?.categoryHierarchy?.at(-1)?.name ?? '')
 
 	// The ratio the product cards below actually resolve to, so the load-more skeletons reserve the
 	// height the incoming products will occupy. Hard-coding `aspect-square` here worked only while
@@ -153,20 +156,28 @@
 	<!-- Say what was looked for and offer the one action that helps. The old copy was a bare
 	     "No products found" over a link to /products, which also threw away the search term. -->
 	<div class="ed-empty flex flex-col items-center justify-center gap-2 px-6 py-12 text-center">
+		<!-- Three different situations, said as they are: the words found nothing, the filters left
+		     nothing, or there is nothing here to filter yet. -->
 		<p class="ed-empty__title text-lg font-medium text-foreground">
 			{#if searchTerm}
 				No products match “{searchTerm}”
-			{:else}
+			{:else if hasRemovableFilters}
 				No products match these filters
-			{/if}
-		</p>
-		<p class="max-w-sm text-sm text-muted-foreground">
-			{#if hasRemovableFilters}
-				Try removing a filter, or search for something more general.
+			{:else if categoryName}
+				No products in {categoryName} yet
 			{:else}
-				Try a shorter or more general search term.
+				No products in this shop yet
 			{/if}
 		</p>
+		{#if searchTerm || hasRemovableFilters}
+			<p class="max-w-sm text-sm text-muted-foreground">
+				{#if hasRemovableFilters}
+					Try removing a filter, or search for something more general.
+				{:else}
+					Try a shorter or more general search term.
+				{/if}
+			</p>
+		{/if}
 		{#if hasRemovableFilters}
 			<a
 				href={urlWithoutAnyFilter(page.url)}
@@ -174,7 +185,7 @@
 			>
 				Clear all filters
 			</a>
-		{:else if searchTerm}
+		{:else if searchTerm || categoryName}
 			<a
 				href="/products"
 				class="ed-empty__link mt-2 inline-flex h-11 items-center rounded-md border border-input px-4 text-sm font-semibold transition-colors hover:bg-muted"
@@ -187,6 +198,8 @@
 	<div
 		data-testid="product-grid"
 		class="ed-grid intra-gap grid auto-rows-auto grid-cols-2 transition-opacity md:grid-cols-3 xl:grid-cols-4 {refining ? 'opacity-60' : ''}"
+		data-cols-mobile={options.list_columns_mobile}
+		data-cols-desktop={options.list_columns_desktop}
 		aria-busy={refining}
 	>
 		{#each products as product, i (product.id)}
@@ -251,15 +264,34 @@
 	   built against. The default theme's rail is capped at 232px (see listing-page.svelte), which
 	   is what makes room for the extra column: it holds the card between 155px and 184px at every
 	   width from 360 up, instead of swinging from 160px on a tablet to 205px on a desktop. */
+	/* The store's column counts (list_columns_mobile, list_columns_desktop) narrow that ladder. */
+	@media (max-width: 767px) {
+		:global([data-theme='default']) .ed-grid[data-cols-mobile='one'] {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
 	@media (min-width: 1024px) {
 		:global([data-theme='default']) .ed-grid {
 			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+
+		:global([data-theme='default']) .ed-grid[data-cols-desktop='three'] {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 	}
 
 	@media (min-width: 1280px) {
 		:global([data-theme='default']) .ed-grid {
 			grid-template-columns: repeat(5, minmax(0, 1fr));
+		}
+
+		:global([data-theme='default']) .ed-grid[data-cols-desktop='four'] {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+
+		:global([data-theme='default']) .ed-grid[data-cols-desktop='three'] {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 	}
 
@@ -271,7 +303,7 @@
 
 	:global([data-theme='default']) .ed-empty__title {
 		font-family: var(--ed-display);
-		font-weight: 700;
+		font-weight: var(--weight-heading);
 		font-size: var(--type-page-title);
 		line-height: var(--leading-title);
 		letter-spacing: var(--tracking-title);
@@ -280,7 +312,7 @@
 	}
 
 	:global([data-theme='default']) .ed-empty__link {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 		text-underline-offset: 4px;
 	}
 
@@ -314,14 +346,14 @@
 
 	:global([data-theme='default'] .ed-pagination a:hover),
 	:global([data-theme='default'] .ed-pagination button:not(:disabled):hover) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 		background: var(--ed-surface);
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-pagination a[aria-current='page']) {
 		background: hsl(var(--primary));
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 		color: hsl(var(--primary-foreground));
 	}
 

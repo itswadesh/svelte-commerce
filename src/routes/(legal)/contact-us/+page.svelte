@@ -91,7 +91,7 @@
 								>
 									<method.icon class="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
 									<span class="min-w-0">
-										<span class="block text-xs text-muted-foreground">{method.title}</span>
+										<span class="contact-caption block text-xs text-muted-foreground">{method.title}</span>
 										<!-- An email address has no spaces to wrap at; without break-all it pushed the page
 										     sideways at 360px. -->
 										<span class="block break-all text-sm font-medium {method.href ? 'text-primary' : 'text-foreground'}">{method.value}</span>
@@ -119,7 +119,7 @@
 								<div in:scale={{ start: 0.8 }} class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-success/10">
 									<Check class="h-5 w-5 text-success" aria-hidden="true" />
 								</div>
-								<h2 class="text-lg font-semibold text-foreground">Message sent</h2>
+								<h2 class="contact-title text-lg font-semibold text-foreground">Message sent</h2>
 								<p class="mt-1 text-sm text-muted-foreground">
 									Thanks{info.name ? `, ${info.name.trim().split(/\s+/)[0]}` : ''}. Replies go to {info.email}.
 								</p>
@@ -130,7 +130,7 @@
 							</div>
 						{:else}
 							<section class="rounded-lg border bg-card p-4 shadow-xs md:p-6" aria-labelledby="contact-form-title">
-								<h2 id="contact-form-title" class="text-lg font-semibold text-foreground">Send a message</h2>
+								<h2 id="contact-form-title" class="contact-title text-lg font-semibold text-foreground">Send a message</h2>
 
 								<!-- `novalidate` hands every check to the renderer's schema, so an empty field and a
 								     malformed one report the same way: in the summary, which takes focus after a
@@ -226,7 +226,7 @@
 										</Button>
 
 										{#if termsOk || privacyOk}
-											<p class="text-xs text-muted-foreground">
+											<p class="contact-caption text-xs text-muted-foreground">
 												By sending this you agree to our
 												{#if termsOk}<PolicyLink href="/terms-and-conditions" class="text-primary hover:underline">terms</PolicyLink
 													>{/if}{#if termsOk && privacyOk}
@@ -244,3 +244,17 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	/* The default theme reads the role ladder, so the store's type scale moves this page; the other
+	   themes keep the classes above. */
+	:global([data-theme='default']) .contact-caption {
+		font-size: var(--type-dense);
+		line-height: var(--leading-ui);
+	}
+
+	:global([data-theme='default']) .contact-title {
+		font-size: var(--type-heading);
+		line-height: var(--leading-heading);
+	}
+</style>

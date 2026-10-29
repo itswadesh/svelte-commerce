@@ -18,7 +18,7 @@ const DEFAULT_THEME = 'default'
 
 const THEME_FONTS: Record<string, string> = {
 	default:
-		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
 	wine:
 		'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap',
 	organic:

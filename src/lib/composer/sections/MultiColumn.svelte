@@ -99,7 +99,7 @@
 
 	/* Headings are 700 on the default theme (UX_SYSTEM type scale). */
 	:global([data-theme='default']) .cmp-mc__title {
-		font-weight: 700;
+		font-weight: var(--weight-heading);
 	}
 
 	.cmp-mc__link {
@@ -129,7 +129,7 @@
 		margin: 0;
 		padding-left: 4px;
 		font-size: var(--type-heading, clamp(0.9375rem, 2.2vw, 1.25rem));
-		font-weight: 700;
+		font-weight: var(--weight-heading, 700);
 		overflow-wrap: break-word;
 		hyphens: auto;
 	}
@@ -147,7 +147,7 @@
 
 	/* The ring is drawn by the box that covers the tile, so it rings the whole card. */
 	.cmp-mc__tile-link:focus-visible::after {
-		outline: 3px solid hsl(var(--primary));
+		outline: 3px solid hsl(var(--primary-ink));
 		outline-offset: 3px;
 	}
 

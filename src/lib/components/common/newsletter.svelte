@@ -117,7 +117,7 @@
 									<p id={errorId} class="mt-1.5 text-sm text-destructive">{fieldError}</p>
 								{/if}
 							</div>
-							<Button type="submit" class="ed-sub-btn h-11 shrink-0 px-5 sm:px-8 md:h-10" disabled={subscribing || loadingForSubmitting}>
+							<Button type="submit" class="h-11 shrink-0 px-5 sm:px-8 md:h-10" disabled={subscribing || loadingForSubmitting}>
 								{#if subscribing}
 									Subscribing…
 								{:else}
@@ -131,23 +131,3 @@
 		{/snippet}
 	</NewsletterRenderer>
 {/if}
-
-<style>
-	/* Match the editorial buttons on the homepage (.ed-btn): sharp radius, sentence case,
-	   primary fill with a subtle lift on hover. Default theme only. */
-	:global([data-theme='default']) .ed-sub-btn {
-		border: 1px solid hsl(var(--primary));
-		border-radius: var(--ed-radius);
-		font-family: var(--ed-body);
-		font-weight: 600;
-		font-size: 0.76rem;
-		transition:
-			transform var(--motion-fast) var(--motion-ease),
-			opacity var(--motion-fast) var(--motion-ease);
-	}
-
-	:global([data-theme='default']) .ed-sub-btn:hover {
-		transform: translateY(-2px);
-		opacity: 0.92;
-	}
-</style>

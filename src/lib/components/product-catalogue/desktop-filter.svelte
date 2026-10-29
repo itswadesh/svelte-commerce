@@ -63,7 +63,7 @@
 			{#if filterState.anyFilterApplied}
 				<Button variant="link" size="sm" class="ed-df__clear h-auto p-0" onclick={filterState.clearFilters}>
 					<X class="mr-1 h-3 w-3" />
-					Clear
+					Clear all
 				</Button>
 			{/if}
 		</div>
@@ -529,7 +529,7 @@
 	}
 
 	:global([data-theme='default'] .ed-df__clear:hover) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	/* Hairline group dividers */
@@ -558,7 +558,7 @@
 	}
 
 	:global([data-theme='default'] .group:hover .ed-df__cat) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	/* +N more / Show less */
@@ -571,7 +571,7 @@
 	}
 
 	:global([data-theme='default'] .ed-df__more:hover) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 		text-decoration: none;
 	}
 
@@ -594,7 +594,7 @@
 
 	:global([data-theme='default']) .ed-df__search:focus {
 		outline: none;
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 		box-shadow: none;
 	}
 
@@ -612,7 +612,7 @@
 	:global([data-theme='default'] .ed-df__slider input[type='range']::-webkit-slider-thumb) {
 		width: 15px;
 		height: 15px;
-		border: 1px solid hsl(var(--primary));
+		border: 1px solid hsl(var(--primary-ink));
 		background: var(--ed-surface);
 		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
 	}
@@ -620,7 +620,7 @@
 	:global([data-theme='default'] .ed-df__slider input[type='range']::-moz-range-thumb) {
 		width: 15px;
 		height: 15px;
-		border: 1px solid hsl(var(--primary));
+		border: 1px solid hsl(var(--primary-ink));
 		background: var(--ed-surface);
 		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
 	}
@@ -636,7 +636,7 @@
 
 	:global([data-theme='default'] .ed-df__prices input:focus) {
 		outline: none;
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-df__prices label) {

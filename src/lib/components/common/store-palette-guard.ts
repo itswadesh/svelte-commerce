@@ -15,7 +15,8 @@
  * The rule, deliberately narrow:
  *
  * - Only the four ground tokens are touched. Everything else — `--primary`, `--accent`,
- *   `--secondary`, `--destructive` and their foregrounds — is passed through untouched.
+ *   `--secondary`, `--destructive` and their foregrounds — is passed through untouched; an
+ *   unpaired `--primary` only gains the label and ink colours that read with it (below).
  * - A merchant who overrides a ground **and** its paired foreground has declared a complete pair
  *   and knows what they are doing. That pair is passed through untouched, which is why this store's
  *   deliberately dark `--secondary` with its near-white `--secondary-foreground` still works.
@@ -25,6 +26,8 @@
  * This does not decide whether a colour is attractive. It only refuses to print dark text on a
  * ground the merchant never said was dark.
  */
+
+import { contrast, tripletToHex } from '$lib/composer/theme-tokens.js'
 
 /** Ground tokens, with the minimum lightness each needs to stay readable under dark text. */
 const GROUND_FLOORS: Record<string, number> = {
@@ -72,6 +75,15 @@ export function guardStorePalette(vars: Record<string, unknown>): Record<string,
 		const hsl = parseHsl(raw)
 		if (!hsl || hsl.l >= floor) continue
 		out[token] = `${hsl.h} ${hsl.s} ${floor}%`
+	}
+
+	// The default theme's action colour is a light yellow, so its label is dark and its ink is the
+	// text colour. A merchant --primary without its pair gets the label that reads on it, and is
+	// used as ink only where it reads on the white canvas (4.5:1), as the theme editor's accent is.
+	const primary = out['--primary'] ? tripletToHex(out['--primary']) : ''
+	if (primary) {
+		if (!out['--primary-foreground']) out['--primary-foreground'] = contrast(primary, '#1a1a1a') >= contrast(primary, '#ffffff') ? '0 0% 10%' : '0 0% 100%'
+		if (!out['--primary-ink'] && contrast(primary, '#ffffff') >= 4.5) out['--primary-ink'] = out['--primary']
 	}
 
 	return out

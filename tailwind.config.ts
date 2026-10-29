@@ -2,6 +2,11 @@ import { fontFamily } from 'tailwindcss/defaultTheme'
 import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 
+// `bg-primary` is the action colour as a fill. Every other use of it (text, icons, borders, rings)
+// is ink on the canvas and reads --primary-ink, which a theme can point at a darker colour when its
+// fill would not be readable as text (src/app.css).
+const ink = { primary: { DEFAULT: 'hsl(var(--primary-ink) / <alpha-value>)' } }
+
 const config: Config = {
 	// Kept as `class` (never `media`) on purpose: the app ships `dark:` utilities but no dark
 	// token set and never adds the class, so `media` would flip them on for every visitor whose
@@ -40,8 +45,17 @@ const config: Config = {
 				page: '8px'
 			},
 			borderColor: {
-				DEFAULT: 'hsl(var(--border) / <alpha-value>)'
+				DEFAULT: 'hsl(var(--border) / <alpha-value>)',
+				...ink
 			},
+			textColor: ink,
+			ringColor: ink,
+			outlineColor: ink,
+			divideColor: ink,
+			textDecorationColor: ink,
+			accentColor: ink,
+			fill: ink,
+			stroke: ink,
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
 				input: 'hsl(var(--input) / <alpha-value>)',
@@ -67,6 +81,11 @@ const config: Config = {
 				warning: {
 					DEFAULT: 'hsl(var(--warning) / <alpha-value>)',
 					foreground: 'hsl(var(--warning-foreground) / <alpha-value>)'
+				},
+				sale: 'hsl(var(--sale) / <alpha-value>)',
+				info: {
+					DEFAULT: 'hsl(var(--info) / <alpha-value>)',
+					foreground: 'hsl(var(--info-foreground) / <alpha-value>)'
 				},
 				// Additive. `primary-hover` gives the hover step a token instead of
 				// `hover:bg-primary/90`, which blends the button into whatever is behind it;

@@ -29,7 +29,7 @@
 		display: flex;
 		justify-content: center;
 		padding-block: 10px;
-		font-size: 0.8125rem;
+		font-size: var(--type-dense, 0.8125rem);
 		font-weight: 500;
 		line-height: 1.4;
 		letter-spacing: 0.02em;

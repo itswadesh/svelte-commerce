@@ -77,9 +77,12 @@ genuinely missing.
 | text | `--foreground` · `text-foreground` |
 | text-muted | `--muted-foreground` · `text-muted-foreground` |
 | border | `--border` · `border` (default border colour) |
-| primary / primary-hover | `--primary` · `bg-primary`; hover is `hover:bg-primary/90` until a dedicated token exists |
+| primary / primary-hover | `--primary` · `bg-primary` (the action colour as a fill); `--primary-hover` · `bg-primary-hover` |
+| primary ink | `--primary-ink` · `text-primary`, `border-primary`, `ring-primary` (the action colour as ink; the text colour where the fill does not read on the canvas, as the default theme's yellow does not) |
 | accent | `--accent` · `bg-accent` |
 | success | `--success` · `bg-success` |
+| sale | `--sale` · `text-sale` (savings: "% off", offer lines) |
+| info | `--info` · `bg-info`, `text-info` |
 | warning | not defined yet; add `--warning` / `--warning-foreground` in `src/app.css` and `tailwind.config.ts` before first use |
 | danger | `--destructive` · `bg-destructive` |
 | focus | `--ring` · global `:focus-visible` ring in `src/app.css` |
@@ -109,6 +112,17 @@ Use these products as references for principles, not as layouts to copy:
 - **Stripe:** clear information grouping, polished states, restrained visual depth.
 - **Linear:** compact density, consistent spacing, minimal interaction noise.
 - **Baymard research:** product discovery, filtering, product-page, cart and checkout behaviour.
+- **Bewakoof:** the default theme's merchandising patterns and density (owner, 2026-10-29): the
+  card's label, rating pill, brand line and one-line price; round sub-category pictures, filter
+  chips and the Sort | Filter bar on listings; the edge-to-edge picture, low-size hints and Key
+  highlights on the product page. Patterns only, never its brand, copy or imagery, and the owner's
+  settled decisions (sentence case, Inter, honest data) win where it differs.
+
+The store chooses each of those patterns in its GoCommerce theme settings (`card_*`, `list_*`,
+`pdp_*`, `type_scale`, `heading_weight`, `density`, `sale`); the defaults in
+`src/lib/composer/theme-options.ts` and `src/app.css` apply only where a store left a key unset.
+A new default-theme choice a merchant could reasonably want different is added as a setting, not
+hard-coded. `docs/decisions.md` (2026-10-29) lists them.
 
 The storefront must remain themeable for different merchants. Brand identity is expressed through
 tokens, media, typography and limited accent treatments, not page-specific CSS rewrites.
@@ -178,23 +192,31 @@ never from the product, the information a shopper decides on, or a touch target.
 
 ### Type scale
 
-One size per role, as `--type-*` tokens in `src/app.css` (with `--leading-*` and `--tracking-*`);
-a component reads the token for its role rather than restating a size. Fluid steps hold their phone
-size on phones and reach the desktop size near the 1240px rail. The tokens are declared on the
-default theme only; the composer's sections, which every theme shares, read them with their old
-values as the fallback, so another theme's composed page keeps its look.
+One size per role, as `--type-*` tokens in `src/app.css` (with `--leading-*`, `--tracking-*` and
+`--weight-heading`); a component reads the token for its role rather than restating a size. Fluid
+steps hold their phone size on phones and reach the desktop size near the 1240px rail. The tokens
+are declared on the default theme only; the composer's sections, which every theme shares, read
+them with their old values as the fallback, so another theme's composed page keeps its look.
+
+The store's GoCommerce theme settings move this one ladder; unset, the table below applies.
+`type_scale` moves every step together: `standard` is the table, a 16px body (owner, 2026-10-29);
+`compact` is a step smaller, a 14px body; `large` a step larger, an 18px body. `heading_weight` is
+`--weight-heading`, the weight of every heading but the hero (700 unset). `density` moves the
+spacing tokens and the gutter: `compact` is the spacing bullet above, and `comfortable` and
+`spacious` widen each. The values are in `src/lib/composer/theme-tokens.ts`, and a test holds
+`src/app.css` to its `standard` and `compact` sets.
 
 | Role | Token | Phone → desktop | Weight | Line height | Used for |
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | Display | `--type-display` | 34 → 68px | 800 | 1.02, −0.025em | The hero headline only (D140) |
-| Section title | `--type-section-title` | 24 → 32px | 700 | 1.15, −0.015em | A heading over a band: home shelves, customer ratings, related products |
-| Product title | `--type-product-title` | 24 → 28px | 700 | 1.15, −0.015em | The product page h1, in its half-width column |
-| Page title | `--type-page-title` | 20 → 24px | 700 | 1.15, −0.015em | Listing, account and checkout titles (`.page-heading`), empty states, the product price (600) |
-| Heading | `--type-heading` | 16 → 18px | 700 | 1.3 | h3: tiles, columns, benefits; also the hero's lead line (400, 1.5) |
-| Body | `--type-body` | 16px | 400 | 1.5 | Paragraphs a shopper reads: section copy, product description |
-| UI | `--type-ui` | 14px | 400–600 | 1.4 | Links, buttons (600), controls, specs, supporting lines, the phone menu |
-| Dense | `--type-dense` | 13px | 500–600 | 1.35 | Product card names, a listing's description |
-| Label | `--type-label` | 12px | 500–700 | 1.3–1.5 | Eyebrows (the hero's pill at 700), column headings, counts, captions, the header's one-row navigation; the floor |
+| Section title | `--type-section-title` | 24 → 32px | heading | 1.15, −0.015em | A heading over a band: home shelves, customer ratings, related products |
+| Product title | `--type-product-title` | 24 → 28px | heading | 1.15, −0.015em | The product page h1, in its half-width column |
+| Page title | `--type-page-title` | 20 → 24px | heading | 1.15, −0.015em | Listing, account and checkout titles (`.page-heading`), empty states, the product price (600) |
+| Heading | `--type-heading` | 16 → 18px | heading | 1.3 | h3: tiles, columns, benefits; the contact page's panel headings (600); also the hero's lead line (400, 1.5) |
+| Body | `--type-body` | 16px | 400 | 1.5 | Paragraphs a shopper reads: section copy, product description; the product card's price (700) and the footer's column headings (600) |
+| UI | `--type-ui` | 14px | 400–700 | 1.4 | Links, buttons (600), controls, specs, supporting lines, the phone menu, filter chips; the brand line (700) and name on a product card and the product page |
+| Dense | `--type-dense` | 13px | 500–600 | 1.35 | A listing's description, sub-category names, the card's was-price, saving and rating, the announcement strip, the contact page's captions |
+| Label | `--type-label` | 12px | 500–700 | 1.3–1.5 | Eyebrows (the hero's pill at 700), counts, captions, the header's one-row navigation, the card's quick-add button; the floor |
 
 - A heading that only labels a panel or a control — the cart's "Price summary", an option's name
   on the product page — takes the UI or label step, not a title step.
@@ -205,7 +227,8 @@ values as the fallback, so another theme's composed page keeps its look.
 - A listing, account or checkout title sits at the bottom of the page-title band — it labels the
   content, it is not the page's message. Only the hero is display-sized.
 - Product price: prominent, one step under the product title.
-- Weights: 400 body, 500 UI text, 600 labels and buttons, 700 headings, 800 the hero alone.
+- Weights: 400 body, 500 UI text, 600 labels and buttons, `--weight-heading` (700 unset) headings,
+  800 the hero alone.
 - Headings carry no positive tracking; large titles tighten slightly (`--tracking-title`).
 - Sentence case everywhere, buttons and labels included. No all-caps styling (`uppercase`,
   `text-transform: uppercase`) on the default theme; owner decision, `docs/decisions.md`.
@@ -261,7 +284,8 @@ values as the fallback, so another theme's composed page keeps its look.
   every price in a row shares one baseline — a ragged price column is what makes a dense grid
   hard to scan.
 - Do not hide the meaningful difference between similar products through aggressive truncation.
-  Two clamped lines beat one truncated line whenever names differ in the tail.
+  Two clamped lines beat one truncated line whenever names differ in the tail; the store picks
+  one or two (`card_title_lines`, one by default, as the owner's reference does).
 - Reserve image dimensions and show skeletons to prevent layout shift.
 
 ### Product page

@@ -55,6 +55,12 @@
 		/* Control boundaries. 3.18:1 against this block's --background (#EEE), so a
 		   1px field or card edge meets WCAG 1.4.11. --border stays the quiet separator. */
 		--border-strong: 0 0% 52%;
+		/* Information strips (free delivery, delivery checks): a calm blue that carries white text
+		   at 5.96:1, and as text on its own 10% tint at 5.17:1. */
+		--info: 207 65% 38%;
+		--info-foreground: 0 0% 100%;
+		/* Savings: "% off" and offer lines, apart from success states. */
+		--sale: 142 65% 36%;
 
 		/* Motion. One scale for the storefront — see
 		   docs/superpowers/specs/2026-10-01-motion-layer-design.md. Fast is feedback; panel is
@@ -115,31 +121,41 @@
 		--container-gutter: clamp(16px, 4vw, 32px);
 	}
 
+	/* The action colour used as ink: text, icons, borders and rings (`text-primary`,
+	   `border-primary` and the rest map here in tailwind.config.ts). A fill colour is not always
+	   readable as text on the canvas, and a light one such as the default theme's yellow is 1.4:1
+	   on white, so ink and fill are two tokens. Declared on every shell, so it resolves against that
+	   shell's own --primary, merchant overrides included. */
+	:root,
+	[data-theme] {
+		--primary-ink: var(--primary);
+	}
+
+	/* The default palette follows the owner's reference store (docs/decisions.md, 2026-10-29):
+	   white canvas, neutral near-black text, one yellow for the action with dark text on it,
+	   green for savings, blue for information. A store's own colours override every one of these. */
 	[data-theme='default'] {
 		--background: 0 0% 100%;
-		--foreground: 222 47% 11%;
-		--primary: 222 47% 11%;
-		--primary-foreground: 0 0% 100%;
-		--secondary: 210 40% 96%;
-		--secondary-foreground: 222 47% 11%;
+		--foreground: 0 0% 10%;
+		/* 12.16:1 under --primary-foreground. As ink it would be 1.44:1, hence --primary-ink below. */
+		--primary: 47 100% 60%;
+		--primary-foreground: 0 0% 10%;
+		--primary-ink: var(--foreground);
+		--secondary: 0 0% 96%;
+		--secondary-foreground: 0 0% 10%;
 		--accent: 210 100% 50%;
 		--accent-foreground: 0 0% 100%;
-		--muted: 210 40% 96%;
+		--muted: 0 0% 96%;
 		/* Supporting text lives on three grounds here, not one: the white canvas, the `--muted`
-		   fill, and the warm `--ed-canvas` band behind the hero, lookbook, trust strip and
-		   footer. At 47% it measured 4.69:1 on white but only 4.24:1 on the band and 4.10:1 on
-		   --muted, so the same token passed in one place and failed AA in the other two — and
-		   folding --ed-soft into it moved the editorial copy onto the failing value. 44% is
-		   5.27:1 / 4.76:1 / 4.61:1: one value that clears 4.5:1 on every ground it lands on. */
-		--muted-foreground: 215 16% 44%;
-		/* --border stays the quiet separator, but 214 32% 91% measured 1.24:1 against
-		   this block's white canvas (1.13:1 once a translucent surface sat under it),
-		   which is invisible. 214 20% 84% is 1.48:1 — still a hairline, no longer
-		   nothing. Control boundaries use --input / --border-strong instead. */
-		--border: 214 20% 84%;
-		/* 3.20:1 against --background. An input is `border border-input bg-transparent`,
+		   fill and the `--ed-canvas` band. 42% is 5.32:1 / 4.87:1 / 4.88:1, one value that clears
+		   4.5:1 on every ground it lands on. */
+		--muted-foreground: 0 0% 42%;
+		/* --border is the quiet separator: 1.38:1, a hairline that is still visible. Control
+		   boundaries use --input / --border-strong instead. */
+		--border: 0 0% 86%;
+		/* 3.24:1 against --background. An input is `border border-input bg-transparent`,
 		   so this 1px line is the only thing marking the field (WCAG 1.4.11). */
-		--input: 215 16% 58%;
+		--input: 0 0% 56%;
 		/* Focus is its own token, not a copy of --primary: the global :focus-visible
 		   ring reads --ring, and a merchant re-branding --primary must not be able to
 		   silently move or erase the focus indicator. A darkened sibling of this
@@ -150,23 +166,24 @@
 		   bg-card / bg-popover surface fell through to :root's 0 0% 93.3% — a grey
 		   block with pure-black text on a white page. */
 		--card: 0 0% 100%;
-		--card-foreground: 222 47% 11%;
+		--card-foreground: 0 0% 10%;
 		--popover: 0 0% 100%;
-		--popover-foreground: 222 47% 11%;
+		--popover-foreground: 0 0% 10%;
 		/* Re-declared locally: white on the inherited 142 65% 36% is 3.76:1 and fails
 		   AA on the discount badge and the coupon row. 142 65% 30% is 5.12:1. */
 		/* 28%, not 30%: success text on its own 10% tint reached only 4.47:1. */
 		--success: 142 65% 28%;
 		--success-foreground: 0 0% 100%;
+		/* #198837, the engine's own default for the `sale` setting: 4.55:1 on white. */
+		--sale: 136.2 68.9% 31.6%;
 		/* 4.80:1 against white, both as a fill under --warning-foreground and as
 		   `text-warning` on the canvas. */
 		--warning: 32 92% 35%;
 		--warning-foreground: 0 0% 100%;
-		/* --primary is near-black (222 47% 11%), so the hover step lifts rather than
-		   deepens — darkening it further is imperceptible. 14.33:1 under white. */
-		--primary-hover: 222 47% 20%;
-		/* 3.97:1 against white. */
-		--border-strong: 215 16% 52%;
+		/* One step deeper than the yellow; 11.41:1 under --primary-foreground. */
+		--primary-hover: 47 100% 52%;
+		/* 3.71:1 against white. */
+		--border-strong: 0 0% 52%;
 		--wine-red: hsl(var(--primary));
 		--wine-red-dark: #020617;
 		--wine-dark: #111827;
@@ -196,32 +213,37 @@
 		--ed-line-strong: hsl(var(--border-strong));
 		--ed-radius: var(--radius);
 		--ed-display: var(--font-heading);
-		/* The one name NOT folded. --ed-canvas is the warm band tone behind the hero,
+		/* The one name NOT folded. --ed-canvas is the light band tone behind the hero,
 		   the lookbook, the trust strip and the footer, and the semantic set has no
 		   token for that role: --background is the white canvas those bands sit against
 		   (aliasing it there erases the page's tonal rhythm), and --muted is overwritten
 		   on this shell at hydration by the store's admin palette (store-palette.svelte),
 		   which repaints the bands in the merchant's brand hue. Naming the role is a
 		   design decision for the homepage slice; until then this stays a literal. */
-		--ed-canvas: #f6f3ee;
+		--ed-canvas: #f5f5f5;
 		/* Follows the shell's --font-body so the store's admin-set font applies; the theme's own
 		   Inter is the fallback. (This block is the ONE definition of the --ed-* set —
 		   DefaultHomepage used to restate it locally with slightly different contents.) */
 		--ed-body: var(--font-body, 'Inter', ui-sans-serif, system-ui, sans-serif);
 		--container-max: 1240px;
-		--container-gutter: clamp(20px, 5vw, 48px);
+		/* 16px on a phone, as UX_SYSTEM section 4 sets it: the 4px a 20px gutter took from each
+		   side belongs to the product photographs. */
+		--container-gutter: clamp(16px, 4vw, 48px);
 		/* Editorial alias — kept so existing `var(--ed-gutter)` rules keep working, but it is
 		   the shared container gutter now, not a second source of truth. */
 		--ed-gutter: var(--container-gutter);
 
 		/* Type scale: one size per role, so the same job reads the same on every page (UX_SYSTEM
 		   section 4 has the table). Fluid steps hold their phone size on phones and reach their
-		   desktop size near the 1240px rail. Weights are not tokens: 400 body, 500 UI text, 600
-		   labels and buttons, 700 headings, 800 the hero alone.
+		   desktop size near the 1240px rail. Weights: 400 body, 500 UI text, 600 labels and buttons,
+		   --weight-heading for headings, 800 the hero alone.
+		   These are the `standard` type scale and the `compact` density; a store's type_scale,
+		   heading_weight and density settings replace them (src/lib/composer/theme-tokens.ts, which a
+		   test holds to these numbers).
 		   Declared on this theme only. The composer's sections are shared by every theme and read
 		   these with their old values as the fallback, so another theme's composed page is unchanged. */
-		--type-label: 0.75rem; /* 12: eyebrows, column headings, counts, header navigation; the floor */
-		--type-dense: 0.8125rem; /* 13: dense UI, the product card's name */
+		--type-label: 0.75rem; /* 12: eyebrows, counts, captions, header navigation; the floor */
+		--type-dense: 0.8125rem; /* 13: dense UI, the product card's was-price and saving */
 		--type-ui: 0.875rem; /* 14: links, buttons, controls, specs */
 		--type-body: 1rem; /* 16: paragraphs a shopper reads */
 		--type-heading: clamp(1rem, 1.45vw, 1.125rem); /* 16 -> 18: h3, and the hero's lead line */
@@ -236,6 +258,7 @@
 		--leading-body: 1.5;
 		--tracking-display: -0.025em;
 		--tracking-title: -0.015em;
+		--weight-heading: 700;
 
 		/* Spacing, on the 4px scale. One gap between page sections — and inside a full-bleed band,
 		   and between the page and its footer — one between a section's heading and its content, and
@@ -415,8 +438,10 @@
 
 	/* The 0.8px tracking below is caps-era spacing: on this theme's sentence-case Inter it spread
 	   tile names, footer column headings and the cart's headings apart. `:where` keeps this at the
-	   weight of one class, so a heading's own tracking utility or role rule still wins. */
+	   weight of one class, so a heading's own tracking or weight utility, or its role rule, still
+	   wins. The weight is the store's heading_weight. */
 	[data-theme='default'] :where(h1, h2, h3, h4, h5, h6) {
+		font-weight: var(--weight-heading);
 		letter-spacing: normal;
 	}
 
@@ -479,10 +504,10 @@
 	@apply text-lg font-semibold tracking-tight text-foreground sm:text-xl;
 }
 
-/* Headings are 700 on the default theme, the weight the composed home page set (D140); these two
-   were the last at 600 beside it. */
+/* Headings take the store's heading weight on the default theme, 700 unset (the weight the composed
+   home page set, D140); these two were the last at 600 beside it. */
 [data-theme='default'] :is(.page-heading, .section-heading) {
-	font-weight: 700;
+	font-weight: var(--weight-heading);
 }
 
 /* The listing title's size, leading and tracking, so an account or checkout title matches it. */
@@ -546,6 +571,12 @@
 [data-theme='lime'] [data-testid='product-card-selling-price'],
 [data-theme='lime'] [data-testid='product-card-mrp'] {
 	font-weight: 400;
+}
+
+/* Text that sets no size of its own follows the store's type scale. The shell, not <html>, so rem
+   keeps its meaning. */
+div[data-theme='default'] {
+	font-size: var(--type-body);
 }
 
 /* ── Unified editorial buttons ─────────────────────────────────────────────────
@@ -739,7 +770,7 @@ html [data-vaul-overlay] {
 	right: 0;
 	bottom: var(--underline-offset, -4px);
 	height: 2px;
-	background: hsl(var(--primary));
+	background: hsl(var(--primary-ink));
 	transform: scaleX(0);
 	transform-origin: left;
 	transition:

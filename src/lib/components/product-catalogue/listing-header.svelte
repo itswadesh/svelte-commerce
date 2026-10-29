@@ -2,6 +2,10 @@
 	import { page } from '$app/state'
 	import * as Select from '$lib/components/ui/select/index.js'
 	import { sortOptions } from '$lib/config.js'
+	import { SlidersHorizontal } from '@lucide/svelte'
+	import { getDesktopFilterState } from '$lib/core/composables/index.js'
+	import { themeOptions } from '$lib/composer/theme-options.js'
+	import { hasFacetValues } from './scope-filters.js'
 
 	// A plain prop, not a binding: the current sort is derived from the URL by listing-page.svelte,
 	// which also owns the navigation. Seeding it once and mutating it locally left the trigger
@@ -11,6 +15,12 @@
 	const data = $derived(page.data)
 
 	const sortLabel = $derived(sortOptions.find((option) => option.value === selectedSort)?.name ?? 'Sort')
+	const count = $derived(Number(data.products?.count) || 0)
+
+	// With the store's filters in a drawer rather than a sidebar, the desktop opens the same sheet the
+	// phone uses, from a button beside the sort.
+	const filterModule = getDesktopFilterState() as any
+	const filtersInDrawer = $derived(themeOptions(data?.themeSettings).list_filters_desktop === 'drawer' && hasFacetValues(data.products?.facets))
 </script>
 
 <!-- Ungated on purpose: this block used to be `hidden lg:flex`, which is display:none — it took the
@@ -32,8 +42,9 @@
 			{/if}
 		</h1>
 
-		<span class="ed-lh__count shrink-0">
-			{data.products.count > 999 ? '1000+' : data.products.count} items
+		<span class="ed-lh__count shrink-0 tabular-nums">
+			{count > 999 ? '1000+' : count}
+			{count === 1 ? 'product' : 'products'}
 		</span>
 	</div>
 	{#if data.products.data.length}
@@ -42,6 +53,17 @@
 		     shopper could filter but never re-order. The sidebar is already visible from md, so the
 		     bar stays hidden and there is exactly one sort affordance at every width. -->
 		<div class="ed-lh__sort hidden items-center gap-1.5 md:flex">
+			{#if filtersInDrawer}
+				<button
+					type="button"
+					class="ed-lh__filters mr-2 inline-flex h-9 items-center gap-2 rounded-md border border-border-strong px-3 text-[length:var(--type-ui,0.875rem)] font-medium"
+					aria-haspopup="dialog"
+					onclick={() => (filterModule.showFilter = true)}
+				>
+					<SlidersHorizontal class="size-4" aria-hidden="true" />
+					Filters
+				</button>
+			{/if}
 			<span id="sort-by-label" class="ed-lh__sortlabel text-xs font-semibold text-muted-foreground">Sort by</span>
 			<!-- The shadcn/bits-ui select, not the project's custom combobox. That one opens a popover
 			     whose command list has no focusable input when search is off, so nothing consumed the
@@ -119,6 +141,26 @@
 		color: var(--ed-ink);
 	}
 
+	:global([data-theme='default'] .ed-lh__filters) {
+		transition:
+			border-color var(--motion-fast) var(--motion-ease),
+			transform var(--motion-fast) var(--motion-ease);
+	}
+
+	:global([data-theme='default'] .ed-lh__filters:hover) {
+		border-color: hsl(var(--foreground));
+	}
+
+	:global([data-theme='default'] .ed-lh__filters:active) {
+		transform: scale(0.97);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default'] .ed-lh__filters:active) {
+			transform: none;
+		}
+	}
+
 	:global([data-theme='default']) .ed-lh__sortlabel {
 		color: var(--ed-soft);
 	}
@@ -160,7 +202,7 @@
 	}
 
 	:global([data-theme='default'] .ed-lh__select:hover) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 		background: var(--ed-surface);
 	}
 </style>

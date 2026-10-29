@@ -15,7 +15,13 @@
 
 	// A plain prop, not a binding: listing-page.svelte derives the current sort from the URL and
 	// owns the navigation, so this sheet can never drift out of step with the grid it sorts.
-	let { selectedSort = 'popularity:desc', onSortChange = (value: string) => {} } = $props()
+	// `fixed`: the sticky Sort | Filter bar along the bottom (the store's list_mobile_bar). Off, the
+	// same two controls sit in the page above the grid.
+	let { selectedSort = 'popularity:desc', onSortChange = (value: string) => {}, fixed = true } = $props()
+
+	// The sheet also opens from the quick filter chips and the desktop Filters button, so focus goes
+	// back to whichever control opened it, not only to this bar's own trigger.
+	let opener: HTMLElement | null = null
 
 	const filterModule = getDesktopFilterState()
 
@@ -83,9 +89,9 @@
 </script>
 
 <div
-	class="ed-mf__bar fixed bottom-0 left-0 right-0 z-sticky grid h-14 w-full {showFilter
-		? 'grid-cols-2'
-		: 'grid-cols-1'} border-t bg-background pb-[env(safe-area-inset-bottom,0px)] shadow-z-2 md:hidden"
+	class="ed-mf__bar grid h-14 w-full {showFilter ? 'grid-cols-2' : 'grid-cols-1'} {fixed
+		? 'fixed bottom-0 left-0 right-0 z-sticky border-t pb-[env(safe-area-inset-bottom,0px)] shadow-z-2'
+		: 'is-inline rounded-md border'} bg-background md:hidden"
 >
 	<!-- Sort by -->
 	<div class="flex items-center justify-center" class:border-r={showFilter}>
@@ -99,7 +105,7 @@
 			<Drawer.Trigger class="flex h-full w-full items-center justify-center gap-2 px-2 text-sm text-foreground transition-colors hover:bg-muted">
 				<ArrowDownNarrowWide class="h-4 w-4 shrink-0 text-muted-foreground" />
 				<div class="flex min-w-0 flex-col items-start">
-					<span class="font-semibold">Sort by</span>
+					<span class="font-semibold">Sort</span>
 					{#if selectedSort}
 						<span class="max-w-[14ch] truncate text-xs text-muted-foreground">
 							{sortOptions.find((item) => item.value === selectedSort)?.name}
@@ -166,7 +172,17 @@
 		     product grid the shopper could not see, Escape did nothing and no dialog boundary was
 		     announced. The sheet primitive supplies focus trapping, Escape, scroll lock and focus
 		     restore to the trigger. -->
-			<Sheet.Content side="left" class="ed-mf__panel flex w-full max-w-none flex-col gap-0 p-0 sm:max-w-none">
+			<Sheet.Content
+				side="left"
+				class="ed-mf__panel flex w-full max-w-none flex-col gap-0 p-0 sm:max-w-md"
+				onOpenAutoFocus={() => (opener = document.activeElement as HTMLElement | null)}
+				onCloseAutoFocus={(e: Event) => {
+					if (opener?.isConnected && opener.offsetParent !== null) {
+						e.preventDefault()
+						opener.focus()
+					}
+				}}
+			>
 				<Sheet.Header class="ed-mf__phead shrink-0 space-y-0 border-b px-4 py-4 pr-14 text-left">
 					<Sheet.Title class="ed-mf__ptitle text-xs font-bold">Filters</Sheet.Title>
 					<Sheet.Description class="sr-only">Narrow the product list by category, price and product attributes.</Sheet.Description>
@@ -174,7 +190,7 @@
 
 				<div class="flex min-h-0 flex-1">
 					<!-- Section tabs -->
-					<div class="ed-mf__menu w-[35vw] shrink-0 overflow-y-auto border-r">
+					<div class="ed-mf__menu w-[35%] shrink-0 overflow-y-auto border-r">
 						{#each menuItems as item}
 							<Button
 								variant="ghost"
@@ -185,7 +201,7 @@
 								onclick={() => (filterModule.selectedSection = item.id)}
 							>
 								<span class="text-left text-[11px] font-bold">
-									{filterModule.formatFilterName(item.label)}
+									{String(filterModule.formatFilterName(item.label)).replace(/^./, (c) => c.toUpperCase())}
 								</span>
 								{#if filterModule.appliedFiltersCountByKey[item.id]}
 									<span class="text-[10px] text-primary">
@@ -426,7 +442,7 @@
 	   and the footer's first line covered. Charge it to the PLP row instead — that one is a real
 	   box on every theme — and only while the bar is on screen (<md). */
 	@media (max-width: 767px) {
-		:global(.ed-plp__row) {
+		:global(.ed-plp__row.has-mobile-bar) {
 			padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
 		}
 	}
@@ -436,11 +452,14 @@
 	   product grid on every listing — eight pixels back is eight pixels of merchandise. */
 	:global([data-theme='default'] .ed-mf__bar) {
 		height: 48px;
-		border-top: 1px solid var(--ed-line);
 		background: var(--ed-surface);
-		box-shadow: 0 -1px 12px rgba(27, 26, 23, 0.06);
 		font-family: var(--ed-body);
 		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .ed-mf__bar:not(.is-inline)) {
+		border-top: 1px solid var(--ed-line);
+		box-shadow: 0 -1px 12px rgba(27, 26, 23, 0.06);
 	}
 
 	/* Full-height filter sheet */
@@ -497,7 +516,7 @@
 	}
 
 	:global([data-theme='default'] .ed-mf__search:focus) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 	}
 
 	/* Labels + options */
@@ -536,13 +555,13 @@
 	}
 
 	:global([data-theme='default'] .ed-mf__slider input[type='range']::-webkit-slider-thumb) {
-		border: 1px solid hsl(var(--primary));
+		border: 1px solid hsl(var(--primary-ink));
 		background: var(--ed-surface);
 		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
 	}
 
 	:global([data-theme='default'] .ed-mf__slider input[type='range']::-moz-range-thumb) {
-		border: 1px solid hsl(var(--primary));
+		border: 1px solid hsl(var(--primary-ink));
 		background: var(--ed-surface);
 		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
 	}
@@ -557,7 +576,7 @@
 	}
 
 	:global([data-theme='default'] .ed-mf__prices input:focus) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-mf__prices label) {

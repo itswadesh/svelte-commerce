@@ -3,18 +3,68 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-29: The default theme shops like Bewakoof, and the store decides each part
+
+The owner: "for the default theme, take reference from https://www.bewakoof.com/", and then "dont
+leave everything for storefront to decide. keep maximum modifyable at admin".
+
+Bewakoof is the reference for the default theme's merchandising patterns and density, not a look to
+copy: no logo, name, artwork, copy or pictures of theirs. What the default theme took from it:
+
+- **Palette.** A white canvas, neutral near-black text, one yellow (`--primary`, 47 100% 60%) for
+  the action with dark text on it (12.2:1), green for savings (`--sale`, #198837, the engine's
+  default for the `sale` setting), a calm blue for information (`--info`). Yellow cannot be ink
+  (1.44:1 on white), so `text-primary`, `border-primary`, rings and the like read `--primary-ink`,
+  the text colour on this theme, and selected pills and the current page take a dark edge.
+- **Cards.** The label top left on the picture, the rating pill bottom left, the brand line in bold
+  with the heart beside it under the picture, the name, then price, was-price and saving on one line.
+- **Listings.** Title and product count on one line, round sub-category pictures, filter chips that
+  open the filter sheet, the sticky Sort | Filter bar on a phone, a filter rail on a desktop.
+- **Product page.** The picture edge to edge on a phone with the label and rating on it, the brand
+  line, "2 left" under a low size, a Key highlights card of attribute pairs, the sticky Add to bag.
+
+Every one of those choices is a key in the store's GoCommerce theme settings (engine PR #182), and
+the storefront's value applies only when the key is unset: `sale`, `type_scale`, `heading_weight`,
+`density`, the `card_*`, `list_*` and `pdp_*` keys. Visual keys become CSS variables in
+`src/lib/composer/theme-tokens.ts`; the rest are parsed and checked in
+`src/lib/composer/theme-options.ts`. A value outside its list is dropped, as with the colours.
+
+The type and spacing keys move the one scale of the next entry; there is no second ladder.
+`type_scale` moves every `--type-*` step together: `standard` is that scale, with its 16px body,
+`compact` a step smaller with a 14px body, `large` a step larger with an 18px body. `heading_weight`
+sets `--weight-heading`, the weight of every heading but the hero. Unset it is 700, the scale's
+own weight, so the hero's 800 stays the one heavier line; GoCommerce's starting page saves
+`extrabold`, so a store that keeps it gets Bewakoof's heavier headings. `density` moves `--space-*`,
+`--grid-gap-*` and the page gutter, with `compact`, the scale's own values, when unset.
+
+Kept from settled decisions where the reference differs: sentence case, not Bewakoof's capitals
+("Add to bag", not "ADD TO BAG"); Inter, not a new face; the store's own colours over the theme's;
+nothing invented (no rating without reviews, no "N left" without the variant's own count, no
+offers, no "bestseller"); 2 / 3 / 4 / 5 product columns, not Bewakoof's three on a desktop (a store
+can choose three); the sticky Add to bag only once the in-page button has scrolled away. Bewakoof's
+free-shipping strip is not drawn: the engine gives the free-delivery threshold only for a cart, so
+there is no figure to show a shopper who has none.
+
+A card's name is one line by default (`card_title_lines: one`; two lines is the other choice), so
+UX_SYSTEM's preference for two lines is now the store's choice.
+
+The store defaults (`kitcommerce.config.ts`) no longer carry the Litekart demo shop's navy palette,
+which had painted every GoCommerce store in one merchant's colours over the theme's own.
+
 ## 2026-10-29: One type and spacing scale on the default theme
 
 The owner asked for the default theme's font sizes, weights, alignment, spacing, density and line
 heights to be studied and made consistent. The scale is the role table in UX_SYSTEM section 4,
-held as `--type-*`, `--leading-*`, `--tracking-*`, `--space-*` and `--grid-gap-*` tokens in
-`src/app.css` on the default theme. What it settles: page and section titles are 700 on every
-page, the weight the composed home page (D140) set, and only the hero is 800; a heading over a band
-is the same size wherever it appears (home shelves, customer ratings, related products); paragraphs
-a shopper reads are 16px at 1.5 on phones and desktops, while card and control text stays on the
-compact 12–14px steps; headings carry no positive tracking; and 12px is the floor for anything a
-shopper reads (the phone menu, at 9–12px, now meets it). The lime, noor, wine and organic themes
-keep their type; the composer's shared sections fall back to their old values there.
+held as `--type-*`, `--leading-*`, `--tracking-*`, `--weight-heading`, `--space-*` and
+`--grid-gap-*` tokens in `src/app.css` on the default theme, and the store's type and spacing
+settings move it (the entry above). What it settles: page and section titles take one weight on
+every page, 700 unless the store chose another, the weight the composed home page (D140) set, and
+only the hero is 800; a heading over a band is the same size wherever it appears (home shelves,
+customer ratings, related products); paragraphs a shopper reads are 16px at 1.5 on phones and
+desktops, while card and control text stays on the compact 12–14px steps (a card's price is
+16px); headings carry no positive tracking; and 12px is the floor for anything a shopper reads (the phone menu, at 9–12px,
+now meets it). The lime, noor, wine and organic themes keep their type; the composer's shared
+sections fall back to their old values there.
 
 ## 2026-10-28: A new store's footer links its standard pages, shown once published
 

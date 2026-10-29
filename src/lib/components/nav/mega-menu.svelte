@@ -287,7 +287,7 @@
 	}
 
 	:global([data-theme='default'] .ed-mm-cat:hover) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-mm-sub) {
@@ -296,7 +296,7 @@
 	}
 
 	:global([data-theme='default'] .ed-mm-sub:hover) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-mm-foot) {
@@ -309,7 +309,7 @@
 	}
 
 	:global([data-theme='default'] .ed-mm-viewall:hover) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	.mega-menu {
