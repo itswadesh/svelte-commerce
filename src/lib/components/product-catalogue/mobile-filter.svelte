@@ -28,8 +28,9 @@
 
 	// The search term is what the filters run against, not one of them, so it is not summarised on
 	// the Filter button. It has its own removable chip above the grid.
+	const currency = $derived(page.data?.store?.currency?.code)
 	const barFilters = $derived(
-		readAppliedFilters(page.url, Object.keys(page.data?.products?.facets || {}), (amount) => formatPrice(amount, page.data?.store?.currency?.code)).filter(
+		readAppliedFilters(page.url, Object.keys(page.data?.products?.facets || {}), (amount) => formatPrice(amount, currency)).filter(
 			(f) => f.key !== 'search'
 		)
 	)
@@ -353,7 +354,7 @@
 
 								<p class="ed-mf__priceval text-base font-semibold text-foreground" aria-live="polite">
 									{#if filterModule.minPrice >= 0 && filterModule.maxPrice >= 0}
-										{formatPrice(filterModule.minPrice, page.data?.store?.currency?.code)} - {formatPrice(filterModule.maxPrice, page.data?.store?.currency?.code)}
+										{formatPrice(filterModule.minPrice, currency)} - {formatPrice(filterModule.maxPrice, currency)}
 									{/if}
 								</p>
 							</div>

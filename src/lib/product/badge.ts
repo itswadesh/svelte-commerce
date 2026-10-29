@@ -1,6 +1,7 @@
 import type { ThemeOptions } from '$lib/composer/theme-options'
 
-type BadgeSource = { tags?: unknown; productTags?: unknown; material?: unknown; highlights?: unknown; metadata?: { badge?: unknown } | null } | null | undefined
+type BadgeSource =
+	{ tags?: unknown; productTags?: unknown; material?: unknown; highlights?: unknown; metadata?: { badge?: unknown } | null } | null | undefined
 
 /**
  * The label on a product's picture (the store's card_badge setting), from the product's own data
