@@ -6,7 +6,7 @@
 	import { Skeleton } from '$lib/components/ui/skeleton'
 	import { getCartState } from '$lib/core/stores/index.js'
 	import type { CartLineItem } from '$lib/core/types/index.js'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { themeOptions } from '$lib/composer/theme-options.js'

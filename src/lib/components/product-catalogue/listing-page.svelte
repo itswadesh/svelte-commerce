@@ -12,6 +12,7 @@
 	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { X } from '@lucide/svelte'
 	import { hasFacetValues, readAppliedFilters, urlWithoutAnyFilter, urlWithoutFilter } from './scope-filters.js'
+	import { formatPrice } from '$lib/utils/price'
 
 	const data = $derived(page.data)
 	// The listing's layout is the store's choice (its theme settings); unset, the defaults apply.
@@ -52,7 +53,7 @@
 	// Reading the URL also means a filter whose facet group came back empty still gets a chip, so
 	// the very filter that emptied the grid can always be removed.
 	const facetKeys = $derived(Object.keys(data?.products?.facets || {}))
-	const appliedFilters = $derived(readAppliedFilters(page.url, facetKeys, data?.store?.currencySymbol ?? ''))
+	const appliedFilters = $derived(readAppliedFilters(page.url, facetKeys, (amount) => formatPrice(amount, data?.store?.currency?.code)))
 </script>
 
 <div class="ed-plp">

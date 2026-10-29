@@ -109,7 +109,7 @@ export interface AppliedFilter {
 	label: string
 }
 
-export function readAppliedFilters(url: URL, facetKeys: Iterable<string>, currencySymbol = ''): AppliedFilter[] {
+export function readAppliedFilters(url: URL, facetKeys: Iterable<string>, formatAmount: (amount: number) => string = String): AppliedFilter[] {
 	const facets = new Set(facetKeys)
 	const applied: AppliedFilter[] = []
 
@@ -129,8 +129,9 @@ export function readAppliedFilters(url: URL, facetKeys: Iterable<string>, curren
 	const from = url.searchParams.get('priceFrom')
 	const to = url.searchParams.get('priceTo')
 	if (from || to) {
-		const lo = from ? `${currencySymbol}${from}` : 'Min'
-		const hi = to ? `${currencySymbol}${to}` : 'Max'
+		const amount = (raw: string) => (Number.isFinite(Number(raw)) ? formatAmount(Number(raw)) : raw)
+		const lo = from ? amount(from) : 'Min'
+		const hi = to ? amount(to) : 'Max'
 		applied.push({ key: 'price', label: `${lo} – ${hi}` })
 	}
 

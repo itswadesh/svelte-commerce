@@ -4,7 +4,7 @@
 	import { MessageCircle, X, Send, Sparkles, Truck, Clock } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
 	import { getCartState } from '$lib/core/stores/index.js'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import {
 		assistantService,
 		type ProductRecommendation,

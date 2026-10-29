@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { cartService } from '$lib/core/services'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { fade } from '$lib/motion'
 	import { Check, Plus } from '@lucide/svelte'

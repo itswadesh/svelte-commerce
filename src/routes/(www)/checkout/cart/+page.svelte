@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { AlertCircle, Check, LockKeyhole, Minus, Plus, ShoppingBag, Tag, Trash2, X } from '@lucide/svelte'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { page } from '$app/state'

@@ -8,7 +8,8 @@
 	import { ArrowLeft, Compass, Grid, Heart, Home, Play, ShoppingBag } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { Separator } from '$lib/components/ui/separator'
-	import { cn, formatPrice } from '$lib/core/utils'
+	import { cn } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import CartItem from '$lib/components/cart/cart-item.svelte'
 
 	let { class: className = '' } = $props()

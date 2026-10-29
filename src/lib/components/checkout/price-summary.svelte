@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { cn, formatPrice } from '$lib/core/utils'
+	import { cn } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 
 	/**

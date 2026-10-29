@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronLeft, CreditCard, LockKeyhole, Mail, MapPin, Pencil, Truck } from '@lucide/svelte'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'

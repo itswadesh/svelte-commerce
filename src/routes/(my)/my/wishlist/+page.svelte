@@ -4,7 +4,8 @@
 	import { Heart, ArrowRight, LoaderCircle, Trash2, ShoppingBag } from '@lucide/svelte'
 	import { fade, fly } from '$lib/motion'
 	import { page } from '$app/state'
-	import { formatPrice, toast } from '$lib/core/utils/index.js'
+	import { toast } from '$lib/core/utils/index.js'
+	import { formatPrice } from '$lib/utils/price'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import * as Dialog from '$lib/components/ui/dialog'
 

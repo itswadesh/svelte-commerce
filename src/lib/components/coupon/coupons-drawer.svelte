@@ -5,7 +5,8 @@
 	import Input from '$lib/components/ui/input/input.svelte'
 	import { CouponDrawerRenderer } from '$lib/core/composables/index.js'
 	import { fade } from '$lib/motion'
-	import { date, formatPrice } from '$lib/core/utils/index.js'
+	import { date } from '$lib/core/utils/index.js'
+	import { formatPrice } from '$lib/utils/price'
 	import { page } from '$app/state'
 	import { innerWidth } from 'svelte/reactivity/window'
 

@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { goto } from '$app/navigation'
 	import { ChevronRight, LoaderCircle, LockKeyhole, MapPin, Pencil, ShoppingBag, Truck } from '@lucide/svelte'
-	import { formatPrice } from '$lib/core/utils/index.js'
+	import { formatPrice } from '$lib/utils/price'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'

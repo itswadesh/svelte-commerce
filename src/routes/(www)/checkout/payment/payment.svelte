@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'

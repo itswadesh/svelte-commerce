@@ -3,7 +3,7 @@
 	import { page } from '$app/state'
 	import { Heart, Loader2, ShoppingBag } from '@lucide/svelte'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 
 	let { product, aspectRatio, hideCartControls = false, themeContent }: any = $props()
 

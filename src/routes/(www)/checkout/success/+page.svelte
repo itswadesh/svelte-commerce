@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
-	import { formatPrice } from '$lib/core/utils/index.js'
+	import { formatPrice } from '$lib/utils/price'
 	import { CheckCircle2, MapPin, Package, Truck, ArrowRight, ShoppingBag, Mail, Calendar, SearchX } from '@lucide/svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { getUserState, getCartState } from '$lib/core/stores/index.js'

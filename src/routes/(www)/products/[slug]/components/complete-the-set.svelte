@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { productService } from '$lib/core/services'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { slide } from '$lib/motion'
 	import { addOnPicks, resetPicks, togglePick } from '$lib/product/add-on-picks.svelte'
 	import type { AddOnOption } from '$lib/product/upsells'

@@ -8,7 +8,7 @@
 	import { getCartState } from '$lib/core/stores/index.js'
 	import type { CartLineItem } from '$lib/core/types/index.js'
 
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 	import LimeProductCard from '$lib/theme/lime/LimeProductCard.svelte'
 	import NoorProductCard from '$lib/theme/noor/NoorProductCard.svelte'

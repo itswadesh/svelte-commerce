@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { cartService } from '$lib/core/services'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { fade } from '$lib/motion'
 	import { freeDeliveryState, type FreeDelivery } from '$lib/product/upsells'
 	import { Truck } from '@lucide/svelte'

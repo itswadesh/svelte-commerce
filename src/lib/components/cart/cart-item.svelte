@@ -5,7 +5,8 @@
 	import { Button } from '$lib/components/ui/button'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import Spinner from '$lib/components/common/spinner.svelte'
-	import { formatPrice, fireGTagEvent } from '$lib/core/utils/index.js'
+	import { fireGTagEvent } from '$lib/core/utils/index.js'
+	import { formatPrice } from '$lib/utils/price'
 	import { page } from '$app/state'
 
 	const cartState = getCartState()

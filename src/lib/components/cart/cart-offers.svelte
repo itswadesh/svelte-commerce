@@ -2,7 +2,7 @@
 	import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button'
 	import { cartService } from '$lib/core/services'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { slide } from '$lib/motion'
 	import { offerNote, offerValue, sortOffers, type BagOffer } from '$lib/product/upsells'
 	import { BadgePercent } from '@lucide/svelte'
