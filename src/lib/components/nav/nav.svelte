@@ -403,7 +403,7 @@
 						<span class="ed-drawer-label text-[10px] font-bold text-muted-foreground">Welcome guest</span>
 						<AuthButton aria-label="Login" type="login">
 							<div
-								class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all duration-200 hover:bg-primary/95"
+								class="ed-drawer-login flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all duration-200 hover:bg-primary/95"
 							>
 								<UserCircle class="h-4 w-4" />
 								<span>Login / Register</span>
@@ -462,7 +462,7 @@
 											</a>
 											<button
 												type="button"
-												class="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted"
+												class="ed-drawer-toggle grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted"
 												aria-label="Toggle {menuItem.name}"
 												aria-expanded={mobileNestOpen[i] ? 'true' : 'false'}
 												onclick={() => toggleMobileNest(i)}
@@ -533,7 +533,7 @@
 						{#if userState?.user?.role}
 							<li>
 								<button
-									class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-destructive transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
+									class="ed-drawer-signout flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-destructive transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
 									onclick={() => {
 										navModule.openSidebar = false
 										navModule.handleSignOut()
@@ -649,6 +649,26 @@
 		font-family: var(--ed-body);
 		color: var(--ed-soft);
 		font-weight: 600;
+		/* 12px, the type scale's floor; these were 9-10px. */
+		font-size: var(--type-label);
+	}
+	/* The menu is a phone's only navigation: 14px links, each a 44px target (they were 12px in a
+	   32px row, and 11px for a category's own links). */
+	.ed :is(.ed-drawer-link, .ed-drawer-signout, .ed-drawer-login) {
+		min-height: 44px;
+		font-size: var(--type-ui);
+	}
+	.ed :is(.ed-drawer-link, .ed-drawer-signout) {
+		display: flex;
+		align-items: center;
+		font-weight: 500;
+	}
+	.ed .ed-drawer-toggle {
+		width: 44px;
+		height: 44px;
+	}
+	.ed .ed-drawer-user p {
+		font-size: var(--type-label);
 	}
 
 	.ed .ed-drawer-link {
@@ -675,7 +695,9 @@
 	}
 
 	.ed .ed-contact {
+		min-height: 44px;
 		color: var(--ed-soft);
+		font-size: var(--type-label);
 		transition: color var(--motion-fast) var(--motion-ease);
 	}
 
