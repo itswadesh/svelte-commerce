@@ -89,39 +89,42 @@
 					</p>
 				{:else}
 					<form
-						class="flex flex-col gap-2 sm:flex-row sm:items-start"
 						onsubmit={(e) => {
 							e.preventDefault()
 							handleSubscribe()
 						}}
 					>
-						<div class="w-full min-w-0 flex-1">
-							<!-- A visible label, not a placeholder standing in for one. -->
-							<Label for="newsletter-email" class="sr-only sm:not-sr-only sm:mb-1.5 sm:block sm:text-xs sm:text-muted-foreground">Email address</Label
-							>
-							<Input
-								id="newsletter-email"
-								type="email"
-								name="email"
-								autocomplete="email"
-								placeholder={plugin?.placeholder || 'Enter your email'}
-								bind:value={email}
-								aria-invalid={fieldError ? 'true' : undefined}
-								aria-describedby={fieldError ? errorId : undefined}
-								class="h-11 w-full bg-background md:h-10 {fieldError ? 'border-destructive focus-visible:ring-destructive' : ''}"
-								required
-							/>
-							{#if fieldError}
-								<p id={errorId} class="mt-1.5 text-sm text-destructive">{fieldError}</p>
-							{/if}
+						<!-- A visible label, not a placeholder standing in for one. It sits above the row, not
+						     inside the input's column, so `items-start` alone lines the button up with the
+						     input. Inside the column, the button had to be pushed down by a guessed 26px,
+						     which missed the label's real height and left it 4px low. -->
+						<Label for="newsletter-email" class="sr-only sm:not-sr-only sm:mb-1.5 sm:block sm:text-xs sm:text-muted-foreground">Email address</Label>
+						<div class="flex flex-col gap-2 sm:flex-row sm:items-start">
+							<div class="w-full min-w-0 flex-1">
+								<Input
+									id="newsletter-email"
+									type="email"
+									name="email"
+									autocomplete="email"
+									placeholder={plugin?.placeholder || 'Enter your email'}
+									bind:value={email}
+									aria-invalid={fieldError ? 'true' : undefined}
+									aria-describedby={fieldError ? errorId : undefined}
+									class="h-11 w-full bg-background md:h-10 {fieldError ? 'border-destructive focus-visible:ring-destructive' : ''}"
+									required
+								/>
+								{#if fieldError}
+									<p id={errorId} class="mt-1.5 text-sm text-destructive">{fieldError}</p>
+								{/if}
+							</div>
+							<Button type="submit" class="ed-sub-btn h-11 shrink-0 px-5 sm:px-8 md:h-10" disabled={subscribing || loadingForSubmitting}>
+								{#if subscribing}
+									Subscribing…
+								{:else}
+									Subscribe
+								{/if}
+							</Button>
 						</div>
-						<Button type="submit" class="ed-sub-btn h-11 shrink-0 px-5 sm:mt-[26px] sm:px-8 md:h-10" disabled={subscribing || loadingForSubmitting}>
-							{#if subscribing}
-								Subscribing…
-							{:else}
-								Subscribe
-							{/if}
-						</Button>
 					</form>
 				{/if}
 			</div>
