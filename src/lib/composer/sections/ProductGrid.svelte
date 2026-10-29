@@ -35,7 +35,7 @@
 					{/if}
 				</header>
 			{/if}
-			<div class="grid gap-3 sm:gap-5 {columns}">
+			<div class="product-grid grid gap-3 sm:gap-5 {columns}">
 				{#each products as product, i (product.id || product.slug)}
 					<ProductCard {product} {aspectRatio} priority={priority && i < PRIORITY_CARDS} />
 				{/each}

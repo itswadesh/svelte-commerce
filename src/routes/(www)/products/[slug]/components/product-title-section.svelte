@@ -127,17 +127,15 @@
 
 	:global([data-theme='default'] .edp-title) {
 		font-family: var(--ed-display);
-		font-weight: 500;
-		letter-spacing: -0.01em;
-		/* Was clamp(1.55rem, 2.6vw, 2.3rem) — 24.8px on a phone and 36.8px at 1440, where a
-		   37px serif name in a half-width column dwarfed the price and every control under it.
-		   The floor is 1.5rem rather than 1.4rem: at 22.4px this h1 was only 2.4px larger than the
-		   20px price beside it, and 5.6px SMALLER than the listing page's own "All products" title
-		   one tap earlier — a product name that shrinks when you open the product. 24px restores
-		   both gaps. The ceiling stays one deliberate step under the 28-36px page-title ramp on the
-		   homepage and listing, because this heading sits in a ~550px column, not the full rail. */
-		font-size: clamp(1.5rem, 2vw, 1.875rem);
-		line-height: 1.15;
+		font-weight: 700;
+		letter-spacing: var(--tracking-title);
+		/* The product-title step, 24px on a phone to 28px. Was clamp(1.55rem, 2.6vw, 2.3rem) —
+		   36.8px at 1440, where the name in a half-width column dwarfed the price and every control
+		   under it. The floor keeps it a step above the price (the page-title step, 20-24px) and the
+		   listing's own title one tap earlier; the ceiling stays a step under the 32px section
+		   titles, because this heading sits in a ~550px column, not the full rail. */
+		font-size: var(--type-product-title);
+		line-height: var(--leading-title);
 		color: var(--ed-ink);
 	}
 

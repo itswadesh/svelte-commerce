@@ -74,7 +74,7 @@
 			<p class="text-sm text-muted-foreground">No products in this collection yet.</p>
 		</div>
 	{:else}
-		<ul class="grid grid-cols-2 gap-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+		<ul class="product-grid grid grid-cols-2 gap-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
 			{#each products as product, i}
 				<li>
 					<ProductCard {product} priority={i < 4} />

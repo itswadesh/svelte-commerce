@@ -266,7 +266,7 @@
 	:global([data-theme='default'] .ed-mm-link) {
 		color: var(--ed-soft);
 		font-weight: 600;
-		font-size: 0.78rem;
+		font-size: var(--type-label);
 		font-family: var(--ed-body);
 	}
 

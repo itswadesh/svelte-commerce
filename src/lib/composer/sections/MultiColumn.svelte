@@ -91,10 +91,15 @@
 	.cmp-mc__title {
 		margin: 4px 0 0;
 		font-family: var(--font-heading, inherit);
-		font-size: 1.125rem;
+		font-size: var(--type-heading, 1.125rem);
 		font-weight: 600;
-		line-height: 1.3;
+		line-height: var(--leading-heading, 1.3);
 		overflow-wrap: anywhere;
+	}
+
+	/* Headings are 700 on the default theme (UX_SYSTEM type scale). */
+	:global([data-theme='default']) .cmp-mc__title {
+		font-weight: 700;
 	}
 
 	.cmp-mc__link {
@@ -123,7 +128,7 @@
 	.cmp-mc--tiles .cmp-mc__title {
 		margin: 0;
 		padding-left: 4px;
-		font-size: clamp(0.9375rem, 2.2vw, 1.25rem);
+		font-size: var(--type-heading, clamp(0.9375rem, 2.2vw, 1.25rem));
 		font-weight: 700;
 		overflow-wrap: break-word;
 		hyphens: auto;

@@ -22,7 +22,9 @@
 		padding: 0 22px;
 		border: 1px solid hsl(var(--primary));
 		border-radius: var(--radius, 0.5rem);
-		font-size: 0.8rem;
+		/* 14px on the default theme, the size of every other button label there; 12.8px read as a
+		   caption under a 68px headline. Other themes keep 12.8px. */
+		font-size: var(--type-ui, 0.8rem);
 		font-weight: 600;
 		text-align: center;
 		transition:

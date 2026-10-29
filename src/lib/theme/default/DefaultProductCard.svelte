@@ -520,7 +520,7 @@
 		background: transparent;
 		color: var(--ed-ink);
 		font-family: var(--ed-body);
-		font-size: 0.74rem;
+		font-size: var(--type-label);
 		font-weight: 600;
 		cursor: pointer;
 	}
@@ -582,7 +582,7 @@
 	.dpc__qty-val {
 		flex: 1;
 		text-align: center;
-		font-size: 0.85rem;
+		font-size: var(--type-ui);
 		font-weight: 600;
 	}
 

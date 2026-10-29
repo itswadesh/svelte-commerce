@@ -71,9 +71,8 @@
 		background: transparent !important;
 		color: var(--ed-ink) !important;
 		font-family: var(--ed-body);
-		font-size: 0.85rem;
+		font-size: var(--type-ui);
 		font-weight: 500;
-		letter-spacing: 0.02em;
 		text-transform: none;
 		box-shadow: none !important;
 		transition:

@@ -48,8 +48,8 @@
 	:global([data-theme='default'] .edp-price) {
 		font-family: var(--ed-body);
 		/* Was a flat 1.6rem (25.6px) at every width, which made the price LARGER than the product
-		   title on a phone. 20-22.4px keeps it second in the hierarchy, where it belongs. */
-		font-size: clamp(1.25rem, 1.6vw, 1.4rem);
+		   title on a phone. The page-title step, 20-24px, keeps it one step under the name. */
+		font-size: var(--type-page-title);
 		font-weight: 600;
 		letter-spacing: -0.01em;
 		color: var(--ed-ink);

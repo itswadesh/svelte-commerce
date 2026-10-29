@@ -36,9 +36,10 @@
 {/if}
 
 <style>
-	/* A full-width band, not one of the page's plain bands: it keeps its own padding wherever it sits. */
+	/* A full-width band, not one of the page's plain bands: it keeps its own padding wherever it
+	   sits, on the default theme the same space the page leaves between sections. */
 	.cmp-benefits-band {
-		padding-block: clamp(28px, 4vw, 48px);
+		padding-block: var(--space-section, clamp(28px, 4vw, 48px));
 		background: hsl(var(--foreground));
 		color: hsl(var(--background));
 	}
@@ -72,6 +73,11 @@
 		stroke-width: 1.75;
 	}
 
+	/* Centred on the title's first line, whichever size the heading step is at (16-18px). */
+	:global([data-theme='default']) .cmp-benefit :global(.cmp-benefit__icon) {
+		margin-top: calc((var(--type-heading) * var(--leading-heading) - 22px) / 2);
+	}
+
 	.cmp-benefit__words {
 		min-width: 0;
 	}
@@ -83,17 +89,17 @@
 	.cmp-benefit__title {
 		margin: 0;
 		font-family: var(--font-heading, inherit);
-		font-size: 1.0625rem;
+		font-size: var(--type-heading, 1.0625rem);
 		font-weight: 700;
-		line-height: 1.3;
+		line-height: var(--leading-heading, 1.3);
 		overflow-wrap: anywhere;
 	}
 
 	.cmp-benefit__body {
 		margin: 6px 0 0;
 		color: inherit;
-		font-size: 0.9rem;
-		line-height: 1.5;
+		font-size: var(--type-ui, 0.9rem);
+		line-height: var(--leading-ui, 1.5);
 		overflow-wrap: anywhere;
 	}
 

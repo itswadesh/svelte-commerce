@@ -133,7 +133,7 @@
 
 	:global([data-theme='default'] .edp-spec .edp-acc-label) {
 		font-family: var(--ed-body);
-		font-size: 0.78rem;
+		font-size: var(--type-ui);
 		font-weight: 600;
 		color: var(--ed-ink);
 	}

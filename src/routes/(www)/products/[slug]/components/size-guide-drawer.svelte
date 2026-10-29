@@ -126,7 +126,7 @@
 	/* Refined Editorial — default theme only. Trigger only (Drawer content is portaled). */
 	:global([data-theme='default'] .edp-sizeguide) {
 		color: var(--ed-ink);
-		font-size: 0.72rem;
+		font-size: var(--type-label);
 		font-weight: 600;
 	}
 </style>

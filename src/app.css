@@ -213,6 +213,38 @@
 		/* Editorial alias — kept so existing `var(--ed-gutter)` rules keep working, but it is
 		   the shared container gutter now, not a second source of truth. */
 		--ed-gutter: var(--container-gutter);
+
+		/* Type scale: one size per role, so the same job reads the same on every page (UX_SYSTEM
+		   section 4 has the table). Fluid steps hold their phone size on phones and reach their
+		   desktop size near the 1240px rail. Weights are not tokens: 400 body, 500 UI text, 600
+		   labels and buttons, 700 headings, 800 the hero alone.
+		   Declared on this theme only. The composer's sections are shared by every theme and read
+		   these with their old values as the fallback, so another theme's composed page is unchanged. */
+		--type-label: 0.75rem; /* 12: eyebrows, column headings, counts, header navigation; the floor */
+		--type-dense: 0.8125rem; /* 13: dense UI, the product card's name */
+		--type-ui: 0.875rem; /* 14: links, buttons, controls, specs */
+		--type-body: 1rem; /* 16: paragraphs a shopper reads */
+		--type-heading: clamp(1rem, 1.45vw, 1.125rem); /* 16 -> 18: h3, and the hero's lead line */
+		--type-page-title: clamp(1.25rem, 1.95vw, 1.5rem); /* 20 -> 24: listing/account title, PDP price */
+		--type-product-title: clamp(1.5rem, 2.25vw, 1.75rem); /* 24 -> 28: the product page h1 */
+		--type-section-title: clamp(1.5rem, 2.6vw, 2rem); /* 24 -> 32: a heading over a band */
+		--type-display: clamp(2.125rem, 6.4vw, 4.25rem); /* 34 -> 68: the hero headline only (D140) */
+		--leading-display: 1.02;
+		--leading-title: 1.15;
+		--leading-heading: 1.3;
+		--leading-ui: 1.4;
+		--leading-body: 1.5;
+		--tracking-display: -0.025em;
+		--tracking-title: -0.015em;
+
+		/* Spacing, on the 4px scale. One gap between page sections — and inside a full-bleed band,
+		   and between the page and its footer — one between a section's heading and its content, and
+		   one product-grid gap, so a grid of cards is spaced the same on the home page, the listing
+		   and under a product. */
+		--space-section: clamp(24px, 3vw, 40px);
+		--space-head: clamp(16px, 2.4vw, 24px);
+		--grid-gap-x: clamp(10px, 1.1vw, 16px);
+		--grid-gap-y: clamp(14px, 1.4vw, 20px);
 	}
 
 	[data-theme='wine'] {
@@ -373,6 +405,21 @@
 		font-family: var(--font-body);
 	}
 
+	/* The body's 1.65 set every single-line label, button and link on this theme in a line box a
+	   third taller than its text; 1.5 (--leading-body) is the body leading UX_SYSTEM asks for. The
+	   body too, for the sheets and dialogs that open outside the themed wrapper. */
+	[data-theme='default'],
+	body:has([data-theme='default']) {
+		line-height: 1.5;
+	}
+
+	/* The 0.8px tracking below is caps-era spacing: on this theme's sentence-case Inter it spread
+	   tile names, footer column headings and the cart's headings apart. `:where` keeps this at the
+	   weight of one class, so a heading's own tracking utility or role rule still wins. */
+	[data-theme='default'] :where(h1, h2, h3, h4, h5, h6) {
+		letter-spacing: normal;
+	}
+
 	body:has([data-theme='lime']) {
 		--font-heading: 'Queens', serif;
 		--font-body: 'YsabeauInfant', 'Inter', sans-serif;
@@ -422,8 +469,8 @@
 	@apply pt-2 sm:pt-4;
 }
 
-/* The one page-title and section-title style, so no page restates sizes (UX_SYSTEM type scale:
-   page title 20-28px, section title 18-24px). */
+/* The one page-title and section-title style, so no page restates sizes. The default theme's
+   values are the page-title role in UX_SYSTEM's type scale, below. */
 .page-heading {
 	@apply text-xl font-semibold tracking-tight text-foreground sm:text-2xl;
 }
@@ -432,12 +479,32 @@
 	@apply text-lg font-semibold tracking-tight text-foreground sm:text-xl;
 }
 
+/* Headings are 700 on the default theme, the weight the composed home page set (D140); these two
+   were the last at 600 beside it. */
+[data-theme='default'] :is(.page-heading, .section-heading) {
+	font-weight: 700;
+}
+
+/* The listing title's size, leading and tracking, so an account or checkout title matches it. */
+[data-theme='default'] .page-heading {
+	font-size: var(--type-page-title);
+	line-height: var(--leading-title);
+	letter-spacing: var(--tracking-title);
+}
+
 /* The single container rail — see --container-max / --container-gutter in :root. Was
    `mx-page lg:container lg:mx-auto`, i.e. 8px gutters below lg then a hard jump to Tailwind's
    container (2rem padding, 1024/1280/1400px), which never lined up with any theme homepage. */
 .page-width {
 	width: min(var(--container-max, 1240px), 100% - 2 * var(--container-gutter, 16px));
 	margin-inline: auto;
+}
+
+/* The one gap between product cards, on a home shelf, a collection and under a product. It
+   outranks the grid's own gap utilities, which other themes keep. */
+[data-theme='default'] .product-grid {
+	column-gap: var(--grid-gap-x);
+	row-gap: var(--grid-gap-y);
 }
 
 /* ------------------------------------------------------------------ *
