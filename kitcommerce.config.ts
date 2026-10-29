@@ -23,5 +23,9 @@ export * as services from './src/lib/core/connectors/active'
 // stranded there.
 export default {
 	// Product images on cards, listings and the product page. "1:1" square, "3:4" or "2:3" portrait.
-	productImageAspectRatio: '1:1'
+	productImageAspectRatio: '1:1',
+	// The defaults' palette is the Litekart demo shop's navy, and it painted every store on these
+	// connectors in that one merchant's colours over the theme's own. A store's colours come from
+	// its theme settings; with none set it shows the theme's defaults.
+	cssVariables: {} as Partial<(typeof import('./src/lib/core/connectors/default-store.json'))['cssVariables']>
 }

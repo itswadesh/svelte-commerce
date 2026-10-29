@@ -413,8 +413,8 @@
 	}
 
 	.dpc :global(.dpc__wish-icon.is-on) {
-		fill: hsl(var(--primary));
-		color: hsl(var(--primary));
+		fill: hsl(var(--primary-ink));
+		color: hsl(var(--primary-ink));
 	}
 
 	/* The caption is two facts — what it is, what it costs — so it is one tight block under the
@@ -448,7 +448,7 @@
 	}
 
 	.dpc:hover .dpc__title {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	/* Price and was-price, then the saving on its own line. Squeezing all three onto one line only
@@ -493,7 +493,7 @@
 		font-size: 0.75rem;
 		font-weight: 600;
 		white-space: nowrap;
-		color: hsl(var(--success));
+		color: hsl(var(--sale));
 	}
 
 	/* Narrow cards (three per row at 768px, a 360px phone) step the price down so price and

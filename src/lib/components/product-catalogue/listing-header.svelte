@@ -166,7 +166,7 @@
 	}
 
 	:global([data-theme='default'] .ed-lh__select:hover) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 		background: var(--ed-surface);
 	}
 </style>

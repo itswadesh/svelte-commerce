@@ -497,7 +497,7 @@
 	}
 
 	:global([data-theme='default'] .ed-mf__search:focus) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 	}
 
 	/* Labels + options */
@@ -536,13 +536,13 @@
 	}
 
 	:global([data-theme='default'] .ed-mf__slider input[type='range']::-webkit-slider-thumb) {
-		border: 1px solid hsl(var(--primary));
+		border: 1px solid hsl(var(--primary-ink));
 		background: var(--ed-surface);
 		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
 	}
 
 	:global([data-theme='default'] .ed-mf__slider input[type='range']::-moz-range-thumb) {
-		border: 1px solid hsl(var(--primary));
+		border: 1px solid hsl(var(--primary-ink));
 		background: var(--ed-surface);
 		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
 	}
@@ -557,7 +557,7 @@
 	}
 
 	:global([data-theme='default'] .ed-mf__prices input:focus) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-mf__prices label) {

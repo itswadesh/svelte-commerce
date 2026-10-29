@@ -283,7 +283,7 @@
 	}
 
 	:global([data-theme='default']) .ed-empty__link {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 		text-underline-offset: 4px;
 	}
 
@@ -317,14 +317,14 @@
 
 	:global([data-theme='default'] .ed-pagination a:hover),
 	:global([data-theme='default'] .ed-pagination button:not(:disabled):hover) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 		background: var(--ed-surface);
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	:global([data-theme='default'] .ed-pagination a[aria-current='page']) {
 		background: hsl(var(--primary));
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 		color: hsl(var(--primary-foreground));
 	}
 

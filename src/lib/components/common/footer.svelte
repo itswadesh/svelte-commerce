@@ -336,6 +336,6 @@
 
 	.ed :global(a.hover\:text-foreground:hover),
 	.ed :global(a.hover\:text-primary:hover) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 </style>

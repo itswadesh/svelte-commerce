@@ -32,7 +32,7 @@
 			<div class="edp-mrp text-sm text-muted-foreground line-through">
 				{formatPrice(mrp, currency?.code)}
 			</div>
-			<div class="edp-off text-sm font-semibold text-success">
+			<div class="edp-off text-sm font-semibold text-sale">
 				{discountPct}% off
 			</div>
 		{/if}
@@ -64,7 +64,7 @@
 	:global([data-theme='default'] .edp-off) {
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: hsl(var(--success));
+		color: hsl(var(--sale));
 	}
 
 	:global([data-theme='default'] .edp-tax) {

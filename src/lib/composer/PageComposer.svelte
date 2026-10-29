@@ -265,12 +265,12 @@
 	}
 
 	.cmp-home :global(.cmp-edit:hover::after) {
-		border-color: hsl(var(--primary) / 0.45);
+		border-color: hsl(var(--primary-ink) / 0.45);
 	}
 
 	.cmp-home :global(.cmp-edit:focus-visible::after),
 	.cmp-home :global(.cmp-edit--selected::after) {
-		border-color: hsl(var(--primary));
+		border-color: hsl(var(--primary-ink));
 	}
 
 	/* A section with nothing to show yet — a grid before its products are saved, a hero before its

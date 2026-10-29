@@ -142,7 +142,7 @@
 
 	/* The ring is drawn by the box that covers the tile, so it rings the whole card. */
 	.cmp-mc__tile-link:focus-visible::after {
-		outline: 3px solid hsl(var(--primary));
+		outline: 3px solid hsl(var(--primary-ink));
 		outline-offset: 3px;
 	}
 

@@ -620,7 +620,7 @@
 	}
 
 	.ed .ed-action:hover {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	/* The mobile product-listing header rules that lived here are gone with the markup they
@@ -662,7 +662,7 @@
 
 	.ed .ed-drawer-link:hover {
 		background: var(--ed-canvas);
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	.ed .ed-drawer-link :global(svg) {
@@ -671,7 +671,7 @@
 	}
 
 	.ed .ed-drawer-link:hover :global(svg) {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	.ed .ed-contact {
@@ -680,7 +680,7 @@
 	}
 
 	.ed .ed-contact:hover {
-		color: hsl(var(--primary));
+		color: hsl(var(--primary-ink));
 	}
 
 	.ed .ed-contact :global(svg) {

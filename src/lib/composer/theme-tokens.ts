@@ -93,6 +93,32 @@ function mix(a: string, b: string, amount: number): string {
 	)
 }
 
+/** An `H S% L%` triplet → `#rrggbb`, or '' when it is not one. */
+export function tripletToHex(triplet: string): string {
+	const [h, s, l] = triplet.trim().split(/\s+/).map(parseFloat)
+	if (![h, s, l].every(Number.isFinite)) return ''
+	const a = (s / 100) * Math.min(l / 100, 1 - l / 100)
+	const channel = (n: number) => {
+		const k = (n + h / 30) % 12
+		const v = l / 100 - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))
+		return Math.round(v * 255)
+			.toString(16)
+			.padStart(2, '0')
+	}
+	return '#' + channel(0) + channel(8) + channel(4)
+}
+
+/** WCAG contrast ratio between two #rrggbb colours. */
+export function contrast(a: string, b: string): number {
+	const lum = (hex: string) =>
+		rgb(hex)
+			.map((c) => c / 255)
+			.map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+			.reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0)
+	const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x)
+	return (hi + 0.05) / (lo + 0.05)
+}
+
 /** The same hue a step lighter or darker, whichever reads as a change on a hover. */
 function hoverTriplet(hex: string): string {
 	const [h, s, l] = hexToTriplet(hex).split(' ')
@@ -121,10 +147,10 @@ export function themeTokenDeclarations(settings: ThemeSettings | null | undefine
 	if (text) {
 		for (const key of ['--foreground', '--card-foreground', '--popover-foreground', '--secondary-foreground']) out[key] = hexToTriplet(text)
 	}
+	// The default theme's own ground and ink stand in for whichever half was left unset.
+	const ink = text || '#1a1a1a'
+	const ground = background || '#ffffff'
 	if (background || text) {
-		// The default theme's own ground and ink stand in for whichever half was left unset.
-		const ink = text || '#0f172a'
-		const ground = background || '#ffffff'
 		out['--muted-foreground'] = hexToTriplet(mix(ink, ground, 0.3))
 		out['--border'] = hexToTriplet(mix(ink, ground, 0.8))
 		out['--input'] = hexToTriplet(mix(ink, ground, 0.55))
@@ -133,6 +159,11 @@ export function themeTokenDeclarations(settings: ThemeSettings | null | undefine
 	if (accent) {
 		out['--primary'] = hexToTriplet(accent)
 		out['--primary-hover'] = hoverTriplet(accent)
+		// The accent as text and borders only where it reads on the ground (4.5:1); a light accent
+		// such as yellow is a fill, and its ink is the text colour.
+		out['--primary-ink'] = hexToTriplet(contrast(accent, ground) >= 4.5 ? accent : ink)
+		// With no label colour set, ink or white, whichever reads on this accent.
+		if (!accentText) out['--primary-foreground'] = hexToTriplet(contrast(accent, ink) >= contrast(accent, '#ffffff') ? ink : '#ffffff')
 	}
 	if (accentText) out['--primary-foreground'] = hexToTriplet(accentText)
 	if (muted) {

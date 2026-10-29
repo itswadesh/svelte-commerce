@@ -87,9 +87,11 @@
 	}
 
 	:global([data-theme='default'] .edp-aggregation .edp-pill.edp-on) {
-		border-color: hsl(var(--primary)) !important;
+		/* The fill alone is 1.44:1 on white, so the chosen value also takes a 2px ink edge. */
+		border-color: hsl(var(--primary-ink)) !important;
 		background: hsl(var(--primary)) !important;
 		color: hsl(var(--primary-foreground)) !important;
+		box-shadow: inset 0 0 0 1px hsl(var(--primary-ink)) !important;
 	}
 
 	:global([data-theme='default'] .edp-aggregation .edp-pill:disabled) {
