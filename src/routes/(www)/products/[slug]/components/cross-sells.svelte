@@ -38,7 +38,7 @@
 		</header>
 		<!-- A row that scrolls on a phone and a grid from md up, the way the reference shelf reads:
 		     cheap accessories a thumb can flick through without leaving the product. -->
-		<div class="xs-rail product-grid -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0 lg:grid-cols-6">
+		<div class="xs-rail product-grid -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:scroll-px-0 md:grid-cols-4 md:overflow-visible md:px-0 lg:grid-cols-6">
 			{#each products as { id, slug, thumbnail, price, mrp, title, vendor, variants } (id)}
 				<div class="w-40 shrink-0 snap-start md:w-auto">
 					<ProductCard product={{ id, slug, thumbnail, price, mrp, title, vendor, variants }} hideCartControls={false} />
