@@ -46,4 +46,16 @@ describe('a product made to a design', () => {
 		guardPlainAdds(ok)
 		expect(await ok.addToCart()).toEqual({ id: 'cart-1' })
 	})
+
+	it('hands the cart service every argument it was called with', async () => {
+		const seen: unknown[][] = []
+		const cart = { addAddOn: async (...args: unknown[]) => seen.push(args) }
+		guardPlainAdds(cart)
+		await cart.addAddOn({ productId: 44 }, { lineId: 'l1' })
+		expect(seen).toEqual([[{ productId: 44 }, { lineId: 'l1' }]])
+	})
+
+	it('leaves a connector with no cart service alone', () => {
+		expect(guardPlainAdds(undefined)).toBe(undefined)
+	})
 })

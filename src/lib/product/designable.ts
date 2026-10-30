@@ -9,17 +9,18 @@ const refused = new SvelteSet<string>()
 export const madeToDesign = (product: { id?: unknown; designable?: boolean } | null | undefined): boolean =>
 	product?.designable === true || (product?.id != null && refused.has(String(product.id)))
 
-type Add = (q: { productId?: unknown }) => Promise<unknown>
+type Add = (q?: { productId?: unknown }, ...rest: unknown[]) => Promise<unknown>
 
 // Core's cart store catches a failed add and toasts err.message, so no caller sees the error.
-export function guardPlainAdds(cart: object) {
+export function guardPlainAdds(cart: object | null | undefined) {
+	if (!cart) return
 	const methods = cart as Record<'addToCart' | 'addAddOn', Add | undefined>
 	for (const name of ['addToCart', 'addAddOn'] as const) {
 		const add = methods[name]?.bind(cart)
 		if (!add) continue
-		methods[name] = async (q) => {
+		methods[name] = async (q, ...rest) => {
 			try {
-				return await add(q)
+				return await add(q, ...rest)
 			} catch (err) {
 				if ((err as { code?: unknown } | null)?.code !== 'design_required') throw err
 				if (q?.productId != null) refused.add(String(q.productId))
