@@ -72,6 +72,7 @@ export async function preparePhoto(file: File, cap: number): Promise<{ blob: Blo
 			img.onload = resolve
 			img.onerror = () => reject(new ShopperError(UNREADABLE))
 		})
+		if (!img.naturalWidth || !img.naturalHeight) throw new ShopperError(UNREADABLE)
 		const scale = Math.min(
 			1,
 			cap / Math.max(img.naturalWidth, img.naturalHeight),
