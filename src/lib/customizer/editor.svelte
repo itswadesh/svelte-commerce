@@ -15,6 +15,7 @@
 <script lang="ts">
 	import { Dialog as DialogPrimitive } from 'bits-ui'
 	import { untrack } from 'svelte'
+	import { SvelteMap } from 'svelte/reactivity'
 	import { afterNavigate } from '$app/navigation'
 	import {
 		ArrowDown,
@@ -177,10 +178,10 @@
 	const softPhoto = $derived(selected?.type === 'image' ? designer.lowResPhotos[selected.upload_id] : undefined)
 	const empty = $derived(isEmpty(designer.doc))
 
-	let savedDesign = $state.raw<{ doc: DesignDocument; variantId: string; designId: string } | null>(null)
-	const reusable = $derived(savedDesign?.doc === designer.doc && savedDesign.variantId === variantId ? savedDesign : null)
+	const designIds = new SvelteMap<DesignDocument, Record<string, string>>()
+	const reusable = $derived(designIds.get(designer.doc)?.[variantId])
 	const lineOf = (cart: any, designId: string) => cart?.lineItems?.find((l: { designId?: string }) => l.designId === designId)
-	const bagButton = $derived(status.state === 'saving' ? 'saving' : reusable && lineOf(cartState?.cart, reusable.designId) ? 'added' : 'add')
+	const bagButton = $derived(status.state === 'saving' ? 'saving' : reusable && lineOf(cartState?.cart, reusable) ? 'added' : 'add')
 
 	function announce(message: string) {
 		announcement = ''
@@ -302,8 +303,8 @@
 			const cartId = cartState?.retrieveCartId() || cartState?.cart?.id
 			const reuse = reusable
 			let cart = reuse && cartId ? await bag.getCartByCartId(cartId) : null
-			const designId = reuse?.designId ?? (await saveDocument(doc, pictures))
-			savedDesign = { doc, variantId, designId }
+			const designId = reuse ?? (await saveDocument(doc, pictures))
+			designIds.set(doc, { ...designIds.get(doc), [variantId]: designId })
 			if (!lineOf(cart, designId)) {
 				cart = await bag.addToCart({ cartId: cartState?.cart?.id || null, productId: setup.productId, variantId, qty: 1, designId })
 			}
