@@ -1,7 +1,20 @@
+<script module lang="ts">
+	import { pushState, replaceState } from '$app/navigation'
+
+	// A frame, such as the theme editor's preview, shares its history with the page around it, and a
+	// step back there can undo that page's own step: in a frame the editor neither adds nor leaves an entry.
+	const framed = () => window.parent !== window
+
+	export function openEditor() {
+		if (framed()) replaceState('', { customizerOpen: true })
+		else pushState('', { customizerOpen: true })
+	}
+</script>
+
 <script lang="ts">
 	import { Dialog as DialogPrimitive } from 'bits-ui'
 	import { untrack } from 'svelte'
-	import { afterNavigate, replaceState } from '$app/navigation'
+	import { afterNavigate } from '$app/navigation'
 	import { page } from '$app/state'
 	import {
 		ArrowDown,
@@ -121,7 +134,7 @@
 	// A reload keeps the editor's history entry but not page.state or the design, so the next Back
 	// would land on this product again: step off the entry now.
 	$effect(() => {
-		if (history.state?.['sveltekit:states']?.customizerOpen) history.back()
+		if (!framed() && history.state?.['sveltekit:states']?.customizerOpen) history.back()
 	})
 
 	// SvelteKit applies the entry's state in its own popstate listener, which may run after this one.
@@ -134,6 +147,11 @@
 	// One step back however often Close is asked for before the step lands, and closed even if it never does.
 	function close(): Promise<void> {
 		if (!open) return Promise.resolve()
+		if (framed()) {
+			replaceState('', { ...page.state, customizerOpen: false })
+			shut()
+			return Promise.resolve()
+		}
 		closing ??= new Promise<void>((resolve) => {
 			closed = resolve
 			closeFallback = setTimeout(shut, 500)

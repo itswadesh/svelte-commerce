@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { pushState } from '$app/navigation'
+	import { openEditor } from '$lib/customizer/editor.svelte'
 	import { Button } from '$lib/components/ui/button'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
@@ -179,7 +179,7 @@
 					size="lg"
 					aria-haspopup="dialog"
 					disabled={outOfStock}
-					onclick={() => pushState('', { customizerOpen: true })}
+					onclick={openEditor}
 				>
 					{#if outOfStock}
 						<span>Out of stock</span>
