@@ -169,3 +169,13 @@ class, no `text-transform: uppercase` and no caps-only letter-spacing. The owner
 the account, auth and shop pages were unified, so the whole storefront reads in one voice.
 `scripts/check-tokens.mjs` fails on all-caps styling in default-theme files. The wine, organic, lime
 and noor themes keep their own type treatment.
+
+## 2026-10-30: Criteo's OneTag, per store, behind the cookie choice
+
+The owner asked for Criteo's tag (`dynamic.criteo.com/js/ld/ld.js?a=<account>`). The account is
+each store's own: the engine's `criteo` plugin, which the gocommerce connector hands over as
+`store.plugins.criteo`. It is never hard-coded, because one deployment serves many stores. The tag
+loads on the first interaction. Criteo does not read Google's consent mode, so a saved cookie choice
+decides, and without one, visitors whose time zone is in the opt-in regions (Europe and the
+Atlantic islands, as `app.html` treats them) wait for "Accept all". A store with Criteo shows the
+cookie banner. Product, cart and purchase events are not sent yet.

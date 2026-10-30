@@ -5,6 +5,7 @@
 	import { setUserState } from '$lib/core/stores/index.js'
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
+	import CriteoTag from '$lib/components/common/criteo-tag.svelte'
 	import ConsentBanner from '$lib/components/common/consent-banner.svelte'
 	import { navigating } from '$app/stores'
 	import { page, updated } from '$app/state'
@@ -282,6 +283,7 @@
 <StoreFont />
 <GoogleAnalytics />
 <KlaviyoPlugin storeData={data?.store} />
+<CriteoTag plugin={data?.store?.plugins?.criteo} />
 
 <!-- <ThemeProvider /> -->
 

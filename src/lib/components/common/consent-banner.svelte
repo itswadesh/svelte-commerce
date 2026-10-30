@@ -5,13 +5,15 @@
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
 	import { fade, fly } from '$lib/motion'
 	import { onFirstInteraction } from '$lib/utils/on-first-interaction'
+	import { criteoAccount } from '$lib/criteo'
 
 	type Consent = { ad_storage: 'granted' | 'denied'; analytics_storage: 'granted' | 'denied' }
 
-	// Only a store that actually loads Google tags has anything to ask about: the GoogleAnalytics
-	// loader in the root layout needs the plugin switched on and a container id.
+	// Only a store that actually loads ad or analytics tags has anything to ask about: the
+	// GoogleAnalytics loader in the root layout needs the plugin switched on and a container id,
+	// criteo-tag.svelte a Criteo account.
 	const gtm = $derived(page.data?.store?.plugins?.googleTagManager)
-	const tagsLoad = $derived(!!(gtm?.active ?? gtm?.isActive) && !!gtm?.id)
+	const tagsLoad = $derived((!!(gtm?.active ?? gtm?.isActive) && !!gtm?.id) || !!criteoAccount(page.data?.store?.plugins?.criteo))
 
 	let showBanner = $state(false)
 
@@ -39,6 +41,8 @@
 				personalization_storage: settings.analytics_storage
 			})
 		}
+		// Tags that do not read Google's consent mode (criteo-tag.svelte) listen for the choice.
+		window.dispatchEvent(new CustomEvent('consentchange', { detail: settings }))
 		showBanner = false
 	}
 </script>
