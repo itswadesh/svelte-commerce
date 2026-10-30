@@ -33,7 +33,7 @@
 	import { bumpTotal } from '$lib/product/upsells'
 	import { isEmpty, layerLabel, type CustomizerSetup, type Panel } from './document'
 	import { Designer } from './designer.svelte'
-	import { loadPicture, renderPng } from './draw'
+	import { loadPicture, previewView, renderPng } from './draw'
 	import { loadFonts, MAX_UPLOAD_BYTES, saveDesign, upload } from './service'
 	import Stage from './stage.svelte'
 	import Tools from './tools.svelte'
@@ -169,7 +169,7 @@
 			await designer.fontsReady
 			const doc = designer.doc
 			const [previewPng, printPng] = await Promise.all([
-				renderPng(doc, setup, pictures, { kind: 'mockup', scale: 1 }),
+				renderPng(doc, setup, pictures, previewView(setup)),
 				renderPng(doc, setup, pictures, { kind: 'print' })
 			])
 			if (printPng.size > MAX_UPLOAD_BYTES || previewPng.size > MAX_UPLOAD_BYTES) throw new Error(TOO_LARGE)
