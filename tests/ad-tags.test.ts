@@ -304,6 +304,8 @@ describe('startAdTags', () => {
 		w.gtag('event', 'purchase', { transaction_id: 'GC-9', currency: 'INR', value: 549, items: [{ item_id: 'TEE-M', price: 499, quantity: 1 }] })
 		await settle()
 		expect(metaCalls().find((a: unknown[]) => a[1] === 'Purchase')?.[3]).toEqual({ eventID: 'GC-9' })
+		// Loading scans the dataLayer again; the purchase that started it is still one purchase.
+		expect(metaCalls().filter((a: unknown[]) => a[1] === 'Purchase')).toHaveLength(1)
 	})
 
 	it('loads nothing while the address carries an email, a token or a key, and loads once it does not', async () => {
