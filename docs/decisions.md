@@ -3,6 +3,33 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-30: A shopper designs their own print, and the bag shows it
+
+The owner asked for a product customizer like Zapvi's (GoCommerce D162, stage 2 of 3). On a product
+the merchant made designable, the product page's one action becomes "Design yours", because the
+product is made to a design. It opens the editor: full screen on a phone, with the mockup in the
+middle, close, undo, redo, zoom and preview along the top, the tools along the bottom and Add to bag
+under them; on a desktop, the canvas beside a tool panel. Only the tools the merchant switched on
+are offered (photo, words, shapes, background, stickers), with a layer list. One function draws the
+design for the screen, the preview and the print file, so what the shopper sees is what is printed.
+The print file is exactly `round(mm / 25.4 × dpi)` pixels a side, as a PNG so the print area's round
+corners stay clear. The merchant's consent line shows before a photo is chosen, and a photo under
+the setup's smallest size is flagged as likely to print soft, never refused. Add to bag uploads the
+preview and the print file, saves the design and adds it as a line of its own, with any add-ons
+ticked in "Complete the set". The bag, checkout, confirmation and order pages show the shopper's
+design in place of the product picture, labelled "Your design". A connector without the customizer,
+an older release of one, or a product that cannot be designed gives the ordinary page, so this ships
+before the connector release does. Templates, matching add-ons and a customization fee are stage 3.
+
+Uploads go through the storefront's own proxy, and adapter-node refuses a request body over
+`BODY_SIZE_LIMIT`, 512 KB unless set. Every chosen photo is redrawn in the browser, turned upright,
+and sent as a plain JPEG (a PNG only when it has see-through parts), at most 12 megapixels and twice
+the print file's longest side: the engine refuses HEIC, WebP and some costly files it could read,
+more pixels never print sharper, and a smaller upload is faster on a phone's data. The print file is
+a PNG and can still approach the engine's 15 MB limit, so a deployment selling designs sets
+`BODY_SIZE_LIMIT=16M`; `docker-compose.yml` does. A print file over the limit gets a plain message
+asking for a simpler design, not a silent failure.
+
 ## 2026-10-30: Google reviews are Google's, live, and the survey uses the engine's order data
 
 The owner asked to "integrate google reviews" (engine D161). The home page's Google reviews section

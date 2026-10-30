@@ -21,3 +21,6 @@ services:
       - PUBLIC_LITEKART_STORE_ID=${PUBLIC_LITEKART_STORE_ID}
       - PUBLIC_LITEKART_DOMAIN=${PUBLIC_LITEKART_DOMAIN}
       - PUBLIC_SITEMAP_URL=${PUBLIC_SITEMAP_URL}
+      # A shopper's design is uploaded through this server, and its print file can be up to the
+      # engine's 15 MB; adapter-node refuses bodies over 512 KB unless told otherwise.
+      - BODY_SIZE_LIMIT=${BODY_SIZE_LIMIT:-16M}
