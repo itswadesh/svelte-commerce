@@ -20,7 +20,7 @@ import {
 	type Layer
 } from '$lib/customizer/document'
 import { Designer } from '$lib/customizer/designer.svelte'
-import { backingScale } from '$lib/customizer/draw'
+import { backingScale, previewView } from '$lib/customizer/draw'
 
 const area = { x: 40, y: 40, width: 520, height: 1120, radius: 90 }
 
@@ -201,5 +201,10 @@ describe('canvas sizes', () => {
 		expect(backingScale(400, 800, 2)).toBe(2)
 		const k = backingScale(1738.5, 3477, 2)
 		expect([Math.floor(1738.5 * k), Math.floor(3477 * k)]).toEqual([2828, 5656])
+	})
+
+	it('draws the preview at most 2000 pixels on its longer side', () => {
+		expect(previewView({ ...setup, mockup: { url: '/m.png', width: 4000, height: 8000 } })).toEqual({ kind: 'mockup', scale: 0.25 })
+		expect(previewView(setup)).toEqual({ kind: 'mockup', scale: 1 })
 	})
 })

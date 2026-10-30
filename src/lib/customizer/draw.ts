@@ -26,6 +26,13 @@ const MAX_CANVAS_PIXELS = 16_000_000
 
 export const backingScale = (width: number, height: number, dpr: number) => Math.min(dpr, Math.sqrt(MAX_CANVAS_PIXELS / (width * height)))
 
+const MAX_PREVIEW_SIDE = 2000
+
+export const previewView = (setup: CustomizerSetup): View => ({
+	kind: 'mockup',
+	scale: Math.min(1, MAX_PREVIEW_SIDE / Math.max(setup.mockup.width, setup.mockup.height))
+})
+
 function canvasSize(setup: CustomizerSetup, view: View): { width: number; height: number } {
 	if (view.kind === 'print') return printPixels(setup.printSize)
 	return { width: Math.round(setup.mockup.width * view.scale), height: Math.round(setup.mockup.height * view.scale) }
