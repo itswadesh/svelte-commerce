@@ -154,6 +154,26 @@ describe('undo and redo', () => {
 		expect(designer.doc.layers).toEqual([])
 	})
 
+	it('keeps an edit still in progress as its own step when Undo is pressed', () => {
+		const designer = new Designer(setup)
+		designer.add(shape('a'))
+		designer.updateLive('a', { x: 30 })
+		designer.undo()
+		expect(designer.doc.layers.map((l) => l.x)).toEqual([0])
+		designer.redo()
+		expect(designer.doc.layers.map((l) => l.x)).toEqual([30])
+	})
+
+	it('keeps an edit still in progress when Redo is pressed', () => {
+		const designer = new Designer(setup)
+		designer.add(shape('a'))
+		designer.add(shape('b'))
+		designer.undo()
+		designer.updateLive('a', { x: 30 })
+		designer.redo()
+		expect(designer.doc.layers.map((l) => l.x)).toEqual([30])
+	})
+
 	it('lets go of the selection when its layer is deleted', () => {
 		const designer = new Designer(setup)
 		designer.add(shape('a'))
