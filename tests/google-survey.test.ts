@@ -33,11 +33,20 @@ describe("the confirmation page's Google Customer Reviews offer", () => {
 		expect(showSurvey).toHaveBeenCalledWith(survey)
 	})
 
-	it('offers nothing when the engine has no survey for the order', async () => {
+	it('offers nothing when the engine has no survey for the order, after asking twice more', async () => {
 		loadSurvey.mockResolvedValue(null)
 		render(GoogleSurvey, { active: true, orderNo: 'GC-000049' })
 		await vi.runAllTimersAsync()
+		expect(loadSurvey).toHaveBeenCalledTimes(3)
 		expect(showSurvey).not.toHaveBeenCalled()
+	})
+
+	it('offers the survey once a payment confirmed after the page opened', async () => {
+		loadSurvey.mockResolvedValueOnce(null).mockResolvedValueOnce(survey)
+		render(GoogleSurvey, { active: true, orderNo: 'GC-000049' })
+		await vi.runAllTimersAsync()
+		expect(loadSurvey).toHaveBeenCalledTimes(2)
+		expect(showSurvey).toHaveBeenCalledWith(survey)
 	})
 
 	it('asks nothing while the survey is off or before the order is known', async () => {

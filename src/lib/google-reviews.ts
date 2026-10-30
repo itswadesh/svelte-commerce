@@ -76,7 +76,8 @@ export function showSurvey(survey: GoogleSurvey): void {
 		gapi?: { load: (name: string, fn: () => void) => void; surveyoptin: { render: (o: GoogleSurvey) => void } }
 	}
 	w.renderOptIn = () => w.gapi?.load('surveyoptin', () => w.gapi?.surveyoptin.render(survey))
-	addScript(PLATFORM)
+	// Loaded already (a second order this visit): Google will not call renderOptIn again.
+	if (!addScript(PLATFORM) && w.gapi) w.renderOptIn()
 }
 
 /**
