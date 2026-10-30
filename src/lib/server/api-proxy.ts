@@ -8,16 +8,29 @@ export const isApiPath = (pathname: string) => pathname === '/api' || pathname.s
 
 // Hop-by-hop headers, plus the edge's own. `api.litekart.in` sits behind Cloudflare too, and a
 // request still carrying the storefront zone's `cdn-loop` / `cf-*` headers reads to it as a loop.
-const DROPPED_REQUEST_HEADERS = ['host', 'connection', 'accept-encoding', 'content-length', 'cdn-loop']
+// `x-forwarded-for` as the browser sent it, too: proxyApiRequest writes its own.
+const DROPPED_REQUEST_HEADERS = ['host', 'connection', 'accept-encoding', 'content-length', 'cdn-loop', 'x-forwarded-for']
 
-/** `stripPrefix` is the storefront-side mount, cut off before forwarding: `/backend/api/carts` → `/api/carts`. */
-export const proxyApiRequest = async (request: Request, apiBase: string, fetchFn: typeof fetch = fetch, stripPrefix = ''): Promise<Response> => {
+/**
+ * `stripPrefix` is the storefront-side mount, cut off before forwarding: `/backend/api/carts` → `/api/carts`.
+ * `clientAddress` is the shopper's, sent as the whole `X-Forwarded-For`. An engine that trusts this server
+ * counts its per-address limits (sign-in, order lookup) against it, so a value the browser wrote must never
+ * get through: the shopper would pick the address they are counted as.
+ */
+export const proxyApiRequest = async (
+	request: Request,
+	apiBase: string,
+	fetchFn: typeof fetch = fetch,
+	stripPrefix = '',
+	clientAddress?: string
+): Promise<Response> => {
 	const source = new URL(request.url)
 	const target = `${apiBase.replace(/\/+$/, '')}${source.pathname.slice(stripPrefix.length)}${source.search}`
 
 	const headers = new Headers(request.headers)
 	for (const name of DROPPED_REQUEST_HEADERS) headers.delete(name)
 	for (const name of [...headers.keys()]) if (name.startsWith('cf-')) headers.delete(name)
+	if (clientAddress) headers.set('x-forwarded-for', clientAddress)
 
 	const init: RequestInit & { duplex?: 'half' } = { method: request.method, headers, redirect: 'manual' }
 	if (request.method !== 'GET' && request.method !== 'HEAD') {

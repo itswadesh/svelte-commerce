@@ -38,6 +38,28 @@ describe('proxyApiRequest', () => {
 		expect(fetchFn.mock.calls[0][0]).toBe('https://api.litekart.in/api/menu')
 	})
 
+	it("replaces a browser-sent X-Forwarded-For with the shopper's address", async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		const request = new Request('https://shop.example/backend/api/orders/GC-1/open', {
+			method: 'POST',
+			headers: { 'x-forwarded-for': '198.51.100.7, 10.0.0.1' },
+			body: '{"contact":"a@b.co"}'
+		})
+
+		await proxyApiRequest(request, 'https://engine.example', fetchFn, '/backend', '203.0.113.9')
+
+		expect(new Headers(fetchFn.mock.calls[0][1]?.headers).get('x-forwarded-for')).toBe('203.0.113.9')
+	})
+
+	it('sends no X-Forwarded-For when it has no address for the shopper', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		const request = new Request('https://shop.example/backend/api/menu', { headers: { 'x-forwarded-for': '198.51.100.7' } })
+
+		await proxyApiRequest(request, 'https://engine.example', fetchFn, '/backend')
+
+		expect(new Headers(fetchFn.mock.calls[0][1]?.headers).has('x-forwarded-for')).toBe(false)
+	})
+
 	it('cuts the storefront-side mount off before forwarding', async () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
 		await proxyApiRequest(new Request('https://shop.example/backend/api/carts?x=1'), 'https://engine.example/', fetchFn, '/backend')
