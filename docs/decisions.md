@@ -10,14 +10,18 @@ The engine now marks every product `designable` and refuses a plain add of a des
 follows the flag. A plain product's page no longer asks for a customizer setup. A designable
 product's page offers Design yours even when its setup failed to load: the button reads the setup
 again, and if it still cannot, says "Couldn't open the designer." with Try again, never Add to bag.
-Every card or list that offered a one-tap add (the listing, search, collections, cross-sells, the
-bag's suggestions and the wishlist) offers Design yours instead, a link to the product page. A
-product with no flag, from an older engine or connector, behaves as before. When a stale flag still
-lets a plain add through, the cart service puts the refusal in plain words, "This one is made to
-your design. Design it first.", keeps the bag, and turns that product's cards to Design yours. The
-Lime and Noor cards are out of design scope and keep their quick add; there the reworded refusal is
-the guard. Complete-the-set add-ons carry no flag from the engine, so the same refusal is their
-only guard.
+Every card or list that offered a one-tap add (the listing, search, collections, cross-sells,
+related products, a seller's store page, the bag's suggestions and the wishlist) offers Design
+yours instead, a link to the product page. Buy again offers Design again, a link to the product
+page, for a past line that was designed and for a product made to a design. Undo after removing a
+designed line from the bag puts back the same design. A product with no flag, from an older engine
+or connector, behaves as before. When a stale flag still lets a plain add through, the cart service
+puts the refusal in plain words, "This one is made to your design. Design it first.", keeps the
+bag, and turns that product's cards to Design yours. The Lime and Noor cards are out of design scope
+and keep their quick add; there the reworded refusal is the guard. Complete-the-set add-ons carry no
+flag from the engine, so the same refusal is their only guard. The shopping assistant's
+recommendations keep their add button: the assistant runs only on Litekart, which neither sends the
+flag nor refuses a plain add.
 
 ## 2026-10-30: A shopper designs their own print, and the bag shows it
 
