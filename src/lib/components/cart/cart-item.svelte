@@ -62,10 +62,11 @@
 		const me = userState?.user
 		const lineId = cartProduct.id
 		const next = cartProduct.qty + 1
+		// What was added is one more unit, not the line: GA4 and the ad tags (ad-tags.ts) add these up.
 		const payload = {
-			items: [{ ...analyticsProduct(), qty: next }],
-			total: cartProduct?.price * next,
-			qty: next,
+			items: [{ ...analyticsProduct(), qty: 1 }],
+			total: cartProduct?.price,
+			qty: 1,
 			vendorBusinessName: cartProduct?.vendor?.businessName,
 			// Only the pseudonymous id: name and email are PII and must not reach GA4.
 			user: { id: me?._id || me?.id }
