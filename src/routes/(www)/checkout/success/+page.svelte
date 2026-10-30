@@ -56,10 +56,12 @@
 		].filter((row) => typeof row.value === 'number' && row.value !== 0)
 	)
 
+	// Only the order's own estimate. A guessed week was shown here whenever the order had none, a
+	// date nobody promised, and it disagreed with the date Google Customer Reviews is given.
 	const estimatedDeliveryDateDisplay = $derived.by(() => {
-		if (!firstOrder) return ''
+		const days = Number(firstOrder?.shippingRate?.estimatedMaxDays)
+		if (!firstOrder || !(days > 0)) return ''
 		const date = new Date(firstOrder.createdAt)
-		const days = firstOrder.shippingRate?.estimatedMaxDays || 7
 		date.setDate(date.getDate() + days)
 		return new Intl.DateTimeFormat('en-US', {
 			month: 'long',
@@ -295,11 +297,13 @@
 
 					<!-- Delivery Status -->
 					<div class="p-4 md:p-6">
-						<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
-							<Calendar class="h-5 w-5 text-primary" />
-							<h3>Estimated delivery</h3>
-						</div>
-						<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
+						{#if estimatedDeliveryDateDisplay}
+							<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
+								<Calendar class="h-5 w-5 text-primary" />
+								<h3>Estimated delivery</h3>
+							</div>
+							<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
+						{/if}
 						<div class="flex items-start gap-3 rounded-radius border border-border bg-card p-2">
 							<Mail class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
 							<p class="text-sm leading-relaxed text-foreground">

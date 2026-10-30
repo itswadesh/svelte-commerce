@@ -90,8 +90,11 @@ describe('the Google reviews section', () => {
 		// How the reviews were chosen, and where the rest are.
 		expect(screen.getByText(/most relevant/i)).toBeInTheDocument()
 		expect(screen.getByRole('link', { name: /see all reviews on google/i })).toHaveAttribute('href', 'https://maps.google.com/?cid=1')
-		expect(screen.getByRole('link', { name: /read on google maps/i })).toHaveAttribute('href', 'https://www.google.com/maps/reviews/1')
-		expect(screen.getByRole('link', { name: /report/i })).toHaveAttribute('href', 'https://www.google.com/local/review/rap/report?postId=1')
+		expect(screen.getByRole('link', { name: "Read Asha R's review on Google Maps" })).toHaveAttribute('href', 'https://www.google.com/maps/reviews/1')
+		expect(screen.getByRole('link', { name: "Report Asha R's review to Google" })).toHaveAttribute(
+			'href',
+			'https://www.google.com/local/review/rap/report?postId=1'
+		)
 		expect(screen.getByRole('img', { name: 'Google Maps' })).toBeInTheDocument()
 	})
 
@@ -151,6 +154,15 @@ describe("Google Customer Reviews' scripts", () => {
 		;(window as any).gapi = { load: (_name: string, fn: () => void) => fn(), surveyoptin: { render } }
 		;(window as any).renderOptIn()
 		expect(render).toHaveBeenCalledWith(survey)
+	})
+
+	it('renders a second survey this visit, with Google already loaded', () => {
+		const render = vi.fn()
+		;(window as any).gapi = { load: (_name: string, fn: () => void) => fn(), surveyoptin: { render } }
+		showSurvey(survey)
+		showSurvey({ ...survey, order_id: 'GC-000050' })
+		expect(render).toHaveBeenCalledTimes(1)
+		expect(render).toHaveBeenCalledWith({ ...survey, order_id: 'GC-000050' })
 	})
 
 	it("starts Google's store widget where the store placed it", () => {

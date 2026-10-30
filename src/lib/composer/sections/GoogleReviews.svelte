@@ -15,8 +15,9 @@
 	 *
 	 * Nothing renders until Google has answered with a rating. Every answer is a call the store pays
 	 * Google for, and Google's terms forbid keeping it, so the section asks only when a shopper is
-	 * about to scroll to it; asking ahead of the screen also means it grows below the fold, where
-	 * it moves nothing a shopper is looking at.
+	 * about to scroll to it. It asks about a screen and a half ahead, so it grows below the fold and
+	 * moves nothing a shopper is looking at; a placeholder would instead snap shut whenever Google
+	 * has nothing to show.
 	 *
 	 * `load` is the connector's service unless a caller passes its own (the tests).
 	 */
@@ -39,7 +40,7 @@
 					.then((p) => (place = p?.count ? p : null))
 					.catch(() => (place = null))
 			},
-			{ rootMargin: '600px 0px' }
+			{ rootMargin: '1200px 0px' }
 		)
 		io.observe(anchor)
 		return () => io.disconnect()
@@ -100,8 +101,12 @@
 								{#if r.text}<p class="cmp-gr__text" lang={r.language || undefined}>{r.text}</p>{/if}
 								{#if r.url || r.reportUrl}
 									<p class="cmp-gr__links">
-										{#if r.url}<a href={r.url} target="_blank" rel="noopener nofollow">Read on Google Maps</a>{/if}
-										{#if r.reportUrl}<a href={r.reportUrl} target="_blank" rel="noopener nofollow">Report</a>{/if}
+										{#if r.url}<a href={r.url} target="_blank" rel="noopener nofollow" aria-label="Read {r.author}'s review on Google Maps"
+												>Read on Google Maps</a
+											>{/if}
+										{#if r.reportUrl}<a href={r.reportUrl} target="_blank" rel="noopener nofollow" aria-label="Report {r.author}'s review to Google"
+												>Report</a
+											>{/if}
 									</p>
 								{/if}
 							</li>
@@ -110,10 +115,12 @@
 				{/if}
 
 				<div class="cmp-gr__foot">
-					<p class="cmp-gr__note">
-						Google's {place.reviews.length} most relevant {place.reviews.length === 1 ? 'review' : 'reviews'} of {nf.format(place.count)}, in Google's
-						order, none left out. Google doesn't verify reviews, but removes fake ones it finds.
-					</p>
+					{#if place.reviews.length}
+						<p class="cmp-gr__note">
+							Google's {place.reviews.length} most relevant {place.reviews.length === 1 ? 'review' : 'reviews'} of {nf.format(place.count)}, in
+							Google's order, none left out. Google doesn't verify reviews, but removes fake ones it finds.
+						</p>
+					{/if}
 					{#if place.mapsUrl}
 						<a class="cmp-gr__all" href={place.mapsUrl} target="_blank" rel="noopener nofollow">See all reviews on Google</a>
 					{/if}
