@@ -35,9 +35,19 @@
 	import { formatPrice } from '$lib/utils/price'
 	import { addOnPicks, addPicks } from '$lib/product/add-on-picks.svelte'
 	import { bumpTotal } from '$lib/product/upsells'
-	import { canResize, isEmpty, layerLabel, SIZE_STEP, TURN_STEP, type CustomizerSetup, type Panel, type TextLayer } from './document'
+	import {
+		canResize,
+		isEmpty,
+		layerLabel,
+		SIZE_STEP,
+		TURN_STEP,
+		type CustomizerSetup,
+		type DesignDocument,
+		type Panel,
+		type TextLayer
+	} from './document'
 	import { Designer } from './designer.svelte'
-	import { loadPicture, previewView, renderPng } from './draw'
+	import { loadPicture, previewView, renderPng, type Pictures } from './draw'
 	import { loadFonts, loadGlyphs, MAX_UPLOAD_BYTES, PlainError, plainMessage, saveDesign, upload } from './service'
 	import Stage from './stage.svelte'
 	import Tools from './tools.svelte'
@@ -169,41 +179,55 @@
 	const TOO_LARGE = 'Your design is too detailed to save as a print file. Make a photo smaller on the print, or use fewer photos, and try again.'
 	const MISSING_PHOTO = 'A photo in your design did not finish loading. Delete it, add it again, and try again.'
 
+	async function saveDocument(doc: DesignDocument, pictures: Pictures): Promise<string> {
+		if (designer.missingPhoto) throw new PlainError(MISSING_PHOTO)
+		await designer.fontsReady
+		await loadGlyphs(
+			setup,
+			doc.layers.filter((l): l is TextLayer => l.type === 'text')
+		)
+		const [previewPng, printPng] = await Promise.all([
+			renderPng(doc, setup, pictures, previewView(setup)),
+			renderPng(doc, setup, pictures, { kind: 'print' })
+		])
+		if (printPng.size > MAX_UPLOAD_BYTES || previewPng.size > MAX_UPLOAD_BYTES) throw new PlainError(TOO_LARGE)
+		const [preview, print] = await Promise.all([upload(previewPng, 'preview.png'), upload(printPng, 'print.png')])
+		const saved = await saveDesign({
+			productId: setup.productId,
+			variantId,
+			previewUploadId: preview.uploadId,
+			printUploadId: print.uploadId,
+			document: doc
+		})
+		return saved.designId
+	}
+
+	// The design saved by an attempt whose answer never arrived. Trying again with the same design
+	// and variant reuses it, and finds its line if the bag already took it.
+	let attempted: { doc: DesignDocument; variantId: string; designId: string } | null = null
+
 	async function addToBag() {
 		const pictures = designer.pictures
 		if (!pictures || status.state === 'saving') return
 		designer.endGesture()
 		status = { state: 'saving' }
 		try {
-			if (designer.missingPhoto) throw new PlainError(MISSING_PHOTO)
-			await designer.fontsReady
 			const doc = designer.doc
-			await loadGlyphs(
-				setup,
-				doc.layers.filter((l): l is TextLayer => l.type === 'text')
-			)
-			const [previewPng, printPng] = await Promise.all([
-				renderPng(doc, setup, pictures, previewView(setup)),
-				renderPng(doc, setup, pictures, { kind: 'print' })
-			])
-			if (printPng.size > MAX_UPLOAD_BYTES || previewPng.size > MAX_UPLOAD_BYTES) throw new PlainError(TOO_LARGE)
-			const [preview, print] = await Promise.all([upload(previewPng, 'preview.png'), upload(printPng, 'print.png')])
-			const saved = await saveDesign({
-				productId: setup.productId,
-				variantId,
-				previewUploadId: preview.uploadId,
-				printUploadId: print.uploadId,
-				document: doc
-			})
-			const bag = cartService as unknown as { addToCart: (q: Record<string, unknown>) => Promise<any> }
-			const cart = await bag.addToCart({
-				cartId: cartState?.cart?.id || null,
-				productId: setup.productId,
-				variantId,
-				qty: 1,
-				designId: saved.designId
-			})
-			if (!cart?.lineItems?.some((l: { designId?: string }) => l.designId === saved.designId)) throw new Error('The bag came back without the design')
+			const retried = attempted?.doc === doc && attempted.variantId === variantId ? attempted.designId : null
+			const designId = retried ?? (await saveDocument(doc, pictures))
+			attempted = { doc, variantId, designId }
+			const bag = cartService as unknown as {
+				addToCart: (q: Record<string, unknown>) => Promise<any>
+				getCartByCartId: (cartId: string) => Promise<any>
+			}
+			const holdsDesign = (cart: any) => cart?.lineItems?.some((l: { designId?: string }) => l.designId === designId)
+			const cartId = cartState?.retrieveCartId() || cartState?.cart?.id
+			let cart = retried && cartId ? await bag.getCartByCartId(cartId) : null
+			if (!holdsDesign(cart)) {
+				cart = await bag.addToCart({ cartId: cartState?.cart?.id || null, productId: setup.productId, variantId, qty: 1, designId })
+			}
+			if (!holdsDesign(cart)) throw new Error('The bag came back without the design')
+			attempted = null
 			if (cartState) cartState.cart = cart
 			await addPicks(setup.productId, cartState)
 			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: unitPrice, qty: 1, user: { id: userState?.user?.id } })
