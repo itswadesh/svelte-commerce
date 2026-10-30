@@ -275,20 +275,25 @@
 		status = { state: 'saving' }
 		try {
 			const doc = designer.doc
-			const retried = unconfirmed?.doc === doc && unconfirmed.variantId === variantId ? unconfirmed.designId : null
-			const designId = retried ?? (await saveDocument(doc, pictures))
-			unconfirmed = { doc, variantId, designId }
 			const bag = cartService as unknown as {
 				addToCart: (q: Record<string, unknown>) => Promise<any>
 				getCartByCartId: (cartId: string) => Promise<any>
+				removeCart: (q: { cartId: string | undefined; lineId: string }) => Promise<any>
 			}
-			const holdsDesign = (cart: any) => cart?.lineItems?.some((l: { designId?: string }) => l.designId === designId)
+			const lineOf = (cart: any, designId: string) => cart?.lineItems?.find((l: { designId?: string }) => l.designId === designId)
 			const cartId = cartState?.retrieveCartId() || cartState?.cart?.id
-			let cart = retried && cartId ? await bag.getCartByCartId(cartId) : null
-			if (!holdsDesign(cart)) {
+			let cart = unconfirmed && cartId ? await bag.getCartByCartId(cartId) : null
+			if (unconfirmed && (unconfirmed.doc !== doc || unconfirmed.variantId !== variantId)) {
+				const lost = lineOf(cart, unconfirmed.designId)
+				if (lost) cart = await bag.removeCart({ cartId, lineId: lost.id })
+				unconfirmed = null
+			}
+			const designId = unconfirmed?.designId ?? (await saveDocument(doc, pictures))
+			unconfirmed = { doc, variantId, designId }
+			if (!lineOf(cart, designId)) {
 				cart = await bag.addToCart({ cartId: cartState?.cart?.id || null, productId: setup.productId, variantId, qty: 1, designId })
 			}
-			if (!holdsDesign(cart)) throw new Error('The bag came back without the design')
+			if (!lineOf(cart, designId)) throw new Error('The bag came back without the design')
 			unconfirmed = null
 			if (cartState) cartState.cart = cart
 			await addPicks(setup.productId, cartState)
