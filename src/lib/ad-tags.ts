@@ -186,7 +186,12 @@ export function startAdTags(
 	// from there in order, each once. The wrapper only says when to look.
 	const scan = () => {
 		const dl = w.dataLayer ?? []
-		for (; scanned < dl.length; scanned++) if (dl[scanned]?.[0] === 'event') hear(String(dl[scanned][1]), dl[scanned][2] ?? {})
+		while (scanned < dl.length) {
+			// Counted before it is heard: a purchase loads the tags, which scans again, and must not
+			// hear the same purchase over and over.
+			const command = dl[scanned++]
+			if (command?.[0] === 'event') hear(String(command[1]), command[2] ?? {})
+		}
 	}
 	let gtag = w.gtag
 	const listening = function (this: unknown, ...args: unknown[]) {
@@ -203,9 +208,10 @@ export function startAdTags(
 		}
 		scan()
 	}
+	// Before the first scan, which can hear a purchase and so load.
+	let waiting = false
 	listen()
 
-	let waiting = false
 	async function load(choice?: Record<string, string>) {
 		listen()
 		if (PRIVATE_QUERY.test(location.search)) {
