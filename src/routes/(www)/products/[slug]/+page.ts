@@ -58,7 +58,8 @@ export const load = async (event: any) => {
 		const editorOrigin = allowEditorFrame(event, layout, editor)
 		if (!data?.product) return data
 		const previewKey = layout?.preview ? preview : null
-		const customizer = await loadSetup(services as object, data.product.id)
+		// An engine older than the flag leaves designable undefined: only false skips the setup read.
+		const customizer = data.product.designable === false ? null : await loadSetup(services as object, data.product.id)
 		return { ...data, product: withStringVariantIds(data.product), layout, editorOrigin, previewKey, customizer }
 	} catch (e) {
 		const reportedMissing = (isRedirect(e) && e.location === '/') || (isHttpError(e) && e.status === 404)
