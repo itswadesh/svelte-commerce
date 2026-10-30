@@ -419,8 +419,8 @@
 					{#if selected && !previewing}
 						{@const name = layerLabel(selected)}
 						<div class="flex shrink-0 flex-col gap-1 border-t px-3 py-1.5" data-testid="customizer-layer-bar" transition:fly={{ y: 8 }}>
-							<div class="flex flex-wrap items-center gap-1">
-								<div class="flex h-9 min-w-0 flex-1 basis-full items-center gap-1 sm:h-auto sm:basis-0">
+							<div class="flex items-center gap-1">
+								<div class="flex min-w-0 flex-1 items-center gap-1 max-sm:hidden">
 									<p class="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{name}</p>
 									{#if selected.type === 'text' && panel !== 'text'}
 										<Button variant="outline" size="sm" class="h-9" onclick={() => (panel = 'text')}>Edit words</Button>
