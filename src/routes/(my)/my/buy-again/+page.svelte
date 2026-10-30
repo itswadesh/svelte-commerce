@@ -1,21 +1,48 @@
-<script>
+<script lang="ts">
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { getCartState } from '$lib/core/stores/index.js'
 	import { formatPrice } from '$lib/utils/price'
 	const cartState = getCartState()
 
-	let data = $state([])
+	let data = $state<any[]>([])
 
 	import { onMount } from 'svelte'
 	import { Plus } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { orderService } from '$lib/core/services/index.js'
+	import { madeToDesign } from '$lib/product/designable'
 
 	onMount(async () => {
 		data = await orderService.buyAgain()
 	})
 </script>
+
+{#snippet again(item: any)}
+	{#if item.designId || madeToDesign({ id: item.productId, designable: item.designable })}
+		<Button variant="outline" class="w-full" href="/products/{item.slug}?variant_id={item.variantId || ''}" aria-label="Design again: {item.title}">
+			Design again
+		</Button>
+	{:else if cartState?.cart?.lineItems?.some((item1) => item1.productId === item.productId)}
+		<div>Item already in cart</div>
+	{:else}
+		<Button
+			disabled={!!cartState?.isUpdatingCart}
+			variant="outline"
+			class="w-full"
+			onclick={() => {
+				cartState?.add({
+					qty: item.qty,
+					productId: item.productId,
+					variantId: item.variantId
+				})
+			}}
+		>
+			<Plus class="mr-2 max-h-4 max-w-4" />
+			Add to cart
+		</Button>
+	{/if}
+{/snippet}
 
 <svelte:head>
 	<title>Buy again</title>
@@ -64,27 +91,9 @@
 							</div>
 
 							<div
-								class="relative z-10 flex w-full items-center justify-center p-0 opacity-100 duration-fast laptop:absolute laptop:bottom-0 laptop:translate-y-full laptop:transform laptop:opacity-0 laptop:transition-[transform,opacity] laptop:group-hover:translate-y-0 laptop:group-hover:opacity-100"
+								class="flex w-full items-center justify-center"
 							>
-								{#if cartState?.cart?.lineItems?.some((item1) => item1.productId === item.productId)}
-									<div>Item already in cart</div>
-								{:else}
-									<Button
-										disabled={!!cartState?.isUpdatingCart}
-										variant="outline"
-										class="w-full"
-										onclick={() => {
-											cartState?.add({
-												qty: item.qty,
-												productId: item.productId,
-												variantId: item.variantId
-											})
-										}}
-									>
-										<Plus class="mr-2 max-h-4 max-w-4" />
-										Add to cart
-									</Button>
-								{/if}
+								{@render again(item)}
 							</div>
 						</div>
 					</div>
@@ -133,27 +142,9 @@
 									</div>
 
 									<div
-										class="relative z-10 flex w-full items-center justify-center p-0 opacity-100 duration-fast laptop:absolute laptop:bottom-0 laptop:translate-y-full laptop:transform laptop:opacity-0 laptop:transition-[transform,opacity] laptop:group-hover:translate-y-0 laptop:group-hover:opacity-100"
+										class="flex w-full items-center justify-center"
 									>
-										{#if cartState?.cart?.lineItems?.some((item1) => item1.productId === item.productId)}
-											<div>Item already in cart</div>
-										{:else}
-											<Button
-												disabled={!!cartState?.isUpdatingCart}
-												variant="outline"
-												class="w-full"
-												onclick={() => {
-													cartState?.add({
-														qty: item.qty,
-														productId: item.productId,
-														variantId: item.variantId
-													})
-												}}
-											>
-												<Plus class="mr-2 max-h-4 max-w-4" />
-												Add to cart
-											</Button>
-										{/if}
+										{@render again(item)}
 									</div>
 								</div>
 							</div>
