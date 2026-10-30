@@ -160,3 +160,37 @@ describe('undo and redo', () => {
 		expect(designer.selectedId).toBe(null)
 	})
 })
+
+const photo = (id: string, uploadId: string): Layer => ({
+	id,
+	type: 'image',
+	upload_id: uploadId,
+	x: 0,
+	y: 0,
+	width: 100,
+	height: 100,
+	rotation: 0,
+	opacity: 1
+})
+
+const bitmap = () => {
+	const b = { closed: false, close: () => void (b.closed = true) }
+	return b as unknown as ImageBitmap & { closed: boolean }
+}
+
+describe('the shopper’s photos', () => {
+	it('keeps a photo added before the product’s pictures have loaded', () => {
+		const designer = new Designer(setup)
+		const picture = bitmap()
+		designer.addPhoto('u1', picture)
+		designer.add(photo('p', 'u1'))
+		expect(designer.photos.get('u1')).toBe(picture)
+		expect(designer.missingPhoto).toBe(false)
+	})
+
+	it('knows when a photo layer has no picture to print', () => {
+		const designer = new Designer(setup)
+		designer.add(photo('p', 'u9'))
+		expect(designer.missingPhoto).toBe(true)
+	})
+})

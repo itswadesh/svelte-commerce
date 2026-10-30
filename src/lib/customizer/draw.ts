@@ -15,7 +15,7 @@ export const FONT_WEIGHT = 400
 export type Pictures = {
 	mockup: CanvasImageSource
 	overlay: CanvasImageSource | null
-	photos: Map<string, CanvasImageSource>
+	photos: Map<string, ImageBitmap>
 	stickers: Map<number, CanvasImageSource>
 }
 
