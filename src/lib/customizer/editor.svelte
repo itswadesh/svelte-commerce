@@ -1,6 +1,6 @@
 <script module lang="ts">
 	import { pushState, replaceState } from '$app/navigation'
-	import { page } from '$app/state'
+	import { navigating, page } from '$app/state'
 
 	// A frame, such as the theme editor's preview, shares its history with the page around it, and a
 	// step back there can undo that page's own step: in a frame the editor neither adds nor leaves an entry.
@@ -15,7 +15,7 @@
 <script lang="ts">
 	import { Dialog as DialogPrimitive } from 'bits-ui'
 	import { untrack } from 'svelte'
-	import { afterNavigate, beforeNavigate } from '$app/navigation'
+	import { afterNavigate } from '$app/navigation'
 	import {
 		ArrowDown,
 		ArrowUp,
@@ -211,17 +211,20 @@
 		if (!open) untrack(() => designer.prune())
 	})
 
-	let left = false
+	let destroyed = false
+	let home = ''
 
-	$effect(() => () => {
-		left = true
-		shut()
-		designer.dispose()
+	$effect(() => {
+		home = location.pathname
+		return () => {
+			destroyed = true
+			shut()
+			designer.dispose()
+		}
 	})
 
-	beforeNavigate(({ to }) => {
-		if (to?.url.pathname !== page.url.pathname) left = true
-	})
+	// A link changes the address only once its page has loaded, so a page still loading counts as gone.
+	const onThisPage = () => !destroyed && location.pathname === home && (navigating.to?.url.pathname ?? home) === home
 
 	function togglePanel(p: Panel) {
 		previewing = false
@@ -282,7 +285,7 @@
 	}
 
 	const showBag = () => {
-		if (!left && cartState) cartState.isOpen = true
+		if (onThisPage() && cartState) cartState.isOpen = true
 	}
 
 	async function addToBag() {
@@ -309,6 +312,7 @@
 			await addPicks(setup.productId, cartState)
 			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: unitPrice, qty: 1, user: { id: userState?.user?.id } })
 			status = { state: 'idle' }
+			if (!onThisPage()) return
 			if (!open) return showBag()
 			announce('Your design is in your bag')
 			addedTimer = setTimeout(() => close().then(showBag), 900)
