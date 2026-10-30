@@ -10,6 +10,9 @@
 		if (framed() || page.state.customizerOpen) replaceState('', { customizerOpen: true })
 		else pushState('', { customizerOpen: true })
 	}
+
+	export type EditorHandle = { readonly hasSetup: boolean; reloadSetup: () => Promise<void> }
+	export const EDITOR = Symbol('editor')
 </script>
 
 <script lang="ts">

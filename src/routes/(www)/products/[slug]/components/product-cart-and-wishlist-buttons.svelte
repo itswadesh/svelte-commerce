@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { getContext, tick } from 'svelte'
 	import { page } from '$app/state'
-	import { openEditor } from '$lib/customizer/editor.svelte'
+	import { EDITOR, openEditor, type EditorHandle } from '$lib/customizer/editor.svelte'
+	import { madeToDesign } from '$lib/product/designable'
 	import { Button } from '$lib/components/ui/button'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
@@ -34,7 +36,23 @@
 
 	const cartCount = $derived(productState.cartState?.cart?.lineItems?.length ?? 0)
 
-	const designable = $derived(!!page.data?.customizer)
+	const editor = getContext<EditorHandle | undefined>(EDITOR)
+	const designable = $derived(madeToDesign(page.data?.product) || !!editor?.hasSetup)
+	let opening = $state(false)
+
+	async function design() {
+		if (!editor?.hasSetup) {
+			opening = true
+			await editor?.reloadSetup()
+			await tick()
+			opening = false
+			if (!editor?.hasSetup) {
+				toast.error("Couldn't open the designer.", { action: { label: 'Try again', onClick: design } })
+				return
+			}
+		}
+		openEditor()
+	}
 
 	// The figure on the button: the chosen variant's price and every add-on ticked in "Complete the
 	// set" (D133), so the sticky bar on a phone says what the tap will cost.
@@ -178,13 +196,18 @@
 					class="edp-atc flex h-full w-full items-center justify-center gap-2 text-sm font-semibold"
 					size="lg"
 					aria-haspopup="dialog"
-					disabled={outOfStock}
-					onclick={openEditor}
+					aria-busy={opening}
+					disabled={outOfStock || opening}
+					onclick={design}
 				>
 					{#if outOfStock}
 						<span>Out of stock</span>
 					{:else}
-						<Palette class="h-4 w-4" aria-hidden="true" />
+						{#if opening}
+							<Spinner label="Opening the designer" />
+						{:else}
+							<Palette class="h-4 w-4" aria-hidden="true" />
+						{/if}
 						<span>Design yours</span>
 						{#if buttonPrice}
 							<span class="tabular-nums" aria-hidden="true">· {buttonPrice}</span>
