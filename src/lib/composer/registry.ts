@@ -3,6 +3,7 @@ import AnnouncementBar from './sections/AnnouncementBar.svelte'
 import Benefits from './sections/Benefits.svelte'
 import CollectionList from './sections/CollectionList.svelte'
 import Faq from './sections/Faq.svelte'
+import GoogleReviews from './sections/GoogleReviews.svelte'
 import Hero from './sections/Hero.svelte'
 import ImageWithText from './sections/ImageWithText.svelte'
 import MultiColumn from './sections/MultiColumn.svelte'
@@ -29,5 +30,6 @@ export const SECTIONS: Record<string, Component<any>> = {
 	video: Video,
 	faq: Faq,
 	newsletter: Newsletter,
+	'google-reviews': GoogleReviews,
 	benefits: Benefits
 }

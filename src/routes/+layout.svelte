@@ -6,6 +6,7 @@
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
 	import ConsentBanner from '$lib/components/common/consent-banner.svelte'
+	import GoogleStoreWidget from '$lib/components/google/google-store-widget.svelte'
 	import { navigating } from '$app/stores'
 	import { page, updated } from '$app/state'
 	import { themeBackground, themeFontsHref, themeTokenCss } from '$lib/composer/theme-tokens.js'
@@ -282,6 +283,7 @@
 <StoreFont />
 <GoogleAnalytics />
 <KlaviyoPlugin storeData={data?.store} />
+<GoogleStoreWidget widget={data?.store?.plugins?.googleStoreWidget} />
 
 <!-- <ThemeProvider /> -->
 

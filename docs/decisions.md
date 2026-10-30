@@ -3,6 +3,22 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-30: Google reviews are Google's, live, and the survey uses the engine's order data
+
+The owner asked to "integrate google reviews" (engine D161). The home page's Google reviews section
+shows the store's Google rating, count and Google's most relevant reviews only after the engine has
+read them from Google, and only when the section nears the screen: Google's terms forbid keeping
+them, so every view is a call the store pays for, and nothing loads for a shopper who never scrolls
+there. It credits each author by name, photo and profile link, links each review on Google Maps and
+to Google's report page, says how the reviews were chosen, links to all of them, and carries the
+Google Maps logo, as Google's Places policies ask. It emits no structured data: Google's review
+snippet rules say not to mark up ratings from another site. The confirmation page's Google Customer
+Reviews offer no longer builds its fields here: the old block pasted a merchant ID from the static
+record into script text, read the email from the emptied cart, and invented a delivery date seven
+days out. The engine now builds every field from the order and offers no survey without a real
+delivery estimate. Google's scripts load after the page: the survey when the browser is idle, the
+store widget on the first interaction.
+
 ## 2026-10-30: The strip above the header is one thin line
 
 The owner: "keep the heads up notification above header thinner". The header's announcement strip,
@@ -13,6 +29,7 @@ composer section's link takes the bar's full height: 30px targets, above WCAG 2.
 rather than the 44px they borrowed from the bar's padding. The hello bar's messages are the
 merchant's own HTML, so a link at the end of a message too long for a phone is cut off with the
 rest of it; keep a linked message short.
+
 
 ## 2026-10-29: A product's own badge is the label on its picture
 
