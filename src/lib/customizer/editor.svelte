@@ -14,7 +14,7 @@
 <script lang="ts">
 	import { Dialog as DialogPrimitive } from 'bits-ui'
 	import { untrack } from 'svelte'
-	import { afterNavigate } from '$app/navigation'
+	import { afterNavigate, beforeNavigate } from '$app/navigation'
 	import { page } from '$app/state'
 	import {
 		ArrowDown,
@@ -126,7 +126,6 @@
 		open = false
 		clearTimeout(closeFallback)
 		clearTimeout(addedTimer)
-		if (status.state === 'added') status = { state: 'idle' }
 		closing = null
 		closed()
 	}
@@ -163,12 +162,17 @@
 	let announcement = $state('')
 	let loadError = $state(false)
 
-	type Status = { state: 'idle' } | { state: 'saving' } | { state: 'added' } | { state: 'error'; message: string }
+	type Status = { state: 'idle' } | { state: 'saving' } | { state: 'error'; message: string }
 	let status = $state<Status>({ state: 'idle' })
 
 	const selected = $derived(designer.selected)
 	const softPhoto = $derived(selected?.type === 'image' ? designer.lowResPhotos[selected.upload_id] : undefined)
 	const empty = $derived(isEmpty(designer.doc))
+
+	let savedDesign = $state.raw<{ doc: DesignDocument; variantId: string; designId: string } | null>(null)
+	const reusable = $derived(savedDesign?.doc === designer.doc && savedDesign.variantId === variantId ? savedDesign : null)
+	const lineOf = (cart: any, designId: string) => cart?.lineItems?.find((l: { designId?: string }) => l.designId === designId)
+	const bagButton = $derived(status.state === 'saving' ? 'saving' : reusable && lineOf(cartState?.cart, reusable.designId) ? 'added' : 'add')
 
 	function announce(message: string) {
 		announcement = ''
@@ -205,6 +209,10 @@
 		left = true
 		shut()
 		designer.dispose()
+	})
+
+	beforeNavigate(({ to }) => {
+		if (to?.url.pathname !== page.url.pathname) left = true
 	})
 
 	function togglePanel(p: Panel) {
@@ -255,17 +263,15 @@
 		])
 		if (printPng.size > MAX_UPLOAD_BYTES || previewPng.size > MAX_UPLOAD_BYTES) throw new ShopperError(TOO_LARGE)
 		const [preview, print] = await Promise.all([upload(previewPng, 'preview.png'), upload(printPng, 'print.png')])
-		const saved = await saveDesign({
+		const { designId } = await saveDesign({
 			productId: setup.productId,
 			variantId,
 			previewUploadId: preview.uploadId,
 			printUploadId: print.uploadId,
 			document: doc
 		})
-		return saved.designId
+		return designId
 	}
-
-	let unconfirmed: { doc: DesignDocument; variantId: string; designId: string } | null = null
 
 	const showBag = () => {
 		if (!left && cartState) cartState.isOpen = true
@@ -282,25 +288,20 @@
 				addToCart: (q: Record<string, unknown>) => Promise<any>
 				getCartByCartId: (cartId: string) => Promise<any>
 			}
-			const lineOf = (cart: any, designId: string) => cart?.lineItems?.find((l: { designId?: string }) => l.designId === designId)
 			const cartId = cartState?.retrieveCartId() || cartState?.cart?.id
-			const retry = unconfirmed?.doc === doc && unconfirmed.variantId === variantId ? unconfirmed : null
-			let cart = retry && cartId ? await bag.getCartByCartId(cartId) : null
-			const designId = retry?.designId ?? (await saveDocument(doc, pictures))
-			unconfirmed = { doc, variantId, designId }
+			const reuse = reusable
+			let cart = reuse && cartId ? await bag.getCartByCartId(cartId) : null
+			const designId = reuse?.designId ?? (await saveDocument(doc, pictures))
+			savedDesign = { doc, variantId, designId }
 			if (!lineOf(cart, designId)) {
 				cart = await bag.addToCart({ cartId: cartState?.cart?.id || null, productId: setup.productId, variantId, qty: 1, designId })
 			}
 			if (!lineOf(cart, designId)) throw new Error('The bag came back without the design')
-			unconfirmed = null
 			if (cartState) cartState.cart = cart
 			await addPicks(setup.productId, cartState)
 			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: unitPrice, qty: 1, user: { id: userState?.user?.id } })
-			if (!open) {
-				status = { state: 'idle' }
-				return
-			}
-			status = { state: 'added' }
+			status = { state: 'idle' }
+			if (!open) return showBag()
 			announce('Your design is in your bag')
 			addedTimer = setTimeout(() => close().then(showBag), 900)
 		} catch (err) {
@@ -457,19 +458,19 @@
 				<Button
 					data-testid="customizer-add-to-bag"
 					size="lg"
-					class="edp-atc h-11 w-full gap-2 text-sm font-semibold md:w-auto md:min-w-72 {status.state === 'added'
+					class="edp-atc h-11 w-full gap-2 text-sm font-semibold md:w-auto md:min-w-72 {bagButton === 'added'
 						? 'bg-success text-success-foreground hover:bg-success'
 						: ''}"
-					disabled={empty || !designer.pictures || status.state === 'saving' || status.state === 'added'}
-					aria-busy={status.state === 'saving'}
+					disabled={empty || !designer.pictures || bagButton !== 'add'}
+					aria-busy={bagButton === 'saving'}
 					onclick={addToBag}
 				>
-					{#key status.state}
+					{#key bagButton}
 						<span class="inline-flex items-center gap-2" in:fade>
-							{#if status.state === 'saving'}
+							{#if bagButton === 'saving'}
 								<Spinner label="Saving your design" />
 								<span>Saving your design…</span>
-							{:else if status.state === 'added'}
+							{:else if bagButton === 'added'}
 								<Check class="motion-pop-in h-4 w-4" aria-hidden="true" />
 								<span>Added</span>
 							{:else}
