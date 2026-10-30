@@ -85,12 +85,12 @@ export class Designer {
 	}
 
 	undo() {
-		this.live = null
+		this.endGesture()
 		this.history = undo(this.history)
 	}
 
 	redo() {
-		this.live = null
+		this.endGesture()
 		this.history = redo(this.history)
 	}
 
