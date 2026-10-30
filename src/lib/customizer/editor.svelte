@@ -277,17 +277,12 @@
 			const bag = cartService as unknown as {
 				addToCart: (q: Record<string, unknown>) => Promise<any>
 				getCartByCartId: (cartId: string) => Promise<any>
-				removeCart: (q: { cartId: string | undefined; lineId: string }) => Promise<any>
 			}
 			const lineOf = (cart: any, designId: string) => cart?.lineItems?.find((l: { designId?: string }) => l.designId === designId)
 			const cartId = cartState?.retrieveCartId() || cartState?.cart?.id
-			let cart = unconfirmed && cartId ? await bag.getCartByCartId(cartId) : null
-			if (unconfirmed && (unconfirmed.doc !== doc || unconfirmed.variantId !== variantId)) {
-				const lost = lineOf(cart, unconfirmed.designId)
-				if (lost) cart = await bag.removeCart({ cartId, lineId: lost.id })
-				unconfirmed = null
-			}
-			const designId = unconfirmed?.designId ?? (await saveDocument(doc, pictures))
+			const retry = unconfirmed?.doc === doc && unconfirmed.variantId === variantId ? unconfirmed : null
+			let cart = retry && cartId ? await bag.getCartByCartId(cartId) : null
+			const designId = retry?.designId ?? (await saveDocument(doc, pictures))
 			unconfirmed = { doc, variantId, designId }
 			if (!lineOf(cart, designId)) {
 				cart = await bag.addToCart({ cartId: cartState?.cart?.id || null, productId: setup.productId, variantId, qty: 1, designId })
