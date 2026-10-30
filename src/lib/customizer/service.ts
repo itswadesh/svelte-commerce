@@ -41,12 +41,10 @@ export async function saveDesign(design: Parameters<Required<CustomizerService>[
 	return (await service()).saveDesign(design)
 }
 
-/** A failure whose message is written for the shopper. */
-export class PlainError extends Error {}
+export class ShopperError extends Error {}
 
-/** The engine's and HTTP's own words never reach a shopper; a step's own sentence stands in for them. */
-export function plainMessage(err: unknown, fallback: string, tooLarge = fallback): string {
-	if (err instanceof PlainError) return err.message
+export function shopperMessage(err: unknown, fallback: string, tooLarge = fallback): string {
+	if (err instanceof ShopperError) return err.message
 	const status = (err as { status?: unknown } | null)?.status
 	if (status === 413) return tooLarge
 	if (status === 429) return 'Too many tries in the last hour. Please wait a while and try again.'
@@ -72,7 +70,7 @@ export async function preparePhoto(file: File, cap: number): Promise<{ blob: Blo
 	try {
 		await new Promise((resolve, reject) => {
 			img.onload = resolve
-			img.onerror = () => reject(new PlainError(UNREADABLE))
+			img.onerror = () => reject(new ShopperError(UNREADABLE))
 		})
 		const scale = Math.min(
 			1,
@@ -84,7 +82,7 @@ export async function preparePhoto(file: File, cap: number): Promise<{ blob: Blo
 			height: Math.round(img.naturalHeight * scale)
 		})
 		const ctx = canvas.getContext('2d', { willReadFrequently: true })
-		if (!ctx) throw new PlainError(UNREADABLE)
+		if (!ctx) throw new ShopperError(UNREADABLE)
 		ctx.imageSmoothingQuality = 'high'
 		// Drawn smaller straight from the image element, Chrome decodes a large JPEG at a reduced
 		// scale; an ImageBitmap of the file would first hold the whole original.
@@ -95,7 +93,7 @@ export async function preparePhoto(file: File, cap: number): Promise<{ blob: Blo
 		canvas.width = canvas.height = 0
 		if (!blob) {
 			picture.close()
-			throw new PlainError(UNREADABLE)
+			throw new ShopperError(UNREADABLE)
 		}
 		return { blob, picture }
 	} finally {
@@ -127,7 +125,7 @@ export async function loadFonts(setup: CustomizerSetup): Promise<void> {
 	await Promise.all(setup.fonts.map((f) => document.fonts.load(`${FONT_WEIGHT} 32px "${f.family}"`).catch(() => [])))
 }
 
-/** A face's Devanagari, latin-ext and ₹ are subsets of their own, loaded only for words that use them. */
+/** A face's Devanagari and latin-ext subsets, which hold ₹, load only for words that use them. */
 export async function loadGlyphs(setup: CustomizerSetup, words: Pick<TextLayer, 'text' | 'font' | 'font_size'>[]): Promise<void> {
 	await Promise.all(words.map((w) => document.fonts.load(fontOf(w, setup), w.text).catch(() => [])))
 }

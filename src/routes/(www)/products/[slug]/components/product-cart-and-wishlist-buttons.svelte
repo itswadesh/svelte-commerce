@@ -179,7 +179,7 @@
 					size="lg"
 					aria-haspopup="dialog"
 					disabled={outOfStock}
-					onclick={() => pushState('', { designing: true })}
+					onclick={() => pushState('', { customizerOpen: true })}
 				>
 					{#if outOfStock}
 						<span>Out of stock</span>

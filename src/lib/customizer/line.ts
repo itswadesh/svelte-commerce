@@ -11,7 +11,6 @@ type Line = {
 export function linePicture(item: object | null | undefined): { src: string; alt: string; designed: boolean } {
 	const line = (item ?? {}) as Line
 	const title = line.title || line.name || 'Product'
-	// A backend whose own customiser saves the picture the shopper made sends it as `customizedImg`.
 	const design = line.designPreview || (line.isCustomized && line.customizedImg)
 	if (design) return { src: design, alt: `Your design on ${title}`, designed: true }
 	return { src: line.thumbnail || line.img || '', alt: title, designed: false }
