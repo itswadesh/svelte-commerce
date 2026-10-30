@@ -9,6 +9,8 @@ const ALL = {
 	pinterestTag: { active: true, id: '2612345678901' },
 	snapchatPixel: { active: true, id: '6abc82ca-4a3a-4391-98ba-0317a8471234' }
 }
+// What the connector makes of the engine's google-analytics plugin.
+const GOOGLE = { active: true, tags: ['G-ABC123XYZ', 'AW-1234567890'], conversions: [{ event: 'purchase', label: 'AbC-dEf_1' }] }
 
 describe('enabledTags', () => {
 	it('loads nothing for a store with every tag off or unset', () => {
@@ -31,6 +33,25 @@ describe('enabledTags', () => {
 	it('refuses an ID that would break out of the script it goes into', () => {
 		expect(enabledTags({ facebookPixel: { active: true, id: "1'); alert(1); ('" } })).toEqual({})
 		expect(enabledTags({ microsoftClarity: { active: true, id: 'abc"><script>' } })).toEqual({})
+		expect(enabledTags({ googleTagManager: { active: true, tags: ["G-ABC'+alert(1)+'"] } })).toEqual({})
+		expect(enabledTags({ googleTagManager: { ...GOOGLE, conversions: [{ event: 'purchase', label: "x'/><script>" }] } })).toEqual({
+			ga4: 'G-ABC123XYZ',
+			gads: 'AW-1234567890'
+		})
+	})
+
+	it('reads Google Analytics and Ads from googleTagManager, with the purchase’s conversion label', () => {
+		expect(enabledTags({ googleTagManager: GOOGLE })).toEqual({ ga4: 'G-ABC123XYZ', gads: 'AW-1234567890/AbC-dEf_1' })
+		// Ads without a label has no conversion to send, but still measures.
+		expect(enabledTags({ googleTagManager: { active: true, tags: ['AW-1234567890'] } })).toEqual({ gads: 'AW-1234567890' })
+		// The Litekart-era single id.
+		expect(enabledTags({ googleTagManager: { active: true, id: 'G-ABC123XYZ' } })).toEqual({ ga4: 'G-ABC123XYZ' })
+		expect(enabledTags({ googleTagManager: { ...GOOGLE, active: false } })).toEqual({})
+		expect(enabledTags({ googleTagManager: { active: false } })).toEqual({})
+	})
+
+	it('a Tag Manager container takes over Analytics and Ads, so nothing is measured twice', () => {
+		expect(enabledTags({ googleTagManager: { ...GOOGLE, tags: [...GOOGLE.tags, 'GTM-K9ZZ1'] } })).toEqual({ gtm: 'GTM-K9ZZ1' })
 	})
 })
 
@@ -160,6 +181,32 @@ describe('vendorCalls', () => {
 		expect(vendorCalls('remove_from_cart', { items: [item] }, [...tags])).toEqual([])
 		expect(vendorCalls('login', {}, [...tags])).toEqual([])
 	})
+
+	it('GA4 hears every event, to GA4 alone, with its e-commerce parameters and nothing personal', () => {
+		const purchase = { transaction_id: 'GC-1', currency: 'INR', value: 10, items: [item] }
+		const personal = { hashedEmail: 'abc', hashedPhone: 'def', iPv4: '1.2.3.4', iPv6: '::1', user_agent: 'x', city: 'Pune', zip: '411001', vendor_email: 'v@x.in' }
+		expect(vendorCalls('purchase', { ...purchase, ...personal } as any, ['ga4'])).toEqual([['ga4', 'event', 'purchase', purchase]])
+		expect(vendorCalls('search', { search_term: 'tee' } as any, ['ga4'], { ga4: 'G-ABC123XYZ' })).toEqual([
+			['ga4', 'event', 'search', { search_term: 'tee', send_to: 'G-ABC123XYZ' }]
+		])
+		// Core's sign-out hands GA4 the whole user record; an event never picks its own destination.
+		const user = { id: 'u1', fullName: 'Asha Rao', email: 'asha@example.com', phone: '+919876543210', send_to: 'AW-1234567890' }
+		expect(vendorCalls('logout', user as any, ['ga4'])).toEqual([['ga4', 'event', 'logout', {}]])
+	})
+
+	it('Tag Manager gets each event in the shape Google’s e-commerce guide gives it', () => {
+		const add = { currency: 'INR', value: 998, items: [item] }
+		expect(vendorCalls('add_to_cart', { ...add, iPv4: '1.2.3.4' } as any, ['gtm'])).toEqual([['gtm', { event: 'add_to_cart', ecommerce: add }]])
+	})
+
+	it('a purchase is the Google Ads conversion, when the store gave its label', () => {
+		const purchase = { transaction_id: 'GC-1', currency: 'INR', value: 1047, items: [item] }
+		expect(vendorCalls('purchase', purchase, ['gads'], { gads: 'AW-1234567890/AbC-dEf_1' })).toEqual([
+			['gads', 'event', 'conversion', { send_to: 'AW-1234567890/AbC-dEf_1', value: 1047, currency: 'INR', transaction_id: 'GC-1' }]
+		])
+		expect(vendorCalls('purchase', purchase, ['gads'], { gads: 'AW-1234567890' })).toEqual([])
+		expect(vendorCalls('add_to_cart', purchase, ['gads'], { gads: 'AW-1234567890/AbC-dEf_1' })).toEqual([])
+	})
 })
 
 describe('startAdTags', () => {
@@ -183,11 +230,16 @@ describe('startAdTags', () => {
 	const metaCalls = () => w.fbq.queue.map((a: IArguments) => [...a])
 	const view = (id: string) => ({ currency: 'INR', value: 499, items: [{ item_id: id, price: 499, quantity: 1 }] })
 
+	const google = () => scripts().filter((src) => src.includes('google'))
+	// Each command the Google tag got, with the date of 'js' left out.
+	const gcCalls = () => (w.gcLayer ?? []).map((a: IArguments) => [...a]).map((c: unknown[]) => (c[0] === 'js' ? ['js'] : c))
+	const purchase = { transaction_id: 'GC-7', currency: 'INR', value: 549, items: [{ item_id: 'TEE-M', price: 499, quantity: 1 }] }
+
 	beforeEach(() => {
 		document.head.innerHTML = '<script></script>'
 		localStorage.clear()
 		history.replaceState(null, '', '/')
-		for (const k of ['fbq', '_fbq', 'ttq', 'TiktokAnalyticsObject', 'pintrk', 'snaptr', 'clarity', 'hj', '_hjSettings']) delete w[k]
+		for (const k of ['fbq', '_fbq', 'ttq', 'TiktokAnalyticsObject', 'pintrk', 'snaptr', 'clarity', 'hj', '_hjSettings', 'gcLayer', 'gcGtag', 'gtmLayer', 'gtmGtag', 'ga-disable-G-ABC123XYZ', 'ga-disable-AW-1234567890']) delete w[k]
 		w.dataLayer = []
 		w.gtag = function () {
 			w.dataLayer.push(arguments)
@@ -322,6 +374,167 @@ describe('startAdTags', () => {
 		history.replaceState(null, '', '/order-tracking?order=GC-1&key=abc')
 		tags.pageView()
 		expect(metaCalls().filter((a: unknown[]) => a[1] === 'PageView')).toHaveLength(1)
+	})
+
+	it('Google Analytics and Ads load on the first interaction, on a data layer of their own, after the page’s consent', async () => {
+		w.gtag('consent', 'default', { ad_storage: 'granted', analytics_storage: 'granted' })
+		w.gtag('event', 'view_item', view('TEE-M'))
+		stop = startAdTags(enabledTags({ googleTagManager: GOOGLE }), { timeZone: 'Asia/Kolkata' }).stop
+		expect(google()).toEqual([])
+		await interact()
+		expect(google()).toEqual(['https://www.googletagmanager.com/gtag/js?id=G-ABC123XYZ&l=gcLayer'])
+		w.gtag('event', 'purchase', { ...purchase, hashedEmail: 'abc' })
+		expect(gcCalls()).toEqual([
+			['consent', 'default', { ad_storage: 'granted', analytics_storage: 'granted' }],
+			['js'],
+			['config', 'G-ABC123XYZ'],
+			['config', 'AW-1234567890'],
+			['event', 'view_item', { ...view('TEE-M'), send_to: 'G-ABC123XYZ' }],
+			['event', 'purchase', { ...purchase, send_to: 'G-ABC123XYZ' }],
+			['event', 'conversion', { send_to: 'AW-1234567890/AbC-dEf_1', value: 549, currency: 'INR', transaction_id: 'GC-7' }]
+		])
+		// The page's own dataLayer is untouched: core's events are there once, as sent.
+		expect(w.dataLayer.filter((a: IArguments) => a[0] === 'event').map((a: IArguments) => a[1])).toEqual(['view_item', 'purchase'])
+	})
+
+	it('in an opt-in region Google waits, and Analytics consent alone loads Analytics but not Ads', async () => {
+		stop = startAdTags(enabledTags({ googleTagManager: GOOGLE }), { timeZone: 'Europe/Berlin' }).stop
+		w.gtag('event', 'view_item', view('TEE-M'))
+		await interact()
+		expect(google()).toEqual([])
+		// What the banner does: Google's consent update, then the choice for the other tags.
+		const choice = { ad_storage: 'denied', analytics_storage: 'granted' }
+		w.gtag('consent', 'update', choice)
+		await choose(choice)
+		expect(google()).toHaveLength(1)
+		w.gtag('event', 'purchase', purchase)
+		const sent = gcCalls()
+		expect(sent).toContainEqual(['consent', 'update', choice])
+		expect(sent.filter((c: unknown[]) => c[0] === 'config')).toEqual([['config', 'G-ABC123XYZ']])
+		// Nothing from before the choice, and no Ads conversion.
+		expect(sent.filter((c: unknown[]) => c[0] === 'event').map((c: unknown[]) => c[1])).toEqual(['purchase'])
+	})
+
+	it('a later choice reaches the running Google tag as a consent update, and taking it back reloads', async () => {
+		const reload = vi.fn()
+		stop = startAdTags(enabledTags({ googleTagManager: GOOGLE }), { timeZone: 'Asia/Kolkata', reload }).stop
+		await interact()
+		const choice = { ad_storage: 'denied', analytics_storage: 'denied' }
+		w.gtag('consent', 'update', choice)
+		expect(gcCalls().at(-1)).toEqual(['consent', 'update', choice])
+		await choose(choice)
+		expect(reload).toHaveBeenCalledOnce()
+		// Google's opt-out flags, so nothing more is sent as the page goes.
+		expect(w['ga-disable-G-ABC123XYZ']).toBe(true)
+		expect(w['ga-disable-AW-1234567890']).toBe(true)
+	})
+
+	it('a store with Google off, or a saved refusal, makes no Google request at all', async () => {
+		stop = startAdTags(enabledTags({ ...ALL, googleTagManager: { active: false } }), { timeZone: 'Asia/Kolkata' }).stop
+		await interact()
+		w.gtag('event', 'purchase', purchase)
+		expect(google()).toEqual([])
+		expect(w.gcLayer).toBeUndefined()
+		stop()
+
+		// Another page.
+		w.dataLayer = []
+		localStorage.setItem('user_consent', JSON.stringify({ ad_storage: 'denied', analytics_storage: 'denied' }))
+		stop = startAdTags(enabledTags({ googleTagManager: GOOGLE }), { timeZone: 'Asia/Kolkata' }).stop
+		await interact()
+		w.gtag('event', 'purchase', purchase)
+		expect(google()).toEqual([])
+	})
+
+	it('Google neither loads nor hears an event while the address carries an email, a token or a key', async () => {
+		history.replaceState(null, '', '/auth/verify?email=a%40example.com&token=t0k')
+		const tags = startAdTags(enabledTags({ googleTagManager: GOOGLE }), { timeZone: 'Asia/Kolkata' })
+		stop = tags.stop
+		await interact()
+		expect(google()).toEqual([])
+		history.replaceState(null, '', '/account')
+		tags.pageView()
+		await settle()
+		expect(google()).toHaveLength(1)
+		history.replaceState(null, '', '/order-tracking?order=GC-1&key=abc')
+		w.gtag('event', 'view_item', view('TEE-M'))
+		expect(gcCalls().filter((c: unknown[]) => c[0] === 'event')).toEqual([])
+	})
+
+	it('a Tag Manager container loads on a layer of its own: the consent first, then only what is handed on', async () => {
+		w.gtag('consent', 'default', { ad_storage: 'granted', analytics_storage: 'granted' })
+		stop = startAdTags(enabledTags({ googleTagManager: { ...GOOGLE, tags: [...GOOGLE.tags, 'GTM-K9ZZ1'] } }), { timeZone: 'Asia/Kolkata' }).stop
+		w.gtag('event', 'add_to_cart', view('TEE-M'))
+		await interact()
+		expect(google()).toEqual(['https://www.googletagmanager.com/gtm.js?id=GTM-K9ZZ1&l=gtmLayer'])
+		w.gtag('event', 'purchase', { ...purchase, hashedEmail: 'abc' })
+		w.gtag('consent', 'update', { ad_storage: 'denied' })
+		const layer = w.gtmLayer.map((m: any) => (m && typeof m === 'object' && 0 in m ? [...m] : m.event ?? m))
+		expect(layer).toEqual([
+			['consent', 'default', { ad_storage: 'granted', analytics_storage: 'granted' }],
+			'gtm.js',
+			{ ecommerce: null },
+			'add_to_cart',
+			{ ecommerce: null },
+			'purchase',
+			['consent', 'update', { ad_storage: 'denied' }]
+		])
+		expect(w.gtmLayer.find((m: any) => m.event === 'purchase')).toEqual({ event: 'purchase', ecommerce: purchase })
+		// The page's dataLayer gets nothing from the bridge, and core's commands never reach the container.
+		expect(w.dataLayer.every((m: unknown) => m && typeof m === 'object' && 0 in m)).toBe(true)
+		expect(w.gcLayer).toBeUndefined()
+	})
+
+	it('a choice made while the tags are on their way is the one that stands', async () => {
+		stop = startAdTags(enabledTags({ ...ALL, googleTagManager: GOOGLE }), { timeZone: 'Asia/Kolkata' }).stop
+		// The first tap starts loading; "Required only" comes before the snippets have arrived.
+		window.dispatchEvent(new Event('pointerdown'))
+		window.dispatchEvent(new CustomEvent('consentchange', { detail: { ad_storage: 'denied', analytics_storage: 'denied' } }))
+		await settle()
+		expect(scripts()).toEqual([])
+	})
+
+	it('started again on the same page, the bridge neither hears an old purchase again nor loads a tag twice', async () => {
+		stop = startAdTags({ meta: '1234567890' }, { timeZone: 'Asia/Kolkata' }).stop
+		await interact()
+		w.gtag('event', 'purchase', purchase)
+		stop()
+		stop = startAdTags({ meta: '1234567890' }, { timeZone: 'Asia/Kolkata' }).stop
+		await interact()
+		w.gtag('event', 'add_to_cart', view('TEE-M'))
+		expect(metaCalls().map((a: unknown[]) => a[1])).toEqual(['1234567890', 'PageView', 'Purchase', 'AddToCart'])
+	})
+
+	it('a tag the store dropped while the page was open is turned off, by the ID it loaded with', async () => {
+		const reload = vi.fn()
+		stop = startAdTags(enabledTags({ googleTagManager: GOOGLE }), { timeZone: 'Asia/Kolkata', reload }).stop
+		await interact()
+		stop()
+		// The store added a container, which takes over GA4 and Ads.
+		stop = startAdTags(enabledTags({ googleTagManager: { ...GOOGLE, tags: [...GOOGLE.tags, 'GTM-K9ZZ1'] } }), { timeZone: 'Asia/Kolkata', reload }).stop
+		await interact()
+		expect(reload).toHaveBeenCalledOnce()
+		expect(w['ga-disable-G-ABC123XYZ']).toBe(true)
+		expect(w['ga-disable-AW-1234567890']).toBe(true)
+	})
+
+	it('a choice taken back counts on a private address too, and a draft’s preview key is private', async () => {
+		const reload = vi.fn()
+		stop = startAdTags(enabledTags({ googleTagManager: GOOGLE }), { timeZone: 'Asia/Kolkata', reload }).stop
+		await interact()
+		history.replaceState(null, '', '/order-tracking?order=GC-1&key=abc')
+		await choose({ ad_storage: 'denied', analytics_storage: 'denied' })
+		expect(reload).toHaveBeenCalledOnce()
+		stop()
+
+		w.dataLayer = []
+		delete w.gcGtag
+		document.head.innerHTML = '<script></script>'
+		history.replaceState(null, '', '/?preview=draft-key')
+		localStorage.clear()
+		stop = startAdTags(enabledTags({ googleTagManager: GOOGLE }), { timeZone: 'Asia/Kolkata' }).stop
+		await interact()
+		expect(google()).toEqual([])
 	})
 
 	it('a page change after loading is a page view for every pixel', async () => {

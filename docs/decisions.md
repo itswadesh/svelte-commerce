@@ -211,3 +211,28 @@ shopping events the storefront already sends GA4 (`view_item`, `add_to_cart`, `b
 `purchase`) by listening on `window.gtag`, so there is one place events are fired, not one per
 vendor; `begin_checkout` is now sent from the address step. Meta's Purchase carries the order
 number as its eventID, which the engine's Conversions API also sends, so Meta counts the sale once.
+
+## 2026-10-30: Google Analytics, Ads and Tag Manager wait for the cookie choice like every other tag
+
+The engine's google-analytics plugin (GA4 measurement ID, Tag Manager container, Google Ads ID and
+conversion label) now reaches the store as `store.plugins.googleTagManager`, the shape Litekart
+used, and loads through the same bridge as the pixels: on the first interaction, only where the
+cookie choice allows (analytics for GA4 and Tag Manager, ad cookies for Ads), never while the
+address carries an email, a token or a key, and a choice taken back reloads without it. Core's
+`GoogleAnalytics` loader, which put Google's tags in the head of every page before any choice, is
+no longer rendered. GA4 and Ads share one Google tag on a data layer of its own (`gcLayer`): it gets
+the page's consent commands first, then only the events handed on after consent, each with its
+e-commerce parameters alone (core also attaches the shopper's hashed contact details, address, IP
+addresses and user agent, and signing out sends the whole user record). GA4's events go to GA4
+only; a purchase with a conversion label is the Ads conversion, so an Ads account counts a sale
+once. The page's own `dataLayer` keeps every event since the page opened, which is why neither tag
+reads it.
+
+A Tag Manager container takes over GA4 and Ads: the storefront then loads only the container, on
+its own layer too (`gtmLayer`), and hands it each event in the shape Google's Tag Manager
+e-commerce guide gives (`{ event, ecommerce }`). Google's advice is to deploy each product through
+one of the two, and a container can hold either, so loading the IDs as well could count every page
+view and sale twice; a store with a container sets GA4 and Ads up inside it, reading `gtmLayer`.
+
+GA4 starts on the first interaction, like every tag here, so a visit that never scrolls, taps or
+types is not counted; sessions and bounce figures will differ from a tag loaded in the page head.

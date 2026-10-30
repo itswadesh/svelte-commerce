@@ -9,10 +9,8 @@
 
 	type Consent = { ad_storage: 'granted' | 'denied'; analytics_storage: 'granted' | 'denied' }
 
-	// Only a store that actually loads tags has anything to ask about: the GoogleAnalytics loader in
-	// the root layout needs the plugin switched on and a container id, ad-tags.svelte a tag with its ID.
-	const gtm = $derived(page.data?.store?.plugins?.googleTagManager)
-	const tagsLoad = $derived((!!(gtm?.active ?? gtm?.isActive) && !!gtm?.id) || Object.keys(enabledTags(page.data?.store?.plugins)).length > 0)
+	// Only a store that loads a tag (ad-tags.svelte, Google's included) has anything to ask about.
+	const tagsLoad = $derived(Object.keys(enabledTags(page.data?.store?.plugins)).length > 0)
 
 	let showBanner = $state(false)
 
@@ -40,7 +38,7 @@
 				personalization_storage: settings.analytics_storage
 			})
 		}
-		// The ad and analytics tags do not read Google's consent mode; they listen for the choice.
+		// Every tag waits on the choice itself (ad-tags.ts); one taken back reloads the page without it.
 		window.dispatchEvent(new CustomEvent('consentchange', { detail: settings }))
 		showBanner = false
 	}
