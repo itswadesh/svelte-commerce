@@ -5,6 +5,7 @@
 	import { setUserState } from '$lib/core/stores/index.js'
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
 	import AdTags from '$lib/components/common/ad-tags.svelte'
+	import Attribution from '$lib/components/common/attribution.svelte'
 	import ConsentBanner from '$lib/components/common/consent-banner.svelte'
 	import GoogleStoreWidget from '$lib/components/google/google-store-widget.svelte'
 	import { navigating } from '$app/stores'
@@ -286,6 +287,8 @@
 <!-- Google Analytics, Ads and Tag Manager too: core's GoogleAnalytics loaded them in the head of
      every page, before any cookie choice. -->
 <AdTags plugins={data?.store?.plugins} />
+<!-- Where the shopper came from, for the store's own ads report (GoCommerce D168). -->
+<Attribution plugins={data?.store?.plugins} />
 
 <!-- <ThemeProvider /> -->
 
