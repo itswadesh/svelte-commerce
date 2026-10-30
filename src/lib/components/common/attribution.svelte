@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { enabledTags } from '$lib/ad-tags'
+	import { resolveKlaviyoConfig } from '$lib/klaviyo'
 	import { ATTRIBUTION_KEY, captureLanding, withoutAttribution } from '$lib/attribution'
 
 	let { plugins } = $props()
@@ -19,9 +20,10 @@
 		}
 		capture()
 
-		// The store's ad tags read gclid and fbclid from the address themselves when they load, which
-		// is after the shopper's first touch; while any is on, the parameters stay until the next page.
-		if (!Object.keys(enabledTags(plugins)).length) {
+		// The store's ad tags read gclid and fbclid from the address themselves when they load, and
+		// Klaviyo its utm_ parameters, which is after the shopper's first touch; while any of them is
+		// on, the parameters stay until the next page.
+		if (!Object.keys(enabledTags(plugins)).length && !resolveKlaviyoConfig(plugins).active) {
 			const clean = withoutAttribution(href)
 			if (clean) history.replaceState(history.state, '', clean)
 		}

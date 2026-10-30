@@ -93,3 +93,17 @@ describe('withoutAttribution', () => {
 		expect(withoutAttribution('https://shop.test/p/ring?size=7')).toBeNull()
 	})
 })
+
+describe('review fixes', () => {
+	it('keeps the last visit as the first when the first has gone stale', () => {
+		const old = { utm_source: 'facebook', at: days(31) }
+		const recent = { utm_source: 'google', at: days(10) }
+		expect(recordTouch({ first: old, last: recent }, null, NOW)).toEqual({ first: recent, last: recent })
+	})
+
+	it('leaves out a value carrying an email address, and treats www as the shop itself', () => {
+		const url = new URL('https://shop.test/?utm_source=newsletter&utm_term=a%40b.com')
+		expect(touchFrom(url, '', NOW)).toEqual({ utm_source: 'newsletter', at: NOW.toISOString() })
+		expect(touchFrom(new URL('https://shop.test/'), 'https://www.shop.test/p/ring', NOW)).toBeNull()
+	})
+})

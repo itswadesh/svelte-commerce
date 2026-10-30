@@ -39,7 +39,8 @@ export function touchFrom(url: URL, referrer: string, now: Date): Touch | null {
 	const touch: Touch = {}
 	for (const p of PARAMS) {
 		const v = url.searchParams.get(p)?.trim()
-		if (v) touch[p] = v.slice(0, MAX)
+		// Some mail tools put the recipient's address in utm_term or utm_content; it is not a source.
+		if (v && !v.includes('@')) touch[p] = v.slice(0, MAX)
 	}
 	let host = ''
 	try {
@@ -48,7 +49,8 @@ export function touchFrom(url: URL, referrer: string, now: Date): Touch | null {
 		/* an unreadable referrer is none */
 	}
 	const tagged = Object.keys(touch).length > 0
-	if (host && host !== url.hostname && (tagged || !AFTER_PAYMENT.test(url.pathname))) touch.referrer = host.slice(0, MAX)
+	const bare = (h: string) => h.replace(/^www\./, '')
+	if (host && bare(host) !== bare(url.hostname) && (tagged || !AFTER_PAYMENT.test(url.pathname))) touch.referrer = host.slice(0, MAX)
 	if (!Object.keys(touch).length) return null
 	touch.at = now.toISOString()
 	return touch
@@ -61,7 +63,7 @@ const fresh = (t: Touch | undefined, now: Date) => {
 
 /** The record after one arrival: the first visit kept while it is fresh, the last one moved. */
 export function recordTouch(saved: Attribution | null, touch: Touch | null, now: Date): Attribution | null {
-	const first = fresh(saved?.first, now) ?? touch ?? undefined
+	const first = fresh(saved?.first, now) ?? fresh(saved?.last, now) ?? touch ?? undefined
 	const last = touch ?? fresh(saved?.last, now)
 	if (!first && !last) return null
 	return { ...(first ? { first } : {}), ...(last ? { last } : {}) }
