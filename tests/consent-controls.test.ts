@@ -3,11 +3,14 @@ import { render, screen, fireEvent } from '@testing-library/svelte'
 import { tick } from 'svelte'
 import { page } from '$app/state'
 
+const showAuthModal = vi.fn()
+vi.mock('@misiki/kitcommerce-core/components', () => ({ showAuthModal: (...args: unknown[]) => showAuthModal(...args) }))
 vi.mock('$lib/core/utils/index.js', () => ({ cn: (...classes: unknown[]) => classes.filter(Boolean).join(' ') }))
 vi.mock('$lib/core/services/index.js', () => ({ pageService: {} }))
 // jsdom has no Web Animations.
 vi.mock('$lib/motion', () => ({ fade: () => ({ duration: 0 }), fly: () => ({ duration: 0 }) }))
 
+const { default: AuthButton, authEmail } = await import('$lib/components/auth/auth-button.svelte')
 const { default: CookieSettingsLink } = await import('$lib/components/common/cookie-settings-link.svelte')
 const { default: ConsentBanner } = await import('$lib/components/common/consent-banner.svelte')
 
@@ -16,6 +19,16 @@ const GOOGLE = { googleTagManager: { active: true, tags: ['G-ABC123XYZ'] } }
 beforeEach(() => {
 	localStorage.clear()
 	page.data = {}
+	showAuthModal.mockClear()
+})
+
+describe('the sign-in screens', () => {
+	it('hand the typed address to the next screen in memory, never in the URL', async () => {
+		render(AuthButton, { type: 'forgot-password', extraqueries: { email: 'asha@example.com', redirect: '/cart' } })
+		await fireEvent.click(screen.getByRole('button'))
+		expect(showAuthModal).toHaveBeenCalledWith('forgot-password', { redirect: '/cart' })
+		expect(authEmail.value).toBe('asha@example.com')
+	})
 })
 
 describe('Cookie settings', () => {
