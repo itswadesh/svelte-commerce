@@ -14,6 +14,7 @@
 	let scrollLock:
 		| {
 				scrollY: number
+				path: string
 				bodyOverflow: string
 				bodyPosition: string
 				bodyTop: string
@@ -28,6 +29,7 @@
 		const scrollY = window.scrollY
 		scrollLock = {
 			scrollY,
+			path: location.pathname,
 			bodyOverflow: document.body.style.overflow,
 			bodyPosition: document.body.style.position,
 			bodyTop: document.body.style.top,
@@ -45,14 +47,16 @@
 	function unlockPageScroll() {
 		if (typeof window === 'undefined' || !scrollLock) return
 
-		const { scrollY, bodyOverflow, bodyPosition, bodyTop, bodyWidth, htmlOverflow } = scrollLock
+		const { scrollY, path, bodyOverflow, bodyPosition, bodyTop, bodyWidth, htmlOverflow } = scrollLock
 		document.documentElement.style.overflow = htmlOverflow
 		document.body.style.overflow = bodyOverflow
 		document.body.style.position = bodyPosition
 		document.body.style.top = bodyTop
 		document.body.style.width = bodyWidth
 		scrollLock = undefined
-		window.scrollTo(0, scrollY)
+		// Back where it was on the same page; at the top of a page the modal led to (signing up
+		// lands on its success page), whose own scroll to the top ran while the page was locked.
+		window.scrollTo(0, location.pathname === path ? scrollY : 0)
 	}
 
 	function removeAuthParamsFromCurrentUrl() {

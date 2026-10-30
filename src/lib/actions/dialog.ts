@@ -18,7 +18,9 @@ export function dialog(node: HTMLElement, close?: () => void) {
 	const opener = document.activeElement as HTMLElement | null
 	let onclose = close
 
-	const focusable = () => Array.from(node.querySelectorAll<HTMLElement>(FOCUSABLE))
+	// Only what Tab can reach: a control hidden at this width (display: none) is skipped by the
+	// browser, so counting it as the last stop would let Tab walk out of the overlay.
+	const focusable = () => Array.from(node.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.getClientRects().length > 0)
 
 	// The overlay itself is the fallback target, hence the required tabindex="-1".
 	;(focusable()[0] ?? node).focus()
@@ -58,8 +60,11 @@ export function dialog(node: HTMLElement, close?: () => void) {
 		},
 		destroy() {
 			node.removeEventListener('keydown', onkeydown)
-			// isConnected: don't yank focus to a trigger that a navigation already removed.
-			if (opener?.isConnected) opener.focus()
+			// isConnected: don't yank focus to a trigger that a navigation already removed. Nor from
+			// wherever the closer already moved it outside the overlay.
+			const active = document.activeElement
+			const focusLeft = active && active !== document.body && !node.contains(active)
+			if (opener?.isConnected && !focusLeft) opener.focus()
 		}
 	}
 }

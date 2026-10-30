@@ -1,15 +1,17 @@
 // The store's ad and analytics tags (GoCommerce D160): the Meta pixel, Microsoft Clarity, Hotjar,
-// and the TikTok, Pinterest and Snap pixels. Each is the store's own ID, which the connector hands
-// over as store.plugins.<name> = { active, id }; ad-tags.svelte starts them.
+// the TikTok, Pinterest and Snap pixels, and Google Analytics, Ads and Tag Manager. Each is the
+// store's own ID, which the connector hands over as store.plugins.<name> = { active, id }, and the
+// Google ones as googleTagManager = { active, tags, conversions }, the shape Litekart used;
+// ad-tags.svelte starts them.
 //
-// They hear the shopping events the storefront already sends GA4 — view_item, add_to_cart,
-// begin_checkout, purchase — by listening on window.gtag, which app.html always defines. So an
-// event fired anywhere, by this repo or by core, reaches every tag, and a new event site is one
-// GA4 call rather than one per vendor.
+// They hear the events the storefront already sends GA4 — view_item, add_to_cart, begin_checkout,
+// purchase and the rest — by listening on window.gtag, which app.html always defines. So an event
+// fired anywhere, by this repo or by core, reaches every tag, and a new event site is one GA4 call
+// rather than one per vendor.
 
 import { onFirstInteraction } from '$lib/utils/on-first-interaction'
 
-export type Vendor = 'meta' | 'clarity' | 'hotjar' | 'tiktok' | 'pinterest' | 'snap'
+export type Vendor = 'meta' | 'clarity' | 'hotjar' | 'tiktok' | 'pinterest' | 'snap' | 'ga4' | 'gads' | 'gtm'
 type ConsentKind = 'ad_storage' | 'analytics_storage'
 
 // The ID goes into a script, so its shape is checked against the vendor's, never trusted.
@@ -19,26 +21,48 @@ const SOURCES: Record<Vendor, { plugin: string; id: RegExp; consent: ConsentKind
 	hotjar: { plugin: 'hotjar', id: /^\d{1,12}$/, consent: 'analytics_storage' },
 	tiktok: { plugin: 'tiktokPixel', id: /^[A-Z0-9]{8,32}$/i, consent: 'ad_storage' },
 	pinterest: { plugin: 'pinterestTag', id: /^\d{5,20}$/, consent: 'ad_storage' },
-	snap: { plugin: 'snapchatPixel', id: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, consent: 'ad_storage' }
+	snap: { plugin: 'snapchatPixel', id: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, consent: 'ad_storage' },
+	ga4: { plugin: 'googleTagManager', id: /^G-[A-Z0-9]{4,16}$/i, consent: 'analytics_storage' },
+	gads: { plugin: 'googleTagManager', id: /^AW-\d{5,16}$/, consent: 'ad_storage' },
+	gtm: { plugin: 'googleTagManager', id: /^GTM-[A-Z0-9]{4,12}$/i, consent: 'analytics_storage' }
 }
 
 export type TagIds = Partial<Record<Vendor, string>>
 
-/** The tags this store switched on with a well-formed ID. Nothing else is ever loaded. */
+/** Every ID a plugin carries: its `id`, and for Google its `tags`, a list or one string. */
+const idsOf = (p: Record<string, any> | undefined): string[] =>
+	[p?.id, ...(Array.isArray(p?.tags) ? p.tags : [p?.tags])].map((t) => String((t && typeof t === 'object' ? t.id : t) ?? '').trim())
+
+/**
+ * The tags this store switched on with a well-formed ID. Nothing else is ever loaded. Google Ads is
+ * `AW-…/label` when the store gave the purchase's conversion label: the account and the conversion,
+ * as Google's `send_to` writes them.
+ *
+ * A Tag Manager container takes over Analytics and Ads. Google's advice is to deploy each with one
+ * or the other, never both, and a container can hold either, so loading the IDs here as well could
+ * count every page view and sale twice. A store with a container sets Analytics and Ads up in it.
+ */
 export function enabledTags(plugins: Record<string, any> | null | undefined): TagIds {
 	const out: TagIds = {}
 	for (const [vendor, source] of Object.entries(SOURCES) as [Vendor, (typeof SOURCES)[Vendor]][]) {
 		const p = plugins?.[source.plugin]
-		const id = String(p?.id ?? '').trim()
-		if (p?.active && source.id.test(id)) out[vendor] = id
+		const id = idsOf(p).find((id) => source.id.test(id))
+		if (p?.active && id) out[vendor] = id
+	}
+	const label = String(plugins?.googleTagManager?.conversions?.find((c: any) => c?.event === 'purchase')?.label ?? '').trim()
+	if (out.gads && /^[\w-]{4,64}$/.test(label)) out.gads += '/' + label
+	if (out.gtm) {
+		delete out.ga4
+		delete out.gads
 	}
 	return out
 }
 
 // The regions app.html's consent defaults treat as opt-in (EEA, UK, Switzerland), with the EU's
-// zones outside Europe/ (Cyprus, Ceuta, the outermost regions). These tags do not read Google's
-// consent mode, so the browser's time zone stands in for the visitor's country, and a zone that
-// says nothing (empty, UTC, Etc/, as privacy browsers report) is treated as opt-in too.
+// zones outside Europe/ (Cyprus, Ceuta, the outermost regions). Only Google's tags read Google's
+// consent mode, and every tag waits the same way, so the browser's time zone stands in for the
+// visitor's country, and a zone that says nothing (empty, UTC, Etc/, as privacy browsers report) is
+// treated as opt-in too.
 // ponytail: a time zone is a proxy for a country; use the host's country header if one reaches the page.
 const OPT_IN_ZONE =
 	/^(|UTC|Etc\/.*|Europe\/.*|Arctic\/Longyearbyen|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe)|Asia\/(Nicosia|Famagusta)|Africa\/Ceuta|Indian\/(Reunion|Mayotte)|America\/(Guadeloupe|Martinique|Cayenne|Marigot|St_Barthelemy))$/
@@ -60,12 +84,42 @@ export type Call = [Vendor, ...unknown[]]
 
 const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : Number(v) || 0)
 
+// The GA4 event parameters Google is told. Core's payload also carries the shopper's hashed
+// contact details, address, IP addresses and user agent, and some of its events pass a whole record
+// through (sign-out sends the user's), so only these are kept: Google's terms forbid personal data
+// in event parameters. `send_to` and `groups` are left out too, so no event picks its own tag.
+const GA4_PARAMS = new Set([
+	'currency',
+	'value',
+	'transaction_id',
+	'tax',
+	'shipping',
+	'coupon',
+	'affiliation',
+	'items',
+	'item_list_id',
+	'item_list_name',
+	'item_id',
+	'item_name',
+	'search_term',
+	'payment_type',
+	'shipping_tier',
+	'method',
+	'form_type',
+	'contact_method',
+	'checkout_step',
+	'order_id'
+])
+const pick = (p: object) => Object.fromEntries(Object.entries(p ?? {}).filter(([k]) => GA4_PARAMS.has(k)))
+
 /**
- * What each vendor is told for one GA4 event, by the names in its own docs. Only the product ids,
- * prices, units, value, currency and order number are passed on: core's GA4 payload also carries
- * hashed contact details, the user agent and IP addresses, and none of that is any vendor's here.
+ * What each vendor is told for one GA4 event, by the names in its own docs. The pixels get only the
+ * product ids, prices, units, value, currency and order number, and only for the four shopping
+ * events; Google gets every event, with its e-commerce parameters only. GA4's events are sent to GA4
+ * alone, and a purchase is Google Ads' conversion when the store gave its label (`AW-…/label`), so
+ * an Ads account never counts a sale twice.
  */
-export function vendorCalls(name: string, p: Ga4, tags: Vendor[]): Call[] {
+export function vendorCalls(name: string, p: Ga4, tags: Vendor[], google: TagIds = {}): Call[] {
 	const list = (Array.isArray(p?.items) ? p.items : p?.items ? [p.items] : []).filter((i) => i?.item_id != null && i.item_id !== '')
 	const items = list.map((i) => ({ id: String(i.item_id), price: num(i.price), quantity: num(i.quantity) || 1 }))
 	const ids = items.map((i) => i.id)
@@ -112,6 +166,12 @@ export function vendorCalls(name: string, p: Ga4, tags: Vendor[]): Call[] {
 			calls.push(['snap', 'track', 'PURCHASE', { ...snap, number_items: units, transaction_id: order }])
 			break
 	}
+	calls.push(['ga4', 'event', name, google.ga4 ? { ...pick(p), send_to: google.ga4 } : pick(p)])
+	if (name === 'purchase' && order && google.gads?.includes('/')) {
+		calls.push(['gads', 'event', 'conversion', { send_to: google.gads, value, currency, transaction_id: order }])
+	}
+	// Google's e-commerce guide for Tag Manager: the event under `event`, its details under `ecommerce`.
+	calls.push(['gtm', { event: name, ecommerce: pick(p) }])
 	return calls.filter(([vendor]) => tags.includes(vendor))
 }
 
@@ -123,6 +183,12 @@ function send([vendor, ...args]: Call): void {
 		else if (vendor === 'tiktok') w.ttq?.[args[0] as string]?.(...args.slice(1))
 		else if (vendor === 'pinterest') w.pintrk?.(...args)
 		else if (vendor === 'snap') w.snaptr?.(...args)
+		else if (vendor === 'ga4' || vendor === 'gads') w.gcGtag?.(...args)
+		else if (vendor === 'gtm') {
+			// Cleared first, as Google's guide does, so one event's items never carry into the next.
+			w.gtmLayer?.push({ ecommerce: null })
+			w.gtmLayer?.push(args[0])
+		}
 	} catch {
 		/* a vendor's script must never break the page */
 	}
@@ -133,7 +199,8 @@ const BUFFER = 20
 // A query carrying an address or a credential: a verification link, an order's key. Every tag
 // records the page's address, so none loads while the address bar holds one; the pages that read
 // them take them out once read.
-const PRIVATE_QUERY = /[?&](email|token|key)=/i
+// A draft's preview key is one too.
+const PRIVATE_QUERY = /[?&](email|token|key|preview)=/i
 // The product page reports its view and so does core's product state, a moment apart.
 const SAME_VIEW_MS = 10_000
 
@@ -144,6 +211,11 @@ const savedChoice = (choice?: Record<string, string>): string | null => {
 		return null /* storage blocked: no saved choice */
 	}
 }
+
+// What a page has read from its dataLayer and the tags it loaded, each with the ID it loaded with,
+// kept with that dataLayer: a bridge started again (the store's tags changed) neither hears an old
+// purchase again nor loads a tag twice, and can still turn off a tag it no longer has an ID for.
+const pages = new WeakMap<object, { read: number; loaded: Map<Vendor, string>; consent: unknown[][] }>()
 
 /**
  * Starts the store's tags. Each loads on the shopper's first interaction — out of the first paint,
@@ -161,13 +233,17 @@ export function startAdTags(
 	if (!enabled.length) return { stop() {}, pageView() {} }
 
 	const w = window as any
-	const loaded = new Set<Vendor>()
-	let before: [string, Ga4][] | null = []
+	const dataLayer = (w.dataLayer ??= [])
+	const memory = pages.get(dataLayer) ?? { read: 0, loaded: new Map<Vendor, string>(), consent: [] }
+	pages.set(dataLayer, memory)
+	const { loaded, consent: consentCommands } = memory
+	// Kept until the first load; tags already running hear each event as it comes.
+	let before: [string, Ga4][] | null = loaded.size ? null : []
 	let lastView = { id: '', at: 0 }
-	let scanned = 0
+	// Each load() takes a number; one overtaken by a newer choice, or by stop(), loads nothing.
+	let runs = 0
 
 	const hear = (name: string, params: Ga4) => {
-		if (!SHOPPING.has(name)) return
 		if (name === 'view_item') {
 			const items = Array.isArray(params?.items) ? params.items : params?.items ? [params.items] : []
 			const id = String(items[0]?.item_id ?? '')
@@ -175,18 +251,31 @@ export function startAdTags(
 			lastView = { id, at: Date.now() }
 		}
 		if (before) {
-			if (before.length < BUFFER) before.push([name, params])
+			if (SHOPPING.has(name) && before.length < BUFFER) before.push([name, params])
 			if (name === 'purchase') void load()
 			return
 		}
-		vendorCalls(name, params, [...loaded]).forEach(send)
+		// Every tag records the page's address with what it is told.
+		if (PRIVATE_QUERY.test(location.search)) return
+		vendorCalls(name, params, [...loaded.keys()], ids).forEach(send)
 	}
 
 	// Every gtag call lands in the dataLayer as gtag's arguments, whoever made it; they are read
-	// from there in order, each once. The wrapper only says when to look.
+	// from there in order, each once. The wrapper only says when to look. Google's consent commands,
+	// from app.html and the banner, are kept for Google's tags, which read them on layers of their own.
 	const scan = () => {
-		const dl = w.dataLayer ?? []
-		for (; scanned < dl.length; scanned++) if (dl[scanned]?.[0] === 'event') hear(String(dl[scanned][1]), dl[scanned][2] ?? {})
+		while (memory.read < dataLayer.length) {
+			// Counted before it is heard: a purchase loads the tags, which scans again, and must not
+			// hear the same purchase over and over.
+			const command = dataLayer[memory.read++]
+			if (command?.[0] === 'event') hear(String(command[1]), command[2] ?? {})
+			else if (command?.[0] === 'consent') {
+				const copy = Array.from(command)
+				consentCommands.push(copy)
+				if (loaded.has('ga4') || loaded.has('gads')) w.gcGtag(...copy)
+				if (loaded.has('gtm')) w.gtmGtag(...copy)
+			}
+		}
 	}
 	let gtag = w.gtag
 	const listening = function (this: unknown, ...args: unknown[]) {
@@ -194,8 +283,8 @@ export function startAdTags(
 		scan()
 		return out
 	}
-	// The GoogleAnalytics loader defines a gtag of its own when it starts, so the wrapper is put
-	// back whenever it has been replaced.
+	// A Google snippet in the store's header scripts defines a gtag of its own when it runs, so the
+	// wrapper is put back whenever it has been replaced.
 	const listen = () => {
 		if (w.gtag !== listening) {
 			gtag = w.gtag
@@ -203,28 +292,38 @@ export function startAdTags(
 		}
 		scan()
 	}
+	// Before the first scan, which can hear a purchase and so load.
+	let waiting = false
 	listen()
 
-	let waiting = false
 	async function load(choice?: Record<string, string>) {
+		const run = ++runs
 		listen()
+		const consent = savedChoice(choice)
+		const allowed = enabled.filter((v) => consentAllows(SOURCES[v].consent, consent, timeZone))
+		// A running tag cannot be unloaded, so a choice taken back starts the page again without it.
+		// Google's own opt-out flag stops its tag at once, so it sends nothing more as the page goes.
+		const withdrawn = [...loaded.keys()].filter((v) => !allowed.includes(v))
+		if (withdrawn.length) {
+			for (const v of withdrawn) if (v === 'ga4' || v === 'gads') w['ga-disable-' + loaded.get(v)!.split('/')[0]] = true
+			return reload()
+		}
 		if (PRIVATE_QUERY.test(location.search)) {
 			waiting = true
 			return
 		}
 		waiting = false
-		const consent = savedChoice(choice)
-		const allowed = enabled.filter((v) => consentAllows(SOURCES[v].consent, consent, timeZone))
-		// A running tag cannot be unloaded, so a choice taken back starts the page again without it.
-		if ([...loaded].some((v) => !allowed.includes(v))) return reload()
 		const fresh = allowed.filter((v) => !loaded.has(v))
-		if (fresh.length) {
-			const { LOADERS } = await import('$lib/ad-tags-snippets.js')
+		const { LOADERS } = fresh.length ? await import('$lib/ad-tags-snippets.js') : { LOADERS: null }
+		// A choice made while the snippets were on their way (the banner's "Required only" on a slow
+		// phone) is the one that stands.
+		if (run !== runs) return
+		if (LOADERS) {
 			for (const vendor of fresh) {
 				if (loaded.has(vendor)) continue
 				try {
-					LOADERS[vendor](ids[vendor])
-					loaded.add(vendor)
+					LOADERS[vendor](ids[vendor], consentCommands)
+					loaded.set(vendor, ids[vendor]!)
 				} catch {
 					/* a vendor's snippet must never break the page */
 				}
@@ -235,7 +334,7 @@ export function startAdTags(
 		if (before) {
 			const queued = before
 			before = null
-			for (const [name, params] of queued) vendorCalls(name, params, fresh).forEach(send)
+			for (const [name, params] of queued) vendorCalls(name, params, fresh, ids).forEach(send)
 		}
 	}
 
@@ -245,6 +344,7 @@ export function startAdTags(
 
 	return {
 		stop() {
+			runs++
 			stopWaiting()
 			window.removeEventListener('consentchange', onChoice)
 			if (w.gtag === listening) w.gtag = gtag
