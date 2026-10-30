@@ -230,7 +230,8 @@
 							mrp: p.mrp,
 							title: p.title,
 							vendor: p.vendor,
-							variants: p.variants
+							variants: p.variants,
+							designable: p.designable
 						}}
 						aspectRatio="square"
 					/>
