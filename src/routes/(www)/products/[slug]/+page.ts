@@ -48,13 +48,8 @@ export const load = async (event: any) => {
 	// The theme editor re-reads the draft after each save: the template's product grids are resolved
 	// here.
 	event.depends(LAYOUT_DEPENDENCY)
-	// Untracked, for the reason below: reading the query would re-run this load on every
-	// ?variant_id= change. A preview's key and the editor's origin only change with a new frame, and
-	// survive that change through the tab (previewParams).
 	const { preview, editor } = event.untrack(() => previewParams('product', event.url, browser))
 	try {
-		// Only what the core load reads (fetch, params). Passing the whole event would read
-		// `event.url` and make this load re-run on every ?variant_id= change.
 		const [data, layout] = await Promise.all([
 			wwwProductsSlugLoad({ fetch: watch.fetch, params: event.params } as any),
 			// The shop's product page template (GoCommerce D128), or null for the built-in page.
