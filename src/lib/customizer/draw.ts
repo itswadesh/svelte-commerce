@@ -107,7 +107,7 @@ function drawLayer(ctx: CanvasRenderingContext2D, layer: Layer, setup: Customize
 	ctx.restore()
 }
 
-function fontOf(layer: Pick<TextLayer, 'font' | 'font_size'>, setup: CustomizerSetup): string {
+export function fontOf(layer: Pick<TextLayer, 'font' | 'font_size'>, setup: CustomizerSetup): string {
 	const family = setup.fonts.find((f) => f.key === layer.font)?.family ?? 'sans-serif'
 	return `${FONT_WEIGHT} ${layer.font_size}px "${family}"`
 }

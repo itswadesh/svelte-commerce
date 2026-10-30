@@ -18,7 +18,7 @@
 		type TextLayer
 	} from './document'
 	import { textBox } from './draw'
-	import { photoCap, plainMessage, preparePhoto, upload } from './service'
+	import { loadGlyphs, photoCap, plainMessage, preparePhoto, upload } from './service'
 	import type { Designer } from './designer.svelte'
 
 	type Props = { designer: Designer; panel: Panel; announce: (message: string) => void }
@@ -64,7 +64,11 @@
 			})
 			announce('Photo added')
 		} catch (err) {
-			uploadError = plainMessage(err, 'Your photo could not be uploaded. Please try again.', 'This photo is too large to upload. Choose a smaller one.')
+			uploadError = plainMessage(
+				err,
+				'Your photo could not be uploaded. Please try again.',
+				'This photo is too large to upload. Choose a smaller one.'
+			)
 		} finally {
 			uploading = false
 		}
@@ -74,6 +78,7 @@
 	let font = $state('')
 	let colour = $state(PRINT_COLOURS[0].hex)
 	let align = $state<Align>('center')
+	let editedGlyphs = Promise.resolve()
 	const currentFont = $derived(selectedText?.font ?? (font || setup.fonts[0]?.key || ''))
 	const currentColour = $derived(selectedText?.color ?? selectedShape?.color ?? colour)
 
@@ -82,6 +87,7 @@
 		if (!text) return
 		await designer.fontsReady
 		const words = { text, font: currentFont, font_size: Math.round(area.height / 14) }
+		await loadGlyphs(setup, [words])
 		const box = measure(words)
 		const fitted = Math.min(1, (area.width * 0.9) / box.width)
 		const font_size = words.font_size * fitted
@@ -210,9 +216,13 @@
 					value={selectedText.text}
 					oninput={(e) => {
 						const text = e.currentTarget.value
-						if (text.trim()) rewriteKeepingCentre(selectedText, { text }, true)
+						if (!text.trim()) return
+						rewriteKeepingCentre(selectedText, { text }, true)
+						editedGlyphs = loadGlyphs(setup, [{ ...selectedText, text }]).then(() => {
+							if (selectedText?.text === text) rewriteKeepingCentre(selectedText, {}, true)
+						})
 					}}
-					onchange={() => designer.endGesture()}
+					onchange={() => editedGlyphs.then(() => designer.endGesture())}
 					class="text-base font-normal md:text-sm"
 				/>
 			{:else}
@@ -227,6 +237,7 @@
 				onchange={async (e) => {
 					font = e.currentTarget.value
 					await designer.fontsReady
+					if (selectedText) await loadGlyphs(setup, [{ ...selectedText, font }])
 					if (selectedText) rewriteKeepingCentre(selectedText, { font })
 				}}
 			>

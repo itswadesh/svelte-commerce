@@ -35,10 +35,10 @@
 	import { formatPrice } from '$lib/utils/price'
 	import { addOnPicks, addPicks } from '$lib/product/add-on-picks.svelte'
 	import { bumpTotal } from '$lib/product/upsells'
-	import { canResize, isEmpty, layerLabel, SIZE_STEP, TURN_STEP, type CustomizerSetup, type Panel } from './document'
+	import { canResize, isEmpty, layerLabel, SIZE_STEP, TURN_STEP, type CustomizerSetup, type Panel, type TextLayer } from './document'
 	import { Designer } from './designer.svelte'
 	import { loadPicture, previewView, renderPng } from './draw'
-	import { loadFonts, MAX_UPLOAD_BYTES, PlainError, plainMessage, saveDesign, upload } from './service'
+	import { loadFonts, loadGlyphs, MAX_UPLOAD_BYTES, PlainError, plainMessage, saveDesign, upload } from './service'
 	import Stage from './stage.svelte'
 	import Tools from './tools.svelte'
 
@@ -172,6 +172,10 @@
 			if (designer.missingPhoto) throw new PlainError(MISSING_PHOTO)
 			await designer.fontsReady
 			const doc = designer.doc
+			await loadGlyphs(
+				setup,
+				doc.layers.filter((l): l is TextLayer => l.type === 'text')
+			)
 			const [previewPng, printPng] = await Promise.all([
 				renderPng(doc, setup, pictures, previewView(setup)),
 				renderPng(doc, setup, pictures, { kind: 'print' })
