@@ -1,6 +1,6 @@
 import { FONTS } from '$lib/composer/theme-tokens'
-import { printPixels, type CustomizerSetup, type DesignDocument } from './document'
-import { FONT_WEIGHT } from './draw'
+import { printPixels, type CustomizerSetup, type DesignDocument, type TextLayer } from './document'
+import { FONT_WEIGHT, fontOf } from './draw'
 
 export type Upload = { uploadId: string; url: string; width: number; height: number }
 
@@ -109,4 +109,9 @@ export async function loadFonts(setup: CustomizerSetup): Promise<void> {
 		google.forEach((g) => loadedFonts.add(g))
 	}
 	await Promise.all(setup.fonts.map((f) => document.fonts.load(`${FONT_WEIGHT} 32px "${f.family}"`).catch(() => [])))
+}
+
+/** A face's Devanagari, latin-ext and ₹ are subsets of their own, loaded only for words that use them. */
+export async function loadGlyphs(setup: CustomizerSetup, words: Pick<TextLayer, 'text' | 'font' | 'font_size'>[]): Promise<void> {
+	await Promise.all(words.map((w) => document.fonts.load(fontOf(w, setup), w.text).catch(() => [])))
 }

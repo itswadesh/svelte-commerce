@@ -45,6 +45,12 @@
 		drawDesign(ctx, doc, setup, pictures, { kind: 'mockup', scale: scale * backing })
 	})
 
+	$effect(() => {
+		const redraw = () => designer.redraws++
+		document.fonts.addEventListener('loadingdone', redraw)
+		return () => document.fonts.removeEventListener('loadingdone', redraw)
+	})
+
 	function boxStyle(l: Layer) {
 		return `left:${(area.x + l.x) * scale}px;top:${(area.y + l.y) * scale}px;width:${l.width * scale}px;height:${l.height * scale}px;transform:rotate(${l.rotation}deg)`
 	}
