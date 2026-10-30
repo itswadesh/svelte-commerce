@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { pushState } from '$app/navigation'
 	import { Button } from '$lib/components/ui/button'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/utils/price'
 	import { Check, HeartIcon, Palette, ShoppingBag } from '@lucide/svelte'
-	import { editor } from '$lib/customizer/designer.svelte'
 	import { fade, fly } from '$lib/motion'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import { toast } from 'svelte-sonner'
@@ -179,7 +179,7 @@
 					size="lg"
 					aria-haspopup="dialog"
 					disabled={outOfStock}
-					onclick={() => (editor.open = true)}
+					onclick={() => pushState('', { designing: true })}
 				>
 					{#if outOfStock}
 						<span>Out of stock</span>
