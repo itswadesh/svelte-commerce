@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
 	import {
 		ChevronRight,
 		ShoppingBag,
@@ -189,26 +190,14 @@
 							<!-- Order Items -->
 							<div class=" bg-background">
 								{#each order.lineItems as item}
+									{@const picture = linePicture(item)}
 									<div class="group flex items-center intra-gap p-3">
 										<a
 											href="/my/orders/{order.parentOrderNo}"
 											class="relative shrink-0 overflow-hidden transition-transform duration-emphasis"
 										>
-											{#if item.thumbnail}
-												<!-- <LazyImg
-													src={item.thumbnail}
-													alt={item.title}
-													aspectRatio="5:6"
-													height="96"
-													width="80"
-													class="h-full w-full object-cover object-center"
-												/> -->
-													<LazyImg
-														src={item.thumbnail}
-														alt={item.title}
-														class="aspect-[3/4] w-24 object-contain sm:w-16"
-													/>
-												
+											{#if picture.src}
+												<LazyImg src={picture.src} alt={picture.alt} class="aspect-[3/4] w-24 object-contain sm:w-16" />
 											{:else}
 												<div class="flex h-full w-full items-center justify-center bg-muted">
 													<ShoppingBag class="h-8 w-8 text-muted-foreground/40" />

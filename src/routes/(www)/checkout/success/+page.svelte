@@ -3,6 +3,7 @@
 	import { formatPrice } from '$lib/utils/price'
 	import { CheckCircle2, MapPin, Package, Truck, ArrowRight, ShoppingBag, Mail, Calendar, SearchX } from '@lucide/svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
 	import { getUserState, getCartState } from '$lib/core/stores/index.js'
 	import { onMount } from 'svelte'
 	import { page } from '$app/state'
@@ -211,9 +212,10 @@
 					<div class="divide-y divide-border">
 						{#each orders as { lineItems }}
 							{#each lineItems || [] as item}
+								{@const picture = linePicture(item)}
 								<div class="group flex items-start gap-6 py-6 first:pt-0 last:pb-0">
 									<div class="relative flex-shrink-0 overflow-hidden">
-										<LazyImg src={item.thumbnail} alt={item.title} class="aspect-[3/4] w-16 object-contain sm:w-16" />
+										<LazyImg src={picture.src} alt={picture.alt} class="aspect-[3/4] w-16 object-contain sm:w-16" />
 									</div>
 									<div class="flex flex-1 flex-col">
 										<div class="flex justify-between text-base font-semibold text-foreground">
@@ -227,6 +229,7 @@
 										<p class="mt-1 text-sm text-muted-foreground">
 											{formatPrice(item.price, currencyCode)} × {item.qty}
 										</p>
+										{#if picture.designed}<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>{/if}
 										{#if item.variantTitle}
 											<p class="mt-1 text-xs text-muted-foreground">{item.variantTitle}</p>
 										{/if}

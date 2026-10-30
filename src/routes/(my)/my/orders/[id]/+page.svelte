@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import OrderListSkeleton from '../_OrderListSkeleton.svelte'
 	import BackButton from '$lib/components/common/back-button.svelte'
@@ -115,20 +116,11 @@
 								</div>
 								<div class="divide-y divide-border">
 									{#each order?.lineItems || [] as item}
+										{@const picture = linePicture(item)}
 										<div class="p-3 transition-colors hover:bg-muted/30 sm:p-6">
 											<div class="flex gap-6">
 												<a href="/products/{item.slug}" class="relative shrink-0 overflow-hidden">
-													<!-- <LazyImg
-															src={item.isCustomized ? item.customizedImg : (item.thumbnail || item.img)}
-															alt={item.title}
-															aspectRatio="5:6"
-															class="h-full w-full object-cover object-center"
-														/> -->
-													<LazyImg
-														src={item.isCustomized ? item.customizedImg : item.thumbnail || item.img}
-														alt={item.title}
-														class="aspect-[3/4] w-24 object-contain sm:w-24"
-													/>
+													<LazyImg src={picture.src} alt={picture.alt} class="aspect-[3/4] w-24 object-contain sm:w-24" />
 												</a>
 
 												<div class="flex flex-1 flex-col">
@@ -139,6 +131,7 @@
 																	{item.title}
 																</h4>
 															</a>
+															{#if picture.designed}<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>{/if}
 															<div class="mt-2 flex flex-wrap gap-4 text-xs font-bold text-muted-foreground">
 																<span class="flex items-center gap-1.5">
 																	<Tag class="h-3.5 w-3.5" />

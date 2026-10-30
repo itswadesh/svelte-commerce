@@ -12,6 +12,7 @@
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
 	import { tweened } from 'svelte/motion'
 	import { cubicOut } from 'svelte/easing'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
@@ -294,6 +295,7 @@
 							{/if}
 
 							{#each cartState.cart?.lineItems || [] as item (item.id)}
+								{@const picture = linePicture(item)}
 								<!-- The row used to be one anchor with `target="_blank"` wrapping seven buttons, so
 								     assistive technology announced a link containing a stepper, invalid markup put
 								     interactive controls inside an anchor, and a tap on the row's empty space opened a
@@ -319,7 +321,7 @@
 
 									<div class="flex shrink-0 flex-col items-center gap-3">
 										<a href={`/products/${item.slug}`} class="block w-24 overflow-hidden rounded-md bg-muted sm:w-28" aria-label="View {item.title}">
-											<LazyImg src={item.thumbnail} alt={item.title} class="w-full object-contain object-top" />
+											<LazyImg src={picture.src} alt={picture.alt} class="w-full object-contain object-top" />
 										</a>
 
 										<div class="sm:hidden">
@@ -333,6 +335,7 @@
 												<a href={`/products/${item.slug}`} class="block">
 													<h3 class="line-clamp-2 text-sm font-medium text-foreground sm:text-base">{item.title}</h3>
 												</a>
+												{#if picture.designed}<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>{/if}
 
 												{#if item.variant?.options?.length}
 													<div class="mt-1.5 flex flex-wrap gap-1.5">

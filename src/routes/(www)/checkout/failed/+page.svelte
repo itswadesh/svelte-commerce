@@ -5,6 +5,7 @@
 	import { goto } from '$app/navigation'
 	import { AlertCircle, ArrowLeft, ShoppingBag } from '@lucide/svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
@@ -84,6 +85,7 @@
 					<h2 class="text-base font-bold text-foreground">Order summary</h2>
 					<ul class="mt-4 divide-y divide-border">
 						{#each items as item (item.id ?? item.slug)}
+							{@const picture = linePicture(item)}
 							<li class="flex gap-3 py-3 text-sm">
 								<a
 									href={`/products/${item.slug}${item.variant?.id ? `?variant_id=${item.variant.id}` : ''}`}
@@ -92,7 +94,7 @@
 									<!-- The shared lazy image already draws its own fallback; the raw <img> here pointed
 									     at /images/placeholder.png, which does not exist, so any item without a working
 									     thumbnail rendered the browser's broken-image glyph (UX-314). -->
-									<LazyImg src={item.thumbnail} alt={item.title} class="size-full object-contain" />
+									<LazyImg src={picture.src} alt={picture.alt} class="size-full object-contain" />
 								</a>
 								<div class="flex min-w-0 flex-1 flex-col justify-between py-0.5">
 									<div>
@@ -102,6 +104,7 @@
 										{#if item.variantTitle}
 											<p class="mt-0.5 text-xs text-muted-foreground">{item.variantTitle}</p>
 										{/if}
+										{#if picture.designed}<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>{/if}
 									</div>
 									<p class="text-xs text-muted-foreground">Qty: {item.qty}</p>
 								</div>
