@@ -10,7 +10,7 @@
 </script>
 
 {#if message}
-	<div class="cmp-announce bg-primary text-primary-foreground">
+	<div class="cmp-announce bg-primary text-primary-foreground" data-target="secondary">
 		<div class="page-width cmp-announce__row">
 			{#if href}
 				<a class="cmp-announce__link" {href}>
@@ -25,34 +25,37 @@
 {/if}
 
 <style>
+	/* One 30px line, as the strip above the header: long text ends in an ellipsis rather than
+	   wrapping the bar taller, and the link keeps the bar's full height as its target. */
 	.cmp-announce__row {
 		display: flex;
 		justify-content: center;
-		padding-block: 10px;
+		height: 1.875rem;
 		font-size: var(--type-dense, 0.8125rem);
 		font-weight: 500;
-		line-height: 1.4;
+		line-height: 1.875rem;
 		letter-spacing: 0.02em;
 		text-align: center;
+		white-space: nowrap;
 	}
 
-	.cmp-announce__text {
+	.cmp-announce__text,
+	.cmp-announce__link span {
 		margin: 0;
-		overflow-wrap: anywhere;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.cmp-announce__link {
-		display: inline-flex;
+		display: flex;
 		align-items: center;
 		gap: 8px;
-		/* A full-height touch target, though the bar itself stays slim. */
-		min-height: 44px;
-		margin-block: -10px;
+		min-width: 0;
 		color: inherit;
 		text-decoration: underline;
 		text-decoration-color: transparent;
 		text-underline-offset: 3px;
-		overflow-wrap: anywhere;
 		transition:
 			opacity var(--motion-fast, 150ms) var(--motion-ease, ease-out),
 			text-decoration-color var(--motion-fast, 150ms) var(--motion-ease, ease-out);
