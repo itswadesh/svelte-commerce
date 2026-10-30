@@ -118,6 +118,12 @@
 		closed()
 	}
 
+	// A reload keeps the editor's history entry but not page.state or the design, so the next Back
+	// would land on this product again: step off the entry now.
+	$effect(() => {
+		if (history.state?.['sveltekit:states']?.customizerOpen) history.back()
+	})
+
 	// SvelteKit applies the entry's state in its own popstate listener, which may run after this one.
 	function onpopstate() {
 		setTimeout(() => {
