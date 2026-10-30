@@ -143,9 +143,10 @@
 		if (!framed() && history.state?.['sveltekit:states']?.customizerOpen) history.back()
 	})
 
-	// The entry's own state: SvelteKit updates page.state for another page only once that page has loaded.
+	// The entry's own state: SvelteKit updates page.state for another page only once that page has
+	// loaded. Shut after the event: the bag drawer closes itself on any popstate it sees while open.
 	function onpopstate(e: PopStateEvent) {
-		if (!e.state?.['sveltekit:states']?.customizerOpen) shut()
+		if (!e.state?.['sveltekit:states']?.customizerOpen) setTimeout(shut)
 	}
 
 	function close(): Promise<void> {
