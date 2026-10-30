@@ -167,16 +167,12 @@
 			<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
 		     content wins -->
 			{#if !helloBarHasContent && announcement && announcementShown}
-				<div class="overflow-hidden">
-					<div class="ed-announce max-w-none bg-primary px-4 py-2.5 text-center text-xs font-semibold text-primary-foreground">
-						{#if announcement.link}
-							<a href={announcement.link} class="inline-flex min-h-[32px] items-center transition-opacity hover:opacity-80"
-								>{announcement.text}</a
-							>
-						{:else}
-							{announcement.text}
-						{/if}
-					</div>
+				<div class="announce-strip ed-announce bg-primary text-xs font-semibold text-primary-foreground" data-target="secondary">
+					{#if announcement.link}
+						<a href={announcement.link} class="announce-line transition-opacity hover:opacity-80">{announcement.text}</a>
+					{:else}
+						<p class="announce-line">{announcement.text}</p>
+					{/if}
 				</div>
 			{/if}
 
@@ -189,7 +185,7 @@
 
 				<div class="overflow-hidden">
 					{#if navModule.helloBarPlugin?.content}
-						<div class="max-w-none bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
+						<div class="announce-strip ed-announce bg-primary text-center text-xs text-primary-foreground sm:text-sm" data-target="secondary">
 							<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
 								{#if navModule.helloBarPlugin?.content}
 									<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
@@ -601,24 +597,52 @@
 		background: transparent;
 	}
 
+	/* The strip above the header, announcement or hello bar: one 30px line at every width. Text too
+	   long for a phone ends in an ellipsis instead of wrapping the bar to three lines, and a link
+	   fills the bar, so the whole strip is a full-width 30px target. In rem, so it grows with the
+	   shopper's own text size. */
+	.announce-strip {
+		height: 1.875rem;
+		overflow: hidden;
+	}
+
+	.announce-line,
+	.sliding-list li {
+		display: block;
+		height: 100%;
+		padding-inline: 16px;
+		line-height: 1.875rem;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* A hello-bar message is rich text: its paragraphs run inline so the ellipsis applies to them. */
+	.sliding-list li :global(:is(p, div)) {
+		display: inline;
+	}
+
+	.sliding-list li :global(br) {
+		display: none;
+	}
+
 	.ed .ed-announce {
 		font-size: var(--type-dense);
 		font-weight: 500;
-		line-height: var(--leading-ui);
 	}
 
-	/* The bar's 10px padding is taken back, so the link is a 44px target without the bar growing. */
-	.ed .ed-announce a {
-		min-height: 44px;
-		margin-block: -10px;
-	}
-
-	.ed .ed-announce a:active {
+	a.announce-line:active {
 		opacity: 0.6;
 	}
 
-	/* Inset: the bar's overflow-hidden wrapper clips the global ring, which is drawn outside the box. */
-	.ed .ed-announce a:focus-visible {
+	/* Inset: a ring drawn outside the bar would be cut off at the top of the page. The bar's own ink,
+	   because on the other themes --ring is the bar's colour; the default theme keeps its focus token. */
+	a.announce-line:focus-visible {
+		box-shadow: inset 0 0 0 2px hsl(var(--primary-foreground));
+	}
+
+	.ed a.announce-line:focus-visible {
 		box-shadow: inset 0 0 0 2px hsl(var(--ring));
 	}
 
@@ -734,51 +758,67 @@
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		height: 1.8rem;
-		overflow: hidden;
+		height: 100%;
 		position: relative;
 	}
 
+	/* Hidden messages are also visibility: hidden. They share the bar's box, so an invisible one on
+	   top would otherwise take the clicks and the tab stops of the one being shown. */
 	.sliding-list li {
-		height: 1.8rem;
-		line-height: 1.8rem;
 		position: absolute;
+		top: 0;
 		width: 100%;
 		opacity: 0;
+		visibility: hidden;
 		animation: slideUp var(--anim-duration) linear infinite;
 		animation-delay: calc(var(--index) * (var(--anim-duration) / var(--item-count)));
 	}
 
 	.sliding-list li:first-child {
 		opacity: 1;
-		top: 0;
-	}
-
-	@media screen and (max-width: 300px) {
-		.sliding-list {
-			height: 1rem;
-		}
-		.sliding-list li {
-			height: 1rem;
-			line-height: 1rem;
-		}
+		visibility: visible;
 	}
 
 	@keyframes slideUp {
 		0%,
 		3% {
-			top: 100%;
+			transform: translateY(100%);
 			opacity: 0;
+			visibility: hidden;
 		}
 		5%,
 		33% {
-			top: 0;
+			transform: none;
 			opacity: 1;
+			visibility: visible;
 		}
 		36%,
 		100% {
-			top: -100%;
+			transform: translateY(-100%);
 			opacity: 0;
+			visibility: hidden;
+		}
+	}
+
+	/* Reduced motion: the messages swap in place with the same fade, without sliding. */
+	@keyframes fadeSwap {
+		0%,
+		3%,
+		36%,
+		100% {
+			opacity: 0;
+			visibility: hidden;
+		}
+		5%,
+		33% {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.sliding-list li {
+			animation-name: fadeSwap;
 		}
 	}
 </style>
