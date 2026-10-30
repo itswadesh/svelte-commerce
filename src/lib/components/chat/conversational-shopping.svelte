@@ -5,6 +5,7 @@
 	import { toast } from 'svelte-sonner'
 	import { getCartState } from '$lib/core/stores/index.js'
 	import { formatPrice } from '$lib/utils/price'
+	import { madeToDesign } from '$lib/product/designable'
 	import {
 		assistantService,
 		type ProductRecommendation,
@@ -112,6 +113,7 @@
 				return
 			}
 			await cartState.add({ productId: rec.productId, variantId: rec.variantId, qty: 1 })
+			if (madeToDesign({ id: rec.productId })) return
 			assistantService.postEvent(sessionId, { type: 'assistant_add_to_cart', productId: rec.productId }).catch(() => {})
 			toast.success('Added to cart')
 		} catch {
