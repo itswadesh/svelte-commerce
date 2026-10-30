@@ -3,6 +3,16 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-30: Criteo's OneTag, per store, behind the cookie choice
+
+The owner asked for Criteo's tag (`dynamic.criteo.com/js/ld/ld.js?a=<account>`). The account is
+each store's own: the engine's `criteo` plugin, which the gocommerce connector hands over as
+`store.plugins.criteo`. It is never hard-coded, because one deployment serves many stores. The tag
+loads on the first interaction. Criteo does not read Google's consent mode, so a saved cookie choice
+decides, and without one, visitors whose time zone is in the opt-in regions (Europe and the
+Atlantic islands, as `app.html` treats them) wait for "Accept all". A store with Criteo shows the
+cookie banner. Product, cart and purchase events are not sent yet.
+
 ## 2026-10-30: Google reviews are Google's, live, and the survey uses the engine's order data
 
 The owner asked to "integrate google reviews" (engine D161). The home page's Google reviews section
