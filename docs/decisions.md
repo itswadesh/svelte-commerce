@@ -242,3 +242,10 @@ types is not counted; sessions and bounce figures will differ from a tag loaded 
 A cookie choice has to be as easy to take back as it was to give (DPDP, GDPR). Every footer
 (default, lime, noor and checkout) offers "Cookie settings" on a store that loads a tag; it opens
 the consent banner again, and a choice taken back reloads the page without the tags.
+
+## 2026-10-30: No personal data in a URL
+
+The owner's standing rule: no email, phone, token or name in a URL, since every analytics tag
+records the page's address and the history keeps it. The page after sign-up gets the address in
+SvelteKit's navigation state and greets the shopper without it after a reload; the sign-in form
+hands the typed address to the reset form in memory instead of an `email` query.
