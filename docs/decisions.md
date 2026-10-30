@@ -180,3 +180,17 @@ class, no `text-transform: uppercase` and no caps-only letter-spacing. The owner
 the account, auth and shop pages were unified, so the whole storefront reads in one voice.
 `scripts/check-tokens.mjs` fails on all-caps styling in default-theme files. The wine, organic, lime
 and noor themes keep their own type treatment.
+
+## 2026-10-30: The store's ad and analytics tags, one bridge, behind the cookie choice
+
+The owner asked for the popular ad and analytics integrations (GoCommerce D160). The Meta pixel,
+Microsoft Clarity, Hotjar and the TikTok, Pinterest and Snap pixels are each the store's own ID
+from the engine, which the gocommerce connector hands over as `store.plugins.<name>`; none is ever
+hard-coded. Each loads the vendor's own base code on the shopper's first interaction, like Klaviyo,
+and only where the cookie choice allows: a saved choice decides (ad cookies for the four pixels,
+analytics for Clarity and Hotjar), and without one, visitors whose time zone is in the opt-in
+regions wait for the banner, which a store with any of these tags shows. The pixels hear the
+shopping events the storefront already sends GA4 (`view_item`, `add_to_cart`, `begin_checkout`,
+`purchase`) by listening on `window.gtag`, so there is one place events are fired, not one per
+vendor; `begin_checkout` is now sent from the address step. Meta's Purchase carries the order
+number as its eventID, which the engine's Conversions API also sends, so Meta counts the sale once.

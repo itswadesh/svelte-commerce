@@ -18,3 +18,37 @@ export function trackGenerateLead(formType: string, context: Record<string, stri
 		/* never let analytics break the form */
 	}
 }
+
+/**
+ * GA4 begin_checkout, with the basket as it stands. Nothing sent it before, so GA4's funnel had no
+ * start; the ad tags hear it too (ad-tags.ts). Item ids are SKUs, as on every other shopping event.
+ * Once per basket in a session: coming back to the address step, or reloading it, is the same
+ * checkout.
+ */
+export function trackBeginCheckout(cart: Record<string, any> | null | undefined, currency?: string): void {
+	if (typeof window === 'undefined') return
+	const gtag = (window as any).gtag
+	const lines: Record<string, any>[] = cart?.lineItems ?? []
+	if (typeof gtag !== 'function' || !lines.length) return
+	try {
+		const key = `begin_checkout_${cart?.id ?? ''}`
+		if (sessionStorage.getItem(key)) return
+		sessionStorage.setItem(key, '1')
+	} catch {
+		/* storage blocked: send it */
+	}
+	try {
+		gtag('event', 'begin_checkout', {
+			currency,
+			value: Number(cart?.subtotal) || 0,
+			items: lines.map((l) => ({
+				item_id: l.sku || l.productId,
+				item_name: l.name ?? l.title,
+				price: Number(l.price) || 0,
+				quantity: Number(l.qty) || 1
+			}))
+		})
+	} catch {
+		/* never let analytics break checkout */
+	}
+}

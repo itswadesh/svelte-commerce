@@ -21,6 +21,7 @@
 	import { authService } from '$lib/core/services/index.js'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { onMount } from 'svelte'
+	import { trackBeginCheckout } from '$lib/analytics'
 	import { replaceState } from '$app/navigation'
 
 	const addressModule = new AddressModule()
@@ -116,6 +117,8 @@
 	// address so it can be edited in place.
 	onMount(async () => {
 		await cartState.hasLoaded
+		// The address step is where checkout begins; the basket before it is still shopping.
+		trackBeginCheckout(cartState.cart, page.data?.store?.currency?.code)
 		if (isGuestCheckout) {
 			if (cartState.cart.shippingAddress) {
 				addressModule.currentAddress = cartState.cart.shippingAddress
