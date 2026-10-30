@@ -38,17 +38,55 @@ export function trackBeginCheckout(cart: Record<string, any> | null | undefined,
 		/* storage blocked: send it */
 	}
 	try {
-		gtag('event', 'begin_checkout', {
+		gtag('event', 'begin_checkout', { currency, value: Number(cart?.subtotal) || 0, items: lines.map(cartItem) })
+	} catch {
+		/* never let analytics break checkout */
+	}
+}
+
+const cartItem = (l: Record<string, any>) => ({
+	item_id: l.sku || l.productId,
+	item_name: l.name ?? l.title,
+	price: Number(l.price) || 0,
+	quantity: Number(l.qty) || 1
+})
+
+/**
+ * GA4 view_cart, on the bag page, with the basket as it stands. Nothing sent it before; the ad tags
+ * hear it too, and it is Criteo's basket event (ad-tags.ts).
+ */
+export function trackViewCart(cart: Record<string, any> | null | undefined, currency?: string): void {
+	if (typeof window === 'undefined') return
+	const gtag = (window as any).gtag
+	const lines: Record<string, any>[] = cart?.lineItems ?? []
+	if (typeof gtag !== 'function' || !lines.length) return
+	try {
+		gtag('event', 'view_cart', { currency, value: Number(cart?.subtotal) || 0, items: lines.map(cartItem) })
+	} catch {
+		/* never let analytics break the bag */
+	}
+}
+
+/**
+ * GA4 view_item_list, for a listing page's products in the order shown. Ids follow view_item's
+ * (SKU, else the product id), so every tag matches a listed product to its page.
+ */
+export function trackViewItemList(products: Record<string, any>[] | null | undefined, listName: string, currency?: string): void {
+	if (typeof window === 'undefined') return
+	const gtag = (window as any).gtag
+	if (typeof gtag !== 'function' || !products?.length) return
+	try {
+		gtag('event', 'view_item_list', {
+			item_list_name: listName,
 			currency,
-			value: Number(cart?.subtotal) || 0,
-			items: lines.map((l) => ({
-				item_id: l.sku || l.productId,
-				item_name: l.name ?? l.title,
-				price: Number(l.price) || 0,
-				quantity: Number(l.qty) || 1
+			items: products.slice(0, 30).map((p, index) => ({
+				item_id: p.sku ?? p.id,
+				item_name: p.title ?? p.name,
+				price: Number(p.price) || 0,
+				index
 			}))
 		})
 	} catch {
-		/* never let analytics break checkout */
+		/* never let analytics break the listing */
 	}
 }

@@ -50,6 +50,12 @@ describe('enabledTags', () => {
 		expect(enabledTags({ googleTagManager: { active: false } })).toEqual({})
 	})
 
+	it('reads Criteo’s account, digits only, as the connector hands it over', () => {
+		expect(enabledTags({ criteo: { active: true, accountId: '12345' } })).toEqual({ criteo: '12345' })
+		expect(enabledTags({ criteo: { active: true, accountId: '123&a=9' } })).toEqual({})
+		expect(enabledTags({ criteo: { active: false, accountId: '12345' } })).toEqual({})
+	})
+
 	it('a Tag Manager container takes over Analytics and Ads, so nothing is measured twice', () => {
 		expect(enabledTags({ googleTagManager: { ...GOOGLE, tags: [...GOOGLE.tags, 'GTM-K9ZZ1'] } })).toEqual({ gtm: 'GTM-K9ZZ1' })
 	})
@@ -171,6 +177,25 @@ describe('vendorCalls', () => {
 		expect(calls[3][3]).toMatchObject({ transaction_id: 'GC-1001', price: 1047, currency: 'INR' })
 	})
 
+	it('Criteo hears the product, list, basket and purchase, in its OneTag events', () => {
+		const one = (name: string, p: Record<string, unknown>) => vendorCalls(name, p, ['criteo'])
+		expect(one('view_item', { currency: 'INR', value: 499, items: { item_id: 'TEE-M', price: 499 } })).toEqual([
+			['criteo', { event: 'viewItem', item: 'TEE-M' }]
+		])
+		// Criteo reads the first three products of a listing.
+		const list = ['A', 'B', 'C', 'D'].map((id) => ({ item_id: id, price: 100 }))
+		expect(one('view_item_list', { items: list })).toEqual([['criteo', { event: 'viewList', item: ['A', 'B', 'C'] }]])
+		const basket = [['criteo', { event: 'viewBasket', item: [{ id: 'TEE-M', price: 499, quantity: 2 }] }]]
+		expect(one('view_cart', { currency: 'INR', value: 998, items: [item] })).toEqual(basket)
+		expect(one('begin_checkout', { currency: 'INR', value: 998, items: [item] })).toEqual(basket)
+		expect(one('purchase', { transaction_id: 'GC-1001', currency: 'INR', value: 1047, items: [item] })).toEqual([
+			['criteo', { event: 'trackTransaction', id: 'GC-1001', currency: 'INR', item: [{ id: 'TEE-M', price: 499, quantity: 2 }] }]
+		])
+		// A purchase without an order number is not a transaction; adding one item is not the basket.
+		expect(one('purchase', { currency: 'INR', items: [item] })).toEqual([])
+		expect(one('add_to_cart', { currency: 'INR', items: [item] })).toEqual([])
+	})
+
 	it('hands on nothing it was not given: no personal data, no other events', () => {
 		const calls = vendorCalls(
 			'purchase',
@@ -239,7 +264,7 @@ describe('startAdTags', () => {
 		document.head.innerHTML = '<script></script>'
 		localStorage.clear()
 		history.replaceState(null, '', '/')
-		for (const k of ['fbq', '_fbq', 'ttq', 'TiktokAnalyticsObject', 'pintrk', 'snaptr', 'clarity', 'hj', '_hjSettings', 'gcLayer', 'gcGtag', 'gtmLayer', 'gtmGtag', 'ga-disable-G-ABC123XYZ', 'ga-disable-AW-1234567890']) delete w[k]
+		for (const k of ['fbq', '_fbq', 'ttq', 'TiktokAnalyticsObject', 'pintrk', 'snaptr', 'clarity', 'hj', '_hjSettings', 'gcLayer', 'gcGtag', 'gtmLayer', 'gtmGtag', 'ga-disable-G-ABC123XYZ', 'ga-disable-AW-1234567890', 'criteo_q']) delete w[k]
 		w.dataLayer = []
 		w.gtag = function () {
 			w.dataLayer.push(arguments)
@@ -349,6 +374,25 @@ describe('startAdTags', () => {
 		expect(reload).not.toHaveBeenCalled()
 		await choose({ ad_storage: 'denied', analytics_storage: 'denied' })
 		expect(reload).toHaveBeenCalledOnce()
+	})
+
+	it('Criteo loads with the store’s account, then hears the shopping events, those before it too', async () => {
+		w.gtag('event', 'view_item', view('TEE-M'))
+		stop = startAdTags({ criteo: '12345' }, { timeZone: 'Asia/Kolkata' }).stop
+		expect(scripts()).toEqual([])
+		await interact()
+		expect(scripts()).toEqual(['https://dynamic.criteo.com/js/ld/ld.js?a=12345'])
+		w.gtag('event', 'purchase', purchase)
+		expect(w.criteo_q.map((e: { event: string }) => e.event)).toEqual(['setAccount', 'setSiteType', 'viewItem', 'trackTransaction'])
+		expect(w.criteo_q[0]).toEqual({ event: 'setAccount', account: 12345 })
+	})
+
+	it('Criteo is an ad tag: in an opt-in region it waits for the banner', async () => {
+		stop = startAdTags({ criteo: '12345' }, { timeZone: 'Europe/Berlin' }).stop
+		await interact()
+		expect(scripts()).toEqual([])
+		await choose({ ad_storage: 'granted', analytics_storage: 'denied' })
+		expect(scripts()).toEqual(['https://dynamic.criteo.com/js/ld/ld.js?a=12345'])
 	})
 
 	it('a purchase loads the tags at once: the page a gateway returns to may never be touched', async () => {
