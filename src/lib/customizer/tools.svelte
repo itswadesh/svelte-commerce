@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { Textarea } from '$lib/components/ui/textarea'
 	import Spinner from '$lib/components/common/spinner.svelte'
-	import { slide } from '$lib/motion'
+	import { fade, slide } from '$lib/motion'
 	import {
 		centredBox,
 		coverBox,
@@ -85,29 +85,37 @@
 	const currentFont = $derived(selectedText?.font ?? (font || setup.fonts[0]?.key || ''))
 	const currentColour = $derived(selectedText?.color ?? selectedShape?.color ?? colour)
 
+	let addingWords = $state(false)
+
 	async function addWords() {
-		const text = draft.trim()
-		if (!text) return
-		await designer.fontsReady
-		const words = { text, font: currentFont, font_size: Math.round(area.height / 14) }
-		await loadGlyphs(setup, [words])
-		const box = measure(words)
-		const fitted = Math.min(1, (area.width * 0.9) / box.width)
-		const font_size = words.font_size * fitted
-		const size = measure({ ...words, font_size })
-		designer.add({
-			id: layerId('text'),
-			type: 'text',
-			...words,
-			font_size,
-			color: colour,
-			align,
-			rotation: 0,
-			opacity: 1,
-			...centredBox(area, size.width / size.height, size.width / area.width)
-		})
-		draft = ''
-		announce('Words added')
+		const submitted = draft
+		const text = submitted.trim()
+		if (!text || addingWords) return
+		addingWords = true
+		try {
+			await designer.fontsReady
+			const words = { text, font: currentFont, font_size: Math.round(area.height / 14) }
+			await loadGlyphs(setup, [words])
+			const box = measure(words)
+			const fitted = Math.min(1, (area.width * 0.9) / box.width)
+			const font_size = words.font_size * fitted
+			const size = measure({ ...words, font_size })
+			designer.add({
+				id: layerId('text'),
+				type: 'text',
+				...words,
+				font_size,
+				color: colour,
+				align,
+				rotation: 0,
+				opacity: 1,
+				...centredBox(area, size.width / size.height, size.width / area.width)
+			})
+			if (draft === submitted) draft = ''
+			announce('Words added')
+		} finally {
+			addingWords = false
+		}
 	}
 
 	function rewriteKeepingCentre(layer: TextLayer, patch: Partial<TextLayer>, live = false) {
@@ -267,7 +275,18 @@
 			{/each}
 		</div>
 		{#if !selectedText}
-			<Button class="h-11 w-full font-semibold md:h-10" disabled={!draft.trim()} onclick={addWords}>Add words</Button>
+			<Button class="h-11 w-full gap-2 font-semibold md:h-10" disabled={!draft.trim() || addingWords} aria-busy={addingWords} onclick={addWords}>
+				{#key addingWords}
+					<span class="inline-flex items-center gap-2" in:fade>
+						{#if addingWords}
+							<Spinner label="Adding your words" />
+							<span>Adding…</span>
+						{:else}
+							Add words
+						{/if}
+					</span>
+				{/key}
+			</Button>
 		{/if}
 	{:else if panel === 'shapes'}
 		<h3 class="text-sm font-semibold text-foreground">Shapes</h3>
