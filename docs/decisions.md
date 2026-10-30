@@ -11,7 +11,18 @@ each store's own: the engine's `criteo` plugin, which the gocommerce connector h
 loads on the first interaction. Criteo does not read Google's consent mode, so a saved cookie choice
 decides, and without one, visitors whose time zone is in the opt-in regions (Europe and the
 Atlantic islands, as `app.html` treats them) wait for "Accept all". A store with Criteo shows the
-cookie banner. Product, cart and purchase events are not sent yet.
+cookie banner.
+
+Amended 2026-10-30, the owner: "send Criteo product, cart and purchase events too". Criteo is now one
+of the ad tags in `ad-tags.ts`, which hears the GA4 events the storefront already sends, so it loads,
+waits for consent and hears events exactly as the Meta and TikTok pixels do: a product view is
+`viewItem`, a listing `viewList` (its first three products), the basket page and the start of
+checkout `viewBasket` with each line's ID, price and quantity, and a purchase with an order number
+`trackTransaction` with its currency. Adding one item is not sent: Criteo's basket event wants the
+whole basket. No email is sent. The separate Criteo component is gone. Listing pages now send
+GA4's `view_item_list` and the bag page `view_cart`, which nothing sent before, so every tag hears
+them; their item IDs follow `view_item`'s (SKU, else the product ID), and a store's Criteo product
+feed must use the same IDs for the ads to show the right products.
 
 ## 2026-10-30: Google reviews are Google's, live, and the survey uses the engine's order data
 

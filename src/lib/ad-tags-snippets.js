@@ -206,5 +206,21 @@ export const LOADERS = {
 		})(window, document, 'https://sc-static.net/scevent.min.js')
 		window.snaptr('init', id)
 		window.snaptr('track', 'PAGE_VIEW')
+	},
+
+	// Criteo's OneTag (dynamic.criteo.com/js/ld/ld.js?a=<account>): the account and the site type
+	// (m, t or d, as Criteo's own snippet works it out) go first on its queue; ad-tags.ts pushes
+	// the product, list, basket and transaction events after them.
+	criteo(id) {
+		const src = 'https://dynamic.criteo.com/js/ld/ld.js?a=' + id
+		if (document.querySelector('script[src="' + src + '"]')) return
+		const ua = navigator.userAgent
+		const type = /iPad/.test(ua) ? 't' : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(ua) ? 'm' : 'd'
+		window.criteo_q = window.criteo_q || []
+		window.criteo_q.push({ event: 'setAccount', account: Number(id) }, { event: 'setSiteType', type })
+		const s = document.createElement('script')
+		s.async = true
+		s.src = src
+		document.head.appendChild(s)
 	}
 }
