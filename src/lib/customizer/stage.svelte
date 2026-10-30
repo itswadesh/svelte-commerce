@@ -55,6 +55,20 @@
 		return `left:${(area.x + l.x) * scale}px;top:${(area.y + l.y) * scale}px;width:${l.width * scale}px;height:${l.height * scale}px;transform:rotate(${l.rotation}deg)`
 	}
 
+	const HANDLE_RADIUS = 22
+	const ROTATE_GAP = 26
+
+	/** Where a layer's handles go on the stage: at its corner and above it as it turns, but never off the stage. */
+	function handlesOf(l: Layer) {
+		const turn = (l.rotation * Math.PI) / 180
+		const cx = (area.x + l.x + l.width / 2) * scale
+		const cy = (area.y + l.y + l.height / 2) * scale
+		const within = (v: number, size: number) => Math.min(Math.max(v, HANDLE_RADIUS), size - HANDLE_RADIUS)
+		const at = (dx: number, dy: number) =>
+			`left:${within(cx + dx * Math.cos(turn) - dy * Math.sin(turn), width)}px;top:${within(cy + dx * Math.sin(turn) + dy * Math.cos(turn), height)}px`
+		return { rotate: at(0, (-l.height * scale) / 2 - ROTATE_GAP), resize: at((l.width * scale) / 2, (l.height * scale) / 2) }
+	}
+
 	function toDesignPoint(e: PointerEvent) {
 		const r = surface!.getBoundingClientRect()
 		return { x: (e.clientX - r.left) / scale - area.x, y: (e.clientY - r.top) / scale - area.y }
@@ -218,13 +232,17 @@
 				>
 					{#if selected}
 						<span class="pointer-events-none absolute -inset-px rounded-sm border-2 border-primary" transition:fade aria-hidden="true"></span>
-						<span data-handle="rotate" class="cz-handle cursor-grab" aria-hidden="true">
-							<RotateCw class="size-3.5" />
-						</span>
-						<span data-handle="resize" class="cz-handle cursor-nwse-resize" aria-hidden="true"></span>
 					{/if}
 				</button>
 			{/each}
+
+			{#if designer.selected}
+				{@const handles = handlesOf(designer.selected)}
+				<span data-handle="rotate" class="cz-handle cursor-grab" style={handles.rotate} aria-hidden="true" transition:fade>
+					<RotateCw class="size-3.5" />
+				</span>
+				<span data-handle="resize" class="cz-handle cursor-nwse-resize" style={handles.resize} aria-hidden="true" transition:fade></span>
+			{/if}
 
 			{#if !doc.layers.length && !doc.background && designer.pictures}
 				<div
@@ -269,16 +287,8 @@
 		pointer-events: auto;
 		touch-action: none;
 		isolation: isolate;
+		transform: translate(-50%, -50%);
 		transition: transform var(--motion-fast) var(--motion-ease);
-	}
-	.cz-handle[data-handle='resize'] {
-		right: -1.375rem;
-		bottom: -1.375rem;
-	}
-	.cz-handle[data-handle='rotate'] {
-		top: -3rem;
-		left: 50%;
-		transform: translateX(-50%);
 	}
 	.cz-handle::before {
 		content: '';
@@ -290,18 +300,11 @@
 		background: hsl(var(--background));
 	}
 	.cz-handle:active {
-		transform: scale(1.15);
-	}
-	.cz-handle[data-handle='rotate']:active {
-		transform: translateX(-50%) scale(1.15);
+		transform: translate(-50%, -50%) scale(1.15);
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.cz-handle:active,
-		.cz-handle[data-handle='rotate']:active {
-			transform: none;
-		}
-		.cz-handle[data-handle='rotate']:active {
-			transform: translateX(-50%);
+		.cz-handle:active {
+			transform: translate(-50%, -50%);
 		}
 	}
 </style>
