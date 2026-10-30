@@ -6,6 +6,7 @@
 	import { fade } from '$lib/motion'
 	import { Check, Plus } from '@lucide/svelte'
 	import Spinner from '$lib/components/common/spinner.svelte'
+	import { madeToDesign } from '$lib/product/designable'
 
 	/**
 	 * "You may be interested in" (GoCommerce D133): what the bag's products suggest, less what it
@@ -68,22 +69,32 @@
 								{/if}
 							</p>
 						</div>
-						<button
-							type="button"
-							class="ccs-add flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-muted disabled:opacity-60 sm:size-9"
-							aria-label={added[p.id] ? `${p.title} is in your bag` : `Add ${p.title} to bag`}
-							disabled={!!adding || added[p.id]}
-							onclick={() => quickAdd(p)}
-						>
-							{#if adding === p.id}
-								<Spinner size={4} label="Adding" />
-							{:else if added[p.id]}
-								<Check class="motion-pop-in size-4 text-success" aria-hidden="true" />
-							{:else}
-								<Plus class="size-4" aria-hidden="true" />
-							{/if}
-						</button>
+						{#if !madeToDesign(p)}
+							<button
+								type="button"
+								class="ccs-add flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-muted disabled:opacity-60 sm:size-9"
+								aria-label={added[p.id] ? `${p.title} is in your bag` : `Add ${p.title} to bag`}
+								disabled={!!adding || added[p.id]}
+								onclick={() => quickAdd(p)}
+							>
+								{#if adding === p.id}
+									<Spinner size={4} label="Adding" />
+								{:else if added[p.id]}
+									<Check class="motion-pop-in size-4 text-success" aria-hidden="true" />
+								{:else}
+									<Plus class="size-4" aria-hidden="true" />
+								{/if}
+							</button>
+						{/if}
 					</div>
+					{#if madeToDesign(p)}
+						<a
+							href={`/products/${p.slug}`}
+							class="ccs-add mx-2 mb-2 flex h-11 items-center justify-center rounded-md border border-border text-xs font-semibold text-foreground hover:bg-muted sm:h-9"
+							aria-label={`Design yours: ${p.title}`}
+							data-testid="cart-cross-sell-design">Design yours</a
+						>
+					{/if}
 				</li>
 			{/each}
 		</ul>
