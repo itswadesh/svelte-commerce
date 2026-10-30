@@ -236,3 +236,9 @@ view and sale twice; a store with a container sets GA4 and Ads up inside it, rea
 
 GA4 starts on the first interaction, like every tag here, so a visit that never scrolls, taps or
 types is not counted; sessions and bounce figures will differ from a tag loaded in the page head.
+
+## 2026-10-30: Cookie settings in every footer
+
+A cookie choice has to be as easy to take back as it was to give (DPDP, GDPR). Every footer
+(default, lime, noor and checkout) offers "Cookie settings" on a store that loads a tag; it opens
+the consent banner again, and a choice taken back reloads the page without the tags.

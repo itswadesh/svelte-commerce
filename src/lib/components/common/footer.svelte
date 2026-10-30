@@ -9,6 +9,7 @@
 	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
 	import Newsletter from './newsletter.svelte'
 	import FooterMenu from './footer-menu.svelte'
+	import CookieSettingsLink from './cookie-settings-link.svelte'
 	import Logo from '$lib/components/common/logo.svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { resolveThemeContent } from '$lib/theme/index.js'
@@ -287,6 +288,9 @@
 									{/if}
 								{/if}
 							</span>
+							<CookieSettingsLink
+								class="-my-2 self-start py-2 text-xs text-muted-foreground underline underline-offset-2 transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:self-auto"
+							/>
 							<TrustpilotPlugin />
 						</div>
 
