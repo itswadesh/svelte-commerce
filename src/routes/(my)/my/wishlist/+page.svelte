@@ -64,7 +64,7 @@
 					</div>
 				</div>
 			{:else}
-				<div class="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-3 lg:gap-10">
+				<div class="grid grid-cols-2 gap-3 md:gap-8 lg:grid-cols-3 lg:gap-10">
 					{#each wishlistItems as item, i}
 						<div
 							in:fly={{ y: 12, delay: Math.min(i, 5) * 40 }}
@@ -110,7 +110,7 @@
 									<Button
 										variant="outline"
 										size="icon"
-										class="h-8 w-[20%] md:h-9"
+										class="shrink-0 max-md:h-11 max-md:w-9"
 										onclick={(e) => {
 											e.preventDefault()
 											e.stopPropagation()
@@ -124,7 +124,7 @@
 									{#if madeToDesign(item?.product)}
 										<Button
 											variant="default"
-											class="h-8 w-[80%] md:h-9"
+											class="min-w-0 flex-1 max-md:px-2"
 											href="/products/{item?.product?.slug}?variant_id={item.variantId}"
 											aria-label="Design yours: {item?.product?.title}"
 										>
@@ -133,7 +133,7 @@
 									{:else}
 										<Button
 											variant="default"
-											class="h-8 w-[80%] md:h-9"
+											class="min-w-0 flex-1 max-md:px-2"
 											onclick={async (e) => {
 												e.preventDefault()
 												e.stopPropagation()
