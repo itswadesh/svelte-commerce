@@ -1,0 +1,162 @@
+import { describe, expect, it } from 'vitest'
+import {
+	centredBox,
+	commit,
+	coverBox,
+	emptyDocument,
+	layerLabel,
+	moveLayer,
+	normaliseRotation,
+	printPixels,
+	printCoverScale,
+	layerId,
+	redo,
+	scaleLayer,
+	setBackground,
+	startHistory,
+	undo,
+	type CustomizerSetup,
+	type DesignDocument,
+	type Layer
+} from '$lib/customizer/document'
+import { Designer } from '$lib/customizer/designer.svelte'
+
+const area = { x: 40, y: 40, width: 520, height: 1120, radius: 90 }
+
+const setup: CustomizerSetup = {
+	productId: '1',
+	mockup: { url: '/backend/media/mockup.png', width: 600, height: 1200 },
+	overlayUrl: null,
+	printArea: area,
+	printSize: { widthMm: 65, heightMm: 140, dpi: 300 },
+	tools: { upload: true, text: true, shapes: true, background: true, stickers: true },
+	fonts: [{ key: 'poppins', family: 'Poppins' }],
+	stickers: [],
+	minPhotoPx: 1000,
+	consent: 'Your photo is used only to print your order.'
+}
+
+const shape = (id: string, x = 0): Layer => ({
+	id,
+	type: 'shape',
+	shape: 'heart',
+	color: '#e11d48',
+	x,
+	y: 0,
+	width: 100,
+	height: 100,
+	rotation: 0,
+	opacity: 1
+})
+
+describe('the print file size', () => {
+	it('is round(mm / 25.4 × dpi) pixels each side, as the engine checks it', () => {
+		expect(printPixels({ widthMm: 65, heightMm: 140, dpi: 300 })).toEqual({ width: 768, height: 1654 })
+		expect(printPixels({ widthMm: 75, heightMm: 150, dpi: 300 })).toEqual({ width: 886, height: 1772 })
+		expect(printPixels({ widthMm: 65, heightMm: 140, dpi: 500 })).toEqual({ width: 1280, height: 2756 })
+	})
+
+	it('is filled from the print area by one factor, the larger of the two', () => {
+		expect(printCoverScale(area, { widthMm: 65, heightMm: 140, dpi: 300 })).toBe(768 / 520)
+	})
+})
+
+describe('placing a layer', () => {
+	it('covers the print area with a photo, centred', () => {
+		expect(coverBox(area, 1500, 2000)).toEqual({ x: -160, y: 0, width: 840, height: 1120 })
+	})
+
+	it('centres a square at a share of the print area’s width', () => {
+		expect(centredBox(area, 1, 0.3)).toEqual({ x: 182, y: 482, width: 156, height: 156 })
+	})
+
+	it('grows words with their box and keeps the centre', () => {
+		const words: Layer = {
+			id: 't',
+			type: 'text',
+			text: 'Asha',
+			font: 'poppins',
+			color: '#111827',
+			font_size: 40,
+			align: 'center',
+			x: 100,
+			y: 200,
+			width: 200,
+			height: 48,
+			rotation: 0,
+			opacity: 1
+		}
+		expect(scaleLayer(words, 2)).toEqual({ x: 0, y: 176, width: 400, height: 96, font_size: 80 })
+	})
+
+	it('names layers the way the engine accepts ids, never twice', () => {
+		const ids = [layerId('image'), layerId('text'), layerId('shape'), layerId('sticker')]
+		expect(ids.every((id) => /^[A-Za-z0-9_-]{1,64}$/.test(id))).toBe(true)
+		expect(new Set(ids).size).toBe(4)
+	})
+
+	it('keeps rotation inside the engine’s range however far it turns', () => {
+		expect(normaliseRotation(370)).toBe(10)
+		expect(normaliseRotation(-190)).toBe(170)
+		expect(normaliseRotation(-725)).toBe(-5)
+	})
+})
+
+describe('the document', () => {
+	it('moves a layer one step and stops at the ends', () => {
+		const doc: DesignDocument = { version: 1, layers: [shape('a'), shape('b'), shape('c')] }
+		expect(moveLayer(doc, 'a', 'up').layers.map((l) => l.id)).toEqual(['b', 'a', 'c'])
+		expect(moveLayer(doc, 'c', 'down').layers.map((l) => l.id)).toEqual(['a', 'c', 'b'])
+		expect(moveLayer(doc, 'c', 'up').layers.map((l) => l.id)).toEqual(['a', 'b', 'c'])
+	})
+
+	it('leaves the background key out when there is none, as the engine refuses an empty colour', () => {
+		const coloured = setBackground(emptyDocument(), '#fde68a')
+		expect(JSON.stringify(coloured)).toBe('{"version":1,"layers":[],"background":"#fde68a"}')
+		expect(JSON.stringify(setBackground(coloured, null))).toBe('{"version":1,"layers":[]}')
+	})
+
+	it('names each layer for the shopper', () => {
+		expect(layerLabel(shape('h'))).toBe('Heart')
+		expect(layerLabel({ ...shape('w'), type: 'text', text: 'Asha', font: 'poppins', font_size: 40, align: 'center' } as Layer)).toBe('Words: Asha')
+	})
+})
+
+describe('undo and redo', () => {
+	it('steps back and forward through whole documents, and a new change drops the redo', () => {
+		const one: DesignDocument = { version: 1, layers: [shape('a')] }
+		const two: DesignDocument = { version: 1, layers: [shape('a'), shape('b')] }
+		const three: DesignDocument = { version: 1, layers: [shape('c')] }
+		let h = commit(commit(startHistory(), one), two)
+		h = undo(h)
+		expect(h.present).toBe(one)
+		h = redo(h)
+		expect(h.present).toBe(two)
+		h = commit(undo(h), three)
+		expect(h.present).toBe(three)
+		expect(redo(h).present).toBe(three)
+		expect(undo(undo(h)).present.layers).toEqual([])
+	})
+
+	it('takes back a whole drag in one undo', () => {
+		const designer = new Designer(setup)
+		designer.add(shape('a'))
+		designer.updateLive('a', { x: 10 })
+		designer.updateLive('a', { x: 20 })
+		designer.updateLive('a', { x: 30 })
+		designer.endGesture()
+		expect(designer.doc.layers[0].x).toBe(30)
+		designer.undo()
+		expect(designer.doc.layers[0].x).toBe(0)
+		designer.undo()
+		expect(designer.doc.layers).toEqual([])
+	})
+
+	it('lets go of the selection when its layer is deleted', () => {
+		const designer = new Designer(setup)
+		designer.add(shape('a'))
+		expect(designer.selectedId).toBe('a')
+		designer.remove('a')
+		expect(designer.selectedId).toBe(null)
+	})
+})
