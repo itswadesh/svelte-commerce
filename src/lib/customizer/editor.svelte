@@ -103,7 +103,7 @@
 				setup.overlayUrl ? loadPicture(setup.overlayUrl) : null,
 				Promise.all(setup.stickers.map(async (s) => [s.id, await loadPicture(s.url)] as const))
 			])
-			designer.pictures = { mockup, overlay, photos: designer.pictures?.photos ?? new Map(), stickers: new Map(stickers) }
+			designer.pictures = { mockup, overlay, photos: designer.photos, stickers: new Map(stickers) }
 		} catch {
 			loadError = true
 		}
@@ -148,6 +148,7 @@
 	const zoomBy = (by: 1 | -1) => (zoom = ZOOMS[Math.min(ZOOMS.length - 1, Math.max(0, ZOOMS.indexOf(zoom) + by))])
 
 	const TOO_LARGE = 'Your design is too detailed to save as a print file. Make a photo smaller on the print, or use fewer photos, and try again.'
+	const MISSING_PHOTO = 'A photo in your design did not finish loading. Delete it, add it again, and try again.'
 
 	async function addToBag() {
 		const pictures = designer.pictures
@@ -155,6 +156,7 @@
 		designer.endGesture()
 		status = { state: 'saving' }
 		try {
+			if (designer.missingPhoto) throw new Error(MISSING_PHOTO)
 			await designer.fontsReady
 			const doc = designer.doc
 			const [previewPng, printPng] = await Promise.all([

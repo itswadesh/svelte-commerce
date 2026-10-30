@@ -23,6 +23,7 @@ export class Designer {
 	redraws = $state(0)
 	lowResPhotos = $state<Record<string, { width: number; height: number }>>({})
 	pictures = $state.raw<Pictures | null>(null)
+	readonly photos = new Map<string, ImageBitmap>()
 	fontsReady: Promise<void> = Promise.resolve()
 
 	constructor(readonly setup: CustomizerSetup) {}
@@ -92,8 +93,12 @@ export class Designer {
 		this.history = redo(this.history)
 	}
 
-	addPhoto(uploadId: string, picture: CanvasImageSource) {
-		this.pictures?.photos.set(uploadId, picture)
+	addPhoto(uploadId: string, picture: ImageBitmap) {
+		this.photos.set(uploadId, picture)
 		this.redraws++
+	}
+
+	get missingPhoto(): boolean {
+		return this.doc.layers.some((l) => l.type === 'image' && !this.photos.has(l.upload_id))
 	}
 }
