@@ -9,7 +9,7 @@ export type WhatsappOffer = { enabled: boolean; marketing: boolean }
 
 type WhatsappService = {
 	consentOffer?: () => Promise<WhatsappOffer>
-	setConsent?: (a: { phone: string; orderUpdates: boolean; marketing: boolean }) => Promise<unknown>
+	setConsent?: (a: { cartId?: string; phone: string; orderUpdates: boolean; marketing: boolean }) => Promise<unknown>
 }
 
 const NONE: WhatsappOffer = { enabled: false, marketing: false }
@@ -36,11 +36,21 @@ export async function loadWhatsappOffer(): Promise<WhatsappOffer> {
  * Sends both answers for the phone, an unticked box as false: the engine keeps the latest answer per
  * phone, so that is how a shopper who said yes last time says no. Never throws.
  */
-export async function saveWhatsappConsent(phone: string | null | undefined, orderUpdates: boolean, marketing: boolean): Promise<void> {
+export async function saveWhatsappConsent({
+	cartId,
+	phone,
+	orderUpdates,
+	marketing
+}: {
+	cartId?: string
+	phone: string | null | undefined
+	orderUpdates: boolean
+	marketing: boolean
+}): Promise<void> {
 	const typed = String(phone ?? '').trim()
 	if (!typed) return
 	try {
-		await (await service())?.setConsent?.({ phone: typed, orderUpdates, marketing })
+		await (await service())?.setConsent?.({ ...(cartId ? { cartId } : {}), phone: typed, orderUpdates, marketing })
 	} catch (e) {
 		console.warn('WhatsApp consent was not saved; checkout continues.', e)
 	}
