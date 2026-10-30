@@ -2,7 +2,7 @@
 	import { Plus, RotateCw } from '@lucide/svelte'
 	import { fade } from '$lib/motion'
 	import { layerLabel, normaliseRotation, scaleLayer, type Layer } from './document'
-	import { drawDesign } from './draw'
+	import { backingScale, drawDesign } from './draw'
 	import type { Designer } from './designer.svelte'
 
 	type Props = {
@@ -37,12 +37,12 @@
 		const ctx = canvas?.getContext('2d')
 		void designer.redraws
 		if (!canvas || !ctx || !pictures || !boxWidth) return
-		const dpr = window.devicePixelRatio || 1
-		const w = Math.round(width * dpr)
-		const h = Math.round(height * dpr)
+		const backing = backingScale(width, height, window.devicePixelRatio || 1)
+		const w = Math.floor(width * backing)
+		const h = Math.floor(height * backing)
 		if (canvas.width !== w) canvas.width = w
 		if (canvas.height !== h) canvas.height = h
-		drawDesign(ctx, doc, setup, pictures, { kind: 'mockup', scale: scale * dpr })
+		drawDesign(ctx, doc, setup, pictures, { kind: 'mockup', scale: scale * backing })
 	})
 
 	function boxStyle(l: Layer) {

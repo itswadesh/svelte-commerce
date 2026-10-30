@@ -20,6 +20,7 @@ import {
 	type Layer
 } from '$lib/customizer/document'
 import { Designer } from '$lib/customizer/designer.svelte'
+import { backingScale } from '$lib/customizer/draw'
 
 const area = { x: 40, y: 40, width: 520, height: 1120, radius: 90 }
 
@@ -192,5 +193,13 @@ describe('the shopper’s photos', () => {
 		const designer = new Designer(setup)
 		designer.add(photo('p', 'u9'))
 		expect(designer.missingPhoto).toBe(true)
+	})
+})
+
+describe('canvas sizes', () => {
+	it('draws the stage at the screen’s density until that would pass 16 megapixels', () => {
+		expect(backingScale(400, 800, 2)).toBe(2)
+		const k = backingScale(1738.5, 3477, 2)
+		expect([Math.floor(1738.5 * k), Math.floor(3477 * k)]).toEqual([2828, 5656])
 	})
 })
