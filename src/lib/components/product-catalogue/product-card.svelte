@@ -9,6 +9,7 @@
 	import type { CartLineItem } from '$lib/core/types/index.js'
 
 	import { formatPrice } from '$lib/utils/price'
+	import { madeToDesign } from '$lib/product/designable'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 	import LimeProductCard from '$lib/theme/lime/LimeProductCard.svelte'
 	import NoorProductCard from '$lib/theme/noor/NoorProductCard.svelte'
@@ -196,7 +197,9 @@
 
 					{#if !hideCartControls}
 						<div class="mt-3">
-							{#if cartState?.cart?.lineItems?.some((item: CartLineItem) => item.productId === product.id)}
+							{#if madeToDesign(product)}
+								<Button href="/products/{product.slug}" variant="default" class="w-full py-5" aria-label="Design yours: {displayName}">Design yours</Button>
+							{:else if cartState?.cart?.lineItems?.some((item: CartLineItem) => item.productId === product.id)}
 								<div class="flex items-center justify-between rounded-md border border-border p-1">
 									<Button
 										class="size-11 md:size-9"

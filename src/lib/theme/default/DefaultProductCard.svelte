@@ -11,6 +11,7 @@
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { productBadge } from '$lib/product/badge.js'
+	import { madeToDesign } from '$lib/product/designable'
 
 	const cartState = getCartState()
 
@@ -236,7 +237,9 @@
 
 				{#if showCart}
 					<div class="dpc__cart">
-						{#if cartState?.cart?.lineItems?.some((item: CartLineItem) => item.productId === product.id)}
+						{#if madeToDesign(product)}
+							<a class="dpc__add" href="/products/{product.slug}" data-testid="product-card-design" aria-label="Design yours: {displayName}">Design yours</a>
+						{:else if cartState?.cart?.lineItems?.some((item: CartLineItem) => item.productId === product.id)}
 							<div class="dpc__qty">
 								<button
 									type="button"
@@ -586,6 +589,8 @@
 	}
 
 	.dpc__add {
+		display: grid;
+		place-items: center;
 		width: 100%;
 		height: 44px;
 		border: 1px solid var(--ed-line-strong);

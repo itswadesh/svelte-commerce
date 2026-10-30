@@ -7,6 +7,7 @@
 	import { toast } from '$lib/core/utils/index.js'
 	import { formatPrice } from '$lib/utils/price'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { madeToDesign } from '$lib/product/designable'
 	import * as Dialog from '$lib/components/ui/dialog'
 
 	let showRemoveConfirmation = $state(false)
@@ -120,18 +121,29 @@
 										<Trash2 class="size-5" />
 									</Button>
 
-									<Button
-										variant="default"
-										class="h-8 w-[80%] md:h-9"
-										onclick={async (e) => {
-											e.preventDefault()
-											e.stopPropagation()
-											await moveToCart(item)
-											toast('Item added to cart', 'success')
-										}}
-									>
-										Add to cart
-									</Button>
+									{#if madeToDesign(item?.product)}
+										<Button
+											variant="default"
+											class="h-8 w-[80%] md:h-9"
+											href="/products/{item?.product?.slug}?variant_id={item.variantId}"
+											aria-label="Design yours: {item?.product?.title}"
+										>
+											Design yours
+										</Button>
+									{:else}
+										<Button
+											variant="default"
+											class="h-8 w-[80%] md:h-9"
+											onclick={async (e) => {
+												e.preventDefault()
+												e.stopPropagation()
+												await moveToCart(item)
+												toast('Item added to cart', 'success')
+											}}
+										>
+											Add to cart
+										</Button>
+									{/if}
 								</div>
 							</div>
 						</div>
