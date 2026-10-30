@@ -3,6 +3,7 @@
 	import Logo from '$lib/components/common/logo.svelte'
 	import { LockKeyhole } from '@lucide/svelte'
 	import { keepResolvableLinks } from '$lib/components/common/cms-pages.js'
+	import CookieSettingsLink from '$lib/components/common/cookie-settings-link.svelte'
 
 	let { children } = $props()
 
@@ -59,6 +60,9 @@
 					{/each}
 				</nav>
 			{/if}
+			<CookieSettingsLink
+				class="inline-flex min-h-11 items-center text-xs text-muted-foreground underline underline-offset-2 transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:min-h-8"
+			/>
 		</div>
 	</footer>
 </div>

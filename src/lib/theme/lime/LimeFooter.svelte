@@ -4,6 +4,7 @@
 	import { Plus } from '@lucide/svelte'
 	import { onMount } from 'svelte'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
+	import CookieSettingsLink from '$lib/components/common/cookie-settings-link.svelte'
 
 	type ThemeFooter = NonNullable<ThemeHomepageContent['footer']>
 
@@ -59,6 +60,8 @@
 	{#if footer?.copyright}
 		<p class="lime-copyright">{footer.copyright}</p>
 	{/if}
+
+	<CookieSettingsLink class="lime-cookies" />
 
 	<p class="lime-version">v{version}</p>
 </footer>
@@ -163,6 +166,30 @@
 		margin: 60px 0 0;
 		color: #fff;
 		font-size: 13px;
+	}
+
+	/* The button is CookieSettingsLink's, so the rule reaches it as a global under this footer. */
+	.lime-footer :global(.lime-cookies) {
+		margin: 16px 0 0;
+		padding: 6px 4px;
+		background: none;
+		border: 0;
+		color: rgb(255 255 255 / 0.8);
+		font-size: 13px;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		cursor: pointer;
+		transition: color 150ms ease;
+	}
+
+	.lime-footer :global(.lime-cookies:hover),
+	.lime-footer :global(.lime-cookies:focus-visible) {
+		color: #fff;
+	}
+
+	.lime-footer :global(.lime-cookies:focus-visible) {
+		outline: 2px solid #fff;
+		outline-offset: 2px;
 	}
 
 	.lime-version {

@@ -4,7 +4,59 @@
 // Each loader is the vendor's base code with the store's ID in place of the placeholder: it defines
 // the vendor's queue function, inserts the vendor's script (async) and sends the first page view.
 // ad-tags.ts runs one only after consent and the shopper's first interaction.
+
+// https://developers.google.com/tag-platform/gtagjs/install — the Google tag, for GA4 and Google
+// Ads, on a data layer of its own (`l=`, https://developers.google.com/tag-platform/devguides/datalayer#rename_the_data_layer).
+// The page's dataLayer holds every event since the page opened; this one gets the page's consent
+// commands first, then only what ad-tags.ts hands on, so nothing from before the shopper's choice
+// reaches Google. Both IDs share one tag, as Google's snippet does with a second `config`.
+function googleTag(id, consent) {
+	const w = window
+	if (!w.gcGtag) {
+		w.gcLayer = w.gcLayer || []
+		w.gcGtag = function () {
+			w.gcLayer.push(arguments)
+		}
+		for (const command of consent) w.gcGtag(...command)
+		const s = document.createElement('script')
+		s.async = true
+		s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id + '&l=gcLayer'
+		document.head.appendChild(s)
+		w.gcGtag('js', new Date())
+	}
+	w.gcGtag('config', id)
+}
+
 export const LOADERS = {
+	ga4: googleTag,
+	gads(target, consent) {
+		googleTag(target.split('/')[0], consent)
+	},
+
+	// https://developers.google.com/tag-platform/tag-manager/web — the container snippet, on a data
+	// layer of its own (`gtmLayer`), for the reason the Google tag has one: a container reads its
+	// whole layer when it starts, and the page's holds every event since the page opened, with
+	// core's personal details. This one gets the page's consent commands first, then only the events
+	// ad-tags.ts hands on, in Google's e-commerce shape.
+	gtm(id, consent) {
+		const w = window
+		w.gtmLayer = w.gtmLayer || []
+		w.gtmGtag = function () {
+			w.gtmLayer.push(arguments)
+		}
+		for (const command of consent) w.gtmGtag(...command)
+		;(function (w, d, s, l, i) {
+			w[l] = w[l] || []
+			w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+			var f = d.getElementsByTagName(s)[0],
+				j = d.createElement(s),
+				dl = l != 'dataLayer' ? '&l=' + l : ''
+			j.async = true
+			j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+			f.parentNode.insertBefore(j, f)
+		})(window, document, 'script', 'gtmLayer', id)
+	},
+
 	// https://developers.facebook.com/docs/meta-pixel/get-started
 	meta(id) {
 		!(function (f, b, e, v, n, t, s) {

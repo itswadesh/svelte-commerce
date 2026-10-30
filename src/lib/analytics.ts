@@ -1,6 +1,6 @@
-// Site-level GA4 events that core's analytics helpers do not cover. They read window.gtag at call
-// time (defined by the GoogleAnalytics loader in the root layout, driven by the store's
-// googleTagManager plugin) and are a safe no-op when analytics is off.
+// Site-level GA4 events that core's analytics helpers do not cover. They call window.gtag, which
+// app.html always defines; ad-tags.ts hands each event on to the store's Google and ad tags where
+// the cookie choice allows, and to nobody when none is on.
 
 /**
  * GA4 generate_lead. Call it only after the server has accepted the form. The params carry the

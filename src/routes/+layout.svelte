@@ -3,7 +3,6 @@
 	import { Toaster } from '$lib/components/ui/sonner/index.js'
 	import { getThemeFontsUrl } from '$lib/theme/index.js'
 	import { setUserState } from '$lib/core/stores/index.js'
-	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
 	import AdTags from '$lib/components/common/ad-tags.svelte'
 	import ConsentBanner from '$lib/components/common/consent-banner.svelte'
@@ -282,9 +281,10 @@
 <ColorPalette />
 <StorePalette />
 <StoreFont />
-<GoogleAnalytics />
 <KlaviyoPlugin storeData={data?.store} />
 <GoogleStoreWidget widget={data?.store?.plugins?.googleStoreWidget} />
+<!-- Google Analytics, Ads and Tag Manager too: core's GoogleAnalytics loaded them in the head of
+     every page, before any cookie choice. -->
 <AdTags plugins={data?.store?.plugins} />
 
 <!-- <ThemeProvider /> -->

@@ -16,7 +16,11 @@ declare global {
 			storeNotFound?: boolean
 		}
 		// interface PageData {}
-		// interface PageState {}
+		interface PageState {
+			// The address a shopper just signed up with, for the page after sign-up. In the state
+			// rather than the URL, which every analytics tag records.
+			signupEmail?: string
+		}
 		// interface Platform {}
 	}
 }

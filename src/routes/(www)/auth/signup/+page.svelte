@@ -76,7 +76,7 @@
 			// signup() swallows its own errors and returns false, so never claim success on a falsy result.
 			if (!ok) return
 			toast.success('Account created successfully')
-			goto(`/auth/signup/success?email=${encodeURIComponent(email)}`)
+			goto('/auth/signup/success', { state: { signupEmail: email } })
 		} catch (e: any) {
 			toast.error(e.message)
 		} finally {
