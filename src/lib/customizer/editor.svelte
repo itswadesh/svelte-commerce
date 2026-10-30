@@ -104,18 +104,33 @@
 		if (open && type !== 'popstate' && !page.state.customizerOpen) replaceState('', { ...page.state, customizerOpen: true })
 	})
 
+	let closing: Promise<void> | null = null
+	let closed = () => {}
+	let closeFallback: ReturnType<typeof setTimeout> | undefined
+
+	function shut() {
+		open = false
+		clearTimeout(closeFallback)
+		closing = null
+		closed()
+	}
+
 	// SvelteKit applies the entry's state in its own popstate listener, which may run after this one.
 	function onpopstate() {
 		setTimeout(() => {
-			if (!page.state.customizerOpen) open = false
+			if (!page.state.customizerOpen) shut()
 		})
 	}
 
+	// One step back however often Close is asked for before the step lands, and closed even if it never does.
 	function close(): Promise<void> {
 		if (!open) return Promise.resolve()
-		const closed = new Promise<void>((resolve) => addEventListener('popstate', () => resolve(), { once: true }))
-		history.back()
-		return closed
+		closing ??= new Promise<void>((resolve) => {
+			closed = resolve
+			closeFallback = setTimeout(shut, 500)
+			history.back()
+		})
+		return closing
 	}
 
 	let panel = $state<Panel | null>(null)
