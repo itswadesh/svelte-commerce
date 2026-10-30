@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Dialog as DialogPrimitive } from 'bits-ui'
 	import { untrack } from 'svelte'
+	import { afterNavigate, replaceState } from '$app/navigation'
 	import { page } from '$app/state'
 	import {
 		ArrowDown,
@@ -91,10 +92,27 @@
 		return `${setup.tools.upload ? 'or add' : 'Add'} ${list}`
 	})
 
-	const open = $derived(!!page.state.customizerOpen)
+	let open = $state(false)
+
+	$effect(() => {
+		if (page.state.customizerOpen) untrack(() => (open = true))
+	})
+
+	// The product composable canonicalises the URL with a replaceState goto that drops page.state,
+	// and can land after Design yours: claim the entry back, so Back closes and Forward reopens.
+	afterNavigate(({ type }) => {
+		if (open && type !== 'popstate' && !page.state.customizerOpen) replaceState('', { ...page.state, customizerOpen: true })
+	})
+
+	// SvelteKit applies the entry's state in its own popstate listener, which may run after this one.
+	function onpopstate() {
+		setTimeout(() => {
+			if (!page.state.customizerOpen) open = false
+		})
+	}
 
 	function close(): Promise<void> {
-		if (!page.state.customizerOpen) return Promise.resolve()
+		if (!open) return Promise.resolve()
 		const closed = new Promise<void>((resolve) => addEventListener('popstate', () => resolve(), { once: true }))
 		history.back()
 		return closed
@@ -256,6 +274,8 @@
 		<Icon aria-hidden="true" />
 	</Button>
 {/snippet}
+
+<svelte:window {onpopstate} />
 
 <DialogPrimitive.Root
 	bind:open={
