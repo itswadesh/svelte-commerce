@@ -4,13 +4,13 @@
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/utils/price'
-	import { Check, HeartIcon, ShoppingBag } from '@lucide/svelte'
+	import { Check, HeartIcon, Palette, ShoppingBag } from '@lucide/svelte'
+	import { editor } from '$lib/customizer/designer.svelte'
 	import { fade, fly } from '$lib/motion'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import { toast } from 'svelte-sonner'
 	import { isOutOfStock } from '$lib/product/stock'
-	import { cartService } from '$lib/core/services'
-	import { addOnPicks, takePicks } from '$lib/product/add-on-picks.svelte'
+	import { addOnPicks, addPicks } from '$lib/product/add-on-picks.svelte'
 	import { bumpTotal } from '$lib/product/upsells'
 
 	/**
@@ -34,6 +34,8 @@
 
 	const cartCount = $derived(productState.cartState?.cart?.lineItems?.length ?? 0)
 
+	const designable = $derived(!!page.data?.customizer)
+
 	// The figure on the button: the chosen variant's price and every add-on ticked in "Complete the
 	// set" (D133), so the sticky bar on a phone says what the tap will cost.
 	const productId = $derived(String(page.data?.product?.id ?? ''))
@@ -41,24 +43,6 @@
 	const unitPrice = $derived(Number(productState.selectedVariant?.price || page.data?.product?.price) || 0)
 	const buttonPrice = $derived(unitPrice > 0 ? formatPrice(bumpTotal(unitPrice, picked), page.data?.store?.currency?.code) : '')
 
-	/**
-	 * The ticked add-ons go in after the product, because the engine prices one only beside it.
-	 * One failing (sold out since the page loaded, say) leaves the others and the product in the
-	 * bag and says which, rather than undoing a purchase the shopper asked for.
-	 */
-	async function addPicked() {
-		const items = takePicks(productId)
-		const svc = cartService as unknown as { addAddOn?: (q: { addOnId: string }) => Promise<any> }
-		if (!items.length || typeof svc.addAddOn !== 'function') return
-		for (const item of items) {
-			try {
-				const cart = await svc.addAddOn({ addOnId: item.id })
-				if (cart && productState.cartState) productState.cartState.cart = cart
-			} catch (err) {
-				toast.error(`Could not add ${item.title}`, { description: (err as Error)?.message })
-			}
-		}
-	}
 	const thumbnail = $derived(productState.selectedVariant?.img || productState.selectedVariant?.image || page.data?.product?.thumbnail || '')
 
 	// Success is owned here rather than read from `cartState.addToCartMessage`. The store never
@@ -89,7 +73,7 @@
 			return
 		}
 
-		await addPicked()
+		await addPicks(productId, productState.cartState)
 
 		justAdded = true
 		clearTimeout(resetTimer)
@@ -187,6 +171,26 @@
 				/>
 				<Button onclick={() => (showEnquiryModal = true)} class="edp-atc h-full w-full">
 					{enquiryPlugin?.buttonText || 'Enquire'}
+				</Button>
+			{:else if designable}
+				<Button
+					data-testid="design-yours-button"
+					class="edp-atc flex h-full w-full items-center justify-center gap-2 text-sm font-semibold"
+					size="lg"
+					aria-haspopup="dialog"
+					disabled={outOfStock}
+					onclick={() => (editor.open = true)}
+				>
+					{#if outOfStock}
+						<span>Out of stock</span>
+					{:else}
+						<Palette class="h-4 w-4" aria-hidden="true" />
+						<span>Design yours</span>
+						{#if buttonPrice}
+							<span class="tabular-nums" aria-hidden="true">· {buttonPrice}</span>
+							<span class="sr-only">for {buttonPrice}</span>
+						{/if}
+					{/if}
 				</Button>
 			{:else}
 				<!-- One action, one label. Loading, success and out-of-stock are states of this button,

@@ -1,3 +1,5 @@
+import { toast } from 'svelte-sonner'
+import { cartService } from '$lib/core/services'
 import type { AddOnOption } from './upsells'
 
 /**
@@ -29,4 +31,18 @@ export function takePicks(productId: string): AddOnOption[] {
 	const items = addOnPicks.items
 	addOnPicks.items = []
 	return items
+}
+
+export async function addPicks(productId: string, cartState: { cart: unknown } | undefined) {
+	const items = takePicks(productId)
+	const svc = cartService as unknown as { addAddOn?: (q: { addOnId: string }) => Promise<any> }
+	if (!items.length || typeof svc.addAddOn !== 'function') return
+	for (const item of items) {
+		try {
+			const cart = await svc.addAddOn({ addOnId: item.id })
+			if (cart && cartState) cartState.cart = cart
+		} catch (err) {
+			toast.error(`Could not add ${item.title}`, { description: (err as Error)?.message })
+		}
+	}
 }

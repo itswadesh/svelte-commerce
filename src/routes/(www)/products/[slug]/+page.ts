@@ -5,6 +5,7 @@ import { productFailureStatus, watchProductRequest } from '$lib/product/product-
 import { browser } from '$app/environment'
 import { allowEditorFrame, fetchTemplate, previewParams } from '$lib/composer/page-layout.js'
 import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
+import { loadSetup } from '$lib/customizer/service'
 
 /**
  * Variant ids as strings, so selecting a variant works at all.
@@ -62,7 +63,8 @@ export const load = async (event: any) => {
 		const editorOrigin = allowEditorFrame(event, layout, editor)
 		if (!data?.product) return data
 		const previewKey = layout?.preview ? preview : null
-		return { ...data, product: withStringVariantIds(data.product), layout, editorOrigin, previewKey }
+		const customizer = await loadSetup(services as object, data.product.id)
+		return { ...data, product: withStringVariantIds(data.product), layout, editorOrigin, previewKey, customizer }
 	} catch (e) {
 		const reportedMissing = (isRedirect(e) && e.location === '/') || (isHttpError(e) && e.status === 404)
 		if (reportedMissing) {
