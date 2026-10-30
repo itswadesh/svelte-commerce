@@ -9,6 +9,7 @@
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
 
 	const { paymentModule, onsubmit, onback } = $props()
 
@@ -52,16 +53,18 @@
 					</div>
 					<div class="divide-y divide-border">
 						{#each selectedItems as item}
+							{@const picture = linePicture(item)}
 							<div class="flex gap-3 py-3 text-sm">
 								<div class="relative size-16 shrink-0 overflow-hidden rounded-radius border border-border bg-muted/20 p-1">
 									<!-- The shared lazy image draws its own fallback. The raw <img> here fell back to
 									     /placeholder.svg, which does not exist, so an item with no thumbnail rendered the
 									     browser's broken-image glyph on the last screen before paying (UX-314). -->
-									<LazyImg src={item?.thumbnail} alt={item.title} class="size-full object-contain" />
+									<LazyImg src={picture.src} alt={picture.alt} class="size-full object-contain" />
 								</div>
 								<div class="flex min-w-0 flex-1 flex-col justify-between py-1">
 									<div>
 										<p class="line-clamp-2 font-medium text-foreground">{item.title}</p>
+										{#if picture.designed}<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>{/if}
 										<!-- Two sizes of the same product are otherwise two identical rows here (UX-315). -->
 										{#if item.variantTitle}
 											<p class="text-xs text-muted-foreground">{item.variantTitle}</p>

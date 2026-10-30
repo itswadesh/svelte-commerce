@@ -7,6 +7,7 @@
 	import { date } from '$lib/core/utils'
 	import { formatPrice } from '$lib/utils/price'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
@@ -97,14 +98,11 @@
 						{#if order?.lineItems}
 							<div class="divide-y divide-dashed text-xs text-muted-foreground">
 								{#each order?.lineItems as item}
+									{@const picture = linePicture(item)}
 									{#if item}
 										<div class="flex gap-2 p-5 lg:gap-5">
 											<a href={`/products/${item.slug}`} aria-label="Click to view the product details" class="shrink-0">
-												{#if item.isCustomized}
-													<img src={item.customizedImg} alt="{item.name} (Customized)" class="h-auto w-14 object-contain object-top" />
-												{:else}
-													<LazyImg src={item.thumbnail || item.img} alt={item.name} width="56" class="h-auto w-14 object-contain object-top" />
-												{/if}
+												<LazyImg src={picture.src} alt={picture.alt} width="56" class="h-auto w-14 object-contain object-top" />
 											</a>
 
 											<div class="flex w-full flex-1 flex-col gap-0.5 xl:pr-4">
@@ -125,6 +123,8 @@
 														</div>
 													{/if}
 												</div>
+
+												{#if picture.designed}<p class="font-medium text-foreground">Your design</p>{/if}
 
 												{#if item.qty}
 													<span>

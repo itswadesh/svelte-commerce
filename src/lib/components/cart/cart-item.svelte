@@ -7,6 +7,7 @@
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { fireGTagEvent } from '$lib/core/utils/index.js'
 	import { formatPrice } from '$lib/utils/price'
+	import { linePicture } from '$lib/customizer/line'
 	import { page } from '$app/state'
 
 	const cartState = getCartState()
@@ -22,6 +23,7 @@
 	let { cartProduct = $bindable(), removeItem }: Props = $props()
 
 	let totalPrice = $derived((cartProduct?.price || 0) * (cartProduct?.qty || 0))
+	const picture = $derived(linePicture(cartProduct))
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
 
 	// The store flips `updatingItem[lineId]` around every mutation, so a change started from the
@@ -90,7 +92,7 @@
 	<!-- Reserved box: a missing image is demo data, but a row that collapses to nothing because of
 	     one is a layout defect, so the thumbnail keeps its dimensions either way. -->
 	<a href="/products/{cartProduct?.slug}" class="block h-24 w-[4.5rem] shrink-0 overflow-hidden rounded-md bg-muted" onclick={closeDrawer}>
-		<LazyImg src={cartProduct?.thumbnail} alt={cartProduct?.title || 'Product'} class="h-full w-full object-contain" />
+		<LazyImg src={picture.src} alt={picture.alt} class="h-full w-full object-contain" />
 	</a>
 
 	<div class="flex min-w-0 flex-1 flex-col gap-2">
@@ -101,6 +103,9 @@
 				</a>
 				{#if cartProduct?.variantTitle}
 					<p class="mt-0.5 truncate text-xs text-muted-foreground">{cartProduct.variantTitle}</p>
+				{/if}
+				{#if picture.designed}
+					<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>
 				{/if}
 			</div>
 
