@@ -5,6 +5,7 @@
 	import { setUserState } from '$lib/core/stores/index.js'
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
+	import AdTags from '$lib/components/common/ad-tags.svelte'
 	import ConsentBanner from '$lib/components/common/consent-banner.svelte'
 	import GoogleStoreWidget from '$lib/components/google/google-store-widget.svelte'
 	import { navigating } from '$app/stores'
@@ -284,6 +285,7 @@
 <GoogleAnalytics />
 <KlaviyoPlugin storeData={data?.store} />
 <GoogleStoreWidget widget={data?.store?.plugins?.googleStoreWidget} />
+<AdTags plugins={data?.store?.plugins} />
 
 <!-- <ThemeProvider /> -->
 
