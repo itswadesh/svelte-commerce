@@ -222,3 +222,36 @@ describe('what a shopper is told when a step fails', () => {
 		expect(plainMessage(new PlainError('Choose a JPEG or PNG photo.'), tryAgain)).toBe('Choose a JPEG or PNG photo.')
 	})
 })
+
+describe('resizing and turning without a drag', () => {
+	const box = (l: Layer) => [l.x, l.y, l.width, l.height, l.rotation].map((n) => Math.round(n * 100) / 100 || 0)
+
+	it('grows and shrinks a layer about its centre, one step at a time', () => {
+		const designer = new Designer(setup)
+		designer.add(shape('a'))
+		designer.resize('a', 1.1)
+		expect(box(designer.doc.layers[0])).toEqual([-5, -5, 110, 110, 0])
+		designer.resize('a', 1 / 1.1)
+		expect(box(designer.doc.layers[0])).toEqual([0, 0, 100, 100, 0])
+		designer.undo()
+		expect(box(designer.doc.layers[0])).toEqual([-5, -5, 110, 110, 0])
+	})
+
+	it('stops shrinking at the smallest size a drag allows', () => {
+		const designer = new Designer(setup)
+		designer.add({ ...shape('a'), width: 8.5, height: 40 })
+		designer.resize('a', 1 / 1.1)
+		expect(box(designer.doc.layers[0])).toEqual([0, 0, 8.5, 40, 0])
+		expect(designer.history.past.length).toBe(1)
+	})
+
+	it('turns a layer by a step either way, inside the engine’s range', () => {
+		const designer = new Designer(setup)
+		designer.add({ ...shape('a'), rotation: 170 })
+		designer.turn('a', 15)
+		expect(designer.doc.layers[0].rotation).toBe(-175)
+		designer.turn('a', -15)
+		designer.turn('a', -15)
+		expect(designer.doc.layers[0].rotation).toBe(155)
+	})
+})

@@ -1,9 +1,12 @@
 import {
 	addLayer,
+	canResize,
 	commit,
 	moveLayer,
+	normaliseRotation,
 	redo,
 	removeLayer,
+	scaleLayer,
 	setBackground,
 	startHistory,
 	undo,
@@ -89,6 +92,16 @@ export class Designer {
 	redo() {
 		this.live = null
 		this.history = redo(this.history)
+	}
+
+	resize(id: string, factor: number) {
+		const layer = this.doc.layers.find((l) => l.id === id)
+		if (layer && canResize(layer, factor)) this.update(id, scaleLayer(layer, factor))
+	}
+
+	turn(id: string, degrees: number) {
+		const layer = this.doc.layers.find((l) => l.id === id)
+		if (layer) this.update(id, { rotation: normaliseRotation(layer.rotation + degrees) })
 	}
 
 	addPhoto(uploadId: string, picture: ImageBitmap) {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Plus, RotateCw } from '@lucide/svelte'
 	import { fade } from '$lib/motion'
-	import { layerLabel, normaliseRotation, scaleLayer, type Layer } from './document'
+	import { canResize, layerLabel, normaliseRotation, scaleLayer, SIZE_STEP, TURN_STEP, type Layer } from './document'
 	import { backingScale, drawDesign } from './draw'
 	import type { Designer } from './designer.svelte'
 
@@ -115,7 +115,7 @@
 				break
 			case 'resize': {
 				const factor = distance(g.centre, p) / (distance(g.centre, g.from) || 1)
-				if (g.layer.width * factor >= 8 && g.layer.height * factor >= 8) designer.updateLive(g.layer.id, scaleLayer(g.layer, factor))
+				if (canResize(g.layer, factor)) designer.updateLive(g.layer.id, scaleLayer(g.layer, factor))
 				break
 			}
 			case 'rotate':
@@ -125,7 +125,7 @@
 				if (pointers.size < 2) break
 				const [a, b] = [...pointers.values()]
 				const factor = distance(a, b) / g.distance
-				const patch = g.layer.width * factor >= 8 ? scaleLayer(g.layer, factor) : {}
+				const patch = canResize(g.layer, factor) ? scaleLayer(g.layer, factor) : {}
 				designer.updateLive(g.layer.id, { ...patch, rotation: snapToQuarterTurn(g.layer.rotation + angleDeg(a, b) - g.angle) })
 				break
 			}
@@ -148,12 +148,22 @@
 		gesture = pointers.size === 1 && selected ? { kind: 'move', layer: selected, from: [...pointers.values()][0] } : null
 	}
 
+	const SIZE_KEYS: Record<string, number> = { '+': SIZE_STEP, '=': SIZE_STEP, '-': 1 / SIZE_STEP, _: 1 / SIZE_STEP }
+	const TURN_KEYS: Record<string, number> = { '[': -TURN_STEP, ']': TURN_STEP }
+
 	function keydown(e: KeyboardEvent, layer: Layer) {
+		if (e.ctrlKey || e.metaKey || e.altKey) return
 		const step = (area.width / 100) * (e.shiftKey ? 10 : 1)
 		const by: Record<string, [number, number]> = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }
 		if (by[e.key]) {
 			e.preventDefault()
 			designer.update(layer.id, { x: layer.x + by[e.key][0], y: layer.y + by[e.key][1] })
+		} else if (SIZE_KEYS[e.key]) {
+			e.preventDefault()
+			designer.resize(layer.id, SIZE_KEYS[e.key])
+		} else if (TURN_KEYS[e.key]) {
+			e.preventDefault()
+			designer.turn(layer.id, TURN_KEYS[e.key])
 		} else if (e.key === 'Delete' || e.key === 'Backspace') {
 			e.preventDefault()
 			designer.remove(layer.id)

@@ -92,6 +92,12 @@ export function setBackground(doc: DesignDocument, colour: string | null): Desig
 
 export const normaliseRotation = (deg: number) => ((((deg + 180) % 360) + 360) % 360) - 180
 
+export const SIZE_STEP = 1.1
+export const TURN_STEP = 15
+const MIN_LAYER_SIDE = 8
+
+export const canResize = (layer: Box, factor: number) => layer.width * factor >= MIN_LAYER_SIDE && layer.height * factor >= MIN_LAYER_SIDE
+
 export function scaleLayer(layer: Layer, factor: number): Partial<Layer> {
 	const width = layer.width * factor
 	const height = layer.height * factor
