@@ -6,6 +6,7 @@
 		ArrowDown,
 		ArrowUp,
 		Check,
+		Expand,
 		Eye,
 		ImageUp,
 		Layers,
@@ -13,8 +14,11 @@
 		PaintBucket,
 		Plus,
 		Redo2,
+		RotateCcw,
+		RotateCw,
 		Shapes,
 		ShoppingBag,
+		Shrink,
 		Sticker,
 		Trash2,
 		Type,
@@ -31,7 +35,7 @@
 	import { formatPrice } from '$lib/utils/price'
 	import { addOnPicks, addPicks } from '$lib/product/add-on-picks.svelte'
 	import { bumpTotal } from '$lib/product/upsells'
-	import { isEmpty, layerLabel, type CustomizerSetup, type Panel } from './document'
+	import { canResize, isEmpty, layerLabel, SIZE_STEP, TURN_STEP, type CustomizerSetup, type Panel } from './document'
 	import { Designer } from './designer.svelte'
 	import { loadPicture, previewView, renderPng } from './draw'
 	import { loadFonts, MAX_UPLOAD_BYTES, PlainError, plainMessage, saveDesign, upload } from './service'
@@ -207,12 +211,13 @@
 	}
 </script>
 
-{#snippet bar(label: string, onclick: () => void, Icon: typeof Type, disabled = false, pressed: boolean | undefined = undefined)}
+{#snippet bar(label: string, onclick: () => void, Icon: typeof Type, disabled = false, pressed: boolean | undefined = undefined, keys?: string)}
 	<Button
 		variant="plain"
 		size="icon"
 		aria-label={label}
 		aria-pressed={pressed}
+		aria-keyshortcuts={keys}
 		{disabled}
 		{onclick}
 		class="motion-press shrink-0 rounded-md hover:bg-muted {pressed ? 'bg-muted text-primary' : ''}"
@@ -250,7 +255,8 @@
 				>
 				<span class="flex-1 sm:hidden" aria-hidden="true"></span>
 				<DialogPrimitive.Description class="sr-only">
-					Add a photo, words, shapes or stickers, then add your design to your bag. Arrow keys move the selected layer and Delete removes it.
+					Add a photo, words, shapes or stickers, then add your design to your bag. Arrow keys move the selected layer, plus and minus resize it, the
+					bracket keys turn it, and Delete removes it.
 				</DialogPrimitive.Description>
 				{@render bar('Undo', undo, Undo2, !designer.canUndo)}
 				{@render bar('Redo', redo, Redo2, !designer.canRedo)}
@@ -306,25 +312,32 @@
 					{/if}
 
 					{#if selected && !previewing}
-						<div class="flex shrink-0 flex-col gap-1 border-t px-3 py-1.5" transition:fly={{ y: 8 }}>
-							<div class="flex items-center gap-1">
-								<p class="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{layerLabel(selected)}</p>
-								{#if selected.type === 'text' && panel !== 'text'}
-									<Button variant="outline" size="sm" class="h-9" onclick={() => (panel = 'text')}>Edit words</Button>
-								{/if}
-								{@render bar(
-									`Move ${layerLabel(selected)} up`,
-									() => designer.move(selected.id, 'up'),
-									ArrowUp,
-									designer.doc.layers.at(-1)?.id === selected.id
-								)}
-								{@render bar(
-									`Move ${layerLabel(selected)} down`,
-									() => designer.move(selected.id, 'down'),
-									ArrowDown,
-									designer.doc.layers[0]?.id === selected.id
-								)}
-								{@render bar(`Delete ${layerLabel(selected)}`, () => (designer.remove(selected.id), announce('Deleted')), Trash2)}
+						{@const name = layerLabel(selected)}
+						<div class="flex shrink-0 flex-col gap-1 border-t px-3 py-1.5" data-testid="customizer-layer-bar" transition:fly={{ y: 8 }}>
+							<div class="flex flex-wrap items-center gap-1">
+								<div class="flex h-9 min-w-0 flex-1 basis-full items-center gap-1 sm:h-auto sm:basis-0">
+									<p class="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{name}</p>
+									{#if selected.type === 'text' && panel !== 'text'}
+										<Button variant="outline" size="sm" class="h-9" onclick={() => (panel = 'text')}>Edit words</Button>
+									{/if}
+								</div>
+								<div class="flex items-center gap-1 max-sm:w-full max-sm:justify-between">
+									{@render bar(
+										`Make ${name} smaller`,
+										() => designer.resize(selected.id, 1 / SIZE_STEP),
+										Shrink,
+										!canResize(selected, 1 / SIZE_STEP),
+										undefined,
+										'-'
+									)}
+									{@render bar(`Make ${name} bigger`, () => designer.resize(selected.id, SIZE_STEP), Expand, false, undefined, 'Plus')}
+									{@render bar(`Turn ${name} left`, () => designer.turn(selected.id, -TURN_STEP), RotateCcw, false, undefined, '[')}
+									{@render bar(`Turn ${name} right`, () => designer.turn(selected.id, TURN_STEP), RotateCw, false, undefined, ']')}
+									<div class="mx-0.5 hidden h-6 w-px bg-border sm:block" aria-hidden="true"></div>
+									{@render bar(`Move ${name} up`, () => designer.move(selected.id, 'up'), ArrowUp, designer.doc.layers.at(-1)?.id === selected.id)}
+									{@render bar(`Move ${name} down`, () => designer.move(selected.id, 'down'), ArrowDown, designer.doc.layers[0]?.id === selected.id)}
+									{@render bar(`Delete ${name}`, () => (designer.remove(selected.id), announce('Deleted')), Trash2, false, undefined, 'Delete')}
+								</div>
 							</div>
 							{#if softPhoto}
 								<p class="text-xs text-muted-foreground" data-testid="customizer-soft-photo">
