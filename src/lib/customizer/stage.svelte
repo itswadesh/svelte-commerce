@@ -58,14 +58,13 @@
 	const HANDLE_RADIUS = 22
 	const ROTATE_GAP = 26
 
-	/** Where a layer's handles go on the stage: at its corner and above it as it turns, but never off the stage. */
 	function handlesOf(l: Layer) {
 		const turn = (l.rotation * Math.PI) / 180
 		const cx = (area.x + l.x + l.width / 2) * scale
 		const cy = (area.y + l.y + l.height / 2) * scale
-		const within = (v: number, size: number) => Math.min(Math.max(v, HANDLE_RADIUS), size - HANDLE_RADIUS)
+		const keepOnStage = (v: number, size: number) => Math.min(Math.max(v, HANDLE_RADIUS), size - HANDLE_RADIUS)
 		const at = (dx: number, dy: number) =>
-			`left:${within(cx + dx * Math.cos(turn) - dy * Math.sin(turn), width)}px;top:${within(cy + dx * Math.sin(turn) + dy * Math.cos(turn), height)}px`
+			`left:${keepOnStage(cx + dx * Math.cos(turn) - dy * Math.sin(turn), width)}px;top:${keepOnStage(cy + dx * Math.sin(turn) + dy * Math.cos(turn), height)}px`
 		return { rotate: at(0, (-l.height * scale) / 2 - ROTATE_GAP), resize: at((l.width * scale) / 2, (l.height * scale) / 2) }
 	}
 

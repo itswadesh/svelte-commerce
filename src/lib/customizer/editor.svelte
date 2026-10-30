@@ -48,7 +48,7 @@
 	} from './document'
 	import { Designer } from './designer.svelte'
 	import { loadPicture, previewView, renderPng, type Pictures } from './draw'
-	import { loadFonts, loadGlyphs, MAX_UPLOAD_BYTES, PlainError, plainMessage, saveDesign, upload } from './service'
+	import { loadFonts, loadGlyphs, MAX_UPLOAD_BYTES, saveDesign, ShopperError, shopperMessage, upload } from './service'
 	import Stage from './stage.svelte'
 	import Tools from './tools.svelte'
 
@@ -91,10 +91,10 @@
 		return `${setup.tools.upload ? 'or add' : 'Add'} ${list}`
 	})
 
-	const open = $derived(!!page.state.designing)
+	const open = $derived(!!page.state.customizerOpen)
 
 	function close(): Promise<void> {
-		if (!page.state.designing) return Promise.resolve()
+		if (!page.state.customizerOpen) return Promise.resolve()
 		const closed = new Promise<void>((resolve) => addEventListener('popstate', () => resolve(), { once: true }))
 		history.back()
 		return closed
@@ -180,7 +180,7 @@
 	const MISSING_PHOTO = 'A photo in your design did not finish loading. Delete it, add it again, and try again.'
 
 	async function saveDocument(doc: DesignDocument, pictures: Pictures): Promise<string> {
-		if (designer.missingPhoto) throw new PlainError(MISSING_PHOTO)
+		if (designer.missingPhoto) throw new ShopperError(MISSING_PHOTO)
 		await designer.fontsReady
 		await loadGlyphs(
 			setup,
@@ -190,7 +190,7 @@
 			renderPng(doc, setup, pictures, previewView(setup)),
 			renderPng(doc, setup, pictures, { kind: 'print' })
 		])
-		if (printPng.size > MAX_UPLOAD_BYTES || previewPng.size > MAX_UPLOAD_BYTES) throw new PlainError(TOO_LARGE)
+		if (printPng.size > MAX_UPLOAD_BYTES || previewPng.size > MAX_UPLOAD_BYTES) throw new ShopperError(TOO_LARGE)
 		const [preview, print] = await Promise.all([upload(previewPng, 'preview.png'), upload(printPng, 'print.png')])
 		const saved = await saveDesign({
 			productId: setup.productId,
@@ -202,9 +202,7 @@
 		return saved.designId
 	}
 
-	// The design saved by an attempt whose answer never arrived. Trying again with the same design
-	// and variant reuses it, and finds its line if the bag already took it.
-	let attempted: { doc: DesignDocument; variantId: string; designId: string } | null = null
+	let unconfirmed: { doc: DesignDocument; variantId: string; designId: string } | null = null
 
 	async function addToBag() {
 		const pictures = designer.pictures
@@ -213,9 +211,9 @@
 		status = { state: 'saving' }
 		try {
 			const doc = designer.doc
-			const retried = attempted?.doc === doc && attempted.variantId === variantId ? attempted.designId : null
+			const retried = unconfirmed?.doc === doc && unconfirmed.variantId === variantId ? unconfirmed.designId : null
 			const designId = retried ?? (await saveDocument(doc, pictures))
-			attempted = { doc, variantId, designId }
+			unconfirmed = { doc, variantId, designId }
 			const bag = cartService as unknown as {
 				addToCart: (q: Record<string, unknown>) => Promise<any>
 				getCartByCartId: (cartId: string) => Promise<any>
@@ -227,20 +225,19 @@
 				cart = await bag.addToCart({ cartId: cartState?.cart?.id || null, productId: setup.productId, variantId, qty: 1, designId })
 			}
 			if (!holdsDesign(cart)) throw new Error('The bag came back without the design')
-			attempted = null
+			unconfirmed = null
 			if (cartState) cartState.cart = cart
 			await addPicks(setup.productId, cartState)
 			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: unitPrice, qty: 1, user: { id: userState?.user?.id } })
 			status = { state: 'added' }
 			announce('Your design is in your bag')
 			setTimeout(async () => {
-				// The bag's drawer keeps a history entry of its own, so it opens once the editor's is gone.
 				await close()
 				status = { state: 'idle' }
 				if (cartState) cartState.isOpen = true
 			}, 900)
 		} catch (err) {
-			status = { state: 'error', message: plainMessage(err, 'Your design could not be added to your bag. Please try again.', TOO_LARGE) }
+			status = { state: 'error', message: shopperMessage(err, 'Your design could not be added to your bag. Please try again.', TOO_LARGE) }
 		}
 	}
 </script>
