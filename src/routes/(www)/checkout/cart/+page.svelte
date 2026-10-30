@@ -9,6 +9,7 @@
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import { CartModule } from '$lib/core/composables/index.js'
+	import { cartService } from '$lib/core/services'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
@@ -90,12 +91,20 @@
 		toast('Removed from your bag', {
 			action: {
 				label: 'Undo',
-				onClick: () =>
-					cartState?.add({
-						qty: item.qty,
-						productId: item.productId,
-						variantId: item.variantId
-					})
+				onClick: async () => {
+					try {
+						// The cart store's add cannot carry a design, so the line goes back through the service.
+						cartState.cart = await cartService.addToCart({
+							cartId: (cartState.cart as any)?.id || cartState.retrieveCartId(),
+							qty: item.qty,
+							productId: item.productId,
+							variantId: item.variantId,
+							designId: item.designId
+						})
+					} catch (err) {
+						toast.error(err instanceof Error ? err.message : 'Could not put it back in your bag')
+					}
+				}
 			}
 		})
 	}
