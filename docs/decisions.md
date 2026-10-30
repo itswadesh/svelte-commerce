@@ -3,6 +3,17 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-30: The strip above the header is one thin line
+
+The owner: "keep the heads up notification above header thinner". The header's announcement strip,
+the hello bar and the composer's announcement-bar section are each one 30px line at every width,
+down from 38–45px (55–75px on a phone, where long text wrapped to two or three lines). Text too
+long for the width ends in an ellipsis. The header strip's link fills the whole bar, and the
+composer section's link takes the bar's full height: 30px targets, above WCAG 2.2's 24px floor,
+rather than the 44px they borrowed from the bar's padding. The hello bar's messages are the
+merchant's own HTML, so a link at the end of a message too long for a phone is cut off with the
+rest of it; keep a linked message short.
+
 ## 2026-10-29: A product's own badge is the label on its picture
 
 GoCommerce gives each product a one-line Badge (engine metadata key `badge`), and the theme setting
