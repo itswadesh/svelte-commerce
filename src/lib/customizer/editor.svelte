@@ -265,7 +265,7 @@
 	const TOO_LARGE = 'Your design is too detailed to save as a print file. Make a photo smaller on the print, or use fewer photos, and try again.'
 	const MISSING_PHOTO = 'A photo in your design did not finish loading. Delete it, add it again, and try again.'
 
-	async function saveDocument(doc: DesignDocument, pictures: Pictures): Promise<string> {
+	async function saveDocument(doc: DesignDocument, pictures: Pictures, variant: string): Promise<string> {
 		if (designer.missingPhoto) throw new ShopperError(MISSING_PHOTO)
 		await designer.fontsReady
 		await loadGlyphs(
@@ -280,7 +280,7 @@
 		const [preview, print] = await Promise.all([upload(previewPng, 'preview.png'), upload(printPng, 'print.png')])
 		const { designId } = await saveDesign({
 			productId: setup.productId,
-			variantId,
+			variantId: variant,
 			previewUploadId: preview.uploadId,
 			printUploadId: print.uploadId,
 			document: doc
@@ -292,7 +292,7 @@
 		if (onThisPage() && cartState) cartState.isOpen = true
 	}
 
-	async function addToBag() {
+	async function addToBag(variant: string, price: number) {
 		const pictures = designer.pictures
 		if (!pictures || status.state === 'saving') return
 		designer.endGesture()
@@ -306,15 +306,15 @@
 			const cartId = cartState?.retrieveCartId() || cartState?.cart?.id
 			const reuse = reusable
 			let cart = reuse && cartId ? await bag.getCartByCartId(cartId) : null
-			const designId = reuse ?? (await saveDocument(doc, pictures))
-			designIds.set(doc, { ...designIds.get(doc), [variantId]: designId })
+			const designId = reuse ?? (await saveDocument(doc, pictures, variant))
+			designIds.set(doc, { ...designIds.get(doc), [variant]: designId })
 			if (!lineOf(cart, designId)) {
-				cart = await bag.addToCart({ cartId: cartState?.cart?.id || null, productId: setup.productId, variantId, qty: 1, designId })
+				cart = await bag.addToCart({ cartId: cartState?.cart?.id || null, productId: setup.productId, variantId: variant, qty: 1, designId })
 			}
 			if (!lineOf(cart, designId)) throw new Error('The bag came back without the design')
 			if (cartState) cartState.cart = cart
 			await addPicks(setup.productId, cartState)
-			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: unitPrice, qty: 1, user: { id: userState?.user?.id } })
+			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: price, qty: 1, user: { id: userState?.user?.id } })
 			status = { state: 'idle' }
 			if (!onThisPage()) return
 			if (!open) return showBag()
@@ -479,7 +479,7 @@
 						: ''}"
 					disabled={empty || !designer.pictures || bagButton !== 'add'}
 					aria-busy={bagButton === 'saving'}
-					onclick={addToBag}
+					onclick={() => addToBag(variantId, unitPrice)}
 				>
 					{#key bagButton}
 						<span class="inline-flex items-center gap-2" in:fade>
