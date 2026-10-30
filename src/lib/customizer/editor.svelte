@@ -107,10 +107,13 @@
 	let closing: Promise<void> | null = null
 	let closed = () => {}
 	let closeFallback: ReturnType<typeof setTimeout> | undefined
+	let addedTimer: ReturnType<typeof setTimeout> | undefined
 
 	function shut() {
 		open = false
 		clearTimeout(closeFallback)
+		clearTimeout(addedTimer)
+		if (status.state === 'added') status = { state: 'idle' }
 		closing = null
 		closed()
 	}
@@ -175,7 +178,11 @@
 		if (!open) untrack(() => designer.prune())
 	})
 
-	$effect(() => () => designer.dispose())
+	$effect(() => () => {
+		designer.dispose()
+		clearTimeout(addedTimer)
+		clearTimeout(closeFallback)
+	})
 
 	function togglePanel(p: Panel) {
 		previewing = false
@@ -262,11 +269,14 @@
 			if (cartState) cartState.cart = cart
 			await addPicks(setup.productId, cartState)
 			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: unitPrice, qty: 1, user: { id: userState?.user?.id } })
+			if (!open) {
+				status = { state: 'idle' }
+				return
+			}
 			status = { state: 'added' }
 			announce('Your design is in your bag')
-			setTimeout(async () => {
+			addedTimer = setTimeout(async () => {
 				await close()
-				status = { state: 'idle' }
 				if (cartState) cartState.isOpen = true
 			}, 900)
 		} catch (err) {
