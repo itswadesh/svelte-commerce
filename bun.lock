@@ -7,7 +7,7 @@
       "dependencies": {
         "@internationalized/date": "^3.7.0",
         "@lucide/svelte": "^1.8.0",
-        "@misiki/gocommerce-connector": "^0.22.0",
+        "@misiki/gocommerce-connector": "^0.23.0",
         "@misiki/kitcommerce-core": "^0.1.59",
         "cheerio": "^1.2.0",
         "culori": "^4.0.2",
@@ -267,7 +267,7 @@
 
     "@melt-ui/svelte": ["@melt-ui/svelte@0.76.2", "", { "dependencies": { "@floating-ui/core": "^1.3.1", "@floating-ui/dom": "^1.4.5", "@internationalized/date": "^3.5.0", "dequal": "^2.0.3", "focus-trap": "^7.5.2", "nanoid": "^5.0.4" }, "peerDependencies": { "svelte": ">=3 <5" } }, "sha512-7SbOa11tXUS95T3fReL+dwDs5FyJtCEqrqG3inRziDws346SYLsxOQ6HmX+4BkIsQh1R8U3XNa+EMmdMt38lMA=="],
 
-    "@misiki/gocommerce-connector": ["@misiki/gocommerce-connector@0.22.0", "", {}, "sha512-FY1Fk75WaG7fri/By0SpsmRe8xzWU322pWK5dbQ+mmnCS3fincKOwFbfRH5U/NZjvyyTSBXQqbHpgBf4Vm1vjw=="],
+    "@misiki/gocommerce-connector": ["@misiki/gocommerce-connector@0.23.0", "", {}, "sha512-kAzk/qYByPFRLy2qbyzwtJTbwof5VIOnzZ1SP0iJC4qny+TgRnuvDsDO4a+ApOOkBMLISDEYA8t81LuFK9VlZQ=="],
 
     "@misiki/kitcommerce-core": ["@misiki/kitcommerce-core@0.1.59", "", { "dependencies": { "@ayushtripathy/tracebox": "^0.0.3", "@stripe/stripe-js": "^9.0.0", "bits-ui": "^2.16.3", "clsx": "^2.1.1", "date-fns": "^4.4.0", "embla-carousel-svelte": "^8.6.0", "fuse.js": "^7.1.0", "jsdom": "^29.0.2", "svelte-sonner": "^1.1.0", "tailwind-merge": "^3.5.0", "zod": "^3.24.1" }, "peerDependencies": { "@misiki/litekart-connector": "^2.0.31", "@sveltejs/kit": "^2.50.2", "svelte": "^5.0.0" } }, "sha512-dtcYLLwo+AhC3LrUpMaT/vW0FEPN/wEmOChaBt1eKjnfSfRXRWQHXP/+QFjNSjPGRtsDgJflRold5ho2q+P7Jw=="],
 
