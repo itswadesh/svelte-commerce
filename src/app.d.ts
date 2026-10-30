@@ -20,6 +20,8 @@ declare global {
 			// The address a shopper just signed up with, for the page after sign-up. In the state
 			// rather than the URL, which every analytics tag records.
 			signupEmail?: string
+			// The product customizer is open, so Back closes it as it closes any full-screen view.
+			designing?: boolean
 		}
 		// interface Platform {}
 	}

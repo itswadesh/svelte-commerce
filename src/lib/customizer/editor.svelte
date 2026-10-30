@@ -32,7 +32,7 @@
 	import { addOnPicks, addPicks } from '$lib/product/add-on-picks.svelte'
 	import { bumpTotal } from '$lib/product/upsells'
 	import { isEmpty, layerLabel, type CustomizerSetup, type Panel } from './document'
-	import { Designer, editor } from './designer.svelte'
+	import { Designer } from './designer.svelte'
 	import { loadPicture, renderPng } from './draw'
 	import { loadFonts, MAX_UPLOAD_BYTES, saveDesign, upload } from './service'
 	import Stage from './stage.svelte'
@@ -77,6 +77,15 @@
 		return `${setup.tools.upload ? 'or add' : 'Add'} ${list}`
 	})
 
+	const open = $derived(!!page.state.designing)
+
+	function close(): Promise<void> {
+		if (!page.state.designing) return Promise.resolve()
+		const closed = new Promise<void>((resolve) => addEventListener('popstate', () => resolve(), { once: true }))
+		history.back()
+		return closed
+	}
+
 	let panel = $state<Panel | null>(null)
 	let previewing = $state(false)
 	let zoom = $state(1)
@@ -110,7 +119,7 @@
 	}
 
 	$effect(() => {
-		if (!editor.open || designer.pictures) return
+		if (!open || designer.pictures) return
 		designer.fontsReady = loadFonts(setup).then(() => void designer.redraws++)
 		loadPictures()
 	})
@@ -190,8 +199,9 @@
 			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: unitPrice, qty: 1, user: { id: userState?.user?.id } })
 			status = { state: 'added' }
 			announce('Your design is in your bag')
-			setTimeout(() => {
-				editor.open = false
+			setTimeout(async () => {
+				// The bag's drawer keeps a history entry of its own, so it opens once the editor's is gone.
+				await close()
 				status = { state: 'idle' }
 				if (cartState) cartState.isOpen = true
 			}, 900)
@@ -215,7 +225,14 @@
 	</Button>
 {/snippet}
 
-<DialogPrimitive.Root bind:open={editor.open}>
+<DialogPrimitive.Root
+	bind:open={
+		() => open,
+		(next) => {
+			if (!next) close()
+		}
+	}
+>
 	<DialogPrimitive.Portal>
 		<DialogPrimitive.Overlay
 			class="fixed inset-0 z-modal bg-foreground/40 data-[state=closed]:duration-exit data-[state=open]:duration-panel data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"

@@ -14,8 +14,6 @@ import {
 } from './document'
 import type { Pictures } from './draw'
 
-export const editor = $state({ open: false })
-
 export class Designer {
 	history = $state(startHistory())
 	live = $state<DesignDocument | null>(null)
