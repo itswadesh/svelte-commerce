@@ -1,24 +1,19 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { fade } from '$lib/motion'
-	import { loadWhatsappOffer, type WhatsappOffer } from '$lib/whatsapp'
+	import type { WhatsappOffer } from '$lib/whatsapp'
 
 	/**
 	 * The WhatsApp opt-in on the address step. Draws nothing unless the store sends order updates on
 	 * WhatsApp, and both boxes start unticked: the shopper asks, the store never assumes. The page
-	 * sends the answers when the shopper moves on (`saveWhatsappConsent`).
+	 * loads the offer and sends the answers when the shopper moves on (`$lib/whatsapp`).
 	 */
 	let {
 		storeName = '',
-		offer = $bindable<WhatsappOffer>({ enabled: false, marketing: false }),
+		offer,
 		orderUpdates = $bindable(false),
 		marketing = $bindable(false)
-	}: { storeName?: string; offer?: WhatsappOffer; orderUpdates?: boolean; marketing?: boolean } = $props()
-
-	onMount(async () => {
-		offer = await loadWhatsappOffer()
-	})
+	}: { storeName?: string; offer: WhatsappOffer; orderUpdates?: boolean; marketing?: boolean } = $props()
 
 	const row =
 		'flex min-h-11 cursor-pointer items-center gap-3 rounded-radius px-3 py-2 text-sm text-foreground transition-colors duration-fast hover:bg-muted/50'
