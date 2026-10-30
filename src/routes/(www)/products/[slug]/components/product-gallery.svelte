@@ -20,6 +20,8 @@
 	import { page } from '$app/state'
 	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { productBadge } from '$lib/product/badge.js'
+	import { dialog } from '$lib/actions/dialog'
+	import { fade } from '$lib/motion'
 
 	let { images = [] } = $props()
 
@@ -94,18 +96,22 @@
 	const showCarousel = (img: string) => {
 		carouselImages = images
 		displayCarousel = 'flex'
-		const index = images.indexOf(img)
-		currentIndex = index
+		currentIndex = images.indexOf(img)
 		selectedImage = img
-		setTimeout(() => {
-			if (carouselApi) {
-				carouselApi.scrollTo(index, true)
-			}
-		}, 0)
 	}
 
 	const hideCarousel = () => {
 		displayCarousel = 'hidden'
+		// The page's pictures follow the gallery, so the one showing now takes focus back, not the
+		// one that opened it (use:dialog leaves focus where this puts it).
+		document.querySelector<HTMLElement>('[data-vt-gallery-primary]')?.focus({ preventScroll: true })
+	}
+
+	const onGalleryKeydown = (e: KeyboardEvent) => {
+		if (e.key === 'ArrowLeft') carouselApi?.scrollPrev()
+		else if (e.key === 'ArrowRight') carouselApi?.scrollNext()
+		else return
+		e.preventDefault()
 	}
 
 	const videoURLRegex = /mp4$|webm$/
@@ -260,7 +266,13 @@
 							role="button"
 							tabindex="0"
 							onclick={() => showCarousel(img)}
-							onkeydown={(e) => e.key === 'Enter' && showCarousel(img)}
+							onkeydown={(e) => {
+								// Handled here: focus moves into the gallery before the key's keypress, which
+								// would otherwise press the gallery's close button.
+								if (e.key !== 'Enter' && e.key !== ' ') return
+								e.preventDefault()
+								showCarousel(img)
+							}}
 						>
 							<span class="sr-only">View full-screen gallery</span>
 							{#if youtubeId}
@@ -323,12 +335,22 @@
 	</div>
 </div>
 
-<!-- Fullscreen view -->
-<div class="fixed left-0 top-0 z-[100] {displayCarousel} h-[100dvh] w-screen flex-col items-center justify-start overflow-hidden bg-black">
-	<!-- Background overlay -->
-	<Button variant="ghost" class="absolute left-0 top-0 h-full w-full rounded-none hover:bg-transparent" onclick={hideCarousel}>
-		<span class="sr-only">Close carousel</span>
-	</Button>
+<!-- Fullscreen view. Mounted only while open, so use:dialog moves focus in, keeps Tab inside, closes
+     on Escape and hands focus back to the page; the arrows step the pictures. -->
+{#if displayCarousel !== 'hidden'}
+<div
+	transition:fade
+	role="dialog"
+	aria-modal="true"
+	aria-label="Product pictures"
+	tabindex="-1"
+	use:dialog={hideCarousel}
+	onkeydown={onGalleryKeydown}
+	class="fixed left-0 top-0 z-[100] flex h-[100dvh] w-screen flex-col items-center justify-start overflow-hidden bg-black"
+>
+	<!-- A click outside the picture closes; the keyboard has Escape and the close button. -->
+	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+	<div class="absolute left-0 top-0 h-full w-full" aria-hidden="true" onclick={hideCarousel}></div>
 
 	<div class="relative mx-auto flex h-full w-full max-w-[1200px] items-center gap-4 px-4 py-[5vh]">
 		<!-- Close button -->
@@ -339,12 +361,13 @@
 			onclick={hideCarousel}
 		>
 			<X class="h-6 w-6" />
+			<span class="sr-only">Close</span>
 		</Button>
 
 		<!-- Main carousel -->
 		<div class="h-full flex-1 overflow-hidden">
 			<Carousel.Root
-				opts={{ loop: true }}
+				opts={{ loop: true, startIndex: currentIndex }}
 				setApi={(api) => {
 					if (api) {
 						carouselApi = api
@@ -431,6 +454,7 @@
 		{/if}
 	</div>
 </div>
+{/if}
 
 <style>
 	/* Refined Editorial — default theme only. Clean gallery: warm media wells,

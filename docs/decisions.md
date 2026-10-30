@@ -3,6 +3,34 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-30: Google reviews are Google's, live, and the survey uses the engine's order data
+
+The owner asked to "integrate google reviews" (engine D161). The home page's Google reviews section
+shows the store's Google rating, count and Google's most relevant reviews only after the engine has
+read them from Google, and only when the section nears the screen: Google's terms forbid keeping
+them, so every view is a call the store pays for, and nothing loads for a shopper who never scrolls
+there. It credits each author by name, photo and profile link, links each review on Google Maps and
+to Google's report page, says how the reviews were chosen, links to all of them, and carries the
+Google Maps logo, as Google's Places policies ask. It emits no structured data: Google's review
+snippet rules say not to mark up ratings from another site. The confirmation page's Google Customer
+Reviews offer no longer builds its fields here: the old block pasted a merchant ID from the static
+record into script text, read the email from the emptied cart, and invented a delivery date seven
+days out. The engine now builds every field from the order and offers no survey without a real
+delivery estimate. Google's scripts load after the page: the survey when the browser is idle, the
+store widget on the first interaction.
+
+## 2026-10-30: The strip above the header is one thin line
+
+The owner: "keep the heads up notification above header thinner". The header's announcement strip,
+the hello bar and the composer's announcement-bar section are each one 30px line at every width,
+down from 38–45px (55–75px on a phone, where long text wrapped to two or three lines). Text too
+long for the width ends in an ellipsis. The header strip's link fills the whole bar, and the
+composer section's link takes the bar's full height: 30px targets, above WCAG 2.2's 24px floor,
+rather than the 44px they borrowed from the bar's padding. The hello bar's messages are the
+merchant's own HTML, so a link at the end of a message too long for a phone is cut off with the
+rest of it; keep a linked message short.
+
+
 ## 2026-10-29: A product's own badge is the label on its picture
 
 GoCommerce gives each product a one-line Badge (engine metadata key `badge`), and the theme setting
@@ -181,3 +209,55 @@ and in the JSON-LD, is a full URL; the robots tag carries only permissions (max-
 never "index", so a page's own noindex is not contradicted. The product BreadcrumbList runs from Home
 to the product. A product weight is published only with a known unit. The fallback description no
 longer promises free delivery.
+
+## 2026-10-30: The store's ad and analytics tags, one bridge, behind the cookie choice
+
+The owner asked for the popular ad and analytics integrations (GoCommerce D160). The Meta pixel,
+Microsoft Clarity, Hotjar and the TikTok, Pinterest and Snap pixels are each the store's own ID
+from the engine, which the gocommerce connector hands over as `store.plugins.<name>`; none is ever
+hard-coded. Each loads the vendor's own base code on the shopper's first interaction, like Klaviyo,
+and only where the cookie choice allows: a saved choice decides (ad cookies for the four pixels,
+analytics for Clarity and Hotjar), and without one, visitors whose time zone is in the opt-in
+regions wait for the banner, which a store with any of these tags shows. The pixels hear the
+shopping events the storefront already sends GA4 (`view_item`, `add_to_cart`, `begin_checkout`,
+`purchase`) by listening on `window.gtag`, so there is one place events are fired, not one per
+vendor; `begin_checkout` is now sent from the address step. Meta's Purchase carries the order
+number as its eventID, which the engine's Conversions API also sends, so Meta counts the sale once.
+
+## 2026-10-30: Google Analytics, Ads and Tag Manager wait for the cookie choice like every other tag
+
+The engine's google-analytics plugin (GA4 measurement ID, Tag Manager container, Google Ads ID and
+conversion label) now reaches the store as `store.plugins.googleTagManager`, the shape Litekart
+used, and loads through the same bridge as the pixels: on the first interaction, only where the
+cookie choice allows (analytics for GA4 and Tag Manager, ad cookies for Ads), never while the
+address carries an email, a token or a key, and a choice taken back reloads without it. Core's
+`GoogleAnalytics` loader, which put Google's tags in the head of every page before any choice, is
+no longer rendered. GA4 and Ads share one Google tag on a data layer of its own (`gcLayer`): it gets
+the page's consent commands first, then only the events handed on after consent, each with its
+e-commerce parameters alone (core also attaches the shopper's hashed contact details, address, IP
+addresses and user agent, and signing out sends the whole user record). GA4's events go to GA4
+only; a purchase with a conversion label is the Ads conversion, so an Ads account counts a sale
+once. The page's own `dataLayer` keeps every event since the page opened, which is why neither tag
+reads it.
+
+A Tag Manager container takes over GA4 and Ads: the storefront then loads only the container, on
+its own layer too (`gtmLayer`), and hands it each event in the shape Google's Tag Manager
+e-commerce guide gives (`{ event, ecommerce }`). Google's advice is to deploy each product through
+one of the two, and a container can hold either, so loading the IDs as well could count every page
+view and sale twice; a store with a container sets GA4 and Ads up inside it, reading `gtmLayer`.
+
+GA4 starts on the first interaction, like every tag here, so a visit that never scrolls, taps or
+types is not counted; sessions and bounce figures will differ from a tag loaded in the page head.
+
+## 2026-10-30: Cookie settings in every footer
+
+A cookie choice has to be as easy to take back as it was to give (DPDP, GDPR). Every footer
+(default, lime, noor and checkout) offers "Cookie settings" on a store that loads a tag; it opens
+the consent banner again, and a choice taken back reloads the page without the tags.
+
+## 2026-10-30: No personal data in a URL
+
+The owner's standing rule: no email, phone, token or name in a URL, since every analytics tag
+records the page's address and the history keeps it. The page after sign-up gets the address in
+SvelteKit's navigation state and greets the shopper without it after a reload; the sign-in form
+hands the typed address to the reset form in memory instead of an `email` query.

@@ -1,4 +1,4 @@
-import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
+import type { Handle, HandleFetch, HandleServerError, RequestEvent } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
@@ -25,6 +25,17 @@ export const init = initActiveConnector
 	}
 })
 
+// The shopper's address, for the backend's per-address limits (see api-proxy.ts). adapter-node reads
+// it from the socket, or from ADDRESS_HEADER when a proxy of the storefront's own sits in front; some
+// adapters throw instead, and then no address is sent rather than a guessed one.
+const clientAddress = (event: RequestEvent) => {
+	try {
+		return event.getClientAddress()
+	} catch {
+		return undefined
+	}
+}
+
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
 	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
@@ -44,12 +55,12 @@ const app: Handle = async ({ event, resolve }) => {
 	// too, so no dev-proxy entry is needed. See activeBackendProxy.
 	const backend = activeBackendProxy()
 	if (backend && (url.pathname === backend.path || url.pathname.startsWith(`${backend.path}/`))) {
-		return proxyApiRequest(event.request, backend.apiUrl, fetch, backend.path)
+		return proxyApiRequest(event.request, backend.apiUrl, fetch, backend.path, clientAddress(event))
 	}
 
 	// Browser-side `/api/*` calls: the production counterpart of the vite dev proxy. See api-proxy.ts.
 	if (env.PUBLIC_LITEKART_API_URL && isApiPath(url.pathname)) {
-		return proxyApiRequest(event.request, env.PUBLIC_LITEKART_API_URL)
+		return proxyApiRequest(event.request, env.PUBLIC_LITEKART_API_URL, fetch, '', clientAddress(event))
 	}
 
 	if (url.protocol === 'http:' && !isLocalOrIP) {

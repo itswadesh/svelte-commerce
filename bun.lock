@@ -7,8 +7,8 @@
       "dependencies": {
         "@internationalized/date": "^3.7.0",
         "@lucide/svelte": "^1.8.0",
-        "@misiki/gocommerce-connector": "^0.16.0",
-        "@misiki/kitcommerce-core": "^0.1.33",
+        "@misiki/gocommerce-connector": "^0.23.0",
+        "@misiki/kitcommerce-core": "^0.1.59",
         "cheerio": "^1.2.0",
         "culori": "^4.0.2",
         "fuse.js": "^7.1.0",
@@ -92,6 +92,8 @@
     "@asamuzakjp/generational-cache": ["@asamuzakjp/generational-cache@1.0.1", "", {}, "sha512-wajfB8KqzMCN2KGNFdLkReeHncd0AslUSrvHVvvYWuU8ghncRJoA50kT3zP9MVL0+9g4/67H+cdvBskj9THPzg=="],
 
     "@asamuzakjp/nwsapi": ["@asamuzakjp/nwsapi@2.3.9", "", {}, "sha512-n8GuYSrI9bF7FFZ/SjhwevlHc8xaVlb/7HmHelnc/PZXBD2ZR49NnN9sMMuDdEGPeeRQ5d0hqlSlEpgCX3Wl0Q=="],
+
+    "@ayushtripathy/tracebox": ["@ayushtripathy/tracebox@0.0.3", "", {}, "sha512-BVDDOJIgavhbbj2aLnDxouZ3/zJugmernWwOvUhS6QLTek3sdAfyWHDxb6Dfhg6a0cUsUCiixM2syjKhUELITg=="],
 
     "@babel/code-frame": ["@babel/code-frame@7.29.7", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.29.7", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw=="],
 
@@ -265,9 +267,9 @@
 
     "@melt-ui/svelte": ["@melt-ui/svelte@0.76.2", "", { "dependencies": { "@floating-ui/core": "^1.3.1", "@floating-ui/dom": "^1.4.5", "@internationalized/date": "^3.5.0", "dequal": "^2.0.3", "focus-trap": "^7.5.2", "nanoid": "^5.0.4" }, "peerDependencies": { "svelte": ">=3 <5" } }, "sha512-7SbOa11tXUS95T3fReL+dwDs5FyJtCEqrqG3inRziDws346SYLsxOQ6HmX+4BkIsQh1R8U3XNa+EMmdMt38lMA=="],
 
-    "@misiki/gocommerce-connector": ["@misiki/gocommerce-connector@0.16.0", "", {}, "sha512-U0AJXu5iPw78dE4W6lnQcrHM4hLAZmAG0Jv8Je9xNtwsNbebfcxM7FBCJPplVZfxzoCF816C6K0ldIJaxp7cYA=="],
+    "@misiki/gocommerce-connector": ["@misiki/gocommerce-connector@0.23.0", "", {}, "sha512-kAzk/qYByPFRLy2qbyzwtJTbwof5VIOnzZ1SP0iJC4qny+TgRnuvDsDO4a+ApOOkBMLISDEYA8t81LuFK9VlZQ=="],
 
-    "@misiki/kitcommerce-core": ["@misiki/kitcommerce-core@0.1.33", "", { "dependencies": { "@stripe/stripe-js": "^9.0.0", "bits-ui": "^2.16.3", "clsx": "^2.1.1", "date-fns": "^4.4.0", "embla-carousel-svelte": "^8.6.0", "fuse.js": "^7.1.0", "jsdom": "^29.0.2", "svelte-sonner": "^1.1.0", "tailwind-merge": "^3.5.0", "zod": "^3.24.1" }, "peerDependencies": { "@misiki/litekart-connector": "^2.0.28", "@sveltejs/kit": "^2.50.2", "svelte": "^5.0.0" } }, "sha512-ophkoL/vnnq05HtSexQIZJ1rzO+BdeQCTDPMPl2VhrbXk6+nWUsAVMM+ymUQ1gmRoiG/FSkrcZHYhOAoN64shA=="],
+    "@misiki/kitcommerce-core": ["@misiki/kitcommerce-core@0.1.59", "", { "dependencies": { "@ayushtripathy/tracebox": "^0.0.3", "@stripe/stripe-js": "^9.0.0", "bits-ui": "^2.16.3", "clsx": "^2.1.1", "date-fns": "^4.4.0", "embla-carousel-svelte": "^8.6.0", "fuse.js": "^7.1.0", "jsdom": "^29.0.2", "svelte-sonner": "^1.1.0", "tailwind-merge": "^3.5.0", "zod": "^3.24.1" }, "peerDependencies": { "@misiki/litekart-connector": "^2.0.31", "@sveltejs/kit": "^2.50.2", "svelte": "^5.0.0" } }, "sha512-dtcYLLwo+AhC3LrUpMaT/vW0FEPN/wEmOChaBt1eKjnfSfRXRWQHXP/+QFjNSjPGRtsDgJflRold5ho2q+P7Jw=="],
 
     "@misiki/litekart-connector": ["@misiki/litekart-connector@2.0.29", "", {}, "sha512-ADY5L+hvWpZndbMb5G8rkly25hA5/oCawh+V+EeoViqeAH2sgfhFh21AYjwuC4HG8M01vji3JtJu7OVE2Shr4g=="],
 

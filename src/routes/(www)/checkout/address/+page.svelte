@@ -18,9 +18,13 @@
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import AddressForm from './address-form.svelte'
+	import WhatsappOptin from '$lib/components/checkout/whatsapp-optin.svelte'
+	import { browser } from '$app/environment'
+	import { loadWhatsappOffer, saveWhatsappConsent, type WhatsappOffer } from '$lib/whatsapp'
 	import { authService } from '$lib/core/services/index.js'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { onMount } from 'svelte'
+	import { trackBeginCheckout } from '$lib/analytics'
 	import { replaceState } from '$app/navigation'
 
 	const addressModule = new AddressModule()
@@ -116,6 +120,8 @@
 	// address so it can be edited in place.
 	onMount(async () => {
 		await cartState.hasLoaded
+		// The address step is where checkout begins; the basket before it is still shopping.
+		trackBeginCheckout(cartState.cart, page.data?.store?.currency?.code)
 		if (isGuestCheckout) {
 			if (cartState.cart.shippingAddress) {
 				addressModule.currentAddress = cartState.cart.shippingAddress
@@ -124,6 +130,28 @@
 			}
 		}
 	})
+
+	// The WhatsApp boxes. The offer is asked for while the cart loads, so the boxes are usually there
+	// before the step draws rather than pushing the summary down after it.
+	let whatsappOffer = $state<WhatsappOffer>({ enabled: false, marketing: false })
+	let whatsappOrderUpdates = $state(false)
+	let whatsappMarketing = $state(false)
+	if (browser) loadWhatsappOffer().then((offer) => (whatsappOffer = offer))
+
+	// The answers go when the shopper moves on to payment, when the phone is final: the contact phone
+	// on the cart (what the order is placed with), else the one in the address form. Not awaited, so
+	// a slow engine never holds up checkout; a client-side navigation does not cancel the request.
+	async function proceedToPayment() {
+		if (whatsappOffer.enabled) {
+			void saveWhatsappConsent({
+				cartId: cartState.cart?.id,
+				phone: cartState.cart?.phone || addressModule.currentAddress?.phone || cartState.cart?.shippingAddress?.phone,
+				orderUpdates: whatsappOrderUpdates,
+				marketing: whatsappOffer.marketing && whatsappMarketing
+			})
+		}
+		await addressModule.handleProceedToPayment()
+	}
 
 	async function handleGuestSubmit(address: any) {
 		try {
@@ -139,7 +167,7 @@
 				await addressModule.saveAddressToCart()
 			}
 			if (isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress) {
-				await addressModule.handleProceedToPayment()
+				await proceedToPayment()
 			}
 		} finally {
 			loadingForGuestCheckout = false
@@ -460,6 +488,12 @@
 								</div>
 							{/if}
 						{/if}
+						<WhatsappOptin
+							storeName={page?.data?.store?.name}
+							offer={whatsappOffer}
+							bind:orderUpdates={whatsappOrderUpdates}
+							bind:marketing={whatsappMarketing}
+						/>
 					</div>
 
 					<!-- Right Column - Order Summary -->
@@ -512,7 +546,7 @@
 											<CheckoutButton
 												text="Continue to payment"
 												disabled={!!continueBlocker}
-												onclick={addressModule.handleProceedToPayment}
+												onclick={proceedToPayment}
 												loading={addressModule.loadingForCheckout}
 												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
 											/>

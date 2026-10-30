@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
+	import CookieSettingsLink from '$lib/components/common/cookie-settings-link.svelte'
 
 	type ThemeFooter = NonNullable<ThemeHomepageContent['footer']>
 
@@ -26,6 +27,7 @@
 		{#if description}
 			<p>{description}</p>
 		{/if}
+		<CookieSettingsLink class="noor-cookies" />
 	</div>
 
 	{#each footer?.columns || [] as column}
@@ -101,6 +103,30 @@
 
 	.noor-footer a:hover {
 		color: var(--ink);
+	}
+
+	/* The button is CookieSettingsLink's, so the rule reaches it as a global under this footer. */
+	.noor-footer :global(.noor-cookies) {
+		margin-top: 14px;
+		padding: 6px 0;
+		background: none;
+		border: 0;
+		color: var(--muted);
+		font-size: 13px;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		cursor: pointer;
+		transition: color 0.2s ease;
+	}
+
+	.noor-footer :global(.noor-cookies:hover),
+	.noor-footer :global(.noor-cookies:focus-visible) {
+		color: var(--ink);
+	}
+
+	.noor-footer :global(.noor-cookies:focus-visible) {
+		outline: 2px solid var(--ink);
+		outline-offset: 2px;
 	}
 
 	@media (max-width: 900px) {

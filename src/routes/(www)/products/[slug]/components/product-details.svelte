@@ -131,9 +131,9 @@
 		return ''
 	})
 
-	// GA4 view_item — fires once per product (also on client-side navigation). Reads
-	// window.gtag at call time (defined by the GoogleAnalytics loader in the root layout,
-	// driven by the store's googleTagManager plugin); safe no-op when analytics is off.
+	// GA4 view_item — fires once per product (also on client-side navigation). Calls window.gtag,
+	// which app.html always defines; ad-tags.ts hands it on to the store's tags where the cookie
+	// choice allows.
 	const trackViewItem = (p: Record<string, any>, currency?: string) => {
 		if (typeof window === 'undefined') return
 		const g = (window as any).gtag

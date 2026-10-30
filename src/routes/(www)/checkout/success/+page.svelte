@@ -11,6 +11,7 @@
 	import { trackOrderPlaced } from '$lib/purchase-tracking'
 	import { orderService } from '$lib/core/services/index.js'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
+	import GoogleSurvey from '$lib/components/google/google-survey.svelte'
 
 	const userState = getUserState()
 	const cartState = getCartState()
@@ -55,18 +56,12 @@
 		].filter((row) => typeof row.value === 'number' && row.value !== 0)
 	)
 
-	const estimatedDeliveryDateMachine = $derived.by(() => {
-		if (!firstOrder) return ''
-		const date = new Date(firstOrder.createdAt)
-		const days = firstOrder.shippingRate?.estimatedMaxDays || 7
-		date.setDate(date.getDate() + days)
-		return date.toISOString().split('T')[0]
-	})
-
+	// Only the order's own estimate. A guessed week was shown here whenever the order had none, a
+	// date nobody promised, and it disagreed with the date Google Customer Reviews is given.
 	const estimatedDeliveryDateDisplay = $derived.by(() => {
-		if (!firstOrder) return ''
+		const days = Number(firstOrder?.shippingRate?.estimatedMaxDays)
+		if (!firstOrder || !(days > 0)) return ''
 		const date = new Date(firstOrder.createdAt)
-		const days = firstOrder.shippingRate?.estimatedMaxDays || 7
 		date.setDate(date.getDate() + days)
 		return new Intl.DateTimeFormat('en-US', {
 			month: 'long',
@@ -302,11 +297,13 @@
 
 					<!-- Delivery Status -->
 					<div class="p-4 md:p-6">
-						<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
-							<Calendar class="h-5 w-5 text-primary" />
-							<h3>Estimated delivery</h3>
-						</div>
-						<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
+						{#if estimatedDeliveryDateDisplay}
+							<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
+								<Calendar class="h-5 w-5 text-primary" />
+								<h3>Estimated delivery</h3>
+							</div>
+							<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
+						{/if}
 						<div class="flex items-start gap-3 rounded-radius border border-border bg-card p-2">
 							<Mail class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
 							<p class="text-sm leading-relaxed text-foreground">
@@ -368,26 +365,4 @@
 	</div>
 </div>
 
-{#if data?.store?.plugins?.googleReviewsOptIn?.active && firstOrder}
-	<!-- The `<\/script>` escapes are load-bearing: Vite's dep scanner extracts <script>…</script> by
-	regex across the whole file, so an unescaped closing tag in here makes it parse this markup as JS
-	and fail with `Expected "}" but found "{"` on the ${…} interpolations. -->
-	{@html `<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer><\/script>
-  <script>
-    window.renderOptIn = function() {
-      window.gapi.load('surveyoptin', function() {
-        window.gapi.surveyoptin.render(
-          {
-            // REQUIRED FIELDS
-            "merchant_id": ${data?.store?.plugins?.googleReviewsOptIn?.merchantId},
-            "order_id": "${orderNo}",
-            "email": "${cartState?.cart?.email}",
-            "delivery_country": "${firstOrder?.shippingAddress?.countryCode}",
-            "estimated_delivery_date": "${estimatedDeliveryDateMachine}",
-
-            // OPTIONAL FIELDS
-          });
-      });
-    }
-  <\/script>`}
-{/if}
+<GoogleSurvey active={!!data?.store?.plugins?.googleReviewsOptIn?.active} orderNo={orderNo || ''} />

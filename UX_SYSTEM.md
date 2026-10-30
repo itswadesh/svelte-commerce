@@ -175,8 +175,9 @@ never from the product, the information a shopper decides on, or a touch target.
   minimum.
 - Mobile: important actions stay at least 44px. A control that only ever renders above 768px is
   not a mobile target and takes the desktop sizes.
-- Secondary navigation keeps the WCAG 24px floor rather than 44px: breadcrumbs, and carousel dot
-  indicators (44px dots overflow a phone row at nine slides). A link that repeats a bigger link to
+- Secondary navigation keeps the WCAG 24px floor rather than 44px: breadcrumbs, carousel dot
+  indicators (44px dots overflow a phone row at nine slides) and the 30px announcement strip
+  (marked `data-target="secondary"` for the audit). A link that repeats a bigger link to
   the same place in the same card, such as a card title beside its image, is covered by that bigger
   target. Inputs and text areas are 16px on phones, or iOS zooms the page when they take focus.
   `scripts/audit-pro-max.mjs` checks all of this per route at 390px (touch) and 1280px.
@@ -241,6 +242,8 @@ spacing tokens and the gutter: `compact` is the spacing bullet above, and `comfo
 
 - Keep the desktop header to a compact utility row plus a clearly organised category row, only
   when both are necessary.
+- The announcement strip above the header is one 30px line at every width (owner, 2026-10-30):
+  dense text, an ellipsis rather than a second line, and a link that fills the bar.
 - Make search immediately visible on desktop and reachable in one tap on mobile.
 - Use distinct category names. Merge overlapping items such as "Custom" and "Custom Design".
 - Keep wishlist, account and cart icons consistent, labelled for assistive technology, and large
