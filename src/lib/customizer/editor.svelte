@@ -137,11 +137,9 @@
 		if (!framed() && history.state?.['sveltekit:states']?.customizerOpen) history.back()
 	})
 
-	// SvelteKit applies the entry's state in its own popstate listener, which may run after this one.
-	function onpopstate() {
-		setTimeout(() => {
-			if (!page.state.customizerOpen) shut()
-		})
+	// The entry's own state: SvelteKit updates page.state for another page only once that page has loaded.
+	function onpopstate(e: PopStateEvent) {
+		if (!e.state?.['sveltekit:states']?.customizerOpen) shut()
 	}
 
 	function close(): Promise<void> {
@@ -201,10 +199,12 @@
 		if (!open) untrack(() => designer.prune())
 	})
 
+	let left = false
+
 	$effect(() => () => {
+		left = true
+		shut()
 		designer.dispose()
-		clearTimeout(addedTimer)
-		clearTimeout(closeFallback)
 	})
 
 	function togglePanel(p: Panel) {
@@ -267,6 +267,10 @@
 
 	let unconfirmed: { doc: DesignDocument; variantId: string; designId: string } | null = null
 
+	const showBag = () => {
+		if (!left && cartState) cartState.isOpen = true
+	}
+
 	async function addToBag() {
 		const pictures = designer.pictures
 		if (!pictures || status.state === 'saving') return
@@ -298,10 +302,7 @@
 			}
 			status = { state: 'added' }
 			announce('Your design is in your bag')
-			addedTimer = setTimeout(async () => {
-				await close()
-				if (cartState) cartState.isOpen = true
-			}, 900)
+			addedTimer = setTimeout(() => close().then(showBag), 900)
 		} catch (err) {
 			status = { state: 'error', message: shopperMessage(err, 'Your design could not be added to your bag. Please try again.', TOO_LARGE) }
 		}
