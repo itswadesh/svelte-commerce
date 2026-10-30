@@ -19,4 +19,9 @@ describe('a basket line’s picture', () => {
 			designed: true
 		})
 	})
+
+	it('names the product from an order line, which calls it `name`', () => {
+		expect(linePicture({ name: 'Soft case', thumbnail: '/p.png' })).toEqual({ src: '/p.png', alt: 'Soft case', designed: false })
+		expect(linePicture({ name: 'Soft case', designPreview: '/d.png' })).toEqual({ src: '/d.png', alt: 'Your design on Soft case', designed: true })
+	})
 })
