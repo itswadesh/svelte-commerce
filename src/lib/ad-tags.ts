@@ -1,5 +1,5 @@
 // The store's ad and analytics tags (GoCommerce D160): the Meta pixel, Microsoft Clarity, Hotjar,
-// the TikTok, Pinterest and Snap pixels, and Google Analytics, Ads and Tag Manager. Each is the
+// the TikTok, Pinterest and Snap pixels, Criteo's OneTag, and Google Analytics, Ads and Tag Manager. Each is the
 // store's own ID, which the connector hands over as store.plugins.<name> = { active, id }, and the
 // Google ones as googleTagManager = { active, tags, conversions }, the shape Litekart used;
 // ad-tags.svelte starts them.
@@ -11,7 +11,7 @@
 
 import { onFirstInteraction } from '$lib/utils/on-first-interaction'
 
-export type Vendor = 'meta' | 'clarity' | 'hotjar' | 'tiktok' | 'pinterest' | 'snap' | 'ga4' | 'gads' | 'gtm'
+export type Vendor = 'meta' | 'clarity' | 'hotjar' | 'tiktok' | 'pinterest' | 'snap' | 'criteo' | 'ga4' | 'gads' | 'gtm'
 type ConsentKind = 'ad_storage' | 'analytics_storage'
 
 // The ID goes into a script, so its shape is checked against the vendor's, never trusted.
@@ -22,6 +22,7 @@ const SOURCES: Record<Vendor, { plugin: string; id: RegExp; consent: ConsentKind
 	tiktok: { plugin: 'tiktokPixel', id: /^[A-Z0-9]{8,32}$/i, consent: 'ad_storage' },
 	pinterest: { plugin: 'pinterestTag', id: /^\d{5,20}$/, consent: 'ad_storage' },
 	snap: { plugin: 'snapchatPixel', id: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, consent: 'ad_storage' },
+	criteo: { plugin: 'criteo', id: /^\d{1,12}$/, consent: 'ad_storage' },
 	ga4: { plugin: 'googleTagManager', id: /^G-[A-Z0-9]{4,16}$/i, consent: 'analytics_storage' },
 	gads: { plugin: 'googleTagManager', id: /^AW-\d{5,16}$/, consent: 'ad_storage' },
 	gtm: { plugin: 'googleTagManager', id: /^GTM-[A-Z0-9]{4,12}$/i, consent: 'analytics_storage' }
@@ -31,7 +32,7 @@ export type TagIds = Partial<Record<Vendor, string>>
 
 /** Every ID a plugin carries: its `id`, and for Google its `tags`, a list or one string. */
 const idsOf = (p: Record<string, any> | undefined): string[] =>
-	[p?.id, ...(Array.isArray(p?.tags) ? p.tags : [p?.tags])].map((t) => String((t && typeof t === 'object' ? t.id : t) ?? '').trim())
+	[p?.id, p?.accountId, ...(Array.isArray(p?.tags) ? p.tags : [p?.tags])].map((t) => String((t && typeof t === 'object' ? t.id : t) ?? '').trim())
 
 /**
  * The tags this store switched on with a well-formed ID. Nothing else is ever loaded. Google Ads is
@@ -137,6 +138,8 @@ export function vendorCalls(name: string, p: Ga4, tags: Vendor[], google: TagIds
 	}
 	const lineItems = items.map((i) => ({ product_id: i.id, product_price: i.price, product_quantity: i.quantity }))
 	const snap = { item_ids: ids, price: value, currency }
+	// Criteo's OneTag: a basket and a transaction list each line; a product page names one product.
+	const basket = items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity }))
 
 	switch (name) {
 		case 'view_item':
@@ -144,6 +147,14 @@ export function vendorCalls(name: string, p: Ga4, tags: Vendor[], google: TagIds
 			calls.push(['tiktok', 'track', 'ViewContent', tiktok])
 			calls.push(['pinterest', 'track', 'pagevisit', { line_items: lineItems, currency, value }])
 			calls.push(['snap', 'track', 'VIEW_CONTENT', snap])
+			if (ids[0]) calls.push(['criteo', { event: 'viewItem', item: ids[0] }])
+			break
+		case 'view_item_list':
+			// Criteo reads the first three products of a listing.
+			if (ids.length) calls.push(['criteo', { event: 'viewList', item: ids.slice(0, 3) }])
+			break
+		case 'view_cart':
+			if (basket.length) calls.push(['criteo', { event: 'viewBasket', item: basket }])
 			break
 		case 'add_to_cart':
 			calls.push(['meta', 'track', 'AddToCart', meta])
@@ -155,6 +166,8 @@ export function vendorCalls(name: string, p: Ga4, tags: Vendor[], google: TagIds
 			calls.push(['meta', 'track', 'InitiateCheckout', { content_ids: ids, contents: meta.contents, currency, value, num_items: units }])
 			calls.push(['tiktok', 'track', 'InitiateCheckout', tiktok])
 			calls.push(['snap', 'track', 'START_CHECKOUT', { ...snap, number_items: units }])
+			// Checkout carries the whole basket, which is what Criteo's basket event wants.
+			if (basket.length) calls.push(['criteo', { event: 'viewBasket', item: basket }])
 			break
 		case 'purchase':
 			// The order number is Meta's eventID because the engine's Conversions API sends the same
@@ -164,6 +177,7 @@ export function vendorCalls(name: string, p: Ga4, tags: Vendor[], google: TagIds
 			calls.push(['tiktok', 'track', 'Purchase', tiktok])
 			calls.push(['pinterest', 'track', 'checkout', { line_items: lineItems, currency, value, order_quantity: units, order_id: order }])
 			calls.push(['snap', 'track', 'PURCHASE', { ...snap, number_items: units, transaction_id: order }])
+			calls.push(['criteo', { event: 'trackTransaction', id: order, currency, item: basket }])
 			break
 	}
 	calls.push(['ga4', 'event', name, google.ga4 ? { ...pick(p), send_to: google.ga4 } : pick(p)])
@@ -183,6 +197,7 @@ function send([vendor, ...args]: Call): void {
 		else if (vendor === 'tiktok') w.ttq?.[args[0] as string]?.(...args.slice(1))
 		else if (vendor === 'pinterest') w.pintrk?.(...args)
 		else if (vendor === 'snap') w.snaptr?.(...args)
+		else if (vendor === 'criteo') w.criteo_q?.push(args[0])
 		else if (vendor === 'ga4' || vendor === 'gads') w.gcGtag?.(...args)
 		else if (vendor === 'gtm') {
 			// Cleared first, as Google's guide does, so one event's items never carry into the next.
@@ -194,7 +209,7 @@ function send([vendor, ...args]: Call): void {
 	}
 }
 
-const SHOPPING = new Set(['view_item', 'add_to_cart', 'begin_checkout', 'purchase'])
+const SHOPPING = new Set(['view_item', 'view_item_list', 'view_cart', 'add_to_cart', 'begin_checkout', 'purchase'])
 const BUFFER = 20
 // A query carrying an address or a credential: a verification link, an order's key. Every tag
 // records the page's address, so none loads while the address bar holds one; the pages that read

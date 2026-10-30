@@ -1,10 +1,8 @@
 <script module lang="ts">
 	import { enabledTags } from '$lib/ad-tags'
-	import { criteoAccount } from '$lib/criteo'
 
-	/** Only a store that loads a tag (ad-tags.svelte, criteo-tag.svelte) has anything to ask about. */
-	export const asksConsent = (plugins: Record<string, any> | null | undefined) =>
-		Object.keys(enabledTags(plugins)).length > 0 || !!criteoAccount(plugins?.criteo)
+	/** Only a store that loads a tag (ad-tags.svelte) has anything to ask about. */
+	export const asksConsent = (plugins: Record<string, any> | null | undefined) => Object.keys(enabledTags(plugins)).length > 0
 
 	/** Shows the banner again, so a choice is as easy to change or take back as it was to make. */
 	export const openConsentBanner = () => window.dispatchEvent(new Event('consentopen'))
