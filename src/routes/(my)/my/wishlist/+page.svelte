@@ -138,7 +138,7 @@
 												e.preventDefault()
 												e.stopPropagation()
 												await moveToCart(item)
-												toast('Item added to cart', 'success')
+												if (!madeToDesign(item?.product)) toast('Item added to cart', 'success')
 											}}
 										>
 											Add to cart
