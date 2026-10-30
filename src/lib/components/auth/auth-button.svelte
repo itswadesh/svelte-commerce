@@ -1,3 +1,10 @@
+<script module lang="ts">
+	// An address the next screen may offer: the reset form takes the one typed at sign-in. It is
+	// handed over here, in memory, never as an `email` query, since every analytics tag records the
+	// URL and the history keeps it.
+	export const authEmail = { value: '' }
+</script>
+
 <script lang="ts">
 	import type { WithElementRef } from 'bits-ui'
 	import type { HTMLAttributes } from 'svelte/elements'
@@ -23,7 +30,9 @@
 	let { type, extraqueries, children, ...restProps }: AuthButtonProps = $props()
 
 	function handleClick() {
-		showAuthModal(type, extraqueries)
+		const { email = '', ...queries } = extraqueries ?? {}
+		authEmail.value = email
+		showAuthModal(type, queries)
 	}
 </script>
 

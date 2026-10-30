@@ -87,7 +87,7 @@
 			// Only clear storage and redirect on success
 			sessionStorage.removeItem('signup_email')
 			toast.success('Account created successfully')
-			goto(`/auth/signup/success?email=${encodeURIComponent(email)}`)
+			goto('/auth/signup/success', { state: { signupEmail: email } })
 		} catch (e: any) {
 			toast.error(e.message || 'Failed to create account')
 			// Don't redirect, let user fix the error and try again
