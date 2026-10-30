@@ -33,6 +33,9 @@ RUN BUILD_TIME="$(date -u +'%Y-%m-%d %H:%M:%S')" bun run build
 
 # Define environment variables
 ENV NODE_ENV=production
+# A shopper's design is uploaded through this server, and its print file can be up to the engine's
+# 15 MB; adapter-node refuses a body over 512 KB unless told otherwise.
+ENV BODY_SIZE_LIMIT=16M
 
 # Start the application
 CMD ["bun", "start"]

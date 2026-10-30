@@ -21,6 +21,7 @@ import {
 } from '$lib/customizer/document'
 import { Designer } from '$lib/customizer/designer.svelte'
 import { backingScale, previewView } from '$lib/customizer/draw'
+import { PlainError, plainMessage } from '$lib/customizer/service'
 
 const area = { x: 40, y: 40, width: 520, height: 1120, radius: 90 }
 
@@ -206,5 +207,18 @@ describe('canvas sizes', () => {
 	it('draws the preview at most 2000 pixels on its longer side', () => {
 		expect(previewView({ ...setup, mockup: { url: '/m.png', width: 4000, height: 8000 } })).toEqual({ kind: 'mockup', scale: 0.25 })
 		expect(previewView(setup)).toEqual({ kind: 'mockup', scale: 1 })
+	})
+})
+
+describe('what a shopper is told when a step fails', () => {
+	it('is plain copy, never the engine’s or HTTP’s words', () => {
+		const tryAgain = 'Your photo could not be uploaded. Please try again.'
+		const tooLarge = 'This photo is too large to upload. Choose a smaller one.'
+		const engine = (status: number, message: string) => Object.assign(new Error(message), { status })
+		expect(plainMessage(engine(502, 'The commerce engine answered 502.'), tryAgain, tooLarge)).toBe(tryAgain)
+		expect(plainMessage(engine(413, 'Payload Too Large'), tryAgain, tooLarge)).toBe(tooLarge)
+		expect(plainMessage(new TypeError('Failed to fetch'), tryAgain, tooLarge)).toBe(tryAgain)
+		expect(plainMessage(engine(429, 'rate limited'), tryAgain)).toBe('Too many tries in the last hour. Please wait a while and try again.')
+		expect(plainMessage(new PlainError('Choose a JPEG or PNG photo.'), tryAgain)).toBe('Choose a JPEG or PNG photo.')
 	})
 })

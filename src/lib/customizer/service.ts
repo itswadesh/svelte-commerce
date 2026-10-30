@@ -41,6 +41,18 @@ export async function saveDesign(design: Parameters<Required<CustomizerService>[
 	return (await service()).saveDesign(design)
 }
 
+/** A failure whose message is written for the shopper. */
+export class PlainError extends Error {}
+
+/** The engine's and HTTP's own words never reach a shopper; a step's own sentence stands in for them. */
+export function plainMessage(err: unknown, fallback: string, tooLarge = fallback): string {
+	if (err instanceof PlainError) return err.message
+	const status = (err as { status?: unknown } | null)?.status
+	if (status === 413) return tooLarge
+	if (status === 429) return 'Too many tries in the last hour. Please wait a while and try again.'
+	return fallback
+}
+
 export const MAX_UPLOAD_BYTES = 15 * 1024 * 1024
 const MAX_PHOTO_PIXELS = 12_000_000
 const UNREADABLE = 'This photo cannot be opened here. Choose a JPEG or PNG photo.'
@@ -59,19 +71,19 @@ export async function preparePhoto(file: File, cap: number): Promise<{ blob: Blo
 	try {
 		picture = await createImageBitmap(file, { imageOrientation: 'from-image' })
 	} catch {
-		throw new Error(UNREADABLE)
+		throw new PlainError(UNREADABLE)
 	}
 	const scale = Math.min(1, cap / Math.max(picture.width, picture.height), Math.sqrt(MAX_PHOTO_PIXELS / (picture.width * picture.height)))
 	const canvas = document.createElement('canvas')
 	canvas.width = Math.round(picture.width * scale)
 	canvas.height = Math.round(picture.height * scale)
 	const ctx = canvas.getContext('2d', { willReadFrequently: true })
-	if (!ctx) throw new Error(UNREADABLE)
+	if (!ctx) throw new PlainError(UNREADABLE)
 	ctx.drawImage(picture, 0, 0, canvas.width, canvas.height)
 	picture.close()
 	const type = file.type !== 'image/jpeg' && hasTransparency(ctx, canvas.width, canvas.height) ? 'image/png' : 'image/jpeg'
 	const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, 0.9))
-	if (!blob) throw new Error(UNREADABLE)
+	if (!blob) throw new PlainError(UNREADABLE)
 	return { blob, picture: await createImageBitmap(canvas) }
 }
 

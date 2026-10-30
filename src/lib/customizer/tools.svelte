@@ -18,7 +18,7 @@
 		type TextLayer
 	} from './document'
 	import { textBox } from './draw'
-	import { photoCap, preparePhoto, upload } from './service'
+	import { photoCap, plainMessage, preparePhoto, upload } from './service'
 	import type { Designer } from './designer.svelte'
 
 	type Props = { designer: Designer; panel: Panel; announce: (message: string) => void }
@@ -64,10 +64,7 @@
 			})
 			announce('Photo added')
 		} catch (err) {
-			const tooLarge = (err as { status?: number })?.status === 413
-			uploadError = tooLarge
-				? 'This photo is too large to upload. Choose a smaller one.'
-				: (err as Error)?.message || 'Your photo could not be uploaded. Please try again.'
+			uploadError = plainMessage(err, 'Your photo could not be uploaded. Please try again.', 'This photo is too large to upload. Choose a smaller one.')
 		} finally {
 			uploading = false
 		}

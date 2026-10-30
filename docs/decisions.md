@@ -27,8 +27,9 @@ and sent as a plain JPEG (a PNG only when it has see-through parts), at most 12 
 the print file's longest side: the engine refuses HEIC, WebP and some costly files it could read,
 more pixels never print sharper, and a smaller upload is faster on a phone's data. The print file is
 a PNG and can still approach the engine's 15 MB limit, so a deployment selling designs sets
-`BODY_SIZE_LIMIT=16M`; `docker-compose.yml` does. A print file over the limit gets a plain message
-asking for a simpler design, not a silent failure.
+`BODY_SIZE_LIMIT=16M`; the `Dockerfile` and `docker-compose.yml` do. A print file over the limit
+gets a plain message asking for a simpler design, not a silent failure, and every other failed
+upload, save or add says so in plain words, never in the engine's or HTTP's.
 
 ## 2026-10-30: Google reviews are Google's, live, and the survey uses the engine's order data
 

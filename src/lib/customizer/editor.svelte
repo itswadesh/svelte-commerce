@@ -34,7 +34,7 @@
 	import { isEmpty, layerLabel, type CustomizerSetup, type Panel } from './document'
 	import { Designer } from './designer.svelte'
 	import { loadPicture, previewView, renderPng } from './draw'
-	import { loadFonts, MAX_UPLOAD_BYTES, saveDesign, upload } from './service'
+	import { loadFonts, MAX_UPLOAD_BYTES, PlainError, plainMessage, saveDesign, upload } from './service'
 	import Stage from './stage.svelte'
 	import Tools from './tools.svelte'
 
@@ -165,17 +165,15 @@
 		designer.endGesture()
 		status = { state: 'saving' }
 		try {
-			if (designer.missingPhoto) throw new Error(MISSING_PHOTO)
+			if (designer.missingPhoto) throw new PlainError(MISSING_PHOTO)
 			await designer.fontsReady
 			const doc = designer.doc
 			const [previewPng, printPng] = await Promise.all([
 				renderPng(doc, setup, pictures, previewView(setup)),
 				renderPng(doc, setup, pictures, { kind: 'print' })
 			])
-			if (printPng.size > MAX_UPLOAD_BYTES || previewPng.size > MAX_UPLOAD_BYTES) throw new Error(TOO_LARGE)
-			const [preview, print] = await Promise.all([upload(previewPng, 'preview.png'), upload(printPng, 'print.png')]).catch((err) => {
-				throw (err as { status?: number })?.status === 413 ? new Error(TOO_LARGE) : err
-			})
+			if (printPng.size > MAX_UPLOAD_BYTES || previewPng.size > MAX_UPLOAD_BYTES) throw new PlainError(TOO_LARGE)
+			const [preview, print] = await Promise.all([upload(previewPng, 'preview.png'), upload(printPng, 'print.png')])
 			const saved = await saveDesign({
 				productId: setup.productId,
 				variantId,
@@ -191,9 +189,7 @@
 				qty: 1,
 				designId: saved.designId
 			})
-			if (!cart?.lineItems?.some((l: { designId?: string }) => l.designId === saved.designId)) {
-				throw new Error('Your design could not be added to your bag. Please try again.')
-			}
+			if (!cart?.lineItems?.some((l: { designId?: string }) => l.designId === saved.designId)) throw new Error('The bag came back without the design')
 			if (cartState) cartState.cart = cart
 			await addPicks(setup.productId, cartState)
 			fireGTagEvent('add_to_cart', { items: [{ ...product, qty: 1 }], total: unitPrice, qty: 1, user: { id: userState?.user?.id } })
@@ -206,7 +202,7 @@
 				if (cartState) cartState.isOpen = true
 			}, 900)
 		} catch (err) {
-			status = { state: 'error', message: (err as Error)?.message || 'Your design could not be saved. Please try again.' }
+			status = { state: 'error', message: plainMessage(err, 'Your design could not be added to your bag. Please try again.', TOO_LARGE) }
 		}
 	}
 </script>
