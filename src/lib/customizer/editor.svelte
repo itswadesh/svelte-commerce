@@ -144,7 +144,6 @@
 		})
 	}
 
-	// One step back however often Close is asked for before the step lands, and closed even if it never does.
 	function close(): Promise<void> {
 		if (!open) return Promise.resolve()
 		if (framed()) {
