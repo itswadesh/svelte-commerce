@@ -198,6 +198,18 @@ the account, auth and shop pages were unified, so the whole storefront reads in 
 `scripts/check-tokens.mjs` fails on all-caps styling in default-theme files. The wine, organic, lime
 and noor themes keep their own type treatment.
 
+## 2026-10-30: The app writes its own head tags
+
+Compared with another store's product page, ours shared links badly: the vendored SeoHeader always
+said og:type "website", passed site-relative pictures through (Facebook, WhatsApp and X fetch only
+full URLs), emitted an empty keywords tag and had no robots, locale or price tags.
+`src/lib/components/seo/seo-header.svelte` now writes the tags itself instead of wrapping it. Product
+pages are og:type "product" with product:price and product:availability; every picture, in the tags
+and in the JSON-LD, is a full URL; the robots tag carries only permissions (max-image-preview:large),
+never "index", so a page's own noindex is not contradicted. The product BreadcrumbList runs from Home
+to the product. A product weight is published only with a known unit. The fallback description no
+longer promises free delivery.
+
 ## 2026-10-30: The store's ad and analytics tags, one bridge, behind the cookie choice
 
 The owner asked for the popular ad and analytics integrations (GoCommerce D160). The Meta pixel,
