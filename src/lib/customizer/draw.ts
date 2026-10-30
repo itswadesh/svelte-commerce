@@ -179,5 +179,8 @@ export async function renderPng(doc: DesignDocument, setup: CustomizerSetup, pic
 	const ctx = canvas.getContext('2d')
 	if (!ctx) throw new Error('Could not draw the design')
 	drawDesign(ctx, doc, setup, pictures, view)
-	return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not draw the design'))), 'image/png'))
+	const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'))
+	canvas.width = canvas.height = 0
+	if (!blob) throw new Error('Could not draw the design')
+	return blob
 }

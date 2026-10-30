@@ -128,6 +128,12 @@
 		loadPictures()
 	})
 
+	$effect(() => {
+		if (!open) untrack(() => designer.prune())
+	})
+
+	$effect(() => () => designer.dispose())
+
 	function togglePanel(p: Panel) {
 		previewing = false
 		panel = panel === p ? null : p

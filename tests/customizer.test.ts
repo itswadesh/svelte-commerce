@@ -195,6 +195,30 @@ describe('the shopper’s photos', () => {
 		designer.add(photo('p', 'u9'))
 		expect(designer.missingPhoto).toBe(true)
 	})
+
+	it('lets go of a photo only once no layer and no undo step uses it', () => {
+		const designer = new Designer(setup)
+		const [placed, undoable, unused] = [bitmap(), bitmap(), bitmap()]
+		designer.addPhoto('placed', placed)
+		designer.add(photo('a', 'placed'))
+		designer.addPhoto('undoable', undoable)
+		designer.add(photo('b', 'undoable'))
+		designer.remove('b')
+		designer.addPhoto('unused', unused)
+		designer.prune()
+		expect([placed.closed, undoable.closed, unused.closed]).toEqual([false, false, true])
+		expect([...designer.photos.keys()]).toEqual(['placed', 'undoable'])
+	})
+
+	it('lets go of every photo when the editor goes', () => {
+		const designer = new Designer(setup)
+		const picture = bitmap()
+		designer.addPhoto('u1', picture)
+		designer.add(photo('p', 'u1'))
+		designer.dispose()
+		expect(picture.closed).toBe(true)
+		expect(designer.photos.size).toBe(0)
+	})
 })
 
 describe('canvas sizes', () => {

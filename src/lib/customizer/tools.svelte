@@ -49,7 +49,10 @@
 		uploadError = ''
 		try {
 			const { blob, picture } = await preparePhoto(file, photoCap(setup))
-			const sent = await upload(blob, blob.type === 'image/png' ? 'photo.png' : 'photo.jpg')
+			const sent = await upload(blob, blob.type === 'image/png' ? 'photo.png' : 'photo.jpg').catch((err) => {
+				picture.close()
+				throw err
+			})
 			designer.addPhoto(sent.uploadId, picture)
 			if (Math.min(sent.width, sent.height) < setup.minPhotoPx) {
 				designer.lowResPhotos = { ...designer.lowResPhotos, [sent.uploadId]: { width: sent.width, height: sent.height } }
