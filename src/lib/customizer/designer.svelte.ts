@@ -112,4 +112,21 @@ export class Designer {
 	get missingPhoto(): boolean {
 		return this.doc.layers.some((l) => l.type === 'image' && !this.photos.has(l.upload_id))
 	}
+
+	prune() {
+		const { past, present, future } = this.history
+		const used = new Set(
+			[...past, present, ...future, this.live].flatMap((d) => d?.layers ?? []).flatMap((l) => (l.type === 'image' ? [l.upload_id] : []))
+		)
+		for (const [id, picture] of this.photos) {
+			if (used.has(id)) continue
+			picture.close()
+			this.photos.delete(id)
+		}
+	}
+
+	dispose() {
+		for (const picture of this.photos.values()) picture.close()
+		this.photos.clear()
+	}
 }

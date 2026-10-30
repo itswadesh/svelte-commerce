@@ -67,24 +67,40 @@ export const photoCap = (setup: CustomizerSetup) => {
  * (16-bit PNGs, progressive CMYK JPEGs); what a canvas writes it always takes.
  */
 export async function preparePhoto(file: File, cap: number): Promise<{ blob: Blob; picture: ImageBitmap }> {
-	let picture: ImageBitmap
+	const img = new Image()
+	img.src = URL.createObjectURL(file)
 	try {
-		picture = await createImageBitmap(file, { imageOrientation: 'from-image' })
-	} catch {
-		throw new PlainError(UNREADABLE)
+		await new Promise((resolve, reject) => {
+			img.onload = resolve
+			img.onerror = () => reject(new PlainError(UNREADABLE))
+		})
+		const scale = Math.min(
+			1,
+			cap / Math.max(img.naturalWidth, img.naturalHeight),
+			Math.sqrt(MAX_PHOTO_PIXELS / (img.naturalWidth * img.naturalHeight))
+		)
+		const canvas = Object.assign(document.createElement('canvas'), {
+			width: Math.round(img.naturalWidth * scale),
+			height: Math.round(img.naturalHeight * scale)
+		})
+		const ctx = canvas.getContext('2d', { willReadFrequently: true })
+		if (!ctx) throw new PlainError(UNREADABLE)
+		ctx.imageSmoothingQuality = 'high'
+		// Drawn smaller straight from the image element, Chrome decodes a large JPEG at a reduced
+		// scale; an ImageBitmap of the file would first hold the whole original.
+		ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+		const type = file.type !== 'image/jpeg' && hasTransparency(ctx, canvas.width, canvas.height) ? 'image/png' : 'image/jpeg'
+		const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, 0.9))
+		const picture = await createImageBitmap(canvas)
+		canvas.width = canvas.height = 0
+		if (!blob) {
+			picture.close()
+			throw new PlainError(UNREADABLE)
+		}
+		return { blob, picture }
+	} finally {
+		URL.revokeObjectURL(img.src)
 	}
-	const scale = Math.min(1, cap / Math.max(picture.width, picture.height), Math.sqrt(MAX_PHOTO_PIXELS / (picture.width * picture.height)))
-	const canvas = document.createElement('canvas')
-	canvas.width = Math.round(picture.width * scale)
-	canvas.height = Math.round(picture.height * scale)
-	const ctx = canvas.getContext('2d', { willReadFrequently: true })
-	if (!ctx) throw new PlainError(UNREADABLE)
-	ctx.drawImage(picture, 0, 0, canvas.width, canvas.height)
-	picture.close()
-	const type = file.type !== 'image/jpeg' && hasTransparency(ctx, canvas.width, canvas.height) ? 'image/png' : 'image/jpeg'
-	const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, 0.9))
-	if (!blob) throw new PlainError(UNREADABLE)
-	return { blob, picture: await createImageBitmap(canvas) }
 }
 
 function hasTransparency(ctx: CanvasRenderingContext2D, width: number, height: number): boolean {
