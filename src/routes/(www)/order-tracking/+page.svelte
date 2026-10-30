@@ -31,6 +31,13 @@
 	onMount(async () => {
 		if (!orderNo) return
 		const key = page.url.searchParams.get('key')
+		// The key opens the order, so it leaves the address bar, the history and every analytics
+		// tag that records the page as soon as it is read.
+		if (key) {
+			const url = new URL(location.href)
+			url.searchParams.delete('key')
+			history.replaceState(history.state, '', url)
+		}
 		loading = true
 		try {
 			if (key) {
@@ -43,13 +50,6 @@
 			if (key) error = 'This link no longer opens the order. Enter your email or phone instead.'
 		} finally {
 			loading = false
-			// The key opens the order, so it leaves the address bar and the
-			// history once this browser holds it.
-			if (key) {
-				const url = new URL(location.href)
-				url.searchParams.delete('key')
-				history.replaceState(history.state, '', url)
-			}
 		}
 	})
 

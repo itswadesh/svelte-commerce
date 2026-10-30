@@ -2,6 +2,17 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import AuthButton from '$lib/components/auth/auth-button.svelte'
+	import { onMount } from 'svelte'
+
+	// Read once, then taken out of the address bar: the address would otherwise sit in the history
+	// and in every analytics tag that records the page.
+	const email = page.url.searchParams.get('email')
+	onMount(() => {
+		if (!email) return
+		const url = new URL(location.href)
+		url.searchParams.delete('email')
+		history.replaceState(history.state, '', url)
+	})
 </script>
 
 <svelte:head>
@@ -26,7 +37,7 @@
 		<div class="space-y-4">
 			<h1 class="page-heading">Welcome aboard!</h1>
 			<p class="text-lg text-muted-foreground">
-				Hi {page.url.searchParams.get('email')}, Thank you for creating an account with {page?.data?.store?.name}. Please verify your email to
+				Hi {email}, Thank you for creating an account with {page?.data?.store?.name}. Please verify your email to
 				complete registration.
 			</p>
 		</div>
@@ -34,7 +45,7 @@
 		<div class="rounded-lg bg-primary/10 p-6">
 			<h2 class="mb-4 text-xl font-semibold text-primary">Verify your email</h2>
 			<p class="text-primary">
-				We've sent a verification link to <span class="font-medium">{page.url.searchParams.get('email')}</span>
+				We've sent a verification link to <span class="font-medium">{email}</span>
 			</p>
 			<p class="mt-2 text-sm text-primary">Please check your inbox and click the link to activate your account.</p>
 		</div>
