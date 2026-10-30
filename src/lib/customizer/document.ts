@@ -1,7 +1,7 @@
 /**
- * The design document is the engine's (GoCommerce docs/customizer.md, version 1), sent and stored
- * unchanged, so it keeps the engine's snake_case keys. Every coordinate is in the mockup's pixels,
- * measured from the print area's top left corner.
+ * The design document is the commerce engine's (its customizer contract, version 1), sent and
+ * stored unchanged, so it keeps the engine's snake_case keys. Every coordinate is in the mockup's
+ * pixels, measured from the print area's top left corner.
  */
 
 export type CustomizerSetup = {
