@@ -8,6 +8,7 @@
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { readAppliedFilters, urlWithoutAnyFilter } from './scope-filters.js'
 	import { themeOptions } from '$lib/composer/theme-options.js'
+	import { trackViewItemList } from '$lib/analytics'
 
 	const data = $derived(page.data)
 	const options = $derived(themeOptions(data?.themeSettings))
@@ -113,6 +114,12 @@
 			products = data.products?.data ?? []
 			currentPage = urlPage
 		}
+		// Once per listing (a new category, search, filter or sort), for the products the server sent.
+		const hierarchy = data.products?.categoryHierarchy ?? []
+		const listName = page.url.searchParams.get('search')
+			? 'Search results'
+			: (hierarchy[hierarchy.length - 1]?.name ?? 'All products')
+		trackViewItemList(data.products?.data, listName, data.store?.currency?.code)
 	})
 
 	async function loadNextPage() {

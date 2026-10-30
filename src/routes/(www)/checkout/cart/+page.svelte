@@ -21,6 +21,7 @@
 	import FreeDeliveryBar from '$lib/components/cart/free-delivery-bar.svelte'
 	import CartOffers from '$lib/components/cart/cart-offers.svelte'
 	import CartCrossSells from '$lib/components/cart/cart-cross-sells.svelte'
+	import { trackViewCart } from '$lib/analytics'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
@@ -125,6 +126,14 @@
 
 	$effect(() => {
 		animatedSavings.set(totalSavings)
+	})
+
+	// Once per visit to the bag, as soon as it has loaded with something in it.
+	let cartViewSent = false
+	$effect(() => {
+		if (cartViewSent || !cartState.cart?.lineItems?.length) return
+		cartViewSent = true
+		trackViewCart(cartState.cart, page.data?.store?.currency?.code)
 	})
 
 	// One busy flag for the whole page. `cartModule.loadingForCart` is declared in the core

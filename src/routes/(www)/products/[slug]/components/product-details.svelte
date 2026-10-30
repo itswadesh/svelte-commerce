@@ -1,10 +1,9 @@
 <script lang="ts">
 	import LoginModal from '$lib/components/auth/login-modal.svelte'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
-	import { GoogleStructuredDataBreadcrumb } from '$lib/core/components/index.js'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
-	import { stockAvailabilityUrl } from '$lib/components/seo/schema.js'
+	import { breadcrumbList, mediaUrl, stockAvailabilityUrl, weightValue } from '$lib/components/seo/schema.js'
 	import { RETURN_WINDOW_DAYS } from '$lib/config/policy'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
@@ -192,9 +191,10 @@
 			.map((m) => m.trim())
 			.filter(Boolean)
 	const productMedia = $derived(splitMedia(data?.product?.images))
+	// Full addresses: Google reads a schema image only from one, and some backends store site-relative paths.
 	const productImages = $derived.by(() => {
 		const images = productMedia.filter((m) => !isVideo(m))
-		return images.length ? images : [data?.product?.thumbnail].filter(Boolean)
+		return (images.length ? images : [data?.product?.thumbnail]).map((m) => mediaUrl(page.url.origin, m)).filter(Boolean)
 	})
 	const productVideos = $derived([...new Set(productMedia.filter(isVideo))])
 
@@ -306,7 +306,7 @@
 			...(optionAxes.length ? { variesBy: [...new Set(optionAxes.map(([, axis]) => `https://schema.org/${axis}`))] } : {}),
 			hasVariant: variants.map((v: any) => {
 				const url = `${productUrl}?variant_id=${v.id}`
-				const image = v.thumbnail || v.img || splitMedia(v.images).find((m) => !isVideo(m))
+				const image = mediaUrl(page.url.origin, v.thumbnail || v.img || splitMedia(v.images).find((m) => !isVideo(m)))
 				const axes = Object.fromEntries(
 					optionAxes.flatMap(([optionId, axis]) => {
 						const value = v.options?.find((o: any) => o?.optionId === optionId)?.value
@@ -340,7 +340,7 @@
 		const description = cleanHtmlText(p.description)
 		const brandName = p.brandName || storeName
 		const category = p.category?.name || (typeof p.category === 'string' ? p.category : '')
-		const weightUnit = data?.store?.weight_unit
+		const weight = weightValue(p.weight, data?.store?.weight_unit)
 
 		return {
 			'@context': 'https://schema.org/',
@@ -351,15 +351,7 @@
 			url: productUrl,
 			...(description ? { description } : {}),
 			...(category ? { category } : {}),
-			...(p.weight
-				? {
-						weight: {
-							'@type': 'QuantitativeValue',
-							value: p.weight,
-							...(weightUnit ? { unitText: weightUnit } : {})
-						}
-					}
-				: {}),
+			...(weight ? { weight } : {}),
 			...(brandName ? { brand: { '@type': 'Brand', name: brandName } } : {}),
 			// Never fabricate stars: an aggregateRating is emitted only when there is a real one.
 			...(reviewCount > 0 && ratingValue > 0
@@ -405,23 +397,37 @@
 					'@type': 'VideoObject',
 					name: data.product.title,
 					description: cleanHtmlText(data.product.description) || data.product.title,
-					thumbnailUrl: data.product.thumbnail,
+					thumbnailUrl: mediaUrl(page.url.origin, data.product.thumbnail),
 					uploadDate: data.product.createdAt,
-					...(EMBED_URL.test(videoUrl) ? { embedUrl: videoUrl } : { contentUrl: videoUrl })
+					...(EMBED_URL.test(videoUrl) ? { embedUrl: videoUrl } : { contentUrl: mediaUrl(page.url.origin, videoUrl) })
 				}))
 			: []
 	)
 </script>
 
-<SeoHeader {metaTitle} {metaDescription} metaKeywords={data?.product?.keywords || ''} image={data?.product?.thumbnail || ''} />
+<SeoHeader
+	{metaTitle}
+	{metaDescription}
+	metaKeywords={data?.product?.keywords || ''}
+	image={data?.product?.thumbnail || productImages[0] || ''}
+	imageAlt={data?.product?.title || ''}
+	type="product"
+	price={data?.product?.price}
+	currency={currencyCode}
+	availability={data?.product ? stockAvailabilityUrl(data.product) : ''}
+/>
 
 <StructuredData schema={productSchema} />
 
-<!-- Hand the raw hierarchy over: the core component maps `${origin}/${slug}` for every crumb,
-     including the leaf. Pre-mapping into `breadcrumbs` here previously produced
-     `https://example.compendant` (no separator) and dropped the last crumb entirely, so
-     single-category products emitted no BreadcrumbList at all. -->
-<GoogleStructuredDataBreadcrumb categoryHierarchy={data?.product?.categoryHierarchy || []} />
+<!-- Home and the category trail, as the visible breadcrumb reads, then the product itself. -->
+<StructuredData
+	schema={breadcrumbList(
+		page.url.origin,
+		'Home',
+		data?.product?.categoryHierarchy || [],
+		data?.product?.title ? { name: data.product.title, url: productUrl } : undefined
+	)}
+/>
 
 {#each videoSchemas as videoSchema}
 	<StructuredData schema={videoSchema} />

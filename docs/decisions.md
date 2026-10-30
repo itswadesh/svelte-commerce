@@ -31,6 +31,27 @@ a PNG and can still approach the engine's 15 MB limit, so a deployment selling d
 gets a plain message asking for a simpler design, not a silent failure, and every other failed
 upload, save or add says so in plain words, never in the engine's or HTTP's.
 
+## 2026-10-30: Criteo's OneTag, per store, behind the cookie choice
+
+The owner asked for Criteo's tag (`dynamic.criteo.com/js/ld/ld.js?a=<account>`). The account is
+each store's own: the engine's `criteo` plugin, which the gocommerce connector hands over as
+`store.plugins.criteo`. It is never hard-coded, because one deployment serves many stores. The tag
+loads on the first interaction. Criteo does not read Google's consent mode, so a saved cookie choice
+decides, and without one, visitors whose time zone is in the opt-in regions (Europe and the
+Atlantic islands, as `app.html` treats them) wait for "Accept all". A store with Criteo shows the
+cookie banner.
+
+Amended 2026-10-30, the owner: "send Criteo product, cart and purchase events too". Criteo is now one
+of the ad tags in `ad-tags.ts`, which hears the GA4 events the storefront already sends, so it loads,
+waits for consent and hears events exactly as the Meta and TikTok pixels do: a product view is
+`viewItem`, a listing `viewList` (its first three products), the basket page and the start of
+checkout `viewBasket` with each line's ID, price and quantity, and a purchase with an order number
+`trackTransaction` with its currency. Adding one item is not sent: Criteo's basket event wants the
+whole basket. No email is sent. The separate Criteo component is gone. Listing pages now send
+GA4's `view_item_list` and the bag page `view_cart`, which nothing sent before, so every tag hears
+them; their item IDs follow `view_item`'s (SKU, else the product ID), and a store's Criteo product
+feed must use the same IDs for the ads to show the right products.
+
 ## 2026-10-30: Google reviews are Google's, live, and the survey uses the engine's order data
 
 The owner asked to "integrate google reviews" (engine D161). The home page's Google reviews section
@@ -225,6 +246,18 @@ class, no `text-transform: uppercase` and no caps-only letter-spacing. The owner
 the account, auth and shop pages were unified, so the whole storefront reads in one voice.
 `scripts/check-tokens.mjs` fails on all-caps styling in default-theme files. The wine, organic, lime
 and noor themes keep their own type treatment.
+
+## 2026-10-30: The app writes its own head tags
+
+Compared with another store's product page, ours shared links badly: the vendored SeoHeader always
+said og:type "website", passed site-relative pictures through (Facebook, WhatsApp and X fetch only
+full URLs), emitted an empty keywords tag and had no robots, locale or price tags.
+`src/lib/components/seo/seo-header.svelte` now writes the tags itself instead of wrapping it. Product
+pages are og:type "product" with product:price and product:availability; every picture, in the tags
+and in the JSON-LD, is a full URL; the robots tag carries only permissions (max-image-preview:large),
+never "index", so a page's own noindex is not contradicted. The product BreadcrumbList runs from Home
+to the product. A product weight is published only with a known unit. The fallback description no
+longer promises free delivery.
 
 ## 2026-10-30: The store's ad and analytics tags, one bridge, behind the cookie choice
 
