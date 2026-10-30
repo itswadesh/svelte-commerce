@@ -1,12 +1,13 @@
 <script module lang="ts">
 	import { pushState, replaceState } from '$app/navigation'
+	import { page } from '$app/state'
 
 	// A frame, such as the theme editor's preview, shares its history with the page around it, and a
 	// step back there can undo that page's own step: in a frame the editor neither adds nor leaves an entry.
 	const framed = () => window.parent !== window
 
 	export function openEditor() {
-		if (framed()) replaceState('', { customizerOpen: true })
+		if (framed() || page.state.customizerOpen) replaceState('', { customizerOpen: true })
 		else pushState('', { customizerOpen: true })
 	}
 </script>
@@ -15,7 +16,6 @@
 	import { Dialog as DialogPrimitive } from 'bits-ui'
 	import { untrack } from 'svelte'
 	import { afterNavigate, beforeNavigate } from '$app/navigation'
-	import { page } from '$app/state'
 	import {
 		ArrowDown,
 		ArrowUp,
@@ -106,15 +106,22 @@
 	})
 
 	let open = $state(false)
+	let editorEntry: number | undefined
 
 	$effect(() => {
-		if (page.state.customizerOpen) untrack(() => (open = true))
+		if (!page.state.customizerOpen) return
+		untrack(() => {
+			open = true
+			editorEntry = history.state?.['sveltekit:history']
+		})
 	})
 
 	// The product composable canonicalises the URL with a replaceState goto that drops page.state,
 	// and can land after Design yours: claim the entry back, so Back closes and Forward reopens.
 	afterNavigate(({ type }) => {
-		if (open && type !== 'popstate' && !page.state.customizerOpen) replaceState('', { ...page.state, customizerOpen: true })
+		if (!open || type === 'popstate' || page.state.customizerOpen) return
+		if (history.state?.['sveltekit:history'] === editorEntry) replaceState('', { ...page.state, customizerOpen: true })
+		else shut()
 	})
 
 	let closing: Promise<void> | null = null
