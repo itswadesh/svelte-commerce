@@ -70,7 +70,7 @@
 			</div>
 		{:else}
 			<div class="edp-related-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-				{#each products as { id, slug, thumbnail, price, mrp, title, vendor, variants }}
+				{#each products as { id, slug, thumbnail, price, mrp, title, vendor, variants, designable }}
 					<ProductCard
 						product={{
 							id,
@@ -80,7 +80,8 @@
 							mrp,
 							title,
 							vendor,
-							variants
+							variants,
+							designable
 						}}
 					/>
 				{/each}
