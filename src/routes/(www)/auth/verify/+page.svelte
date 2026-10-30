@@ -20,6 +20,12 @@
 	  	// and demanding an email here rejected every Vendure link before it reached the backend.
 	  	const email = page.url.searchParams.get('email') ?? ''
 	  	const token = page.url.searchParams.get('token')
+	  	// Read once; the address and the token leave the address bar, the history and every
+	  	// analytics tag that records the page.
+	  	const clean = new URL(location.href)
+	  	clean.searchParams.delete('email')
+	  	clean.searchParams.delete('token')
+	  	history.replaceState(history.state, '', clean)
 	  	if (!token) {
 	  		throw Error('This link is missing its verification token.')
 	  	}
