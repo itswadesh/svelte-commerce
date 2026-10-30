@@ -55,14 +55,14 @@
 				{#each data as item}
 					<!-- Desktop View -->
 					<div class="hidden gap-2 p-5 md:flex lg:gap-5">
-						<a href={`/product/${item.slug}?variant_id=${item.variantId || ''}`} aria-label="Click to view the product details" class="shrink-0">
+						<a href={`/products/${item.slug}?variant_id=${item.variantId || ''}`} aria-label="Click to view the product details" class="shrink-0">
 							<LazyImg src={item.img} alt={item.title} width="56" class="h-auto w-14 object-contain object-top" />
 						</a>
 
 						<div class="ml-4 flex w-full flex-1 flex-col gap-0.5 pl-4 pr-4">
 							<div class="flex justify-between gap-2 sm:gap-4">
 								<a
-									href={`/product/${item.slug}?variant_id=${item.variantId || ''}`}
+									href={`/products/${item.slug}?variant_id=${item.variantId || ''}`}
 									aria-label="Click to view the product details"
 									class="flex-1 hover:underline"
 								>
@@ -103,7 +103,7 @@
 							<div class="flex items-center justify-between">
 								<div>
 									<a
-										href={`/product/${item.slug}?variant_id=${item.variantId || ''}`}
+										href={`/products/${item.slug}?variant_id=${item.variantId || ''}`}
 										aria-label="Click to view the product details"
 										class="shrink-0"
 									>
@@ -113,7 +113,7 @@
 								<div class="mt-2 flex w-full flex-1 flex-col items-center justify-between gap-0.5 pt-1 xl:pl-4 xl:pr-4">
 									<div class="flex justify-between gap-2 sm:gap-4">
 										<a
-											href={`/product/${item.slug}?variant_id=${item.variantId || ''}`}
+											href={`/products/${item.slug}?variant_id=${item.variantId || ''}`}
 											aria-label="Click to view the product details"
 											class="flex-1 hover:underline"
 										>
