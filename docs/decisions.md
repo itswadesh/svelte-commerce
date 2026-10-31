@@ -11,7 +11,8 @@ storefront loads them. For a store that picks its fonts in the theme editor, thi
 everywhere on the default theme" (2026-10-27). A store that picks none gets Inter exactly as before.
 
 When a store's theme settings name a heading font and a body font, the default theme's Inter
-stylesheet is not requested. Both faces load every weight they offer. Loading the heading face at
+stylesheet is not requested. Both faces load the weights the theme draws, 400 to 800, which Google
+serves as one variable file per face, so 800 costs no extra bytes. Loading the heading face at
 the store's heading weight alone would save 21 KB on Noto Serif (15 KB against 36 KB), but the theme
 also draws headings at fixed weights: the hero's 800, the footer's 600 and a collection or slide
 title's 500. A store that had already chosen a heading font would change look, so the saving waits
@@ -21,7 +22,8 @@ for the hero to follow the heading weight, a later step through the theme editor
 Until a chosen face arrives, its latin text is drawn in Arial, or Times New Roman for a serif,
 resized to the face's metrics (`scripts/font-fallbacks.mjs`), so the swap does not move the page.
 The owner's standard is a layout shift of 0; with these faces the home page at 360 px measured
-0.018 before and 0 after.
+0.018 before and 0 after, in desktop Chrome on Windows. Android has neither Arial nor Times New
+Roman, so there the local face most likely fails and the swap behaves as it did before (untested).
 
 ## 2026-10-31: A store that adds tax on top says its checkout total is before tax
 
