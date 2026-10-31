@@ -184,12 +184,14 @@
 
 	/* A full-width strip at the very top or bottom meets the header or footer, as it always has. */
 	.cmp-home > :global(.cmp-announce:first-child),
-	.cmp-home > :global(.cmp-benefits-band:first-child) {
+	.cmp-home > :global(.cmp-benefits-band:first-child),
+	.cmp-home > :global(.cmp-marquee-band:first-child) {
 		margin-top: calc(-1 * var(--cmp-gap));
 	}
 
 	.cmp-home > :global(.cmp-announce:last-child),
-	.cmp-home > :global(.cmp-benefits-band:last-child) {
+	.cmp-home > :global(.cmp-benefits-band:last-child),
+	.cmp-home > :global(.cmp-marquee-band:last-child) {
 		margin-bottom: calc(-1 * var(--cmp-gap));
 	}
 
@@ -203,8 +205,12 @@
 		background: hsl(var(--muted) / 0.4);
 	}
 
-	.cmp-home > :global(:is(.cmp-divider--band:has(> section), .cmp-benefits-band) + :is(.cmp-divider--line, .cmp-divider--band)) {
+	.cmp-home > :global(:is(.cmp-divider--band:has(> section), .cmp-benefits-band, .cmp-marquee-band) + :is(.cmp-divider--line, .cmp-divider--band)) {
 		margin-top: calc(-1 * var(--cmp-gap));
+	}
+
+	.cmp-home > :global(.cmp-marquee-band + .cmp-divider--line) {
+		border-top-color: transparent;
 	}
 
 	.cmp-home > :global(:is(.cmp-divider--line, .cmp-divider--band):not(.cmp-edit):not(:has(> section))) {
