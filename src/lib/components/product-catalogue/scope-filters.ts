@@ -166,3 +166,20 @@ export function urlWithoutAnyFilter(url: URL): string {
 	next.searchParams.delete('page')
 	return next.pathname + next.search
 }
+
+const CATEGORY_INDENT = {
+	rail: ['', 'ps-3', 'ps-6', 'ps-9'],
+	sheet: ['', 'ps-4', 'ps-7', 'ps-10']
+}
+
+export function categoryIndent(depth: number | string | undefined, search: string, row: keyof typeof CATEGORY_INDENT): string {
+	return search ? '' : CATEGORY_INDENT[row][Math.min(Number(depth) || 0, 3)]
+}
+
+type CategoryRow = { name?: string; depth?: number | string }
+
+export function categoryParent(rows: CategoryRow[], i: number, search: string): string | undefined {
+	const depth = Number(rows[i].depth) || 0
+	if (search || !depth) return undefined
+	return rows.slice(0, i).findLast((row) => (Number(row.depth) || 0) < depth)?.name
+}
