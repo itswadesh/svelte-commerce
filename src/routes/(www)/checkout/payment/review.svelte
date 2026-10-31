@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronLeft, CreditCard, LockKeyhole, Mail, MapPin, Pencil, Truck } from '@lucide/svelte'
-	import { formatPrice, paymentFee, taxIsPending, totalLabel, totalWithFee } from '$lib/utils/price'
+	import { checkoutFigures, formatPrice, totalLabel } from '$lib/utils/price'
 	import { page } from '$app/state'
+	import { onMount } from 'svelte'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
@@ -11,7 +12,7 @@
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { linePicture } from '$lib/customizer/line'
 
-	const { paymentModule, onsubmit, onback } = $props()
+	const { paymentModule, quote, onsubmit, onback } = $props()
 
 	const cartState = paymentModule.cartState
 
@@ -19,9 +20,13 @@
 	const selectedPaymentMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
 	const selectedShippingRate = $derived(paymentModule.shippingRates?.data?.find((r: any) => r.id === cartState.cart?.shippingRateId))
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
-	const fee = $derived(paymentFee(selectedPaymentMethod))
-	const total = $derived(totalWithFee(cartState.cart.total, fee))
-	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart))
+	const quotedMethod = $derived(paymentModule.allPaymentMethods?.find((m: any) => m.code === quote.method))
+	const figures = $derived(
+		checkoutFigures(cartState.cart, quote.current ? quotedMethod : selectedPaymentMethod, page?.data?.store?.currency?.includesTax, quote.current)
+	)
+
+	// A shopper can sit on payment for minutes, and an automatic code can run out meanwhile.
+	onMount(() => quote.retry())
 </script>
 
 <svelte:head>
@@ -198,16 +203,20 @@
 					</div>
 					<div class="space-y-4">
 						<PriceSummary
-							subtotal={cartState.cart.subtotal}
-							discount={cartState.cart.discountAmount}
+							subtotal={figures.subtotal}
+							discount={figures.discount}
 							discountLabel={cartState.cart.couponCode ? `Discount (${cartState.cart.couponCode})` : 'Discount'}
-							shipping={cartState.cart.shippingCharges}
-							{fee}
-							tax={cartState.cart.tax}
-							{total}
+							coupon={figures.coupon}
+							shipping={figures.shipping}
+							fee={figures.fee}
+							tax={figures.tax}
+							total={figures.total}
 							{currencyCode}
 							shippingResolved={!!cartState.cart.shippingAddress}
-							{taxPending}
+							taxPending={figures.taxPending}
+							pending={quote.pending}
+							error={quote.error}
+							onretry={quote.retry}
 						/>
 
 						{#if paymentModule.showError}
@@ -224,10 +233,10 @@
 						<CheckoutButton
 							text="Confirm order"
 							onclick={onsubmit}
-							disabled={paymentModule.checkoutDisabled}
+							disabled={paymentModule.checkoutDisabled || !quote.confirmable(cartState.cart)}
 							loading={paymentModule.paymentLoader}
-							total={formatPrice(total, currencyCode)}
-							totalLabel={totalLabel(!!cartState.cart.shippingAddress, taxPending)}
+							total={quote.error ? '' : formatPrice(figures.total, currencyCode)}
+							totalLabel={totalLabel(!!cartState.cart.shippingAddress, figures.taxPending)}
 						/>
 					</div>
 				</div>

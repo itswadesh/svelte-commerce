@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { PaymentModule } from '$lib/core/composables/index.js'
+	import { LiveQuote } from '$lib/checkout/quote.svelte'
 	import Payment from './payment.svelte'
 	import Review from './review.svelte'
 
 	const paymentModule = new PaymentModule()
+	const quote = new LiveQuote(paymentModule)
 
 	let showReview = $state(false)
 
@@ -26,6 +28,7 @@
 {#if showReview}
 	<Review
 		{paymentModule}
+		{quote}
 		onsubmit={placeOrder}
 		onback={() => {
 			showReview = false
@@ -39,5 +42,6 @@
 			window.scrollTo({ top: 0 })
 		}}
 		{paymentModule}
+		{quote}
 	/>
 {/if}

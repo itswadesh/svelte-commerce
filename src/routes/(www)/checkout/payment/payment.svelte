@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { formatPrice, paymentFee, taxIsPending, totalLabel, totalWithFee } from '$lib/utils/price'
+	import { checkoutFigures, formatPrice, paymentFee, totalLabel } from '$lib/utils/price'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
@@ -12,7 +12,7 @@
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
 
-	const { paymentModule, onreview } = $props()
+	const { paymentModule, quote, onreview } = $props()
 
 	// Check if phone is required based on login type
 	const isPhoneRequired = page.data?.store?.isPhoneMandatory
@@ -22,10 +22,14 @@
 	const cartState = paymentModule.cartState
 
 	const selectedMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
-	const fee = $derived(paymentFee(selectedMethod))
-	const total = $derived(totalWithFee(cartState.cart.total, fee))
-	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart))
-	const barLabel = $derived(totalLabel(!!cartState.cart.shippingAddress, taxPending))
+	// A quote's charge belongs to the method it was asked for, which a re-quote in flight has not caught up with.
+	const quotedMethod = $derived(paymentModule.allPaymentMethods?.find((m: any) => m.code === quote.method))
+	const figures = $derived(
+		checkoutFigures(cartState.cart, quote.current ? quotedMethod : selectedMethod, page?.data?.store?.currency?.includesTax, quote.current)
+	)
+	const quotedAuto = $derived(quote.current ? (quote.current.coupon?.autoApplied ? quote.current.coupon.code : null) : undefined)
+	const total = $derived(figures.total)
+	const barLabel = $derived(totalLabel(!!cartState.cart.shippingAddress, figures.taxPending))
 
 	let showAddress = $state(false)
 
@@ -86,7 +90,7 @@
 			</Button>
 		</div> -->
 
-		{#if paymentModule.loadingForPaymentMethods}
+		{#if paymentModule.loadingForPaymentMethods || quote.awaitingFirst(cartState.cart)}
 			<!-- The shape of the step that is coming. A lone spinner in an empty region is the wrong
 			     answer anywhere, and least defensible at the payment step. -->
 			<div class="grid gap-8 lg:grid-cols-[1fr_400px]" aria-busy="true" aria-label="Loading payment options">
@@ -307,8 +311,13 @@
 					     rather than one that refuses every code. -->
 					{#if discountCouponsPlugin?.active !== false}
 						<!-- The same offers the bag shows (D133), so a code can still be applied at the last step. -->
-						<CartOffers subtotal={cartState?.cart?.subtotal} applied={cartState?.cart?.couponCode} apply={(code) => cartState.applyCoupon(code)} />
-						<CouponsDrawer />
+						<CartOffers
+							subtotal={cartState?.cart?.subtotal}
+							applied={cartState?.cart?.couponCode}
+							quoted={quotedAuto}
+							apply={(code) => cartState.applyCoupon(code)}
+						/>
+						<CouponsDrawer marked={quotedAuto} />
 					{/if}
 
 					<div class="space-y-4">
@@ -322,15 +331,19 @@
 							{:else}
 								<div class="space-y-4">
 									<PriceSummary
-										subtotal={cartState.cart.subtotal}
-										discount={cartState.cart.discountAmount}
-										shipping={cartState.cart.shippingCharges}
-										{fee}
-										tax={cartState.cart.tax}
+										subtotal={figures.subtotal}
+										discount={figures.discount}
+										coupon={figures.coupon}
+										shipping={figures.shipping}
+										fee={figures.fee}
+										tax={figures.tax}
 										{total}
 										currencyCode={page?.data?.store?.currency?.code}
 										shippingResolved={!!cartState.cart.shippingAddress}
-										{taxPending}
+										taxPending={figures.taxPending}
+										pending={quote.pending}
+										error={quote.error}
+										onretry={quote.retry}
 									/>
 
 									<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3">
@@ -345,9 +358,9 @@
 										<CheckoutButton
 											text="Review order"
 											onclick={onreview}
-											disabled={!!reviewBlocker}
+											disabled={!!reviewBlocker || !!quote.error}
 											loading={paymentModule.paymentLoader}
-											total={formatPrice(total, page?.data?.store?.currency?.code)}
+											total={quote.error ? '' : formatPrice(total, page?.data?.store?.currency?.code)}
 											totalLabel={barLabel}
 										/>
 									{:else}
@@ -357,7 +370,7 @@
 										<CheckoutButton
 											text="Add delivery details"
 											onclick={paymentModule.handleAddressChange}
-											total={formatPrice(total, page?.data?.store?.currency?.code)}
+											total={quote.error ? '' : formatPrice(total, page?.data?.store?.currency?.code)}
 											totalLabel={barLabel}
 										/>
 									{/if}

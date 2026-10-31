@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { cn } from '$lib/core/utils'
-	import { formatPrice, totalLabel, type PaymentFee } from '$lib/utils/price'
+	import { formatPrice, totalLabel, type PaymentFee, type QuotedCoupon } from '$lib/utils/price'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { slide } from '$lib/motion'
+	import { Button } from '$lib/components/ui/button'
+	import { fade, slide } from '$lib/motion'
 
 	/**
 	 * The one money block for cart, checkout and order confirmation. The same five rows were
@@ -32,6 +33,10 @@
 		unresolvedShippingText = 'Address required',
 		estimatedNote = 'Shipping is added once we have your address.',
 		loading = false,
+		coupon = null,
+		pending = false,
+		error = '',
+		onretry,
 		class: className = ''
 	}: {
 		subtotal?: number | null
@@ -51,10 +56,23 @@
 		unresolvedShippingText?: string
 		estimatedNote?: string
 		loading?: boolean
+		/** The code a checkout quote applies. Its row shows even at no saving, when the code frees delivery. */
+		coupon?: QuotedCoupon | null
+		/** A new total is being worked out; the figures on screen are the last one's. */
+		pending?: boolean
+		/** Checkout's reason it would refuse the order now. While set, no figure is shown. */
+		error?: string
+		onretry?: () => void
 		class?: string
 	} = $props()
 
 	const money = (value?: number | null) => formatPrice(Number(value) || 0, currencyCode)
+
+	let requoted = $state(false)
+	$effect(() => {
+		if (pending) requoted = true
+	})
+	const figure = $derived(pending ? 'opacity-60 transition-opacity delay-150 duration-fast' : requoted ? 'transition-opacity duration-fast' : '')
 
 	const hasDiscount = $derived(Number(discount) > 0)
 	const hasMrpSaving = $derived(Number(mrpSaving) > 0)
@@ -63,7 +81,7 @@
 	const label = $derived(totalLabel(shippingResolved, taxPending))
 </script>
 
-<div class={cn('space-y-4', className)} aria-busy={loading}>
+<div class={cn('space-y-4', className)} aria-busy={loading || pending}>
 	{#if loading}
 		<!-- Skeletons in the shape of the rows they replace, so the card does not resize when the
 		     figures arrive. -->
@@ -80,6 +98,13 @@
 			<Skeleton class="h-6 w-24" />
 		</div>
 		<span class="sr-only">Loading order totals</span>
+	{:else if error}
+		<div role="alert" class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive" in:fade>
+			<p>{error}</p>
+			{#if onretry}
+				<Button variant="outline" size="sm" class="mt-3" disabled={pending} onclick={onretry}>{pending ? 'Trying again…' : 'Try again'}</Button>
+			{/if}
+		</div>
 	{:else}
 		<dl class="space-y-3 border-b border-border pb-6">
 			{#if hasMrpSaving}
@@ -87,29 +112,41 @@
 				     then what they cost. Only when the store set compare-at prices above the price. -->
 				<div class="flex items-center justify-between gap-4 text-sm">
 					<dt class="font-medium text-muted-foreground">Total MRP</dt>
-					<dd class="font-bold text-foreground">{money(Number(subtotal) + Number(mrpSaving))}</dd>
+					<dd class={['font-bold text-foreground', figure]}>{money(Number(subtotal) + Number(mrpSaving))}</dd>
 				</div>
 				<div class="flex items-center justify-between gap-4 text-sm">
 					<dt class="font-medium text-muted-foreground">Discount on MRP</dt>
-					<dd class="font-bold text-success">-{money(mrpSaving)}</dd>
+					<dd class={['font-bold text-success', figure]}>-{money(mrpSaving)}</dd>
 				</div>
 			{/if}
 			<div class="flex items-center justify-between gap-4 text-sm">
 				<dt class="font-medium text-muted-foreground">Subtotal</dt>
-				<dd class="font-bold text-foreground">{money(subtotal)}</dd>
+				<dd class={['font-bold text-foreground', figure]}>{money(subtotal)}</dd>
 			</div>
 
-			{#if hasDiscount}
+			{#if coupon}
+				<div class="flex items-center justify-between gap-4 text-sm" transition:slide>
+					<dt class="font-medium text-muted-foreground">
+						Discount ({coupon.code})
+						{#if coupon.autoApplied}
+							<span class="block text-[length:var(--type-dense,0.8125rem)]">Applied automatically</span>
+						{/if}
+					</dt>
+					<dd class={['font-bold text-success', figure]}>
+						{#if !Number(discount) && coupon.freeShipping}Free delivery{:else}-{money(discount)}{/if}
+					</dd>
+				</div>
+			{:else if hasDiscount}
 				<div class="flex items-center justify-between gap-4 text-sm">
 					<dt class="font-medium text-muted-foreground">{discountLabel}</dt>
 					<!-- A saving reads as success, not as the raw orange it used to carry. -->
-					<dd class="font-bold text-success">-{money(discount)}</dd>
+					<dd class={['font-bold text-success', figure]}>-{money(discount)}</dd>
 				</div>
 			{/if}
 
 			<div class="flex items-center justify-between gap-4 text-sm">
 				<dt class="font-medium text-muted-foreground">Shipping</dt>
-				<dd class="font-bold text-foreground">
+				<dd class={['font-bold text-foreground', figure]}>
 					{#if !shippingResolved}
 						<span class="font-medium text-muted-foreground">{unresolvedShippingText}</span>
 					{:else if isFreeShipping}
@@ -123,7 +160,7 @@
 			{#if fee}
 				<div class="flex items-center justify-between gap-4 text-sm" transition:slide>
 					<dt class="font-medium text-muted-foreground">{fee.label}</dt>
-					<dd class="font-bold text-foreground">{money(fee.amount)}</dd>
+					<dd class={['font-bold text-foreground', figure]}>{money(fee.amount)}</dd>
 				</div>
 			{/if}
 
@@ -131,7 +168,7 @@
 			{#if hasTax}
 				<div class="flex items-center justify-between gap-4 text-sm">
 					<dt class="font-medium text-muted-foreground">Tax</dt>
-					<dd class="font-bold text-foreground">{money(tax)}</dd>
+					<dd class={['font-bold text-foreground', figure]}>{money(tax)}</dd>
 				</div>
 			{/if}
 		</dl>
@@ -147,7 +184,7 @@
 						<span class="text-xs font-normal text-muted-foreground">Any tax is added when you place your order.</span>
 					{/if}
 				</dt>
-				<dd class="shrink-0 text-xl font-bold text-foreground">{money(total)}</dd>
+				<dd class={['shrink-0 text-xl font-bold text-foreground', figure]}>{money(total)}</dd>
 			</div>
 		</dl>
 	{/if}
