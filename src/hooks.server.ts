@@ -1,4 +1,4 @@
-import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
+import type { Handle, HandleFetch, HandleServerError, ResolveOptions } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
@@ -6,6 +6,7 @@ import { activeBackendProxy, initActiveConnector } from '$lib/core/connectors/in
 import { resolveStorefrontTheme } from '$lib/theme/index.js'
 import { clientAddress, isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 import { compressResponse } from '$lib/server/compress'
+import { guardClosedStore } from '$lib/server/store-lock'
 import { getRequestEvent } from '$app/server'
 import { services } from 'kitcommerce.config'
 
@@ -97,7 +98,7 @@ const app: Handle = async ({ event, resolve }) => {
 	// Flips once `transformPageChunk` below has stamped the opening <html> tag for this response.
 	let themeStamped = false
 
-	const response = await resolve(event, {
+	const options: ResolveOptions = {
 		filterSerializedResponseHeaders: (name) => name === 'content-type',
 		// SvelteKit emits a `Link: rel=modulepreload` header for EVERY client chunk (107 on the jws
 		// PDP). The browser starts all of them before the parser reaches the LCP <img>, saturating the
@@ -132,9 +133,8 @@ const app: Handle = async ({ event, resolve }) => {
 			themeStamped = stamped !== html
 			return stamped
 		}
-	})
-	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
-	return response
+	}
+	return guardClosedStore(event, () => resolve(event, options))
 }
 
 export const handle: Handle = async (input) => compressResponse(input.event.request, await app(input))
