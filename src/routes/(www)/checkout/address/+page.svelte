@@ -123,6 +123,7 @@
 	// address so it can be edited in place.
 	onMount(async () => {
 		await cartState.hasLoaded
+		cartLoaded = true
 		// The address step is where checkout begins; the basket before it is still shopping.
 		trackBeginCheckout(cartState.cart, page.data?.store?.currency?.code)
 		if (isGuestCheckout) {
@@ -132,6 +133,27 @@
 				addressModule.isBillingAddressSameAsShipping = true
 			}
 		}
+	})
+
+	// kitcommerce-core's AddressModule.mount() chooses a signed-in shopper's first saved address only
+	// when the list arrives before the cart has loaded, which it does not after a visit from the bag.
+	// `isUpdatingCart` is false during the cart's first fetch, so the load is awaited in onMount.
+	let cartLoaded = $state(false)
+	let savedAddressChosen = false
+	$effect(() => {
+		if (savedAddressChosen || !cartLoaded || isGuestCheckout) return
+		if (!cartState.cart?.lineItems?.length || cartState.cart.shippingAddress) return
+		if (addressModule.loadingForSaveToCart || addressModule.showAddressForm || addressModule.showAddressList) {
+			savedAddressChosen = true
+			return
+		}
+		const saved = addressModule.addresses[0]
+		if (!saved || cartState.isUpdatingCart) return
+		savedAddressChosen = true
+		addressModule.currentAddress = { ...saved }
+		addressModule.currentAddressType = 'shipping'
+		addressModule.isBillingAddressSameAsShipping = true
+		addressModule.saveAddressToCart()
 	})
 
 	// The WhatsApp boxes. The offer is asked for while the cart loads, so the boxes are usually there
