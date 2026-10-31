@@ -125,7 +125,7 @@ describe('theme tokens', () => {
 			'https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap'
 		)
 		expect(themeFontsHref({ heading_font: 'dm-sans', body_font: 'nope' })).toBe(
-			'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap'
+			'https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&display=swap'
 		)
 	})
 
@@ -134,6 +134,17 @@ describe('theme tokens', () => {
 			'--font-heading': "'Noto Serif', Georgia, serif",
 			'--font-body': "'Source Sans 3', ui-sans-serif, system-ui, sans-serif"
 		})
+	})
+
+	it('loads the heading face at its one weight and the body face at every weight', () => {
+		expect(themeFontsHref({ heading_font: 'noto-serif', heading_weight: 'medium', body_font: 'source-sans-3' })).toBe(
+			'https://fonts.googleapis.com/css2?family=Noto+Serif:wght@500&family=Source+Sans+3:wght@400;500;600;700&display=swap'
+		)
+		expect(themeFontsHref({ heading_font: 'merriweather', heading_weight: 'medium' })).toBe(
+			'https://fonts.googleapis.com/css2?family=Merriweather:wght@400&display=swap'
+		)
+		expect(themeTokenCss({ heading_font: 'noto-serif' })).toContain('font-synthesis-weight: none;')
+		expect(themeTokenCss({ body_font: 'source-sans-3' })).not.toContain('font-synthesis')
 	})
 
 	it('converts colours to the HSL triplets the theme holds', () => {

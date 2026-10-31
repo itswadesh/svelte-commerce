@@ -33,27 +33,31 @@ export type ThemeSettings = Partial<
 	>
 >
 
-type Font = { family: string; google: string }
+type Font = { family: string; googleName: string; weights: number[] }
 
 /** The engine's font list (ext/layouts registry.go `Fonts`), keyed alike. */
 export const FONTS: Record<string, Font> = {
-	inter: { family: "'Inter', ui-sans-serif, system-ui, sans-serif", google: 'Inter:wght@400;500;600;700;800' },
-	roboto: { family: "'Roboto', ui-sans-serif, system-ui, sans-serif", google: 'Roboto:wght@400;500;700' },
-	poppins: { family: "'Poppins', ui-sans-serif, system-ui, sans-serif", google: 'Poppins:wght@400;500;600;700' },
-	montserrat: { family: "'Montserrat', ui-sans-serif, system-ui, sans-serif", google: 'Montserrat:wght@400;500;600;700' },
-	lato: { family: "'Lato', ui-sans-serif, system-ui, sans-serif", google: 'Lato:wght@400;700' },
-	'open-sans': { family: "'Open Sans', ui-sans-serif, system-ui, sans-serif", google: 'Open+Sans:wght@400;500;600;700' },
-	nunito: { family: "'Nunito', ui-sans-serif, system-ui, sans-serif", google: 'Nunito:wght@400;600;700' },
-	'dm-sans': { family: "'DM Sans', ui-sans-serif, system-ui, sans-serif", google: 'DM+Sans:wght@400;500;600;700' },
-	'work-sans': { family: "'Work Sans', ui-sans-serif, system-ui, sans-serif", google: 'Work+Sans:wght@400;500;600;700' },
-	'source-sans-3': { family: "'Source Sans 3', ui-sans-serif, system-ui, sans-serif", google: 'Source+Sans+3:wght@400;500;600;700' },
-	'playfair-display': { family: "'Playfair Display', Georgia, serif", google: 'Playfair+Display:wght@400;500;600;700' },
-	lora: { family: "'Lora', Georgia, serif", google: 'Lora:wght@400;500;600;700' },
-	merriweather: { family: "'Merriweather', Georgia, serif", google: 'Merriweather:wght@400;700' },
-	'cormorant-garamond': { family: "'Cormorant Garamond', Georgia, serif", google: 'Cormorant+Garamond:wght@400;500;600;700' },
-	'libre-baskerville': { family: "'Libre Baskerville', Georgia, serif", google: 'Libre+Baskerville:wght@400;700' },
-	'eb-garamond': { family: "'EB Garamond', Georgia, serif", google: 'EB+Garamond:wght@400;500;600;700' },
-	'noto-serif': { family: "'Noto Serif', Georgia, serif", google: 'Noto+Serif:wght@400;500;600;700' }
+	inter: { family: "'Inter', ui-sans-serif, system-ui, sans-serif", googleName: 'Inter', weights: [400, 500, 600, 700, 800] },
+	roboto: { family: "'Roboto', ui-sans-serif, system-ui, sans-serif", googleName: 'Roboto', weights: [400, 500, 700] },
+	poppins: { family: "'Poppins', ui-sans-serif, system-ui, sans-serif", googleName: 'Poppins', weights: [400, 500, 600, 700] },
+	montserrat: { family: "'Montserrat', ui-sans-serif, system-ui, sans-serif", googleName: 'Montserrat', weights: [400, 500, 600, 700] },
+	lato: { family: "'Lato', ui-sans-serif, system-ui, sans-serif", googleName: 'Lato', weights: [400, 700] },
+	'open-sans': { family: "'Open Sans', ui-sans-serif, system-ui, sans-serif", googleName: 'Open+Sans', weights: [400, 500, 600, 700] },
+	nunito: { family: "'Nunito', ui-sans-serif, system-ui, sans-serif", googleName: 'Nunito', weights: [400, 600, 700] },
+	'dm-sans': { family: "'DM Sans', ui-sans-serif, system-ui, sans-serif", googleName: 'DM+Sans', weights: [400, 500, 600, 700] },
+	'work-sans': { family: "'Work Sans', ui-sans-serif, system-ui, sans-serif", googleName: 'Work+Sans', weights: [400, 500, 600, 700] },
+	'source-sans-3': { family: "'Source Sans 3', ui-sans-serif, system-ui, sans-serif", googleName: 'Source+Sans+3', weights: [400, 500, 600, 700] },
+	'playfair-display': { family: "'Playfair Display', Georgia, serif", googleName: 'Playfair+Display', weights: [400, 500, 600, 700] },
+	lora: { family: "'Lora', Georgia, serif", googleName: 'Lora', weights: [400, 500, 600, 700] },
+	merriweather: { family: "'Merriweather', Georgia, serif", googleName: 'Merriweather', weights: [400, 700] },
+	'cormorant-garamond': { family: "'Cormorant Garamond', Georgia, serif", googleName: 'Cormorant+Garamond', weights: [400, 500, 600, 700] },
+	'libre-baskerville': { family: "'Libre Baskerville', Georgia, serif", googleName: 'Libre+Baskerville', weights: [400, 700] },
+	'eb-garamond': { family: "'EB Garamond', Georgia, serif", googleName: 'EB+Garamond', weights: [400, 500, 600, 700] },
+	'noto-serif': { family: "'Noto Serif', Georgia, serif", googleName: 'Noto+Serif', weights: [400, 500, 600, 700] }
+}
+
+export function googleFamily(face: Font, weights = face.weights): string {
+	return `${face.googleName}:wght@${weights.join(';')}`
 }
 
 const RADII: Record<string, string> = { none: '0px', small: '4px', medium: '8px', large: '16px' }
@@ -282,7 +286,8 @@ export function themeTokenDeclarations(settings: ThemeSettings | null | undefine
 	}
 	const sale = colour(s.sale)
 	if (sale) out['--sale'] = hexToTriplet(readableOn(sale, ground))
-	if (typeof s.heading_weight === 'string' && Object.hasOwn(HEADING_WEIGHTS, s.heading_weight)) out['--weight-heading'] = HEADING_WEIGHTS[s.heading_weight]
+	const weight = headingWeight(s.heading_weight)
+	if (weight) out['--weight-heading'] = weight
 	if (typeof s.type_scale === 'string' && Object.hasOwn(TYPE_SCALES, s.type_scale)) Object.assign(out, TYPE_SCALES[s.type_scale])
 	if (typeof s.density === 'string' && Object.hasOwn(DENSITIES, s.density)) Object.assign(out, DENSITIES[s.density])
 	if (typeof s.radius === 'string' && Object.hasOwn(RADII, s.radius)) out['--radius'] = RADII[s.radius]
@@ -290,6 +295,10 @@ export function themeTokenDeclarations(settings: ThemeSettings | null | undefine
 		out['--product-image-ratio'] = RATIOS[s.product_image_ratio]
 	if (typeof s.product_image_fit === 'string' && Object.hasOwn(FITS, s.product_image_fit)) out['--product-image-fit'] = FITS[s.product_image_fit]
 	return out
+}
+
+function headingWeight(key: unknown): string | undefined {
+	return typeof key === 'string' && Object.hasOwn(HEADING_WEIGHTS, key) ? HEADING_WEIGHTS[key] : undefined
 }
 
 /** A font setting's entry, or undefined — own keys only, so `toString` is not a font. */
@@ -306,17 +315,27 @@ function font(key: unknown): Font | undefined {
 export function themeTokenCss(settings: ThemeSettings | null | undefined, depth = 2): string {
 	const declarations = Object.entries(themeTokenDeclarations(settings))
 		.map(([key, value]) => `${key}: ${value} !important;`)
+		.concat(font(settings?.heading_font) ? ['font-synthesis-weight: none;'] : [])
 		.join(' ')
 	if (!declarations) return ''
 	return `${'[data-theme]'.repeat(Math.max(1, depth))} { ${declarations} }`
 }
 
-/** The Google Fonts stylesheet for the chosen fonts, or '' when none is chosen. */
+/** Google Fonts serves one requested weight as a static file and several as the whole variable font. */
 export function themeFontsHref(settings: ThemeSettings | null | undefined): string {
 	const s = settings ?? {}
-	const keys = [s.heading_font, s.body_font].filter((k, i, all): k is string => !!font(k) && all.indexOf(k) === i)
-	if (!keys.length) return ''
-	return 'https://fonts.googleapis.com/css2?' + keys.map((k) => 'family=' + FONTS[k].google).join('&') + '&display=swap'
+	const heading = font(s.heading_font)
+	const body = font(s.body_font)
+	const wanted = new Map<Font, number[]>()
+	if (heading && heading !== body) {
+		const target = Number(headingWeight(s.heading_weight) ?? HEADING_WEIGHTS.bold)
+		const distance = (w: number) => Math.abs(w - target)
+		const nearest = heading.weights.reduce((a, b) => (distance(b) < distance(a) || (distance(b) === distance(a) && b < a) ? b : a))
+		wanted.set(heading, [nearest])
+	}
+	if (body) wanted.set(body, body.weights)
+	if (!wanted.size) return ''
+	return 'https://fonts.googleapis.com/css2?' + [...wanted].map(([face, weights]) => 'family=' + googleFamily(face, weights)).join('&') + '&display=swap'
 }
 
 /** The page's background colour, for the browser's own chrome, or ''. */
