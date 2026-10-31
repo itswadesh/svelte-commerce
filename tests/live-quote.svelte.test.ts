@@ -171,7 +171,7 @@ describe('LiveQuote.ask', () => {
 	})
 })
 
-describe('LiveQuote.confirming', () => {
+describe('LiveQuote.expectShownTotal', () => {
 	const cart = { id: 'cart-1', shippingAddress: { countryCode: 'IN', state: 'Odisha' }, lineItems: [{ id: 'l1' }] }
 	const sentence = 'Your total changed to ₹1,201. Check the new total and confirm again.'
 
@@ -181,10 +181,10 @@ describe('LiveQuote.confirming', () => {
 		const quote = live()
 		quote.ask('COD|a', async () => quoted(1151))
 		await settle()
-		quote.confirming('cart-1')
+		quote.expectShownTotal('cart-1')
 		quote.ask('COD|b', async () => null)
 		await settle()
-		quote.confirming('cart-1')
+		quote.expectShownTotal('cart-1')
 		expect(expectTotal.mock.calls.map(([args]) => [args.cartId, args.total])).toEqual([
 			['cart-1', 1151],
 			['cart-1', null]
@@ -199,12 +199,12 @@ describe('LiveQuote.confirming', () => {
 		const quote = live()
 		quote.ask('COD|a', async () => quoted(1151), 'COD')
 		await settle()
-		quote.confirming('cart-1')
+		quote.expectShownTotal('cart-1')
 		refuse(quoted(1201), sentence)
-		expect([quote.current?.total, quote.method, quote.moved, quote.confirmable(cart)]).toEqual([1201, 'COD', sentence, true])
+		expect([quote.current?.total, quote.method, quote.totalChanged, quote.confirmable(cart)]).toEqual([1201, 'COD', sentence, true])
 
-		quote.confirming('cart-1')
-		expect(quote.moved).toBe('')
+		quote.expectShownTotal('cart-1')
+		expect(quote.totalChanged).toBe('')
 	})
 
 	it('lets an answer asked after the refusal replace its figures and its sentence', async () => {
@@ -215,14 +215,14 @@ describe('LiveQuote.confirming', () => {
 		const quote = live()
 		quote.ask('COD|a', async () => quoted(1151))
 		await settle()
-		quote.confirming('cart-1')
+		quote.expectShownTotal('cart-1')
 		const asked = later()
 		quote.ask('COD|b', () => asked.promise)
 		refuse(quoted(1201), sentence)
-		expect([quote.current?.total, quote.moved, quote.confirmable(cart)]).toEqual([1201, sentence, false])
+		expect([quote.current?.total, quote.totalChanged, quote.confirmable(cart)]).toEqual([1201, sentence, false])
 		asked.resolve(quoted(1190))
 		await settle()
-		expect([quote.current?.total, quote.moved, quote.confirmable(cart)]).toEqual([1190, '', true])
+		expect([quote.current?.total, quote.totalChanged, quote.confirmable(cart)]).toEqual([1190, '', true])
 	})
 })
 
@@ -323,7 +323,7 @@ describe('LiveQuote on the payment route', () => {
 		expect(quote.supported).toBe(false)
 		expect(quote.awaitingFirst(checkout.cartState.cart)).toBe(false)
 		expect(quote.current).toBeUndefined()
-		quote.confirming('cart-1')
-		expect(quote.moved).toBe('')
+		quote.expectShownTotal('cart-1')
+		expect(quote.totalChanged).toBe('')
 	})
 })

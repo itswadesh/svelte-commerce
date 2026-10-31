@@ -52,8 +52,7 @@ export class LiveQuote {
 	/** Checkout's own sentence for why it would refuse now; it stays until an answer lands. */
 	error = $state('')
 	pending = $state(false)
-	/** Checkout's sentence for a Confirm it refused because the total moved; `current` is already the new one. */
-	moved = $state('')
+	totalChanged = $state('')
 	readonly supported: boolean
 	#key: string | undefined
 	#run: (() => Promise<CheckoutQuote | null>) | undefined
@@ -96,20 +95,15 @@ export class LiveQuote {
 		return !this.pending && !this.error && !this.awaitingFirst(cart)
 	}
 
-	/**
-	 * Hands the backend the total on screen as the shopper confirms, so checkout refuses a different
-	 * one instead of charging it. The refusal puts checkout's figures on screen at once, and nothing
-	 * is placed until the shopper confirms again.
-	 */
-	confirming(cartId?: string) {
-		this.moved = ''
+	expectShownTotal(cartId?: string) {
+		this.totalChanged = ''
 		this.#expect?.({
 			cartId,
 			total: this.current?.total ?? null,
 			onChange: (quote, message) => {
 				this.current = quote
 				this.error = ''
-				this.moved = message
+				this.totalChanged = message
 			}
 		})
 	}
@@ -128,7 +122,7 @@ export class LiveQuote {
 					this.current = answer
 					this.method = method
 					this.error = ''
-					this.moved = ''
+					this.totalChanged = ''
 					this.pending = false
 				},
 				(err: unknown) => {
