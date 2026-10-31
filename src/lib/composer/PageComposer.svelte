@@ -329,6 +329,16 @@
 		.cmp-home :global(.cmp-head__link:hover .cmp-head__icon) {
 			transform: none;
 		}
+		.cmp-home :global(.cmp-head__link) {
+			text-decoration: underline transparent;
+			text-underline-offset: 3px;
+			transition:
+				opacity var(--motion-fast, 150ms) var(--motion-ease, ease-out),
+				text-decoration-color var(--motion-fast, 150ms) var(--motion-ease, ease-out);
+		}
+		.cmp-home :global(.cmp-head__link:hover) {
+			text-decoration-color: currentColor;
+		}
 		.cmp-home :global(.cmp-edit::after) {
 			transition: none;
 		}
