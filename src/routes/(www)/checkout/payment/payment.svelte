@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { formatPrice, paymentFee, totalWithFee } from '$lib/utils/price'
+	import { formatPrice, paymentFee, taxIsPending, totalLabel, totalWithFee } from '$lib/utils/price'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
@@ -24,6 +24,8 @@
 	const selectedMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
 	const fee = $derived(paymentFee(selectedMethod))
 	const total = $derived(totalWithFee(cartState.cart.total, fee))
+	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart.tax))
+	const barLabel = $derived(totalLabel(!!cartState.cart.shippingAddress, taxPending))
 
 	let showAddress = $state(false)
 
@@ -328,6 +330,7 @@
 										{total}
 										currencyCode={page?.data?.store?.currency?.code}
 										shippingResolved={!!cartState.cart.shippingAddress}
+										{taxPending}
 									/>
 
 									<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3">
@@ -345,6 +348,7 @@
 											disabled={!!reviewBlocker}
 											loading={paymentModule.paymentLoader}
 											total={formatPrice(total, page?.data?.store?.currency?.code)}
+											totalLabel={barLabel}
 										/>
 									{:else}
 										<p class="rounded-radius border border-warning/40 bg-warning/10 p-3 text-sm text-foreground">
@@ -354,6 +358,7 @@
 											text="Add delivery details"
 											onclick={paymentModule.handleAddressChange}
 											total={formatPrice(total, page?.data?.store?.currency?.code)}
+											totalLabel={barLabel}
 										/>
 									{/if}
 								</div>

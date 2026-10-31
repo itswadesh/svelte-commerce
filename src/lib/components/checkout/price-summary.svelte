@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/core/utils'
-	import { formatPrice, type PaymentFee } from '$lib/utils/price'
+	import { formatPrice, totalLabel, type PaymentFee } from '$lib/utils/price'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { slide } from '$lib/motion'
 
@@ -28,6 +28,7 @@
 		total = 0,
 		currencyCode = '',
 		shippingResolved = false,
+		taxPending = false,
 		unresolvedShippingText = 'Address required',
 		estimatedNote = 'Shipping is added once we have your address.',
 		loading = false,
@@ -46,6 +47,7 @@
 		currencyCode?: string
 		/** False until a shipping address is on the cart. Drives both the shipping row and the total label. */
 		shippingResolved?: boolean
+		taxPending?: boolean
 		unresolvedShippingText?: string
 		estimatedNote?: string
 		loading?: boolean
@@ -58,7 +60,7 @@
 	const hasMrpSaving = $derived(Number(mrpSaving) > 0)
 	const hasTax = $derived(Number(tax) > 0)
 	const isFreeShipping = $derived(shippingResolved && !Number(shipping))
-	const totalLabel = $derived(shippingResolved ? 'Total' : 'Estimated total')
+	const label = $derived(totalLabel(shippingResolved, taxPending))
 </script>
 
 <div class={cn('space-y-4', className)} aria-busy={loading}>
@@ -137,9 +139,12 @@
 		<dl class="pt-2">
 			<div class="flex items-start justify-between gap-4">
 				<dt class="flex flex-col gap-1">
-					<span class="text-sm font-bold text-foreground">{totalLabel}</span>
+					<span class="text-sm font-bold text-foreground">{label}</span>
 					{#if !shippingResolved}
 						<span class="text-xs font-normal text-muted-foreground">{estimatedNote}</span>
+					{/if}
+					{#if taxPending}
+						<span class="text-xs font-normal text-muted-foreground">Any tax is added when you place your order.</span>
 					{/if}
 				</dt>
 				<dd class="shrink-0 text-xl font-bold text-foreground">{money(total)}</dd>

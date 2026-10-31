@@ -16,3 +16,12 @@ export function paymentFee(method?: { name?: string; fee?: number | null } | nul
 export function totalWithFee(total: number | null | undefined, fee: PaymentFee | null): number {
 	return (Number(total) || 0) + (fee?.amount ?? 0)
 }
+
+export function taxIsPending(includesTax: boolean | null | undefined, tax: number | null | undefined): boolean {
+	return includesTax === false && !(Number(tax) > 0)
+}
+
+export function totalLabel(shippingResolved: boolean, taxPending: boolean): string {
+	if (!shippingResolved) return 'Estimated total'
+	return taxPending ? 'Total before tax' : 'Total'
+}

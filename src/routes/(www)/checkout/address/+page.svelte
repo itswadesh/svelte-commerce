@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { goto } from '$app/navigation'
 	import { ChevronRight, LoaderCircle, LockKeyhole, MapPin, Pencil, ShoppingBag, Truck } from '@lucide/svelte'
-	import { formatPrice } from '$lib/utils/price'
+	import { formatPrice, taxIsPending, totalLabel } from '$lib/utils/price'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
@@ -110,6 +110,9 @@
 	// permanently disabled "Select Address" while the only control that could fix it sat below the
 	// fold.
 	const fillingGuestAddress = $derived(isGuestCheckout && !(isEmailOk && isPhoneOk && cartState.cart?.shippingAddress))
+
+	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart?.tax))
+	const barLabel = $derived(totalLabel(!!cartState.cart?.shippingAddress, taxPending))
 
 	// Submitting through the form element runs its own validation and error display; the footer
 	// button is outside the form, so it cannot be a plain submit button.
@@ -515,6 +518,7 @@
 										total={cartState.cart.total}
 										currencyCode={page?.data?.store?.currency?.code}
 										shippingResolved={!!cartState.cart.shippingAddress}
+										{taxPending}
 									/>
 
 									{#if addressModule.showError}
@@ -538,6 +542,7 @@
 												onclick={submitAddressForm}
 												loading={loadingForGuestCheckout}
 												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+												totalLabel={barLabel}
 											/>
 										{:else}
 											{#if continueBlocker}
@@ -549,6 +554,7 @@
 												onclick={proceedToPayment}
 												loading={addressModule.loadingForCheckout}
 												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+												totalLabel={barLabel}
 											/>
 										{/if}
 									{/if}
