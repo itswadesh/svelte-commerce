@@ -3,6 +3,20 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: A store that adds tax on top says its checkout total is before tax
+
+A review found that on a store whose prices exclude tax (GoCommerce D177, `prices_include_tax`
+false), checkout called its bottom line "Total" and the order then charged more: ₹151 shown, ₹158.56
+charged on an 18% rate. The engine works tax out only when it places the order, and no cart or
+checkout endpoint quotes it before then. Until the engine offers that quote, the storefront does
+not work tax out itself, because a copy of the engine's tax rules would drift from them. Instead,
+when `store.currency.includesTax` is false and the cart carries no tax, the cart, address,
+payment, review and failed steps label the figure "Total before tax", with "Any tax is added when
+you place your order." under it. The pinned bar uses the same label. The confirmation page, the
+order page and order tracking show a "Tax" row when the order's tax was added on top
+(`taxIncluded` false). A store whose prices include tax, or that has not said, reads as before.
+Showing the real total before the order needs an engine quote endpoint.
+
 ## 2026-10-31: The payment step's total includes cash on delivery's extra charge
 
 The owner reported that the cash on delivery charge was not added on the payment step. A store can
