@@ -62,7 +62,8 @@ export function paragraphs(value: unknown): string[] {
 export function safeHref(value: unknown): string {
 	if (typeof value !== 'string') return ''
 	const href = value.trim()
-	if (href.startsWith('/') && !href.startsWith('//')) return href
+	// A browser reads `/\host` and `/<tab>/host` as `//host`, another site; a path keeps none of those.
+	if (/^\/(?![/\\])[^\\\u0000-\u0020\u007f]*$/.test(href)) return href
 	if (/^https?:\/\/[^\s]+$/i.test(href)) return href
 	return ''
 }

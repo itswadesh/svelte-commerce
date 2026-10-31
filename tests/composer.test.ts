@@ -65,6 +65,9 @@ describe('safeHref', () => {
 	it('refuses scripts, protocol-relative and anything that is not a string', () => {
 		expect(safeHref('javascript:alert(1)')).toBe('')
 		expect(safeHref('//evil.example')).toBe('')
+		expect(safeHref('/\\evil.example')).toBe('')
+		expect(safeHref('/\t/evil.example')).toBe('')
+		expect(safeHref('/shop\\..\\evil')).toBe('')
 		expect(safeHref('data:text/html,hi')).toBe('')
 		expect(safeHref(null)).toBe('')
 		expect(safeHref(['/a'])).toBe('')
