@@ -3,6 +3,27 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: The filter's categories are a tree
+
+The owner's report: the listing's filter showed "Naruto keychains" alone where it must show
+"Keychains" with "Naruto keychains" under it. The desktop rail and the phone sheet now list each
+category under its parent, in the store's tree order, and a parent's count is its whole subtree's.
+A parent is a link to its own page, which sells everything under it.
+
+- A level under the root is one 12px step (the sheet's rows keep their own 4px before it), up to
+  three steps, so a deep tree still fits the rail. Three steps make 36px on the rail, and two make
+  28px in the sheet. Those two totals are off the spacing scale's list, but each step is on it.
+- A child's button names its parent for a screen reader ("Naruto keychains, in Keychains"), since
+  the indent shows the tree only to the eye.
+- A name search lists its matches flush. Search ranks them, so an indented match would read as a
+  child of whichever row ranked above it.
+- The rail still shows five rows before "+ N more", now in tree order. A parent with four or more
+  children fills those five rows and hides the roots after it until the shopper opens the rest.
+- The tree comes from the backend as a `depth` on each category (GoCommerce connector 0.29.0). A
+  backend that sends none draws the flat list exactly as before.
+- On a category's own page the rail lists its ancestors too, counted over that page's products,
+  as every filter count is.
+
 ## 2026-10-31: A section can sit on a line or a band, the hero can fade, and the benefits can scroll
 
 The owner wants Chillish to match a reference store whose sections are parted by hairlines and
