@@ -9,9 +9,10 @@
 	import Label from '$lib/components/ui/label/label.svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
+	import { cn } from '$lib/core/utils/index.js'
 	import { sortOptions } from '$lib/config.js'
 	import { page } from '$app/state'
-	import { hasFacetValues, readAppliedFilters } from './scope-filters.js'
+	import { categoryIndent, categoryParent, hasFacetValues, readAppliedFilters } from './scope-filters.js'
 	import { formatPrice } from '$lib/utils/price'
 
 	// A plain prop, not a binding: listing-page.svelte derives the current sort from the URL and
@@ -266,12 +267,18 @@
 							     truncated anything long — in a narrow drawer panel that reads as a ragged list
 							     with ~26px tap targets. These rows are left-aligned, wrap, and are touch-sized. -->
 								<div class="-mx-1 divide-y divide-border">
-									{#each filterModule.filteredCategories as category}
+									{#each filterModule.filteredCategories as category, i}
 										{@const formattedCategoryName = filterModule.formatFilterOptionName(category.name)}
+										{@const parent = categoryParent(filterModule.filteredCategories, i, filterModule.categorySearchQuery)}
+										{@const label = parent ? `${formattedCategoryName}, in ${filterModule.formatFilterOptionName(parent)}` : formattedCategoryName}
 										<Button
 											variant="ghost"
-											title={formattedCategoryName}
-											class="group h-auto min-h-11 w-full justify-start gap-3 whitespace-normal rounded-none px-1 py-3 text-left font-normal hover:bg-transparent"
+											title={label}
+											aria-label={parent ? label : undefined}
+											class={cn(
+												'group h-auto min-h-11 w-full justify-start gap-3 whitespace-normal rounded-none px-1 py-3 text-left font-normal hover:bg-transparent',
+												categoryIndent(category.depth, filterModule.categorySearchQuery, 'sheet')
+											)}
 											onclick={() => filterModule.handleCategoryClick({ slug: category.slug, name: category.name })}
 										>
 											{#if category.thumbnail}

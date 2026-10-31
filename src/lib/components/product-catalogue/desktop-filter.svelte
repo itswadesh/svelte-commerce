@@ -18,6 +18,7 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { page } from '$app/state'
 	import Textbox from '../form/textbox.svelte'
+	import { categoryIndent, categoryParent } from './scope-filters.js'
 
 	type FilterProps = {
 		class?: string
@@ -155,12 +156,18 @@
 			<div class="flex flex-col items-start justify-start text-sm">
 				{#if !filterState.showMoreCategories}
 					{@const categoriesToShow = filterState.filteredCategories.slice(0, 5)}
-					{#each categoriesToShow as category}
+					{#each categoriesToShow as category, i}
 						{@const formattedCategoryName = filterState.formatFilterOptionName(category.name)}
+						{@const parent = categoryParent(filterState.filteredCategories, i, filterState.categorySearchQuery)}
+						{@const label = parent ? `${formattedCategoryName}, in ${filterState.formatFilterOptionName(parent)}` : formattedCategoryName}
 						<Button
 							variant="link"
-							title={formattedCategoryName}
-							class="ed-df__catbtn group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
+							title={label}
+							aria-label={parent ? label : undefined}
+							class={cn(
+								'ed-df__catbtn group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent',
+								categoryIndent(category.depth, filterState.categorySearchQuery, 'rail')
+							)}
 							onclick={() => filterState.handleCategoryClick({ slug: category.slug, name: category.name })}
 						>
 							{#if category.thumbnail}
@@ -181,12 +188,18 @@
 						</Button>
 					{/if}
 				{:else}
-					{#each filterState.filteredCategories as category}
+					{#each filterState.filteredCategories as category, i}
 						{@const formattedCategoryName = filterState.formatFilterOptionName(category.name)}
+						{@const parent = categoryParent(filterState.filteredCategories, i, filterState.categorySearchQuery)}
+						{@const label = parent ? `${formattedCategoryName}, in ${filterState.formatFilterOptionName(parent)}` : formattedCategoryName}
 						<Button
 							variant="link"
-							title={formattedCategoryName}
-							class="ed-df__catbtn group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
+							title={label}
+							aria-label={parent ? label : undefined}
+							class={cn(
+								'ed-df__catbtn group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent',
+								categoryIndent(category.depth, filterState.categorySearchQuery, 'rail')
+							)}
 							onclick={() => filterState.handleCategoryClick({ slug: category.slug, name: category.name })}
 						>
 							{#if category.thumbnail}
