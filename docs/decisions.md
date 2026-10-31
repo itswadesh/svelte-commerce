@@ -3,6 +3,18 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: The payment step's total includes cash on delivery's extra charge
+
+The owner reported that the cash on delivery charge was not added on the payment step. A store can
+set an extra charge for cash on delivery (GoCommerce D165), and the engine adds it to a cash order,
+so a shopper agreed to one total and was charged another. The payment step now shows the charge
+beside the option before the choice ("Cash on delivery · ₹60 extra"). Choosing it adds a "Cash on
+delivery charge" line to the price summary, and the total and the review step include it. Another
+method shows neither. The confirmation page, the order page and order tracking show the charge
+from the order, and only when it is above zero. The figure is the payment method's `fee` and the
+order's `codCharges`, which the connector fills (gocommerce-connector 0.27.0). A connector that
+sends neither shows nothing new.
+
 ## 2026-10-30: A product made to a design is never added plain
 
 The engine now marks every product `designable` and refuses a plain add of a designable one with
