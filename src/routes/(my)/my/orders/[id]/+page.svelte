@@ -311,9 +311,9 @@
 											</span>
 										</div>
 
-										{#if order?.codCharges}
+										{#if order?.codCharges && order.codCharges > 0}
 											<div class="flex justify-between text-sm">
-												<span class="text-muted-foreground">COD Charges</span>
+												<span class="text-muted-foreground">Cash on delivery charge</span>
 												<span class="font-medium text-foreground">{formatPrice(order.codCharges, page?.data?.store?.currency?.code)}</span>
 											</div>
 										{/if}
