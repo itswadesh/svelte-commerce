@@ -140,7 +140,7 @@
 	"dependencies": {
 		"@internationalized/date": "^3.7.0",
 		"@lucide/svelte": "^1.8.0",
-		"@misiki/gocommerce-connector": "^0.29.0",
+		"@misiki/gocommerce-connector": "^0.30.0",
 		"@misiki/kitcommerce-core": "^0.1.59",
 		"cheerio": "^1.2.0",
 		"culori": "^4.0.2",
