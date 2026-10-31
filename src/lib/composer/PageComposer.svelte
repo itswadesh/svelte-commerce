@@ -261,6 +261,13 @@
 		overflow-wrap: anywhere;
 	}
 
+	/* Unset, a var() with no fallback computes to the inherited value, exactly as if neither line
+	   were here. */
+	.cmp-home :global(:is(.cmp-head__eyebrow, .cmp-eyebrow, .cmp-hero__eyebrow)) {
+		text-transform: var(--eyebrow-case);
+		letter-spacing: var(--eyebrow-tracking);
+	}
+
 	.cmp-home :global(.cmp-head__subtitle) {
 		max-width: 36rem;
 		margin: 0;
