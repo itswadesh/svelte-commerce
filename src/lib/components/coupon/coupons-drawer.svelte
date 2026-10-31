@@ -42,7 +42,7 @@
 						<div class="flex gap-2">
 							<Input placeholder="Enter your coupon code" bind:value={code} class="flex-1" />
 							<Button onclick={handleCheck} disabled={!code || isChecking}>
-								{isChecking ? 'Checking...' : 'APPLY'}
+								{isChecking ? 'Checking…' : 'Apply'}
 							</Button>
 						</div>
 					</div>
