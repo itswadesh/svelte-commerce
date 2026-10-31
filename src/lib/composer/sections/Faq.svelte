@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { ChevronDown } from '@lucide/svelte'
 	import Paragraphs from '../Paragraphs.svelte'
-	import { faqItems, text, type ComposerSection } from '../helpers.js'
+	import SectionHead from '../SectionHead.svelte'
+	import { faqItems, type ComposerSection } from '../helpers.js'
 
 	/**
 	 * Questions and answers, each a native disclosure: the browser gives it its keyboard handling,
@@ -10,16 +11,13 @@
 	 */
 	let { section }: { section: ComposerSection } = $props()
 
-	const heading = $derived(text(section.settings, 'heading'))
 	const items = $derived(faqItems(section.settings?.items))
 </script>
 
 {#if items.length}
 	<section class="cmp-band">
 		<div class="page-width cmp-faq">
-			{#if heading}
-				<header class="cmp-head"><h2 class="cmp-head__title">{heading}</h2></header>
-			{/if}
+			<SectionHead settings={section.settings} />
 			<div class="cmp-faq__list">
 				{#each items as item, i (i)}
 					<details class="cmp-faq__item">

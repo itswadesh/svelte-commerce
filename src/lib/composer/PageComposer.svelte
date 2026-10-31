@@ -246,6 +246,37 @@
 		overflow-wrap: anywhere;
 	}
 
+	.cmp-home :global(.cmp-head__words) {
+		display: grid;
+		gap: 8px;
+		min-width: 0;
+	}
+
+	.cmp-home :global(.cmp-head__eyebrow) {
+		margin: 0;
+		color: hsl(var(--muted-foreground));
+		font-size: var(--type-label, 0.75rem);
+		font-weight: 500;
+		line-height: 1.35;
+		overflow-wrap: anywhere;
+	}
+
+	.cmp-home :global(.cmp-head__subtitle) {
+		max-width: 36rem;
+		margin: 0;
+		color: hsl(var(--muted-foreground));
+		font-size: var(--type-ui, 0.875rem);
+		line-height: var(--leading-ui, 1.4);
+		overflow-wrap: anywhere;
+	}
+
+	@media (min-width: 640px) {
+		.cmp-home :global(.cmp-head__subtitle) {
+			font-size: var(--type-body, 1rem);
+			line-height: var(--leading-body, 1.5);
+		}
+	}
+
 	.cmp-home :global(.cmp-copy) {
 		color: hsl(var(--muted-foreground));
 		font-size: var(--type-body, 1rem);
