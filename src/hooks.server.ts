@@ -1,10 +1,10 @@
-import type { Handle, HandleFetch, HandleServerError, RequestEvent } from '@sveltejs/kit'
+import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
 import { activeBackendProxy, initActiveConnector } from '$lib/core/connectors/init'
 import { resolveStorefrontTheme } from '$lib/theme/index.js'
-import { isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
+import { clientAddress, isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 import { compressResponse } from '$lib/server/compress'
 import { getRequestEvent } from '$app/server'
 import { services } from 'kitcommerce.config'
@@ -24,17 +24,6 @@ export const init = initActiveConnector
 		return undefined
 	}
 })
-
-// The shopper's address, for the backend's per-address limits (see api-proxy.ts). adapter-node reads
-// it from the socket, or from ADDRESS_HEADER when a proxy of the storefront's own sits in front; some
-// adapters throw instead, and then no address is sent rather than a guessed one.
-const clientAddress = (event: RequestEvent) => {
-	try {
-		return event.getClientAddress()
-	} catch {
-		return undefined
-	}
-}
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {

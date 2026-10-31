@@ -6,6 +6,14 @@
 
 export const isApiPath = (pathname: string) => pathname === '/api' || pathname.startsWith('/api/')
 
+export const clientAddress = (event: { getClientAddress: () => string }) => {
+	try {
+		return event.getClientAddress()
+	} catch {
+		return undefined
+	}
+}
+
 // Hop-by-hop headers, plus the edge's own. `api.litekart.in` sits behind Cloudflare too, and a
 // request still carrying the storefront zone's `cdn-loop` / `cf-*` headers reads to it as a loop.
 // `x-forwarded-for` as the browser sent it, too: proxyApiRequest writes its own.
