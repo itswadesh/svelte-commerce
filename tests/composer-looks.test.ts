@@ -2,12 +2,14 @@ import { describe, it, expect, vi } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/svelte'
 import { sectionDivider } from '$lib/composer/helpers'
 import PageComposer from '$lib/composer/PageComposer.svelte'
+import Hero from '$lib/composer/sections/Hero.svelte'
 import Benefits from '$lib/composer/sections/Benefits.svelte'
 
 vi.mock('$lib/components/product-catalogue/product-card.svelte', () => ({ default: () => {} }))
 
 const section = (id: string, type: string, settings: Record<string, unknown>) => ({ id, type, settings })
 const classes = (el: Element) => el.className.replace(/\s*svelte-\w+/g, '')
+const links = (container: HTMLElement) => [...container.querySelectorAll('a')].map((a) => [a.textContent?.trim(), a.getAttribute('href'), classes(a)])
 
 describe('a section set apart from the one above', () => {
 	it('reads a line or a band, and nothing else', () => {
@@ -38,6 +40,47 @@ describe('a section set apart from the one above', () => {
 			['DIV', 'cmp-divider--band', 'Banded'],
 			['SECTION', 'cmp-band', 'None']
 		])
+	})
+})
+
+describe('the faded hero', () => {
+	const fade = {
+		style: 'fade',
+		heading: 'Made by hand',
+		image: '/h.webp',
+		button_text: 'Shop now',
+		button_link: '/products',
+		secondary_button_text: 'Our story',
+		secondary_button_link: '/pages/about',
+		align: 'center'
+	}
+
+	it('draws both buttons, the first filled and the second outlined, keeps the words on the left, and loads its picture first', () => {
+		const { container } = render(Hero, { section: section('h', 'hero', fade), priority: true })
+		const hero = container.querySelector('section')!
+		expect(hero.classList.contains('cmp-hero--fade')).toBe(true)
+		expect(hero.classList.contains('cmp-hero--center')).toBe(false)
+		expect(links(container)).toEqual([
+			['Shop now', '/products', 'cmp-btn cmp-btn--primary'],
+			['Our story', '/pages/about', 'cmp-btn cmp-btn--outline']
+		])
+		const img = container.querySelector('img')!
+		expect([img.getAttribute('loading'), img.getAttribute('fetchpriority')]).toEqual(['eager', 'high'])
+	})
+
+	it('puts no text in the button row of a hero with no button, so the row stays :empty and hidden', () => {
+		const { container } = render(Hero, { section: section('h', 'hero', { heading: 'Made by hand' }) })
+		expect(container.querySelector('.cmp-hero__actions')!.textContent).toBe('')
+	})
+
+	it('keeps the colour block, its one button and its centring for a hero with no style or the block', () => {
+		for (const style of [undefined, 'block']) {
+			const { container, unmount } = render(Hero, { section: section('h', 'hero', { ...fade, style }) })
+			const hero = container.querySelector('section')!
+			expect([hero.classList.contains('cmp-hero--fade'), hero.classList.contains('cmp-hero--center')]).toEqual([false, true])
+			expect(links(container)).toEqual([['Shop now', '/products', 'cmp-btn cmp-btn--inverse']])
+			unmount()
+		}
 	})
 })
 

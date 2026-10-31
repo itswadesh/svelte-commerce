@@ -195,6 +195,13 @@
 		margin-bottom: calc(-1 * var(--cmp-gap));
 	}
 
+	@media (min-width: 768px) {
+		.cmp-home > :global(.cmp-hero--fade.cmp-hero--media:first-child),
+		.cmp-home > :global(.cmp-hero--fade.cmp-hero--media + :is(.cmp-benefits-band, .cmp-marquee-band)) {
+			margin-top: calc(-1 * var(--cmp-gap));
+		}
+	}
+
 	.cmp-home > :global(.cmp-divider--line) {
 		padding-top: var(--cmp-gap);
 		border-top: 1px solid hsl(var(--border));

@@ -15,7 +15,8 @@
 	const mobileImage = $derived(safeHref(s.mobile_image))
 	// A phone-only picture still shows everywhere rather than leaving the hero bare on a computer.
 	const image = $derived(safeHref(s.image) || mobileImage)
-	const centered = $derived(text(s, 'align') === 'center')
+	const fade = $derived(text(s, 'style') === 'fade')
+	const centered = $derived(!fade && text(s, 'align') === 'center')
 	// What the picture shows, as the shop wrote it; the heading names it otherwise.
 	const alt = $derived(text(s, 'image_alt') || heading)
 </script>
@@ -23,14 +24,18 @@
 {#if heading}
 	<!-- Bold and bright (D140): the words on a block of the accent colour, the picture beside them
 	     from the tablet up and under them on a phone, so a phone opens on the headline. -->
-	<section class="cmp-hero" class:cmp-hero--media={!!image} class:cmp-hero--center={centered}>
+	<section class="cmp-hero" class:cmp-hero--media={!!image} class:cmp-hero--center={centered} class:cmp-hero--fade={fade}>
 		<div class="page-width cmp-hero__grid">
 			<div class="cmp-hero__body">
 				{#if eyebrow}<span class="cmp-hero__eyebrow">{eyebrow}</span>{/if}
 				<svelte:element this={isPageHeading ? 'h1' : 'h2'} class="cmp-hero__title">{heading}</svelte:element>
 				<Paragraphs value={s.body} class="cmp-hero__text" />
 				<div class="cmp-hero__actions">
-					<ComposerButton href={s.button_link} label={text(s, 'button_text')} variant="inverse" />
+					<ComposerButton href={s.button_link} label={text(s, 'button_text')} variant={fade ? 'primary' : 'inverse'} />{#if fade}<ComposerButton
+							href={s.secondary_button_link}
+							label={text(s, 'secondary_button_text')}
+							variant="outline"
+						/>{/if}
 				</div>
 			</div>
 			{#if image}
@@ -149,6 +154,77 @@
 		.cmp-hero__media img {
 			position: absolute;
 			inset: 0;
+		}
+	}
+
+	.cmp-hero--fade .cmp-hero__grid {
+		gap: 20px;
+	}
+
+	.cmp-hero--fade .cmp-hero__media {
+		order: -1;
+	}
+
+	.cmp-hero--fade .cmp-hero__body {
+		padding: 0;
+		border-radius: 0;
+		background: none;
+		color: hsl(var(--foreground));
+	}
+
+	.cmp-hero--fade .cmp-hero__eyebrow {
+		padding: 0;
+		border-radius: 0;
+		background: none;
+		color: hsl(var(--muted-foreground));
+		font-weight: 500;
+	}
+
+	.cmp-hero--fade .cmp-hero__title {
+		font-weight: var(--weight-heading, 700);
+	}
+
+	.cmp-hero--fade .cmp-hero__body :global(.cmp-hero__text) {
+		color: hsl(var(--muted-foreground));
+	}
+
+	.cmp-hero--fade .cmp-hero__actions:not(:empty) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+
+	.cmp-hero--fade .cmp-hero__actions :global(.cmp-btn--outline) {
+		border-color: hsl(var(--border));
+		background: hsl(var(--background));
+	}
+
+	@media (min-width: 768px) {
+		.cmp-hero--fade.cmp-hero--media {
+			position: relative;
+			isolation: isolate;
+		}
+		.cmp-hero--fade.cmp-hero--media .cmp-hero__grid {
+			grid-template-columns: minmax(0, 1fr);
+			align-content: center;
+			min-height: clamp(420px, 46vw, 680px);
+		}
+		.cmp-hero--fade.cmp-hero--media .cmp-hero__body {
+			max-width: 50%;
+			padding-block: 48px;
+		}
+		.cmp-hero--fade .cmp-hero__media {
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			min-height: 0;
+			border-radius: 0;
+		}
+		.cmp-hero--fade .cmp-hero__media::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(90deg, hsl(var(--background)) 50%, hsl(var(--background) / 0) 80%);
 		}
 	}
 </style>
