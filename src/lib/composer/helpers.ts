@@ -75,6 +75,11 @@ export function intSetting(value: unknown, min: number, max: number, fallback: n
 	return Math.min(max, Math.max(min, Math.round(n)))
 }
 
+export function sectionDivider(settings: Record<string, unknown> | null | undefined): 'line' | 'band' | '' {
+	const value = text(settings, 'divider')
+	return value === 'line' || value === 'band' ? value : ''
+}
+
 /**
  * Tailwind classes for a product grid's desktop columns. Phones always show two across; the
  * classes are written out in full so Tailwind's scanner keeps every one of them.

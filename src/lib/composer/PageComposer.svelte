@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import { SECTIONS } from './registry.js'
-	import { firstPictureSection, knownSections, pageHeadingSection, type ComposerLayout, type ComposerSection } from './helpers.js'
+	import { firstPictureSection, knownSections, pageHeadingSection, sectionDivider, type ComposerLayout, type ComposerSection } from './helpers.js'
 	import { draftSections, editorMessage, storefrontMessage, type DraftDocument } from './editor-bridge.js'
 	import { TEMPLATE_CORE, withCore } from './page-layout.js'
 	import { themeFontsHref, themeTokenCss } from './theme-tokens.js'
@@ -138,10 +138,13 @@
 		<h1 class="sr-only">{brandName}</h1>
 	{/if}
 	{#each sections as section, index (section.id || index)}
+		{@const divider = sectionDivider(section.settings)}
 		{#if editing}
 			<div
 				class="cmp-edit"
 				class:cmp-edit--selected={selected === section.id}
+				class:cmp-divider--line={divider === 'line'}
+				class:cmp-divider--band={divider === 'band'}
 				data-cmp-section={section.id}
 				role="button"
 				tabindex="0"
@@ -151,6 +154,8 @@
 			>
 				{@render drawn(section, index)}
 			</div>
+		{:else if divider}
+			<div class:cmp-divider--line={divider === 'line'} class:cmp-divider--band={divider === 'band'}>{@render drawn(section, index)}</div>
 		{:else}
 			{@render drawn(section, index)}
 		{/if}
@@ -186,6 +191,24 @@
 	.cmp-home > :global(.cmp-announce:last-child),
 	.cmp-home > :global(.cmp-benefits-band:last-child) {
 		margin-bottom: calc(-1 * var(--cmp-gap));
+	}
+
+	.cmp-home > :global(.cmp-divider--line) {
+		padding-top: var(--cmp-gap);
+		border-top: 1px solid hsl(var(--border));
+	}
+
+	.cmp-home > :global(.cmp-divider--band) {
+		padding-block: var(--cmp-gap);
+		background: hsl(var(--muted) / 0.4);
+	}
+
+	.cmp-home > :global(:is(.cmp-divider--band:has(> section), .cmp-benefits-band) + :is(.cmp-divider--line, .cmp-divider--band)) {
+		margin-top: calc(-1 * var(--cmp-gap));
+	}
+
+	.cmp-home > :global(:is(.cmp-divider--line, .cmp-divider--band):not(.cmp-edit):not(:has(> section))) {
+		display: none;
 	}
 
 	.cmp-home :global(.cmp-head) {
