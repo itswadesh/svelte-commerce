@@ -1,3 +1,16 @@
+<script lang="ts" module>
+	const modalHistoryKey = '__svelteCommerceDialog'
+
+	const dialogsOnSharedEntry = new Set<object>()
+
+	function release(owner: object) {
+		dialogsOnSharedEntry.delete(owner)
+		queueMicrotask(() => {
+			if (!dialogsOnSharedEntry.size && history.state?.[modalHistoryKey] === true) history.back()
+		})
+	}
+</script>
+
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte'
 	import { Dialog as DialogPrimitive } from 'bits-ui'
@@ -9,12 +22,11 @@
 	export let open: $$Props['open'] = false
 	export let manageHistory: $$Props['manageHistory'] = true
 
-	const modalHistoryKey = '__svelteCommerceDialog'
-	let ownsHistoryEntry = false
+	const self = {}
 
 	function handleBrowserBack() {
-		if (!open || !ownsHistoryEntry) return
-		ownsHistoryEntry = false
+		if (!open || !dialogsOnSharedEntry.has(self)) return
+		dialogsOnSharedEntry.delete(self)
 		open = false
 	}
 
@@ -24,20 +36,18 @@
 	})
 
 	$: if (typeof window !== 'undefined' && manageHistory) {
-		if (open && !ownsHistoryEntry) {
-			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
-			ownsHistoryEntry = true
-		} else if (!open && ownsHistoryEntry) {
-			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
-			ownsHistoryEntry = false
-			if (isCurrentModalEntry) history.back()
+		if (open && !dialogsOnSharedEntry.has(self)) {
+			if (!dialogsOnSharedEntry.size && history.state?.[modalHistoryKey] !== true) {
+				history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			}
+			dialogsOnSharedEntry.add(self)
+		} else if (!open && dialogsOnSharedEntry.has(self)) {
+			release(self)
 		}
 	}
 
 	onDestroy(() => {
-		if (typeof window !== 'undefined' && manageHistory && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
-			history.back()
-		}
+		if (dialogsOnSharedEntry.has(self)) release(self)
 	})
 </script>
 
