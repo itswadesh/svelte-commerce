@@ -46,12 +46,14 @@ export const FONTS: Record<string, Font> = {
 	nunito: { family: "'Nunito', ui-sans-serif, system-ui, sans-serif", google: 'Nunito:wght@400;600;700' },
 	'dm-sans': { family: "'DM Sans', ui-sans-serif, system-ui, sans-serif", google: 'DM+Sans:wght@400;500;600;700' },
 	'work-sans': { family: "'Work Sans', ui-sans-serif, system-ui, sans-serif", google: 'Work+Sans:wght@400;500;600;700' },
+	'source-sans-3': { family: "'Source Sans 3', ui-sans-serif, system-ui, sans-serif", google: 'Source+Sans+3:wght@400;500;600;700' },
 	'playfair-display': { family: "'Playfair Display', Georgia, serif", google: 'Playfair+Display:wght@400;500;600;700' },
 	lora: { family: "'Lora', Georgia, serif", google: 'Lora:wght@400;500;600;700' },
 	merriweather: { family: "'Merriweather', Georgia, serif", google: 'Merriweather:wght@400;700' },
 	'cormorant-garamond': { family: "'Cormorant Garamond', Georgia, serif", google: 'Cormorant+Garamond:wght@400;500;600;700' },
 	'libre-baskerville': { family: "'Libre Baskerville', Georgia, serif", google: 'Libre+Baskerville:wght@400;700' },
-	'eb-garamond': { family: "'EB Garamond', Georgia, serif", google: 'EB+Garamond:wght@400;500;600;700' }
+	'eb-garamond': { family: "'EB Garamond', Georgia, serif", google: 'EB+Garamond:wght@400;500;600;700' },
+	'noto-serif': { family: "'Noto Serif', Georgia, serif", google: 'Noto+Serif:wght@400;500;600;700' }
 }
 
 const RADII: Record<string, string> = { none: '0px', small: '4px', medium: '8px', large: '16px' }

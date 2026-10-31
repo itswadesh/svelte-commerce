@@ -129,6 +129,13 @@ describe('theme tokens', () => {
 		)
 	})
 
+	it('sets headings in Noto Serif and body text in Source Sans 3', () => {
+		expect(themeTokenDeclarations({ heading_font: 'noto-serif', body_font: 'source-sans-3' })).toMatchObject({
+			'--font-heading': "'Noto Serif', Georgia, serif",
+			'--font-body': "'Source Sans 3', ui-sans-serif, system-ui, sans-serif"
+		})
+	})
+
 	it('converts colours to the HSL triplets the theme holds', () => {
 		expect(hexToTriplet('#0f172a')).toBe('222.2 47.4% 11.2%')
 		expect(themeBackground({ background: '#ABCDEF' })).toBe('#abcdef')
