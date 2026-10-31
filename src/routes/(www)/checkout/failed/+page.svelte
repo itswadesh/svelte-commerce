@@ -10,6 +10,7 @@
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
+	import { taxIsPending } from '$lib/utils/price'
 
 	const cartState = getCartState()
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
@@ -121,6 +122,7 @@
 							total={cart?.total}
 							{currencyCode}
 							shippingResolved={!!cart?.shippingAddress}
+							taxPending={taxIsPending(page?.data?.store?.currency?.includesTax, cart?.tax)}
 						/>
 					</div>
 				</div>

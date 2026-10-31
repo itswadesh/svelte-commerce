@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { AlertCircle, Check, LockKeyhole, Minus, Plus, ShoppingBag, Tag, Trash2, X } from '@lucide/svelte'
-	import { formatPrice } from '$lib/utils/price'
+	import { formatPrice, taxIsPending, totalLabel } from '$lib/utils/price'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { page } from '$app/state'
@@ -156,6 +156,7 @@
 	// Until a shipping address exists the shipping cost is unknown, so the bottom line is an
 	// estimate. Naming it "Total" one row under "Address required" was the defect.
 	const shippingResolved = $derived(!!cartState.cart?.shippingAddress)
+	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, (cartState.cart as any)?.tax))
 
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
 	const cartSubtotal = $derived(formatPrice(cartState.cart?.subtotal, currencyCode))
@@ -467,13 +468,14 @@
 								total={(cartState.cart as any)?.total}
 								{currencyCode}
 								{shippingResolved}
+								{taxPending}
 								loading={isBusy}
 							/>
 
 							<!-- Announced once, politely: a quantity change moved the subtotal with no signal at all
 							     for a screen-reader user. -->
 							<p class="sr-only" aria-live="polite" aria-atomic="true">
-								{isBusy ? 'Updating your bag' : `Subtotal ${cartSubtotal}, ${shippingResolved ? 'total' : 'estimated total'} ${cartTotal}`}
+								{isBusy ? 'Updating your bag' : `Subtotal ${cartSubtotal}, ${totalLabel(shippingResolved, taxPending).toLowerCase()} ${cartTotal}`}
 							</p>
 
 							<div class="mt-5 flex items-center justify-center gap-2 rounded-radius bg-muted/50 px-4 py-2.5">
@@ -487,7 +489,7 @@
 									loading={cartModule.loadingForCheckout}
 									disabled={isBusy}
 									total={cartTotal}
-									totalLabel={shippingResolved ? 'Total' : 'Estimated total'}
+									totalLabel={totalLabel(shippingResolved, taxPending)}
 									class="mt-4"
 								/>
 							{:else}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronLeft, CreditCard, LockKeyhole, Mail, MapPin, Pencil, Truck } from '@lucide/svelte'
-	import { formatPrice, paymentFee, totalWithFee } from '$lib/utils/price'
+	import { formatPrice, paymentFee, taxIsPending, totalLabel, totalWithFee } from '$lib/utils/price'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
@@ -21,6 +21,7 @@
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
 	const fee = $derived(paymentFee(selectedPaymentMethod))
 	const total = $derived(totalWithFee(cartState.cart.total, fee))
+	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart.tax))
 </script>
 
 <svelte:head>
@@ -206,6 +207,7 @@
 							{total}
 							{currencyCode}
 							shippingResolved={!!cartState.cart.shippingAddress}
+							{taxPending}
 						/>
 
 						{#if paymentModule.showError}
@@ -225,6 +227,7 @@
 							disabled={paymentModule.checkoutDisabled}
 							loading={paymentModule.paymentLoader}
 							total={formatPrice(total, currencyCode)}
+							totalLabel={totalLabel(!!cartState.cart.shippingAddress, taxPending)}
 						/>
 					</div>
 				</div>
