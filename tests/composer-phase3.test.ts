@@ -126,7 +126,7 @@ describe('theme tokens', () => {
 			'https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap'
 		)
 		expect(themeFontsHref({ heading_font: 'dm-sans', body_font: 'nope' })).toBe(
-			'https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&display=swap'
+			'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap'
 		)
 	})
 
@@ -137,15 +137,16 @@ describe('theme tokens', () => {
 		})
 	})
 
-	it('loads the heading face at its one weight and the body face at every weight', () => {
+	it('loads every weight of the heading face whatever the heading weight, as the hero and tiles draw others', () => {
 		expect(themeFontsHref({ heading_font: 'noto-serif', heading_weight: 'medium', body_font: 'source-sans-3' })).toBe(
-			'https://fonts.googleapis.com/css2?family=Noto+Serif:wght@500&family=Source+Sans+3:wght@400;500;600;700&display=swap'
+			'https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap'
 		)
-		expect(themeFontsHref({ heading_font: 'merriweather', heading_weight: 'medium' })).toBe(
-			'https://fonts.googleapis.com/css2?family=Merriweather:wght@400&display=swap'
+		expect(themeFontsHref({ heading_font: 'merriweather', heading_weight: 'extrabold' })).toBe(
+			'https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap'
 		)
-		expect(themeTokenCss({ heading_font: 'noto-serif' })).toContain('font-synthesis-weight: none;')
-		expect(themeTokenCss({ body_font: 'source-sans-3' })).not.toContain('font-synthesis')
+		expect(themeTokenCss({ heading_font: 'merriweather', heading_weight: 'medium' })).toBe(
+			"[data-theme][data-theme] { --font-heading: 'Merriweather', Georgia, serif !important; --weight-heading: 500 !important; }"
+		)
 	})
 
 	it("stops loading the default theme's Inter only when the store names both fonts", () => {
