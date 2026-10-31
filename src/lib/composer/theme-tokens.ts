@@ -33,31 +33,45 @@ export type ThemeSettings = Partial<
 	>
 >
 
-type Font = { family: string; googleName: string; weights: number[] }
+type Font = { name: string; serif?: true; weights: number[]; fallback: [sizeAdjust: number, ascent: number, descent: number, lineGap: number] }
 
 /** The engine's font list (ext/layouts registry.go `Fonts`), keyed alike. */
 export const FONTS: Record<string, Font> = {
-	inter: { family: "'Inter', ui-sans-serif, system-ui, sans-serif", googleName: 'Inter', weights: [400, 500, 600, 700, 800] },
-	roboto: { family: "'Roboto', ui-sans-serif, system-ui, sans-serif", googleName: 'Roboto', weights: [400, 500, 700] },
-	poppins: { family: "'Poppins', ui-sans-serif, system-ui, sans-serif", googleName: 'Poppins', weights: [400, 500, 600, 700] },
-	montserrat: { family: "'Montserrat', ui-sans-serif, system-ui, sans-serif", googleName: 'Montserrat', weights: [400, 500, 600, 700] },
-	lato: { family: "'Lato', ui-sans-serif, system-ui, sans-serif", googleName: 'Lato', weights: [400, 700] },
-	'open-sans': { family: "'Open Sans', ui-sans-serif, system-ui, sans-serif", googleName: 'Open+Sans', weights: [400, 500, 600, 700] },
-	nunito: { family: "'Nunito', ui-sans-serif, system-ui, sans-serif", googleName: 'Nunito', weights: [400, 600, 700] },
-	'dm-sans': { family: "'DM Sans', ui-sans-serif, system-ui, sans-serif", googleName: 'DM+Sans', weights: [400, 500, 600, 700] },
-	'work-sans': { family: "'Work Sans', ui-sans-serif, system-ui, sans-serif", googleName: 'Work+Sans', weights: [400, 500, 600, 700] },
-	'source-sans-3': { family: "'Source Sans 3', ui-sans-serif, system-ui, sans-serif", googleName: 'Source+Sans+3', weights: [400, 500, 600, 700] },
-	'playfair-display': { family: "'Playfair Display', Georgia, serif", googleName: 'Playfair+Display', weights: [400, 500, 600, 700] },
-	lora: { family: "'Lora', Georgia, serif", googleName: 'Lora', weights: [400, 500, 600, 700] },
-	merriweather: { family: "'Merriweather', Georgia, serif", googleName: 'Merriweather', weights: [400, 700] },
-	'cormorant-garamond': { family: "'Cormorant Garamond', Georgia, serif", googleName: 'Cormorant+Garamond', weights: [400, 500, 600, 700] },
-	'libre-baskerville': { family: "'Libre Baskerville', Georgia, serif", googleName: 'Libre+Baskerville', weights: [400, 700] },
-	'eb-garamond': { family: "'EB Garamond', Georgia, serif", googleName: 'EB+Garamond', weights: [400, 500, 600, 700] },
-	'noto-serif': { family: "'Noto Serif', Georgia, serif", googleName: 'Noto+Serif', weights: [400, 500, 600, 700] }
+	inter: { name: 'Inter', weights: [400, 500, 600, 700, 800], fallback: [107.12, 90.44, 22.52, 0] },
+	roboto: { name: 'Roboto', weights: [400, 500, 700], fallback: [99.78, 92.98, 24.47, 0] },
+	poppins: { name: 'Poppins', weights: [400, 500, 600, 700], fallback: [112.16, 93.62, 31.21, 8.92] },
+	montserrat: { name: 'Montserrat', weights: [400, 500, 600, 700], fallback: [112.83, 85.79, 22.25, 0] },
+	lato: { name: 'Lato', weights: [400, 700], fallback: [97.69, 101.03, 21.8, 0] },
+	'open-sans': { name: 'Open Sans', weights: [400, 500, 600, 700], fallback: [105.15, 101.65, 27.86, 0] },
+	nunito: { name: 'Nunito', weights: [400, 600, 700], fallback: [101.39, 99.71, 34.82, 0] },
+	'dm-sans': { name: 'DM Sans', weights: [400, 500, 600, 700], fallback: [104.53, 94.9, 29.66, 0] },
+	'work-sans': { name: 'Work Sans', weights: [400, 500, 600, 700], fallback: [111.93, 83.09, 21.71, 0] },
+	'source-sans-3': { name: 'Source Sans 3', weights: [400, 500, 600, 700], fallback: [93.76, 109.21, 42.66, 0] },
+	'playfair-display': { name: 'Playfair Display', serif: true, weights: [400, 500, 600, 700], fallback: [111.26, 97.25, 22.56, 0] },
+	lora: { name: 'Lora', serif: true, weights: [400, 500, 600, 700], fallback: [115.2, 87.33, 23.78, 0] },
+	merriweather: { name: 'Merriweather', serif: true, weights: [400, 700], fallback: [119.38, 82.42, 22.87, 0] },
+	'cormorant-garamond': { name: 'Cormorant Garamond', serif: true, weights: [400, 500, 600, 700], fallback: [96.98, 95.27, 29.59, 0] },
+	'libre-baskerville': { name: 'Libre Baskerville', serif: true, weights: [400, 700], fallback: [127.26, 76.22, 21.22, 0] },
+	'eb-garamond': { name: 'EB Garamond', serif: true, weights: [400, 500, 600, 700], fallback: [94.77, 106.26, 31.44, 0] },
+	'noto-serif': { name: 'Noto Serif', serif: true, weights: [400, 500, 600, 700], fallback: [118.4, 90.29, 24.75, 0] }
 }
 
 export function googleFamily(face: Font): string {
-	return `${face.googleName}:wght@${face.weights.join(';')}`
+	return `${face.name.replaceAll(' ', '+')}:wght@${face.weights.join(';')}`
+}
+
+function fontStack(face: Font): string {
+	return `'${face.name}', '${face.name} Fallback', ${face.serif ? 'Georgia, serif' : 'ui-sans-serif, system-ui, sans-serif'}`
+}
+
+const GOOGLE_LATIN_RANGE =
+	'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'
+
+function fallbackFace({ name, serif, fallback: [size, ascent, descent, lineGap] }: Font): string {
+	return (
+		`@font-face { font-family: '${name} Fallback'; src: local('${serif ? 'Times New Roman' : 'Arial'}'); unicode-range: ${GOOGLE_LATIN_RANGE}; ` +
+		`size-adjust: ${size}%; ascent-override: ${ascent}%; descent-override: ${descent}%; line-gap-override: ${lineGap}%; }`
+	)
 }
 
 const RADII: Record<string, string> = { none: '0px', small: '4px', medium: '8px', large: '16px' }
@@ -279,10 +293,10 @@ export function themeTokenDeclarations(settings: ThemeSettings | null | undefine
 
 	const heading = font(s.heading_font)
 	const body = font(s.body_font)
-	if (heading) out['--font-heading'] = heading.family
+	if (heading) out['--font-heading'] = fontStack(heading)
 	if (body) {
-		out['--font-body'] = body.family
-		out['--font-primary'] = body.family
+		out['--font-body'] = fontStack(body)
+		out['--font-primary'] = fontStack(body)
 	}
 	const sale = colour(s.sale)
 	if (sale) out['--sale'] = hexToTriplet(readableOn(sale, ground))
@@ -301,6 +315,10 @@ function font(key: unknown): Font | undefined {
 	return typeof key === 'string' && Object.hasOwn(FONTS, key) ? FONTS[key] : undefined
 }
 
+function chosenFonts(settings: ThemeSettings | null | undefined): Font[] {
+	return [...new Set([font(settings?.heading_font), font(settings?.body_font)])].filter((f): f is Font => !!f)
+}
+
 /**
  * A style sheet that applies the settings over the theme. `!important` because the theme's own
  * palette can arrive as inline styles on the shell (store-palette.svelte) and the merchant's
@@ -312,23 +330,17 @@ export function themeTokenCss(settings: ThemeSettings | null | undefined, depth 
 		.map(([key, value]) => `${key}: ${value} !important;`)
 		.join(' ')
 	if (!declarations) return ''
-	return `${'[data-theme]'.repeat(Math.max(1, depth))} { ${declarations} }`
+	return [...chosenFonts(settings).map(fallbackFace), `${'[data-theme]'.repeat(Math.max(1, depth))} { ${declarations} }`].join(' ')
 }
 
 export function setsBothFonts(settings: ThemeSettings | null | undefined): boolean {
 	return !!font(settings?.heading_font) && !!font(settings?.body_font)
 }
 
-/**
- * The Google Fonts stylesheet for the chosen fonts, or '' when none is chosen. Every weight of each,
- * the heading face's too: besides the store's heading weight the theme draws headings at fixed ones
- * (the hero's 800, the footer's 600, a collection or slide title's 500).
- */
 export function themeFontsHref(settings: ThemeSettings | null | undefined): string {
-	const s = settings ?? {}
-	const keys = [s.heading_font, s.body_font].filter((k, i, all): k is string => !!font(k) && all.indexOf(k) === i)
-	if (!keys.length) return ''
-	return 'https://fonts.googleapis.com/css2?' + keys.map((k) => 'family=' + googleFamily(FONTS[k])).join('&') + '&display=swap'
+	const faces = chosenFonts(settings)
+	if (!faces.length) return ''
+	return 'https://fonts.googleapis.com/css2?' + faces.map((face) => 'family=' + googleFamily(face)).join('&') + '&display=swap'
 }
 
 /** The page's background colour, for the browser's own chrome, or ''. */
