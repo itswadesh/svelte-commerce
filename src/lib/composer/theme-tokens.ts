@@ -321,6 +321,10 @@ export function themeTokenCss(settings: ThemeSettings | null | undefined, depth 
 	return `${'[data-theme]'.repeat(Math.max(1, depth))} { ${declarations} }`
 }
 
+export function setsBothFonts(settings: ThemeSettings | null | undefined): boolean {
+	return !!font(settings?.heading_font) && !!font(settings?.body_font)
+}
+
 /** Google Fonts serves one requested weight as a static file and several as the whole variable font. */
 export function themeFontsHref(settings: ThemeSettings | null | undefined): string {
 	const s = settings ?? {}
