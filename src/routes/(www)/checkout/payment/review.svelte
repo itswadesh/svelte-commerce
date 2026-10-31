@@ -20,6 +20,7 @@
 	const selectedItems = $derived(cartState.cart?.lineItems?.filter((i: any) => i.isSelectedForCheckout) || [])
 	const selectedPaymentMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
 	const selectedShippingRate = $derived(paymentModule.shippingRates?.data?.find((r: any) => r.id === cartState.cart?.shippingRateId))
+	const deliveryPrice = $derived(quote.current ? quote.current.shippingCharges : selectedShippingRate?.base_rate)
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
 	const quotedMethod = $derived(paymentModule.allPaymentMethods?.find((m: any) => m.code === quote.method))
 	const figures = $derived(
@@ -166,7 +167,7 @@
 								{/if}
 							</div>
 							<span class="font-bold">
-								{selectedShippingRate.base_rate > 0 ? formatPrice(selectedShippingRate.base_rate, currencyCode) : 'FREE'}
+								{deliveryPrice > 0 ? formatPrice(deliveryPrice, currencyCode) : 'FREE'}
 							</span>
 						</div>
 					</div>
@@ -220,9 +221,9 @@
 							onretry={quote.retry}
 						/>
 
-						{#if quote.moved}
+						{#if quote.totalChanged}
 							<p role="status" class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive" in:fade>
-								{quote.moved}
+								{quote.totalChanged}
 							</p>
 						{/if}
 
