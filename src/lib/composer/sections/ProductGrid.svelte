@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import SectionHead from '../SectionHead.svelte'
-	import { gridColumnsClass, intSetting, type ComposerSection } from '../helpers.js'
+	import { gridColumnsClass, intSetting, text, type ComposerSection } from '../helpers.js'
 
 	/**
 	 * A shelf of products the engine resolved live — prices and stock never live in the layout.
@@ -16,7 +16,7 @@
 
 	const s = $derived(section.settings ?? {})
 	const products = $derived((section.products ?? []).slice(0, intSetting(s.limit, 1, 24, 24)))
-	const columns = $derived(gridColumnsClass(s.columns))
+	const columns = $derived(gridColumnsClass(s.columns) + (text(s, 'mobile_layout') === 'row' ? ' cmp-grid--row' : ''))
 </script>
 
 {#if products.length}
@@ -31,3 +31,35 @@
 		</div>
 	</section>
 {/if}
+
+<style>
+	/* Global, not scoped: a scoped rule stamps Svelte's class on every product grid's element,
+	   changing the markup of grids without the row. overflow-x: auto clips the block axis too;
+	   the 4px block padding keeps a card's focus ring unclipped. */
+	@media (max-width: 767.98px) {
+		:global(.product-grid.cmp-grid--row) {
+			grid-template-columns: none;
+			grid-auto-flow: column;
+			grid-auto-columns: min(165px, 42vw);
+			overflow-x: auto;
+			overscroll-behavior-x: contain;
+			scroll-snap-type: x mandatory;
+			scroll-padding-inline: var(--container-gutter, 16px);
+			margin: -4px calc(-1 * var(--container-gutter, 16px));
+			padding: 4px var(--container-gutter, 16px);
+			scrollbar-width: none;
+		}
+		:global(.cmp-grid--row::-webkit-scrollbar) {
+			display: none;
+		}
+		:global(.cmp-grid--row > *) {
+			scroll-snap-align: start;
+		}
+	}
+
+	@media (max-width: 767.98px) and (prefers-reduced-motion: no-preference) {
+		:global(.cmp-grid--row) {
+			scroll-behavior: smooth;
+		}
+	}
+</style>

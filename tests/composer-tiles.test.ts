@@ -1,8 +1,11 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/svelte'
 import { columnItems, columnLook, columnsClass } from '$lib/composer/helpers'
 import MultiColumn from '$lib/composer/sections/MultiColumn.svelte'
 import CollectionList from '$lib/composer/sections/CollectionList.svelte'
+import ProductGrid from '$lib/composer/sections/ProductGrid.svelte'
+
+vi.mock('$lib/components/product-catalogue/product-card.svelte', () => ({ default: () => {} }))
 
 const section = (type: string, settings: Record<string, unknown>, extra: Record<string, unknown> = {}) => ({ id: 's', type, settings, ...extra })
 const classes = (el: Element) => el.className.replace(/\s*svelte-\w+/g, '')
@@ -133,5 +136,30 @@ describe('a collection list with its titles on the pictures', () => {
 			]).toEqual(['cmp-cols cmp-cols--4', null, ['cmp-col-card__media', 'cmp-col-card__title', 'cmp-col-card__media', 'cmp-col-card__title', 'cmp-col-card__media', 'cmp-col-card__title']])
 			unmount()
 		}
+	})
+})
+
+describe('a product grid as one row on a phone', () => {
+	const products = [{ id: 'p1' }, { id: 'p2' }, { id: 'p3' }]
+	const grid = (settings: Record<string, unknown>) => {
+		const { container, unmount } = render(ProductGrid, { section: section('product-grid', settings, { products }) })
+		const out = classes(container.querySelector('.product-grid')!)
+		unmount()
+		return out
+	}
+
+	it('draws a grid with no phone layout exactly as one with the grid layout', () => {
+		const props = (mobile_layout?: string) => ({ section: section('product-grid', { heading: 'New in', mobile_layout }, { products }) })
+		expect(html(ProductGrid, props('grid'))).toBe(html(ProductGrid, props()))
+	})
+
+	it('marks the grid as a row only when the store chose the row, and keeps the computer columns either way', () => {
+		expect([grid({ mobile_layout: 'row', columns: 4 }), grid({ mobile_layout: 'row', columns: 3 }), grid({}), grid({ mobile_layout: 'grid' }), grid({ mobile_layout: 'rows' })]).toEqual([
+			'product-grid grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 cmp-grid--row',
+			'product-grid grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 cmp-grid--row',
+			'product-grid grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+			'product-grid grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+			'product-grid grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+		])
 	})
 })
