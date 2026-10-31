@@ -3,6 +3,29 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: A section can sit on a line or a band, the hero can fade, and the benefits can scroll
+
+The owner wants Chillish to match a reference store whose sections are parted by hairlines and
+alternating quiet bands, which opens on a full-width photograph fading into the page behind its
+headline with two buttons, and which runs its promises as a slow strip under it. GoCommerce D184
+gives every section in the page rail a `divider` (`none`, `line` or `band`), the hero a `style`
+(`block` or `fade`) with a second button, and the benefits strip a `style` (`band` or `marquee`).
+Each is a store's choice; unset, or set to its first value, a section draws exactly as before.
+
+- A line or a band keeps the page's own section gap inside it, so the hairline or the band's edge
+  sits one gap from the words on each side. The band is the theme's quiet background at 40 %.
+- The faded hero's title takes `--weight-heading`. For a store that picks it, this overrides the
+  800 weight of the "Bold and bright" hero (D140); the block keeps 800. Its picture loads first and
+  eagerly, as before, and the section's height is set before the picture arrives.
+- The scrolling strip is the first motion on the default theme that runs by itself. It moves only
+  `transform`, at about 30px a second (one copy of the list per 48 s at the slowest), and stops
+  while a mouse pointer is on it. A pause button at its end stops and starts it (WCAG 2.2.2), as
+  the slideshow's does, and a press wins over the pointer; the reference has none. That button,
+  not keyboard focus, is how a keyboard stops it: a strip that stopped on focus left the button
+  saying "Pause" over a strip already still. Under reduced motion it stands still, the promises
+  wrapped onto centred lines, with no button. The second copy that carries the loop is hidden
+  from assistive technology, so the promises are read once.
+
 ## 2026-10-31: A store can set the small line above a section heading in capitals
 
 The owner wants Chillish to match a reference store whose shelves each carry a small capitalised
