@@ -130,11 +130,26 @@ describe('theme tokens', () => {
 		)
 	})
 
-	it('sets headings in Noto Serif and body text in Source Sans 3', () => {
+	it('sets headings in Noto Serif and body text in Source Sans 3, each with its fallback next', () => {
 		expect(themeTokenDeclarations({ heading_font: 'noto-serif', body_font: 'source-sans-3' })).toMatchObject({
-			'--font-heading': "'Noto Serif', Georgia, serif",
-			'--font-body': "'Source Sans 3', ui-sans-serif, system-ui, sans-serif"
+			'--font-heading': "'Noto Serif', 'Noto Serif Fallback', Georgia, serif",
+			'--font-body': "'Source Sans 3', 'Source Sans 3 Fallback', ui-sans-serif, system-ui, sans-serif"
 		})
+	})
+
+	it('declares each chosen face once, as Arial or Times New Roman resized to its metrics, over the latin subset only so a ₹ the face lacks keeps its system face', () => {
+		const latin =
+			'unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;'
+		expect(themeTokenCss({ heading_font: 'noto-serif', body_font: 'source-sans-3' })).toBe(
+			`@font-face { font-family: 'Noto Serif Fallback'; src: local('Times New Roman'); ${latin} size-adjust: 118.4%; ascent-override: 90.29%; descent-override: 24.75%; line-gap-override: 0%; } ` +
+				`@font-face { font-family: 'Source Sans 3 Fallback'; src: local('Arial'); ${latin} size-adjust: 93.76%; ascent-override: 109.21%; descent-override: 42.66%; line-gap-override: 0%; } ` +
+				"[data-theme][data-theme] { --font-heading: 'Noto Serif', 'Noto Serif Fallback', Georgia, serif !important; " +
+				"--font-body: 'Source Sans 3', 'Source Sans 3 Fallback', ui-sans-serif, system-ui, sans-serif !important; " +
+				"--font-primary: 'Source Sans 3', 'Source Sans 3 Fallback', ui-sans-serif, system-ui, sans-serif !important; }"
+		)
+		expect(themeTokenCss({ heading_font: 'poppins', body_font: 'poppins' }).match(/@font-face \{[^}]*\}/g)).toEqual([
+			`@font-face { font-family: 'Poppins Fallback'; src: local('Arial'); ${latin} size-adjust: 112.16%; ascent-override: 93.62%; descent-override: 31.21%; line-gap-override: 8.92%; }`
+		])
 	})
 
 	it('loads every weight of the heading face whatever the heading weight, as the hero and tiles draw others', () => {
@@ -144,8 +159,9 @@ describe('theme tokens', () => {
 		expect(themeFontsHref({ heading_font: 'merriweather', heading_weight: 'extrabold' })).toBe(
 			'https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap'
 		)
-		expect(themeTokenCss({ heading_font: 'merriweather', heading_weight: 'medium' })).toBe(
-			"[data-theme][data-theme] { --font-heading: 'Merriweather', Georgia, serif !important; --weight-heading: 500 !important; }"
+		const css = themeTokenCss({ heading_font: 'merriweather', heading_weight: 'medium' })
+		expect(css.slice(css.indexOf('[data-theme]'))).toBe(
+			"[data-theme][data-theme] { --font-heading: 'Merriweather', 'Merriweather Fallback', Georgia, serif !important; --weight-heading: 500 !important; }"
 		)
 	})
 
