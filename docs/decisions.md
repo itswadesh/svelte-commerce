@@ -10,12 +10,16 @@ false), checkout called its bottom line "Total" and the order then charged more:
 charged on an 18% rate. The engine works tax out only when it places the order, and no cart or
 checkout endpoint quotes it before then. Until the engine offers that quote, the storefront does
 not work tax out itself, because a copy of the engine's tax rules would drift from them. Instead,
-when `store.currency.includesTax` is false and the cart carries no tax, the cart, address,
-payment, review and failed steps label the figure "Total before tax", with "Any tax is added when
-you place your order." under it. The pinned bar uses the same label. The confirmation page, the
-order page and order tracking show a "Tax" row when the order's tax was added on top
-(`taxIncluded` false). A store whose prices include tax, or that has not said, reads as before.
-Showing the real total before the order needs an engine quote endpoint.
+when the cart says it leaves tax out (`taxIncluded` false) and carries none, and the store does
+not say its prices include tax, the cart, address, payment, review and failed steps label the
+figure "Total before tax", with "Any tax is added when you place your order." under it. The pinned
+bar uses the same label. The confirmation page, the order page and order tracking show a "Tax" row
+when the order's tax was added on top (`taxIncluded` false). A store whose prices include tax
+(`store.currency.includesTax` true) reads as before. A GoCommerce store that has not chosen gets
+the install default, tax added on top, so it shows the label. A cart that does not say it leaves
+tax out reads as before, whatever the store record says, because its total is already final.
+Litekart's demo store and `default-store.json` both say `includesTax` false on backends whose cart
+total is final. Showing the real total before the order needs an engine quote endpoint.
 
 ## 2026-10-31: The payment step's total includes cash on delivery's extra charge
 
