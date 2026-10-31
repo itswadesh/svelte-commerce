@@ -29,3 +29,67 @@ export function totalLabel(shippingResolved: boolean, taxPending: boolean): stri
 export function addedTax(order?: { tax?: number | null; taxIncluded?: boolean | null } | null): number {
 	return order?.taxIncluded === false ? Math.max(0, Number(order.tax) || 0) : 0
 }
+
+export type QuotedCoupon = { code: string; autoApplied: boolean; freeShipping: boolean }
+
+/** What checkout would charge, as a connector that can quote gives it: the order's own names. */
+export type CheckoutQuote = {
+	subtotal: number
+	shippingCharges: number
+	discount: number
+	coupon: QuotedCoupon | null
+	tax: number
+	taxIncluded: boolean
+	codCharges: number
+	total: number
+}
+
+export function checkoutFigures(
+	cart:
+		| {
+				subtotal?: number | null
+				discountAmount?: number | null
+				shippingCharges?: number | null
+				tax?: number | null
+				taxIncluded?: boolean | null
+				total?: number | null
+		  }
+		| null
+		| undefined,
+	method: { name?: string; fee?: number | null } | null | undefined,
+	includesTax: boolean | null | undefined,
+	quote: CheckoutQuote | null | undefined
+): {
+	subtotal?: number | null
+	discount?: number | null
+	coupon: QuotedCoupon | null
+	shipping?: number | null
+	fee: PaymentFee | null
+	tax?: number | null
+	total: number
+	taxPending: boolean
+} {
+	if (!quote) {
+		const fee = paymentFee(method)
+		return {
+			subtotal: cart?.subtotal,
+			discount: cart?.discountAmount,
+			coupon: null,
+			shipping: cart?.shippingCharges,
+			fee,
+			tax: cart?.tax,
+			total: totalWithFee(cart?.total, fee),
+			taxPending: taxIsPending(includesTax, cart)
+		}
+	}
+	return {
+		subtotal: quote.subtotal,
+		discount: quote.discount,
+		coupon: quote.coupon,
+		shipping: quote.shippingCharges,
+		fee: paymentFee({ name: method?.name, fee: quote.codCharges }),
+		tax: addedTax(quote),
+		total: quote.total,
+		taxPending: false
+	}
+}
