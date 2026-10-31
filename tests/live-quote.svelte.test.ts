@@ -2,8 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushSync } from 'svelte'
 import type { CheckoutQuote } from '$lib/utils/price'
 
+type Refused = (quote: CheckoutQuote, message: string) => void
+
 const services = vi.hoisted(() => ({
-	checkoutService: {} as { getQuote?: (args: { cartId?: string; method?: string }) => Promise<CheckoutQuote | null> }
+	checkoutService: {} as {
+		getQuote?: (args: { cartId?: string; method?: string }) => Promise<CheckoutQuote | null>
+		expectTotal?: (args: { cartId?: string; total: number | null; onChange: Refused }) => void
+	}
 }))
 vi.mock('$lib/core/services', () => services)
 
@@ -166,6 +171,61 @@ describe('LiveQuote.ask', () => {
 	})
 })
 
+describe('LiveQuote.confirming', () => {
+	const cart = { id: 'cart-1', shippingAddress: { countryCode: 'IN', state: 'Odisha' }, lineItems: [{ id: 'l1' }] }
+	const sentence = 'Your total changed to ₹1,201. Check the new total and confirm again.'
+
+	it('hands the backend the total on screen, and none when nothing was quoted', async () => {
+		const expectTotal = vi.fn()
+		services.checkoutService.expectTotal = expectTotal
+		const quote = live()
+		quote.ask('COD|a', async () => quoted(1151))
+		await settle()
+		quote.confirming('cart-1')
+		quote.ask('COD|b', async () => null)
+		await settle()
+		quote.confirming('cart-1')
+		expect(expectTotal.mock.calls.map(([args]) => [args.cartId, args.total])).toEqual([
+			['cart-1', 1151],
+			['cart-1', null]
+		])
+	})
+
+	it("shows checkout's figures and sentence at once when it refuses a total that moved, and waits for a fresh Confirm", async () => {
+		let refuse!: Refused
+		services.checkoutService.expectTotal = ({ onChange }) => {
+			refuse = onChange
+		}
+		const quote = live()
+		quote.ask('COD|a', async () => quoted(1151), 'COD')
+		await settle()
+		quote.confirming('cart-1')
+		refuse(quoted(1201), sentence)
+		expect([quote.current?.total, quote.method, quote.moved, quote.confirmable(cart)]).toEqual([1201, 'COD', sentence, true])
+
+		quote.confirming('cart-1')
+		expect(quote.moved).toBe('')
+	})
+
+	it('lets an answer asked after the refusal replace its figures and its sentence', async () => {
+		let refuse!: Refused
+		services.checkoutService.expectTotal = ({ onChange }) => {
+			refuse = onChange
+		}
+		const quote = live()
+		quote.ask('COD|a', async () => quoted(1151))
+		await settle()
+		quote.confirming('cart-1')
+		const asked = later()
+		quote.ask('COD|b', () => asked.promise)
+		refuse(quoted(1201), sentence)
+		expect([quote.current?.total, quote.moved, quote.confirmable(cart)]).toEqual([1201, sentence, false])
+		asked.resolve(quoted(1190))
+		await settle()
+		expect([quote.current?.total, quote.moved, quote.confirmable(cart)]).toEqual([1190, '', true])
+	})
+})
+
 describe('quoteKey', () => {
 	const bag = () => ({
 		id: 'cart-1',
@@ -252,6 +312,7 @@ describe('LiveQuote on the payment route', () => {
 
 	it('stays out of the way on a backend that cannot quote', () => {
 		delete services.checkoutService.getQuote
+		delete services.checkoutService.expectTotal
 		const checkout = {
 			loadingForPaymentMethods: false,
 			SELECTED_PG_CODE: 'COD',
@@ -262,5 +323,7 @@ describe('LiveQuote on the payment route', () => {
 		expect(quote.supported).toBe(false)
 		expect(quote.awaitingFirst(checkout.cartState.cart)).toBe(false)
 		expect(quote.current).toBeUndefined()
+		quote.confirming('cart-1')
+		expect(quote.moved).toBe('')
 	})
 })
