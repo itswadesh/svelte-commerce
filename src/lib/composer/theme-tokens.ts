@@ -46,14 +46,14 @@ export const FONTS: Record<string, Font> = {
 	nunito: { name: 'Nunito', weights: [400, 600, 700], fallback: [101.39, 99.71, 34.82, 0] },
 	'dm-sans': { name: 'DM Sans', weights: [400, 500, 600, 700], fallback: [104.53, 94.9, 29.66, 0] },
 	'work-sans': { name: 'Work Sans', weights: [400, 500, 600, 700], fallback: [111.93, 83.09, 21.71, 0] },
-	'source-sans-3': { name: 'Source Sans 3', weights: [400, 500, 600, 700], fallback: [93.76, 109.21, 42.66, 0] },
+	'source-sans-3': { name: 'Source Sans 3', weights: [400, 500, 600, 700, 800], fallback: [93.76, 109.21, 42.66, 0] },
 	'playfair-display': { name: 'Playfair Display', serif: true, weights: [400, 500, 600, 700], fallback: [111.26, 97.25, 22.56, 0] },
 	lora: { name: 'Lora', serif: true, weights: [400, 500, 600, 700], fallback: [115.2, 87.33, 23.78, 0] },
 	merriweather: { name: 'Merriweather', serif: true, weights: [400, 700], fallback: [119.38, 82.42, 22.87, 0] },
 	'cormorant-garamond': { name: 'Cormorant Garamond', serif: true, weights: [400, 500, 600, 700], fallback: [96.98, 95.27, 29.59, 0] },
 	'libre-baskerville': { name: 'Libre Baskerville', serif: true, weights: [400, 700], fallback: [127.26, 76.22, 21.22, 0] },
 	'eb-garamond': { name: 'EB Garamond', serif: true, weights: [400, 500, 600, 700], fallback: [94.77, 106.26, 31.44, 0] },
-	'noto-serif': { name: 'Noto Serif', serif: true, weights: [400, 500, 600, 700], fallback: [118.4, 90.29, 24.75, 0] }
+	'noto-serif': { name: 'Noto Serif', serif: true, weights: [400, 500, 600, 700, 800], fallback: [118.4, 90.29, 24.75, 0] }
 }
 
 export function googleFamily(face: Font): string {

@@ -154,7 +154,7 @@ describe('theme tokens', () => {
 
 	it('loads every weight of the heading face whatever the heading weight, as the hero and tiles draw others', () => {
 		expect(themeFontsHref({ heading_font: 'noto-serif', heading_weight: 'medium', body_font: 'source-sans-3' })).toBe(
-			'https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap'
+			'https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700;800&display=swap'
 		)
 		expect(themeFontsHref({ heading_font: 'merriweather', heading_weight: 'extrabold' })).toBe(
 			'https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap'
