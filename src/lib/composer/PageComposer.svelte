@@ -215,7 +215,8 @@
 		color: hsl(var(--foreground));
 		font-size: var(--type-ui, 0.82rem);
 		font-weight: 600;
-		white-space: nowrap;
+		min-width: 0;
+		overflow-wrap: anywhere;
 		transition: opacity var(--motion-fast, 150ms) var(--motion-ease, ease-out);
 	}
 
@@ -224,6 +225,7 @@
 	}
 
 	.cmp-home :global(.cmp-head__icon) {
+		flex: none;
 		width: 16px;
 		height: 16px;
 		transition: transform var(--motion-fast, 150ms) var(--motion-ease, ease-out);
