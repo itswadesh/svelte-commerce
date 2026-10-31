@@ -3,6 +3,55 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: A closed store shows its message on every page, and its password lets a visitor in
+
+The owner asked for "a password based lock at storefront with an option for message", like Shopify's
+storefront password page. GoCommerce already holds it as D170, where the owner's words are *"protect
+the store under password with a launching soon message, inside store settings."* The store-close
+plugin on Store settings closes the store with a message and, optionally, a password. The gocommerce
+connector hands it over as `store.closed: { message, password }` (`password` says only whether there
+is one) and adds `storeService.unlockStore` and `storeService.checkStorePass`. A backend that has
+neither is never locked, and the storefront reads nothing extra from it.
+
+- While a store is closed, every address answers with its lock page in place: the store's logo, or
+  its name, the message with its line breaks, and, when the store has a password, a password field
+  and an Enter button. Product pages, checkout, `robots.txt` and `sitemap.xml` are no exception. The
+  status is 503, with `X-Robots-Tag: noindex` and a `noindex` meta tag. 503 and not 403, because the
+  plugin also covers holidays and stock-takes: crawlers retry a 503 through a short closure, where
+  they drop a 4xx like a 404. A closure of many weeks loses pages from search like any long outage.
+  A 503 `robots.txt` lists nothing.
+- The form posts to the address it is on. The right password sets the pass cookie (httpOnly,
+  SameSite=Lax, this host only, for the engine's 30 days; `__Host-store_pass` and Secure on https,
+  `store_pass` on plain http) and answers 303 back to the same address, so there is no return
+  parameter to misuse. The `__Host-` name stops another store on the same base domain from planting
+  a cookie that would lock its visitors out. A wrong password says "That password isn't right." under
+  the field, and nothing typed goes into an address. A post from another site spends no try.
+- The engine allows 20 tries an hour per shopper and store, counted in each engine process. The
+  storefront sends it each shopper's address, so this works only when the storefront knows that
+  address (adapter-node's `ADDRESS_HEADER` and `XFF_DEPTH` behind a proxy or CDN, with the server
+  reachable only through that proxy) and the engine lists the storefront in
+  `GOCOMMERCE_TRUSTED_PROXIES`. Without both, every shopper counts as the storefront, and one
+  person's wrong tries lock out the rest for an hour. `.env.example` says the same.
+- Reloading the page after a wrong password sends it again and spends another try. A lock form sent
+  after the store opened, or from a second tab once the first got in, goes straight back to its page.
+- A pass that checks out is asked about again at most once a minute per store. Turning the lock on
+  or off, or changing the password, reaches shoppers within a minute. On an engine with a
+  secrets key, any save of the lock's settings signs every visitor out, a new message included; the
+  engine seals the password afresh on each save.
+- The theme editor's preview passes without the password, once the engine accepts its preview key. A
+  header or footer key opens only the home page, the one the editor frames.
+- The lock page ships no JavaScript beyond a few lines that mark the button busy and refuse a second
+  send, so it works the same without JavaScript. No tag, pixel or cookie banner loads on it. The
+  store's own head scripts still run there.
+- Limits. The lock hides the storefront's pages, not the engine's public API: the catalogue, the cart
+  and the checkout calls stay reachable through `/backend` (D170 keeps them open). SvelteKit's own
+  data requests pass too, because they carry what that API already serves and a locked visitor never
+  runs the app; gating them would throw the editor's product preview onto the lock page, since core's
+  product page drops the preview key when it picks a variant. So a tab that was open before the store
+  closed, or before the password changed, keeps moving between pages until its next full page load.
+  When the engine cannot list the store's plugins, the last answer stands; a server that has not
+  read it yet reads the store as open.
+
 ## 2026-10-31: The payment step shows what checkout will charge, automatic code included
 
 The owner reported "checkout/payment coupon is not applied automatically". A GoCommerce store can
