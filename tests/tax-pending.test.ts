@@ -4,20 +4,32 @@ import { addedTax, taxIsPending, totalLabel } from '$lib/utils/price'
 vi.mock('$lib/core/utils', () => ({ formatPrice: vi.fn() }))
 
 describe('taxIsPending', () => {
-	it('is true when the store adds tax on top and the cart carries none yet', () => {
-		expect(taxIsPending(false, 0)).toBe(true)
-		expect(taxIsPending(false, undefined)).toBe(true)
-		expect(taxIsPending(false, null)).toBe(true)
+	const taxLeftOut = { subtotal: 151, shippingCharges: 0, tax: 0, taxIncluded: false, codCharges: 0, total: 151 }
+	const finalTotal = { subtotal: 151, shippingCharges: 0, codCharges: 0, tax: 0, total: 151, savingAmount: 0, discountAmount: 0 }
+
+	it('is true when the cart leaves its tax out and the store adds tax on top', () => {
+		expect(taxIsPending(false, taxLeftOut)).toBe(true)
+	})
+
+	it('is true when the cart leaves its tax out and the store has not said', () => {
+		expect(taxIsPending(undefined, taxLeftOut)).toBe(true)
+	})
+
+	it('is false when the store says its prices include tax', () => {
+		expect(taxIsPending(true, taxLeftOut)).toBe(false)
 	})
 
 	it('is false once the cart carries the tax', () => {
-		expect(taxIsPending(false, 7.56)).toBe(false)
+		expect(taxIsPending(false, { ...taxLeftOut, tax: 7.56 })).toBe(false)
 	})
 
-	it('is false when prices include tax, or the store has not said', () => {
-		expect(taxIsPending(true, 0)).toBe(false)
-		expect(taxIsPending(undefined, 0)).toBe(false)
-		expect(taxIsPending(null, 0)).toBe(false)
+	it('is false for a cart that does not say its tax is left out, whatever the store says', () => {
+		expect(taxIsPending(false, finalTotal)).toBe(false)
+		expect(taxIsPending(false, { ...finalTotal, taxIncluded: true })).toBe(false)
+	})
+
+	it('is false before there is a cart', () => {
+		expect(taxIsPending(false, null)).toBe(false)
 	})
 })
 
