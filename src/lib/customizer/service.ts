@@ -1,4 +1,4 @@
-import { FONTS } from '$lib/composer/theme-tokens'
+import { FONTS, googleFamily } from '$lib/composer/theme-tokens'
 import { printPixels, type CustomizerSetup, type DesignDocument, type TextLayer } from './document'
 import { FONT_WEIGHT, fontOf } from './draw'
 
@@ -112,7 +112,10 @@ const loadedFonts = new Set<string>()
 
 /** A canvas draws words in a fallback face until the font has arrived, and would print them so. */
 export async function loadFonts(setup: CustomizerSetup): Promise<void> {
-	const google = setup.fonts.map((f) => FONTS[f.key]?.google).filter((g): g is string => !!g && !loadedFonts.has(g))
+	const google = setup.fonts
+		.filter((f) => Object.hasOwn(FONTS, f.key))
+		.map((f) => googleFamily(FONTS[f.key]))
+		.filter((g) => !loadedFonts.has(g))
 	if (google.length) {
 		const link = document.createElement('link')
 		link.rel = 'stylesheet'
