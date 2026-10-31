@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Pause, Play } from '@lucide/svelte'
 	import { benefitItems, text, type ComposerSection } from '../helpers.js'
 	import { benefitIcon } from '../benefit-icons.js'
 	import SectionHead from '../SectionHead.svelte'
@@ -10,9 +11,54 @@
 	const items = $derived(benefitItems(section.settings?.items))
 	// One icon in the strip keeps the icon column for every benefit, so titles line up.
 	const withIcons = $derived(items.some((item) => benefitIcon(item.icon)))
+	const marquee = $derived(text(section.settings, 'style') === 'marquee')
+	// About 30px a second however long the promises run; a copy is never narrower than the screen, so 48 s is the slowest.
+	const seconds = $derived(
+		Math.max(48, Math.round(items.reduce((px, item) => px + Math.max(item.title.length * 7, item.body.length * 6) + 76, 0) / 30))
+	)
+	// Until the button is pressed the pointer holds the strip still; a press then wins over the pointer.
+	let choice = $state<'paused' | 'playing' | null>(null)
 </script>
 
-{#if items.length}
+{#if items.length && marquee}
+	<section class="cmp-marquee-band">
+		<div class="page-width">
+			<SectionHead settings={section.settings} />
+		</div>
+		<div
+			class="cmp-marquee"
+			class:cmp-marquee--paused={choice === 'paused'}
+			class:cmp-marquee--playing={choice === 'playing'}
+			style:--marquee-duration="{seconds}s"
+		>
+			<div class="cmp-marquee__track">
+				{#each [false, true] as copy (copy)}
+					<ul class="cmp-marquee__group" aria-hidden={copy ? 'true' : undefined}>
+						{#each items as item, i (i)}
+							{@const Icon = benefitIcon(item.icon)}
+							<li class="cmp-marquee__item">
+								{#if Icon}<Icon class="cmp-marquee__icon" aria-hidden="true" />{/if}
+								<div>
+									<svelte:element this={heading ? 'h3' : 'p'} class="cmp-marquee__title">{item.title}</svelte:element>
+									{#if item.body}<p class="cmp-marquee__body">{item.body}</p>{/if}
+								</div>
+							</li>
+						{/each}
+					</ul>
+				{/each}
+			</div>
+			<button
+				type="button"
+				class="cmp-marquee__toggle"
+				data-target="secondary"
+				onclick={() => (choice = choice === 'paused' ? 'playing' : 'paused')}
+				aria-label={choice === 'paused' ? 'Play the strip' : 'Pause the strip'}
+			>
+				{#if choice === 'paused'}<Play aria-hidden="true" />{:else}<Pause aria-hidden="true" />{/if}
+			</button>
+		</div>
+	</section>
+{:else if items.length}
 	<!-- Bold and bright (D140): a dark band, the page's own text and background colours swapped. -->
 	<section class="cmp-benefits-band">
 		<div class="page-width">
@@ -111,6 +157,129 @@
 		}
 		.cmp-benefits--four {
 			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+
+	.cmp-marquee-band {
+		padding-block: 14px;
+		border-block: 1px solid hsl(var(--border));
+		background: hsl(var(--muted) / 0.4);
+	}
+
+	.cmp-marquee {
+		display: flex;
+		align-items: center;
+	}
+
+	.cmp-marquee__track {
+		display: flex;
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+	}
+
+	.cmp-marquee__group {
+		display: flex;
+		flex: none;
+		justify-content: space-around;
+		min-width: 100%;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		animation: cmp-marquee var(--marquee-duration, 48s) linear infinite;
+	}
+
+	.cmp-marquee--paused .cmp-marquee__group {
+		animation-play-state: paused;
+	}
+
+	@media (hover: hover) {
+		.cmp-marquee:not(.cmp-marquee--playing):hover .cmp-marquee__group {
+			animation-play-state: paused;
+		}
+	}
+
+	.cmp-marquee__toggle {
+		display: inline-flex;
+		flex: none;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		margin-inline: 4px 12px;
+		border-radius: 999px;
+		color: hsl(var(--muted-foreground));
+		transition:
+			background-color var(--motion-fast, 150ms) var(--motion-ease, ease-out),
+			color var(--motion-fast, 150ms) var(--motion-ease, ease-out),
+			transform var(--motion-fast, 150ms) var(--motion-ease, ease-out);
+	}
+
+	.cmp-marquee__toggle:hover {
+		background: hsl(var(--foreground) / 0.08);
+		color: hsl(var(--foreground));
+	}
+
+	.cmp-marquee__toggle:active {
+		transform: scale(0.92);
+	}
+
+	.cmp-marquee__toggle :global(svg) {
+		width: 16px;
+		height: 16px;
+	}
+
+	@keyframes cmp-marquee {
+		to {
+			transform: translateX(-100%);
+		}
+	}
+
+	.cmp-marquee__item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding-inline: 24px;
+		white-space: nowrap;
+	}
+
+	.cmp-marquee__item :global(.cmp-marquee__icon) {
+		flex: none;
+		width: 18px;
+		height: 18px;
+		color: hsl(var(--primary-ink));
+		stroke-width: 1.75;
+	}
+
+	.cmp-marquee__title {
+		margin: 0;
+		font-size: var(--type-dense, 0.8125rem);
+		font-weight: 500;
+		line-height: 1.25;
+	}
+
+	.cmp-marquee__body {
+		margin: 0;
+		color: hsl(var(--muted-foreground));
+		font-size: var(--type-label, 0.75rem);
+		line-height: 1.35;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cmp-marquee__group {
+			flex: auto;
+			flex-wrap: wrap;
+			justify-content: center;
+			row-gap: 12px;
+			min-width: 0;
+			animation: none;
+		}
+		.cmp-marquee__item {
+			white-space: normal;
+		}
+		.cmp-marquee__group[aria-hidden],
+		.cmp-marquee__toggle {
+			display: none;
 		}
 	}
 </style>
