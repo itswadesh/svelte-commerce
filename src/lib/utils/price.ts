@@ -17,8 +17,8 @@ export function totalWithFee(total: number | null | undefined, fee: PaymentFee |
 	return (Number(total) || 0) + (fee?.amount ?? 0)
 }
 
-export function taxIsPending(includesTax: boolean | null | undefined, tax: number | null | undefined): boolean {
-	return includesTax === false && !(Number(tax) > 0)
+export function taxIsPending(includesTax: boolean | null | undefined, cart?: { tax?: number | null; taxIncluded?: boolean | null } | null): boolean {
+	return cart?.taxIncluded === false && includesTax !== true && !(Number(cart.tax) > 0)
 }
 
 export function totalLabel(shippingResolved: boolean, taxPending: boolean): string {

@@ -24,7 +24,7 @@
 	const selectedMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
 	const fee = $derived(paymentFee(selectedMethod))
 	const total = $derived(totalWithFee(cartState.cart.total, fee))
-	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart.tax))
+	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart))
 	const barLabel = $derived(totalLabel(!!cartState.cart.shippingAddress, taxPending))
 
 	let showAddress = $state(false)

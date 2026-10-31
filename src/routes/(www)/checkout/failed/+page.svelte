@@ -122,7 +122,7 @@
 							total={cart?.total}
 							{currencyCode}
 							shippingResolved={!!cart?.shippingAddress}
-							taxPending={taxIsPending(page?.data?.store?.currency?.includesTax, cart?.tax)}
+							taxPending={taxIsPending(page?.data?.store?.currency?.includesTax, cart)}
 						/>
 					</div>
 				</div>
