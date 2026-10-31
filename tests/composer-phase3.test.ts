@@ -253,7 +253,7 @@ describe('new section helpers', () => {
 				}
 			)
 		)
-		expect(cards).toEqual([{ id: '1', title: 'Rings', link: '/collections/rings', image: null }])
+		expect(cards).toEqual([{ id: '1', title: 'Rings', link: '/collections/rings', image: null, description: '' }])
 	})
 
 	it('reads a YouTube or Vimeo address the way the engine does', () => {
