@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { taxIsPending, totalLabel } from '$lib/utils/price'
+import { addedTax, taxIsPending, totalLabel } from '$lib/utils/price'
 
 vi.mock('$lib/core/utils', () => ({ formatPrice: vi.fn() }))
 
@@ -27,5 +27,18 @@ describe('totalLabel', () => {
 		expect(totalLabel(true, true)).toBe('Total before tax')
 		expect(totalLabel(false, false)).toBe('Estimated total')
 		expect(totalLabel(false, true)).toBe('Estimated total')
+	})
+})
+
+describe('addedTax', () => {
+	it('is the tax an order added on top of its prices', () => {
+		expect(addedTax({ tax: 7.56, taxIncluded: false })).toBe(7.56)
+	})
+
+	it('is nothing when the prices already held the tax, or the order does not say', () => {
+		expect(addedTax({ tax: 6.41, taxIncluded: true })).toBe(0)
+		expect(addedTax({ tax: 6.41 })).toBe(0)
+		expect(addedTax({ tax: 0, taxIncluded: false })).toBe(0)
+		expect(addedTax(null)).toBe(0)
 	})
 })

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
-	import { formatPrice } from '$lib/utils/price'
+	import { addedTax, formatPrice } from '$lib/utils/price'
 	import { CheckCircle2, MapPin, Package, Truck, ArrowRight, ShoppingBag, Mail, Calendar, SearchX } from '@lucide/svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { linePicture } from '$lib/customizer/line'
@@ -54,7 +54,8 @@
 			{ label: 'Subtotal', value: firstOrder?.subtotal },
 			{ label: 'Shipping', value: firstOrder?.shippingCharges },
 			{ label: 'Cash on delivery charge', value: firstOrder?.codCharges },
-			{ label: 'Discount', value: firstOrder?.discount ? -Math.abs(firstOrder.discount) : 0 }
+			{ label: 'Discount', value: firstOrder?.discount ? -Math.abs(firstOrder.discount) : 0 },
+			{ label: 'Tax', value: addedTax(firstOrder) }
 		].filter((row) => typeof row.value === 'number' && row.value !== 0)
 	)
 

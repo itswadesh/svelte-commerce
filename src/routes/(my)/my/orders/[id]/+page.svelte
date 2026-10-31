@@ -24,7 +24,7 @@
 	} from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { date } from '$lib/core/utils'
-	import { formatPrice } from '$lib/utils/price'
+	import { addedTax, formatPrice } from '$lib/utils/price'
 	import { MyOrdersIdRenderer } from '$lib/core/composables/index.js'
 
 	let { class: klass = '', data, ...rest } = $props()
@@ -315,6 +315,13 @@
 											<div class="flex justify-between text-sm">
 												<span class="text-muted-foreground">Cash on delivery charge</span>
 												<span class="font-medium text-foreground">{formatPrice(order.codCharges, page?.data?.store?.currency?.code)}</span>
+											</div>
+										{/if}
+
+										{#if addedTax(order) > 0}
+											<div class="flex justify-between text-sm">
+												<span class="text-muted-foreground">Tax</span>
+												<span class="font-medium text-foreground">{formatPrice(addedTax(order), page?.data?.store?.currency?.code)}</span>
 											</div>
 										{/if}
 
