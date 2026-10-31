@@ -20,7 +20,7 @@
 	const selectedItems = $derived(cartState.cart?.lineItems?.filter((i: any) => i.isSelectedForCheckout) || [])
 	const selectedPaymentMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
 	const selectedShippingRate = $derived(paymentModule.shippingRates?.data?.find((r: any) => r.id === cartState.cart?.shippingRateId))
-	const deliveryPrice = $derived(quote.current ? quote.current.shippingCharges : selectedShippingRate?.base_rate)
+	const deliveryPrice = $derived(quote.current && quote.confirmable(cartState.cart) ? quote.current.shippingCharges : selectedShippingRate?.base_rate)
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
 	const quotedMethod = $derived(paymentModule.allPaymentMethods?.find((m: any) => m.code === quote.method))
 	const figures = $derived(
