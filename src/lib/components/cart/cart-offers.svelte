@@ -87,7 +87,7 @@
 							aria-label="Apply {offer.code}"
 							onclick={() => use(offer.code)}
 						>
-							{applying === offer.code ? 'Applying…' : 'APPLY'}
+							{applying === offer.code ? 'Applying…' : 'Apply'}
 						</Button>
 					{/if}
 				</li>
