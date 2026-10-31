@@ -41,6 +41,17 @@ later. The drawer marks no code there. The offers drop the Apply button on an au
 no code is typed, because a typed code always wins, and applying an automatic code by hand would
 hold it even where another one saves more.
 
+Addendum, same day. A delivery rate's price, an automatic code's usage limit or end date, a tax rate
+or the method's charge can still change between the quote and Confirm order, and checkout used to
+charge the new sum unseen. Confirm order now hands the backend the total on screen
+(`checkoutService.expectTotal`), and checkout refuses an order whose own total differs, placing
+nothing (engine D185). On that refusal the review step stays open, the summary and the button show
+checkout's new figures at once, and a line above the button says "Your total changed to ₹1,201.
+Check the new total and confirm again." Only a fresh Confirm places the order. The storefront
+passes the figure it renders rather than letting the connector remember its last quote, so the total
+checked is the one the shopper saw, whoever else asked for a quote in between. A backend without a
+quote sends no total and behaves as before.
+
 ## 2026-10-31: Captioned category pictures, collection titles on the picture, and a phone shelf that scrolls sideways
 
 The owner wants Chillish to match a reference store that shows its categories as a row of square
