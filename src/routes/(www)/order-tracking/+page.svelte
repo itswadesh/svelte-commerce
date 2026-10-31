@@ -332,7 +332,7 @@
 					<div class="order-3 col-span-full flex justify-end !border-0 !border-t border-border bg-muted p-5">
 						<div class="flex w-full max-w-md flex-col items-start gap-2">
 							<p class="flex items-center">
-								<span class="mr-2 w-32">Subtotal</span>
+								<span class="mr-2 w-32 sm:w-48">Subtotal</span>
 
 								<span>
 									: &nbsp; {formatPrice(order?.subtotal || 0, page?.data?.store?.currency?.code) || '0.00'}
@@ -341,7 +341,7 @@
 
 							{#if order?.discount && order?.discount > 0}
 								<p class="flex items-center">
-									<span class="mr-2 w-32">Discount</span>
+									<span class="mr-2 w-32 sm:w-48">Discount</span>
 
 									<span>
 										: &nbsp;
@@ -352,7 +352,7 @@
 							{/if}
 
 							<p class="flex items-center">
-								<span class="mr-2 w-32">Shipping</span>
+								<span class="mr-2 w-32 sm:w-48">Shipping</span>
 
 								<span>
 									: &nbsp;
@@ -364,9 +364,9 @@
 								</span>
 							</p>
 
-							{#if order?.codCharges}
+							{#if order?.codCharges > 0}
 								<p class="flex items-center">
-									<span class="mr-2 w-32">COD Charges</span>
+									<span class="mr-2 w-32 sm:w-48">Cash on delivery charge</span>
 
 									<span>
 										: &nbsp;
@@ -379,7 +379,7 @@
 							<hr class="w-full border-t border-border" />
 
 							<div class="flex items-center text-sm font-bold text-foreground">
-								<span class="mr-2 w-32">Total</span>
+								<span class="mr-2 w-32 sm:w-48">Total</span>
 
 								<span>
 									: &nbsp; {formatPrice(order?.total || 0, page?.data?.store?.currency?.code)}

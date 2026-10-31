@@ -53,6 +53,7 @@
 		[
 			{ label: 'Subtotal', value: firstOrder?.subtotal },
 			{ label: 'Shipping', value: firstOrder?.shippingCharges },
+			{ label: 'Cash on delivery charge', value: firstOrder?.codCharges },
 			{ label: 'Discount', value: firstOrder?.discount ? -Math.abs(firstOrder.discount) : 0 }
 		].filter((row) => typeof row.value === 'number' && row.value !== 0)
 	)
