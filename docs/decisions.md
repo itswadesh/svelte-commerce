@@ -3,6 +3,42 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: Captioned category pictures, collection titles on the picture, and a phone shelf that scrolls sideways
+
+The owner wants Chillish to match a reference store that shows its categories as a row of square
+pictures with the name under each, puts each collection's name and one line about it on its
+picture, and lets a phone swipe a shelf sideways instead of scrolling down a long two-across grid.
+GoCommerce D186 gives the columns section a `style` (`tiles` or `captioned`) and up to six columns,
+the collection list a `style` (`below` or `overlay`) with the first line of each collection's
+description on its card, and the product grid a `mobile_layout` (`grid` or `row`). Each is a
+store's choice; unset, or set to its first value, a section draws exactly as before.
+
+- Captioned columns are square pictures with the name under each at 14px, weight 500. They sit two
+  across on a phone, three from 768px (four when there are exactly four), and from 1024px as many
+  as there are up to six: five pictures sit five across. Fewer than four keep a four-across picture
+  size rather than growing. A column with no picture keeps its square box, so the names line up.
+  They are spaced like product cards (`--grid-gap-x`, `--grid-gap-y`). The name is the link and
+  covers the picture, so the whole tile is one target with one focus ring around it. With five or
+  six columns, tiles sit five or six across on a computer and text columns three across.
+- A collection on its picture is a square tile with its title in the heading face at 16px, white,
+  and the collection's first line under it at 12px in 85 % white. The engine sends that line cut at
+  a word near 160 characters. Title and line each stop at two lines, an implementation call: the
+  reference wraps its line onto a second line on a phone, and one line would cut most lines short
+  on a 150px tile. The words sit on a black shade of their own that is at least 60 % behind every
+  line, so they keep 4.5:1 over any photograph: at least 5.7:1 for the title and 4.7:1 for the
+  line over plain white, the worst case (measured on a white picture: 5.9:1 and 5.6:1). The
+  reference's shade is lighter, about 54 % at its title, which over a white photograph holds the
+  title at 4.5:1 and drops its line under 4:1. The line arrives only from a connector that passes
+  the card's `description`; until the GoCommerce connector does, an overlay card shows its title
+  alone.
+- The phone shelf: below 768px a product grid set to `row` is one line of cards about 165px wide
+  (42 % of a narrow screen), each snapping to the gutter, the line running to the screen's edges so
+  the next card shows, with no scroll bar. Tab reaches every card's links and brings each card into
+  view. It scrolls smoothly, and at once under reduced motion. From 768px it is the grid.
+- Motion: a captioned picture or a collection picture grows 4 % over 300ms on hover, and a
+  captioned tile fades to 75 % while pressed; a captioned column with no link does neither. Under
+  reduced motion the picture fades to 85 % instead of growing.
+
 ## 2026-10-31: The filter's categories are a tree
 
 The owner's report: the listing's filter showed "Naruto keychains" alone where it must show
