@@ -40,6 +40,8 @@ export type BagOffer = {
 	amount: number | null
 	remaining: number | null
 	reason?: string
+	/** Checkout applies it by itself when no code is typed (GoCommerce D179). */
+	autoApply?: boolean
 }
 
 /** The add button's figure: the product's price and every ticked add-on's. Rounded to paise. */
@@ -72,6 +74,23 @@ export function offerNote(o: BagOffer, money: (n: number) => string): string {
 	if (o.applies) return o.amount ? `You save ${money(o.amount)}` : o.freeShipping ? 'Delivery is free with this' : ''
 	if (o.remaining !== null && o.remaining > 0) return `Add ${money(o.remaining)} more to use this`
 	return o.reason ?? ''
+}
+
+/**
+ * The one automatic code checkout will take off by itself, or null when that cannot be said
+ * (GoCommerce D179). Checkout takes the single automatic code that saves the most, and none while
+ * a code is typed. `quoted` is the automatic code a checkout quote applied (null for none); with no
+ * quote, a free-delivery code's saving waits on the delivery chosen, so it leaves the answer open.
+ */
+export function autoMarked(offers: readonly BagOffer[], typed?: string | null, quoted?: string | null): string | null {
+	if (typed) return null
+	if (quoted !== undefined) return quoted
+	const live = offers.filter((o) => o.autoApply && o.applies)
+	if (live.length === 1) return live[0].code
+	if (live.some((o) => o.freeShipping)) return null
+	const top = Math.max(...live.map((o) => o.amount ?? 0))
+	const best = live.filter((o) => (o.amount ?? 0) === top)
+	return best.length === 1 ? best[0].code : null
 }
 
 /** Offers that apply first, then the nearest to applying; ties keep the backend's order. */
