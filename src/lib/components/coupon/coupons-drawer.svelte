@@ -10,14 +10,15 @@
 	import { page } from '$app/state'
 	import { innerWidth } from 'svelte/reactivity/window'
 
-	let { open = false, code = $bindable(''), class: className = '' } = $props()
+	let { code = $bindable(''), class: className = '' } = $props()
+	let open = $state(false)
 </script>
 
-<CouponDrawerRenderer bind:code>
+<CouponDrawerRenderer bind:code bind:open>
 	<!-- The code input is always available: unlisted codes (email, influencer, support) have no
 	     entry point otherwise. Only the public coupon list is gated on there being coupons. -->
 	{#snippet content({ coupons, isChecking, handleCheck, handleCouponClick, handleCopy })}
-		<Drawer.Root {open} direction={innerWidth.current && innerWidth.current > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
+		<Drawer.Root bind:open direction={innerWidth.current && innerWidth.current > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
 			<Drawer.Trigger class="w-full {className ? 'h-full' : ''}">
 				<Button variant="outline" class="group w-full justify-between !px-6 !py-5 {className}">
 					Apply promo code
