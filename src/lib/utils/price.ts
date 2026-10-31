@@ -25,3 +25,7 @@ export function totalLabel(shippingResolved: boolean, taxPending: boolean): stri
 	if (!shippingResolved) return 'Estimated total'
 	return taxPending ? 'Total before tax' : 'Total'
 }
+
+export function addedTax(order?: { tax?: number | null; taxIncluded?: boolean | null } | null): number {
+	return order?.taxIncluded === false ? Math.max(0, Number(order.tax) || 0) : 0
+}

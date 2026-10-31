@@ -5,7 +5,7 @@
 	import productNonVeg from '$lib/assets/product/non-veg.png'
 	import productVeg from '$lib/assets/product/veg.png'
 	import { date } from '$lib/core/utils'
-	import { formatPrice } from '$lib/utils/price'
+	import { addedTax, formatPrice } from '$lib/utils/price'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { linePicture } from '$lib/customizer/line'
 	import Button from '$lib/components/ui/button/button.svelte'
@@ -372,6 +372,18 @@
 										: &nbsp;
 
 										{formatPrice(order?.codCharges, page?.data?.store?.currency?.code)}
+									</span>
+								</p>
+							{/if}
+
+							{#if addedTax(order) > 0}
+								<p class="flex items-center">
+									<span class="mr-2 w-32 sm:w-48">Tax</span>
+
+									<span>
+										: &nbsp;
+
+										{formatPrice(addedTax(order), page?.data?.store?.currency?.code)}
 									</span>
 								</p>
 							{/if}
