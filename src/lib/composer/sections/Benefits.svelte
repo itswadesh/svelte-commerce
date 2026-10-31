@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { benefitItems, text, type ComposerSection } from '../helpers.js'
 	import { benefitIcon } from '../benefit-icons.js'
+	import SectionHead from '../SectionHead.svelte'
 
 	/** Up to six short promises, each a title, a line and an optional icon. Statements, not links. */
 	let { section }: { section: ComposerSection } = $props()
@@ -15,9 +16,9 @@
 	<!-- Bold and bright (D140): a dark band, the page's own text and background colours swapped. -->
 	<section class="cmp-benefits-band">
 		<div class="page-width">
-			{#if heading}
-				<header class="cmp-head"><h2 class="cmp-head__title cmp-benefits__heading">{heading}</h2></header>
-			{/if}
+			<SectionHead settings={section.settings}>
+				{#snippet title()}<h2 class="cmp-head__title cmp-benefits__heading">{heading}</h2>{/snippet}
+			</SectionHead>
 			<ul class="cmp-benefits" class:cmp-benefits--four={items.length === 4} class:cmp-benefits--icons={withIcons}>
 				{#each items as item, i (i)}
 					{@const Icon = benefitIcon(item.icon)}
@@ -42,6 +43,7 @@
 		padding-block: var(--space-section, clamp(28px, 4vw, 48px));
 		background: hsl(var(--foreground));
 		color: hsl(var(--background));
+		--muted-foreground: var(--background);
 	}
 
 	.cmp-benefits__heading {

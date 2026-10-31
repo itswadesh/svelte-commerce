@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { collectionCards, intSetting, text, type ComposerSection } from '../helpers.js'
+	import SectionHead from '../SectionHead.svelte'
+	import { collectionCards, intSetting, type ComposerSection } from '../helpers.js'
 
 	/**
 	 * Collections the merchant picked, each its picture and title, linking to it. The engine
@@ -8,7 +9,6 @@
 	 */
 	let { section }: { section: ComposerSection } = $props()
 
-	const heading = $derived(text(section.settings, 'heading'))
 	const cards = $derived(collectionCards(section))
 	const columns = $derived(intSetting(section.settings?.columns, 2, 4, 3))
 </script>
@@ -16,9 +16,7 @@
 {#if cards.length}
 	<section class="cmp-band">
 		<div class="page-width">
-			{#if heading}
-				<header class="cmp-head"><h2 class="cmp-head__title">{heading}</h2></header>
-			{/if}
+			<SectionHead settings={section.settings} />
 			<ul class="cmp-cols cmp-cols--{columns}">
 				{#each cards as card (card.id)}
 					<li>

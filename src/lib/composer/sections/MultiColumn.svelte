@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ArrowRight } from '@lucide/svelte'
 	import Paragraphs from '../Paragraphs.svelte'
+	import SectionHead from '../SectionHead.svelte'
 	import { columnItems, columnsClass, paragraphs, text, type ComposerSection } from '../helpers.js'
 
 	/**
@@ -21,9 +22,7 @@
 {#if columns.length}
 	<section class="cmp-band">
 		<div class="page-width">
-			{#if heading}
-				<header class="cmp-head"><h2 class="cmp-head__title">{heading}</h2></header>
-			{/if}
+			<SectionHead settings={section.settings} />
 			<ul class="cmp-mc grid {tiles ? 'gap-3 md:gap-4' : 'gap-6 md:gap-8'} {grid}" class:cmp-mc--tiles={tiles}>
 				{#each columns as column, i (i)}
 					<li class="cmp-mc__col">
