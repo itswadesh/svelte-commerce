@@ -9,9 +9,7 @@
 	const store = $derived(data.store as { name?: string; logo?: string; closed?: { message?: string; password?: boolean } } | undefined)
 	const name = $derived(store?.name ?? '')
 
-	// Written out, the closing tag would end this component's own script block.
-	const tag = 'script'
-	const PENDING = `<${tag}>
+	const PENDING = `<script>
 document.addEventListener('submit', function (event) {
 	var button = event.target.querySelector('[type=submit]')
 	if (button.hasAttribute('aria-busy')) return event.preventDefault()
@@ -20,7 +18,7 @@ document.addEventListener('submit', function (event) {
 addEventListener('pageshow', function () {
 	document.querySelectorAll('[aria-busy]').forEach(function (button) { button.removeAttribute('aria-busy') })
 })
-</${tag}>`
+<\/script>`
 </script>
 
 <svelte:head>
@@ -47,7 +45,7 @@ addEventListener('pageshow', function () {
 					<Label for="store-password">Password</Label>
 					<Input
 						id="store-password"
-						name="password"
+						name="store_password"
 						type="password"
 						autocomplete="current-password"
 						required

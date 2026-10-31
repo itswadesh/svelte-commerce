@@ -3,7 +3,7 @@ import { services } from 'kitcommerce.config'
 import { clientAddress } from '$lib/server/api-proxy'
 import { chromePreview } from '$lib/composer/site-chrome'
 
-export type LockReason = 'wrong' | 'throttled' | 'unavailable'
+export type LockReason = 'wrong' | 'throttled' | 'unavailable' | 'stopped'
 
 type StorePass = { token: string; expiresAt: Date }
 type Unlock = { outcome: 'unlocked'; pass: StorePass } | { outcome: LockReason }
@@ -23,6 +23,7 @@ const confirmedUntil = new Map<string, number>()
 const CONFIRMED_FOR = 60_000
 const MAX_CONFIRMED = 1000
 
+// As deep as the address asked for: Kit writes asset URLs relative to the rendered path (paths.relative).
 export const lockPath = (pathname: string, reason?: LockReason) =>
 	'/store-closed' + '/-'.repeat(Math.max(0, pathname.split('/').length - 2)) + (reason ? `?reason=${reason}` : '')
 
@@ -43,17 +44,18 @@ export async function guardClosedStore(event: RequestEvent, next: () => Response
 	if (event.isSubRequest || event.isDataRequest) return next()
 	const stores = Reflect.get(services, 'storeService') as LockHooks | undefined
 	if (typeof stores?.checkStorePass !== 'function') return next()
+	const typed = await typedPassword(event.request)
 	const closed = await closedState(stores)
-	if (!closed) return next()
+	if (!closed) return typed === null ? next() : redirect(303, onSitePath(event.url))
 
 	const token = event.cookies.get(passCookieName(event.url))
+	if (!closed.password) return lockPage(event, { dropPass: token !== undefined })
 	const pass = token ? await passState(stores, passKey(event.url, token), token) : 'none'
-	if (pass === 'valid') return privately(await next())
+	if (pass === 'valid') return typed === null ? privately(await next()) : redirect(303, onSitePath(event.url))
 
-	const password = await typedPassword(event.request)
-	if (password !== null) {
-		if (crossSite(event) || !closed.password) return lockPage(event, { dropPass: pass === 'rejected' })
-		const answer = await unlock(stores, password, clientAddress(event))
+	if (typed !== null) {
+		if (crossSite(event)) return lockPage(event, { reason: 'unavailable', dropPass: pass === 'rejected' })
+		const answer = await unlock(stores, typed, clientAddress(event))
 		if (answer.outcome === 'unlocked') {
 			event.cookies.set(passCookieName(event.url), answer.pass.token, { ...passCookie(event.url), expires: answer.pass.expiresAt })
 			confirm(passKey(event.url, answer.pass.token), answer.pass.expiresAt)
@@ -66,9 +68,9 @@ export async function guardClosedStore(event: RequestEvent, next: () => Response
 	return lockPage(event, { dropPass: pass === 'rejected' })
 }
 
-// Kit's own check is off (csrf.trustedOrigins). Hosts, not origins: behind a TLS proxy the storefront
-// may see its own scheme as http.
 function crossSite(event: RequestEvent): boolean {
+	const site = event.request.headers.get('sec-fetch-site')
+	if (site) return site !== 'same-origin' && site !== 'none'
 	const origin = event.request.headers.get('origin')
 	if (!origin) return false
 	try {
@@ -92,7 +94,7 @@ async function typedPassword(request: Request): Promise<string | null> {
 	const form = request.headers.get('content-type')?.startsWith('application/x-www-form-urlencoded')
 	if (request.method !== 'POST' || !form || !(length <= 4096)) return null
 	try {
-		return new URLSearchParams(await request.clone().text()).get('password')
+		return new URLSearchParams(await request.clone().text()).get('store_password')
 	} catch {
 		return null
 	}
@@ -108,9 +110,8 @@ async function unlock(stores: LockHooks, password: string, address: string | und
 		const answer = await stores.unlockStore?.(password, { clientAddress: address })
 		if (answer?.outcome === 'unlocked' && isPass(answer.pass)) return { outcome: 'unlocked', pass: answer.pass }
 		if (answer?.outcome === 'wrong' || answer?.outcome === 'throttled') return { outcome: answer.outcome }
+		if (answer?.outcome === 'open') return { outcome: 'stopped' }
 	} catch {}
-	// `open` too: the store took its password away moments ago, or the engine cannot read it, while
-	// this page still asks for one.
 	return { outcome: 'unavailable' }
 }
 
@@ -152,7 +153,7 @@ const passCookie = (url: URL) => ({ path: '/', httpOnly: true, sameSite: 'lax' a
 
 function privately(response: Response): Response {
 	const headers = new Headers(response.headers)
-	headers.set('cache-control', 'private, no-store')
+	headers.set('cache-control', 'private')
 	return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
 }
 
