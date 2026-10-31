@@ -10,7 +10,7 @@
  */
 
 /** A collection list's card, as the connector answers it. */
-export type ComposerCollection = { id: string; title: string; slug?: string; link: string; image: string | null }
+export type ComposerCollection = { id: string; title: string; slug?: string; link: string; image: string | null; description?: string }
 
 /** One section of a composed page, as the connector answers it. */
 export type ComposerSection = {
@@ -254,7 +254,7 @@ export function columnsClass(count: number, look: ColumnLook = 'columns'): strin
 export function collectionCards(section: ComposerSection): ComposerCollection[] {
 	return (section.collections ?? [])
 		.filter((c) => c && typeof c.title === 'string' && c.title.trim() && safeHref(c.link))
-		.map((c) => ({ ...c, link: safeHref(c.link), image: safeHref(c.image) || null }))
+		.map((c) => ({ ...c, link: safeHref(c.link), image: safeHref(c.image) || null, description: text(c, 'description') }))
 		.slice(0, 12)
 }
 

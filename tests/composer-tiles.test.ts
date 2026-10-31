@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/svelte'
 import { columnItems, columnLook, columnsClass } from '$lib/composer/helpers'
 import MultiColumn from '$lib/composer/sections/MultiColumn.svelte'
+import CollectionList from '$lib/composer/sections/CollectionList.svelte'
 
 const section = (type: string, settings: Record<string, unknown>, extra: Record<string, unknown> = {}) => ({ id: 's', type, settings, ...extra })
 const classes = (el: Element) => el.className.replace(/\s*svelte-\w+/g, '')
@@ -92,5 +93,45 @@ describe('captioned columns', () => {
 		}
 		const { container } = render(MultiColumn, { section: section('multi-column', { heading: 'Start shopping', items: categories(4) }) })
 		expect([classes(container.querySelector('ul')!), container.querySelectorAll('svg.cmp-mc__arrow').length]).toEqual(['cmp-mc grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4 cmp-mc--tiles', 4])
+	})
+})
+
+describe('a collection list with its titles on the pictures', () => {
+	const collections = [
+		{ id: '1', title: 'Everyday basics', link: '/collections/basics', image: '/b.webp', description: 'Things you reach for every day' },
+		{ id: '2', title: 'New in', link: '/collections/new', image: '/n.webp', description: 42 },
+		{ id: '3', title: 'Gifts', link: '/collections/gifts', image: null }
+	]
+
+	it('puts each title and its one line on the picture, inside the link, and leaves the line out where there is none', () => {
+		const { container } = render(CollectionList, { section: section('collection-list', { style: 'overlay', columns: 4 }, { collections }) })
+		expect(classes(container.querySelector('ul')!)).toBe('cmp-cols cmp-cols--4 cmp-cols--overlay')
+		expect(
+			screen.getAllByRole('link').map((a) => [
+				a.getAttribute('href'),
+				[...a.querySelectorAll('.cmp-col-card__caption > span')].map((s) => [classes(s), s.textContent])
+			])
+		).toEqual([
+			['/collections/basics', [['cmp-col-card__title', 'Everyday basics'], ['cmp-col-card__line', 'Things you reach for every day']]],
+			['/collections/new', [['cmp-col-card__title', 'New in']]],
+			['/collections/gifts', [['cmp-col-card__title', 'Gifts']]]
+		])
+	})
+
+	it('draws a list with no style exactly as one with the below style', () => {
+		const props = (style?: string) => ({ section: section('collection-list', { style, columns: 4 }, { collections }) })
+		expect(html(CollectionList, props('below'))).toBe(html(CollectionList, props()))
+	})
+
+	it('keeps the title under the picture, and no line, for a list with no style or the below style', () => {
+		for (const style of [undefined, 'below']) {
+			const { container, unmount } = render(CollectionList, { section: section('collection-list', { style, columns: 4 }, { collections }) })
+			expect([
+				classes(container.querySelector('ul')!),
+				container.querySelector('.cmp-col-card__caption'),
+				[...container.querySelectorAll('a > span')].map((s) => classes(s))
+			]).toEqual(['cmp-cols cmp-cols--4', null, ['cmp-col-card__media', 'cmp-col-card__title', 'cmp-col-card__media', 'cmp-col-card__title', 'cmp-col-card__media', 'cmp-col-card__title']])
+			unmount()
+		}
 	})
 })
