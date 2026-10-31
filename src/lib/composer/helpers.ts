@@ -193,7 +193,7 @@ export function faqItems(value: unknown): { question: string; answer: string }[]
 
 export type Column = { image: string; heading: string; text: unknown; linkText: string; link: string }
 
-/** Columns that show something, at most four. */
+/** Columns that show something, at most six. */
 export function columnItems(value: unknown): Column[] {
 	if (!Array.isArray(value)) return []
 	return value
@@ -208,26 +208,46 @@ export function columnItems(value: unknown): Column[] {
 			}
 		})
 		.filter((c) => c.image || c.heading || paragraphs(c.text).length)
-		.slice(0, 4)
+		.slice(0, 6)
 }
 
-/**
- * Tailwind classes for columns side by side from the tablet up; written out in full for the scanner.
- * `tiles` — columns with no paragraphs, a heading and a picture each — sit two across on a phone.
- */
-export function columnsClass(count: number, tiles = false): string {
-	const n = Math.min(4, Math.max(1, count))
-	if (tiles) return n === 4 ? 'grid-cols-2 lg:grid-cols-4' : n === 3 ? 'grid-cols-2 md:grid-cols-3' : n === 2 ? 'grid-cols-2' : 'grid-cols-1'
-	switch (n) {
-		case 1:
-			return 'grid-cols-1'
-		case 2:
-			return 'grid-cols-1 md:grid-cols-2'
-		case 3:
-			return 'grid-cols-1 md:grid-cols-3'
-		default:
-			return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
-	}
+export type ColumnLook = 'columns' | 'tiles' | 'captioned'
+
+export function columnLook(settings: Record<string, unknown> | null | undefined, columns: Column[]): ColumnLook {
+	if (text(settings, 'style') === 'captioned') return 'captioned'
+	return columns.every((c) => !paragraphs(c.text).length && c.link && (c.heading || c.linkText)) ? 'tiles' : 'columns'
+}
+
+// Written out in full so Tailwind's scanner keeps every one of them.
+const COLUMN_CLASSES: Record<ColumnLook, string[]> = {
+	columns: [
+		'grid-cols-1',
+		'grid-cols-1 md:grid-cols-2',
+		'grid-cols-1 md:grid-cols-3',
+		'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+		'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+		'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+	],
+	tiles: [
+		'grid-cols-1',
+		'grid-cols-2',
+		'grid-cols-2 md:grid-cols-3',
+		'grid-cols-2 lg:grid-cols-4',
+		'grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
+		'grid-cols-2 md:grid-cols-3 lg:grid-cols-6'
+	],
+	captioned: [
+		'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+		'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+		'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+		'grid-cols-2 md:grid-cols-4',
+		'grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
+		'grid-cols-2 md:grid-cols-3 lg:grid-cols-6'
+	]
+}
+
+export function columnsClass(count: number, look: ColumnLook = 'columns'): string {
+	return COLUMN_CLASSES[look][Math.min(6, Math.max(1, count)) - 1]
 }
 
 /** A collection list's cards: those with a title and a link on this site. */
