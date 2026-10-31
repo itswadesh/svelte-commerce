@@ -7,7 +7,8 @@ export const csr = false
 const REFUSED: Record<LockReason, string> = {
 	wrong: "That password isn't right.",
 	throttled: 'Too many tries. Wait a while and try again.',
-	unavailable: "We couldn't check that password. Try again."
+	unavailable: "We couldn't check that password. Try again.",
+	stopped: 'This store has stopped asking for a password. Reload the page in a minute.'
 }
 
 export const load: PageServerLoad = ({ isSubRequest, url }) => {
