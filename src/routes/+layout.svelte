@@ -54,7 +54,6 @@
 	})
 
 	const themeName = $derived(data?.theme?.name || 'default')
-	const themeFontsUrl = $derived(getThemeFontsUrl(themeName))
 
 	// A navigation that changes the page, not just its query string.
 	const isCrossRouteNavigation = $derived(!!$navigating && $navigating.to?.url.pathname !== $navigating.from?.url.pathname)
@@ -146,6 +145,7 @@
 		return css ? STYLE_OPEN.replace('theme-css', 'theme-tokens') + css + STYLE_CLOSE : ''
 	})
 	const tokenFontsUrl = $derived(themeFontsHref(publishedTokens))
+	const themeFontsUrl = $derived(getThemeFontsUrl(themeName, publishedTokens))
 
 	// Mobile browsers paint their own chrome — the address-bar strip on Chrome for Android, the
 	// status-bar backdrop once the storefront is installed — in a default grey unless the page names

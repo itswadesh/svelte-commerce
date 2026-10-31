@@ -1,3 +1,5 @@
+import { setsBothFonts, type ThemeSettings } from '$lib/composer/theme-tokens.js'
+
 export { getThemeHomepageContent, resolveThemeContent, type ThemeHomepageContent } from './homepage-content.js'
 
 export type StorefrontThemeName = 'default' | 'wine' | 'organic' | 'lime' | string
@@ -27,7 +29,8 @@ const THEME_FONTS: Record<string, string> = {
 		'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap'
 }
 
-export function getThemeFontsUrl(theme: string): string | null {
+export function getThemeFontsUrl(theme: string, settings?: ThemeSettings | null): string | null {
+	if (theme === DEFAULT_THEME && setsBothFonts(settings)) return null
 	return THEME_FONTS[theme] || null
 }
 
