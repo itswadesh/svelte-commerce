@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronLeft, CreditCard, LockKeyhole, Mail, MapPin, Pencil, Truck } from '@lucide/svelte'
-	import { formatPrice } from '$lib/utils/price'
+	import { formatPrice, paymentFee, totalWithFee } from '$lib/utils/price'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
@@ -19,6 +19,8 @@
 	const selectedPaymentMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
 	const selectedShippingRate = $derived(paymentModule.shippingRates?.data?.find((r: any) => r.id === cartState.cart?.shippingRateId))
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
+	const fee = $derived(paymentFee(selectedPaymentMethod))
+	const total = $derived(totalWithFee(cartState.cart.total, fee))
 </script>
 
 <svelte:head>
@@ -199,8 +201,9 @@
 							discount={cartState.cart.discountAmount}
 							discountLabel={cartState.cart.couponCode ? `Discount (${cartState.cart.couponCode})` : 'Discount'}
 							shipping={cartState.cart.shippingCharges}
+							{fee}
 							tax={cartState.cart.tax}
-							total={cartState.cart.total}
+							{total}
 							{currencyCode}
 							shippingResolved={!!cartState.cart.shippingAddress}
 						/>
@@ -221,7 +224,7 @@
 							onclick={onsubmit}
 							disabled={paymentModule.checkoutDisabled}
 							loading={paymentModule.paymentLoader}
-							total={formatPrice(cartState.cart.total, currencyCode)}
+							total={formatPrice(total, currencyCode)}
 						/>
 					</div>
 				</div>

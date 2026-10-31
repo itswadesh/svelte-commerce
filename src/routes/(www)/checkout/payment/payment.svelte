@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { formatPrice } from '$lib/utils/price'
+	import { formatPrice, paymentFee, totalWithFee } from '$lib/utils/price'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
@@ -20,6 +20,10 @@
 	const discountCouponsPlugin = $derived(page.data?.store?.plugins?.isDiscountCoupons)
 
 	const cartState = paymentModule.cartState
+
+	const selectedMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
+	const fee = $derived(paymentFee(selectedMethod))
+	const total = $derived(totalWithFee(cartState.cart.total, fee))
 
 	let showAddress = $state(false)
 
@@ -131,6 +135,7 @@
 						{#if paymentModule.showPaymentMethods}
 							<div class="grid grid-cols-1 gap-4">
 								{#each paymentModule.listOfPaymentMethods as method}
+									{@const methodFee = paymentFee(method)}
 									<label
 										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-background px-6 py-5 {paymentModule.selectedPGCode ==
 											method?.code && paymentModule.listOfPaymentMethods?.length !== 1
@@ -155,7 +160,14 @@
 													<img src={method?.img || localPaymentIcon(method)} alt={method?.name} class="h-full w-full object-contain" />
 												</div>
 												<div class="flex flex-col">
-													<span class="text-sm font-bold tracking-tight text-foreground">{method?.name}</span>
+													<span class="text-sm font-bold tracking-tight text-foreground">
+														{method?.name}
+														{#if methodFee}
+															<span class="font-medium text-muted-foreground"
+																>· {formatPrice(methodFee.amount, page?.data?.store?.currency?.code)} extra</span
+															>
+														{/if}
+													</span>
 													{#if method?.description}
 														<span class="text-[10px] font-medium tracking-tighter text-muted-foreground">{@html method?.description}</span>
 													{/if}
@@ -311,8 +323,9 @@
 										subtotal={cartState.cart.subtotal}
 										discount={cartState.cart.discountAmount}
 										shipping={cartState.cart.shippingCharges}
+										{fee}
 										tax={cartState.cart.tax}
-										total={cartState.cart.total}
+										{total}
 										currencyCode={page?.data?.store?.currency?.code}
 										shippingResolved={!!cartState.cart.shippingAddress}
 									/>
@@ -331,7 +344,7 @@
 											onclick={onreview}
 											disabled={!!reviewBlocker}
 											loading={paymentModule.paymentLoader}
-											total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+											total={formatPrice(total, page?.data?.store?.currency?.code)}
 										/>
 									{:else}
 										<p class="rounded-radius border border-warning/40 bg-warning/10 p-3 text-sm text-foreground">
@@ -340,7 +353,7 @@
 										<CheckoutButton
 											text="Add delivery details"
 											onclick={paymentModule.handleAddressChange}
-											total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+											total={formatPrice(total, page?.data?.store?.currency?.code)}
 										/>
 									{/if}
 								</div>

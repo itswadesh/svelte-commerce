@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { cn } from '$lib/core/utils'
-	import { formatPrice } from '$lib/utils/price'
+	import { formatPrice, type PaymentFee } from '$lib/utils/price'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
+	import { slide } from '$lib/motion'
 
 	/**
 	 * The one money block for cart, checkout and order confirmation. The same five rows were
@@ -22,6 +23,7 @@
 		discount = 0,
 		discountLabel = 'Discount',
 		shipping = 0,
+		fee = null,
 		tax = 0,
 		total = 0,
 		currencyCode = '',
@@ -38,6 +40,7 @@
 		/** Review names the code, e.g. `Discount (SAVE10)`; the other steps just say Discount. */
 		discountLabel?: string
 		shipping?: number | null
+		fee?: PaymentFee | null
 		tax?: number | null
 		total?: number | null
 		currencyCode?: string
@@ -114,6 +117,13 @@
 					{/if}
 				</dd>
 			</div>
+
+			{#if fee}
+				<div class="flex items-center justify-between gap-4 text-sm" transition:slide>
+					<dt class="font-medium text-muted-foreground">{fee.label}</dt>
+					<dd class="font-bold text-foreground">{money(fee.amount)}</dd>
+				</div>
+			{/if}
 
 			<!-- Only when the store actually charges it; a permanent "Tax $0.00" row is noise. -->
 			{#if hasTax}
