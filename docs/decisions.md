@@ -3,6 +3,44 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: The payment step shows what checkout will charge, automatic code included
+
+The owner reported "checkout/payment coupon is not applied automatically". A GoCommerce store can
+mark a code "Apply automatically" (GoCommerce D179), and the engine picks the one that saves the
+basket most, but only when it places the order. The cash on delivery charge and tax added on top
+were also settled only then. So the payment step showed the full price with "Total before tax",
+and the order was charged a different sum. Engine D185 adds a quote: checkout's own arithmetic,
+rolled back, with nothing reserved.
+
+The payment and review steps now show that quote when the backend offers one
+(`checkoutService.getQuote`). The discount row names the code, with "Applied automatically" under
+it when the shopper typed none. A free-delivery code shows "Free delivery" on that row and "Free"
+on delivery. The tax row shows the exact tax, so the "Total before tax" label from the entry below
+goes on these two steps. The cash on delivery charge is the one for the chosen method. The total is
+the engine's own sum, which is the sum the order is charged.
+
+The quote is asked again when the method, the delivery option, the code, the address or the bag
+changes, and again when the review step opens. While it is asked, the last figures stay in place,
+faded, and Confirm order waits for the answer. When checkout would refuse the order, the summary
+shows checkout's own message and no total, with "Try again". The refusals are a line that changed,
+an address the store does not deliver to, and a method the store does not offer. A quote with no
+answer after 15 seconds is treated the same way, so a stalled request cannot hold checkout. A code
+the shopper types still wins over an automatic one. Removing it brings the automatic one back on the
+next quote.
+
+The cart and address steps keep their estimate, because the engine needs the country to quote, and
+tax and delivery depend on the address. A backend without a quote, or a GoCommerce engine before
+D185, shows the cart's own figures exactly as before.
+
+Checkout takes off one automatic code, the one that saves the most, and none while a code is typed.
+So "Applied automatically at checkout" marks that one code only. On the payment step it is the code
+the quote applied, in the bag's offers and in the coupon drawer. On the cart step, which has no
+quote, the bag's offers mark the code that saves the most, and mark none when a free-delivery code
+competes or two save the same, because what free delivery saves depends on the delivery chosen
+later. The drawer marks no code there. The offers drop the Apply button on an automatic code while
+no code is typed, because a typed code always wins, and applying an automatic code by hand would
+hold it even where another one saves more.
+
 ## 2026-10-31: Captioned category pictures, collection titles on the picture, and a phone shelf that scrolls sideways
 
 The owner wants Chillish to match a reference store that shows its categories as a row of square
