@@ -52,7 +52,7 @@ describe('a section heading with its words', () => {
 			eyebrow: 'Most loved',
 			title: 'Best selling',
 			subtitle: 'The ones people come back for.',
-			link: ['Shop all: Best selling', '/collections/best']
+			link: ['Shop all', '/collections/best']
 		})
 		expect(container.querySelector('.cmp-head__words')!.children[1].tagName).toBe('H2')
 	})
