@@ -1,7 +1,10 @@
 import { checkoutService } from '$lib/core/services'
 import type { CheckoutQuote } from '$lib/utils/price'
 
-type Quoting = { getQuote?: (args: { cartId?: string; method?: string }) => Promise<CheckoutQuote | null> }
+type Quoting = {
+	getQuote?: (args: { cartId?: string; method?: string }) => Promise<CheckoutQuote | null>
+	expectTotal?: (args: { cartId?: string; total: number | null; onChange: (quote: CheckoutQuote, message: string) => void }) => void
+}
 
 type Checkout = {
 	loadingForPaymentMethods: boolean
@@ -49,14 +52,18 @@ export class LiveQuote {
 	/** Checkout's own sentence for why it would refuse now; it stays until an answer lands. */
 	error = $state('')
 	pending = $state(false)
+	/** Checkout's sentence for a Confirm it refused because the total moved; `current` is already the new one. */
+	moved = $state('')
 	readonly supported: boolean
 	#key: string | undefined
 	#run: (() => Promise<CheckoutQuote | null>) | undefined
 	#method = ''
 	#asks = 0
+	#expect: Quoting['expectTotal']
 
 	constructor(checkout: Checkout) {
 		const svc = checkoutService as unknown as Quoting
+		this.#expect = typeof svc.expectTotal === 'function' ? svc.expectTotal.bind(svc) : undefined
 		const getQuote = typeof svc.getQuote === 'function' ? svc.getQuote.bind(svc) : null
 		this.supported = getQuote !== null
 		if (!getQuote) return
@@ -89,6 +96,24 @@ export class LiveQuote {
 		return !this.pending && !this.error && !this.awaitingFirst(cart)
 	}
 
+	/**
+	 * Hands the backend the total on screen as the shopper confirms, so checkout refuses a different
+	 * one instead of charging it. The refusal puts checkout's figures on screen at once, and nothing
+	 * is placed until the shopper confirms again.
+	 */
+	confirming(cartId?: string) {
+		this.moved = ''
+		this.#expect?.({
+			cartId,
+			total: this.current?.total ?? null,
+			onChange: (quote, message) => {
+				this.current = quote
+				this.error = ''
+				this.moved = message
+			}
+		})
+	}
+
 	#send(run: () => Promise<CheckoutQuote | null>, method: string) {
 		const ask = ++this.#asks
 		this.pending = true
@@ -103,6 +128,7 @@ export class LiveQuote {
 					this.current = answer
 					this.method = method
 					this.error = ''
+					this.moved = ''
 					this.pending = false
 				},
 				(err: unknown) => {

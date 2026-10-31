@@ -11,6 +11,7 @@
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { linePicture } from '$lib/customizer/line'
+	import { fade } from '$lib/motion'
 
 	const { paymentModule, quote, onsubmit, onback } = $props()
 
@@ -218,6 +219,12 @@
 							error={quote.error}
 							onretry={quote.retry}
 						/>
+
+						{#if quote.moved}
+							<p role="status" class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive" in:fade>
+								{quote.moved}
+							</p>
+						{/if}
 
 						{#if paymentModule.showError}
 							<div class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">

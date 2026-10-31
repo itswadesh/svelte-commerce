@@ -17,11 +17,14 @@
 	// success path the reset is harmless: the flow has either navigated away or handed off to the
 	// gateway's own modal, which is the active UI at that point.
 	async function placeOrder() {
+		quote.confirming(paymentModule.cartState.cart?.id)
 		try {
 			await paymentModule.placeOrder()
 		} finally {
 			paymentModule.paymentLoader = false
 		}
+		// Review prices the delivery option from the rates payment loaded, which a refusal can outdate.
+		if (quote.moved) paymentModule.getShippingRates(paymentModule.cartState.cart?.id)
 	}
 </script>
 
