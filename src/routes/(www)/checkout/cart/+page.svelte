@@ -156,7 +156,7 @@
 	// Until a shipping address exists the shipping cost is unknown, so the bottom line is an
 	// estimate. Naming it "Total" one row under "Address required" was the defect.
 	const shippingResolved = $derived(!!cartState.cart?.shippingAddress)
-	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, (cartState.cart as any)?.tax))
+	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart as any))
 
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
 	const cartSubtotal = $derived(formatPrice(cartState.cart?.subtotal, currencyCode))

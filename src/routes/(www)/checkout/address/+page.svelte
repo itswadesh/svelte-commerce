@@ -111,7 +111,7 @@
 	// fold.
 	const fillingGuestAddress = $derived(isGuestCheckout && !(isEmailOk && isPhoneOk && cartState.cart?.shippingAddress))
 
-	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart?.tax))
+	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart))
 	const barLabel = $derived(totalLabel(!!cartState.cart?.shippingAddress, taxPending))
 
 	// Submitting through the form element runs its own validation and error display; the footer

@@ -21,7 +21,7 @@
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
 	const fee = $derived(paymentFee(selectedPaymentMethod))
 	const total = $derived(totalWithFee(cartState.cart.total, fee))
-	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart.tax))
+	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart))
 </script>
 
 <svelte:head>
