@@ -3,6 +3,27 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: A store can set the small line above a section heading in capitals
+
+The owner wants Chillish to match a reference store whose shelves each carry a small capitalised
+line above the heading, a line under it and a "View all" link beside it, set in the CMS first:
+"focus mainly into cms and if something is not possible then go for svelte-commerce chnages".
+GoCommerce D183 (engine PR #229) gives the product grid, collection list, columns, questions and
+benefits strip `eyebrow` and `subtitle`, the text section `eyebrow`, and the grid, list and columns
+`view_all_text` beside `view_all_link`; the storefront draws them in `SectionHead.svelte`.
+
+The theme setting `eyebrow_case: upper` draws every small line above a heading, the hero's
+included, in capitals spaced 0.14em, the reference's measure. For a store that sets it, this
+overrides "No all-caps text on the default theme" (2026-10-26). Unset or `sentence`, a line reads
+as typed, so every other store is unchanged; the capitals come through `--eyebrow-case`, so
+`scripts/check-tokens.mjs` still finds no all-caps styling in a default-theme file.
+
+A section saved without the new words renders the same elements, classes and text as before;
+only Svelte's hydration comments and, for a product grid with a heading and no link, one
+whitespace-only text node inside the flex header differ, and neither is drawn. Under reduced motion
+the link's arrow stays still and an underline fades in on hover instead, so the link still answers
+the pointer.
+
 ## 2026-10-31: A store that picks both fonts no longer downloads Inter
 
 The owner wants Chillish to match a reference store's type, Noto Serif headings at weight 500 and

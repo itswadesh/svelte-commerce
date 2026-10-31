@@ -232,7 +232,9 @@ spacing tokens and the gutter: `compact` is the spacing bullet above, and `comfo
   800 the hero alone.
 - Headings carry no positive tracking; large titles tighten slightly (`--tracking-title`).
 - Sentence case everywhere, buttons and labels included. No all-caps styling (`uppercase`,
-  `text-transform: uppercase`) on the default theme; owner decision, `docs/decisions.md`.
+  `text-transform: uppercase`) on the default theme; owner decision, `docs/decisions.md`. The one
+  exception is a store's own choice: `eyebrow_case: upper` draws the small line above a section
+  heading in spaced capitals, through `--eyebrow-case`, never a class.
 
 ---
 
@@ -261,6 +263,10 @@ spacing tokens and the gutter: `compact` is the spacing bullet above, and `comfo
 - Limit repeated carousels. Prefer a stable grid when users need to compare products.
 - Remove duplicated content and low-value sections. A compact homepage leads to products quickly.
 - Match every headline and CTA to the imagery shown.
+- A section's heading may carry a small line above it (label step, 500, muted), a line under it
+  (UI step on a phone, body step from 640px, muted, 36rem wide at most) and a "View all" link
+  beside it; `src/lib/composer/SectionHead.svelte` draws all three, and a section without them
+  draws its heading alone.
 
 ### Search and product listing
 
