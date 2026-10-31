@@ -2,10 +2,16 @@
 	import { ArrowRight } from '@lucide/svelte'
 	import Paragraphs from '../Paragraphs.svelte'
 	import SectionHead from '../SectionHead.svelte'
-	import { columnItems, columnsClass, paragraphs, text, type ComposerSection } from '../helpers.js'
+	import { columnItems, columnLook, columnsClass, text, type ColumnLook, type ComposerSection } from '../helpers.js'
+
+	const GAP: Record<ColumnLook, string> = {
+		columns: 'gap-6 md:gap-8',
+		tiles: 'gap-3 md:gap-4',
+		captioned: 'gap-x-[var(--grid-gap-x,12px)] gap-y-[var(--grid-gap-y,16px)]'
+	}
 
 	/**
-	 * Up to four columns, each a picture, a heading, text and a link; stacked on a phone. Columns
+	 * Up to six columns, each a picture, a heading, text and a link; stacked on a phone. Columns
 	 * with no paragraphs are tiles (D140): chunky rounded cards, two across on a phone, each card
 	 * one link named by its heading.
 	 */
@@ -13,25 +19,38 @@
 
 	const heading = $derived(text(section.settings, 'heading'))
 	const columns = $derived(columnItems(section.settings?.items))
-	// Tiles only when every column is a named link with no paragraphs: a published section of
-	// pictures or text columns keeps its columns.
-	const tiles = $derived(columns.every((c) => !paragraphs(c.text).length && c.link && (c.heading || c.linkText)))
-	const grid = $derived(columnsClass(columns.length, tiles))
+	const look = $derived(columnLook(section.settings, columns))
+	const tiles = $derived(look === 'tiles')
+	const grid = $derived(columnsClass(columns.length, look))
 </script>
 
 {#if columns.length}
 	<section class="cmp-band">
 		<div class="page-width">
 			<SectionHead settings={section.settings} />
-			<ul class="cmp-mc grid {tiles ? 'gap-3 md:gap-4' : 'gap-6 md:gap-8'} {grid}" class:cmp-mc--tiles={tiles}>
+			<ul class="cmp-mc grid {GAP[look]} {grid}" class:cmp-mc--tiles={tiles} class:cmp-mc--captioned={look === 'captioned'}>
 				{#each columns as column, i (i)}
 					<li class="cmp-mc__col">
-						{#if column.image}
+						{#if column.image || look === 'captioned'}
 							<div class="cmp-mc__media">
-								<img src={column.image} alt="" width="800" height="600" loading="lazy" decoding="async" />
+								{#if column.image}
+									<img src={column.image} alt="" width="800" height="600" loading="lazy" decoding="async" />
+								{/if}
 							</div>
 						{/if}
-						{#if tiles && column.link}
+						{#if look === 'captioned'}
+							{@const name = column.heading || column.linkText}
+							{#if name}
+								<svelte:element this={heading ? 'h3' : 'p'} class="cmp-mc__title">
+									{#if column.link}
+										<a class="cmp-mc__tile-link" href={column.link}>{name}</a>
+									{:else}
+										{name}
+									{/if}
+								</svelte:element>
+							{/if}
+							<Paragraphs value={column.text} class="cmp-copy" />
+						{:else if tiles && column.link}
 							<!-- The heading is the link and its box covers the card, so the whole tile is one target. -->
 							<svelte:element this={heading ? 'h3' : 'p'} class="cmp-mc__title">
 								<a class="cmp-mc__tile-link" href={column.link}>
@@ -189,6 +208,58 @@
 		.cmp-mc--tiles .cmp-mc__col:active,
 		.cmp-mc--tiles .cmp-mc__col:hover :global(.cmp-mc__arrow) {
 			transform: none;
+		}
+	}
+
+	.cmp-mc--captioned .cmp-mc__col {
+		position: relative;
+		gap: 12px;
+		transition: opacity var(--motion-fast, 150ms) var(--motion-ease, ease-out);
+	}
+
+	.cmp-mc--captioned .cmp-mc__media {
+		aspect-ratio: 1 / 1;
+	}
+
+	.cmp-mc--captioned .cmp-mc__media img {
+		transition:
+			transform var(--motion-emphasis, 300ms) var(--motion-ease, ease-out),
+			opacity var(--motion-emphasis, 300ms) var(--motion-ease, ease-out);
+	}
+
+	.cmp-mc--captioned .cmp-mc__title {
+		margin: 0;
+		font-family: inherit;
+		font-size: var(--type-ui, 0.875rem);
+		font-weight: 500;
+		line-height: 1.43;
+	}
+
+	.cmp-mc--captioned .cmp-mc__tile-link::after {
+		border-radius: var(--radius, 0.5rem);
+	}
+
+	.cmp-mc--captioned .cmp-mc__tile-link:focus-visible {
+		box-shadow: none;
+	}
+
+	.cmp-mc--captioned .cmp-mc__col:has(.cmp-mc__tile-link):hover .cmp-mc__media img {
+		transform: scale(1.04);
+	}
+
+	.cmp-mc--captioned .cmp-mc__col:hover .cmp-mc__tile-link {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.cmp-mc--captioned .cmp-mc__col:has(.cmp-mc__tile-link):active {
+		opacity: 0.75;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cmp-mc--captioned .cmp-mc__col:has(.cmp-mc__tile-link):hover .cmp-mc__media img {
+			transform: none;
+			opacity: 0.85;
 		}
 	}
 </style>

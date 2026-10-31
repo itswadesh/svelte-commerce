@@ -226,16 +226,17 @@ describe('new section helpers', () => {
 		expect(faqItems([{ question: 'Q1', answer: 'A' }, { question: 'Q2' }, { answer: 'A' }, 'x'])).toEqual([{ question: 'Q1', answer: 'A' }])
 	})
 
-	it('keeps columns that show something, at most four, and lays them out by count', () => {
-		const cols = columnItems([{ heading: 'A', link: 'javascript:x' }, {}, { text: 'B' }, { image: '/i.jpg' }, { heading: 'C' }, { heading: 'D' }])
-		expect(cols.map((c) => c.heading || 'other')).toEqual(['A', 'other', 'other', 'C'])
+	it('keeps columns that show something, at most six, and lays them out by count', () => {
+		const cols = columnItems([{ heading: 'A', link: 'javascript:x' }, {}, { text: 'B' }, { image: '/i.jpg' }, { heading: 'C' }, { heading: 'D' }, { heading: 'E' }, { heading: 'F' }])
+		expect(cols.map((c) => c.heading || 'other')).toEqual(['A', 'other', 'other', 'C', 'D', 'E'])
 		expect(cols[0].link).toBe('')
 		expect(columnsClass(2)).toBe('grid-cols-1 md:grid-cols-2')
-		expect(columnsClass(9)).toBe('grid-cols-1 sm:grid-cols-2 lg:grid-cols-4')
+		expect(columnsClass(4)).toBe('grid-cols-1 sm:grid-cols-2 lg:grid-cols-4')
+		expect(columnsClass(9)).toBe('grid-cols-1 sm:grid-cols-2 lg:grid-cols-3')
 		// Tiles — no paragraphs in any column — sit two across on a phone.
-		expect(columnsClass(4, true)).toBe('grid-cols-2 lg:grid-cols-4')
-		expect(columnsClass(3, true)).toBe('grid-cols-2 md:grid-cols-3')
-		expect(columnsClass(2, true)).toBe('grid-cols-2')
+		expect(columnsClass(4, 'tiles')).toBe('grid-cols-2 lg:grid-cols-4')
+		expect(columnsClass(3, 'tiles')).toBe('grid-cols-2 md:grid-cols-3')
+		expect(columnsClass(2, 'tiles')).toBe('grid-cols-2')
 	})
 
 	it('keeps collection cards with a title and a link on this site', () => {
