@@ -376,7 +376,7 @@ describe('the lock route', () => {
 		expect(loadAt('https://acme.test/store-closed?reason=throttled')).toEqual({ error: 'Too many tries. Wait a while and try again.' })
 		expect(loadAt('https://acme.test/store-closed?reason=unavailable')).toEqual({ error: "We couldn't check that password. Try again." })
 		expect(loadAt('https://acme.test/store-closed?reason=stopped')).toEqual({
-			error: 'This store has stopped asking for a password. Reload the page in a minute.'
+			error: "This store isn't taking passwords right now. Reload the page in a minute."
 		})
 		expect(loadAt('https://acme.test/store-closed?reason=%3Cb%3E')).toEqual({ error: null })
 		expect(loadAt('https://acme.test/store-closed')).toEqual({ error: null })
