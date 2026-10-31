@@ -9,6 +9,7 @@
 	const eyebrow = $derived(text(settings, 'eyebrow'))
 	const subtitle = $derived(text(settings, 'subtitle'))
 	const viewAll = $derived(safeHref(settings?.view_all_link))
+	const viewAllText = $derived(text(settings, 'view_all_text'))
 </script>
 
 {#snippet headingLine()}
@@ -28,7 +29,7 @@
 		{:else}
 			{@render headingLine()}
 		{/if}{#if viewAll}{' '}<a class="cmp-head__link" href={viewAll}>
-				{text(settings, 'view_all_text') || 'View all'}{#if heading}<span class="sr-only">: {heading}</span>{/if}
+				{viewAllText || 'View all'}{#if heading && !viewAllText}<span class="sr-only">: {heading}</span>{/if}
 				<ArrowRight class="cmp-head__icon" aria-hidden="true" />
 			</a>{/if}
 	</header>
