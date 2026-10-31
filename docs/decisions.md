@@ -3,6 +3,20 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-10-31: A store that picks both fonts no longer downloads Inter
+
+The owner wants Chillish to match a reference store's type, Noto Serif headings at weight 500 and
+Source Sans 3 body text. The theme editor now offers both (GoCommerce PR #228), and the
+storefront loads them. For a store that picks its fonts in the theme editor, this overrides "Inter
+everywhere on the default theme" (2026-10-27). A store that picks none gets Inter exactly as before.
+
+When a store's theme settings name a heading font and a body font, the default theme's Inter
+stylesheet is not requested. The heading face loads at one weight, the store's heading weight or
+the nearest one the face offers, because Google serves one weight as a static file and two or more
+as the whole variable font (Noto Serif: 15 KB against 36 KB). Body text loads every weight. A
+heading drawn heavier than the loaded weight, such as the hero's 800, keeps that weight rather than
+a synthetic bold. On a page with a ₹ the pair costs 102 KB of font files, against Inter's 130 KB.
+
 ## 2026-10-31: A store that adds tax on top says its checkout total is before tax
 
 A review found that on a store whose prices exclude tax (GoCommerce D177, `prices_include_tax`
