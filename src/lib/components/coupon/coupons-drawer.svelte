@@ -10,7 +10,8 @@
 	import { page } from '$app/state'
 	import { innerWidth } from 'svelte/reactivity/window'
 
-	let { code = $bindable(''), class: className = '' } = $props()
+	/** `marked`: the automatic code checkout will apply, as a checkout quote names it. */
+	let { code = $bindable(''), marked = null, class: className = '' }: { code?: string; marked?: string | null; class?: string } = $props()
 	let open = $state(false)
 </script>
 
@@ -76,6 +77,9 @@
 										& Get an Extra{' '}
 										{!coupon.isPercent ? `${formatPrice(coupon?.amount, page?.data?.store?.currency?.code)}` : `${coupon.amount}%`} OFF on your entire purchase
 									</p>
+								{/if}
+								{#if marked && coupon.code === marked}
+									<p class="mt-1 text-xs font-medium text-success">Applied automatically at checkout</p>
 								{/if}
 								<!-- An evergreen coupon has no end date, and `format('', …)` on date-fns 4 throws a
 									     RangeError rather than returning a fallback — one such coupon took the whole list

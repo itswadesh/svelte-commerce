@@ -4,7 +4,7 @@
 	import { cartService } from '$lib/core/services'
 	import { formatPrice } from '$lib/utils/price'
 	import { slide } from '$lib/motion'
-	import { offerNote, offerValue, sortOffers, type BagOffer } from '$lib/product/upsells'
+	import { autoMarked, offerNote, offerValue, sortOffers, type BagOffer } from '$lib/product/upsells'
 	import { BadgePercent } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
 
@@ -16,8 +16,15 @@
 	let {
 		subtotal = 0,
 		applied = '',
+		quoted,
 		apply
-	}: { subtotal?: number | null; applied?: string | null; apply: (code: string) => Promise<unknown> } = $props()
+	}: {
+		subtotal?: number | null
+		applied?: string | null
+		/** The automatic code a checkout quote applied, null for none; absent without a quote. */
+		quoted?: string | null
+		apply: (code: string) => Promise<unknown>
+	} = $props()
 
 	const SHOWN = 3
 	let offers = $state<BagOffer[]>([])
@@ -27,6 +34,7 @@
 	const money = (n: number) => formatPrice(n, currencyCode)
 	const sorted = $derived(sortOffers(offers))
 	const visible = $derived(expanded ? sorted : sorted.slice(0, SHOWN))
+	const marked = $derived(autoMarked(offers, applied, quoted))
 
 	$effect(() => {
 		void subtotal
@@ -78,6 +86,12 @@
 					</div>
 					{#if applied && applied.toUpperCase() === offer.code.toUpperCase()}
 						<span class="text-xs font-semibold text-success">Applied</span>
+					{:else if offer.autoApply && !applied}
+						<!-- Applying it would make it a typed code, which always wins, even over another
+						     automatic code that would save more. -->
+						{#if marked === offer.code}
+							<span class="text-xs font-semibold text-success">Applied automatically at checkout</span>
+						{/if}
 					{:else}
 						<Button
 							variant="outline"
