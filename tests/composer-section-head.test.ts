@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/svelte'
+import { themeTokenCss, themeTokenDeclarations } from '$lib/composer/theme-tokens'
 import ProductGrid from '$lib/composer/sections/ProductGrid.svelte'
 import CollectionList from '$lib/composer/sections/CollectionList.svelte'
 import MultiColumn from '$lib/composer/sections/MultiColumn.svelte'
@@ -23,6 +24,20 @@ function head(container: HTMLElement) {
 		link: header.querySelector('a') ? [header.querySelector('a')!.textContent!.trim(), header.querySelector('a')!.getAttribute('href')] : null
 	}
 }
+
+describe('eyebrow_case', () => {
+	it('draws the small line in spaced capitals only when the store chose upper', () => {
+		expect(themeTokenDeclarations({ eyebrow_case: 'upper' })).toEqual({ '--eyebrow-case': 'uppercase', '--eyebrow-tracking': '0.14em' })
+		expect(themeTokenCss({ eyebrow_case: 'upper' })).toBe('[data-theme][data-theme] { --eyebrow-case: uppercase !important; --eyebrow-tracking: 0.14em !important; }')
+	})
+
+	it('leaves the line as typed when unset, sentence, or anything else', () => {
+		expect(themeTokenDeclarations({ eyebrow_case: 'sentence' })).toEqual({})
+		expect(themeTokenDeclarations({ eyebrow_case: 'UPPER' })).toEqual({})
+		expect(themeTokenDeclarations({ eyebrow_case: 'uppercase; color: red' })).toEqual({})
+		expect(themeTokenCss({ eyebrow_case: 'sentence' })).toBe('')
+	})
+})
 
 describe('a section heading with its words', () => {
 	it('puts the small line above the product grid heading, the line under it, and the link beside', () => {

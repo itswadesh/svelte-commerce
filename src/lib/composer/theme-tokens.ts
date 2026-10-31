@@ -24,6 +24,7 @@ export type ThemeSettings = Partial<
 		| 'heading_font'
 		| 'body_font'
 		| 'heading_weight'
+		| 'eyebrow_case'
 		| 'type_scale'
 		| 'density'
 		| 'radius'
@@ -301,6 +302,10 @@ export function themeTokenDeclarations(settings: ThemeSettings | null | undefine
 	const sale = colour(s.sale)
 	if (sale) out['--sale'] = hexToTriplet(readableOn(sale, ground))
 	if (typeof s.heading_weight === 'string' && Object.hasOwn(HEADING_WEIGHTS, s.heading_weight)) out['--weight-heading'] = HEADING_WEIGHTS[s.heading_weight]
+	if (s.eyebrow_case === 'upper') {
+		out['--eyebrow-case'] = 'uppercase'
+		out['--eyebrow-tracking'] = '0.14em'
+	}
 	if (typeof s.type_scale === 'string' && Object.hasOwn(TYPE_SCALES, s.type_scale)) Object.assign(out, TYPE_SCALES[s.type_scale])
 	if (typeof s.density === 'string' && Object.hasOwn(DENSITIES, s.density)) Object.assign(out, DENSITIES[s.density])
 	if (typeof s.radius === 'string' && Object.hasOwn(RADII, s.radius)) out['--radius'] = RADII[s.radius]
