@@ -48,8 +48,10 @@
 	// one (use-payment.svelte.js: `res?.data?.length === 1`). With several rates every radio starts
 	// unselected, so Review Order stays disabled until the shopper picks one — a required extra tap,
 	// and on mobile an extra scroll past the payment methods. Select the first rate as soon as the
-	// list arrives. A rate already on the cart always wins, and the shopper can still change it.
-	// `attemptedRateId` stops a failed setShippingRate (which leaves `shippingRateId` unset) from
+	// list arrives. A rate already on the cart wins while the list still offers it, and the shopper
+	// can still change it. One the list no longer offers is replaced: rates are banded by the basket's
+	// value, so a basket that crosses a band leaves the old pick behind, and the engine refuses it at
+	// "Place order". `attemptedRateId` stops a failed setShippingRate (which leaves `shippingRateId` unset) from
 	// retrying on every re-render.
 	let attemptedRateId: string | undefined
 
@@ -65,8 +67,10 @@
 	)
 
 	$effect(() => {
-		const firstRate = paymentModule.shippingRates?.data?.[0]
-		if (!firstRate || cartState?.cart?.shippingRateId || attemptedRateId === firstRate.id) return
+		const rates = paymentModule.shippingRates?.data ?? []
+		const firstRate = rates[0]
+		const picked = cartState?.cart?.shippingRateId
+		if (!firstRate || rates.some((r: any) => r.id === picked) || attemptedRateId === firstRate.id) return
 		attemptedRateId = firstRate.id
 		paymentModule.handleShippingRateChange(firstRate)
 	})
