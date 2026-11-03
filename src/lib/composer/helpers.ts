@@ -191,7 +191,7 @@ export function faqItems(value: unknown): { question: string; answer: string }[]
 		.slice(0, 30)
 }
 
-export type Column = { image: string; heading: string; text: unknown; linkText: string; link: string }
+export type Column = { image: string; video: string; heading: string; text: unknown; linkText: string; link: string }
 
 /** Columns that show something, at most six. */
 export function columnItems(value: unknown): Column[] {
@@ -201,13 +201,14 @@ export function columnItems(value: unknown): Column[] {
 			const item = record(raw)
 			return {
 				image: safeHref(item.image),
+				video: safeHref(item.video),
 				heading: text(item, 'heading'),
 				text: item.text,
 				linkText: text(item, 'link_text'),
 				link: safeHref(item.link)
 			}
 		})
-		.filter((c) => c.image || c.heading || paragraphs(c.text).length)
+		.filter((c) => c.image || c.video || c.heading || paragraphs(c.text).length)
 		.slice(0, 6)
 }
 

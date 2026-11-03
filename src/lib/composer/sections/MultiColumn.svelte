@@ -31,7 +31,20 @@
 			<ul class="cmp-mc grid {GAP[look]} {grid}" class:cmp-mc--tiles={tiles} class:cmp-mc--captioned={look === 'captioned'}>
 				{#each columns as column, i (i)}
 					<li class="cmp-mc__col">
-						{#if column.image || look === 'captioned'}
+						{#if column.video}
+							<!-- A customer's clip: plays only when pressed, the picture standing in until then. -->
+							<!-- svelte-ignore a11y_media_has_caption -->
+							<video
+								class="cmp-mc__video"
+								controls
+								playsinline
+								preload={column.image ? 'none' : 'metadata'}
+								poster={column.image || undefined}
+								aria-label={column.heading || 'Video'}
+							>
+								<source src={column.video} type="video/mp4" />
+							</video>
+						{:else if column.image || look === 'captioned'}
 							<div class="cmp-mc__media">
 								{#if column.image}
 									<img src={column.image} alt="" width="800" height="600" loading="lazy" decoding="async" />
@@ -104,6 +117,20 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+	}
+
+	/* Portrait, as a phone records a testimonial; a landscape clip is letterboxed, never cropped. */
+	.cmp-mc__video {
+		display: block;
+		width: 100%;
+		aspect-ratio: 9 / 16;
+		max-height: 70vh;
+		border-radius: var(--radius, 0.5rem);
+		background: hsl(var(--foreground));
+		object-fit: contain;
+		/* Above a tile's full-card link, so its controls still take the press. */
+		position: relative;
+		z-index: 1;
 	}
 
 	.cmp-mc__title {

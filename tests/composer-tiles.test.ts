@@ -163,3 +163,20 @@ describe('a product grid as one row on a phone', () => {
 		])
 	})
 })
+
+describe('video columns', () => {
+	it('plays a customer clip in the column, the picture standing in until pressed', () => {
+		const out = html(MultiColumn, {
+			section: section('multi-column', {
+				items: [
+					{ video: '/media/a.mp4', image: '/a.webp', heading: 'Riya', text: 'Love it.' },
+					{ video: 'javascript:alert(1)', heading: 'Bad' }
+				]
+			})
+		})
+		expect(out).toContain('src="/media/a.mp4"')
+		expect(out).toContain('poster="/a.webp"')
+		expect(out).not.toContain('javascript:')
+		expect(out).not.toContain('autoplay')
+	})
+})
