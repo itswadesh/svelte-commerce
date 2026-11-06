@@ -594,3 +594,10 @@ The owner's standing rule: no email, phone, token or name in a URL, since every 
 records the page's address and the history keeps it. The page after sign-up gets the address in
 SvelteKit's navigation state and greets the shopper without it after a reload; the sign-in form
 hands the typed address to the reset form in memory instead of an `email` query.
+
+## 2026-11-06: The success page says what the payment did
+
+Reaching the page proves nothing: Cashfree resolves its window whatever the transaction did, and a
+webhook can land after the shopper does. So the page reads `paymentStatus`. It thanks a shopper and
+counts a purchase only for a paid order, cash on delivery, or a backend that reports no payment
+state; a pending online payment waits and looks again for 40 seconds, and a failed one says so.

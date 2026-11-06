@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { addedTax, formatPrice } from '$lib/utils/price'
-	import { CheckCircle2, MapPin, Package, Truck, ArrowRight, ShoppingBag, Mail, Calendar, SearchX } from '@lucide/svelte'
+	import { AlertCircle, CheckCircle2, Clock, MapPin, Package, Truck, ArrowRight, Mail, Calendar, SearchX } from '@lucide/svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { linePicture } from '$lib/customizer/line'
 	import { getUserState, getCartState } from '$lib/core/stores/index.js'
-	import { onMount } from 'svelte'
+	import { onMount, untrack } from 'svelte'
 	import { page } from '$app/state'
-	import { fly } from '$lib/motion'
+	import { fade, fly } from '$lib/motion'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import { trackOrderPlaced } from '$lib/purchase-tracking'
+	import { isSale, orderOutcome, OUTCOME_COPY } from '$lib/checkout/order-outcome'
 	import { orderService } from '$lib/core/services/index.js'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import GoogleSurvey from '$lib/components/google/google-survey.svelte'
@@ -24,7 +25,8 @@
 	// empty, the browser asks again before the page says the details are unavailable.
 	let browserOrders = $state<any[]>([])
 	let browserLookupDone = $state(false)
-	const orders = $derived(data.orders?.data?.length ? data.orders.data : browserOrders)
+	// The browser's answer is the newer one: it is what the wait for a payment's webhook re-reads.
+	const orders = $derived(browserOrders.length ? browserOrders : (data.orders?.data ?? []))
 	const firstOrder = $derived(orders[0])
 	const useremail = $derived(firstOrder?.userEmail || firstOrder?.shippingAddress?.email)
 	const orderNo = $derived(page.url.searchParams.get('order_no') || firstOrder?.orderNo)
@@ -35,6 +37,11 @@
 	// number, no items and no amount behind any of it. The page may only make that claim when the URL
 	// carries something identifying an order (UX-291).
 	const hasOrderReference = $derived(!!(orderNo || page.url.searchParams.get('cart_id') || firstOrder))
+
+	// Getting here says nothing about the money, so everything the page claims comes from this.
+	const outcome = $derived(orderOutcome(firstOrder))
+	const copy = $derived(OUTCOME_COPY[outcome])
+	const sale = $derived(isSale(outcome))
 
 	// Compose the address from the parts that exist, so nothing renders as stray punctuation.
 	const recipientName = $derived([firstOrder?.shippingAddress?.firstName, firstOrder?.shippingAddress?.lastName].filter(Boolean).join(' '))
@@ -83,9 +90,6 @@
 		}
 		browserLookupDone = true
 
-		// Before the cart refresh, so an error there can't swallow the purchase event
-		trackOrderPlaced(orders, currencyCode)
-
 		if (!cartState) return
 
 		const prevCartId = localStorage.getItem('prev_cart_id')
@@ -106,16 +110,41 @@
 		}
 	})
 
-	const timelineSteps = [
-		{ label: 'Confirmed', icon: CheckCircle2, completed: true, current: false },
-		{ label: 'Processing', icon: Package, completed: false, current: true },
+	// A purchase is counted when there is one, which for a gateway can be after the page opened.
+	// trackOrderPlaced counts an order once however often this runs.
+	$effect(() => {
+		if (sale) untrack(() => trackOrderPlaced(orders, currencyCode))
+	})
+
+	// A gateway's webhook usually lands soon after the shopper does, so the page looks again for a
+	// while, then leaves it to the email and the orders page.
+	const WEBHOOK_POLL_MS = 5000
+	const WEBHOOK_POLLS = 8
+	let polls = $state(0)
+	const stillWaiting = $derived(outcome === 'confirming' && polls >= WEBHOOK_POLLS)
+	$effect(() => {
+		if (outcome !== 'confirming' || polls >= WEBHOOK_POLLS) return
+		const timer = setTimeout(async () => {
+			const again = await orderService
+				.listOrdersByParent({ orderNo: firstOrder?.orderNo })
+				.catch((e: unknown) => console.error('order lookup from the browser failed', e))
+			if (again?.data?.length) browserOrders = again.data
+			polls += 1
+		}, WEBHOOK_POLL_MS)
+		return () => clearTimeout(timer)
+	})
+
+	// Nothing is confirmed until the payment is.
+	const timelineSteps = $derived([
+		{ label: sale ? 'Confirmed' : 'Confirming', icon: sale ? CheckCircle2 : Clock, completed: sale, current: !sale },
+		{ label: 'Processing', icon: Package, completed: false, current: sale },
 		{ label: 'Shipped', icon: Truck, completed: false, current: false }
-	]
+	])
 </script>
 
 <svelte:head>
 	<!-- Order number stays out of the title so it cannot leak through referrers or screenshots. -->
-	<title>Order confirmed</title>
+	<title>{copy.title}</title>
 </svelte:head>
 
 <div class="min-h-screen bg-muted/20 py-12 md:py-5">
@@ -126,23 +155,38 @@
 		<div in:fly={{ y: 12 }} class="overflow-hidden rounded-lg border border-border bg-card shadow-z-1">
 			{#if hasOrderReference}
 				<!-- Header Section -->
-				<div class="border-b border-border bg-card p-3 text-center sm:p-8 md:p-12">
-					<div class="mb-6 flex justify-center">
-						<div class="relative">
-							<div class="absolute inset-0 animate-ping rounded-full bg-success/20 opacity-20"></div>
-							<div class="relative flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
-								<CheckCircle2 class="h-8 w-8 text-success" />
+				<div class="border-b border-border bg-card p-3 text-center sm:p-8 md:p-12" aria-live="polite">
+					{#key outcome}
+						<div in:fade>
+							<div class="mb-6 flex justify-center">
+								{#if sale}
+									<div class="relative">
+										<div class="absolute inset-0 rounded-full bg-success/20 opacity-20 motion-safe:animate-ping"></div>
+										<div class="relative flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
+											<CheckCircle2 class="h-8 w-8 text-success" aria-hidden="true" />
+										</div>
+									</div>
+								{:else if outcome === 'failed'}
+									<div class="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
+										<AlertCircle class="h-8 w-8 text-destructive" aria-hidden="true" />
+									</div>
+								{:else}
+									<div class="flex h-16 w-16 items-center justify-center rounded-full bg-muted/30">
+										<Clock class="h-8 w-8 text-muted-foreground" aria-hidden="true" />
+									</div>
+								{/if}
 							</div>
+							<h1 class="page-heading mb-3">{copy.heading}</h1>
+							<p class="mx-auto max-w-lg text-sm text-muted-foreground">
+								{copy.body}
+								{#if stillWaiting}
+									It's taking longer than usual. Check <a href="/my/orders" class="font-semibold text-primary underline-offset-4 hover:underline"
+										>your orders</a
+									> or your email later.
+								{/if}
+							</p>
 						</div>
-					</div>
-					<h1 class="mb-3 page-heading">Thank you for your order</h1>
-					{#if firstOrder}
-						<p class="mx-auto max-w-lg text-sm text-muted-foreground">We've received your order and we'll notify you as soon as it's on its way.</p>
-					{:else}
-						<p class="mx-auto max-w-lg text-sm text-muted-foreground">
-							Your payment went through. We're still confirming the order details — they'll appear in your account shortly.
-						</p>
-					{/if}
+					{/key}
 					<!-- The reference a shopper quotes to support. It used to appear only when the order
 					     failed to load, so a successful confirmation showed no number at all. -->
 					{#if orderNo}
@@ -155,35 +199,37 @@
 				</div>
 
 				<!-- Order Progress -->
-				<div class="border-b border-border bg-background px-8 py-10 md:px-12">
-					<div class="relative flex justify-between">
-						<!-- Timeline Line -->
-						<div class="absolute left-0 top-5 h-[2px] w-full bg-border">
-							<div class="h-full w-1/3 bg-primary"></div>
-						</div>
-
-						{#each timelineSteps as step, i}
-							<div class="relative z-10 flex flex-col items-center">
-								<div
-									class="flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-panel
-									{step.completed
-										? 'border-primary bg-primary text-primary-foreground'
-										: step.current
-											? 'border-primary bg-card text-primary'
-											: 'border-border bg-card text-muted-foreground'}"
-								>
-									<step.icon class="h-5 w-5" />
-								</div>
-								<span
-									class="mt-3 text-xs font-semibold
-									{step.completed || step.current ? 'text-foreground': 'text-muted-foreground'}"
-								>
-									{step.label}
-								</span>
+				{#if sale || outcome === 'confirming'}
+					<div class="border-b border-border bg-background px-8 py-10 md:px-12">
+						<div class="relative flex justify-between">
+							<!-- Timeline Line -->
+							<div class="absolute left-0 top-5 h-[2px] w-full bg-border">
+								{#if sale}<div class="h-full w-1/3 bg-primary"></div>{/if}
 							</div>
-						{/each}
+
+							{#each timelineSteps as step, i}
+								<div class="relative z-10 flex flex-col items-center">
+									<div
+										class="flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-panel
+									{step.completed
+											? 'border-primary bg-primary text-primary-foreground'
+											: step.current
+												? 'border-primary bg-card text-primary'
+												: 'border-border bg-card text-muted-foreground'}"
+									>
+										<step.icon class="h-5 w-5" />
+									</div>
+									<span
+										class="mt-3 text-xs font-semibold
+									{step.completed || step.current ? 'text-foreground' : 'text-muted-foreground'}"
+									>
+										{step.label}
+									</span>
+								</div>
+							{/each}
+						</div>
 					</div>
-				</div>
+				{/if}
 			{:else}
 				<!-- No order number, no cart id, no payload: nothing here identifies an order, so the page
 				     says so instead of thanking the shopper for one and telling them a payment it knows
@@ -192,7 +238,7 @@
 					<div class="mx-auto mb-5 flex size-14 items-center justify-center rounded-full bg-muted/30">
 						<SearchX class="size-7 text-muted-foreground" aria-hidden="true" />
 					</div>
-					<h1 class="mb-3 page-heading">We can't find that order</h1>
+					<h1 class="page-heading mb-3">We can't find that order</h1>
 					<p class="mx-auto max-w-lg text-sm leading-relaxed text-muted-foreground">
 						This link doesn't carry an order reference, so there's nothing to show. If you have just paid, check your email for the confirmation — it
 						carries the order number.
@@ -258,7 +304,7 @@
 						{/if}
 						{#if firstOrder?.paymentMethod}
 							<div class="flex items-center justify-between pt-1 text-muted-foreground">
-								<span>Paid with</span>
+								<span>{outcome === 'paid' ? 'Paid with' : 'Payment method'}</span>
 								<span class="capitalize">{String(firstOrder.paymentMethod).replace(/[-_]/g, ' ')}</span>
 							</div>
 						{/if}
@@ -266,9 +312,9 @@
 				</div>
 
 				<!-- Shipping and Delivery Info -->
-				<div class="grid gap-0 border-b border-muted/30 sm:grid-cols-2">
+				<div class="grid gap-0 border-b border-muted/30 {sale ? 'sm:grid-cols-2' : ''}">
 					<!-- Shipping Info -->
-					<div class="border-b border-muted/30 p-4 sm:border-b-0 sm:border-r md:p-6">
+					<div class="p-4 md:p-6 {sale ? 'border-b border-muted/30 sm:border-b-0 sm:border-r' : ''}">
 						<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
 							<MapPin class="h-5 w-5 text-primary" />
 							<h3>Shipping address</h3>
@@ -300,26 +346,28 @@
 						</div>
 					</div>
 
-					<!-- Delivery Status -->
-					<div class="p-4 md:p-6">
-						{#if estimatedDeliveryDateDisplay}
-							<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
-								<Calendar class="h-5 w-5 text-primary" />
-								<h3>Estimated delivery</h3>
+					{#if sale}
+						<!-- Delivery Status -->
+						<div class="p-4 md:p-6">
+							{#if estimatedDeliveryDateDisplay}
+								<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
+									<Calendar class="h-5 w-5 text-primary" />
+									<h3>Estimated delivery</h3>
+								</div>
+								<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
+							{/if}
+							<div class="flex items-start gap-3 rounded-radius border border-border bg-card p-2">
+								<Mail class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+								<p class="text-sm leading-relaxed text-foreground">
+									{#if useremail}
+										Confirmation sent to <span class="font-bold text-foreground">{useremail}</span>. We'll email you again when your items ship.
+									{:else}
+										We'll email you a confirmation and let you know again when your items ship.
+									{/if}
+								</p>
 							</div>
-							<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
-						{/if}
-						<div class="flex items-start gap-3 rounded-radius border border-border bg-card p-2">
-							<Mail class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-							<p class="text-sm leading-relaxed text-foreground">
-								{#if useremail}
-									Confirmation sent to <span class="font-bold text-foreground">{useremail}</span>. We'll email you again when your items ship.
-								{:else}
-									We'll email you a confirmation and let you know again when your items ship.
-								{/if}
-							</p>
 						</div>
-					</div>
+					{/if}
 				</div>
 			{:else if hasOrderReference && !browserLookupDone}
 				<div class="space-y-3 border-b border-muted/30 p-6 md:p-12" aria-busy="true" aria-label="Loading order details">
@@ -334,7 +382,7 @@
 						<div class="text-sm leading-relaxed text-foreground">
 							<p class="font-bold text-foreground">Order details aren't available yet</p>
 							<p class="mt-1">
-								We couldn't load the details for this order right now. Your payment is safe and nothing needs to be paid again.
+								We couldn't load the details for this order right now, so we can't say whether it's been paid.
 								{#if orderNo}
 									Quote order <span class="font-bold text-foreground">#{orderNo}</span> if you need to get in touch.
 								{/if}
@@ -370,4 +418,4 @@
 	</div>
 </div>
 
-<GoogleSurvey active={!!data?.store?.plugins?.googleReviewsOptIn?.active} orderNo={orderNo || ''} />
+<GoogleSurvey active={sale && !!data?.store?.plugins?.googleReviewsOptIn?.active} orderNo={orderNo || ''} />
