@@ -13,6 +13,15 @@ describe('isApiPath', () => {
 })
 
 describe('proxyApiRequest', () => {
+	it('drops transfer-encoding from a chunked body, which fetch refuses to send on', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		const request = new Request('https://demo.litekart.in/api/x', { method: 'POST', body: '{}', headers: { 'transfer-encoding': 'chunked', te: 'trailers' } })
+		await proxyApiRequest(request, API, fetchFn)
+		const sent = new Headers((fetchFn.mock.calls[0] as [string, RequestInit])[1].headers)
+		expect(sent.has('transfer-encoding')).toBe(false)
+		expect(sent.has('te')).toBe(false)
+	})
+
 	it('forwards path, query and the store cookie to the backend', async () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{"ok":true}', { status: 200, headers: { 'content-type': 'application/json' } }))
 		const request = new Request('https://demo.litekart.in/api/products?limit=2', {

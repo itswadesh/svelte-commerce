@@ -7,6 +7,8 @@ import { resolveStorefrontTheme } from '$lib/theme/index.js'
 import { clientAddress, isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 import { compressResponse } from '$lib/server/compress'
 import { guardClosedStore } from '$lib/server/store-lock'
+import { isEngineOnlyPath, isTradePortalRequest, tradePortalRequest } from '$lib/server/trade-portal'
+import { gocommerceEngine, gocommerceStore } from '$lib/server/gocommerce'
 import { getRequestEvent } from '$app/server'
 import { services } from 'kitcommerce.config'
 
@@ -45,7 +47,15 @@ const app: Handle = async ({ event, resolve }) => {
 	// too, so no dev-proxy entry is needed. See activeBackendProxy.
 	const backend = activeBackendProxy()
 	if (backend && (url.pathname === backend.path || url.pathname.startsWith(`${backend.path}/`))) {
+		if (isEngineOnlyPath(url.pathname.slice(backend.path.length))) return new Response('Not found', { status: 404 })
 		return proxyApiRequest(event.request, backend.apiUrl, fetch, backend.path, clientAddress(event))
+	}
+
+	// A GoCommerce store's trade portal, at /portal on this host. See trade-portal.ts.
+	const engine = gocommerceEngine()
+	if (engine && isTradePortalRequest(event.request.method, url.pathname)) {
+		const request = tradePortalRequest(event.request, gocommerceStore(url.hostname))
+		return proxyApiRequest(request, engine, fetch, '', clientAddress(event))
 	}
 
 	// Browser-side `/api/*` calls: the production counterpart of the vite dev proxy. See api-proxy.ts.

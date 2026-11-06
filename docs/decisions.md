@@ -3,6 +3,19 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-11-06: A GoCommerce store's trade portal opens on the store's own host
+
+Wholesale buyers are who the owner sells to, and they could not reach the portal: every store host
+comes here, so `/portal` was this app's 404. This server now forwards an explicit list to the engine
+(`src/lib/server/trade-portal.ts`, GoCommerce D231), naming the store by the visitor's host, so no
+proxy rule is needed. `/api/admin` and `/internal` are never forwarded, and the `/backend` mount now
+refuses them too, which it did not before. The footer offers "Trade account" only where the store has
+a live company and "Find a dealer" only where a dealer covers a territory, read from
+`GET /x/b2b/availability`: the module is on for every store of an install, so "the module is on" would
+have shown the link on every retail shop. A company's buyer at checkout is told so before filling
+anything in, and their bag moves to the portal's basket: its lines leave the bag, so the button can't
+double them, and a line that won't go, or that carries a shopper's own design, stays and is named.
+
 ## 2026-10-31: A closed store shows its message on every page, and its password lets a visitor in
 
 The owner asked for "a password based lock at storefront with an option for message", like Shopify's
