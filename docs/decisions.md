@@ -7,7 +7,7 @@ decision needs the owner.
 
 Wholesale buyers are who the owner sells to, and they could not reach the portal: every store host
 comes here, so `/portal` was this app's 404. This server now forwards an explicit list to the engine
-(`src/lib/server/trade-portal.ts`, GoCommerce D231), naming the store by the visitor's host, so no
+(`src/lib/server/trade-portal.ts`, GoCommerce D233), naming the store by the visitor's host, so no
 proxy rule is needed. `/api/admin` and `/internal` are never forwarded, and the `/backend` mount now
 refuses them too, which it did not before. The footer offers "Trade account" only where the store has
 a live company and "Find a dealer" only where a dealer covers a territory, read from
