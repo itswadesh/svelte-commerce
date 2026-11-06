@@ -6,8 +6,13 @@ import type { RequestHandler } from '@sveltejs/kit'
 // @misiki/litekart-connector here would break the build for anyone who swapped it for their
 // own backend's connector.
 import { StoreService } from '$lib/core/services'
+import { engineSitemap } from '$lib/server/engine-sitemap'
 
-export const GET: RequestHandler = async ({ fetch, cookies }) => {
+export const GET: RequestHandler = async (event) => {
+  const fromEngine = await engineSitemap(event, 'sitemap.xml')
+  if (fromEngine) return fromEngine
+
+  const { fetch, cookies } = event
   const storeId = cookies.get('litekart_store_id') || ''
 
   const storeService = new StoreService(fetch)
