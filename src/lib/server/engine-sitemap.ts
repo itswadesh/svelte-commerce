@@ -16,9 +16,10 @@ function storeFor(hostname: string) {
 /**
  * A sitemap file from the GoCommerce engine, or null when this storefront runs on another backend.
  *
- * It has to reach the shopper's host rather than the engine's, because a search engine trusts a
- * sitemap only for the host it came from. X-Forwarded-Host is what makes the engine write its links
- * to the other files on this host, which /x/sitemaps/[file] then serves.
+ * It has to answer on the shopper's host, because a search engine trusts a sitemap only for the
+ * host it came from. The engine writes its links to the other files on whatever host it thinks it
+ * was asked at, and a proxy between here and there may overwrite X-Forwarded-Host with its own, as
+ * production's does. So those links are put on this host here, where /x/sitemaps/[file] serves them.
  */
 export async function engineSitemap(event: RequestEvent, file: string): Promise<Response | null> {
 	const engine = env.PUBLIC_GOCOMMERCE_API_URL
@@ -26,13 +27,15 @@ export async function engineSitemap(event: RequestEvent, file: string): Promise<
 
 	const headers = new Headers({
 		accept: 'application/xml',
-		'x-store': storeFor(event.url.hostname),
-		'x-forwarded-host': event.url.host,
-		'x-forwarded-proto': event.url.protocol.replace(':', '')
+		'x-store': storeFor(event.url.hostname)
 	})
 	try {
 		const answer = await fetch(`${engine.replace(/\/+$/, '')}/x/sitemaps/${file}`, { headers })
-		return new Response(answer.body, {
+		const body = (await answer.text()).replace(
+			/(<loc>)https?:\/\/[^/<]+(\/x\/sitemaps\/)/g,
+			`$1${event.url.origin}$2`
+		)
+		return new Response(body, {
 			status: answer.status,
 			headers: {
 				'content-type': answer.headers.get('content-type') ?? 'application/xml; charset=utf-8',
