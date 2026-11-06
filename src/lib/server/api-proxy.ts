@@ -17,7 +17,7 @@ export const clientAddress = (event: { getClientAddress: () => string }) => {
 // Hop-by-hop headers, plus the edge's own. `api.litekart.in` sits behind Cloudflare too, and a
 // request still carrying the storefront zone's `cdn-loop` / `cf-*` headers reads to it as a loop.
 // `x-forwarded-for` as the browser sent it, too: proxyApiRequest writes its own.
-const DROPPED_REQUEST_HEADERS = ['host', 'connection', 'accept-encoding', 'content-length', 'cdn-loop', 'x-forwarded-for']
+const DROPPED_REQUEST_HEADERS = ['host', 'connection', 'transfer-encoding', 'keep-alive', 'te', 'trailer', 'upgrade', 'accept-encoding', 'content-length', 'cdn-loop', 'x-forwarded-for']
 
 /**
  * `stripPrefix` is the storefront-side mount, cut off before forwarding: `/backend/api/carts` → `/api/carts`.

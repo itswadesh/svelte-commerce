@@ -4,6 +4,7 @@
 	import { LockKeyhole } from '@lucide/svelte'
 	import { keepResolvableLinks } from '$lib/components/common/cms-pages.js'
 	import CookieSettingsLink from '$lib/components/common/cookie-settings-link.svelte'
+	import CompanyCheckout from '$lib/components/checkout/company-checkout.svelte'
 
 	let { children } = $props()
 
@@ -42,7 +43,9 @@
 	</header>
 
 	<main id="main" class="flex-1">
-		{@render children?.()}
+		<CompanyCheckout>
+			{@render children?.()}
+		</CompanyCheckout>
 	</main>
 
 	<footer class="border-t border-border bg-background">

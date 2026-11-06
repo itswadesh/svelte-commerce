@@ -4,6 +4,8 @@ import { resolveStorefrontTheme } from '$lib/theme/index.js'
 import { publishedCmsSlugs } from '$lib/components/common/cms-pages.js'
 import { publishedThemeSettings } from '$lib/composer/theme-settings.js'
 import { chromePreview, fetchChrome, withChromeMenus } from '$lib/composer/site-chrome.js'
+import { gocommerceEngine, gocommerceStore } from '$lib/server/gocommerce'
+import { tradeOffer } from '$lib/server/trade-portal'
 import { services } from 'kitcommerce.config'
 
 export async function load(event: any) {
@@ -56,6 +58,8 @@ export async function load(event: any) {
 		// Which CMS-backed policy pages this store actually publishes, so the footer never links one
 		// that 404s — a page the store has only drafted included. Remembered per host for a minute,
 		// and empty when the backend has no CMS.
-		cmsPages: await publishedCmsSlugs(host)
+		cmsPages: await publishedCmsSlugs(host),
+		// Whether the footer offers the trade account and the dealer form.
+		trade: await tradeOffer(gocommerceEngine(), gocommerceStore(host.replace(/:\d+$/, '')))
 	}
 }

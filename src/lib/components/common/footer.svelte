@@ -266,6 +266,18 @@
 						</div>
 					</div>
 
+					{#if page.data?.trade?.companies || page.data?.trade?.dealers}
+						<nav aria-label="Trade" class="flex flex-wrap gap-x-6 border-t py-1 md:py-2">
+							{#if page.data.trade.companies}
+								<!-- The engine's, not a page of this app: the client router would take it for a [slug]. -->
+								<a href="/portal" data-sveltekit-reload class="trade-link">Trade account</a>
+							{/if}
+							{#if page.data.trade.dealers}
+								<a href="/find-a-dealer" class="trade-link">Find a dealer</a>
+							{/if}
+						</nav>
+					{/if}
+
 					<div class="flex flex-col gap-6 border-t py-6 md:gap-8 md:py-8 lg:flex-row lg:items-center lg:justify-between">
 						<div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8">
 							<!-- One sentence, sentence case. The uppercase treatment plus a line break before the full
@@ -316,6 +328,32 @@
 <WhatsappChatButton />
 
 <style>
+	/* Feedback in colour and underline, which reduced motion keeps: only the fade between them goes. */
+	.trade-link {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-size: 0.875rem;
+		color: hsl(var(--muted-foreground));
+		text-underline-offset: 2px;
+		transition: color 150ms;
+	}
+	.trade-link:hover {
+		color: hsl(var(--foreground));
+		text-decoration: underline;
+	}
+	.trade-link:active {
+		opacity: 0.7;
+	}
+	.trade-link:focus-visible {
+		outline: 2px solid hsl(var(--ring));
+		outline-offset: 2px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.trade-link {
+			transition: none;
+		}
+	}
 	/* The page's section gap above the footer, the same space the home page leaves between its
 	   sections; the home page draws none below its last one, so the two no longer add up. */
 	:global([data-theme='default']) .ed-footer-gap {
