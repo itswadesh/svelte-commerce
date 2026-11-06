@@ -51,9 +51,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		...SEO_BOTS.map((bot) => `User-agent: ${bot}\nCrawl-delay: 10\n${RULES}`)
 	]
 
-	const body = `# we use Litekart as our ecommerce platform
-
-${groups.join('\n\n')}
+	const body = `${groups.join('\n\n')}
 
 Sitemap: ${origin}/sitemap.xml
 # Route manifest for AI agents (there is no standard robots.txt directive for it):
