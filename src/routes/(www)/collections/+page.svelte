@@ -39,8 +39,6 @@
 								<LazyImg
 									src={collection.img || collection.images?.[0] || collection.thumbnail}
 									alt={collection.name}
-									width={400}
-									height={400}
 									class="h-full w-full object-cover transition-transform duration-emphasis ease-standard motion-safe:group-hover:scale-105"
 									priority={i < 4}
 								/>
