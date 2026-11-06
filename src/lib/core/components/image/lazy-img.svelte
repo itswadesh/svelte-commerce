@@ -184,7 +184,7 @@
 					src={getImageCDNUrl(src, cdnW, h)}
 					height={attrH}
 					width={attrW}
-					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
+					class="h-full w-full object-contain transition-opacity duration-300 {klass}"
 					class:opacity-0={!(loaded || priority)}
 					class:opacity-100={loaded || priority}
 					{...rest}
@@ -220,7 +220,7 @@
 	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 					height={attrH}
 					width={attrW}
-					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
+					class="h-full w-full object-contain transition-opacity duration-300 {klass}"
 					class:opacity-0={!(loaded || priority)}
 					class:opacity-100={loaded || priority}
 					{...rest}

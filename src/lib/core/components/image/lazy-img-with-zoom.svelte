@@ -245,7 +245,7 @@
 					src={getImageCDNUrl(src, cdnW, h)}
 					height={+h}
 					width={+w}
-					class="h-full w-full object-contain object-center {klass}"
+					class="h-full w-full object-contain {klass}"
 					class:opacity-0={!(loaded || priority)}
 					class:opacity-100={loaded || priority}
 					{...rest}
@@ -273,7 +273,7 @@
 					data-nimg="1"
 					height={+h}
 					width={+w}
-					class="h-full w-full object-contain object-center {klass}"
+					class="h-full w-full object-contain {klass}"
 					class:opacity-0={!(loaded || priority)}
 					class:opacity-100={loaded || priority}
 					{...rest}
@@ -302,14 +302,14 @@
 		aria-hidden="true"
 	>
 		<!-- Cached display copy, so the panel is never empty while the hi-res one downloads. -->
-		<img src={displaySrc} alt="" draggable="false" decoding="async" class="absolute max-w-none object-contain object-center" style={frame} />
+		<img src={displaySrc} alt="" draggable="false" decoding="async" class="absolute max-w-none object-contain" style={frame} />
 		<img
 			src={zoomSrc}
 			alt=""
 			draggable="false"
 			decoding="async"
 			onload={() => (zoomHiResLoaded = true)}
-			class="absolute max-w-none object-contain object-center transition-opacity duration-200"
+			class="absolute max-w-none object-contain transition-opacity duration-200"
 			class:opacity-0={!zoomHiResLoaded}
 			style={frame}
 		/>
