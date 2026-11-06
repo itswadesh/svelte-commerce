@@ -150,6 +150,7 @@
 						id="contact-name"
 						name="name"
 						autocomplete="name"
+						placeholder="Your full name"
 						maxlength={200}
 						bind:value={name}
 						onblur={() => (touched.name = true)}
@@ -172,6 +173,7 @@
 						type="email"
 						inputmode="email"
 						autocomplete="email"
+						placeholder="you@example.com"
 						autocapitalize="off"
 						spellcheck="false"
 						bind:value={email}

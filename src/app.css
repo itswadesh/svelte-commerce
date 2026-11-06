@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+	/* A photo keeps the top of its frame, so a crop or a letterbox never loses a model's head. A utility class or a theme still overrides this. */
+	img {
+		object-position: top;
+	}
+
 	/*
 	 * The Lime theme names 'Queens' and 'YsabeauInfant' in its font stacks, but the licensed
 	 * font files were never added to static/lime/fonts/, so the @font-face rules that used to
