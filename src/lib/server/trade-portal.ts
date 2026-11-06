@@ -1,6 +1,6 @@
 // A GoCommerce store's trade portal lives at /portal on the store's own host, and it is the engine's:
 // the panel's build calls the engine on its own origin. The proxy in front sends every store host
-// here, so this server forwards what the portal needs and nothing else (GoCommerce D231). No proxy
+// here, so this server forwards what the portal needs and nothing else (GoCommerce D233). No proxy
 // rule to keep per store, and the shopper's address comes through as on every other forwarded call.
 
 const CART = '[^/]+'
