@@ -16,6 +16,7 @@ type Bag = {
 	id?: string
 	email?: string | null
 	couponCode?: string | null
+	giftCard?: { last4?: string } | null
 	shippingRateId?: string | null
 	shippingAddress?: { country?: string; countryCode?: string; state?: string } | null
 	lineItems?: { id?: string; qty?: number; price?: number }[]
@@ -37,6 +38,7 @@ export function quoteKey(method: string, cart: Bag): string {
 		cart.id,
 		cart.email,
 		cart.couponCode,
+		cart.giftCard?.last4,
 		cart.shippingRateId,
 		to?.countryCode || to?.country,
 		to?.state,
