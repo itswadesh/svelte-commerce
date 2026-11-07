@@ -4,6 +4,7 @@
 	import Footer from '$lib/components/common/footer.svelte'
 	import { StorePlugins } from '$lib/core/components/index.js'
 	import ConversationalShopping from '$lib/components/chat/conversational-shopping.svelte'
+	import ShopAssistant from '$lib/components/chat/shop-assistant.svelte'
 	import type { LayoutProps } from './$types'
 	import { page } from '$app/state'
 	import { hasConfiguredSupportChat } from '$lib/components/common/store-capabilities.js'
@@ -67,3 +68,5 @@
 
 <!-- Self-gates on the store's admin toggle via /api/commerce-assistant/config -->
 <ConversationalShopping />
+<!-- Self-gates on the engine's GET /x/shop-assistant/status -->
+<ShopAssistant />
