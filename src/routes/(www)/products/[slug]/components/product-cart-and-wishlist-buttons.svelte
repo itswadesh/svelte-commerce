@@ -262,7 +262,7 @@
 			Go to bag ({cartCount})
 		</Button>
 	{/if}
-	{#if !enquiryPlugin?.active && page.data?.store?.plugins?.productEnquiries?.active}
+	{#if !compact && !enquiryPlugin?.active && page.data?.store?.plugins?.productEnquiries?.active}
 		<EnquiryModal
 			onClose={() => (showEnquiryModal = false)}
 			isOpen={showEnquiryModal}
