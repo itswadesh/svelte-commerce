@@ -262,6 +262,21 @@
 			Go to bag ({cartCount})
 		</Button>
 	{/if}
+	{#if !enquiryPlugin?.active && page.data?.store?.plugins?.productEnquiries?.active}
+		<EnquiryModal
+			onClose={() => (showEnquiryModal = false)}
+			isOpen={showEnquiryModal}
+			productId={page.data?.product?.id}
+			productTitle={page.data?.product?.title}
+		/>
+		<button
+			type="button"
+			class="self-start py-2 text-sm underline underline-offset-2 transition-opacity duration-200 hover:opacity-70 active:opacity-50"
+			onclick={() => (showEnquiryModal = true)}
+		>
+			Ask about this product
+		</button>
+	{/if}
 </div>
 
 <style>

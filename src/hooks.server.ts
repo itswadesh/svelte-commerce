@@ -28,6 +28,15 @@ export const init = initActiveConnector
 	}
 })
 
+// The language the shopper chose in the footer, for the same reason: read per call, per request.
+;(services as { setRequestLanguage?: (fn: () => string | undefined) => void }).setRequestLanguage?.(() => {
+	try {
+		return getRequestEvent().cookies.get('gc_lang')
+	} catch {
+		return undefined
+	}
+})
+
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
 	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
@@ -139,7 +148,10 @@ const app: Handle = async ({ event, resolve }) => {
 			// `normalizeThemeName` can produce rather than interpolating a store string into markup.
 			const theme = resolveStorefrontTheme(event.locals.storeDetails).name.replace(/[^a-z0-9_-]/g, '')
 			if (!theme) return html
-			const stamped = html.replace(/<html(?=[\s>])/, `<html data-theme="${theme}"`)
+			const lang = event.cookies.get('gc_lang')
+			const stamped = html
+				.replace(/<html(?=[\s>])/, `<html data-theme="${theme}"`)
+				.replace(/(<html[^>]*\slang=")[^"]*"/, (all, head) => (lang && /^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(lang) ? `${head}${lang}"` : all))
 			themeStamped = stamped !== html
 			return stamped
 		}

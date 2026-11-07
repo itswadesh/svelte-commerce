@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from '@misiki/kitcommerce-core'
-	import { Star, StarIcon, X, Camera, ChevronLeft, ChevronRight, UserRound } from '@lucide/svelte'
+	import { BadgeCheck, Star, StarIcon, X, Camera, ChevronLeft, ChevronRight, UserRound } from '@lucide/svelte'
 	import { date } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
 	import { invalidateAll, replaceState } from '$app/navigation'
@@ -215,6 +215,11 @@
 									<StarIcon class="h-4.5 w-4.5 {i < Math.round(rating.rating) ? 'fill-primary text-primary' : 'text-muted-foreground/40'}" />
 								{/each}
 							</div>
+							{#if rating.verified}
+								<p class="mt-2 flex items-center gap-1 text-sm text-muted-foreground">
+									<BadgeCheck class="h-4 w-4 text-primary" aria-hidden="true" /> Verified purchase
+								</p>
+							{/if}
 							{#if size}
 								<p class="mt-2 text-sm text-muted-foreground">Size: {size}</p>
 							{/if}
