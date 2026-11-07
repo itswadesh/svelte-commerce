@@ -6,6 +6,7 @@
 	import { rememberPreview } from '$lib/composer/page-layout.js'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import ShowcaseVideos from '$lib/components/showcases/showcase-videos.svelte'
 	import PageComposer from '$lib/composer/PageComposer.svelte'
 	import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
 	import type { ComposerLayout } from '$lib/composer/helpers.js'
@@ -82,5 +83,6 @@
 			{/each}
 		</ul>
 	{/if}
+	<ShowcaseVideos place={collection?.id ? { collection: collection.id } : null} />
 </div>
 {/snippet}
