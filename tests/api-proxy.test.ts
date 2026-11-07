@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
+import { clientAddress, isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 
 const API = 'https://api.litekart.in'
 
@@ -9,6 +9,32 @@ describe('isApiPath', () => {
 		expect(isApiPath('/api/menu')).toBe(true)
 		expect(isApiPath('/apical-ring')).toBe(false)
 		expect(isApiPath('/products/api')).toBe(false)
+	})
+})
+
+describe('clientAddress', () => {
+	const event = (peer: string, cf?: string) => ({
+		getClientAddress: () => peer,
+		request: new Request('https://shop.example.com/', { headers: cf ? { 'cf-connecting-ip': cf } : {} })
+	})
+
+	it("reads the shopper from Cloudflare's header on a request from Cloudflare", () => {
+		expect(clientAddress(event('162.158.1.1', '203.0.113.9'))).toBe('203.0.113.9')
+		expect(clientAddress(event('2606:4700::1', '2001:db8::9'))).toBe('2001:db8::9')
+	})
+
+	it('ignores the header on a request from anywhere else, so nobody picks their own address', () => {
+		expect(clientAddress(event('198.51.100.7', '203.0.113.9'))).toBe('198.51.100.7')
+	})
+
+	it('falls back to the connection when the header is missing or not an address', () => {
+		expect(clientAddress(event('162.158.1.1'))).toBe('162.158.1.1')
+		expect(clientAddress(event('162.158.1.1', 'not-an-address'))).toBe('162.158.1.1')
+	})
+
+	it('answers nothing when the adapter cannot say', () => {
+		const broken = { getClientAddress: () => { throw new Error('no address') } }
+		expect(clientAddress(broken)).toBeUndefined()
 	})
 })
 
