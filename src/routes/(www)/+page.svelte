@@ -4,6 +4,7 @@
 	import { X } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import ShowcaseVideos from '$lib/components/showcases/showcase-videos.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
 	import ProductListSchema from '$lib/components/seo/product-list-schema.svelte'
 	import { cleanSchemaText } from '$lib/components/seo/schema.js'
@@ -224,6 +225,10 @@
 		currencyCode={data?.store?.currency?.code}
 	/>
 {/if}
+
+<div class="page-width my-8">
+	<ShowcaseVideos place={{ on: 'home' }} />
+</div>
 
 <!-- The theme owns the homepage design, so the admin `home` page record never replaces a section.
      The editorial theme inherits two things from it and only when the merchant has filled them in:
