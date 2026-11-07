@@ -87,6 +87,9 @@
 					<div class="flex items-center gap-4">
 						<h6>Order No : #{order?.orderNo}</h6>
 						<StatusCell value={order?.status} />
+						{#if order?.invoiceLink}
+							<a class="text-sm underline underline-offset-2" href={order.invoiceLink} target="_blank" rel="noopener">Download invoice</a>
+						{/if}
 					</div>
 
 					<h6 class="mt-2 text-sm text-muted-foreground sm:mt-0">Order Date : {date(order?.createdAt)}</h6>

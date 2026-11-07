@@ -25,6 +25,11 @@
 
 	let { images = [] } = $props()
 
+	// The store's own words for a picture, when it wrote some.
+	const pictureAlt = (img: string, index: number) =>
+		page.data?.product?.imageAlts?.[img] ||
+		`${page.data?.product?.title || page.data?.product?.name || 'Product image'} - View ${index + 1}`
+
 	// The label and the rating on the picture, as on the cards: from the product's own data, and
 	// nothing without it. The rating is the reviews this page lists, so the two always agree.
 	const options = $derived(themeOptions(page.data?.themeSettings))
@@ -156,7 +161,7 @@
 				<span class="sr-only">View picture {index + 1} full screen</span>
 				<LazyImg
 					src={img}
-					alt={`${page.data?.product?.title || page.data?.product?.name || 'Product image'} - View ${index + 1}`}
+					alt={pictureAlt(img, index)}
 					class="h-full w-full"
 					sizes="(min-width: 1024px) 25vw, 50vw"
 					priority={index === 0}
@@ -302,7 +307,7 @@
 									<div class="edp-gallery__frame overflow-hidden rounded-radius" style={frameStyle}>
 										<LazyImg
 											src={img}
-											alt={`${page.data?.product?.title || page.data?.product?.name || 'Product image'} - View ${index + 1}`}
+											alt={pictureAlt(img, index)}
 											class="h-full w-full"
 											sizes={GALLERY_IMAGE_SIZES}
 											priority={index === 0}
@@ -404,7 +409,7 @@
 								{:else}
 									<LazyImg
 										src={img}
-										alt={`${page.data?.product?.title || page.data?.product?.name || 'Product image'} - View ${index + 1}`}
+										alt={pictureAlt(img, index)}
 										class="max-h-[90vh]"
 									/>
 								{/if}

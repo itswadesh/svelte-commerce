@@ -10,6 +10,7 @@
 	import Newsletter from './newsletter.svelte'
 	import FooterMenu from './footer-menu.svelte'
 	import CookieSettingsLink from './cookie-settings-link.svelte'
+	import LanguageSwitcher from './language-switcher.svelte'
 	import Logo from '$lib/components/common/logo.svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { resolveThemeContent } from '$lib/theme/index.js'
@@ -283,6 +284,7 @@
 							<!-- One sentence, sentence case. The uppercase treatment plus a line break before the full
 							     stop rendered as "© 2026 TEST . ALL RIGHTS RESERVED."; the build stamp that used to sit
 							     here as sr-only text was read out to screen readers and is now the footer's data-build. -->
+							<LanguageSwitcher />
 							<span class="ed-legal text-xs text-muted-foreground">
 								{#if copyright}
 									{copyright}
