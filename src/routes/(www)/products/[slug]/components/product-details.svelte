@@ -18,6 +18,7 @@
 	import ProductMetaDataSection from './product-meta-data-section.svelte'
 	import ProductPricing from './product-pricing.svelte'
 	import ProductReviewsSection from './product-reviews-section.svelte'
+	import ShowcaseVideos from '$lib/components/showcases/showcase-videos.svelte'
 	import ProductSpecifications from './product-specifications.svelte'
 	import ProductTags from './product-tags.svelte'
 	import ProductTitleSection from './product-title-section.svelte'
@@ -561,6 +562,7 @@
 	{@render breadcrumbs()}
 	<div class="page-width intra-gap edp-root flex flex-col">
 		{@render core()}
+		<ShowcaseVideos place={data?.product?.id ? { product: data.product.id } : null} />
 	</div>
 {/snippet}
 
@@ -597,6 +599,8 @@
 	{@render breadcrumbs()}
 	<div class="page-width intra-gap edp-root flex flex-col">
 		{@render core()}
+
+		<ShowcaseVideos place={data?.product?.id ? { product: data.product.id } : null} />
 
 		<CrossSells />
 
