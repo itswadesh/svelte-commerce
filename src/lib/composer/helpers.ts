@@ -113,13 +113,201 @@ export function knownSections<T extends { type: string }>(
 }
 
 /**
- * The id of the section whose heading is the page's h1: the first hero that has a heading.
- * Everything else is an h2. With no hero, the composer renders a visually hidden h1 instead, so
- * the page always has exactly one.
+ * The id of the section whose heading is the page's h1: the first hero or spotlight banner that has
+ * a heading. Everything else is an h2. With neither, the composer renders a visually hidden h1
+ * instead, so the page always has exactly one.
  */
 export function pageHeadingSection(sections: ComposerSection[]): string | null {
-	const hero = sections.find((s) => s.type === 'hero' && text(s.settings, 'heading'))
+	const hero = sections.find((s) => (s.type === 'hero' || s.type === 'spotlight') && text(s.settings, 'heading'))
 	return hero ? hero.id : null
+}
+
+/** A select setting, or the fallback for anything that is not one of its choices. */
+export function choice<T extends string>(value: unknown, options: readonly T[], fallback: T): T {
+	const v = typeof value === 'string' ? value.trim() : ''
+	return (options as readonly string[]).includes(v) ? (v as T) : fallback
+}
+
+export type BentoTile = {
+	image: string
+	alt: string
+	heading: string
+	text: string
+	linkText: string
+	link: string
+	tone: 'quiet' | 'accent' | 'dark'
+}
+
+/** A bento grid's tiles that show something, at most six. */
+export function bentoTiles(value: unknown): BentoTile[] {
+	if (!Array.isArray(value)) return []
+	return value
+		.map((raw) => {
+			const item = record(raw)
+			return {
+				image: safeHref(item.image),
+				alt: text(item, 'image_alt'),
+				heading: text(item, 'heading'),
+				text: text(item, 'text'),
+				linkText: text(item, 'link_text'),
+				link: safeHref(item.link),
+				tone: choice(item.tone, ['quiet', 'accent', 'dark'], 'quiet')
+			}
+		})
+		.filter((tile) => tile.image || tile.heading || tile.text)
+		.slice(0, 6)
+}
+
+export type BentoSize = { w: number; h: number; widePhone: boolean }
+
+// Each list fills a four-column grid exactly, whichever arrangement and however many tiles, so no
+// count leaves a hole. Width and height, in the order the tiles come.
+const BENTO: Record<'feature' | 'mosaic', [number, number][][]> = {
+	feature: [
+		[[4, 2]],
+		[
+			[2, 2],
+			[2, 2]
+		],
+		[
+			[2, 2],
+			[2, 1],
+			[2, 1]
+		],
+		[
+			[2, 2],
+			[2, 1],
+			[1, 1],
+			[1, 1]
+		],
+		[
+			[2, 2],
+			[1, 1],
+			[1, 1],
+			[1, 1],
+			[1, 1]
+		],
+		[
+			[2, 2],
+			[2, 1],
+			[1, 1],
+			[1, 1],
+			[2, 1],
+			[2, 1]
+		]
+	],
+	mosaic: [
+		[[4, 2]],
+		[
+			[3, 2],
+			[1, 2]
+		],
+		[
+			[1, 2],
+			[2, 2],
+			[1, 2]
+		],
+		[
+			[1, 2],
+			[2, 1],
+			[1, 2],
+			[2, 1]
+		],
+		[
+			[1, 2],
+			[2, 1],
+			[1, 2],
+			[1, 1],
+			[1, 1]
+		],
+		[
+			[1, 2],
+			[2, 1],
+			[1, 1],
+			[1, 1],
+			[1, 1],
+			[1, 1]
+		]
+	]
+}
+
+/**
+ * Each tile's size on a computer, and on a phone's two columns whether it takes both: the first
+ * always, and the last when it would otherwise stand alone.
+ */
+export function bentoSizes(count: number, layout: unknown): BentoSize[] {
+	if (count < 1) return []
+	const sizes = BENTO[choice(layout, ['feature', 'mosaic'], 'feature')][Math.min(count, 6) - 1]
+	return sizes.map(([w, h], i) => ({ w, h, widePhone: i === 0 || (i === sizes.length - 1 && sizes.length % 2 === 0) }))
+}
+
+export type QuoteItem = { quote: string; name: string; detail: string; image: string; rating: number }
+
+/** Quotes that have words, at most twelve. A rating is whole stars, 1 to 5; 0 is none shown. */
+export function quoteItems(value: unknown): QuoteItem[] {
+	if (!Array.isArray(value)) return []
+	return value
+		.map((raw) => {
+			const item = record(raw)
+			return {
+				quote: text(item, 'quote'),
+				name: text(item, 'name'),
+				detail: text(item, 'detail'),
+				image: safeHref(item.image),
+				rating: item.rating === undefined || item.rating === null ? 0 : intSetting(item.rating, 1, 5, 0)
+			}
+		})
+		.filter((item) => item.quote)
+		.slice(0, 12)
+}
+
+/** Figures with both a value and what it counts, at most four: a bare number claims nothing. */
+export function statItems(value: unknown): { value: string; label: string }[] {
+	if (!Array.isArray(value)) return []
+	return value
+		.map((raw) => ({ value: text(record(raw), 'value'), label: text(record(raw), 'label') }))
+		.filter((item) => item.value && item.label)
+		.slice(0, 4)
+}
+
+/** Logos that have a picture, at most sixteen. */
+export function logoItems(value: unknown): { image: string; name: string; link: string }[] {
+	if (!Array.isArray(value)) return []
+	return value
+		.map((raw) => {
+			const item = record(raw)
+			return { image: safeHref(item.image), name: text(item, 'name'), link: safeHref(item.link) }
+		})
+		.filter((logo) => logo.image)
+		.slice(0, 16)
+}
+
+/** A scrolling text's phrases, at most eight. */
+export function phraseItems(value: unknown): string[] {
+	if (!Array.isArray(value)) return []
+	return value
+		.map((raw) => text(record(raw), 'text'))
+		.filter(Boolean)
+		.slice(0, 8)
+}
+
+/** How long one pass takes: the same pace however much text, and never a blur for a short phrase. */
+export function scrollSeconds(characters: number, speed: unknown): number {
+	const perCharacter = { slow: 0.6, medium: 0.4, fast: 0.25 }[choice(speed, ['slow', 'medium', 'fast'], 'slow')]
+	return Math.max(16, Math.round(characters * perCharacter))
+}
+
+/** A countdown's end as a time, or null for one unset or unreadable: then it draws nothing. */
+export function countdownEnd(value: unknown): number | null {
+	if (typeof value !== 'string' || !value.trim()) return null
+	const at = Date.parse(value)
+	return Number.isNaN(at) ? null : at
+}
+
+/** The time left, whole units; all zero once it has passed. */
+export function countdownParts(end: number, now: number): { days: number; hours: number; minutes: number; seconds: number } {
+	const left = Math.max(0, Math.floor((end - now) / 1000))
+	return { days: Math.floor(left / 86400), hours: Math.floor(left / 3600) % 24, minutes: Math.floor(left / 60) % 60, seconds: left % 60 }
 }
 
 /**
@@ -132,6 +320,7 @@ export function firstPictureSection(sections: ComposerSection[]): number {
 		const settings = s.settings ?? {}
 		if (s.type === 'hero') return !!text(settings, 'heading') && !!(safeHref(settings.image) || safeHref(settings.mobile_image))
 		if (s.type === 'slideshow') return slideItems(settings.slides).length > 0
+		if (s.type === 'spotlight') return !!(safeHref(settings.image) || safeHref(settings.mobile_image))
 		return s.type === 'product-grid' && !!s.products?.length
 	})
 	return index < 3 ? index : -1
