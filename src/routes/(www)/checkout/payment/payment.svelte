@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { checkoutFigures, formatPrice, paymentFee, totalLabel } from '$lib/utils/price'
+	import { checkoutFigures, coveredByGiftCard, formatPrice, paymentFee, totalLabel } from '$lib/utils/price'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
@@ -10,7 +10,9 @@
 	import CartOffers from '$lib/components/cart/cart-offers.svelte'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
+	import GiftCardBox from '$lib/components/checkout/gift-card-box.svelte'
 	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
+	import { fade } from '$lib/motion'
 
 	const { paymentModule, quote, onreview } = $props()
 
@@ -29,6 +31,8 @@
 	)
 	const quotedAuto = $derived(quote.current ? (quote.current.coupon?.autoApplied ? quote.current.coupon.code : null) : undefined)
 	const total = $derived(figures.total)
+	// A gift card that pays for everything leaves nothing to choose a method for (D250).
+	const covered = $derived(coveredByGiftCard(quote.current))
 	const barLabel = $derived(totalLabel(!!cartState.cart.shippingAddress, figures.taxPending))
 
 	let showAddress = $state(false)
@@ -61,7 +65,7 @@
 	const reviewBlocker = $derived(
 		paymentModule.shippingRates?.error?.message
 			? 'We do not ship to the selected country yet. Change the delivery address to continue.'
-			: paymentModule.checkoutDisabled
+			: paymentModule.checkoutDisabled && !covered
 				? 'Choose a payment method to continue.'
 				: ''
 	)
@@ -135,14 +139,18 @@
 					{/if}
 
 					<div class="h-fit space-y-6">
-						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Select payment method</h2>
+						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">{covered ? 'Payment' : 'Select payment method'}</h2>
 						{#if paymentModule.showError}
 							<div class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">
 								{paymentModule.errorMessage}
 							</div>
 						{/if}
 
-						{#if paymentModule.showPaymentMethods}
+						{#if covered}
+							<p class="rounded-radius border border-success/40 bg-success/5 p-4 text-sm font-medium text-foreground" in:fade>
+								Your gift card pays for the whole order. There is nothing more to pay.
+							</p>
+						{:else if paymentModule.showPaymentMethods}
 							<div class="grid grid-cols-1 gap-4">
 								{#each paymentModule.listOfPaymentMethods as method}
 									{@const methodFee = paymentFee(method)}
@@ -324,6 +332,8 @@
 						<CouponsDrawer marked={quotedAuto} />
 					{/if}
 
+					<GiftCardBox {cartState} />
+
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 							<div class="mb-6 flex flex-col gap-1">
@@ -338,6 +348,7 @@
 										subtotal={figures.subtotal}
 										discount={figures.discount}
 										coupon={figures.coupon}
+										giftCard={figures.giftCard}
 										shipping={figures.shipping}
 										fee={figures.fee}
 										tax={figures.tax}

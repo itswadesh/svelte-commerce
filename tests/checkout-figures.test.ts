@@ -26,6 +26,7 @@ describe('checkoutFigures', () => {
 			fee: { label: 'Cash on delivery charge', amount: 40 },
 			tax: 0,
 			total: 1089,
+			giftCard: null,
 			taxPending: true
 		})
 	})
@@ -39,6 +40,7 @@ describe('checkoutFigures', () => {
 			fee: { label: 'Cash on delivery charge', amount: 40 },
 			tax: 162,
 			total: 1151,
+			giftCard: null,
 			taxPending: false
 		})
 	})
