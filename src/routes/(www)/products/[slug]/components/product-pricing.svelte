@@ -2,6 +2,7 @@
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/utils/price'
+	import { emiNoteText } from '$lib/product/emi-note'
 
 	const productState = useProductState()
 
@@ -20,6 +21,9 @@
 	// there is no "calculated at checkout" line, because no cart or checkout surface in this
 	// codebase shows a tax row that would back the promise.
 	const includesTax = $derived(currency?.includesTax === true)
+
+	// Shown only when the store switched the engine's emi-note on; see emiNoteText for what it may say.
+	const emiNote = $derived(emiNoteText(page.data?.store?.plugins?.emiNote, price, currency?.code))
 </script>
 
 <div class="edp-pricewrap flex flex-col tabular-nums">
@@ -41,6 +45,10 @@
 			<span class="edp-tax w-fit text-sm font-normal text-muted-foreground">Inclusive of all taxes</span>
 		{/if}
 	</div>
+
+	{#if emiNote}
+		<p class="edp-emi mt-1 text-sm text-muted-foreground" data-testid="product-emi-note">{emiNote}</p>
+	{/if}
 </div>
 
 <style>
@@ -67,7 +75,8 @@
 		color: hsl(var(--sale));
 	}
 
-	:global([data-theme='default'] .edp-tax) {
+	:global([data-theme='default'] .edp-tax),
+	:global([data-theme='default'] .edp-emi) {
 		font-size: 0.75rem;
 		font-weight: 400;
 		color: var(--ed-soft);
