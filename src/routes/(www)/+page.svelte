@@ -2,6 +2,7 @@
 	import { page as sveltePage } from '$app/state'
 	import { fly } from '$lib/motion'
 	import { X } from '@lucide/svelte'
+	import { withBanners } from '$lib/composer/banner-sections.js'
 	import { Button } from '$lib/components/ui/button'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import ShowcaseVideos from '$lib/components/showcases/showcase-videos.svelte'
@@ -69,7 +70,7 @@
 	const themeLayout = $derived(data?.store?.themeLayout)
 	// The page the merchant composed in the panel wins over both; without one, everything below
 	// renders exactly as it did before the composer existed.
-	const composedLayout = $derived(data?.layout)
+	const composedLayout = $derived(withBanners(data?.layout, page))
 	const sectionContext = $derived({
 		content: themeContent,
 		brandName,
