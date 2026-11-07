@@ -26,6 +26,7 @@
 	import { date } from '$lib/core/utils'
 	import { addedTax, formatPrice } from '$lib/utils/price'
 	import { MyOrdersIdRenderer } from '$lib/core/composables/index.js'
+	import BoughtGiftCards from '$lib/components/order/bought-gift-cards.svelte'
 
 	let { class: klass = '', data, ...rest } = $props()
 
@@ -274,6 +275,8 @@
 								</div>
 							</div>
 
+							<BoughtGiftCards cards={order?.giftCards} currencyCode={order?.currencyCode || page?.data?.store?.currency?.code} />
+
 							<!-- Summary Card -->
 							<div class="overflow-hidden rounded-md border border-muted/20 bg-background">
 								<div class=" bg-muted/20 px-3 py-4 sm:px-6">
@@ -325,6 +328,14 @@
 											</div>
 										{/if}
 
+										<!-- The card pays after tax (D250), so what follows it is what the payment method took. -->
+										{#if order?.giftCardAmount > 0}
+											<div class="flex justify-between text-sm text-success">
+												<span>Paid by gift card</span>
+												<span>−{formatPrice(order.giftCardAmount, page?.data?.store?.currency?.code)}</span>
+											</div>
+										{/if}
+
 										<div class="flex items-baseline justify-between pt-1">
 											<span class="text-base font-bold text-foreground">Total</span>
 											{#if money(order?.total)}
@@ -343,7 +354,7 @@
 											</div>
 											<span
 												class="text-xs font-bold {!order?.paymentStatus
-													? 'text-muted-foreground': order.paymentStatus === 'paid'
+													? 'text-muted-foreground': order.paymentStatus?.toLowerCase() === 'paid'
 														? 'text-success'
 														: 'text-destructive'}"
 											>

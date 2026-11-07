@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/svelte'
 import PriceSummary from '$lib/components/checkout/price-summary.svelte'
-import { checkoutFigures, type CheckoutQuote } from '$lib/utils/price'
+import { checkoutFigures, coveredByGiftCard, type CheckoutQuote } from '$lib/utils/price'
 
 vi.mock('$lib/core/utils', () => ({
 	formatPrice: (n: number) => `₹${n.toFixed(2)}`,
@@ -68,5 +68,17 @@ describe('the price summary on payment', () => {
 		const { container } = render(PriceSummary, { ...checkoutFigures(cart, cod, false, auto10), ...onPayment, pending: true })
 		expect(screen.getByText('₹1,151')).toHaveClass('opacity-60')
 		expect(container.firstElementChild).toHaveAttribute('aria-busy', 'true')
+	})
+})
+
+describe('a gift card on the payment step (D250)', () => {
+	it('comes off last, by its last four, and leaves the rest as the total', () => {
+		const card: CheckoutQuote = { ...auto10, codCharges: 0, giftCard: { last4: 'WXYZ', amount: 500 }, total: 611 }
+		render(PriceSummary, { ...checkoutFigures(cart, cod, false, card), ...onPayment })
+		expect(screen.getByText('Gift card …WXYZ').nextElementSibling).toHaveTextContent('−₹500')
+		expect(screen.getByText('Total').closest('div')).toHaveTextContent('₹611')
+		expect(coveredByGiftCard(card)).toBe(false)
+		expect(coveredByGiftCard({ ...card, total: 0 })).toBe(true)
+		expect(coveredByGiftCard({ ...auto10, total: 0 })).toBe(false)
 	})
 })

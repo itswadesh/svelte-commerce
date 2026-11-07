@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/core/utils'
-	import { formatPrice, totalLabel, type PaymentFee, type QuotedCoupon } from '$lib/utils/price'
+	import { formatPrice, totalLabel, type PaymentFee, type QuotedCoupon, type QuotedGiftCard } from '$lib/utils/price'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { Button } from '$lib/components/ui/button'
 	import { fade, slide } from '$lib/motion'
@@ -34,6 +34,7 @@
 		estimatedNote = 'Shipping is added once we have your address.',
 		loading = false,
 		coupon = null,
+		giftCard = null,
 		pending = false,
 		error = '',
 		onretry,
@@ -58,6 +59,8 @@
 		loading?: boolean
 		/** The code a checkout quote applies. Its row shows even at no saving, when the code frees delivery. */
 		coupon?: QuotedCoupon | null
+		/** What a gift card pays. It comes off last, after tax, so `total` is what is left to pay. */
+		giftCard?: QuotedGiftCard | null
 		/** A new total is being worked out; the figures on screen are the last one's. */
 		pending?: boolean
 		/** Checkout's reason it would refuse the order now. While set, no figure is shown. */
@@ -169,6 +172,11 @@
 				<div class="flex items-center justify-between gap-4 text-sm">
 					<dt class="font-medium text-muted-foreground">Tax</dt>
 					<dd class={['font-bold text-foreground', figure]}>{money(tax)}</dd>
+				</div>
+			{/if}{#if giftCard}
+				<div class="flex items-center justify-between gap-4 text-sm" transition:slide>
+					<dt class="font-medium text-muted-foreground">Gift card …{giftCard.last4}</dt>
+					<dd class={['font-bold text-success', figure]}>−{money(giftCard.amount)}</dd>
 				</div>
 			{/if}
 		</dl>

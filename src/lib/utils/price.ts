@@ -41,8 +41,15 @@ export type CheckoutQuote = {
 	tax: number
 	taxIncluded: boolean
 	codCharges: number
+	/** What a gift card on the cart pays (GoCommerce D250); `total` is what is left for the payment method. */
+	giftCard?: QuotedGiftCard | null
 	total: number
 }
+
+export type QuotedGiftCard = { last4: string; amount: number }
+
+/** True when a gift card leaves nothing for a payment method to collect. */
+export const coveredByGiftCard = (quote?: CheckoutQuote | null): boolean => !!quote?.giftCard && Number(quote.total) === 0
 
 export function checkoutFigures(
 	cart:
@@ -66,6 +73,7 @@ export function checkoutFigures(
 	shipping?: number | null
 	fee: PaymentFee | null
 	tax?: number | null
+	giftCard: QuotedGiftCard | null
 	total: number
 	taxPending: boolean
 } {
@@ -78,6 +86,7 @@ export function checkoutFigures(
 			shipping: cart?.shippingCharges,
 			fee,
 			tax: cart?.tax,
+			giftCard: null,
 			total: totalWithFee(cart?.total, fee),
 			taxPending: taxIsPending(includesTax, cart)
 		}
@@ -89,6 +98,7 @@ export function checkoutFigures(
 		shipping: quote.shippingCharges,
 		fee: paymentFee({ name: method?.name, fee: quote.codCharges }),
 		tax: addedTax(quote),
+		giftCard: quote.giftCard ?? null,
 		total: quote.total,
 		taxPending: false
 	}

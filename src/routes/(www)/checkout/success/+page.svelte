@@ -14,6 +14,7 @@
 	import { orderService } from '$lib/core/services/index.js'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import GoogleSurvey from '$lib/components/google/google-survey.svelte'
+	import BoughtGiftCards from '$lib/components/order/bought-gift-cards.svelte'
 
 	const userState = getUserState()
 	const cartState = getCartState()
@@ -62,7 +63,9 @@
 			{ label: 'Shipping', value: firstOrder?.shippingCharges },
 			{ label: 'Cash on delivery charge', value: firstOrder?.codCharges },
 			{ label: 'Discount', value: firstOrder?.discount ? -Math.abs(firstOrder.discount) : 0 },
-			{ label: 'Tax', value: addedTax(firstOrder) }
+			{ label: 'Tax', value: addedTax(firstOrder) },
+			// The card pays after tax (D250), so Total below it is what the payment method took.
+			{ label: 'Paid by gift card', value: firstOrder?.giftCardAmount ? -Math.abs(firstOrder.giftCardAmount) : 0 }
 		].filter((row) => typeof row.value === 'number' && row.value !== 0)
 	)
 
@@ -293,7 +296,7 @@
 						{#each orderTotals as row}
 							<div class="flex items-center justify-between text-muted-foreground">
 								<span>{row.label}</span>
-								<span>{formatPrice(row.value, currencyCode)}</span>
+								<span>{row.value < 0 ? `−${formatPrice(-row.value, currencyCode)}` : formatPrice(row.value, currencyCode)}</span>
 							</div>
 						{/each}
 						{#if typeof firstOrder?.total === 'number'}
@@ -302,12 +305,20 @@
 								<span>{formatPrice(firstOrder.total, currencyCode)}</span>
 							</div>
 						{/if}
-						{#if firstOrder?.paymentMethod}
+						{#if firstOrder?.total === 0 && firstOrder?.giftCardAmount > 0}
+							<div class="flex items-center justify-between pt-1 text-muted-foreground">
+								<span>Paid with</span>
+								<span>Gift card</span>
+							</div>
+						{:else if firstOrder?.paymentMethod}
 							<div class="flex items-center justify-between pt-1 text-muted-foreground">
 								<span>{outcome === 'paid' ? 'Paid with' : 'Payment method'}</span>
 								<span class="capitalize">{String(firstOrder.paymentMethod).replace(/[-_]/g, ' ')}</span>
 							</div>
 						{/if}
+					</div>
+					<div class="mt-6">
+						<BoughtGiftCards cards={firstOrder?.giftCards} {currencyCode} />
 					</div>
 				</div>
 

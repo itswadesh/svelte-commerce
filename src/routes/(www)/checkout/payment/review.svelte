@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronLeft, CreditCard, LockKeyhole, Mail, MapPin, Pencil, Truck } from '@lucide/svelte'
-	import { checkoutFigures, formatPrice, totalLabel } from '$lib/utils/price'
+	import { checkoutFigures, coveredByGiftCard, formatPrice, totalLabel } from '$lib/utils/price'
 	import { page } from '$app/state'
 	import { onMount } from 'svelte'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
@@ -26,6 +26,8 @@
 	const figures = $derived(
 		checkoutFigures(cartState.cart, quote.current ? quotedMethod : selectedPaymentMethod, page?.data?.store?.currency?.includesTax, quote.current)
 	)
+
+	const covered = $derived(coveredByGiftCard(quote.current))
 
 	// A shopper can sit on payment for minutes, and an automatic code can run out meanwhile.
 	onMount(() => quote.retry())
@@ -190,7 +192,7 @@
 							</div>
 						{/if}
 						<span class="text-sm font-bold tracking-tight text-foreground">
-							{selectedPaymentMethod?.name || 'No payment method selected'}
+							{covered ? `Gift card …${figures.giftCard?.last4}` : selectedPaymentMethod?.name || 'No payment method selected'}
 						</span>
 					</div>
 				</div>
@@ -209,6 +211,7 @@
 							discount={figures.discount}
 							discountLabel={cartState.cart.couponCode ? `Discount (${cartState.cart.couponCode})` : 'Discount'}
 							coupon={figures.coupon}
+							giftCard={figures.giftCard}
 							shipping={figures.shipping}
 							fee={figures.fee}
 							tax={figures.tax}
@@ -239,9 +242,9 @@
 						</div>
 
 						<CheckoutButton
-							text="Confirm order"
+							text={covered ? 'Place order' : 'Confirm order'}
 							onclick={onsubmit}
-							disabled={paymentModule.checkoutDisabled || !quote.confirmable(cartState.cart)}
+							disabled={(paymentModule.checkoutDisabled && !covered) || !quote.confirmable(cartState.cart)}
 							loading={paymentModule.paymentLoader}
 							total={quote.error ? '' : formatPrice(figures.total, currencyCode)}
 							totalLabel={totalLabel(!!cartState.cart.shippingAddress, figures.taxPending)}
