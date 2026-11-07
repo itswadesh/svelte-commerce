@@ -3,6 +3,18 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-11-07: Seven more home page sections, in the store's own colours
+
+The owner asked for more modern sections with a better layout (GoCommerce D243). Spotlight banner,
+bento grid, customer quotes, numbers, logos, scrolling text and countdown are registered, and a
+product grid can stand beside a large picture. They read the theme's tokens, so a shop's colours,
+type and rounding restyle them. Words over a photograph are the one exception: white over a shade
+(`--on-photo`, `--photo-shade`), because a photograph is not chosen with the theme. The spotlight is
+display-sized because it does a hero's job, and carries the page's h1 when it comes first. The
+figures and the scrolling words are also over the section-title step, as a deliberate editorial band
+a shop opts into. Nothing here is invented for the shop: a quote, a figure or a logo shows only once
+it has been entered, and a figure needs both its number and what it counts.
+
 ## 2026-11-06: A GoCommerce store's trade portal opens on the store's own host
 
 Wholesale buyers are who the owner sells to, and they could not reach the portal: every store host

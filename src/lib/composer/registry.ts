@@ -1,16 +1,23 @@
 import type { Component } from 'svelte'
 import AnnouncementBar from './sections/AnnouncementBar.svelte'
 import Benefits from './sections/Benefits.svelte'
+import BentoGrid from './sections/BentoGrid.svelte'
 import CollectionList from './sections/CollectionList.svelte'
+import Countdown from './sections/Countdown.svelte'
 import Faq from './sections/Faq.svelte'
 import GoogleReviews from './sections/GoogleReviews.svelte'
 import Hero from './sections/Hero.svelte'
 import ImageWithText from './sections/ImageWithText.svelte'
+import LogoCloud from './sections/LogoCloud.svelte'
 import MultiColumn from './sections/MultiColumn.svelte'
 import Newsletter from './sections/Newsletter.svelte'
 import ProductGrid from './sections/ProductGrid.svelte'
 import RichText from './sections/RichText.svelte'
+import ScrollingText from './sections/ScrollingText.svelte'
 import Slideshow from './sections/Slideshow.svelte'
+import Spotlight from './sections/Spotlight.svelte'
+import Stats from './sections/Stats.svelte'
+import Testimonials from './sections/Testimonials.svelte'
 import Video from './sections/Video.svelte'
 
 /**
@@ -31,5 +38,12 @@ export const SECTIONS: Record<string, Component<any>> = {
 	faq: Faq,
 	newsletter: Newsletter,
 	'google-reviews': GoogleReviews,
-	benefits: Benefits
+	benefits: Benefits,
+	spotlight: Spotlight,
+	'bento-grid': BentoGrid,
+	testimonials: Testimonials,
+	stats: Stats,
+	'logo-cloud': LogoCloud,
+	'scrolling-text': ScrollingText,
+	countdown: Countdown
 }

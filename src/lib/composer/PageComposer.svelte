@@ -46,9 +46,7 @@
 
 	const home = $derived(page === 'home')
 	const core = $derived(home ? null : TEMPLATE_CORE[page as 'product' | 'collection'])
-	const source = $derived(
-		editing && draft ? withCore(draftSections(draft, layout?.sections), layout?.sections ?? [], core) : layout?.sections
-	)
+	const source = $derived(editing && draft ? withCore(draftSections(draft, layout?.sections), layout?.sections ?? [], core) : layout?.sections)
 	const sections = $derived(knownSections(source, { ...SECTIONS, ...parts }, import.meta.env.DEV ? (m) => console.warn(m) : undefined))
 	// On a template the core's own title is the h1; every section heading is an h2.
 	const headingId = $derived(home ? pageHeadingSection(sections) : null)
@@ -168,6 +166,10 @@
 	   ran from 24px to over 100px depending on which pair met. */
 	.cmp-home {
 		--cmp-gap: var(--space-section, clamp(24px, 3vw, 40px));
+		/* Words over a photograph and the shade under them. Not the theme's colours: those are chosen
+		   for the page, and a photograph is whatever it is. */
+		--on-photo: 0 0% 100%;
+		--photo-shade: 0 0% 0%;
 		display: flex;
 		flex-direction: column;
 		gap: var(--cmp-gap);
@@ -185,13 +187,19 @@
 	/* A full-width strip at the very top or bottom meets the header or footer, as it always has. */
 	.cmp-home > :global(.cmp-announce:first-child),
 	.cmp-home > :global(.cmp-benefits-band:first-child),
-	.cmp-home > :global(.cmp-marquee-band:first-child) {
+	.cmp-home > :global(.cmp-marquee-band:first-child),
+	.cmp-home > :global(.cmp-spot--full:first-child),
+	.cmp-home > :global(.cmp-stats-band:first-child),
+	.cmp-home > :global(.cmp-words--band:first-child) {
 		margin-top: calc(-1 * var(--cmp-gap));
 	}
 
 	.cmp-home > :global(.cmp-announce:last-child),
 	.cmp-home > :global(.cmp-benefits-band:last-child),
-	.cmp-home > :global(.cmp-marquee-band:last-child) {
+	.cmp-home > :global(.cmp-marquee-band:last-child),
+	.cmp-home > :global(.cmp-spot--full:last-child),
+	.cmp-home > :global(.cmp-stats-band:last-child),
+	.cmp-home > :global(.cmp-words--band:last-child) {
 		margin-bottom: calc(-1 * var(--cmp-gap));
 	}
 
@@ -301,9 +309,17 @@
 
 	/* Unset, a var() with no fallback computes to the inherited value, exactly as if neither line
 	   were here. */
-	.cmp-home :global(:is(.cmp-head__eyebrow, .cmp-eyebrow, .cmp-hero__eyebrow)) {
+	.cmp-home :global(:is(.cmp-head__eyebrow, .cmp-eyebrow, .cmp-eyebrow-ink, .cmp-hero__eyebrow)) {
 		text-transform: var(--eyebrow-case);
 		letter-spacing: var(--eyebrow-tracking);
+	}
+
+	/* The small line on a picture or a block of colour: the muted grey of the page would vanish
+	   there, so it takes the colour of the words around it. */
+	.cmp-home :global(.cmp-eyebrow-ink) {
+		font-size: var(--type-ui, 0.875rem);
+		font-weight: 600;
+		overflow-wrap: anywhere;
 	}
 
 	.cmp-home :global(.cmp-head__subtitle) {
