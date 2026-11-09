@@ -27,6 +27,7 @@
 	import { addedTax, formatPrice } from '$lib/utils/price'
 	import { MyOrdersIdRenderer } from '$lib/core/composables/index.js'
 	import BoughtGiftCards from '$lib/components/order/bought-gift-cards.svelte'
+	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
 
 	let { class: klass = '', data, ...rest } = $props()
 
@@ -83,7 +84,7 @@
 							<!-- Order Status Banner -->
 							<div class="rounded-md border border-muted/20 bg-muted/5 p-6">
 								<div class="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-									<div class="border flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-muted/20">
+									<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border bg-background ring-1 ring-muted/20">
 										<Package class="h-6 w-6 text-primary" />
 									</div>
 									<div class="flex-1">
@@ -236,7 +237,7 @@
 									<div>
 										<div class="mb-3 flex items-center gap-2">
 											<MapPin class="h-4 w-4 text-muted-foreground" />
-											<h4 class="text-sm font-bold tracking-tight text-foreground">Shipping address</h4>
+											<h4 class="text-sm font-bold tracking-tight text-foreground">{order?.shippingAddress?.address_1 ? 'Shipping address' : 'Billing details'}</h4>
 										</div>
 										<div class="text-sm leading-relaxed text-muted-foreground">
 											<p class="font-bold text-foreground">
@@ -274,6 +275,8 @@
 									{/if}
 								</div>
 							</div>
+
+							<OrderDownloads downloads={(order as any)?.downloads} orderNo={orderNumberOf(order)} />
 
 							<BoughtGiftCards cards={order?.giftCards} currencyCode={order?.currencyCode || page?.data?.store?.currency?.code} />
 
@@ -354,7 +357,8 @@
 											</div>
 											<span
 												class="text-xs font-bold {!order?.paymentStatus
-													? 'text-muted-foreground': order.paymentStatus?.toLowerCase() === 'paid'
+													? 'text-muted-foreground'
+													: order.paymentStatus?.toLowerCase() === 'paid'
 														? 'text-success'
 														: 'text-destructive'}"
 											>
@@ -396,4 +400,3 @@
 		</div>
 	{/snippet}
 </MyOrdersIdRenderer>
-

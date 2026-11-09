@@ -13,6 +13,7 @@
 	import { Label } from '$lib/components/ui/label'
 	import OrderListSkeleton from '../../(my)/my/orders/_OrderListSkeleton.svelte'
 	import OrderTimeline from '$lib/components/order/order-timeline.svelte'
+	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
 	import StatusCell from '$lib/components/common/status-cell.svelte'
 	import { orderService } from '$lib/core/services/index.js'
 	import { CheckCircle } from '@lucide/svelte'
@@ -94,6 +95,11 @@
 
 					<h6 class="mt-2 text-sm text-muted-foreground sm:mt-0">Order Date : {date(order?.createdAt)}</h6>
 				</div>
+				{#if order?.downloads?.length}
+					<div class="border-x p-3 sm:p-5">
+						<OrderDownloads downloads={order.downloads} orderNo={order.orderNo} />
+					</div>
+				{/if}
 
 				<!-- Order detail  -->
 				<div class="flex flex-col lg:grid lg:grid-cols-2 lg:divide-x">
@@ -261,7 +267,7 @@
 					<div class="order-2 p-5 lg:order-none">
 						<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-5">
 							<div class="space-y-2">
-								<h5 class="font-semibold">Delivery address</h5>
+								<h5 class="font-semibold">{order?.shippingAddress?.address_1 ? 'Delivery address' : 'Billing details'}</h5>
 
 								<p class="flex flex-col text-sm">
 									<span>
@@ -278,9 +284,7 @@
 										, {order?.shippingAddress?.city}
 										<br />
 										{order?.shippingAddress?.state},
-										<span class=""
-											>{order?.shippingAddress?.country || order?.shippingAddress?.countryCode}</span
-										>,
+										<span class="">{order?.shippingAddress?.country || order?.shippingAddress?.countryCode}</span>,
 										{order?.shippingAddress?.zip}
 									</span>
 								</p>
@@ -315,9 +319,7 @@
 											, {order?.billingAddress?.city}
 											<br />
 											{order?.billingAddress?.state},
-											<span class=""
-												>{order?.billingAddress?.country || order?.billingAddress?.countryCode}</span
-											>,
+											<span class="">{order?.billingAddress?.country || order?.billingAddress?.countryCode}</span>,
 											{order?.billingAddress?.zip}
 										</span>
 									</p>

@@ -613,3 +613,13 @@ Reaching the page proves nothing: Cashfree resolves its window whatever the tran
 webhook can land after the shopper does. So the page reads `paymentStatus`. It thanks a shopper and
 counts a purchase only for a paid order, cash on delivery, or a backend that reports no payment
 state; a pending online payment waits and looks again for 40 seconds, and a failed one says so.
+
+## 2026-11-09: Downloads are sold without a delivery address
+
+Owner: "we must build the digital product feature in gocommerce" (GoCommerce D254). A product page
+whose product has files says "Instant download" and its formats instead of delivery options. A
+basket of nothing but downloads asks only name, email, phone, state and country (the state for the
+GST invoice); no street, city or PIN code is asked or invented. Cash on delivery is not offered for
+it. A paid order lists its files on the success page, the order tracking page and the account order
+page; each Download button asks the engine for a ten-minute link when pressed, and a file the store
+has closed says why instead. Licence keys are out of scope by the owner's word.

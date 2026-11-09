@@ -15,6 +15,7 @@
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import GoogleSurvey from '$lib/components/google/google-survey.svelte'
 	import BoughtGiftCards from '$lib/components/order/bought-gift-cards.svelte'
+	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
 
 	const userState = getUserState()
 	const cartState = getCartState()
@@ -316,6 +317,9 @@
 								<span class="capitalize">{String(firstOrder.paymentMethod).replace(/[-_]/g, ' ')}</span>
 							</div>
 						{/if}
+					</div>
+					<div class="mt-6">
+						<OrderDownloads downloads={firstOrder?.downloads} orderNo={firstOrder?.orderNo} />
 					</div>
 					<div class="mt-6">
 						<BoughtGiftCards cards={firstOrder?.giftCards} {currencyCode} />

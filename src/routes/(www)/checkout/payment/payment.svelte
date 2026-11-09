@@ -23,6 +23,14 @@
 
 	const cartState = paymentModule.cartState
 
+	// Cash on delivery has no delivery to wait for in a basket of downloads (GoCommerce D254); the
+	// engine refuses it, so it is not offered.
+	const methods = $derived(
+		(paymentModule.listOfPaymentMethods ?? []).filter(
+			(m: any) => cartState.cart?.needAddress !== false || String(m?.code).toLowerCase() !== 'cod'
+		)
+	)
+
 	const selectedMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
 	// A quote's charge belongs to the method it was asked for, which a re-quote in flight has not caught up with.
 	const quotedMethod = $derived(paymentModule.allPaymentMethods?.find((m: any) => m.code === quote.method))
@@ -152,7 +160,7 @@
 							</p>
 						{:else if paymentModule.showPaymentMethods}
 							<div class="grid grid-cols-1 gap-4">
-								{#each paymentModule.listOfPaymentMethods as method}
+								{#each methods as method}
 									{@const methodFee = paymentFee(method)}
 									<label
 										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-background px-6 py-5 {paymentModule.selectedPGCode ==
@@ -282,7 +290,7 @@
 						<div class="overflow-hidden rounded-lg border border-border bg-background text-left">
 							<Button variant="plain" class="flex h-auto w-full items-center justify-between px-6 py-4" onclick={() => (showAddress = !showAddress)}>
 								<div class="flex flex-col items-start">
-									<span class="text-sm font-medium text-muted-foreground">Delivering order to</span>
+									<span class="text-sm font-medium text-muted-foreground">{cartState.cart?.needAddress === false ? 'Order for' : 'Delivering order to'}</span>
 									<span class="text-sm font-bold tracking-tight text-foreground">
 										{cartState.cart.shippingAddress.firstName}
 										{cartState.cart.shippingAddress.lastName}

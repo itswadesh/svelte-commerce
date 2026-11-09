@@ -9,7 +9,7 @@
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { RotateCcw, Truck } from '@lucide/svelte'
+	import { Download, RotateCcw, Truck } from '@lucide/svelte'
 	import ProductAggregation from './product-aggregation.svelte'
 	import ProductAvailability from './product-availability.svelte'
 	import ProductCartAndWishlistButtons from './product-cart-and-wishlist-buttons.svelte'
@@ -53,6 +53,10 @@
 	}
 	const [aspectWidth, aspectHeight] = $derived(data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
 	const options = $derived(themeOptions(data?.themeSettings))
+	// A product delivered as files once paid (GoCommerce D254): nothing is posted, so there is no
+	// delivery to check and no shipping policy to point at. Null for everything else, and from a
+	// connector or store without downloads.
+	const digital = $derived<{ files: number; formats: string[] } | null>(data?.product?.digital ?? null)
 	const showPincodeCheck = $derived(options.pdp_delivery_check && productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
 
 	// Delivery and returns are stated only where the merchant has actually published the policy.
@@ -491,7 +495,24 @@
 					<ProductCartAndWishlistButtons />
 				</div>
 
-				{#if showPincodeCheck}
+				{#if digital}
+					<div class="flex flex-col gap-1.5 border-t pt-3 text-sm">
+						<p class="flex items-center gap-2 font-medium text-foreground">
+							<Download class="size-4 shrink-0" aria-hidden="true" />
+							Instant download
+							{#if digital.formats.length}<span class="font-normal text-muted-foreground">· {digital.formats.join(', ')}</span>{/if}
+						</p>
+						<p class="text-muted-foreground">
+							{digital.files === 1 ? 'Your file is' : `Your ${digital.files} files are`} ready to download as soon as you pay. Nothing is posted.
+						</p>
+						{#if hasRefundPolicy}
+							<p class="flex items-center gap-2 text-muted-foreground">
+								<RotateCcw class="size-4 shrink-0" aria-hidden="true" />
+								<PolicyLink href="/refund-policy" class="underline underline-offset-4 hover:text-foreground">Returns and refunds</PolicyLink>
+							</p>
+						{/if}
+					</div>
+				{:else if showPincodeCheck}
 					<div class="flex flex-col gap-2 border-t pt-3">
 						<div class="flex items-center gap-2">
 							<Truck class="size-4 text-muted-foreground" />
