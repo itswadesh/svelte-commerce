@@ -14,12 +14,20 @@
 	let {
 		address = $bindable(),
 		isLoading = false,
+		detailsOnly = false,
 		onsave
 	}: {
 		address: any
 		isLoading?: boolean
+		/**
+		 * A basket of downloads (GoCommerce D254): nothing is posted, so only the buyer's name,
+		 * contact, state and country are asked — the state because tax and a GST invoice are worked
+		 * out from it. No street, city or PIN code is invented to fill the gap.
+		 */
+		detailsOnly?: boolean
 		onsave?: (address: any) => void | Promise<void>
 	} = $props()
+
 	let show = $state(true)
 
 	// The submit path the page's pinned footer drives with `requestSubmit()`.
@@ -65,15 +73,18 @@
 			: checkoutAddressSchema.email
 	)
 
+	const POSTAL_FIELDS = ['address_1', 'address_2', 'zip', 'city']
+	const rules = $derived(
+		Object.fromEntries(Object.entries({ ...AddressSchema, email: emailRule }).filter(([key]) => !detailsOnly || !POSTAL_FIELDS.includes(key)))
+	)
+
 	function submitWithVisibleErrors(event: Event, handleSubmit: (e: Event) => void) {
 		event.preventDefault()
 		// A field the shopper has never touched comes back as null, not '', and zod then reports
 		// "Expected string, received null" instead of the rule's own message. Normalise first.
-		const candidate = Object.fromEntries(
-			Object.keys({ ...AddressSchema, email: emailRule }).map((key) => [key, (address as Record<string, unknown>)?.[key] ?? ''])
-		)
+		const candidate = Object.fromEntries(Object.keys(rules).map((key) => [key, (address as Record<string, unknown>)?.[key] ?? '']))
 		candidate.countryCode = address?.countryCode || page?.data?.store?.country?.code || ''
-		const result = z.object({ ...AddressSchema, email: emailRule }).safeParse(candidate)
+		const result = z.object(rules).safeParse(candidate)
 		if (!result.success) {
 			const next: Record<string, string> = {}
 			for (const issue of result.error.errors) {
@@ -92,6 +103,12 @@
 		}
 		fieldErrors = {}
 		formError = ''
+		// The renderer would hold the address to every postal field again; details alone go straight on.
+		if (detailsOnly) {
+			address.countryCode = candidate.countryCode
+			saveAndReportFailure(address)
+			return
+		}
 		handleSubmit(event)
 	}
 
@@ -197,46 +214,50 @@
 					required
 				/>
 			</div>
-			<Textbox
-				name="address_1"
-				error={fieldErrors.address_1}
-				autocomplete="address-line1"
-				bind:value={address.address_1}
-				placeholder="Street address"
-				schema={AddressSchema.address_1}
-				label="Address Line 1"
-				required
-			/>
-			<Textbox
-				name="address_2"
-				autocomplete="address-line2"
-				bind:value={address.address_2}
-				placeholder="Apartment, suite, etc."
-				label="Address Line 2"
-			/>
+			{#if !detailsOnly}
+				<Textbox
+					name="address_1"
+					error={fieldErrors.address_1}
+					autocomplete="address-line1"
+					bind:value={address.address_1}
+					placeholder="Street address"
+					schema={AddressSchema.address_1}
+					label="Address Line 1"
+					required
+				/>
+				<Textbox
+					name="address_2"
+					autocomplete="address-line2"
+					bind:value={address.address_2}
+					placeholder="Apartment, suite, etc."
+					label="Address Line 2"
+				/>
+			{/if}
 			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-				<Textbox
-					name="zip"
-					error={fieldErrors.zip}
-					autocomplete="postal-code"
-					inputmode="numeric"
-					bind:value={address.zip}
-					placeholder={isIndia ? '6-digit PIN code' : '12345'}
-					schema={AddressSchema.zip}
-					label={isIndia ? 'PIN code' : 'ZIP Code'}
-					required
-				/>
-				<PinAutofill bind:address country={countryCode} />
-				<Textbox
-					name="city"
-					error={fieldErrors.city}
-					autocomplete="address-level2"
-					bind:value={address.city}
-					placeholder="City"
-					schema={AddressSchema.city}
-					label="City"
-					required
-				/>
+				{#if !detailsOnly}
+					<Textbox
+						name="zip"
+						error={fieldErrors.zip}
+						autocomplete="postal-code"
+						inputmode="numeric"
+						bind:value={address.zip}
+						placeholder={isIndia ? '6-digit PIN code' : '12345'}
+						schema={AddressSchema.zip}
+						label={isIndia ? 'PIN code' : 'ZIP Code'}
+						required
+					/>
+					<PinAutofill bind:address country={countryCode} />
+					<Textbox
+						name="city"
+						error={fieldErrors.city}
+						autocomplete="address-level2"
+						bind:value={address.city}
+						placeholder="City"
+						schema={AddressSchema.city}
+						label="City"
+						required
+					/>
+				{/if}
 				<Textbox
 					name="state"
 					error={fieldErrors.state}
@@ -287,10 +308,10 @@
 				     The renderer's zod validation on submit already blocks incomplete addresses. -->
 				<Button type="submit" variant="outline" disabled={isLoading} class="h-11 w-full">
 					{#if isLoading}
-						<Spinner label="Saving address" />
+						<Spinner label={detailsOnly ? 'Saving your details' : 'Saving address'} />
 					{:else}
 						<Save class="mr-2 h-4 w-4" />
-						Save address
+						{detailsOnly ? 'Save details' : 'Save address'}
 					{/if}
 				</Button>
 			</div>

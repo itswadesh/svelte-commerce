@@ -29,6 +29,9 @@
 
 	const addressModule = new AddressModule()
 	const cartState = addressModule.cartState
+	// A basket with nothing to post (GoCommerce D254) is asked for the buyer's details, not a delivery
+	// address. Connectors that do not say keep the address step as it was.
+	const detailsOnly = $derived(cartState.cart?.needAddress === false)
 	const userState = addressModule.userState
 
 	const isEmailOk = $derived(addressModule.isEmailOk)
@@ -209,7 +212,7 @@
 		<CheckoutHeader step={2} />
 
 		<!-- Same as the cart step: the progress indicator is a control, not the page heading. -->
-		<h1 class="sr-only">Delivery address</h1>
+		<h1 class="sr-only">{detailsOnly ? 'Your details' : 'Delivery address'}</h1>
 		<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
 		  <div>
 				<p class="font-semibold tracking-tight text-xl">My addresses</p>
@@ -378,12 +381,24 @@
 									<!-- Guest checkout: inline address form, no login required -->
 									<div class="p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-											<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Delivery address</h2>
+											<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">
+												{detailsOnly ? 'Your details' : 'Delivery address'}
+											</h2>
 											<Button variant="link" onclick={() => showAuthModal('login')} class="h-auto whitespace-normal p-0 text-left">
-												Login to view your saved addresses
+												{detailsOnly ? 'Login to fill these in' : 'Login to view your saved addresses'}
 											</Button>
 										</div>
-										<AddressForm bind:address={addressModule.currentAddress} isLoading={loadingForGuestCheckout} onsave={handleGuestSubmit} />
+										{#if detailsOnly}
+											<p class="mb-4 text-sm text-muted-foreground">
+												Nothing is posted: your files are ready to download as soon as you pay. Your state is used for the tax on your invoice.
+											</p>
+										{/if}
+										<AddressForm
+											bind:address={addressModule.currentAddress}
+											isLoading={loadingForGuestCheckout}
+											onsave={handleGuestSubmit}
+											{detailsOnly}
+										/>
 									</div>
 								{:else if cartState.cart.shippingAddress}
 									<div class="">
@@ -425,6 +440,19 @@
 												</div>
 											</div>
 										{/if}
+									</div>
+								{:else if detailsOnly}
+									<div class="p-6">
+										<h2 class="mb-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">Your details</h2>
+										<p class="mb-4 text-sm text-muted-foreground">
+											Nothing is posted: your files are ready to download as soon as you pay. Your state is used for the tax on your invoice.
+										</p>
+										<AddressForm
+											bind:address={addressModule.currentAddress}
+											isLoading={loadingForGuestCheckout}
+											onsave={handleGuestSubmit}
+											detailsOnly
+										/>
 									</div>
 								{:else}
 									<div class="p-6">
