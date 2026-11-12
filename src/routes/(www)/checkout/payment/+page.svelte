@@ -6,12 +6,18 @@
 	import { goto } from '$app/navigation'
 	import { checkoutService } from '$lib/core/services'
 	import { coveredByGiftCard } from '$lib/utils/price'
+	import { offerWhatsApp, placeWhatsAppOrder, WHATSAPP } from '$lib/checkout/whatsapp'
 	import { toast } from 'svelte-sonner'
 
 	const paymentModule = new PaymentModule()
 	const quote = new LiveQuote(paymentModule)
 
 	let showReview = $state(false)
+
+	// Once the connector's list is in, Order on WhatsApp joins it when the store has it on (D255).
+	$effect(() => {
+		if (!paymentModule.loadingForPaymentMethods) offerWhatsApp(paymentModule)
+	})
 
 	// `placeOrder` sets `paymentLoader = true` up front, but its "gateway not ready yet" branches
 	// (Razorpay flips `razorpayReady` a second after its script loads; Affirm checks a global) only
@@ -24,6 +30,7 @@
 		quote.expectShownTotal(paymentModule.cartState.cart?.id)
 		try {
 			if (coveredByGiftCard(quote.current)) return await placeCovered()
+			if (paymentModule.SELECTED_PG_CODE === WHATSAPP) return await placeWhatsApp()
 			await paymentModule.placeOrder()
 		} finally {
 			paymentModule.paymentLoader = false
@@ -44,6 +51,18 @@
 		try {
 			const placed = await svc.checkout(method?.engineCode || method?.code || 'cod', { cartId })
 			await goto(`/checkout/success?order_no=${encodeURIComponent(placed.orderNo)}&cart_id=${encodeURIComponent(cartId ?? '')}`)
+		} catch (err) {
+			toast.error((err as Error)?.message || 'Your order could not be placed. Please try again.')
+		}
+	}
+
+	/** Order on WhatsApp: the success page then offers the chat with the order written in. */
+	async function placeWhatsApp() {
+		const cartId = paymentModule.cartState.cart?.id
+		paymentModule.paymentLoader = true
+		try {
+			const orderNo = await placeWhatsAppOrder(cartId)
+			await goto(`/checkout/success?order_no=${encodeURIComponent(orderNo)}&cart_id=${encodeURIComponent(cartId ?? '')}`)
 		} catch (err) {
 			toast.error((err as Error)?.message || 'Your order could not be placed. Please try again.')
 		}

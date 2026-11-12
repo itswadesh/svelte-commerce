@@ -4,12 +4,13 @@
 
 /**
  * - `paid`, `pay-on-delivery`: a sale, and the page thanks the shopper.
+ * - `whatsapp`: a sale settled in the shop's chat (GoCommerce D255); the shopper sends it there.
  * - `received`: the backend reports no payment state this page knows, so it claims none.
  * - `confirming`: paid online, or not, and the backend does not know yet.
  * - `failed`: not paid, and the shopper is told so.
  * - `unknown`: no order to read.
  */
-export type OrderOutcome = 'paid' | 'pay-on-delivery' | 'received' | 'confirming' | 'failed' | 'unknown'
+export type OrderOutcome = 'paid' | 'pay-on-delivery' | 'whatsapp' | 'received' | 'confirming' | 'failed' | 'unknown'
 
 type OrderState = { paymentStatus?: unknown; paymentMethod?: unknown; status?: unknown } | null | undefined
 
@@ -30,11 +31,13 @@ export function orderOutcome(order: OrderState): OrderOutcome {
 	if (FAILED.has(payment)) return 'failed'
 	if (UNSETTLED.has(payment) && FAILED.has(word(order.status))) return 'failed'
 	if (PAY_ON_DELIVERY.has(word(order.paymentMethod))) return 'pay-on-delivery'
+	if (word(order.paymentMethod) === 'whatsapp') return 'whatsapp'
 	return UNSETTLED.has(payment) ? 'confirming' : 'received'
 }
 
 /** The outcomes that are a sale: only these count as a purchase or ask for a review. */
-export const isSale = (outcome: OrderOutcome) => outcome === 'paid' || outcome === 'pay-on-delivery' || outcome === 'received'
+export const isSale = (outcome: OrderOutcome) =>
+	outcome === 'paid' || outcome === 'pay-on-delivery' || outcome === 'whatsapp' || outcome === 'received'
 
 export const OUTCOME_COPY: Record<OrderOutcome, { title: string; heading: string; body: string }> = {
 	paid: {
@@ -46,6 +49,11 @@ export const OUTCOME_COPY: Record<OrderOutcome, { title: string; heading: string
 		title: 'Order confirmed',
 		heading: 'Thank you for your order',
 		body: "We've received your order. You pay when it's delivered, and we'll notify you as soon as it's on its way."
+	},
+	whatsapp: {
+		title: 'Order placed',
+		heading: 'Send your order on WhatsApp',
+		body: "Your order is placed. Send it to the shop on WhatsApp, and they'll confirm it there and tell you how to pay."
 	},
 	received: {
 		title: 'Order received',
@@ -67,4 +75,11 @@ export const OUTCOME_COPY: Record<OrderOutcome, { title: string; heading: string
 		heading: "We're checking your order",
 		body: "Please don't pay again until you've seen this order's status."
 	}
+}
+
+/** A WhatsApp order opened in a browser that did not place it has no link to send; the shop has the order. */
+export const WHATSAPP_ELSEWHERE_COPY = {
+	title: 'Order placed',
+	heading: 'Thank you for your order',
+	body: 'Your order is placed. The shop confirms it with you on WhatsApp and tells you there how to pay.'
 }
