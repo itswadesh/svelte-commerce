@@ -12,7 +12,7 @@
 	import { cn } from '$lib/core/utils/index.js'
 	import { sortOptions } from '$lib/config.js'
 	import { page } from '$app/state'
-	import { categoryIndent, categoryParent, hasFacetValues, readAppliedFilters } from './scope-filters.js'
+	import { categoryIndent, categoryParent, facetKeys, hasFacetValues, readAppliedFilters } from './scope-filters.js'
 	import { formatPrice } from '$lib/utils/price'
 
 	// A plain prop, not a binding: listing-page.svelte derives the current sort from the URL and
@@ -31,7 +31,7 @@
 	// the Filter button. It has its own removable chip above the grid.
 	const currency = $derived(page.data?.store?.currency?.code)
 	const barFilters = $derived(
-		readAppliedFilters(page.url, Object.keys(page.data?.products?.facets || {}), (amount) => formatPrice(amount, currency)).filter(
+		readAppliedFilters(page.url, facetKeys(page.data?.products?.facets), (amount) => formatPrice(amount, currency)).filter(
 			(f) => f.key !== 'search'
 		)
 	)
