@@ -138,11 +138,13 @@
 	>
 		<ShoppingBag class="h-5 w-5" />
 		{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
-			<!-- The outer span positions; the inner one animates, so the bump never fights the offset. -->
-			<span class="absolute right-0 top-0 -translate-y-1/2 translate-x-1/2">
+			<!-- The outer span positions; the inner one animates, so the bump never fights the offset. At the
+			     glyph's corner, inside the header: pinned to the 44px box's corner and lifted by half its
+			     height, it rose above the top of the screen. -->
+			<span class="absolute -right-0.5 top-0.5">
 				{#key bumpKey}
 					<span
-						class="inline-flex items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-primary-foreground {bumpKey
+						class="inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold leading-none text-primary-foreground {bumpKey
 							? 'motion-bump'
 							: ''}"
 					>
