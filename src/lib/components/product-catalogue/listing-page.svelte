@@ -11,7 +11,7 @@
 	import QuickFilters from './quick-filters.svelte'
 	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { X } from '@lucide/svelte'
-	import { hasFacetValues, readAppliedFilters, urlWithoutAnyFilter, urlWithoutFilter } from './scope-filters.js'
+	import { facetKeys, hasFacetValues, readAppliedFilters, urlWithoutAnyFilter, urlWithoutFilter } from './scope-filters.js'
 	import { formatPrice } from '$lib/utils/price'
 
 	const data = $derived(page.data)
@@ -52,8 +52,7 @@
 	// `search` as facets, so a merely sorted listing would sprout chips for filters nobody set.
 	// Reading the URL also means a filter whose facet group came back empty still gets a chip, so
 	// the very filter that emptied the grid can always be removed.
-	const facetKeys = $derived(Object.keys(data?.products?.facets || {}))
-	const appliedFilters = $derived(readAppliedFilters(page.url, facetKeys, (amount) => formatPrice(amount, data?.store?.currency?.code)))
+	const appliedFilters = $derived(readAppliedFilters(page.url, facetKeys(data?.products?.facets), (amount) => formatPrice(amount, data?.store?.currency?.code)))
 </script>
 
 <div class="ed-plp">
