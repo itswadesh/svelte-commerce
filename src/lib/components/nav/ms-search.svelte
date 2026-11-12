@@ -37,7 +37,7 @@
 			<Button
 				variant="ghost"
 				size="icon"
-				class="rounded-full text-foreground transition-colors hover:text-primary"
+				class="rounded-full text-foreground transition-colors hover:text-primary [&_svg]:size-5"
 				aria-label="Open search"
 				aria-haspopup="dialog"
 				aria-expanded={expandSearch && showSearchResults}
