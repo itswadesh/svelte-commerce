@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { addedTax, formatPrice } from '$lib/utils/price'
-	import { AlertCircle, CheckCircle2, Clock, MapPin, Package, Truck, ArrowRight, Mail, Calendar, SearchX } from '@lucide/svelte'
+	import { AlertCircle, CheckCircle2, Clock, MapPin, Package, Truck, ArrowRight, Mail, Calendar, SearchX, MessageCircle } from '@lucide/svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { linePicture } from '$lib/customizer/line'
 	import { getUserState, getCartState } from '$lib/core/stores/index.js'
@@ -10,7 +10,8 @@
 	import { fade, fly } from '$lib/motion'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import { trackOrderPlaced } from '$lib/purchase-tracking'
-	import { isSale, orderOutcome, OUTCOME_COPY } from '$lib/checkout/order-outcome'
+	import { isSale, orderOutcome, OUTCOME_COPY, WHATSAPP_ELSEWHERE_COPY } from '$lib/checkout/order-outcome'
+	import { whatsappLinkFor } from '$lib/checkout/whatsapp'
 	import { orderService } from '$lib/core/services/index.js'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import GoogleSurvey from '$lib/components/google/google-survey.svelte'
@@ -42,7 +43,9 @@
 
 	// Getting here says nothing about the money, so everything the page claims comes from this.
 	const outcome = $derived(orderOutcome(firstOrder))
-	const copy = $derived(OUTCOME_COPY[outcome])
+	// An order placed on WhatsApp (D255) is sent from the chat this browser was handed at checkout.
+	let whatsappUrl = $state('')
+	const copy = $derived(outcome === 'whatsapp' && !whatsappUrl ? WHATSAPP_ELSEWHERE_COPY : OUTCOME_COPY[outcome])
 	const sale = $derived(isSale(outcome))
 
 	// Compose the address from the parts that exist, so nothing renders as stray punctuation.
@@ -84,6 +87,7 @@
 		}).format(date)
 	})
 	onMount(async () => {
+		whatsappUrl = whatsappLinkFor(orderNo)
 		const cartId = page.url.searchParams.get('cart_id')
 		if (!orders.length && (orderNo || cartId)) {
 			try {
@@ -200,6 +204,22 @@
 							Order #{orderNo}
 						</div>
 					{/if}
+					{#if outcome === 'whatsapp' && whatsappUrl}
+						<!-- A real link, so it opens the app on a phone, WhatsApp Web on a computer, and works
+						     from a long press too. -->
+						<div class="mt-6" in:fade>
+							<Button
+								href={whatsappUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								data-testid="send-on-whatsapp"
+								class="group h-12 w-full gap-2 px-6 text-base font-semibold transition-transform duration-fast ease-standard motion-safe:active:scale-[0.97] sm:w-auto"
+							>
+								<MessageCircle class="size-5" aria-hidden="true" />
+								Send order on WhatsApp
+							</Button>
+						</div>
+					{/if}
 				</div>
 
 				<!-- Order Progress -->
@@ -314,7 +334,7 @@
 						{:else if firstOrder?.paymentMethod}
 							<div class="flex items-center justify-between pt-1 text-muted-foreground">
 								<span>{outcome === 'paid' ? 'Paid with' : 'Payment method'}</span>
-								<span class="capitalize">{String(firstOrder.paymentMethod).replace(/[-_]/g, ' ')}</span>
+								<span class="capitalize">{outcome === 'whatsapp' ? 'WhatsApp' : String(firstOrder.paymentMethod).replace(/[-_]/g, ' ')}</span>
 							</div>
 						{/if}
 					</div>
