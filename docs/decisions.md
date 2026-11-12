@@ -636,3 +636,11 @@ the engine's own method list (the connector drives only cash on delivery, Razorp
 hosted pages), places it through the connector's generic checkout, and the success page offers
 Send order on WhatsApp: a real wa.me link the engine wrote, with the order in it. A WhatsApp order
 counts as a sale like cash on delivery and claims no payment.
+
+## 2026-11-12: A card shows the product's whole name
+
+Owner: "keep the full text of the product title, if it goes to 3rd line then all product cards in
+that line must spread across 3 lines" (GoCommerce D258). `card_title_lines` gains `full`, now the
+default: the name wraps over as many lines as it needs. The card's name row is a row of the grid
+(subgrid), so every card in a row takes the height of its longest name and the prices stay level.
+One line and two lines remain the store's choice in the theme editor.

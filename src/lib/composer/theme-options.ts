@@ -11,7 +11,7 @@
 
 const CHOICES = {
 	card_badge: ['none', 'product_badge', 'first_tag', 'first_highlight'],
-	card_title_lines: ['one', 'two'],
+	card_title_lines: ['full', 'one', 'two'],
 	list_columns_mobile: ['one', 'two'],
 	list_columns_desktop: ['three', 'four', 'five'],
 	list_filters_desktop: ['sidebar', 'drawer'],
@@ -42,7 +42,7 @@ export type ThemeOptions = { [K in keyof typeof CHOICES]: Choice<K> } & {
 export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
 	card_badge: 'product_badge',
 	card_vendor: true,
-	card_title_lines: 'one',
+	card_title_lines: 'full',
 	card_rating: true,
 	card_discount: true,
 	card_wishlist: true,
