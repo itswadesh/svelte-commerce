@@ -32,6 +32,7 @@
 		taxPending = false,
 		unresolvedShippingText = 'Address required',
 		estimatedNote = 'Shipping is added once we have your address.',
+		freeDelivery = false,
 		loading = false,
 		coupon = null,
 		giftCard = null,
@@ -56,6 +57,12 @@
 		taxPending?: boolean
 		unresolvedShippingText?: string
 		estimatedNote?: string
+		/**
+		 * The bag already qualifies for the store's free delivery (free-delivery-bar.svelte says so above
+		 * the lines). Before an address the row said "Address required" under a banner saying "FREE
+		 * delivery on this order"; it says Free now, as the banner does.
+		 */
+		freeDelivery?: boolean
 		loading?: boolean
 		/** The code a checkout quote applies. Its row shows even at no saving, when the code frees delivery. */
 		coupon?: QuotedCoupon | null
@@ -150,9 +157,9 @@
 			<div class="flex items-center justify-between gap-4 text-sm">
 				<dt class="font-medium text-muted-foreground">Shipping</dt>
 				<dd class={['font-bold text-foreground', figure]}>
-					{#if !shippingResolved}
+					{#if !shippingResolved && !freeDelivery}
 						<span class="font-medium text-muted-foreground">{unresolvedShippingText}</span>
-					{:else if isFreeShipping}
+					{:else if isFreeShipping || !shippingResolved}
 						<span class="rounded-radius bg-success/5 px-2 py-0.5 text-xs font-bold text-success ring-1 ring-inset ring-success/30"> Free </span>
 					{:else}
 						{money(shipping)}
@@ -185,7 +192,7 @@
 			<div class="flex items-start justify-between gap-4">
 				<dt class="flex flex-col gap-1">
 					<span class="text-sm font-bold text-foreground">{label}</span>
-					{#if !shippingResolved}
+					{#if !shippingResolved && !freeDelivery}
 						<span class="text-xs font-normal text-muted-foreground">{estimatedNote}</span>
 					{/if}
 					{#if taxPending}
