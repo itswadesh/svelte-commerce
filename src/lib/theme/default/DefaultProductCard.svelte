@@ -11,6 +11,7 @@
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
 	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { productBadge } from '$lib/product/badge.js'
+	import { productColours } from '$lib/product/colour.js'
 	import { madeToDesign } from '$lib/product/designable'
 
 	const cartState = getCartState()
@@ -53,6 +54,12 @@
 	const showCart = $derived(options.card_add_to_cart || !hideCartControls)
 
 	const badge = $derived(productBadge(product, options.card_badge))
+
+	// A dot per colour when the product comes in more than one. A colour name the dots cannot paint
+	// turns the row into words ("3 colours"), never a wrong dot.
+	const colours = $derived(productColours(product))
+	const colourNames = $derived(colours.map((c) => c.name).join(', '))
+	const allPainted = $derived(colours.every((c) => c.paint))
 
 	// Score and count are different numbers. The badge used to print `ratings.length` whenever the
 	// backend sent reviews without a pre-computed score, so three one-star reviews read as a 3.
@@ -237,6 +244,20 @@
 							{formatPrice(product.mrp, currencyCode)}
 						</span>
 						<span class="dpc__price-off" data-testid="product-card-discount">{discount}% off</span>
+					{/if}
+					{#if colours.length}
+						<span class="dpc__colours" role="img" aria-label="{colours.length} colours: {colourNames}" title={colourNames} data-testid="product-card-colours">
+							{#if allPainted}
+								{#each colours.slice(0, 4) as colour}
+									<span class="dpc__dot" style="background: {colour.paint}"></span>
+								{/each}
+								{#if colours.length > 4}
+									<span class="dpc__dots-more">+{colours.length - 4}</span>
+								{/if}
+							{:else}
+								{colours.length} colours
+							{/if}
+						</span>
 					{/if}
 				</div>
 
@@ -559,6 +580,32 @@
 		container-type: inline-size;
 		line-height: 1.35;
 		font-variant-numeric: tabular-nums;
+	}
+
+	/* At the price row's far end, so names and prices stay level across a row of cards; on a card
+	   too narrow for both it wraps under the price. */
+	.dpc__colours {
+		display: inline-flex;
+		align-items: center;
+		align-self: center;
+		gap: 4px;
+		margin-left: auto;
+		font-size: var(--type-dense);
+		line-height: 1.35;
+		color: var(--ed-soft);
+	}
+
+	/* The ring keeps a white or cream dot visible on a white card. */
+	.dpc__dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 999px;
+		box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18);
+	}
+
+	.dpc__dots-more {
+		font-size: 0.6875rem;
+		font-weight: 600;
 	}
 
 	.dpc__price-from {
