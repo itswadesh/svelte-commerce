@@ -5,8 +5,13 @@
 	import { keepResolvableLinks } from '$lib/components/common/cms-pages.js'
 	import CookieSettingsLink from '$lib/components/common/cookie-settings-link.svelte'
 	import CompanyCheckout from '$lib/components/checkout/company-checkout.svelte'
+	import AuthModal from '$lib/components/auth/auth-modal.svelte'
 
 	let { children } = $props()
+
+	// The sign-in dialog lives in the storefront's nav, which checkout leaves out, so the address
+	// step's "log in" and "Login to view your saved addresses" opened nothing. Checkout mounts its own.
+	let showAuth = $state(false)
 
 	// The reduced chrome checkout gets instead of the storefront's nav and footer: the brand mark
 	// home, a reassurance, and a single row of legal links and payment marks. Nothing that invites
@@ -69,3 +74,5 @@
 		</div>
 	</footer>
 </div>
+
+<AuthModal bind:show={showAuth} />
