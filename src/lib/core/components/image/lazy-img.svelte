@@ -122,12 +122,18 @@
 		}
 	})
 
+	// Start over only when the address really changes. The effect also re-ran whenever the parent
+	// rebuilt the object `src` was read from (a cart refresh after +, a listing re-fetch) with the
+	// same address: `loaded` went false, the browser had nothing new to load, so no load event came
+	// and the picture stayed at opacity 0. That emptied every other line's picture in the bag.
+	let shownSrc: string | null = null
 	$effect(() => {
-		if (src) {
-			loaded = false
-			error = false
-			usingFallback = false
-		}
+		const changed = shownSrc !== null && src !== shownSrc
+		shownSrc = src
+		if (!changed) return
+		loaded = false
+		error = false
+		usingFallback = false
 	})
 </script>
 
