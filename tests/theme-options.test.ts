@@ -39,6 +39,12 @@ describe('themeOptions', () => {
 		})
 	})
 
+	it('shows the whole name unless the store chose a line limit', () => {
+		expect(themeOptions({}).card_title_lines).toBe('full')
+		expect(themeOptions({ card_title_lines: 'one' }).card_title_lines).toBe('one')
+		expect(themeOptions({ card_title_lines: 'three' }).card_title_lines).toBe('full')
+	})
+
 	it('drops anything outside the lists, so a value can only pick, never write', () => {
 		const o = themeOptions({
 			card_badge: 'bestseller',
