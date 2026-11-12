@@ -207,7 +207,7 @@
 	<title>Address - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
-<div class="min-h-screen py-8">
+<div class="min-h-screen py-4 sm:py-8">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={2} />
 
@@ -262,7 +262,7 @@
 					<Button variant="outline" href="/">Continue shopping</Button>
 				</div>
 			{:else}
-				<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
+				<div class="grid gap-4 sm:gap-8 lg:grid-cols-[1fr_400px]">
 					<!-- Left Column. `min-w-0`: a grid item's default `min-width: auto` lets a wide
 					     min-content child (a nowrap button, a long token) stretch the column past the
 					     viewport, which scrolls the whole page sideways on a phone. -->
@@ -271,7 +271,7 @@
 						{#await userState.hasLoaded then _}
 							<!-- Every logged-out visitor sees the guest-checkout banner. -->
 							{#if !userState.user?.userId}
-								<div class="rounded-lg border border-primary/30 bg-primary/10 p-4">
+								<div class="rounded-lg border border-primary/30 bg-primary/10 p-3 sm:p-4">
 									<div class="flex items-start gap-3">
 										<ShoppingBag class="mt-0.5 size-5 shrink-0 text-primary" />
 										<div>
@@ -312,7 +312,7 @@
 								</div>
 
 								{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
-									<div class="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2">
+									<div class="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 sm:gap-6 sm:p-6">
 										<div class="flex flex-col gap-1">
 											<p class="text-[10px] font-bold tracking-tighter text-muted-foreground">Email address</p>
 											<p class="text-sm font-medium text-foreground">{cartState.cart.email}</p>
@@ -379,7 +379,7 @@
 							<div class="overflow-hidden rounded-lg border border-border bg-background">
 								{#if isGuestCheckout}
 									<!-- Guest checkout: inline address form, no login required -->
-									<div class="p-6">
+									<div class="p-4 sm:p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
 											<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">
 												{detailsOnly ? 'Your details' : 'Delivery address'}
@@ -409,11 +409,11 @@
 											{/if}
 										</div>
 										{#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'shipping'}
-											<div class="p-6">
+											<div class="p-4 sm:p-6">
 												<Skeleton class="h-[100px] w-full rounded-lg" />
 											</div>
 										{:else}
-											<div class="p-6">
+											<div class="p-4 sm:p-6">
 												<div class="mb-4 flex items-center">
 													<MapPin class="mr-2 h-4 w-4 text-primary" />
 													<h3 class="text-sm font-bold tracking-tight text-foreground">
@@ -442,7 +442,7 @@
 										{/if}
 									</div>
 								{:else if detailsOnly}
-									<div class="p-6">
+									<div class="p-4 sm:p-6">
 										<h2 class="mb-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">Your details</h2>
 										<p class="mb-4 text-sm text-muted-foreground">
 											Nothing is posted: your files are ready to download as soon as you pay. Your state is used for the tax on your invoice.
@@ -455,7 +455,7 @@
 										/>
 									</div>
 								{:else}
-									<div class="p-6">
+									<div class="p-4 sm:p-6">
 										<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
 											<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Shipping address</h2>
 
@@ -495,11 +495,11 @@
 											{/if}
 										</div>
 										{#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'billing'}
-											<div class="p-6">
+											<div class="p-4 sm:p-6">
 												<Skeleton class="h-[100px] w-full rounded-lg" />
 											</div>
 										{:else if cartState.cart?.billingAddress?.address_1}
-											<div class="p-6">
+											<div class="p-4 sm:p-6">
 												<div class="mb-4 flex items-center">
 													<MapPin class="mr-2 h-4 w-4 text-primary" />
 													<h3 class="text-sm font-bold tracking-tight text-foreground">

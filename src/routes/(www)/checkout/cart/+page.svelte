@@ -245,7 +245,7 @@
 	<title>Cart - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
-<div class="py-8">
+<div class="py-4 sm:py-8">
 	<div class="page-width">
 		<CheckoutHeader step={1} />
 
@@ -280,7 +280,7 @@
 					<Button href="/" class="h-11 px-6">Start shopping</Button>
 				</div>
 			{:else}
-				<div class="grid gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
+				<div class="grid gap-4 sm:gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
 					<!-- Left column. `min-w-0` keeps a wide min-content child from stretching the column
 					     past the viewport and scrolling the page sideways on a phone. -->
 					<div class="min-w-0">
@@ -320,11 +320,11 @@
 								     interactive controls inside an anchor, and a tap on the row's empty space opened a
 								     second tab. Only the thumbnail and the title are links now, in this tab, which is
 								     the pattern the drawer row already followed. -->
-								<div class="flex gap-3 p-4 sm:gap-5 sm:p-5">
+								<div class="flex gap-3 px-0 py-3 sm:gap-5 sm:p-5">
 									{#if cartModule.partialCheckoutEnabled}
 										<label
 											for={item.id}
-											class="-my-4 -ml-4 flex shrink-0 items-center px-3 hover:cursor-pointer sm:-my-5 sm:-ml-5 {item.isSelectedForCheckout
+											class="-my-3 flex shrink-0 items-center px-3 hover:cursor-pointer sm:-my-5 sm:-ml-5 {item.isSelectedForCheckout
 												? 'bg-muted'
 												: 'hover:bg-muted/50'}"
 										>
@@ -341,7 +341,7 @@
 									<div class="flex shrink-0 flex-col items-center gap-3">
 										<a
 											href={`/products/${item.slug}`}
-											class="cart-thumb block w-24 overflow-hidden rounded-md bg-muted sm:w-28"
+											class="cart-thumb block w-20 overflow-hidden rounded-md bg-muted sm:w-28"
 											style="aspect-ratio: var(--product-image-ratio, 3 / 4)"
 											aria-label="View {item.title}"
 										>

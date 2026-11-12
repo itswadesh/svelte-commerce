@@ -275,6 +275,24 @@
 		--grid-gap-y: clamp(14px, 1.4vw, 20px);
 	}
 
+	/* Phones are compact (owner, 2026-11-12: "everything is big in mobile, lets keep things compact",
+	   pointing at Flipkart, Ajio and Myntra): type one step down, to the `compact` scale, under 640px.
+	   A store whose settings choose a larger scale or density takes the same step on a phone
+	   (theme-tokens.ts, phoneTokenDeclarations); a test holds both to TYPE_SCALES.compact. */
+	@media (max-width: 639px) {
+		[data-theme='default'] {
+			--type-label: 0.75rem;
+			--type-dense: 0.75rem;
+			--type-ui: 0.8125rem;
+			--type-body: 0.875rem;
+			--type-heading: clamp(0.9375rem, 1.3vw, 1rem);
+			--type-page-title: clamp(1.125rem, 1.75vw, 1.375rem);
+			--type-product-title: clamp(1.375rem, 1.95vw, 1.5rem);
+			--type-section-title: clamp(1.375rem, 2.25vw, 1.75rem);
+			--type-display: clamp(1.875rem, 5.6vw, 3.75rem);
+		}
+	}
+
 	[data-theme='wine'] {
 		--background: 0 0% 93.3%;
 		--foreground: 0 0% 0%;
