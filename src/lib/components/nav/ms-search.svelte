@@ -189,7 +189,9 @@
 							{/if}
 
 							{#if searchResults.length}
-								<Command.Group heading={search.trim() ? 'Products' : 'Popular right now'} class="p-0">
+								<!-- "Recommended", the listing's own word for the store's order: nothing here
+								     counts sales, so "Popular right now" claimed what no one had measured. -->
+								<Command.Group heading={search.trim() ? 'Products' : 'Recommended'} class="p-0">
 									{#each searchResults as result}
 										<!-- Real anchors, so a shopper comparing two suggestions can middle-click or
 										     long-press them into background tabs and a screen reader can list them. -->
