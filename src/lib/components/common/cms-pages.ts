@@ -16,8 +16,27 @@ import { aliasedPath } from '$lib/path-aliases'
  * shipped broken.
  */
 
-/** Routes under `(legal)` whose content comes from the CMS, keyed by the path the footer links. */
-export const CMS_BACKED_PATHS = new Set(['/about-us', '/privacy-policy', '/terms-and-conditions', '/shipping-policy', '/refund-policy'])
+/**
+ * Routes under `(legal)` whose content comes from the CMS, keyed by the path the footer links, and
+ * the page names (slugs) each may be stored under, the route's own first. GoCommerce gives a new
+ * store `about`, `shipping` and `returns`; only the long names were asked for, so /refund-policy,
+ * /shipping-policy and /about-us were 404s on a store that had all three, and their footer links
+ * were hidden.
+ */
+export const CMS_PAGE_SLUGS: Record<string, string[]> = {
+	'/about-us': ['about-us', 'about'],
+	'/privacy-policy': ['privacy-policy', 'privacy'],
+	'/terms-and-conditions': ['terms-and-conditions', 'terms'],
+	'/shipping-policy': ['shipping-policy', 'shipping'],
+	'/refund-policy': ['refund-policy', 'returns', 'refunds', 'return-policy']
+}
+
+export const CMS_BACKED_PATHS = new Set(Object.keys(CMS_PAGE_SLUGS))
+
+/** Whether a CMS-backed path has its page published under any of its names. */
+function isPublished(path: string, slugs: Set<string>): boolean {
+	return (CMS_PAGE_SLUGS[path] ?? [slugOf(path)]).some((slug) => slugs.has(slug))
+}
 
 function slugOf(path: string) {
 	return path.replace(/^\/+/, '').replace(/\/+$/, '')
@@ -49,16 +68,17 @@ async function fetchPublishedSlugs(): Promise<string[]> {
 		// Fall through to the per-slug probe.
 	}
 
-	const probes = [...CMS_BACKED_PATHS].map(async (path) => {
-		const slug = slugOf(path)
-		try {
-			const record: any = await pageService.getOne(slug)
-			const hasContent = !!(record?.content || record?.layouts?.length)
-			return hasContent ? slug : null
-		} catch {
-			return null
-		}
-	})
+	const probes = Object.values(CMS_PAGE_SLUGS)
+		.flat()
+		.map(async (slug) => {
+			try {
+				const record: any = await pageService.getOne(slug)
+				const hasContent = !!(record?.content || record?.layouts?.length)
+				return hasContent ? slug : null
+			} catch {
+				return null
+			}
+		})
 	return (await Promise.all(probes)).filter(Boolean) as string[]
 }
 
@@ -77,7 +97,7 @@ export function publishedCmsSlugs(store = ''): Promise<string[]> {
  * `/privacy-policy`, see path-aliases.ts) or `/p/about-us`, the generic page route. Each of those
  * 404s on an unpublished page exactly as the direct path does.
  */
-function cmsPathOf(href: string): string | null {
+export function cmsPathOf(href: string): string | null {
 	if (!href.startsWith('/') || href.startsWith('//')) return null
 	let path: string
 	try {
@@ -86,9 +106,39 @@ function cmsPathOf(href: string): string | null {
 	} catch {
 		return null // a malformed escape in a merchant's link; the router will say what it is
 	}
+	// The generic page route, under any of a policy page's names: /p/returns is /refund-policy.
 	const generic = /^\/p\/([^/]+)$/.exec(path)?.[1]
-	const target = generic ? `/${generic}` : path
-	return CMS_BACKED_PATHS.has(target) ? target : null
+	if (generic) {
+		let slug = generic
+		try {
+			slug = decodeURIComponent(generic)
+		} catch {
+			// Keep it as written.
+		}
+		return Object.keys(CMS_PAGE_SLUGS).find((key) => CMS_PAGE_SLUGS[key].includes(slug)) ?? null
+	}
+	return CMS_BACKED_PATHS.has(path) ? path : null
+}
+
+/**
+ * Columns of links with each policy page linked once: a later link to a page already linked, under
+ * any of its names, is dropped, and a column left empty with it. A store's footer menu can carry
+ * both /about-us and /p/about; once both resolve to the store's `about` page, it showed twice.
+ */
+export function withoutRepeatedPages<T extends { items: any[] }>(columns: T[]): T[] {
+	const seen = new Set<string>()
+	return columns
+		.map((column) => ({
+			...column,
+			items: column.items.filter((item) => {
+				const key = cmsPathOf(item?.link ?? item?.href ?? '')
+				if (!key) return true
+				if (seen.has(key)) return false
+				seen.add(key)
+				return true
+			})
+		}))
+		.filter((column) => column.items.length)
 }
 
 /**
@@ -101,7 +151,7 @@ function cmsPathOf(href: string): string | null {
  */
 export function isCmsPageResolvable(href: string, published: Iterable<string>): boolean {
 	const path = cmsPathOf(href)
-	return !path || new Set(published).has(slugOf(path))
+	return !path || isPublished(path, new Set(published))
 }
 
 /**
@@ -113,6 +163,6 @@ export function keepResolvableLinks<T extends { link?: string; href?: string }>(
 	const available = new Set(published)
 	return links.filter((entry) => {
 		const path = cmsPathOf(entry?.link ?? entry?.href ?? '')
-		return !path || available.has(slugOf(path))
+		return !path || isPublished(path, available)
 	})
 }
