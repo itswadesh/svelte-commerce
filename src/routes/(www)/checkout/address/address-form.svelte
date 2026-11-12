@@ -168,7 +168,7 @@
 					<span>{formError}</span>
 				</p>
 			{/if}
-			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+			<div class="grid grid-cols-2 gap-2">
 				<Textbox
 					name="firstName"
 					error={fieldErrors.firstName}
@@ -233,7 +233,7 @@
 					label="Address Line 2"
 				/>
 			{/if}
-			<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+			<div class="grid grid-cols-2 gap-2">
 				{#if !detailsOnly}
 					<Textbox
 						name="zip"
