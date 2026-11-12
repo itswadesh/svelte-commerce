@@ -161,6 +161,10 @@
 {/if}
 
 {#snippet overlays()}
+	<!-- The tag and the rating share the bottom-left corner, as on the cards: at the top, the tag
+	     covered the model's face. -->
+	{#if badge || ratingScore > 0}
+	<div class="edp-gallery__marks">
 	{#if badge}
 		<span class="edp-gallery__badge" data-testid="product-gallery-badge">{badge}</span>
 	{/if}
@@ -175,6 +179,8 @@
 			<span>{ratingScore.toFixed(1)}</span>
 			<span class="edp-gallery__rating-count">| {ratings.length}</span>
 		</a>
+	{/if}
+	</div>
 	{/if}
 {/snippet}
 
@@ -526,15 +532,37 @@
 		}
 	}
 
-	.edp-gallery__badge,
-	.edp-gallery__rating {
+	/* Bottom-left, the tag over the rating. On a phone it stops short of the "similar" button in the
+	   opposite corner (product-gallery-section.svelte), 46px wide and 12px in. */
+	.edp-gallery__marks {
 		position: absolute;
 		left: 12px;
+		right: 70px;
+		bottom: 12px;
 		z-index: 2;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+		pointer-events: none;
+	}
+
+	.edp-gallery__marks > :global(*) {
+		pointer-events: auto;
+	}
+
+	@media (min-width: 640px) {
+		.edp-gallery__marks {
+			right: 12px;
+		}
+	}
+
+	.edp-gallery__badge,
+	.edp-gallery__rating {
 		display: inline-flex;
 		align-items: center;
 		gap: 4px;
-		max-width: calc(100% - 24px);
+		max-width: 100%;
 		padding: 4px 8px;
 		background: hsl(var(--card) / 0.92);
 		color: hsl(var(--foreground));
@@ -544,7 +572,7 @@
 	}
 
 	.edp-gallery__badge {
-		top: 12px;
+		display: block;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -552,17 +580,16 @@
 	}
 
 	.edp-gallery__rating {
-		bottom: 12px;
 		min-height: 28px;
 		border-radius: 999px;
 		font-variant-numeric: tabular-nums;
 		transition: transform var(--motion-fast) var(--motion-ease);
 	}
 
-	/* From 640px each slide keeps a 20px margin under its picture (`sm:mb-5`); the pill stays on the
+	/* From 640px each slide keeps a 20px margin under its picture (`sm:mb-5`); the marks stay on the
 	   picture, not on that margin. */
 	@media (min-width: 640px) {
-		.edp-gallery .edp-gallery__rating {
+		.edp-gallery .edp-gallery__marks {
 			bottom: 32px;
 		}
 	}
