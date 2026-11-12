@@ -6,7 +6,7 @@ const published: Record<string, string[]> = { a: ['privacy-policy'], b: ['about-
 const list = vi.fn(async () => ({ data: published[shop].map((slug) => ({ slug })) }))
 vi.mock('$lib/core/services/index.js', () => ({ pageService: { list, getOne: vi.fn() } }))
 
-const { isCmsPageResolvable, keepResolvableLinks, publishedCmsSlugs } = await import('$lib/components/common/cms-pages')
+const { cmsPathOf, isCmsPageResolvable, keepResolvableLinks, publishedCmsSlugs, withoutRepeatedPages } = await import('$lib/components/common/cms-pages')
 
 describe('keepResolvableLinks', () => {
 	// A new GoCommerce store's footer: six standard pages, all drafts until the merchant publishes.
@@ -66,5 +66,29 @@ describe('publishedCmsSlugs', () => {
 		vi.advanceTimersByTime(61_000)
 		expect(await publishedCmsSlugs('a.example')).toEqual(['privacy-policy', 'about-us'])
 		vi.useRealTimers()
+	})
+})
+
+describe('a policy page under its short name', () => {
+	it("counts a store's `returns`, `shipping` and `about` pages as the long routes", () => {
+		const slugs = ['about', 'shipping', 'returns']
+		expect(isCmsPageResolvable('/refund-policy', slugs)).toBe(true)
+		expect(isCmsPageResolvable('/shipping-policy', slugs)).toBe(true)
+		expect(isCmsPageResolvable('/about-us', slugs)).toBe(true)
+		expect(isCmsPageResolvable('/privacy-policy', slugs)).toBe(false)
+		expect(cmsPathOf('/p/returns')).toBe('/refund-policy')
+		expect(cmsPathOf('/p/lookbook')).toBeNull()
+	})
+
+	it('links each page once, whichever name came first', () => {
+		const columns = [
+			{ name: 'Help', items: [{ name: 'About us', link: '/about-us' }, { name: 'Contact', link: '/contact-us' }] },
+			{ name: 'Pages', items: [{ name: 'About', link: '/p/about' }] },
+			{ name: 'Shop', items: [{ name: 'Returns', link: '/p/returns' }, { name: 'Note' }] }
+		]
+		expect(withoutRepeatedPages(columns)).toEqual([
+			{ name: 'Help', items: [{ name: 'About us', link: '/about-us' }, { name: 'Contact', link: '/contact-us' }] },
+			{ name: 'Shop', items: [{ name: 'Returns', link: '/p/returns' }, { name: 'Note' }] }
+		])
 	})
 })
