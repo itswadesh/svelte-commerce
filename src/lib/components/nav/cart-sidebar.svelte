@@ -100,9 +100,11 @@
 		}
 	})
 
+	// Not on the quick-order page (D255): a shopper there adds row after row, and its own pinned bar
+	// already shows the order, so a drawer over the list on every Add would hide the next row.
 	$effect(() => {
 		const showCheckout = !!cartState?.showCheckout
-		if (showCheckout && !prevShowCheckout && cartState && !cartState.isOpen) {
+		if (showCheckout && !prevShowCheckout && cartState && !cartState.isOpen && page.url.pathname !== '/order') {
 			cartState.isOpen = true
 		}
 		prevShowCheckout = showCheckout
