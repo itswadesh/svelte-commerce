@@ -530,6 +530,13 @@
 	margin-inline: auto;
 }
 
+/* A bag line's thumbnail (drawer and cart page). LazyImg draws its own box in the store record's
+   ratio, square unless set, which shrank a portrait photo inside the thumbnail with bars beside
+   it. With both sides set that ratio no longer applies, and the photo fills the thumbnail. */
+.cart-thumb > div {
+	height: 100%;
+}
+
 /* The one gap between product cards, on a home shelf, a collection and under a product. It
    outranks the grid's own gap utilities, which other themes keep. */
 [data-theme='default'] .product-grid {

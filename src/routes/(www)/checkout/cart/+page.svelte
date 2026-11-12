@@ -339,8 +339,13 @@
 									{/if}
 
 									<div class="flex shrink-0 flex-col items-center gap-3">
-										<a href={`/products/${item.slug}`} class="block w-24 overflow-hidden rounded-md bg-muted sm:w-28" aria-label="View {item.title}">
-											<LazyImg src={picture.src} alt={picture.alt} class="w-full object-contain object-top" />
+										<a
+											href={`/products/${item.slug}`}
+											class="cart-thumb block w-24 overflow-hidden rounded-md bg-muted sm:w-28"
+											style="aspect-ratio: var(--product-image-ratio, 3 / 4)"
+											aria-label="View {item.title}"
+										>
+											<LazyImg src={picture.src} alt={picture.alt} class="h-full w-full object-cover object-top" />
 										</a>
 
 										<div class="sm:hidden">
