@@ -46,6 +46,8 @@
 	// The store keeps its cart id in localStorage, so a stored id with no cart behind it is exactly
 	// the failure case the store swallowed. `reload` counts retries and re-runs the store's own
 	// hydration.
+	// Whether the bag has reached the store's free delivery, as the bar above the lines reports it.
+	let freeDelivery = $state(false)
 	let reloads = $state(0)
 	let cartLoadFailed = $state(false)
 
@@ -284,7 +286,11 @@
 					<!-- Left column. `min-w-0` keeps a wide min-content child from stretching the column
 					     past the viewport and scrolling the page sideways on a phone. -->
 					<div class="min-w-0">
-						<FreeDeliveryBar subtotal={cartState.cart?.subtotal} country={(cartState.cart as any)?.shippingAddress?.country ?? ''} />
+						<FreeDeliveryBar
+							subtotal={cartState.cart?.subtotal}
+							country={(cartState.cart as any)?.shippingAddress?.country ?? ''}
+							bind:qualifies={freeDelivery}
+						/>
 
 						{#if totalSavings > 0}
 							<div class="mb-4 flex items-center gap-2 rounded-radius border border-success/40 bg-success/5 px-4 py-3">
@@ -464,6 +470,7 @@
 							<!-- The four hand-written copies of this block had drifted; this is the shared one, and
 							     it is what moves the bottom line to "Estimated total" while shipping is unknown. -->
 							<PriceSummary
+								{freeDelivery}
 								subtotal={cartState.cart?.subtotal}
 								{mrpSaving}
 								discount={cartState.cart?.discountAmount}

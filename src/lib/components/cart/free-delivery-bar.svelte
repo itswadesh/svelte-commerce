@@ -11,11 +11,15 @@
 	 * delivery rate, read by the engine for the bag's country; with no such rate there is no bar.
 	 * Re-asked whenever the subtotal moves.
 	 */
-	let { subtotal = 0, country = '' }: { subtotal?: number | null; country?: string } = $props()
+	// `qualifies` tells the page the bag has reached free delivery, so its price summary can say so too.
+	let { subtotal = 0, country = '', qualifies = $bindable(false) }: { subtotal?: number | null; country?: string; qualifies?: boolean } = $props()
 
 	let answer = $state<FreeDelivery>(null)
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
 	const bar = $derived(freeDeliveryState(answer))
+	$effect(() => {
+		qualifies = !!bar?.qualifies
+	})
 
 	$effect(() => {
 		void subtotal
