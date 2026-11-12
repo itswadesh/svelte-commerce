@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { onMount, type Snippet } from 'svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import * as Carousel from '$lib/components/ui/carousel/index.js'
 	import type { CarouselAPI } from '$lib/components/ui/carousel/context.js'
@@ -23,7 +23,9 @@
 	import { dialog } from '$lib/actions/dialog'
 	import { fade } from '$lib/motion'
 
-	let { images = [] } = $props()
+	// `corner`: controls drawn on the swiped picture itself, so they keep to its corners on a phone,
+	// where the picture runs past the page's margins and the dots sit under it.
+	let { images = [], corner }: { images?: string[]; corner?: Snippet } = $props()
 
 	// The store's own words for a picture, when it wrote some.
 	const pictureAlt = (img: string, index: number) =>
@@ -345,6 +347,7 @@
 				{/each}
 			</Carousel.Content>
 			{@render overlays()}
+			{@render corner?.()}
 			</div>
 			<div class="hidden sm:block">
 				<Carousel.Previous class="-left-4 size-7 [&>svg]:size-3.5" />

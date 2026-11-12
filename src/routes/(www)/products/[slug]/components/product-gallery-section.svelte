@@ -50,41 +50,48 @@
 <div class="relative">
 	{#if page?.data?.store?.plugins?.socialSharingButtons}
 		<div
-			class="edp-gallery-float absolute right-2 top-2 z-10 block rounded-full bg-card shadow-z-1 max-md:[&_button]:min-h-11 max-md:[&_button]:min-w-11"
+			class="edp-gallery-float edp-share absolute right-3 top-3 z-10 block rounded-full bg-card shadow-z-1 max-md:[&_button]:min-h-11 max-md:[&_button]:min-w-11"
 		>
 			<ShareButton productName={page.data?.product?.title} productImage={page.data?.product?.thumbnail} url={page?.url?.href} />
 		</div>
 	{/if}
 	{#if productState.productImagesArray?.length > 0}
 		<div class="relative">
-			<ProductGallery images={productState.productImagesArray || []} />
+			<ProductGallery images={productState.productImagesArray || []}>
+				{#snippet corner()}
+					{#if productState.productsOfSameCategory?.length}
+						<!-- Phones only: 12px in from the picture's bottom corner, level with the rating
+						     opposite, and the same size as the share button above it. -->
+						<button
+							type="button"
+							class="edp-gallery-float absolute bottom-3 right-3 z-[2] grid size-[46px] place-items-center rounded-full bg-card text-foreground shadow-z-1 transition-transform duration-fast active:scale-95 sm:hidden"
+							onclick={() => (productState.showSimilarDrawer = true)}
+						>
+							<svg
+								class="[&>*]:stroke-[1.2]"
+								xmlns="http://www.w3.org/2000/svg"
+								width="1em"
+								height="1em"
+								fill="none"
+								viewBox="0 0 20 20"
+								stroke="none"
+								style="height: 20px; width: 20px;"
+								><g stroke="currentColor" stroke-width="1.5" clip-path="url(#icon-ymal_svg__a)"
+									><rect width="8.9" height="13.7" x="5.55" y="3.15" rx="1.25"></rect><path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="m14.4 6.4 4 1.2-4 8.8M5.6 6.4l-4 1.2 4 8.8"
+									></path></g
+								><defs><clipPath id="icon-ymal_svg__a"><path fill="#fff" d="M0 0h19.2v19.2H0z"></path></clipPath></defs></svg
+							>
+							<span class="sr-only">View similar</span>
+						</button>
+					{/if}
+				{/snippet}
+			</ProductGallery>
 		</div>
 
 		<Drawer.Root direction="bottom" bind:open={productState.showSimilarDrawer}>
-			{#if productState.productsOfSameCategory?.length}
-				<Drawer.Trigger class="edp-gallery-float absolute bottom-10 right-3 rounded-full bg-card p-2 shadow-z-1 sm:hidden">
-					<div class="text-foreground">
-						<svg
-							class="[&>*]:stroke-[1.2]"
-							xmlns="http://www.w3.org/2000/svg"
-							width="1em"
-							height="1em"
-							fill="none"
-							viewBox="0 0 20 20"
-							stroke="none"
-							style="height: 20px; width: 20px;"
-							><g stroke="currentColor" stroke-width="1.5" clip-path="url(#icon-ymal_svg__a)"
-								><rect width="8.9" height="13.7" x="5.55" y="3.15" rx="1.25"></rect><path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="m14.4 6.4 4 1.2-4 8.8M5.6 6.4l-4 1.2 4 8.8"
-								></path></g
-							><defs><clipPath id="icon-ymal_svg__a"><path fill="#fff" d="M0 0h19.2v19.2H0z"></path></clipPath></defs></svg
-						>
-						<span class="sr-only">View similar</span>
-					</div>
-				</Drawer.Trigger>
-			{/if}
 			<Drawer.Content class="">
 				<Drawer.Header class="text-left">
 					<Drawer.Title>You may also like</Drawer.Title>
@@ -126,5 +133,13 @@
 	:global([data-theme='default'] .edp-gallery-float) {
 		background: var(--ed-surface);
 		border: 1px solid var(--ed-line);
+	}
+
+	/* On a phone the default theme's picture runs past the page's margins (product-gallery.svelte),
+	   so the share button moves out with it: 12px in from the picture's corner, like the badge. */
+	@media (max-width: 639px) {
+		:global([data-theme='default']) .edp-share {
+			right: calc(12px - var(--container-gutter));
+		}
 	}
 </style>
