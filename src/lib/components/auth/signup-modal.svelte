@@ -44,9 +44,9 @@
 					{#if page?.data?.store?.logo}
 						<img src={page.data.store.logo} alt={page.data.store.name} class="h-7 w-auto object-contain" />
 					{:else}
-						<span class="flex size-8 items-center justify-center rounded-radius border bg-muted text-sm font-semibold">
-							{page?.data?.store?.name?.charAt(0) || 'L'}
-						</span>
+						<!-- No logo: the store's name as a wordmark. Its first letter in a bordered square read as a
+						     keyboard key, a shortcut nobody had defined. -->
+						<span class="min-w-0 truncate text-base font-semibold">{page?.data?.store?.name ?? ''}</span>
 					{/if}
 					<button
 						type="button"
