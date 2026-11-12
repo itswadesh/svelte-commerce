@@ -5,7 +5,7 @@
 	import { page } from '$app/state'
 	import { TrustpilotPlugin } from '$lib/core/components/index.js'
 	import { sanitize } from '$lib/core/utils/index.js'
-	import { keepResolvableLinks } from './cms-pages.js'
+	import { keepResolvableLinks, withoutRepeatedPages } from './cms-pages.js'
 	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
 	import Newsletter from './newsletter.svelte'
 	import FooterMenu from './footer-menu.svelte'
@@ -106,7 +106,7 @@
 			.map((column) => ({ ...column, items: keepResolvableLinks(column.items, publishedCms) }))
 			.filter((column) => column.items.length)
 	)
-	const renderedFooterMenu = $derived(shownFooterColumns<{ name?: string; items: unknown[] }>(resolvableFooterMenu, themeFooterMenu))
+	const renderedFooterMenu = $derived(withoutRepeatedPages(shownFooterColumns<{ name?: string; items: any[] }>(resolvableFooterMenu, themeFooterMenu)))
 	const footerDescription = $derived(
 		chromeFooter?.about ?? (activeThemeName === 'default' ? storeData?.description : themeContent?.description || storeData?.description)
 	)

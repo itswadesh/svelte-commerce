@@ -1,1 +1,3 @@
-export { legalRefundPolicyLoadServer as load } from '$lib/core/load-functions/index.js'
+import { cmsPageLoader } from '../cms-page-load'
+
+export const load = cmsPageLoader('/refund-policy')

@@ -1,4 +1,26 @@
 import { error } from '@sveltejs/kit'
+import { PageService } from '$lib/core/services'
+import { CMS_PAGE_SLUGS } from '$lib/components/common/cms-pages'
+
+/**
+ * The server load for a legal route: its CMS page under the first of its names that has content
+ * (CMS_PAGE_SLUGS), so /refund-policy shows a store's `returns` page. A miss is `{ page: {} }`,
+ * which requireCmsPage below turns into the 404, as the shared loaders it replaces did.
+ */
+export function cmsPageLoader(path: string) {
+	return async ({ fetch }: { fetch: typeof globalThis.fetch }) => {
+		const pageService = new PageService(fetch)
+		for (const slug of CMS_PAGE_SLUGS[path] ?? []) {
+			try {
+				const page: any = await pageService.getOne(slug)
+				if (page?.content || page?.layouts?.length) return { page }
+			} catch {
+				// Not under this name; try the next.
+			}
+		}
+		return { page: {} }
+	}
+}
 
 /**
  * The five CMS-backed legal routes share one shape: a one-line `+page.server.ts` re-exporting a
