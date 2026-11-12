@@ -93,8 +93,9 @@
 			{ title: 'Orders', url: '/my/orders' },
 			// { title: 'Buy Again', url: '/my/buy-again' },
 			{ title: 'Addresses', url: '/my/addresses' },
-			{ title: 'Change password', url: '/auth/change-password' }
 		]
+		// Only a signed-in shopper has a password to change; the other links ask a guest to sign in.
+		if (userState?.user?.userId) items.push({ title: 'Change password', url: '/auth/change-password' })
 		if (wishlistPlugin?.active) items.push({ title: 'Wishlist', url: '/my/wishlist' })
 		return items
 	})
