@@ -19,7 +19,7 @@
 	//      recents live in localStorage, categories come from the megamenu payload the header
 	//      has already loaded.
 	import { type Snippet } from 'svelte'
-	import { meilisearchService } from '$lib/core/services/index.js'
+	import { meilisearchService, productService } from '$lib/core/services/index.js'
 	import { page } from '$app/state'
 	import { goto } from '$app/navigation'
 
@@ -100,9 +100,29 @@
 		debouncedSearch(search)
 	})
 
+	// An empty box lists the store's top ten products: its "featured" collection when it keeps one,
+	// else its own listing order (the connector falls back). The autocomplete answers an empty query
+	// with nothing on GoCommerce, so the panel used to open on a blank list. Fetched once per visit;
+	// clearing the box brings the same ten back without asking again.
+	const TOP_LIMIT = 10
+	let topProducts: any[] = $state([])
+
 	const showInitialRecommendations = async () => {
-		await autoComplete('')
+		if (topProducts.length) return
+		const id = ++requestId
+		loading = true
+		try {
+			const res = await productService.listFeaturedProducts({ page: 1, limit: TOP_LIMIT })
+			topProducts = (res?.data || []).slice(0, TOP_LIMIT)
+		} catch (error) {
+			console.error('Top products error:', error)
+		} finally {
+			if (id === requestId) loading = false
+		}
 	}
+
+	// What the list shows: the typed term's matches, or the top products while the box is empty.
+	const shownResults = $derived(search.trim() ? searchResults : topProducts)
 
 	/* ---------------- Recent searches ---------------- */
 
@@ -252,7 +272,7 @@
 </script>
 
 {@render content({
-	searchResults,
+	searchResults: shownResults,
 	loading,
 	searchPlugin,
 	expandSearch,
