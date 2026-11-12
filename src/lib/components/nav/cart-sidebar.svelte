@@ -158,7 +158,7 @@
 		<div transition:fade>
 			<Button
 				variant="ghost"
-				class="fixed inset-0 z-overlay h-svh w-full rounded-none border-0 bg-foreground/40 hover:bg-foreground/40"
+				class="fixed inset-0 z-overlay h-auto w-full rounded-none border-0 bg-foreground/40 hover:bg-foreground/40"
 				aria-label="Close cart"
 				onclick={closeCart}
 			>
@@ -175,7 +175,7 @@
 		     now sits on <html>, so a panel painted in `bg-background` follows the active theme
 		     rather than freezing the default palette into the drawer. -->
 		<div
-			class="fixed right-0 top-0 z-modal flex h-svh w-full flex-col bg-background shadow-z-10 sm:w-[26rem]"
+			class="fixed inset-y-0 right-0 z-modal flex w-full flex-col bg-background shadow-z-10 sm:w-[26rem]"
 			in:drawer={{ edge: 'right' }}
 			out:drawer={{ edge: 'right' }}
 			role="dialog"

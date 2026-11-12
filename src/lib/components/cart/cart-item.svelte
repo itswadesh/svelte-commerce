@@ -91,8 +91,14 @@
 <div class="flex gap-3 py-4">
 	<!-- Reserved box: a missing image is demo data, but a row that collapses to nothing because of
 	     one is a layout defect, so the thumbnail keeps its dimensions either way. -->
-	<a href="/products/{cartProduct?.slug}" class="block h-24 w-[4.5rem] shrink-0 overflow-hidden rounded-md bg-muted" onclick={closeDrawer}>
-		<LazyImg src={picture.src} alt={picture.alt} class="h-full w-full object-contain" />
+	<!-- The store's picture shape, as on the cards, and the photo fills it (.cart-thumb in app.css). -->
+	<a
+		href="/products/{cartProduct?.slug}"
+		class="cart-thumb block w-[4.5rem] shrink-0 overflow-hidden rounded-md bg-muted"
+		style="aspect-ratio: var(--product-image-ratio, 3 / 4)"
+		onclick={closeDrawer}
+	>
+		<LazyImg src={picture.src} alt={picture.alt} class="h-full w-full object-cover object-top" />
 	</a>
 
 	<div class="flex min-w-0 flex-1 flex-col gap-2">
