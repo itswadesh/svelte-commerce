@@ -184,10 +184,13 @@
 		padding-bottom: 0;
 	}
 
-	/* A full-width strip at the very top or bottom meets the header or footer, as it always has. */
+	/* A full-width strip at the very top or bottom meets the header or footer, as it always has. The
+	   slideshow is one: a store's banners open the page there (banner-sections.ts), and it sat 40px
+	   under the header with an empty band of page above it. */
 	.cmp-home > :global(.cmp-announce:first-child),
 	.cmp-home > :global(.cmp-benefits-band:first-child),
 	.cmp-home > :global(.cmp-marquee-band:first-child),
+	.cmp-home > :global(.cmp-slides:first-child),
 	.cmp-home > :global(.cmp-spot--full:first-child),
 	.cmp-home > :global(.cmp-stats-band:first-child),
 	.cmp-home > :global(.cmp-words--band:first-child) {
@@ -197,6 +200,7 @@
 	.cmp-home > :global(.cmp-announce:last-child),
 	.cmp-home > :global(.cmp-benefits-band:last-child),
 	.cmp-home > :global(.cmp-marquee-band:last-child),
+	.cmp-home > :global(.cmp-slides:last-child),
 	.cmp-home > :global(.cmp-spot--full:last-child),
 	.cmp-home > :global(.cmp-stats-band:last-child),
 	.cmp-home > :global(.cmp-words--band:last-child) {
