@@ -3,8 +3,14 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { ChangePasswordModule } from '$lib/core/composables/index.js'
 	import { Lock, KeyRound, Eye, EyeOff } from '@lucide/svelte'
+	import { getUserState } from '$lib/core/stores/index.js'
+	import { showAuthModal } from '$lib/core/components/index.js'
 
 	const changePasswordModule = new ChangePasswordModule()
+	const userState = getUserState()
+	// A guest has no password to change: the form took all three fields and only then said "Please
+	// sign in to continue". Ask first.
+	const signedIn = $derived(!!userState?.user?.userId)
 
 	// Each message was a sibling paragraph painted red and nothing else: the input never carried
 	// `aria-invalid`, nothing pointed at the text, and colour was the only signal. A screen-reader
@@ -29,6 +35,13 @@
 			<p class="mt-2 text-sm text-muted-foreground">Please enter your old password and choose a new one</p>
 		</div>
 
+		{#await userState.hasLoaded then _}
+		{#if !signedIn}
+			<div class="space-y-3 text-center">
+				<p class="text-sm text-muted-foreground">Sign in first, then you can change your password here.</p>
+				<Button class="h-11 w-full" onclick={() => showAuthModal('login')}>Sign in</Button>
+			</div>
+		{:else}
 		<form
 			class="space-y-4"
 			onsubmit={(e) => {
@@ -156,5 +169,7 @@
 				{changePasswordModule.loading ? 'Changing Password...' : 'Change password'}
 			</Button>
 		</form>
+		{/if}
+		{/await}
 	</div>
 </div>
