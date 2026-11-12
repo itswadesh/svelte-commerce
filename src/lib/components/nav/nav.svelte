@@ -264,7 +264,9 @@
 					<MegaMenu slim={isScrolled} />
 				</nav>
 			{/if}
-			<div class="-mr-3 flex items-center gap-2 md:-mr-2">
+			<!-- Touching 44px targets, so the three icons sit close, 24px apart, as on the big Indian
+			     shopping apps, without shrinking what a thumb has to hit. -->
+			<div class="-mr-3 flex items-center gap-0 md:-mr-2 md:gap-1">
 				<MsSearch />
 
 				{#if wishlistPlugin?.active}
@@ -280,7 +282,7 @@
 							<Heart class="h-5 w-5" />
 							{#if wishlistState?.count > 0}
 								<span
-									class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-primary-foreground"
+									class="absolute -right-0.5 top-0.5 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold leading-none text-primary-foreground"
 								>
 									{wishlistState.count}
 								</span>
