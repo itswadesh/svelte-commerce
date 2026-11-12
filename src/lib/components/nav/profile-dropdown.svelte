@@ -52,7 +52,8 @@
 </style>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger aria-label="User profile" class="ed-pd-trigger flex items-center justify-center rounded-full">
+	<!-- The same box as the signed-out account button: a 44px target on phones, 36px from md up. -->
+	<DropdownMenu.Trigger aria-label="User profile" class="ed-pd-trigger flex h-9 w-9 items-center justify-center rounded-full max-md:h-11 max-md:w-11">
 		{#if userState.user?.avatar}
 			<div class="h-5 w-5 overflow-hidden rounded-full">
 				<LazyImg

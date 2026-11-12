@@ -209,7 +209,7 @@
 		<!-- One fixed height: the row no longer slims on scroll, because animating height re-lays-out
 		     the page on every scroll frame. -->
 		<div class="ed-row page-width flex h-14 items-center justify-between bg-background">
-			<div class="hidden justify-center gap-3 sm:flex">
+			<div class="hidden items-center justify-center gap-3 sm:flex">
 				<!-- `lg:hidden`, not `md:hidden`: MainNav only reveals its inline links at `lg`, so
 				     hiding this button at `md` left 768-1023px with no way to reach any category —
 				     no menu button, no links, and the category row below is plugin-gated. The two
@@ -221,7 +221,7 @@
 						aria-label="Menu"
 						aria-expanded={navModule.openSidebar}
 						aria-controls="main-menu-drawer"
-						class="lg:hidden"
+						class="-ml-3 md:-ml-2 lg:hidden [&_svg]:size-5"
 						onclick={() => {
 							navModule.openSidebar = true
 						}}
@@ -237,7 +237,10 @@
 			     arriving from an ad or a shared link with no menu, no brand link and no search, and
 			     the one control there called history.back() — on a fresh tab that exits to
 			     about:blank. The listing already prints its own title and count in the page body. -->
-			<div class="flex items-center justify-center sm:hidden">
+			<!-- The edge controls are 44px targets around 20px glyphs, so each is pulled out by its own
+			     padding (here and on the actions' row): the glyphs line up with the page's content edges,
+			     and every header icon is the same 20px (the Button's own default is 16px). -->
+			<div class="flex items-center justify-center gap-1 sm:hidden">
 				{#if menuShown}
 					<Button
 						variant="ghost"
@@ -245,6 +248,7 @@
 						aria-label="Menu"
 						aria-expanded={navModule.openSidebar}
 						aria-controls="main-menu-drawer"
+						class="-ml-3 [&_svg]:size-5"
 						onclick={() => {
 							navModule.openSidebar = true
 						}}
@@ -260,7 +264,7 @@
 					<MegaMenu slim={isScrolled} />
 				</nav>
 			{/if}
-			<div class="flex items-center gap-2 sm:gap-2">
+			<div class="-mr-3 flex items-center gap-2 md:-mr-2">
 				<MsSearch />
 
 				{#if wishlistPlugin?.active}
