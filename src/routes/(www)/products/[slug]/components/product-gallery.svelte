@@ -357,12 +357,12 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 	<div class="absolute left-0 top-0 h-full w-full" aria-hidden="true" onclick={hideCarousel}></div>
 
-	<div class="relative mx-auto flex h-full w-full max-w-[1200px] items-center gap-4 px-4 py-[5vh]">
-		<!-- Close button -->
+	<div class="relative mx-auto flex h-full w-full max-w-[1200px] items-center gap-4 py-[5vh] sm:px-4">
+		<!-- Close button. Its own dark disc, since a picture can now reach the top edge. -->
 		<Button
 			variant="plain"
 			size="icon"
-			class="absolute right-0 top-4 z-30 rounded-full text-white hover:border hover:border-primary hover:bg-white/10"
+			class="absolute right-2 top-4 z-30 rounded-full bg-black/50 text-white hover:border hover:border-primary hover:bg-white/10 sm:right-0"
 			onclick={hideCarousel}
 		>
 			<X class="h-6 w-6" />
@@ -382,13 +382,13 @@
 						})
 					}
 				}}
-				class="relative h-full w-full"
+				class="relative h-full w-full [&>div]:h-full"
 			>
 				<Carousel.Content class="h-full">
 					{#each carouselImages || [] as img, index (index)}
 						{@const youtubeId = getYoutubeId(img)}
-						<Carousel.Item class="">
-							<div class="">
+						<Carousel.Item>
+							<div class="edp-lightbox__slide flex h-full items-center">
 								{#if youtubeId}
 									<iframe
 										width="100%"
@@ -410,7 +410,7 @@
 									<LazyImg
 										src={img}
 										alt={pictureAlt(img, index)}
-										class="max-h-[90vh]"
+										class="h-full w-full object-center"
 									/>
 								{/if}
 							</div>
@@ -479,6 +479,13 @@
 
 	.edp-gallery__frame :global(img) {
 		object-fit: var(--product-image-fit, contain);
+	}
+
+	/* Full screen, a picture takes the whole slide, fitted whole, whatever its own shape. LazyImg's
+	   box keeps the store's ratio (square by default), which shrank a portrait photo into the top
+	   of a phone screen. With both sides set, that ratio no longer applies. */
+	.edp-lightbox__slide :global(> div) {
+		height: 100%;
 	}
 
 	/* A phone shows the picture edge to edge, the product before the page's margins. */
