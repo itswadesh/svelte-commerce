@@ -54,9 +54,11 @@
 	{#if !isCheckout}
 		<Nav />
 	{/if}
-	<main id="main" class="inter-gap flex min-h-screen flex-1 flex-col">
+	<!-- Checkout draws its own <main id="main"> between its header and footer, so here it is a plain
+	     box: nesting the two put two main landmarks and two #main ids on every checkout page. -->
+	<svelte:element this={isCheckout ? 'div' : 'main'} id={isCheckout ? undefined : 'main'} class="inter-gap flex min-h-screen flex-1 flex-col">
 		{@render children()}
-	</main>
+	</svelte:element>
 	{#if !isCheckout}
 		<Footer />
 	{/if}
