@@ -623,3 +623,16 @@ GST invoice); no street, city or PIN code is asked or invented. Cash on delivery
 it. A paid order lists its files on the success page, the order tracking page and the account order
 page; each Download button asks the engine for a ten-minute link when pressed, and a file the store
 has closed says why instead. Licence keys are out of scope by the owner's word.
+
+## 2026-11-12: A one-page order form, and Order on WhatsApp at checkout
+
+Owner, asked to add a WhatsApp order form for small shops: "yes start part 1", and of four layouts
+for the page the menu list (GoCommerce D255). `/order` lists every product on one page, grouped by
+its category with chips that jump to each group, a row per size with Add and then − / +, a search
+that needs every word typed, and a pinned bar with the item count, the total and Next to the
+address step. A sold-out size says so. The bag drawer does not open on that page, since its own bar
+already shows the order. When the store has Order on WhatsApp on, the payment step offers it from
+the engine's own method list (the connector drives only cash on delivery, Razorpay, Cashfree and
+hosted pages), places it through the connector's generic checkout, and the success page offers
+Send order on WhatsApp: a real wa.me link the engine wrote, with the order in it. A WhatsApp order
+counts as a sale like cash on delivery and claims no payment.
