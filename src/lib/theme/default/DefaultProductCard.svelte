@@ -206,7 +206,8 @@
 						{#if vendor}
 							<span class="dpc__vendor" data-testid="product-card-vendor">{vendor}</span>
 						{/if}
-						<span class="dpc__title" class:has-vendor={!!vendor} class:is-two={options.card_title_lines === 'two'} data-testid="product-title" title={displayName}
+						<span class="dpc__title" class:has-vendor={!!vendor} class:is-two={options.card_title_lines === 'two'}
+							class:is-full={options.card_title_lines === 'full'} data-testid="product-title" title={displayName}
 							>{displayName}</span
 						>
 					</a>
@@ -488,8 +489,8 @@
 		color: var(--ed-ink);
 	}
 
-	/* One line or two is the store's choice (card_title_lines). Under a brand line the name is
-	   the supporting detail, so it steps back to the muted colour. */
+	/* The whole name, one line or two is the store's choice (card_title_lines). Under a brand line
+	   the name is the supporting detail, so it steps back to the muted colour. */
 	.dpc__title {
 		overflow: hidden;
 		display: -webkit-box;
@@ -506,6 +507,16 @@
 	.dpc__title.is-two {
 		-webkit-line-clamp: 2;
 		line-clamp: 2;
+	}
+
+	/* The whole name, however many lines. The name row is a row of the grid (subgrid), so every
+	   card in a row takes the height of its longest name and the prices stay level. */
+	.dpc__title.is-full {
+		display: block;
+		overflow: visible;
+		-webkit-line-clamp: unset;
+		line-clamp: none;
+		overflow-wrap: anywhere;
 	}
 
 	.dpc__title.has-vendor {
