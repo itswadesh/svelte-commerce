@@ -10,6 +10,7 @@
 	import * as Select from '$lib/components/ui/select/index.js'
 	import { Label } from '$lib/components/ui/label/index.js'
 	import PinAutofill from '$lib/components/address/pin-autofill.svelte'
+	import { tidyPhone } from '$lib/utils/phone'
 
 	let {
 		address = $bindable(),
@@ -74,12 +75,18 @@
 	)
 
 	const POSTAL_FIELDS = ['address_1', 'address_2', 'zip', 'city']
+	// The shared rule wants bare digits; a shopper's spaces, dashes or leading 0 are tidied away
+	// before it looks, and the tidied number is what is saved.
+	const phoneRule = z.preprocess(tidyPhone, AddressSchema.phone)
 	const rules = $derived(
-		Object.fromEntries(Object.entries({ ...AddressSchema, email: emailRule }).filter(([key]) => !detailsOnly || !POSTAL_FIELDS.includes(key)))
+		Object.fromEntries(
+			Object.entries({ ...AddressSchema, phone: phoneRule, email: emailRule }).filter(([key]) => !detailsOnly || !POSTAL_FIELDS.includes(key))
+		)
 	)
 
 	function submitWithVisibleErrors(event: Event, handleSubmit: (e: Event) => void) {
 		event.preventDefault()
+		if (address?.phone) address.phone = tidyPhone(address.phone)
 		// A field the shopper has never touched comes back as null, not '', and zod then reports
 		// "Expected string, received null" instead of the rule's own message. Normalise first.
 		const candidate = Object.fromEntries(Object.keys(rules).map((key) => [key, (address as Record<string, unknown>)?.[key] ?? '']))
@@ -208,8 +215,8 @@
 					type="tel"
 					autocomplete="tel"
 					bind:value={address.phone}
-					placeholder="+1234567890"
-					schema={AddressSchema.phone}
+					placeholder="Mobile number"
+					schema={phoneRule}
 					label="Phone"
 					required
 				/>
