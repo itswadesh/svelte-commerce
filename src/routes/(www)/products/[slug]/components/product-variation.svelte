@@ -8,6 +8,7 @@
 	import OptionPicker from './option-picker.svelte'
 	import { pickerChoices, usesSearchablePicker, variantFor, variantsWith } from '$lib/product/conversion'
 	import { themeOptions } from '$lib/composer/theme-options.js'
+	import { swatchPaint } from '$lib/product/colour.js'
 	import { ChevronRight } from '@lucide/svelte'
 
 	const productState = useProductState()
@@ -137,55 +138,9 @@
 		productState.selectedVariant?.options?.find((o: Record<string, any>) => sameId(option.id, o.optionId))?.value
 
 	// A colour swatch is only honest when the option value really is a colour. "Rose Gold" used as
-	// a CSS background painted an empty circle with no label, so anything that is not a recognised
-	// colour token falls back to the standard labelled pill.
-	const COLOUR_SYNTAX = /^(#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})|(rgb|hsl)a?\()/i
-	const COLOUR_KEYWORDS = new Set([
-		'aqua',
-		'beige',
-		'black',
-		'blue',
-		'brown',
-		'coral',
-		'cream',
-		'crimson',
-		'cyan',
-		'fuchsia',
-		'gold',
-		'gray',
-		'green',
-		'grey',
-		'indigo',
-		'ivory',
-		'khaki',
-		'lavender',
-		'lime',
-		'magenta',
-		'maroon',
-		'navy',
-		'olive',
-		'orange',
-		'pink',
-		'purple',
-		'red',
-		'salmon',
-		'silver',
-		'tan',
-		'teal',
-		'turquoise',
-		'violet',
-		'white',
-		'yellow'
-	])
-
-	const swatchColour = (value: Record<string, any>): string | null => {
-		const explicit = value?.colorCode || value?.colourCode || value?.hex || value?.color
-		if (typeof explicit === 'string' && explicit.trim()) return explicit.trim()
-		const raw = typeof value?.value === 'string' ? value.value.trim() : ''
-		if (!raw) return null
-		if (COLOUR_SYNTAX.test(raw)) return raw
-		return COLOUR_KEYWORDS.has(raw.toLowerCase()) ? raw.toLowerCase() : null
-	}
+	// a CSS background painted an empty circle with no label, so anything swatchPaint does not know
+	// falls back to the standard labelled pill. The cards' colour dots read the same list.
+	const swatchColour = swatchPaint
 </script>
 
 <!-- No `{#key}` wrapper. Re-keying the whole group on every selection destroyed and rebuilt each
@@ -250,7 +205,7 @@
 										: ''}"
 									onclick={(event) => choose(event, option, v)}
 								>
-									<span class="block h-full w-full rounded-full" style="background-color: {colour}"></span>
+									<span class="block h-full w-full rounded-full" style="background: {colour}"></span>
 									<span class="sr-only">{v.value}{isBlocked ? ` — ${unavailableReason(status)}` : ''}</span>
 								</Button>
 							{:else}
