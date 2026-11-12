@@ -6,7 +6,7 @@
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import { SearchService } from '$lib/core/services/index.js'
 	import { toCssRatio } from '$lib/theme/aspect-ratio.js'
-	import { readAppliedFilters, urlWithoutAnyFilter } from './scope-filters.js'
+	import { facetKeys, readAppliedFilters, urlWithoutAnyFilter } from './scope-filters.js'
 	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { trackViewItemList } from '$lib/analytics'
 
@@ -45,7 +45,7 @@
 	const refining = $derived(!!navigating.to && navigating.to.url.pathname === page.url.pathname)
 
 	const searchTerm = $derived(page.url.searchParams.get('search') ?? '')
-	const hasRemovableFilters = $derived(readAppliedFilters(page.url, Object.keys(data?.products?.facets || {})).some((f) => f.key !== 'search'))
+	const hasRemovableFilters = $derived(readAppliedFilters(page.url, facetKeys(data?.products?.facets)).some((f) => f.key !== 'search'))
 
 	// Mobile is the viewport Googlebot renders, and the desktop pagination is display:none there.
 	// Giving the infinite-scroll trigger a real href keeps page 2+ reachable without JS.

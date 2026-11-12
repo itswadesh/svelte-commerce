@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { hasFacetValues } from '$lib/components/product-catalogue/scope-filters.js'
+import { facetKeys, hasFacetValues, readAppliedFilters } from '$lib/components/product-catalogue/scope-filters.js'
 
 vi.mock('$lib/core/composables/index.js', () => ({}))
 
@@ -15,5 +15,15 @@ describe('hasFacetValues', () => {
 		expect(hasFacetValues({ categories: [{ name: 'Rings' }] })).toBe(true)
 		expect(hasFacetValues({ allFilters: { color: { red: 3 } } })).toBe(true)
 		expect(hasFacetValues({ priceStat: { min: 5, max: 90 } })).toBe(true)
+	})
+})
+
+describe('facetKeys', () => {
+	it('counts the groups under allFilters, so a product type filter reads as applied', () => {
+		const facets = { priceStat: {}, categories: [], tags: [], allFilters: { product_type: { Apparel: 3 }, vendor: { Acme: 1 } } }
+		expect(facetKeys(facets)).toEqual(['priceStat', 'categories', 'tags', 'allFilters', 'product_type', 'vendor'])
+		const applied = readAppliedFilters(new URL('https://shop.test/products?product_type=Apparel&sort=price'), facetKeys(facets))
+		expect(applied).toEqual([{ key: 'product_type', value: 'Apparel', label: 'Apparel' }])
+		expect(facetKeys(null)).toEqual([])
 	})
 })

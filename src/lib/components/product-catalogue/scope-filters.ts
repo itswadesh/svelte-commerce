@@ -81,6 +81,15 @@ export function scopeListingFilters() {
  * still sends the facet object, with every group empty, and the rail rendered as a bare
  * "Filters" heading.
  */
+/**
+ * The names a filter can go by in the URL: the facets' own keys and the groups listed under
+ * `allFilters` (product_type, vendor, attributes.*). Only the top level used to count, so a product
+ * type or brand filter was never read as applied: no chip to remove it, no word on the Filter bar.
+ */
+export function facetKeys(facets: any): string[] {
+	return [...Object.keys(facets || {}), ...Object.keys(facets?.allFilters || {})]
+}
+
 export function hasFacetValues(facets: any): boolean {
 	const { categories, tags, allFilters, priceStat } = facets || {}
 	return Boolean(
