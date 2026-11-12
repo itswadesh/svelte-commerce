@@ -7,8 +7,11 @@
 
 	/**
 	 * One chip per filter group above the grid ("Size", "Colour" …). A tap opens the filter sheet on
-	 * that group. Where the sidebar shows the groups already (sidebar mode, from 768px) the row is
-	 * not drawn; the store can switch it off altogether (list_quick_filters).
+	 * that group. Only from 768px, and only where filters open in a drawer: below 768px the Sort and
+	 * Filter bar is always on screen, and the owner asked for the row to go there ("we don't need
+	 * those filters at top, because already there is a filter button at bottom", 2026-11-12); in
+	 * sidebar mode the sidebar shows the groups already. The store can switch it off altogether
+	 * (list_quick_filters).
 	 */
 	const filterModule = getDesktopFilterState() as any
 	const options = $derived(themeOptions(page.data?.themeSettings))
@@ -28,8 +31,8 @@
 	}
 </script>
 
-{#if groups.length}
-	<div class="qf -mx-1 flex gap-2 overflow-x-auto px-1 scrollbar-none {options.list_filters_desktop === 'sidebar' ? 'md:hidden' : ''}" role="group" aria-label="Filter by">
+{#if groups.length && options.list_filters_desktop !== 'sidebar'}
+	<div class="qf -mx-1 flex gap-2 overflow-x-auto px-1 scrollbar-none max-md:hidden" role="group" aria-label="Filter by">
 		{#each groups as group (group.id)}
 			{@const count = filterModule.appliedFiltersCountByKey?.[group.id] ?? 0}
 			<button

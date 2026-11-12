@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_THEME_OPTIONS, themeOptions } from '$lib/composer/theme-options'
-import { DENSITIES, TYPE_SCALES, themeTokenDeclarations } from '$lib/composer/theme-tokens'
+import { DENSITIES, TYPE_SCALES, phoneTokenDeclarations, themeTokenCss, themeTokenDeclarations } from '$lib/composer/theme-tokens'
 
 describe('themeOptions', () => {
 	it("takes the storefront's own choices when the store set nothing", () => {
@@ -93,5 +93,28 @@ describe('type, weight, density and sale settings', () => {
 		for (const [name, value] of Object.entries({ ...TYPE_SCALES.standard, ...DENSITIES.compact })) {
 			expect(css, name).toContain(`${name}: ${value};`)
 		}
+	})
+})
+
+describe('phones', () => {
+	it('step a larger density and type scale down on a phone, and leave compact alone', () => {
+		expect(phoneTokenDeclarations({ density: 'spacious', type_scale: 'standard' })).toEqual({ ...DENSITIES.compact, ...TYPE_SCALES.compact })
+		expect(phoneTokenDeclarations({ type_scale: 'large' })).toEqual(TYPE_SCALES.standard)
+		expect(phoneTokenDeclarations({ density: 'compact', type_scale: 'compact' })).toEqual({})
+		expect(phoneTokenDeclarations({})).toEqual({})
+		expect(phoneTokenDeclarations(null)).toEqual({})
+	})
+
+	it('writes the phone step under its own media rule, after the store’s', () => {
+		const css = themeTokenCss({ density: 'spacious' })
+		expect(css).toContain('@media (max-width: 639px) { [data-theme][data-theme] { --container-gutter: clamp(16px, 4vw, 48px) !important;')
+		expect(css.indexOf('@media')).toBeGreaterThan(css.indexOf('--container-gutter: clamp(24px, 6vw, 72px)'))
+		expect(themeTokenCss({ accent: '#000000' })).not.toContain('@media')
+	})
+
+	it("keeps src/app.css's phone type equal to the compact scale", () => {
+		const css = readFileSync('src/app.css', 'utf8')
+		const phone = css.slice(css.indexOf('@media (max-width: 639px) {'))
+		for (const [name, value] of Object.entries(TYPE_SCALES.compact)) expect(phone, name).toContain(`${name}: ${value};`)
 	})
 })

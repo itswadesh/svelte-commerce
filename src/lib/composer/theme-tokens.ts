@@ -331,11 +331,34 @@ function chosenFonts(settings: ThemeSettings | null | undefined): Font[] {
  * editor's live preview draws a draft over the published block and must win over it.
  */
 export function themeTokenCss(settings: ThemeSettings | null | undefined, depth = 2): string {
-	const declarations = Object.entries(themeTokenDeclarations(settings))
-		.map(([key, value]) => `${key}: ${value} !important;`)
-		.join(' ')
+	const important = (tokens: Record<string, string>) =>
+		Object.entries(tokens)
+			.map(([key, value]) => `${key}: ${value} !important;`)
+			.join(' ')
+	const declarations = important(themeTokenDeclarations(settings))
 	if (!declarations) return ''
-	return [...chosenFonts(settings).map(fallbackFace), `${'[data-theme]'.repeat(Math.max(1, depth))} { ${declarations} }`].join(' ')
+	const selector = '[data-theme]'.repeat(Math.max(1, depth))
+	const phone = important(phoneTokenDeclarations(settings))
+	return [
+		...chosenFonts(settings).map(fallbackFace),
+		`${selector} { ${declarations} }`,
+		...(phone ? [`@media (max-width: 639px) { ${selector} { ${phone} } }`] : [])
+	].join(' ')
+}
+
+/**
+ * What a phone uses in place of a larger scale or density the store chose. Phones are compact
+ * (owner, 2026-11-12: "everything is big in mobile, lets keep things compact", pointing at
+ * Flipkart, Ajio and Myntra): the compact density, and type one step down, so a store that chose
+ * large type still reads larger than one that did not. Nothing for a setting that is already
+ * compact or unset; src/app.css takes the default theme's own type the same step.
+ */
+export function phoneTokenDeclarations(settings: ThemeSettings | null | undefined): Record<string, string> {
+	const s = settings ?? {}
+	const density = typeof s.density === 'string' && Object.hasOwn(DENSITIES, s.density) && s.density !== 'compact' ? DENSITIES.compact : {}
+	const step: Record<string, string> = { standard: 'compact', large: 'standard' }
+	const type = typeof s.type_scale === 'string' && Object.hasOwn(step, s.type_scale) ? TYPE_SCALES[step[s.type_scale]] : {}
+	return { ...density, ...type }
 }
 
 export function setsBothFonts(settings: ThemeSettings | null | undefined): boolean {

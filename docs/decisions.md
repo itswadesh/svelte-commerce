@@ -644,3 +644,15 @@ that line must spread across 3 lines" (GoCommerce D258). `card_title_lines` gain
 default: the name wraps over as many lines as it needs. The card's name row is a row of the grid
 (subgrid), so every card in a row takes the height of its longest name and the prices stay level.
 One line and two lines remain the store's choice in the theme editor.
+
+## 2026-11-12: Phones are compact
+
+Owner: "everything is big in mobile, lets keep things compact, you can take reference from flipkart,
+ajio, myntra", and of the listing: "I don't think we need those filters at top, because already
+there is a filter button at bottom". Under 640px every store takes the compact density (16px page
+gutter, 24px between sections, 10px and 14px between cards) whatever its density setting, and its
+type one step down (a 14px body; a store that chose large type gets the standard scale). Desktop
+keeps the store's own settings. The listing's filter chips are not drawn below 768px, where the
+Sort and Filter bar is always on screen. Checkout tightens on a phone too: less padding around the
+page and the address card, first and last name side by side, PIN code and city side by side, and
+the bag's lines without their own box.
