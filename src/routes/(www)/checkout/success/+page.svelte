@@ -391,16 +391,17 @@
 								</div>
 								<p class="px-2 text-lg font-bold tracking-tight text-foreground">{estimatedDeliveryDateDisplay}</p>
 							{/if}
-							<div class="flex items-start gap-3 rounded-radius border border-border bg-card p-2">
-								<Mail class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-								<p class="text-sm leading-relaxed text-foreground">
-									{#if useremail}
-										Confirmation sent to <span class="font-bold text-foreground">{useremail}</span>. We'll email you again when your items ship.
-									{:else}
-										We'll email you a confirmation and let you know again when your items ship.
-									{/if}
-								</p>
-							</div>
+							<!-- The address the order is under, as a fact. "Confirmation sent to …, we'll email you
+							     again when your items ship" promised mail the storefront cannot know is sent: a store
+							     with no email provider sends none, and that store showed the promise all the same. -->
+							{#if useremail}
+								<div class="flex items-start gap-3 rounded-radius border border-border bg-card p-2">
+									<Mail class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+									<p class="text-sm leading-relaxed text-foreground">
+										Order email: <span class="font-bold text-foreground">{useremail}</span>
+									</p>
+								</div>
+							{/if}
 						</div>
 					{/if}
 				</div>
