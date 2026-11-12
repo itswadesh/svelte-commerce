@@ -98,18 +98,40 @@
 		return items
 	}
 
+	// A phone's back button closes the gallery rather than leaving the page, as it does the other
+	// overlays (modal.svelte): opening adds a history entry, and back takes it off again.
+	const modalHistoryKey = '__svelteCommerceModal'
+	let ownsHistoryEntry = false
+
 	const showCarousel = (img: string) => {
 		carouselImages = images
 		displayCarousel = 'flex'
 		currentIndex = images.indexOf(img)
 		selectedImage = img
+		if (!ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		}
 	}
 
-	const hideCarousel = () => {
+	const closeGallery = () => {
 		displayCarousel = 'hidden'
 		// The page's pictures follow the gallery, so the one showing now takes focus back, not the
 		// one that opened it (use:dialog leaves focus where this puts it).
 		document.querySelector<HTMLElement>('[data-vt-gallery-primary]')?.focus({ preventScroll: true })
+	}
+
+	// Closed by the button or Escape: drop the entry, so the next back leaves the page as it should.
+	const hideCarousel = () => {
+		closeGallery()
+		if (ownsHistoryEntry && history.state?.[modalHistoryKey] === true) history.back()
+		ownsHistoryEntry = false
+	}
+
+	const onPopState = () => {
+		if (!ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		closeGallery()
 	}
 
 	const onGalleryKeydown = (e: KeyboardEvent) => {
@@ -125,6 +147,8 @@
 	const knownVideos = $derived(new Set<string>(Array.isArray(page.data?.product?.videos) ? page.data.product.videos : []))
 	const isVideoURL = (x: string) => knownVideos.has(x) || videoURLRegex.test(x)
 </script>
+
+<svelte:window onpopstate={onPopState} />
 
 {#if displayCarousel !== 'hidden'}
 	<style>
