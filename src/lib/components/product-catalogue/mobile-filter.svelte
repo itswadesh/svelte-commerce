@@ -3,7 +3,7 @@
 	import * as Sheet from '$lib/components/ui/sheet/index.js'
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js'
 	import { GetColorName } from 'hex-color-to-color-name'
-	import { ArrowDownNarrowWide, ChevronRight, Filter, SearchIcon } from '@lucide/svelte'
+	import { ArrowDownNarrowWide, Check, ChevronRight, Filter, SearchIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import Label from '$lib/components/ui/label/label.svelte'
@@ -186,32 +186,37 @@
 					}
 				}}
 			>
-				<Sheet.Header class="ed-mf__phead shrink-0 space-y-0 border-b px-4 py-4 pr-14 text-left">
-					<Sheet.Title class="ed-mf__ptitle text-xs font-bold">Filters</Sheet.Title>
+				<!-- Title, then Clear all beside it while anything is applied; the sheet's own close
+				     control sits at the far end. -->
+				<Sheet.Header class="ed-mf__phead flex h-14 shrink-0 flex-row items-center gap-2 space-y-0 border-b pl-4 pr-14 text-left">
+					<Sheet.Title class="ed-mf__ptitle flex-1 text-base font-semibold">Filters</Sheet.Title>
 					<Sheet.Description class="sr-only">Narrow the product list by category, price and product attributes.</Sheet.Description>
+					{#if filterModule.anyFilterApplied}
+						<button type="button" class="ed-mf__clear" onclick={filterModule.clearFilters}>Clear all</button>
+					{/if}
 				</Sheet.Header>
 
 				<div class="flex min-h-0 flex-1">
-					<!-- Section tabs -->
-					<div class="ed-mf__menu w-[35%] shrink-0 overflow-y-auto border-r">
+					<!-- Section tabs. The chosen one takes the content pane's colour and runs into it, so
+					     it reads as the page it opened rather than as a boxed button; a count says how
+					     many of its values are on. -->
+					<div class="ed-mf__menu w-[36%] max-w-44 shrink-0 overflow-y-auto">
 						{#each menuItems as item}
-							<Button
-								variant="ghost"
-								class="ed-mf__tab h-auto min-h-11 w-full justify-between gap-1 rounded-none px-4 py-3 {filterModule.selectedSection === item.id
-									? 'bg-background text-primary hover:bg-background'
-									: 'text-muted-foreground'}"
+							{@const count = filterModule.appliedFiltersCountByKey[item.id]}
+							<button
+								type="button"
+								class="ed-mf__tab"
+								class:is-on={filterModule.selectedSection === item.id}
 								aria-current={filterModule.selectedSection === item.id ? 'true' : undefined}
 								onclick={() => (filterModule.selectedSection = item.id)}
 							>
-								<span class="text-left text-[11px] font-bold">
+								<span class="min-w-0 break-words">
 									{String(filterModule.formatFilterName(item.label)).replace(/^./, (c) => c.toUpperCase())}
 								</span>
-								{#if filterModule.appliedFiltersCountByKey[item.id]}
-									<span class="text-[10px] text-primary">
-										({filterModule.appliedFiltersCountByKey[item.id]})
-									</span>
+								{#if count}
+									<span class="ed-mf__count"><span class="sr-only">, </span>{count}<span class="sr-only"> selected</span></span>
 								{/if}
-							</Button>
+							</button>
 						{/each}
 					</div>
 
@@ -220,19 +225,19 @@
 						{#if filterModule.selectedSection === 'discount'}
 							<div class="space-y-5">
 								<div class="relative">
+									<SearchIcon class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 									<input
 										type="text"
-										placeholder="Search discount..."
+										placeholder="Search discounts"
 										aria-label="Search discounts"
-										class="ed-mf__search h-11 w-full rounded-md border border-input bg-background py-2.5 pl-3 pr-10 text-sm focus:border-primary focus:outline-none"
+										class="ed-mf__search h-11 w-full rounded-md border border-input bg-background py-2.5 pl-9 pr-3 text-sm focus:border-primary focus:outline-none"
 										bind:value={filterModule.searchQuery}
 									/>
-									<SearchIcon class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 								</div>
 
 								<div class="space-y-1">
 									{#each filterModule.discountOptions as option}
-										<label class="group flex min-h-11 cursor-pointer items-center gap-3">
+										<label class="group flex min-h-12 cursor-pointer items-center gap-3">
 											<span class="relative flex items-center justify-center">
 												<input
 													type="radio"
@@ -243,7 +248,7 @@
 												/>
 												<span class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></span>
 											</span>
-											<span class="ed-mf__opt text-sm font-medium text-foreground transition-colors group-hover:text-primary">
+											<span class="ed-mf__opt text-sm text-foreground" class:is-on={filterModule.selectedDiscount === option.value}>
 												{option.label}
 											</span>
 										</label>
@@ -251,50 +256,51 @@
 								</div>
 							</div>
 						{:else if filterModule.selectedSection === 'category'}
-							<div class="relative mb-4">
+							<div class="relative mb-2">
+								<SearchIcon class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 								<input
 									type="text"
-									placeholder="Search category..."
+									placeholder="Search categories"
 									aria-label="Search categories"
-									class="ed-mf__search h-11 w-full rounded-md border border-input bg-background py-2.5 pl-3 pr-10 text-sm focus:border-primary focus:outline-none"
+									class="ed-mf__search h-11 w-full rounded-md border border-input bg-background py-2.5 pl-9 pr-3 text-sm focus:border-primary focus:outline-none"
 									bind:value={filterModule.categorySearchQuery}
 								/>
-								<SearchIcon class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 							</div>
 							{#if filterModule.filteredCategories?.length > 0}
-								<!-- One full-width row per category. The Button base is `inline-flex justify-center
-							     whitespace-nowrap`, which centred each name, shrank the row to the text and
-							     truncated anything long — in a narrow drawer panel that reads as a ragged list
-							     with ~26px tap targets. These rows are left-aligned, wrap, and are touch-sized. -->
-								<div class="-mx-1 divide-y divide-border">
+								<!-- A category opens its own listing, so each row is a plain full-width button
+								     with a chevron, a group's name in bold over its indented children, and a tick
+								     on the one being browsed. These were shadcn Buttons, whose 1px border the
+								     list's dividers painted on all four sides, boxing every child row. -->
+								<ul class="ed-mf__cats">
 									{#each filterModule.filteredCategories as category, i}
 										{@const formattedCategoryName = filterModule.formatFilterOptionName(category.name)}
 										{@const parent = categoryParent(filterModule.filteredCategories, i, filterModule.categorySearchQuery)}
 										{@const label = parent ? `${formattedCategoryName}, in ${filterModule.formatFilterOptionName(parent)}` : formattedCategoryName}
-										<Button
-											variant="ghost"
-											title={label}
-											aria-label={parent ? label : undefined}
-											class={cn(
-												'group h-auto min-h-11 w-full justify-start gap-3 whitespace-normal rounded-none px-1 py-3 text-left font-normal hover:bg-transparent',
-												categoryIndent(category.depth, filterModule.categorySearchQuery, 'sheet')
-											)}
-											onclick={() => filterModule.handleCategoryClick({ slug: category.slug, name: category.name })}
-										>
-											{#if category.thumbnail}
-												<img
-													src={category.thumbnail}
-													alt={formattedCategoryName}
-													class="size-9 shrink-0 rounded object-cover transition-opacity group-hover:opacity-80"
-												/>
-											{/if}
-											<span class="ed-mf__opt min-w-0 flex-1 text-sm capitalize text-foreground transition-colors group-hover:text-primary"
-												>{formatCategoryName(category.name)}</span
+										{@const current = !!category.slug && page.url.pathname === `/${category.slug}`}
+										<li>
+											<button
+												type="button"
+												title={label}
+												aria-label={parent ? label : undefined}
+												aria-current={current ? 'page' : undefined}
+												class={cn('ed-mf__cat', categoryIndent(category.depth, filterModule.categorySearchQuery, 'sheet'))}
+												class:is-group={!parent}
+												class:is-current={current}
+												onclick={() => filterModule.handleCategoryClick({ slug: category.slug, name: category.name })}
 											>
-											<ChevronRight class="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
-										</Button>
+												{#if category.thumbnail}
+													<img src={category.thumbnail} alt="" class="size-9 shrink-0 rounded object-cover" />
+												{/if}
+												<span class="ed-mf__cat-name">{formatCategoryName(category.name)}</span>
+												{#if current}
+													<Check aria-hidden="true" />
+												{:else}
+													<ChevronRight aria-hidden="true" />
+												{/if}
+											</button>
+										</li>
 									{/each}
-								</div>
+								</ul>
 							{:else}
 								<div class="flex h-40 items-center justify-center">
 									<p class="text-sm font-medium text-muted-foreground">No categories found</p>
@@ -302,14 +308,20 @@
 							{/if}
 						{:else if filterModule.selectedSection === 'price'}
 							<div class="w-full">
-								<p class="ed-mf__label text-xs font-bold text-foreground">Price range</p>
+								<!-- The range chosen so far, beside its label, where the eye starts. -->
+								<div class="flex items-baseline justify-between gap-3">
+									<p class="ed-mf__label text-sm font-semibold text-foreground">Price range</p>
+									<p class="ed-mf__priceval text-sm font-semibold tabular-nums text-foreground" aria-live="polite">
+										{#if filterModule.minPrice >= 0 && filterModule.maxPrice >= 0}
+											{formatPrice(filterModule.minPrice, currency)} – {formatPrice(filterModule.maxPrice, currency)}
+										{/if}
+									</p>
+								</div>
 
-								<!-- h-5: every child of this wrapper is absolutely positioned, so it used to be a zero-height
-							      box. Its own top margin then collapsed straight through with the price block's, which put
-							      the Min/Max captions on the same line as the track and left the 20px thumbs sitting on top
-							      of the words. Giving the wrapper the thumb's own height stops the collapse, so the margin
-							      below it is real space again. The 44px input hit area still overhangs it. -->
-								<div class="ed-mf__slider relative mr-5 mt-3 h-5 px-2">
+								<!-- h-5: every child of this wrapper is absolutely positioned, so without it the
+								     wrapper is a zero-height box whose margin collapses through. The 44px input hit
+								     area still overhangs it. -->
+								<div class="ed-mf__slider relative mx-2 mt-6 h-5">
 									<div class="ed-mf__track absolute top-1/2 h-1 w-full -translate-y-1/2 rounded bg-muted">
 										<div
 											class="ed-mf__fill absolute h-1 bg-primary-ink"
@@ -317,9 +329,8 @@
 										></div>
 									</div>
 
-									<!-- One accessible name each. Two unnamed sliders sharing a track are
-								     indistinguishable to a screen reader, and the desktop panel has carried
-								     these labels all along. -->
+									<!-- One accessible name each: two unnamed sliders on one track are
+									     indistinguishable to a screen reader. -->
 									<input
 										type="range"
 										bind:value={filterModule.minPrice}
@@ -340,9 +351,8 @@
 									/>
 								</div>
 
-								<!-- The same editable bounds the desktop panel already ships. Dragging two
-							     overlapping thumbs is not a way to set an exact budget on a phone. -->
-								<div class="ed-mf__prices mt-3 grid grid-cols-2 gap-3">
+								<!-- Exact bounds: dragging two overlapping thumbs is no way to set a budget on a phone. -->
+								<div class="ed-mf__prices mt-6 grid grid-cols-2 gap-3">
 									<Textbox
 										type="number"
 										class="h-11"
@@ -358,29 +368,24 @@
 										bind:value={filterModule.maxPrice}
 									/>
 								</div>
-
-								<p class="ed-mf__priceval text-base font-semibold text-foreground" aria-live="polite">
-									{#if filterModule.minPrice >= 0 && filterModule.maxPrice >= 0}
-										{formatPrice(filterModule.minPrice, currency)} - {formatPrice(filterModule.maxPrice, currency)}
-									{/if}
-								</p>
 							</div>
 						{:else if filterModule.selectedSection === 'tags'}
 							{#if filterModule.tags.length > 0}
-								<div class="divide-y divide-border">
+								<div class="ed-mf__checks">
 									{#each filterModule.tags as tag}
-										<div class="flex min-h-11 flex-row items-center gap-3 py-1">
+										{@const on = !!filterModule.selectedTags?.find?.((t: any) => t?.name === tag?.name)}
+										<div class="flex min-h-12 flex-row items-center gap-3">
 											<Checkbox
 												id={`m-tags-${tag.slug || tag.name}`}
-												checked={filterModule.selectedTags?.find?.((t: any) => t?.name === tag?.name) ? true : false}
+												checked={on}
 												onCheckedChange={(checked) => {
 													filterModule.handleTagChange({ tag, checked })
 												}}
 											/>
 											<label
 												for={`m-tags-${tag.slug || tag.name}`}
-												class="ed-mf__opt flex min-h-11 flex-1 cursor-pointer items-center text-sm font-medium capitalize text-foreground"
-												>{tag.name}</label
+												class="ed-mf__opt flex min-h-12 flex-1 cursor-pointer items-center text-sm capitalize text-foreground"
+												class:is-on={on}>{tag.name}</label
 											>
 										</div>
 									{/each}
@@ -392,15 +397,16 @@
 							{/if}
 						{:else if filterModule.processedFilters}
 							{@const valuesToShow = filterModule.processedFilters[filterModule.selectedSection]}
-							<div class="divide-y divide-border">
+							<div class="ed-mf__checks">
 								{#each valuesToShow as value}
+									{@const on = !!filterModule.selectedGeneralFilters[filterModule.selectedSection]?.includes(value)}
 									<!-- The id carries the group key. Built from the value alone, the same value under
-								     two facets (Black under colour and under trim colour) emitted duplicate ids,
-								     so tapping one label ticked the other group's box. -->
-									<div class="flex min-h-11 items-center gap-3 py-1">
+									     two facets (Black under colour and under trim colour) emitted duplicate ids,
+									     so tapping one label ticked the other group's box. -->
+									<div class="flex min-h-12 items-center gap-3">
 										<Checkbox
 											id={`m-${filterModule.selectedSection}-${value}`}
-											checked={filterModule.selectedGeneralFilters[filterModule.selectedSection]?.includes(value)}
+											checked={on}
 											onCheckedChange={(checked) =>
 												filterModule.handleGeneralFiltersChange({
 													key: filterModule.selectedSection,
@@ -410,7 +416,8 @@
 										/>
 										<label
 											for={`m-${filterModule.selectedSection}-${value}`}
-											class="ed-mf__opt flex min-h-11 flex-1 cursor-pointer items-center text-sm font-medium capitalize text-foreground"
+											class="ed-mf__opt flex min-h-12 flex-1 cursor-pointer items-center text-sm capitalize text-foreground"
+											class:is-on={on}
 										>
 											{#if value?.startsWith?.('#')}
 												<span class="flex items-center gap-2">
@@ -428,13 +435,9 @@
 					</div>
 				</div>
 
-				<!-- Both decisions at the mobile target size, and Apply where a thumb already rests
-			     rather than tucked into the header beside the close control. -->
-				<div class="flex shrink-0 items-center gap-3 border-t bg-background px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
-					{#if filterModule.anyFilterApplied}
-						<Button variant="outline" class="h-11 flex-1" onclick={filterModule.clearFilters}>Clear all</Button>
-					{/if}
-					<Button class="ed-mf__apply h-11 flex-[2] text-xs font-bold" onclick={filterModule.handleApply}>Apply</Button>
+				<!-- Apply where a thumb already rests, full width; Clear all moved up beside the title. -->
+				<div class="ed-mf__foot shrink-0 border-t bg-background px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+					<Button class="ed-mf__apply h-12 w-full text-sm font-semibold" onclick={filterModule.handleApply}>Apply</Button>
 				</div>
 			</Sheet.Content>
 		</Sheet.Root>
@@ -502,15 +505,20 @@
 	}
 
 	/* Section tab rail — warm tint, no coloured left stripe (that would ban a >1px accent
-	   border). Active = surface + primary text. */
+	   border). Active = surface + ink, joined to the content pane. */
 	:global([data-theme='default'] .ed-mf__menu) {
-		background: var(--ed-canvas);
-		border-right: 1px solid var(--ed-line);
+		--mf-line: var(--ed-line);
+		background-color: var(--ed-canvas);
 	}
 
 	:global([data-theme='default'] .ed-mf__tab) {
 		color: var(--ed-soft);
 		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default'] .ed-mf__tab.is-on) {
+		background: var(--ed-surface);
+		color: var(--ed-ink);
 	}
 
 	:global([data-theme='default'] .ed-mf__content) {
@@ -595,5 +603,179 @@
 		font-size: var(--type-label);
 		font-weight: 500;
 		color: var(--ed-soft);
+	}
+
+	/* ---- The filter sheet, every theme ---- */
+
+	/* The rail's divider is painted on its background, not as a border, so the chosen tab's own
+	   fill covers it and the tab runs into the content pane. */
+	:global(.ed-mf__menu) {
+		background-color: hsl(var(--muted));
+		background-image: linear-gradient(var(--mf-line, hsl(var(--border))), var(--mf-line, hsl(var(--border))));
+		background-position: right top;
+		background-size: 1px 100%;
+		background-repeat: no-repeat;
+	}
+
+	:global(.ed-mf__tab) {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		width: 100%;
+		min-height: 52px;
+		padding: 12px 12px 12px 16px;
+		text-align: left;
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.3;
+		color: hsl(var(--muted-foreground));
+		transition:
+			background-color var(--motion-fast, 150ms) var(--motion-ease, ease),
+			color var(--motion-fast, 150ms) var(--motion-ease, ease);
+	}
+
+	:global(.ed-mf__tab.is-on) {
+		background: hsl(var(--background));
+		color: hsl(var(--foreground));
+		font-weight: 600;
+	}
+
+	:global(.ed-mf__tab:not(.is-on):active) {
+		background: hsl(var(--foreground) / 0.06);
+	}
+
+	/* How many of a group's values are on: ink disc, page-colour number. */
+	:global(.ed-mf__count) {
+		display: inline-grid;
+		place-items: center;
+		flex-shrink: 0;
+		min-width: 20px;
+		height: 20px;
+		padding: 0 6px;
+		border-radius: 999px;
+		background: hsl(var(--foreground));
+		color: hsl(var(--background));
+		font-size: 0.6875rem;
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+		animation: ed-mf-count-in var(--motion-fast, 150ms) var(--motion-ease, ease-out);
+	}
+
+	@keyframes ed-mf-count-in {
+		from {
+			opacity: 0;
+			transform: scale(0.6);
+		}
+	}
+
+	:global(.ed-mf__clear) {
+		min-height: 44px;
+		padding: 0 8px;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: hsl(var(--foreground));
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		transition: opacity var(--motion-fast, 150ms) var(--motion-ease, ease);
+	}
+
+	:global(.ed-mf__clear:active) {
+		opacity: 0.6;
+	}
+
+	/* The sheet's own close control: a round ghost button in the header's row, not a grey square. */
+	:global(.ed-mf__panel > [data-dialog-close][data-state]) {
+		top: 6px;
+		right: 6px;
+		border-radius: 999px;
+		background: transparent;
+		opacity: 1;
+		color: hsl(var(--foreground));
+		transition: background-color var(--motion-fast, 150ms) var(--motion-ease, ease);
+	}
+
+	:global(.ed-mf__panel > [data-dialog-close][data-state] svg) {
+		width: 20px;
+		height: 20px;
+	}
+
+	:global(.ed-mf__panel > [data-dialog-close][data-state]:active) {
+		background: hsl(var(--foreground) / 0.08);
+	}
+
+	:global(.ed-mf__cats) {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	/* Leading padding comes from categoryIndent's utilities, so only the other sides are set. */
+	:global(.ed-mf__cat) {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		width: 100%;
+		min-height: 48px;
+		padding-block: 8px;
+		padding-inline-end: 4px;
+		border-radius: var(--radius);
+		text-align: left;
+		font-size: 0.875rem;
+		line-height: 1.35;
+		color: hsl(var(--foreground));
+		transition: background-color var(--motion-fast, 150ms) var(--motion-ease, ease);
+	}
+
+	:global(.ed-mf__cat:active) {
+		background: hsl(var(--foreground) / 0.06);
+	}
+
+	:global(.ed-mf__cats li + li .ed-mf__cat.is-group) {
+		margin-top: 8px;
+	}
+
+	:global(.ed-mf__cat.is-group),
+	:global(.ed-mf__cat.is-current) {
+		font-weight: 600;
+	}
+
+	:global(.ed-mf__cat-name) {
+		flex: 1;
+		min-width: 0;
+		text-transform: capitalize;
+	}
+
+	:global(.ed-mf__cat svg) {
+		flex-shrink: 0;
+		width: 16px;
+		height: 16px;
+		color: hsl(var(--muted-foreground));
+	}
+
+	:global(.ed-mf__cat.is-current svg) {
+		color: hsl(var(--foreground));
+	}
+
+	:global(.ed-mf__opt.is-on) {
+		font-weight: 600;
+	}
+
+	@media (hover: hover) {
+		:global(.ed-mf__tab:not(.is-on):hover),
+		:global(.ed-mf__cat:hover),
+		:global(.ed-mf__panel > [data-dialog-close][data-state]:hover) {
+			background: hsl(var(--foreground) / 0.05);
+		}
+
+		:global(.ed-mf__clear:hover) {
+			opacity: 0.7;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global(.ed-mf__count) {
+			animation: none;
+		}
 	}
 </style>
