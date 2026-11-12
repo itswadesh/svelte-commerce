@@ -163,23 +163,28 @@
 						</div>
 					{/if}
 
-					{#if badge}
-						<div class="dpc__tag">
-							<span data-testid="product-card-tag">{badge}</span>
-						</div>
-					{/if}
-
-					{#if ratingScore > 0}
-						<div data-testid="product-card-rating-container" class="dpc__rating">
-							<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 12 12" aria-hidden="true">
-								<path
-									fill="currentColor"
-									d="M5.58 1.15a.5.5 0 0 1 .84 0l1.528 2.363a.5.5 0 0 0 .291.212l2.72.722a.5.5 0 0 1 .26.799L9.442 7.429a.5.5 0 0 0-.111.343l.153 2.81a.5.5 0 0 1-.68.493L6.18 10.063a.5.5 0 0 0-.36 0l-2.625 1.014a.5.5 0 0 1-.68-.494l.153-2.81a.5.5 0 0 0-.11-.343L.781 5.246a.5.5 0 0 1 .26-.799l2.719-.722a.5.5 0 0 0 .291-.212L5.58 1.149Z"
-								></path>
-							</svg>
-							<span class="dpc__rating-score">{ratingScore.toFixed(1)}</span>
-							{#if ratingCount > 0}
-								<span class="dpc__rating-count">({ratingCount})</span>
+					<!-- The tag and the rating share the bottom-left corner: at the top, the tag covered
+					     the model's face. -->
+					{#if badge || ratingScore > 0}
+						<div class="dpc__marks">
+							{#if badge}
+								<div class="dpc__tag">
+									<span data-testid="product-card-tag">{badge}</span>
+								</div>
+							{/if}
+							{#if ratingScore > 0}
+								<div data-testid="product-card-rating-container" class="dpc__rating">
+									<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 12 12" aria-hidden="true">
+										<path
+											fill="currentColor"
+											d="M5.58 1.15a.5.5 0 0 1 .84 0l1.528 2.363a.5.5 0 0 0 .291.212l2.72.722a.5.5 0 0 1 .26.799L9.442 7.429a.5.5 0 0 0-.111.343l.153 2.81a.5.5 0 0 1-.68.493L6.18 10.063a.5.5 0 0 0-.36 0l-2.625 1.014a.5.5 0 0 1-.68-.494l.153-2.81a.5.5 0 0 0-.11-.343L.781 5.246a.5.5 0 0 1 .26-.799l2.719-.722a.5.5 0 0 0 .291-.212L5.58 1.149Z"
+										></path>
+									</svg>
+									<span class="dpc__rating-score">{ratingScore.toFixed(1)}</span>
+									{#if ratingCount > 0}
+										<span class="dpc__rating-count">({ratingCount})</span>
+									{/if}
+								</div>
 							{/if}
 						</div>
 					{/if}
@@ -377,13 +382,21 @@
 		opacity: 0.55;
 	}
 
-	.dpc__tag {
+	.dpc__marks {
 		position: absolute;
 		left: 8px;
-		top: 8px;
 		right: 8px;
+		bottom: 8px;
 		z-index: 2;
 		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+	}
+
+	.dpc__tag {
+		display: flex;
+		max-width: 100%;
 	}
 
 	/* 11px: the one size UX_SYSTEM reserves for a badge. */
@@ -402,10 +415,6 @@
 	}
 
 	.dpc__rating {
-		position: absolute;
-		left: 8px;
-		bottom: 8px;
-		z-index: 2;
 		display: flex;
 		align-items: center;
 		gap: 3px;
