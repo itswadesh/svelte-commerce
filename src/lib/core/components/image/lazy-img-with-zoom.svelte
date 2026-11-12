@@ -1,4 +1,6 @@
 <script lang="ts">
+	// The zoom panel has to escape the carousel's overflow-hidden, transformed viewport.
+	import { portal } from '$lib/actions/portal'
 	import { onMount } from 'svelte'
 	import { page } from '$app/state'
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
@@ -191,15 +193,6 @@
 		isHovered = false
 	}
 
-	// The panel has to escape the carousel's overflow-hidden/transformed viewport.
-	function portal(node: HTMLElement) {
-		document.body.appendChild(node)
-		return {
-			destroy() {
-				node.remove()
-			}
-		}
-	}
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->

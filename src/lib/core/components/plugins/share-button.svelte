@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { portal } from '$lib/actions/portal'
 	import { fly, fade } from 'svelte/transition'
 	import { page } from '$app/state'
 	import { Email, Facebook, LinkedIn, Pinterest, Telegram, X, WhatsApp } from 'svelte-share-buttons-component'
@@ -94,7 +95,11 @@
 
 	{#if showDropDown}
 		<!-- Backdrop for closing -->
+		<!-- The backdrop and the phone sheet go to <body>: drawn inside the share button's own
+		     positioned, z-indexed box, no z-index lifted them over the product page's sticky Add to
+		     bag bar, which covered the sheet's second row. -->
 		<button
+			use:portal
 			type="button"
 			class="fixed inset-0 z-overlay bg-black/40 backdrop-blur-xs transition-opacity"
 			onclick={() => (showDropDown = false)}
@@ -189,6 +194,7 @@
 
 		<!-- Mobile Share Bottom Sheet -->
 		<div
+			use:portal
 			transition:fly={{ y: '100%', duration: 400, opacity: 1 }}
 			class="pb-safe fixed inset-x-0 bottom-0 z-drawer overflow-hidden rounded-t-xl bg-background shadow-z-10 lg:hidden"
 		>
