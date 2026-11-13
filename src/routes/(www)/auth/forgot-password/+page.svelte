@@ -73,7 +73,7 @@
 					name="email"
 					type="email"
 					bind:value={forgotPasswordModule.email}
-					placeholder="swadesh@litekrat.in"
+					placeholder="you@example.com"
 					schema={schemas.email}
 					label="Email"
 					required

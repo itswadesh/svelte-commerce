@@ -56,7 +56,7 @@
 					name="email"
 					type="email"
 					bind:value={forgotPasswordModule.email}
-					placeholder="swadesh@litekart.in"
+					placeholder="you@example.com"
 					schema={schemas.email}
 					label="Email"
 					class="h-12"

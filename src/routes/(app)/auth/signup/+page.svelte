@@ -25,7 +25,7 @@ let ref = $page?.url?.searchParams.get('ref')
 let role = $page?.url?.searchParams.get('role') || 'admin'
 let store = $page?.url?.searchParams.get('store') || undefined
 let newResistration = {
-	firstName: IS_DEV ? 'Swadesh' : '',
+	firstName: IS_DEV ? 'Ipsita' : '',
 	lastName: IS_DEV ? 'Behera' : '',
 	email: IS_DEV ? 'hi@litekart.in' : '',
 	password: IS_DEV ? 'litekart' : '',
