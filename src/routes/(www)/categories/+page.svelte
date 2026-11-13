@@ -14,17 +14,18 @@
 	<h1 class="mb-6 text-xl font-medium md:text-2xl">Shop by {taxonomy.one}</h1>
 
 	<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-		{#each data.categories as category}
-			<a
-				href="/{category.slug}"
-				class="group flex flex-col overflow-hidden rounded-lg border bg-card transition-all hover:border-primary hover:border-border-strong"
+		<!-- The card used to be one link to the parent, with the first two subcategories as plain text
+		     inside it: "Dresses" led to /women, and the rest were not shown at all. The parent's name now
+		     stretches its link over the card, and every subcategory is a link of its own above it. -->
+		{#each data.categories as category (category.id ?? category.slug)}
+			<div
+				class="group relative flex flex-col overflow-hidden rounded-lg border bg-card transition-[border-color,box-shadow] duration-fast ease-standard focus-within:border-border-strong hover:border-border-strong hover:shadow-sm"
 			>
-				<!-- Image Container -->
 				<div class="relative aspect-square overflow-hidden bg-muted">
 					{#if category.img}
 						<img
 							src={category.img}
-							alt={category.name}
+							alt=""
 							loading="lazy"
 							decoding="async"
 							class="h-full w-full object-cover transition-transform duration-emphasis ease-standard motion-safe:group-hover:scale-105"
@@ -36,24 +37,30 @@
 					{/if}
 				</div>
 
-				<!-- Category Info -->
 				<div class="flex flex-1 flex-col p-3">
-					<h3 class="font-medium">{category.name}</h3>
+					<h2 class="font-medium">
+						<a href="/{category.slug}" class="flex min-h-11 items-center gap-0.5 after:absolute after:inset-0">
+							{category.name}
+							<ChevronRight class="size-4 shrink-0 text-muted-foreground transition-transform duration-fast ease-standard motion-safe:group-hover:translate-x-0.5" aria-hidden="true" />
+						</a>
+					</h2>
 
-					<!-- Subcategories -->
-					<div class="mt-1 space-y-0.5">
-						{#each category.children.slice(0, 2) as child}
-							<div class="text-xs text-muted-foreground">{child.name}</div>
-						{/each}
-						{#if category.children.length > 2}
-							<div class="flex items-center gap-0.5 text-xs text-primary">
-								<span>View all</span>
-								<ChevronRight class="h-3 w-3" />
-							</div>
-						{/if}
-					</div>
+					{#if category.children?.length}
+						<ul class="mt-1 flex flex-wrap gap-1.5" aria-label="{category.name} {taxonomy.many.toLowerCase()}">
+							{#each category.children as child (child.id ?? child.slug)}
+								<li>
+									<a
+										href="/{child.slug}"
+										class="relative z-10 inline-flex min-h-11 items-center rounded-full border bg-background px-3 text-xs text-muted-foreground transition-[color,border-color,transform] duration-fast ease-standard hover:border-border-strong hover:text-foreground active:scale-95 motion-reduce:active:scale-100"
+									>
+										{child.name}
+									</a>
+								</li>
+							{/each}
+						</ul>
+					{/if}
 				</div>
-			</a>
+			</div>
 		{/each}
 	</div>
 </div>
