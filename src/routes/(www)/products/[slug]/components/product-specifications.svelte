@@ -24,7 +24,9 @@
 	const barcode = $derived(pick('barcode'))
 	// A weight is shown only with its unit: "Weight 520" could be grams or kilograms (SNX-012), and
 	// the product schema leaves a unitless weight out by the same rule.
-	const weightUnit = $derived(page?.data?.store?.weight_unit || settingState?.selectedStore?.weight_unit || '')
+	// GoCommerce gives the unit with the weight (connector 0.39: always grams); other backends name one
+	// store-wide.
+	const weightUnit = $derived(pick('weightUnit') || page?.data?.store?.weight_unit || settingState?.selectedStore?.weight_unit || '')
 	const weight = $derived(weightUnit ? pick('weight') : '')
 	const qrcode = $derived(pick('qrcode'))
 	const originCountry = $derived(product?.originCountry)
