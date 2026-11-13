@@ -32,11 +32,11 @@
 	const lcpImage = $derived.by(() => {
 		const first = productState.productImagesArray?.[0]
 		if (!first || videoURLRegex.test(first) || /youtube\.com|youtu\.be/.test(first)) return null
-		const responsive = !!page.data?.store?.plugins?.imageCdn?.active
+		const srcset = page.data?.store?.plugins?.imageCdn?.active ? lazyImgSrcset(first) : ''
 		return {
 			href: getImageCDNUrl(first, 1280, 0),
-			srcset: responsive ? lazyImgSrcset(first) : undefined,
-			sizes: responsive ? GALLERY_IMAGE_SIZES : undefined
+			srcset: srcset || undefined,
+			sizes: srcset ? GALLERY_IMAGE_SIZES : undefined
 		}
 	})
 </script>
