@@ -6,6 +6,7 @@ import { browser } from '$app/environment'
 import { allowEditorFrame, fetchTemplate, previewParams } from '$lib/composer/page-layout.js'
 import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
 import { loadSetup } from '$lib/customizer/service'
+import { takesCashOnDelivery } from '$lib/product/store-facts'
 
 /**
  * Variant ids as strings, so selecting a variant works at all.
@@ -50,17 +51,18 @@ export const load = async (event: any) => {
 	event.depends(LAYOUT_DEPENDENCY)
 	const { preview, editor } = event.untrack(() => previewParams('product', event.url, browser))
 	try {
-		const [data, layout] = await Promise.all([
+		const [data, layout, cod] = await Promise.all([
 			wwwProductsSlugLoad({ fetch: watch.fetch, params: event.params } as any),
 			// The shop's product page template (GoCommerce D128), or null for the built-in page.
-			fetchTemplate(services as object, 'product', preview)
+			fetchTemplate(services as object, 'product', preview),
+			takesCashOnDelivery(services as object)
 		])
 		const editorOrigin = allowEditorFrame(event, layout, editor)
 		if (!data?.product) return data
 		const previewKey = layout?.preview ? preview : null
 		// An engine older than the flag leaves designable undefined: only false skips the setup read.
 		const customizer = data.product.designable === false ? null : await loadSetup(services as object, data.product.id)
-		return { ...data, product: withStringVariantIds(data.product), layout, editorOrigin, previewKey, customizer }
+		return { ...data, product: withStringVariantIds(data.product), layout, editorOrigin, previewKey, customizer, cod }
 	} catch (e) {
 		const reportedMissing = (isRedirect(e) && e.location === '/') || (isHttpError(e) && e.status === 404)
 		if (reportedMissing) {
