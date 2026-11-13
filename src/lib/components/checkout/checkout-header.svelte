@@ -8,7 +8,7 @@
 
 <!-- Shown on mobile too: it is the only step context and the only way back to cart/address there.
      Below sm only the current step keeps its label so all four steps still fit. -->
-<div class="mb-8">
+<div class="mb-3 sm:mb-8">
 	<div class="flex items-center justify-center space-x-2 sm:space-x-4 md:space-x-8">
 		<!-- Step 1: Cart -->
 		<Button
@@ -22,7 +22,7 @@
 		>
 			<div
 				class={cn(
-					'flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold tracking-tight',
+					'flex size-6 items-center justify-center rounded-full border text-xs font-bold tracking-tight sm:size-7',
 					step === 1 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
@@ -45,7 +45,7 @@
 		>
 			<div
 				class={cn(
-					'flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold tracking-tight',
+					'flex size-6 items-center justify-center rounded-full border text-xs font-bold tracking-tight sm:size-7',
 					step === 2 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
@@ -67,7 +67,7 @@
 		>
 			<div
 				class={cn(
-					'flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold tracking-tight',
+					'flex size-6 items-center justify-center rounded-full border text-xs font-bold tracking-tight sm:size-7',
 					step === 3 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
@@ -89,7 +89,7 @@
 		>
 			<div
 				class={cn(
-					'flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold tracking-tight',
+					'flex size-6 items-center justify-center rounded-full border text-xs font-bold tracking-tight sm:size-7',
 					step === 4 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>

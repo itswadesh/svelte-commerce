@@ -42,7 +42,7 @@
 </script>
 
 {#if bar}
-	<div class="fdb mb-4 rounded-radius border border-border bg-background px-4 py-3" in:fade data-testid="free-delivery-bar" role="status">
+	<div class="fdb mb-2 rounded-radius border border-border bg-background px-3 py-2 sm:mb-4 sm:px-4 sm:py-3" in:fade data-testid="free-delivery-bar" role="status">
 		<p class="flex items-center gap-2 text-sm text-foreground">
 			<Truck class="size-4 shrink-0 {bar.qualifies ? 'text-success' : 'text-muted-foreground'}" aria-hidden="true" />
 			{#if bar.qualifies}
@@ -51,7 +51,7 @@
 				<span>Add <span class="font-semibold">{formatPrice(bar.remaining, currencyCode)}</span> more for <span class="font-semibold">FREE delivery</span></span>
 			{/if}
 		</p>
-		<div class="fdb-track mt-2 h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+		<div class="fdb-track mt-1.5 h-1 overflow-hidden rounded-full bg-muted sm:mt-2 sm:h-1.5" aria-hidden="true">
 			<div class="fdb-fill h-full w-full origin-left rounded-full {bar.qualifies ? 'bg-success' : 'bg-primary-ink'}" style="transform: scaleX({bar.progress})"></div>
 		</div>
 	</div>

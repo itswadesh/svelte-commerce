@@ -51,11 +51,11 @@
 </script>
 
 {#if products.length}
-	<section class="mt-6" aria-labelledby="bag-suggestions-title" data-testid="cart-cross-sells">
+	<section aria-labelledby="bag-suggestions-title" data-testid="cart-cross-sells">
 		<h2 id="bag-suggestions-title" class="mb-3 text-sm font-semibold text-foreground">You may be interested in</h2>
 		<ul class="ccs-rail -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:scroll-px-0 sm:px-0">
 			{#each products as p (p.id)}
-				<li class="w-36 shrink-0 snap-start overflow-hidden rounded-radius border border-border bg-background" in:fade>
+				<li class="w-32 shrink-0 snap-start sm:w-36 overflow-hidden rounded-radius border border-border bg-background" in:fade>
 					<a href={`/products/${p.slug}`} class="relative block aspect-square bg-muted" aria-label={p.title}>
 						<LazyImg src={p.thumbnail} alt={p.title} class="h-full w-full object-contain" />
 					</a>
@@ -72,7 +72,7 @@
 						{#if !madeToDesign(p)}
 							<button
 								type="button"
-								class="ccs-add flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-muted disabled:opacity-60 sm:size-9"
+								class="ccs-add hit-44 flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-muted disabled:opacity-60"
 								aria-label={added[p.id] ? `${p.title} is in your bag` : `Add ${p.title} to bag`}
 								disabled={!!adding || added[p.id]}
 								onclick={() => quickAdd(p)}

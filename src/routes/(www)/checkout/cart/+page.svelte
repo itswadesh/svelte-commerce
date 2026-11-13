@@ -164,9 +164,9 @@
 	const cartSubtotal = $derived(formatPrice(cartState.cart?.subtotal, currencyCode))
 </script>
 
-<!-- One stepper geometry for the whole storefront: `size="icon"` is 44px on phones and the compact
-     36px box from md up, which is what the drawer row uses too. The two surfaces used to disagree
-     by half — 22px in the drawer against 40px here — so one shopper got two steppers for one job. -->
+<!-- Phones draw the stepper and the bin at 32px so a line fits beside its photo, and `.hit-44`
+     (src/app.css) keeps each tap target 44px. From md up it is the compact 36px box the drawer
+     row uses too. -->
 {#snippet quantitySelector(item: any)}
 	<div class="flex items-center rounded-radius border border-border bg-background">
 		<Button
@@ -174,13 +174,13 @@
 			size="icon"
 			onclick={(e) => cartModule.decreaseQty(e, item)}
 			disabled={isUpdating(item) || item.qty <= 1}
-			class="rounded-r-none border-0"
+			class="hit-44 rounded-r-none border-0 max-md:size-8"
 			aria-label="Decrease quantity of {item.title}"
 		>
 			<Minus class="size-4" />
 		</Button>
 		<span
-			class="flex min-w-[2.25rem] items-center justify-center px-1 text-sm font-semibold tabular-nums text-foreground"
+			class="flex min-w-8 items-center justify-center px-1 text-sm font-semibold tabular-nums text-foreground md:min-w-[2.25rem]"
 			aria-live="polite"
 			aria-atomic="true"
 		>
@@ -193,7 +193,7 @@
 		<Button
 			variant="ghost"
 			size="icon"
-			class="rounded-l-none border-0"
+			class="hit-44 rounded-l-none border-0 max-md:size-8"
 			aria-label="Increase quantity of {item.title}"
 			disabled={isUpdating(item)}
 			onclick={(e) => cartModule.increaseQty(e, item)}
@@ -207,7 +207,7 @@
 	<Button
 		variant="ghost"
 		size="icon"
-		class="text-muted-foreground hover:border-transparent hover:bg-destructive/10 hover:text-destructive"
+		class="hit-44 text-muted-foreground hover:border-transparent hover:bg-destructive/10 hover:text-destructive max-md:size-8"
 		aria-label="Remove {item.title} from bag"
 		disabled={isUpdating(item)}
 		onclick={(e) => removeItem(e, item)}
@@ -219,17 +219,17 @@
 <!-- The first load used to be one 34px spinner in an otherwise blank 384px region, then the whole
      page snapped in. These skeletons hold the real layout so nothing jumps. -->
 {#snippet loadingSkeleton()}
-	<div class="grid gap-8 lg:grid-cols-[1fr_380px]" role="status" aria-busy="true">
+	<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_380px]" role="status" aria-busy="true">
 		<div class="min-w-0 divide-y divide-border overflow-hidden rounded-radius sm:border">
 			{#each [0, 1] as row (row)}
-				<div class="flex gap-4 p-4 sm:p-5">
-					<Skeleton class="h-28 w-24 shrink-0 sm:h-32 sm:w-28" />
-					<div class="flex min-w-0 flex-1 flex-col gap-3">
+				<div class="flex gap-3 py-2.5 sm:gap-5 sm:p-5">
+					<Skeleton class="h-24 w-[4.5rem] shrink-0 sm:h-36 sm:w-28" />
+					<div class="flex min-w-0 flex-1 flex-col gap-2">
 						<Skeleton class="h-4 w-2/3" />
 						<Skeleton class="h-4 w-1/3" />
 						<div class="mt-auto flex items-center justify-between">
-							<Skeleton class="h-11 w-32" />
-							<Skeleton class="h-11 w-11" />
+							<Skeleton class="h-8 w-24 md:h-9 md:w-28" />
+							<Skeleton class="size-8 md:size-9" />
 						</div>
 					</div>
 				</div>
@@ -247,7 +247,7 @@
 	<title>Cart - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
-<div class="py-4 sm:py-8">
+<div class="py-3 sm:py-8">
 	<div class="page-width">
 		<CheckoutHeader step={1} />
 
@@ -282,7 +282,7 @@
 					<Button href="/" class="h-11 px-6">Start shopping</Button>
 				</div>
 			{:else}
-				<div class="grid gap-4 sm:gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
+				<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
 					<!-- Left column. `min-w-0` keeps a wide min-content child from stretching the column
 					     past the viewport and scrolling the page sideways on a phone. -->
 					<div class="min-w-0">
@@ -291,15 +291,6 @@
 							country={(cartState.cart as any)?.shippingAddress?.country ?? ''}
 							bind:qualifies={freeDelivery}
 						/>
-
-						{#if totalSavings > 0}
-							<div class="mb-4 flex items-center gap-2 rounded-radius border border-success/40 bg-success/5 px-4 py-3">
-								<Tag class="size-3.5 shrink-0 text-success" />
-								<span class="text-sm font-medium text-success">
-									You saved <span class="font-bold">{formatPrice($animatedSavings, currencyCode)}</span> on this order.
-								</span>
-							</div>
-						{/if}
 
 						<div
 							class="h-fit divide-y divide-border overflow-hidden rounded-radius sm:border {cartModule.partialCheckoutEnabled
@@ -326,11 +317,11 @@
 								     interactive controls inside an anchor, and a tap on the row's empty space opened a
 								     second tab. Only the thumbnail and the title are links now, in this tab, which is
 								     the pattern the drawer row already followed. -->
-								<div class="flex gap-3 px-0 py-3 sm:gap-5 sm:p-5">
+								<div class="flex gap-3 py-2.5 sm:gap-5 sm:p-5">
 									{#if cartModule.partialCheckoutEnabled}
 										<label
 											for={item.id}
-											class="-my-3 flex shrink-0 items-center px-3 hover:cursor-pointer sm:-my-5 sm:-ml-5 {item.isSelectedForCheckout
+											class="-my-2.5 flex shrink-0 items-center px-3 hover:cursor-pointer sm:-my-5 sm:-ml-5 {item.isSelectedForCheckout
 												? 'bg-muted'
 												: 'hover:bg-muted/50'}"
 										>
@@ -344,22 +335,16 @@
 										</label>
 									{/if}
 
-									<div class="flex shrink-0 flex-col items-center gap-3">
-										<a
-											href={`/products/${item.slug}`}
-											class="cart-thumb block w-20 overflow-hidden rounded-md bg-muted sm:w-28"
-											style="aspect-ratio: var(--product-image-ratio, 3 / 4)"
-											aria-label="View {item.title}"
-										>
-											<LazyImg src={picture.src} alt={picture.alt} class="h-full w-full object-cover object-top" />
-										</a>
+									<a
+										href={`/products/${item.slug}`}
+										class="cart-thumb block w-[4.5rem] shrink-0 self-start overflow-hidden rounded-md bg-muted sm:w-28"
+										style="aspect-ratio: var(--product-image-ratio, 3 / 4)"
+										aria-label="View {item.title}"
+									>
+										<LazyImg src={picture.src} alt={picture.alt} class="h-full w-full object-cover object-top" />
+									</a>
 
-										<div class="sm:hidden">
-											{@render quantitySelector(item)}
-										</div>
-									</div>
-
-									<div class="flex min-w-0 flex-1 flex-col gap-2">
+									<div class="flex min-w-0 flex-1 flex-col gap-1 sm:gap-2">
 										<div class="flex items-start justify-between gap-3">
 											<div class="min-w-0 flex-1">
 												<a href={`/products/${item.slug}`} class="block">
@@ -368,10 +353,10 @@
 												{#if picture.designed}<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>{/if}
 
 												{#if item.variant?.options?.length}
-													<div class="mt-1.5 flex flex-wrap gap-1.5">
+													<div class="mt-1 flex flex-wrap gap-1 sm:mt-1.5 sm:gap-1.5">
 														{#each item.variant.options as option}
 															{#if option?.option?.title && option?.value}
-																<span class="inline-flex items-center rounded-sm border border-border px-2 py-0.5 text-xs text-muted-foreground">
+																<span class="inline-flex items-center rounded-sm border border-border px-1.5 text-xs text-muted-foreground sm:px-2 sm:py-0.5">
 																	{option.option?.title}: {option?.value}
 																</span>
 															{/if}
@@ -405,8 +390,10 @@
 												Offer price with {(cartState.cart?.lineItems || []).find((l: any) => l.productId === (item as any).addOnFor && !l.addOnId)?.title ?? 'its product'}
 											</p>
 										{/if}
+										<!-- Phones leave the line's saving to its struck-out MRP and the bag's saving
+										     under the price summary; a third green line per item cost a row each. -->
 										{#if item.mrp > item.price}
-											<p class="text-xs font-medium text-success">
+											<p class="text-xs font-medium text-success max-sm:hidden">
 												You saved {formatPrice(item.mrp * item.qty - item.price * item.qty, currencyCode)}
 											</p>
 										{:else if item.qty > 1}
@@ -415,24 +402,20 @@
 											</p>
 										{/if}
 
-										<div class="mt-auto flex items-center justify-between gap-3 pt-2">
-											<div class="max-sm:hidden">
-												{@render quantitySelector(item)}
-											</div>
-											<div class="ml-auto">
-												{@render removeButton(item)}
-											</div>
+										<div class="mt-auto flex items-center justify-between gap-3 sm:pt-2">
+											{@render quantitySelector(item)}
+											{@render removeButton(item)}
 										</div>
 									</div>
 								</div>
 							{/each}
 						</div>
-
-						<CartCrossSells productIds={bagProducts} add={(p) => cartState.add({ qty: 1, productId: p.productId, variantId: p.variantId })} />
 					</div>
 
-					<!-- Right column - order summary -->
-					<div class="flex flex-col gap-3 lg:sticky lg:top-24">
+					<!-- Right column - order summary. It spans both rows on desktop so the suggestions can
+					     sit under the items there and under the summary on a phone, where the total comes
+					     straight after the bag. -->
+					<div class="flex flex-col gap-3 lg:sticky lg:top-24 lg:row-span-2">
 						<!-- coupon applied-->
 						{#if cartState.cart?.couponCode}
 							<div class="flex items-center justify-between gap-3 rounded-radius border border-border bg-background px-3 py-2">
@@ -464,8 +447,8 @@
 							<CouponsDrawer />
 						{/if}
 
-						<div class="rounded-radius border border-border bg-background p-4 shadow-xs md:p-5">
-							<h2 class="mb-4 text-sm font-semibold text-foreground">Price summary</h2>
+						<div class="rounded-radius border border-border bg-background p-3 shadow-xs sm:p-4 md:p-5">
+							<h2 class="mb-2 text-sm font-semibold text-foreground sm:mb-4">Price summary</h2>
 
 							<!-- The four hand-written copies of this block had drifted; this is the shared one, and
 							     it is what moves the bottom line to "Estimated total" while shipping is unknown. -->
@@ -490,7 +473,15 @@
 								{isBusy ? 'Updating your bag' : `Subtotal ${cartSubtotal}, ${totalLabel(shippingResolved, taxPending).toLowerCase()} ${cartTotal}`}
 							</p>
 
-							<div class="mt-5 flex items-center justify-center gap-2 rounded-radius bg-muted/50 px-4 py-2.5">
+							{#if totalSavings > 0}
+								<p class="mt-3 flex items-center gap-1.5 rounded-sm bg-success/5 px-2 py-1.5 text-xs font-medium text-success sm:text-sm">
+									<Tag class="size-3.5 shrink-0" aria-hidden="true" />
+									<span>You save <span class="font-bold">{formatPrice($animatedSavings, currencyCode)}</span> on this order</span>
+								</p>
+							{/if}
+
+							<!-- Phones have the trust badges straight under this card saying the same thing. -->
+							<div class="mt-5 flex items-center justify-center gap-2 rounded-radius bg-muted/50 px-4 py-2.5 max-sm:hidden">
 								<LockKeyhole class="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
 								<p class="text-xs text-muted-foreground">Secure 256-bit encryption</p>
 							</div>
@@ -512,6 +503,10 @@
 						</div>
 
 						<OrderTrustBadges />
+					</div>
+
+					<div class="min-w-0 lg:col-start-1">
+						<CartCrossSells productIds={bagProducts} add={(p) => cartState.add({ qty: 1, productId: p.productId, variantId: p.variantId })} />
 					</div>
 				</div>
 			{/if}

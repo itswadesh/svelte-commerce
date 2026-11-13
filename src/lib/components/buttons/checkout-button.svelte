@@ -24,14 +24,15 @@
      as it appears and gives the body matching bottom padding while it is on the page, so trailing
      content is not left underneath. -->
 <div
-	class="checkout-bar w-full max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-sticky max-sm:border-t max-sm:border-border max-sm:bg-background max-sm:pb-[env(safe-area-inset-bottom)] max-sm:shadow-z-2 {className}"
+	class="checkout-bar w-full max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-sticky max-sm:flex max-sm:items-center max-sm:gap-3 max-sm:border-t max-sm:border-border max-sm:bg-background max-sm:px-3 max-sm:pt-2 max-sm:pb-[calc(0.5rem+env(safe-area-inset-bottom))] max-sm:shadow-z-2 {className}"
 >
 	{#if total}
 		<!-- The order total is in the summary card the shopper has just scrolled past on mobile;
-		     repeating it here means the amount is on screen at the moment of commitment. -->
-		<div class="flex items-center justify-between px-4 py-2.5 sm:hidden">
-			<span class="text-xs font-medium text-muted-foreground">{totalLabel}</span>
-			<span class="text-base font-bold text-foreground">{total}</span>
+		     repeating it here means the amount is on screen at the moment of commitment. Beside the
+		     button rather than above it, so the bar is one row, as on the big Indian shopping apps. -->
+		<div class="flex shrink-0 flex-col sm:hidden">
+			<span class="text-[11px] font-medium leading-tight text-muted-foreground">{totalLabel}</span>
+			<span class="text-base font-bold leading-tight text-foreground">{total}</span>
 		</div>
 	{/if}
 	<!-- Busy is disabled, so that a second tap cannot place a second order — but it must not *look*
@@ -40,7 +41,7 @@
 	     muted-on-muted. -->
 	<Button
 		data-testid="checkout-button"
-		class="group w-full bg-primary py-6 text-sm font-semibold shadow-z-1 transition-colors duration-150 hover:bg-primary-hover disabled:border disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100 disabled:shadow-none max-sm:h-14 max-sm:rounded-none {loading
+		class="group w-full bg-primary py-6 text-sm font-semibold shadow-z-1 transition-colors duration-150 hover:bg-primary-hover disabled:border disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100 disabled:shadow-none max-sm:h-12 max-sm:min-w-0 max-sm:flex-1 {loading
 			? 'disabled:border-0 disabled:bg-primary disabled:text-primary-foreground disabled:shadow-z-1'
 			: ''}"
 		disabled={disabled || loading}

@@ -116,7 +116,7 @@
 			{/if}
 		</div>
 	{:else}
-		<dl class="space-y-3 border-b border-border pb-6">
+		<dl class="space-y-2 border-b border-border pb-3 sm:space-y-3 sm:pb-6">
 			{#if hasMrpSaving}
 				<!-- The breakup a shopper in India expects: what the items list at, what comes off that,
 				     then what they cost. Only when the store set compare-at prices above the price. -->
@@ -199,7 +199,7 @@
 						<span class="text-xs font-normal text-muted-foreground">Any tax is added when you place your order.</span>
 					{/if}
 				</dt>
-				<dd class={['shrink-0 text-xl font-bold text-foreground', figure]}>{money(total)}</dd>
+				<dd class={['shrink-0 text-lg font-bold text-foreground sm:text-xl', figure]}>{money(total)}</dd>
 			</div>
 		</dl>
 	{/if}
