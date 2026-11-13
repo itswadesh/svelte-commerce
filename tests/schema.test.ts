@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { absoluteUrl, availabilityUrl, breadcrumbList, cleanSchemaText, mediaUrl, productGroupId, variantName, weightValue } from '../src/lib/components/seo/schema'
+import { absoluteUrl, availabilityUrl, breadcrumbList, cleanSchemaText, compactSchema, mediaUrl, productGroupId, variantName, weightValue } from '../src/lib/components/seo/schema'
 
 // The escaping applied by src/lib/components/seo/structured-data.svelte before it interpolates
 // serialized JSON into a script tag. Kept in sync with that one-liner.
@@ -105,5 +105,35 @@ describe('variantName', () => {
 		expect(variantName("Men's kurta set", 'Black / M')).toBe("Men's kurta set – Black / M")
 		expect(variantName('Kurta', 'Kurta Black M')).toBe('Kurta Black M')
 		expect(variantName('Kurta', '')).toBe('Kurta')
+	})
+})
+
+describe('compactSchema', () => {
+	it('leaves out the empty fields of a store that never filled in its details', () => {
+		const organization = {
+			'@context': 'https://schema.org',
+			'@type': 'Organization',
+			'@id': 'https://demo.shopnx.in/#organization',
+			name: 'Demo',
+			address: { '@type': 'PostalAddress', streetAddress: null, addressLocality: null, addressCountry: 'IN' },
+			contactPoint: { '@type': 'ContactPoint', telephone: null, email: '' },
+			legalName: undefined,
+			sameAs: [],
+			publisher: { '@id': 'https://demo.shopnx.in/#organization' },
+			offers: { '@type': 'Offer', price: 0, availability: 'https://schema.org/InStock' }
+		}
+		expect(compactSchema(organization)).toEqual({
+			'@context': 'https://schema.org',
+			'@type': 'Organization',
+			'@id': 'https://demo.shopnx.in/#organization',
+			name: 'Demo',
+			address: { '@type': 'PostalAddress', addressCountry: 'IN' },
+			publisher: { '@id': 'https://demo.shopnx.in/#organization' },
+			offers: { '@type': 'Offer', price: 0, availability: 'https://schema.org/InStock' }
+		})
+	})
+
+	it('is undefined when nothing is left', () => {
+		expect(compactSchema({ '@context': 'https://schema.org', '@type': 'Thing', name: ' ' })).toBeUndefined()
 	})
 })
