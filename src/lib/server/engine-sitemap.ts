@@ -1,5 +1,6 @@
 import { env } from '$env/dynamic/public'
 import type { RequestEvent } from '@sveltejs/kit'
+import { finalLocs } from '$lib/path-aliases'
 
 // The connector's rule for which store a host sells for: acme.<base domain> is acme, and the
 // configured store has any other host. Failing both the host itself goes, which the engine reads
@@ -31,9 +32,8 @@ export async function engineSitemap(event: RequestEvent, file: string): Promise<
 	})
 	try {
 		const answer = await fetch(`${engine.replace(/\/+$/, '')}/x/sitemaps/${file}`, { headers })
-		const body = (await answer.text()).replace(
-			/(<loc>)https?:\/\/[^/<]+(\/x\/sitemaps\/)/g,
-			`$1${event.url.origin}$2`
+		const body = finalLocs(
+			(await answer.text()).replace(/(<loc>)https?:\/\/[^/<]+(\/x\/sitemaps\/)/g, `$1${event.url.origin}$2`)
 		)
 		return new Response(body, {
 			status: answer.status,
