@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte'
 import { themeFontsHref, themeTokenCss, themeTokenDeclarations, hexToTriplet, themeBackground } from '$lib/composer/theme-tokens'
-import { getThemeFontsUrl } from '$lib/theme'
+import { getThemeFontsUrl, preloadsInter } from '$lib/theme'
 import { publishedThemeSettings, forgetThemeSettings } from '$lib/composer/theme-settings'
 import { collectionCards, columnItems, columnsClass, faqItems, slideInterval, slideItems, videoEmbed, videoSource } from '$lib/composer/helpers'
 import { draftSections } from '$lib/composer/editor-bridge'
@@ -165,13 +165,14 @@ describe('theme tokens', () => {
 		)
 	})
 
-	it("stops loading the default theme's Inter only when the store names both fonts", () => {
-		const inter = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
-		expect(getThemeFontsUrl('default', null)).toBe(inter)
-		expect(getThemeFontsUrl('default', { heading_font: 'noto-serif' })).toBe(inter)
-		expect(getThemeFontsUrl('default', { heading_font: 'noto-serif', body_font: 'comic-sans' })).toBe(inter)
-		expect(getThemeFontsUrl('default', { heading_font: 'noto-serif', body_font: 'source-sans-3' })).toBeNull()
-		expect(getThemeFontsUrl('wine', { heading_font: 'noto-serif', body_font: 'source-sans-3' })).toContain('family=Dancing+Script')
+	it("preloads the default theme's self-hosted Inter unless the store names both fonts", () => {
+		expect(getThemeFontsUrl('default')).toBeNull()
+		expect(preloadsInter('default', null)).toBe(true)
+		expect(preloadsInter('default', { heading_font: 'noto-serif' })).toBe(true)
+		expect(preloadsInter('default', { heading_font: 'noto-serif', body_font: 'comic-sans' })).toBe(true)
+		expect(preloadsInter('default', { heading_font: 'noto-serif', body_font: 'source-sans-3' })).toBe(false)
+		expect(preloadsInter('wine', null)).toBe(false)
+		expect(getThemeFontsUrl('wine')).toContain('family=Dancing+Script')
 	})
 
 	it('converts colours to the HSL triplets the theme holds', () => {

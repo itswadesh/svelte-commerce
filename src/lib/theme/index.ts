@@ -18,9 +18,8 @@ export interface StorefrontTheme {
 const AVAILABLE_THEMES = ['default', 'wine', 'organic', 'lime', 'noor']
 const DEFAULT_THEME = 'default'
 
+// The default theme's Inter is self-hosted (src/app.css), so it has no entry here.
 const THEME_FONTS: Record<string, string> = {
-	default:
-		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
 	wine:
 		'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap',
 	organic:
@@ -29,9 +28,13 @@ const THEME_FONTS: Record<string, string> = {
 		'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap'
 }
 
-export function getThemeFontsUrl(theme: string, settings?: ThemeSettings | null): string | null {
-	if (theme === DEFAULT_THEME && setsBothFonts(settings)) return null
+export function getThemeFontsUrl(theme: string): string | null {
 	return THEME_FONTS[theme] || null
+}
+
+/** Whether the page preloads the self-hosted Inter: the default theme, unless the store named both its fonts. */
+export function preloadsInter(theme: string, settings?: ThemeSettings | null): boolean {
+	return theme === DEFAULT_THEME && !setsBothFonts(settings)
 }
 
 /**

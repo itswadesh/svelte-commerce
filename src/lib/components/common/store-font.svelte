@@ -12,8 +12,8 @@
 		roboto: "'Roboto', ui-sans-serif, system-ui, sans-serif",
 		poppins: "'Poppins', ui-sans-serif, system-ui, sans-serif"
 	}
+	// Inter is self-hosted (src/app.css), so it needs no stylesheet.
 	const GOOGLE: Record<string, string> = {
-		inter: 'Inter:wght@400;500;600;700',
 		roboto: 'Roboto:wght@400;500;700',
 		poppins: 'Poppins:wght@400;500;600;700'
 	}
