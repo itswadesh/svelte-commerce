@@ -10,9 +10,15 @@
 	 * The width-descriptor srcset this component emits when it is given `sizes`. Exported so a
 	 * preload of the same image (the product page's LCP preload) offers the browser identical
 	 * candidates, and the image is downloaded once.
+	 *
+	 * Empty when the CDN hands back one address for every width: a picture it cannot resize (a
+	 * site-relative path, such as a sample shop's photos) listed the same file at 160w to 1280w,
+	 * which offers the browser nothing and claims sizes that do not exist (SNX-034).
 	 */
 	export function lazyImgSrcset(src: string): string {
-		return SRCSET_WIDTHS.map((sw) => `${getImageCDNUrl(src, sw, 0)} ${sw}w`).join(', ')
+		const urls = SRCSET_WIDTHS.map((sw) => getImageCDNUrl(src, sw, 0))
+		if (new Set(urls).size < 2) return ''
+		return urls.map((url, i) => `${url} ${SRCSET_WIDTHS[i]}w`).join(', ')
 	}
 </script>
 
@@ -81,7 +87,7 @@
 	const attrH = $derived(height === 'auto' ? Math.round((cdnW * +aspectHeight) / +aspectWidth) || cdnW : +h)
 	// Device-responsive srcset (width descriptors) built from the CDN. Only emitted when a
 	// caller supplies `sizes`, so existing single-src usage is unchanged.
-	const cdnSrcset = $derived(sizes ? lazyImgSrcset(src) : undefined)
+	const cdnSrcset = $derived((sizes && lazyImgSrcset(src)) || undefined)
 
 	const extension = $derived(src?.split('.').pop())
 
@@ -186,7 +192,7 @@
 					data-nimg="1"
 					loading={resolvedLoading}
 					srcset={cdnSrcset}
-					{sizes}
+					sizes={cdnSrcset ? sizes : undefined}
 					src={getImageCDNUrl(src, cdnW, h)}
 					height={attrH}
 					width={attrW}
