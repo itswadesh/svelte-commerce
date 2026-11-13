@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
-	import { AlertCircle, Check, LockKeyhole, Minus, Plus, ShoppingBag, Tag, Trash2, X } from '@lucide/svelte'
+	import { AlertCircle, Check, ChevronDown, LockKeyhole, ShoppingBag, Tag, Trash2, X } from '@lucide/svelte'
+	import { fireGTagEvent } from '$lib/core/utils/index.js'
 	import { formatPrice, taxIsPending, totalLabel } from '$lib/utils/price'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
@@ -111,6 +112,15 @@
 		})
 	}
 
+	// The Qty chip sets the number outright. A lower one is reported as the stepper's minus was.
+	function setQty(item: any, qty: number) {
+		if (!qty || qty === item.qty) return
+		if (qty < item.qty) fireGTagEvent('remove_from_cart', { items: [{ ...item, qty: item.qty - qty }], price: item.price })
+		cartState.update({ qty, lineId: item.id, productId: item.productId, variantId: item.variantId })
+	}
+	// 1 to 10, or up to the line's own quantity when it is already more.
+	const qtyOptions = (item: any) => Array.from({ length: Math.max(10, item.qty) }, (_, i) => i + 1)
+
 	// What the lines save on their MRP, apart from a code's discount, for the price breakup.
 	const mrpSaving = $derived(
 		(cartState.cart?.lineItems || []).reduce((acc, item) => acc + Math.max(0, (item.mrp || item.price) - item.price) * item.qty, 0)
@@ -164,43 +174,42 @@
 	const cartSubtotal = $derived(formatPrice(cartState.cart?.subtotal, currencyCode))
 </script>
 
-<!-- Phones draw the stepper and the bin at 32px so a line fits beside its photo, and `.hit-44`
-     (src/app.css) keeps each tap target 44px. From md up it is the compact 36px box the drawer
-     row uses too. -->
+<!-- Quantity is one small "Qty: 1" chip, as on the big Indian shopping apps (owner: "keep the qty
+     section minimal"). A real select lies invisible over it, 44px tall, so a tap opens the phone's
+     own picker and the tap target stays 44px. -->
 {#snippet quantitySelector(item: any)}
-	<div class="flex items-center rounded-radius border border-border bg-background">
-		<Button
-			variant="ghost"
-			size="icon"
-			onclick={(e) => cartModule.decreaseQty(e, item)}
-			disabled={isUpdating(item) || item.qty <= 1}
-			class="hit-44 rounded-r-none border-0 max-md:size-8"
-			aria-label="Decrease quantity of {item.title}"
-		>
-			<Minus class="size-4" />
-		</Button>
-		<span
-			class="flex min-w-8 items-center justify-center px-1 text-sm font-semibold tabular-nums text-foreground md:min-w-[2.25rem]"
-			aria-live="polite"
-			aria-atomic="true"
-		>
-			{#if isUpdating(item)}
-				<Spinner size={4} label="Updating quantity" />
-			{:else}
-				{item.qty}
-			{/if}
-		</span>
-		<Button
-			variant="ghost"
-			size="icon"
-			class="hit-44 rounded-l-none border-0 max-md:size-8"
-			aria-label="Increase quantity of {item.title}"
+	<label
+		class="relative inline-flex h-7 items-center gap-1 rounded-sm border border-border bg-background px-2 text-xs font-medium text-foreground transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring hover:bg-muted {isUpdating(
+			item
+		)
+			? 'opacity-60'
+			: ''}"
+	>
+		<span aria-hidden="true">Qty:</span>
+		{#if isUpdating(item)}
+			<Spinner size={3} label="Updating quantity" />
+		{:else}
+			<span class="font-semibold tabular-nums" aria-hidden="true">{item.qty}</span>
+		{/if}
+		<ChevronDown class="size-3.5 text-muted-foreground" aria-hidden="true" />
+		<select
+			class="absolute inset-x-0 top-1/2 h-11 w-full -translate-y-1/2 cursor-pointer opacity-0 disabled:cursor-default"
+			aria-label="Quantity of {item.title}"
+			value={item.qty}
 			disabled={isUpdating(item)}
-			onclick={(e) => cartModule.increaseQty(e, item)}
+			onchange={(e) => {
+				const qty = Number(e.currentTarget.value)
+				// Back to the bag's figure until the bag itself moves, so a refused change does not leave
+				// the picker showing a quantity the bag does not have.
+				e.currentTarget.value = String(item.qty)
+				setQty(item, qty)
+			}}
 		>
-			<Plus class="size-4" />
-		</Button>
-	</div>
+			{#each qtyOptions(item) as n (n)}
+				<option value={n}>{n}</option>
+			{/each}
+		</select>
+	</label>
 {/snippet}
 
 {#snippet removeButton(item: any)}
@@ -228,7 +237,7 @@
 						<Skeleton class="h-4 w-2/3" />
 						<Skeleton class="h-4 w-1/3" />
 						<div class="mt-auto flex items-center justify-between">
-							<Skeleton class="h-8 w-24 md:h-9 md:w-28" />
+							<Skeleton class="h-7 w-16" />
 							<Skeleton class="size-8 md:size-9" />
 						</div>
 					</div>

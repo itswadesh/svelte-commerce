@@ -57,8 +57,8 @@
 </script>
 
 {#if supported}
-	<section class="rounded-radius border border-border bg-background p-4" aria-labelledby="gift-card-title" data-testid="gift-card-box">
-		<h2 id="gift-card-title" class="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
+	<section class="rounded-radius border border-border bg-background p-3 sm:p-4" aria-labelledby="gift-card-title" data-testid="gift-card-box">
+		<h2 id="gift-card-title" class="mb-2 flex sm:mb-3 items-center gap-2 text-sm font-semibold text-foreground">
 			<Gift class="size-4 text-primary" aria-hidden="true" />
 			Gift card
 		</h2>

@@ -92,7 +92,7 @@
 	<title>Checkout - Secure Payment</title>
 </svelte:head>
 
-<div class="min-h-screen py-8">
+<div class="min-h-screen py-3 sm:py-8">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={3} />
 		<!-- <div class="mb-8 flex justify-between items-center">
@@ -109,8 +109,8 @@
 		{#if paymentModule.loadingForPaymentMethods || quote.awaitingFirst(cartState.cart)}
 			<!-- The shape of the step that is coming. A lone spinner in an empty region is the wrong
 			     answer anywhere, and least defensible at the payment step. -->
-			<div class="grid gap-8 lg:grid-cols-[1fr_400px]" aria-busy="true" aria-label="Loading payment options">
-				<div class="flex min-w-0 flex-col gap-6">
+			<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_400px]" aria-busy="true" aria-label="Loading payment options">
+				<div class="flex min-w-0 flex-col gap-3 sm:gap-6">
 					<div class="space-y-3 rounded-lg border p-6">
 						<Skeleton class="h-4 w-40" />
 						{#each Array(3) as _}
@@ -127,10 +127,10 @@
 				</div>
 			</div>
 		{:else}
-			<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
+			<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_400px]">
 				<!-- Left Column. `min-w-0` keeps a wide min-content child from stretching the column
 				     past the viewport and scrolling the page sideways on a phone. -->
-				<div class="flex min-w-0 flex-col gap-6">
+				<div class="flex min-w-0 flex-col gap-3 sm:gap-6">
 					{#if paymentModule.shippingRates?.error?.message}
 						<div class="mb-4 rounded-radius border border-destructive/40 bg-destructive/5 p-4 text-sm font-medium text-destructive">
 							We currently deliver only to
@@ -146,7 +146,7 @@
 						</div>
 					{/if}
 
-					<div class="h-fit space-y-6">
+					<div class="h-fit space-y-2 sm:space-y-6">
 						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">{covered ? 'Payment' : 'Select payment method'}</h2>
 						{#if paymentModule.showError}
 							<div class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">
@@ -159,16 +159,16 @@
 								Your gift card pays for the whole order. There is nothing more to pay.
 							</p>
 						{:else if paymentModule.showPaymentMethods}
-							<div class="grid grid-cols-1 gap-4">
+							<div class="grid grid-cols-1 gap-2 sm:gap-4">
 								{#each methods as method}
 									{@const methodFee = paymentFee(method)}
 									<label
-										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-background px-6 py-5 {paymentModule.selectedPGCode ==
+										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-background px-3 py-2.5 sm:px-6 sm:py-5 {paymentModule.selectedPGCode ==
 											method?.code && paymentModule.listOfPaymentMethods?.length !== 1
 											? 'border-primary ring-1 ring-primary'
 											: 'border-border'}"
 									>
-										<div class="flex items-center gap-4">
+										<div class="flex items-center gap-3 sm:gap-4">
 											<div class="relative flex h-5 w-5 items-center justify-center">
 												<input
 													type="radio"
@@ -182,7 +182,7 @@
 											</div>
 
 											<div class="flex items-center gap-3">
-												<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-background p-1">
+												<div class="flex h-8 w-10 items-center justify-center rounded border border-border bg-background p-1 sm:h-10 sm:w-12">
 													<img src={method?.img || localPaymentIcon(method)} alt={method?.name} class="h-full w-full object-contain" />
 												</div>
 												<div class="flex flex-col">
@@ -217,19 +217,19 @@
 					</div>
 
 					{#if paymentModule.shippingRates?.data?.length}
-						<div class="grid h-fit grid-cols-1 space-y-6 pt-4">
+						<div class="grid h-fit grid-cols-1 space-y-2 pt-1 sm:space-y-6 sm:pt-4">
 							<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Select shipping method</h2>
 
-							<div class="flex flex-col gap-3">
+							<div class="flex flex-col gap-2 sm:gap-3">
 								{#each paymentModule.shippingRates?.data as rate}
 									<label
 										for={rate.id}
-										class="flex items-center justify-between rounded-lg border bg-background p-5 transition-[transform,border-color,background-color] duration-fast ease-standard motion-safe:active:scale-[0.99] {cartState
+										class="flex items-center justify-between rounded-lg border bg-background px-3 py-2.5 transition sm:p-5-[transform,border-color,background-color] duration-fast ease-standard motion-safe:active:scale-[0.99] {cartState
 											?.cart?.shippingRateId === rate.id
 											? ''
 											: 'shadow-sm'}"
 									>
-										<div class="flex items-center gap-4">
+										<div class="flex items-center gap-3 sm:gap-4">
 											<div class="relative flex h-5 w-5 items-center justify-center">
 												<input
 													type="radio"
@@ -288,7 +288,7 @@
 
 					{#if cartState?.cart?.shippingAddress}
 						<div class="overflow-hidden rounded-lg border border-border bg-background text-left">
-							<Button variant="plain" class="flex h-auto w-full items-center justify-between px-6 py-4" onclick={() => (showAddress = !showAddress)}>
+							<Button variant="plain" class="flex h-auto w-full items-center justify-between px-3 py-2.5 sm:px-6 sm:py-4" onclick={() => (showAddress = !showAddress)}>
 								<div class="flex flex-col items-start">
 									<span class="text-sm font-medium text-muted-foreground">{cartState.cart?.needAddress === false ? 'Order for' : 'Delivering order to'}</span>
 									<span class="text-sm font-bold tracking-tight text-foreground">
@@ -302,7 +302,7 @@
 							</Button>
 
 							{#if showAddress}
-								<div class="border-t border-border bg-background px-6 py-2">
+								<div class="border-t border-border bg-background px-3 py-2 sm:px-6">
 									<div class="flex items-start justify-between gap-4">
 										<div class="flex-1">
 											<p class="text-sm leading-relaxed text-muted-foreground">
@@ -342,16 +342,16 @@
 
 					<GiftCardBox {cartState} />
 
-					<div class="space-y-4">
-						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
-							<div class="mb-6 flex flex-col gap-1">
+					<div class="space-y-3 sm:space-y-4">
+						<div class="space-y-3 rounded-lg border border-border bg-background p-3 sm:space-y-4 sm:p-6">
+							<div class="mb-1 flex flex-col gap-1 sm:mb-6">
 								<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Price summary</h2>
-								<div class="h-1 w-12 bg-primary"></div>
+								<div class="h-1 w-12 bg-primary max-sm:hidden"></div>
 							</div>
 							{#if paymentModule.loadingForCart}
 								<PriceSummary loading />
 							{:else}
-								<div class="space-y-4">
+								<div class="space-y-3 sm:space-y-4">
 									<PriceSummary
 										subtotal={figures.subtotal}
 										discount={figures.discount}
@@ -369,7 +369,7 @@
 										onretry={quote.retry}
 									/>
 
-									<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3">
+									<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3 max-sm:hidden">
 										<LockKeyhole class="h-3.5 w-3.5 text-muted-foreground" />
 										<p class="text-[10px] font-bold text-muted-foreground">Secure 256-bit encryption</p>
 									</div>

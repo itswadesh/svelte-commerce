@@ -38,36 +38,36 @@
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-<div class="min-h-screen py-8">
+<div class="min-h-screen py-3 sm:py-8">
 	<div class="container mx-auto px-4">
 		<CheckoutHeader step={3} />
 
-		<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-			<h1 class="text-xl font-bold text-foreground" style="font-family: var(--font-body);">Review your order</h1>
-			<Button variant="outline" onclick={onback} class="group flex w-fit items-center gap-2">
-				<ChevronLeft class="size-4 transition-transform duration-fast ease-standard motion-safe:group-hover:-translate-x-1" /> Back to Payment
+		<div class="mb-3 flex items-center justify-between gap-3 sm:mb-8">
+			<h1 class="text-lg font-bold text-foreground sm:text-xl" style="font-family: var(--font-body);">Review your order</h1>
+			<Button variant="ghost" size="sm" onclick={onback} class="hit-44 group -mr-2 h-7 gap-1 px-2 text-muted-foreground hover:text-foreground max-md:min-h-0">
+				<ChevronLeft class="size-4 transition-transform duration-fast ease-standard motion-safe:group-hover:-translate-x-1" /> Back to payment
 			</Button>
 		</div>
 
-		<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
+		<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_400px]">
 			<!-- Left Column. `min-w-0` keeps a wide min-content child from stretching the column past
 			     the viewport and scrolling the page sideways on a phone. -->
-			<div class="flex min-w-0 flex-col gap-4">
+			<div class="flex min-w-0 flex-col gap-3 sm:gap-4">
 				<!-- Items -->
-				<div class="rounded-lg border border-border bg-background p-6">
-					<div class="flex items-center justify-between border-b border-border pb-3">
+				<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+					<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
 						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">
 							Items ({selectedItems.length})
 						</h2>
-						<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/cart')} class="h-8 text-primary hover:text-primary/80">
+						<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/cart')} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
 							<Pencil class="mr-1 size-3.5" /> Edit
 						</Button>
 					</div>
 					<div class="divide-y divide-border">
 						{#each selectedItems as item}
 							{@const picture = linePicture(item)}
-							<div class="flex gap-3 py-3 text-sm">
-								<div class="relative size-16 shrink-0 overflow-hidden rounded-radius border border-border bg-muted/20 p-1">
+							<div class="flex gap-3 py-2 text-sm sm:py-3">
+								<div class="relative size-14 shrink-0 sm:size-16 overflow-hidden rounded-radius border border-border bg-muted/20 p-1">
 									<!-- The shared lazy image draws its own fallback. The raw <img> here fell back to
 									     /placeholder.svg, which does not exist, so an item with no thumbnail rendered the
 									     browser's broken-image glyph on the last screen before paying (UX-314). -->
@@ -94,16 +94,16 @@
 
 				<!-- Contact -->
 				{#if cartState.cart?.email || cartState.cart?.phone}
-					<div class="rounded-lg border border-border bg-background p-6">
-						<div class="flex items-center justify-between border-b border-border pb-3">
+					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
 							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
 								<Mail class="size-4 text-primary" /> Contact
 							</h2>
-							<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/address')} class="h-8 text-primary hover:text-primary/80">
+							<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/address')} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
 								<Pencil class="mr-1 size-3.5" /> Edit
 							</Button>
 						</div>
-						<div class="space-y-1 pt-3 text-sm text-muted-foreground">
+						<div class="space-y-1 pt-2 sm:pt-3 text-sm text-muted-foreground">
 							{#if cartState.cart.email}
 								<p>Email: {cartState.cart.email}</p>
 							{/if}
@@ -116,16 +116,16 @@
 
 				<!-- Delivery Address -->
 				{#if cartState.cart?.shippingAddress}
-					<div class="rounded-lg border border-border bg-background p-6">
-						<div class="flex items-center justify-between border-b border-border pb-3">
+					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
 							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
 								<MapPin class="size-4 text-primary" /> Delivery Address
 							</h2>
-							<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/address')} class="h-8 text-primary hover:text-primary/80">
+							<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/address')} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
 								<Pencil class="mr-1 size-3.5" /> Edit
 							</Button>
 						</div>
-						<div class="pt-3 text-sm leading-relaxed text-muted-foreground">
+						<div class="pt-2 sm:pt-3 text-sm leading-relaxed text-muted-foreground">
 							<p class="font-bold text-foreground">
 								{cartState.cart.shippingAddress?.firstName}
 								{cartState.cart.shippingAddress?.lastName}
@@ -147,16 +147,16 @@
 
 				<!-- Shipping Method -->
 				{#if selectedShippingRate}
-					<div class="rounded-lg border border-border bg-background p-6">
-						<div class="flex items-center justify-between border-b border-border pb-3">
+					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
 							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
 								<Truck class="size-4 text-primary" /> Shipping Method
 							</h2>
-							<Button variant="ghost" size="sm" onclick={onback} class="h-8 text-primary hover:text-primary/80">
+							<Button variant="ghost" size="sm" onclick={onback} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
 								<Pencil class="mr-1 size-3.5" /> Edit
 							</Button>
 						</div>
-						<div class="flex items-center justify-between pt-3 text-sm text-muted-foreground">
+						<div class="flex items-center justify-between pt-2 sm:pt-3 text-sm text-muted-foreground">
 							<div>
 								<p class="font-bold text-foreground">
 									{selectedShippingRate.name}
@@ -176,18 +176,18 @@
 				{/if}
 
 				<!-- Payment Method -->
-				<div class="rounded-lg border border-border bg-background p-6">
-					<div class="flex items-center justify-between border-b border-border pb-3">
+				<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+					<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
 						<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
 							<CreditCard class="size-4 text-primary" /> Payment Method
 						</h2>
-						<Button variant="ghost" size="sm" onclick={onback} class="h-8 text-primary hover:text-primary/80">
+						<Button variant="ghost" size="sm" onclick={onback} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
 							<Pencil class="mr-1 size-3.5" /> Edit
 						</Button>
 					</div>
-					<div class="flex items-center gap-3 pt-3">
+					<div class="flex items-center gap-3 pt-2 sm:pt-3">
 						{#if selectedPaymentMethod?.img}
-							<div class="flex h-10 w-12 items-center justify-center rounded border border-border bg-background p-1">
+							<div class="flex h-8 w-10 items-center justify-center rounded border border-border bg-background p-1 sm:h-10 sm:w-12">
 								<img src={selectedPaymentMethod.img} alt={selectedPaymentMethod?.name} class="h-full w-full object-contain" />
 							</div>
 						{/if}
@@ -200,12 +200,12 @@
 
 			<!-- Right Column - Price Summary -->
 			<div class="flex h-fit flex-col gap-3">
-				<div class="space-y-4 rounded-lg border border-border bg-background p-6">
-					<div class="mb-6 flex flex-col gap-1">
+				<div class="space-y-3 rounded-lg border border-border bg-background p-3 sm:p-6">
+					<div class="mb-1 flex flex-col gap-1 sm:mb-6">
 						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Price summary</h2>
-						<div class="h-1 w-12 bg-primary"></div>
+						<div class="h-1 w-12 bg-primary max-sm:hidden"></div>
 					</div>
-					<div class="space-y-4">
+					<div class="space-y-3 sm:space-y-4">
 						<PriceSummary
 							subtotal={figures.subtotal}
 							discount={figures.discount}
@@ -236,7 +236,7 @@
 							</div>
 						{/if}
 
-						<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3">
+						<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3 max-sm:hidden">
 							<LockKeyhole class="h-3.5 w-3.5 text-muted-foreground" />
 							<p class="text-[10px] font-bold text-muted-foreground">Secure 256-bit encryption</p>
 						</div>
