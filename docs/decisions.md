@@ -679,3 +679,16 @@ line's quantity when that is more. The payment and review steps take the bag pag
 smaller card padding and gaps, slimmer payment and delivery options, no accent bar or encryption
 note on phones (the trust badges say it), and "Back to payment" is a small text link beside the
 heading.
+
+## 2026-11-13: The product page states delivery, returns and cash on delivery only from store data
+
+From the demo.shopnx.in audit (SNX-014): product pages said nothing about delivery, returns or
+payment. Under Add to bag the page now links the store's own "Shipping and delivery" and "Returns
+and refunds" pages when it publishes them, under any of their names (GoCommerce publishes
+`shipping` and `returns`, which the page used to miss), and says "Cash on delivery available" only
+when cash on delivery is one of the store's switched-on payment methods. No delivery date and no
+return window is printed: GoCommerce quotes delivery days only for a cart and an address, and a
+store records no return window, so there is nothing to state yet. The product markup's
+MerchantReturnPolicy keeps its 7-day constant (`src/lib/config/policy.ts`) beside a
+`refund-policy` page only, because GoCommerce's starter `returns` page names no window. A unitless
+weight is no longer printed ("Weight 520"); it shows once the store has a weight unit.
