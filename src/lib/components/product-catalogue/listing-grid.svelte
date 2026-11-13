@@ -209,8 +209,10 @@
 		data-cols-desktop={options.list_columns_desktop}
 		aria-busy={refining}
 	>
+		<!-- High priority for the first row on a phone only. Six high-priority images shared the
+		     bandwidth with the one that is the phone's largest paint, which then arrived later. -->
 		{#each products as product, i (product.id)}
-			<ProductCard {product} priority={i < 6} />
+			<ProductCard {product} priority={i < 2} />
 		{/each}
 	</div>
 

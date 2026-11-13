@@ -1,7 +1,8 @@
 <script lang="ts">
 	import '../app.css'
 	import { Toaster } from '$lib/components/ui/sonner/index.js'
-	import { getThemeFontsUrl } from '$lib/theme/index.js'
+	import { getThemeFontsUrl, preloadsInter } from '$lib/theme/index.js'
+	import interLatin from '$lib/assets/fonts/inter-latin.woff2?url'
 	import { setUserState } from '$lib/core/stores/index.js'
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
 	import AdTags from '$lib/components/common/ad-tags.svelte'
@@ -145,7 +146,8 @@
 		return css ? STYLE_OPEN.replace('theme-css', 'theme-tokens') + css + STYLE_CLOSE : ''
 	})
 	const tokenFontsUrl = $derived(themeFontsHref(publishedTokens))
-	const themeFontsUrl = $derived(getThemeFontsUrl(themeName, publishedTokens))
+	const themeFontsUrl = $derived(getThemeFontsUrl(themeName))
+	const preloadInter = $derived(preloadsInter(themeName, publishedTokens))
 
 	// Mobile browsers paint their own chrome — the address-bar strip on Chrome for Android, the
 	// status-bar backdrop once the storefront is installed — in a default grey unless the page names
@@ -251,6 +253,12 @@
 	     render <Canonical /> ($lib/components/seo/canonical.svelte).
 	     No default <meta name="description"> here either — the root head renders *before* the
 	     page's, so a generic one would shadow the per-page description on every SeoHeader route. -->
+	<!-- The same file src/app.css names, so the browser fetches it with the document instead of
+	     after the inlined CSS has been parsed and text laid out. `crossorigin` even though it is
+	     same-origin: fonts are always fetched in CORS mode, and a preload without it is not reused. -->
+	{#if preloadInter}
+		<link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+	{/if}
 	{#if themeFontsUrl}
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
