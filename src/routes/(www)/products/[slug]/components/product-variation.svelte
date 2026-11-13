@@ -107,6 +107,10 @@
 	const theme = $derived(themeOptions(page.data?.themeSettings))
 	const lowStockAt = $derived(theme.pdp_low_stock_at)
 	const sizeGuide = $derived(theme.pdp_size_guide)
+	// A sold-out value stays choosable while the store can email when it is back (SNX-025): choosing it
+	// is how a shopper reaches "Notify me" under the button.
+	const restockAlerts = $derived(page.data?.restockAlerts === true)
+	const blocks = (status: string) => status === 'unavailable' || (status === 'soldout' && !restockAlerts)
 
 	const lowLeftOf = (variant: any) => {
 		if (variant?.manageInventory === false || variant?.allowBackorder) return 0
@@ -191,6 +195,7 @@
 							{@const status = statusOf(option.id, v.value)}
 							{@const isSelected = status === 'selected'}
 							{@const isBlocked = status === 'unavailable' || status === 'soldout'}
+							{@const soldOutChoosable = status === 'soldout' && !blocks(status)}
 							{@const colour = option.type === 'Color' ? swatchColour(v) : null}
 
 							{#if colour}
@@ -198,9 +203,9 @@
 									variant="plain"
 									data-testid="variant-option"
 									aria-pressed={isSelected}
-									disabled={isBlocked}
+									disabled={blocks(status)}
 									title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : v.value}
-									class="edp-swatch relative size-11 rounded-full border border-border-strong p-1 md:size-10 {isSelected
+									class="edp-swatch relative size-11 rounded-full border border-border-strong p-1 md:size-10 {soldOutChoosable ? 'edp-soldout opacity-50' : ''} {isSelected
 										? 'edp-on ring-2 ring-primary ring-offset-2'
 										: ''}"
 									onclick={(event) => choose(event, option, v)}
@@ -215,9 +220,9 @@
 										variant="plain"
 										data-testid="variant-option"
 										aria-pressed={isSelected}
-										disabled={isBlocked}
+										disabled={blocks(status)}
 										title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : undefined}
-										class="edp-pill h-11 min-w-[3.5rem] border px-4 text-sm font-medium md:h-10 {isSelected
+										class="edp-pill h-11 min-w-[3.5rem] border px-4 text-sm font-medium md:h-10 {soldOutChoosable ? 'edp-soldout line-through' : ''} {isSelected
 											? 'edp-on border-primary bg-primary text-primary-foreground'
 											: 'border-border-strong bg-background text-foreground hover:border-foreground'}"
 										onclick={(event) => choose(event, option, v)}
@@ -311,6 +316,13 @@
 	   or cannot be bought. Everything else renders enabled, including before hydration. */
 	:global([data-theme='default'] .edp-pill:disabled) {
 		opacity: 0.45 !important;
+		text-decoration: line-through;
+	}
+
+	/* A sold-out value that can still be chosen, to ask for an email when it is back: struck through
+	   like an excluded one, in the muted text colour rather than faded, because it can be pressed. */
+	:global([data-theme='default'] .edp-pill.edp-soldout:not(.edp-on)) {
+		color: hsl(var(--muted-foreground)) !important;
 		text-decoration: line-through;
 	}
 
