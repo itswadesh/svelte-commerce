@@ -1,9 +1,23 @@
+<script lang="ts" module>
+	import { cartService } from '$lib/core/services'
+	import type { FreeDelivery } from '$lib/product/upsells'
+
+	/**
+	 * The engine's free-delivery answer for the bag, or null from a connector without one. The
+	 * address step asks it too, so its price summary says Free where the bag already did.
+	 */
+	export function askFreeDelivery(country = ''): Promise<FreeDelivery> {
+		const svc = cartService as unknown as { getFreeShipping?: (q: { country?: string }) => Promise<FreeDelivery> }
+		if (typeof svc.getFreeShipping !== 'function') return Promise.resolve(null)
+		return svc.getFreeShipping(country ? { country } : {}).then((f) => f ?? null, () => null)
+	}
+</script>
+
 <script lang="ts">
 	import { page } from '$app/state'
-	import { cartService } from '$lib/core/services'
 	import { formatPrice } from '$lib/utils/price'
 	import { fade } from '$lib/motion'
-	import { freeDeliveryState, type FreeDelivery } from '$lib/product/upsells'
+	import { freeDeliveryState } from '$lib/product/upsells'
 	import { Truck } from '@lucide/svelte'
 
 	/**
@@ -23,18 +37,10 @@
 
 	$effect(() => {
 		void subtotal
-		const where = country
-		const svc = cartService as unknown as { getFreeShipping?: (q: { country?: string }) => Promise<FreeDelivery> }
-		if (typeof svc.getFreeShipping !== 'function') return
 		let live = true
-		svc
-			.getFreeShipping(where ? { country: where } : {})
-			.then((f) => {
-				if (live) answer = f ?? null
-			})
-			.catch(() => {
-				if (live) answer = null
-			})
+		askFreeDelivery(country).then((f) => {
+			if (live) answer = f
+		})
 		return () => {
 			live = false
 		}
