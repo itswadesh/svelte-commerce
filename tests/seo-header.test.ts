@@ -48,6 +48,27 @@ describe('seo-header.svelte', () => {
 		expect(meta('robots')).toBe('noindex, follow')
 	})
 
+	it('shares the first listed product on a store with no logo or icon, and nothing where none is listed', () => {
+		page.url = new URL('https://demo.shopnx.in/women') as typeof page.url
+		page.data = { store: { name: 'Demo', logo: '', favicon: '' }, products: { data: [{ thumbnail: '/backend/media/dress.webp' }] } }
+		render(SeoHeader, { props: { metaTitle: 'Women' } })
+		expect(meta('og:image')).toBe('https://demo.shopnx.in/backend/media/dress.webp')
+		cleanup()
+		document.head.innerHTML = ''
+
+		page.url = new URL('https://demo.shopnx.in/') as typeof page.url
+		page.data = { store: { name: 'Demo', favicon: '/backend/media/icon.png' }, featuredProducts: [{ thumbnail: '/backend/media/dress.webp' }] }
+		render(SeoHeader, { props: { metaTitle: 'Demo' } })
+		expect(meta('og:image')).toBe('https://demo.shopnx.in/backend/media/icon.png')
+		cleanup()
+		document.head.innerHTML = ''
+
+		page.url = new URL('https://demo.shopnx.in/faqs') as typeof page.url
+		page.data = { store: { name: 'Demo' } }
+		render(SeoHeader, { props: { metaTitle: 'FAQs' } })
+		expect(meta('og:image')).toBeNull()
+	})
+
 	it('writes no description rather than the bare store name', () => {
 		page.url = new URL('https://demo.shopnx.in/faqs') as typeof page.url
 		page.data = { store: { name: 'Demo' } }
