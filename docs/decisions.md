@@ -668,3 +668,14 @@ after the summary on phones and under the bag on desktop. The trust badges are o
 the summary card and free delivery bar have less padding, and the pinned bar is one row: the total
 beside the button. The step bar, summary, badges and pinned bar are shared, so the other checkout
 steps tighten the same way.
+
+## 2026-11-13: Qty is one chip, and checkout's payment step is compact
+
+Owner: "keep the qty section minimal in cart page", "in checkout step 3 make it compact as well",
+and of the review screen's "Back to payment" button: "its too big". A bag line's quantity is a
+"Qty: 1" chip, as on the big Indian shopping apps: a real select lies invisible over it, 44px tall,
+so the phone's own picker opens and the tap target stays 44px. It offers 1 to 10, or up to the
+line's quantity when that is more. The payment and review steps take the bag page's phone spacing:
+smaller card padding and gaps, slimmer payment and delivery options, no accent bar or encryption
+note on phones (the trust badges say it), and "Back to payment" is a small text link beside the
+heading.
