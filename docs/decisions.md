@@ -692,3 +692,14 @@ store records no return window, so there is nothing to state yet. The product ma
 MerchantReturnPolicy keeps its 7-day constant (`src/lib/config/policy.ts`) beside a
 `refund-policy` page only, because GoCommerce's starter `returns` page names no window. A unitless
 weight is no longer printed ("Weight 520"); it shows once the store has a weight unit.
+
+## 2026-11-13: A sold-out size offers "Notify me" while the store asks for wishlist emails
+
+From the demo.shopnx.in audit (SNX-025): a sold-out size was a dead end. GoCommerce emails a
+wishlist's address when a saved item is back (GoCommerce D248), but only while the wishlist
+module's "Ask for an email on the wishlist page" setting is on. While it is, a sold-out size stays
+choosable (struck through, muted), and choosing it puts "Notify me" with an email field under the
+button. Sending it keeps the address on the shopper's wishlist and saves that size to it, and the
+page says both: "Saved to your wishlist. We'll email … when it's back." With the setting off, which
+is the default, sold-out sizes stay disabled as before. Email only, because a wishlist holds only
+an address; the same address also hears when a saved item goes on sale.
