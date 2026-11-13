@@ -1,5 +1,5 @@
 import { wwwLoad } from '$lib/core/load-functions/index.js'
-import { categoryService, productService } from '$lib/core/services/index.js'
+import { categoryService, pageService, productService } from '$lib/core/services/index.js'
 import { services } from 'kitcommerce.config'
 import type { ComposerLayout } from '$lib/composer/helpers.js'
 import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
@@ -34,6 +34,18 @@ async function homeLayout(preview: string | null): Promise<ComposerLayout | null
 	}
 }
 
+/**
+ * The core home load asks the CMS for a page named "home", which few stores write. GoCommerce
+ * answers 404, and the core logs that as an error on every visit. Where the connector can fetch the
+ * home banners on their own, the page is asked for only when the store's page list names it.
+ */
+async function homePage(event: Parameters<PageLoad>[0]) {
+	const { cmsPages } = (await event.parent()) as { cmsPages?: string[] }
+	const banners = Reflect.get(pageService as object, 'homeBanners') as (() => Promise<object | null>) | undefined
+	if (typeof banners !== 'function' || cmsPages?.includes('home')) return wwwLoad(event)
+	return { page: (await banners.call(pageService).catch(() => null)) ?? {} }
+}
+
 // HomepageModule fetches the featured products in a `$effect` and the featured categories in an
 // `onMount` — neither runs on the server. The homepage is the highest-authority page on the site
 // and the entry point for every crawl, and it was server-rendering no product links, no category
@@ -44,7 +56,7 @@ async function homeLayout(preview: string | null): Promise<ComposerLayout | null
 // Failures degrade to an empty list rather than taking the homepage down with them — the page
 // already renders empty/loading states for both, and the theme sections around them are static.
 export const load: PageLoad = async (event) => {
-	const base = await wwwLoad(event)
+	const base = await homePage(event)
 	// The theme editor re-reads the draft after each save: its product grids are resolved here.
 	event.depends(LAYOUT_DEPENDENCY)
 
