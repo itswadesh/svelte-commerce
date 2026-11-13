@@ -856,8 +856,22 @@ html [data-vaul-overlay] {
 		animation: checkout-bar-in var(--motion-panel) var(--motion-ease) both;
 	}
 	body:has(.checkout-bar) {
-		padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+		padding-bottom: calc(4.25rem + env(safe-area-inset-bottom));
 	}
+}
+
+/* A control drawn under 44px, like the cart's 32px stepper on phones, keeps a 44px tap target. */
+.hit-44 {
+	position: relative;
+}
+.hit-44::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: max(100%, 44px);
+	height: max(100%, 44px);
+	transform: translate(-50%, -50%);
 }
 @media (prefers-reduced-motion: reduce) {
 	html .checkout-bar {
