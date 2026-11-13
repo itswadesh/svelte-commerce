@@ -7,9 +7,12 @@ import { CMS_PAGE_SLUGS } from '$lib/components/common/cms-pages'
 // itself canonical, so a search engine saw three duplicate pairs; and footers configured in the
 // store admin link /p/return-policy, which no CMS record answers. Checked here rather than in
 // +page.ts, because the CMS lookup below 404s before the universal load ever runs.
-const ALIASES: Record<string, string> = Object.fromEntries(
-	Object.entries(CMS_PAGE_SLUGS).flatMap(([path, slugs]) => slugs.map((slug) => [slug, path]))
-)
+// The FAQ is a route of its own rather than a CMS page; /pages/faq used to be sent here.
+const ALIASES: Record<string, string> = {
+	...Object.fromEntries(Object.entries(CMS_PAGE_SLUGS).flatMap(([path, slugs]) => slugs.map((slug) => [slug, path]))),
+	faq: '/faqs',
+	faqs: '/faqs'
+}
 
 export async function load({ parent, params, fetch }) {
 	const { slug } = params
