@@ -25,3 +25,21 @@ export function aliasedPath(url: URL): string | null {
 	if (Object.values(PAGES).includes(`/${page}`)) return `/${page}`
 	return `/p/${encodeURIComponent(decodeURIComponent(page))}`
 }
+
+/**
+ * Each link as the address that answers it. The engine lists a store's pages under its own
+ * /pages/<slug> scheme, which this storefront answers with a redirect (/pages/returns is
+ * /refund-policy), and a search engine reports a sitemap of redirects as errors rather than
+ * following them.
+ */
+export function finalLocs(xml: string): string {
+	return xml.replace(/<loc>([^<]+)<\/loc>/g, (whole, loc: string) => {
+		try {
+			const url = new URL(loc)
+			const to = aliasedPath(url)
+			return to ? `<loc>${url.origin}${to}</loc>` : whole
+		} catch {
+			return whole
+		}
+	})
+}

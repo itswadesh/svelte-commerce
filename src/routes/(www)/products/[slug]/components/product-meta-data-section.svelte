@@ -4,10 +4,16 @@
 
 	const productState = useProductState()
 	const data = $derived(page.data)
-	// The highlights and the free gift note are drawn in the buy box (GoCommerce D134), and a value
-	// that is a list or an object has no line of text to show here ("[object Object]"), so neither
-	// is repeated as a raw key.
-	const DRAWN_ELSEWHERE = new Set(['highlights', 'free_gift'])
+	// The highlights and the free gift note are drawn in the buy box (GoCommerce D134), the badge on
+	// the gallery (src/lib/product/badge.ts), and a value that is a list or an object has no line of
+	// text to show here ("[object Object]"), so none is repeated as a raw key. The badge was: every
+	// product page carried a heading reading just "badge".
+	const DRAWN_ELSEWHERE = new Set(['highlights', 'free_gift', 'badge'])
+	// A key as a person reads it: "fabric_care" is "Fabric care".
+	const label = (key: string) => {
+		const words = key.replace(/[_-]+/g, ' ').trim()
+		return words.charAt(0).toUpperCase() + words.slice(1)
+	}
 	const metadataEntries = $derived(
 		Object.entries(data?.product?.metadata || {}).filter(
 			([key, value]) =>
@@ -25,7 +31,7 @@
 			{#each metadataEntries as [key, value]}
 				<div class="card edp-meta-item">
 					<div class="card-header">
-						<h2 class="card-title edp-meta-key">{key}</h2>
+						<h2 class="card-title edp-meta-key">{label(key)}</h2>
 					</div>
 					<div class="card-content edp-meta-val">
 						<p>{value}</p>

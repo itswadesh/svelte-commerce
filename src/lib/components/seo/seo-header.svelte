@@ -37,7 +37,7 @@
 	}: Props = $props()
 
 	const store = $derived(page.data?.store)
-	const storeName = $derived(store?.name || 'Litekart')
+	const storeName = $derived(store?.name || '')
 
 	// CMS-authored titles arrive with stray wrapping quotes.
 	const stripQuotes = (value: unknown) =>
@@ -48,9 +48,10 @@
 	const title = $derived(stripQuotes(metaTitle) || storeName)
 
 	// A page with no description of its own (a category without SEO fields) falls back to the
-	// store's, cleaned of the markup it is stored with, then to the store's name. Never a made-up
-	// promise such as free delivery.
-	const description = $derived(metaDescription || cleanSchemaText(store?.description) || storeName)
+	// store's, cleaned of the markup it is stored with. Never a made-up promise such as free
+	// delivery, and never the bare store name: "Demo" as a description tells a search engine
+	// nothing, and with no tag at all it writes its own snippet from the page.
+	const description = $derived(metaDescription || cleanSchemaText(store?.description) || '')
 
 	// The default canonical is origin + pathname, which folds /products?page=7 into /products and
 	// gets every deep listing page dropped as a duplicate of page 1. A paginated page keeps its own
@@ -82,7 +83,7 @@
 
 <svelte:head>
 	<title>{title}</title>
-	<meta name="description" content={description} />
+	{#if description}<meta name="description" content={description} />{/if}
 	{#if metaKeywords}
 		<meta name="keywords" content={metaKeywords} />
 	{/if}
@@ -97,7 +98,7 @@
 	{/if}
 
 	<meta property="og:title" content={title} />
-	<meta property="og:description" content={description} />
+	{#if description}<meta property="og:description" content={description} />{/if}
 	<meta property="og:url" content={canonical} />
 	<meta property="og:site_name" content={storeName} />
 	<meta property="og:type" content={type} />
@@ -118,7 +119,7 @@
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={title} />
-	<meta name="twitter:description" content={description} />
+	{#if description}<meta name="twitter:description" content={description} />{/if}
 	{#if imageUrl}
 		<meta name="twitter:image" content={imageUrl} />
 		<meta name="twitter:image:alt" content={imageAlt || title} />

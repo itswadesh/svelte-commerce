@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { aliasedPath } from '$lib/path-aliases'
+import { aliasedPath, finalLocs } from '$lib/path-aliases'
 
 const at = (path: string) => aliasedPath(new URL(path, 'https://shop.test'))
 
@@ -18,5 +18,22 @@ describe('aliasedPath', () => {
 		expect(at('/contact-us')).toBeNull()
 		expect(at('/products')).toBeNull()
 		expect(at('/pages')).toBeNull()
+	})
+
+	it("lists a sitemap's pages at the addresses that answer them, not at redirects", () => {
+		const xml = [
+			'<url><loc>https://demo.shopnx.in/pages/about</loc></url>',
+			'<url><loc>https://demo.shopnx.in/pages/returns</loc></url>',
+			'<url><loc>https://demo.shopnx.in/pages/gift-wrap</loc></url>',
+			'<url><loc>https://demo.shopnx.in/products/satin-saree</loc></url>'
+		].join('')
+		expect(finalLocs(xml)).toBe(
+			[
+				'<url><loc>https://demo.shopnx.in/about-us</loc></url>',
+				'<url><loc>https://demo.shopnx.in/refund-policy</loc></url>',
+				'<url><loc>https://demo.shopnx.in/p/gift-wrap</loc></url>',
+				'<url><loc>https://demo.shopnx.in/products/satin-saree</loc></url>'
+			].join('')
+		)
 	})
 })
