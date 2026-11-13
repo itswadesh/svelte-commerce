@@ -15,6 +15,8 @@
 	import { AddressModule, emptyAddress, checkoutAddressSchema as schemas } from '$lib/core/composables/index.js'
 	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
+	import { askFreeDelivery } from '$lib/components/cart/free-delivery-bar.svelte'
+	import { freeDeliveryState } from '$lib/product/upsells'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import AddressForm from './address-form.svelte'
@@ -116,6 +118,21 @@
 
 	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart))
 	const barLabel = $derived(totalLabel(!!cartState.cart?.shippingAddress, taxPending))
+
+	// The bag said "FREE delivery on this order"; before an address this step said "Address required"
+	// for the same bag (SNX-024). Asked the way the bag's bar asks, so both steps read the same.
+	let freeDelivery = $state(false)
+	$effect(() => {
+		void cartState.cart?.subtotal
+		const country = (cartState.cart as any)?.shippingAddress?.country ?? ''
+		let live = true
+		askFreeDelivery(country).then((f) => {
+			if (live) freeDelivery = !!freeDeliveryState(f)?.qualifies
+		})
+		return () => {
+			live = false
+		}
+	})
 
 	// Submitting through the form element runs its own validation and error display; the footer
 	// button is outside the form, so it cannot be a plain submit button.
@@ -568,6 +585,7 @@
 										total={cartState.cart.total}
 										currencyCode={page?.data?.store?.currency?.code}
 										shippingResolved={!!cartState.cart.shippingAddress}
+										{freeDelivery}
 										{taxPending}
 									/>
 

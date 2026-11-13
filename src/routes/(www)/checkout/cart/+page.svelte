@@ -19,7 +19,7 @@
 	import { cubicOut } from 'svelte/easing'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 	import { toast } from 'svelte-sonner'
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import FreeDeliveryBar from '$lib/components/cart/free-delivery-bar.svelte'
 	import CartOffers from '$lib/components/cart/cart-offers.svelte'
 	import CartCrossSells from '$lib/components/cart/cart-cross-sells.svelte'
@@ -89,9 +89,14 @@
 	const discountCouponsPlugin = $derived(page?.data?.store?.plugins?.isDiscountCoupons)
 
 	// Removing a line is one tap with no dialog, so offer an undo instead of a blocking confirm.
+	// The offer belongs to this page: it stayed over the address step after Checkout (SNX-024).
+	let undoToast: string | number | undefined
+	onDestroy(() => {
+		if (undoToast !== undefined) toast.dismiss(undoToast)
+	})
 	function removeItem(e: Event, item: any) {
 		cartModule.removeItem(e, item)
-		toast('Removed from your bag', {
+		undoToast = toast('Removed from your bag', {
 			action: {
 				label: 'Undo',
 				onClick: async () => {
