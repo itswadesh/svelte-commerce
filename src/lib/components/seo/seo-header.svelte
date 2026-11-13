@@ -59,8 +59,14 @@
 	const pageNumber = $derived(Math.floor(Number(page.url.searchParams.get('page'))) || 1)
 	const canonical = $derived(canonicalUrl || page.url.origin + page.url.pathname + (pageNumber > 1 ? `?page=${pageNumber}` : ''))
 
-	// A page without a picture of its own shares the store's logo rather than a bare grey card.
-	const imageUrl = $derived(mediaUrl(page.url.origin, image || store?.logo))
+	// A page without a picture of its own shares the store's logo or icon rather than a bare grey
+	// card, and on a store with neither, the first product the page shows (a listing, the home page).
+	// A page that shows none, such as a policy, still has nothing true to share and shares nothing.
+	const firstListed = $derived.by(() => {
+		const data = page.data as { products?: { data?: { thumbnail?: string }[] }; featuredProducts?: { thumbnail?: string }[] }
+		return (data?.products?.data ?? data?.featuredProducts ?? [])[0]?.thumbnail
+	})
+	const imageUrl = $derived(mediaUrl(page.url.origin, image || store?.logo || store?.favicon || firstListed))
 
 	// og:locale is language_TERRITORY ("en_IN"), from the store's language and country when both are known.
 	const locale = $derived.by(() => {
