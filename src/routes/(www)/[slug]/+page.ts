@@ -25,6 +25,8 @@ export const load: PageLoad = async (event) => {
 	const resolved = data?.products?.categoryHierarchy?.length || data?.products?.data?.length
 	const narrowed = FILTER_PARAMS.some((p) => event.url.searchParams.has(p))
 	if (!resolved && !narrowed) error(404, 'Not found')
+	// A page past the last one is not "no matches" but a page that does not exist.
+	if ((Number(event.url.searchParams.get('page')) || 1) > 1 && !data?.products?.data?.length) error(404, 'Not found')
 
 	return { ...data, subcategories: childrenOf(tree, event.params.slug) }
 }

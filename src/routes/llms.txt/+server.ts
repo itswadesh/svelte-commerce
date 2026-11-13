@@ -1,5 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit'
 import { layoutServer } from '$lib/core/load-functions/index.js'
+import { BlogService, categoryService } from '$lib/core/services/index.js'
 
 // Replaces the old static/llms.txt, which described the open-source template ("# Svelte Commerce",
 // a GitHub link, a list of supported backends) and shipped byte-identical to every deployment. This
@@ -16,14 +17,24 @@ const stripHtml = (value: unknown) =>
 		.replace(/\s+/g, ' ')
 		.trim()
 
+// The file names only what this store has: /vendors with the marketplace on, /blog once there is a
+// post, and category examples from its own menu (it used to say `/pendant` on a clothes shop).
+// Any lookup that fails leaves its part out rather than failing the file.
+const quietly = <T>(work: () => Promise<T>): Promise<T | null> => work().catch(() => null)
+
 export const GET: RequestHandler = async (event) => {
-	let store: any = null
-	try {
-		store = (await layoutServer(event as any))?.store
-	} catch {
-		// Store lookup failed (bad domain mapping, upstream blip). Still serve a usable route
-		// manifest rather than a 500 — the structure is correct regardless of the brand details.
-	}
+	// A failed store lookup (bad domain mapping, upstream blip) still serves a usable route manifest
+	// rather than a 500.
+	const [layout, blogs, tree] = await Promise.all([
+		quietly(() => layoutServer(event as any)),
+		quietly(() => new BlogService(event.fetch).list({ page: 1 })),
+		quietly(() => categoryService.getMegamenu())
+	])
+	const store: any = (layout as any)?.store ?? null
+	const hasBlog = !!(blogs as any)?.data?.length
+	const hasVendors = !!store?.plugins?.isMultiVendor?.active
+	const topLevel = (Array.isArray(tree) ? tree : []).filter((c: any) => c?.slug)
+	const examples = [topLevel[0]?.slug, topLevel[0]?.children?.[0]?.slug ?? topLevel[1]?.slug].filter(Boolean)
 
 	const origin = event.url.origin
 	const name = store?.name || event.url.host
@@ -51,14 +62,12 @@ ${facts.join('\n')}
 - [Home](/)
 - [All products](/products): the full catalogue, with search, filtering and pagination.
 - [Collections](/collections): curated product groupings.
-- [Vendors](/vendors): brands and sellers stocked here.
-- [Blog](/blog): editorial and long-form content.
-
-Category and term listings live at the bare slug — \`/pendant\`, \`/gold-ring\` — not under
+${hasVendors ? '- [Vendors](/vendors): brands and sellers stocked here.\n' : ''}${hasBlog ? '- [Blog](/blog): editorial and long-form content.\n' : ''}
+Category listings live at the bare slug${examples.length ? ` — ${examples.map((slug) => `\`/${slug}\``).join(', ')} —` : ','} not under
 \`/categories/\`. Paginate any listing with \`?page=N\` on the same path; that parameter is
 crawlable, every other listing parameter is disallowed in robots.txt.
 
-Individual products live at \`/products/<slug>\`, blog posts at \`/blog/<slug>\`, and CMS pages at
+Individual products live at \`/products/<slug>\`${hasBlog ? ', blog posts at `/blog/<slug>`,' : ''} and CMS pages at
 \`/p/<slug>\`. Product pages carry Product and BreadcrumbList structured data. Prices, stock and
 availability change frequently — read them from the product page at request time rather than
 relying on cached values.
