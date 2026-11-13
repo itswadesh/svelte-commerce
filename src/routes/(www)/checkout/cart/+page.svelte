@@ -364,9 +364,10 @@
 												{#if item.variant?.options?.length}
 													<div class="mt-1 flex flex-wrap gap-1 sm:mt-1.5 sm:gap-1.5">
 														{#each item.variant.options as option}
-															{#if option?.option?.title && option?.value}
+															<!-- Some connectors send the value without its option name ("Black", not "Colour: Black"); the value alone still tells the shopper which size and colour they chose. -->
+															{#if option?.value}
 																<span class="inline-flex items-center rounded-sm border border-border px-1.5 text-xs text-muted-foreground sm:px-2 sm:py-0.5">
-																	{option.option?.title}: {option?.value}
+																	{option.option?.title ? `${option.option.title}: ` : ''}{option.value}
 																</span>
 															{/if}
 														{/each}
