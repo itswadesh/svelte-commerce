@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Inter, self-hosted (OFL, lib/assets/fonts/Inter-OFL.txt). It came from fonts.googleapis.com, a
+   render-blocking stylesheet on another origin: about 0.8s before first paint on a phone, and every
+   visitor's address sent to Google. One variable file covers every weight. The rupee sign sits in
+   Google's 85KB latin-ext slice, which a price on nearly every page pulled in for one glyph, so it
+   has a 1KB file of its own; latin-ext still loads for the rare accented letter. The latin file is
+   preloaded in src/routes/+layout.svelte. */
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('./lib/assets/fonts/inter-latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('./lib/assets/fonts/inter-rupee.woff2') format('woff2');
+	unicode-range: U+20B9;
+}
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('./lib/assets/fonts/inter-latin-ext.woff2') format('woff2');
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20B8, U+20BA-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 @layer base {
 	/* A photo keeps the top of its frame, so a crop or a letterbox never loses a model's head. A utility class or a theme still overrides this. */
 	img {
