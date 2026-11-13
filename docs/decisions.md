@@ -656,3 +656,15 @@ keeps the store's own settings. The listing's filter chips are not drawn below 7
 Sort and Filter bar is always on screen. Checkout tightens on a phone too: less padding around the
 page and the address card, first and last name side by side, PIN code and city side by side, and
 the bag's lines without their own box.
+
+## 2026-11-13: The bag page is highly compact
+
+Owner: "make this page highly compact checkout/cart". On a 390px phone the page went from 1,667px
+to 1,232px, and the whole bag, the promo box and the price summary fit on the first screen above
+the pinned bar. A line is about 120px: a 72px photo with the stepper and bin beside it, drawn at
+32px with a 44px tap target kept (`.hit-44`). The "You saved" banner moved into the price summary
+as one line, and a line's own saving shows only as its struck-out MRP on phones. Suggestions come
+after the summary on phones and under the bag on desktop. The trust badges are one short strip,
+the summary card and free delivery bar have less padding, and the pinned bar is one row: the total
+beside the button. The step bar, summary, badges and pinned bar are shared, so the other checkout
+steps tighten the same way.
