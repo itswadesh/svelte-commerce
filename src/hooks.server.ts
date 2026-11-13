@@ -6,6 +6,7 @@ import { activeBackendProxy, initActiveConnector } from '$lib/core/connectors/in
 import { resolveStorefrontTheme } from '$lib/theme/index.js'
 import { clientAddress, isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 import { compressResponse } from '$lib/server/compress'
+import { frameAncestors, withSecurityHeaders } from '$lib/server/security-headers'
 import { guardClosedStore } from '$lib/server/store-lock'
 import { isEngineOnlyPath, isTradePortalRequest, tradePortalRequest } from '$lib/server/trade-portal'
 import { gocommerceEngine, gocommerceStore } from '$lib/server/gocommerce'
@@ -159,7 +160,8 @@ const app: Handle = async ({ event, resolve }) => {
 	return guardClosedStore(event, () => resolve(event, options))
 }
 
-export const handle: Handle = async (input) => compressResponse(input.event.request, await app(input))
+export const handle: Handle = async (input) =>
+	compressResponse(input.event.request, withSecurityHeaders(await app(input), frameAncestors(gocommerceEngine())))
 
 // Route server-side API calls straight to the backend (PUBLIC_LITEKART_API_URL) instead of letting
 // them hairpin through the public origin. When the storefront is behind a proxy/CDN (e.g. Cloudflare),
