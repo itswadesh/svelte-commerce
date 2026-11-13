@@ -8,8 +8,9 @@
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
+	import { isCmsPageResolvable } from '$lib/components/common/cms-pages.js'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { Download, RotateCcw, Truck } from '@lucide/svelte'
+	import { Banknote, Download, RotateCcw, Truck } from '@lucide/svelte'
 	import ProductAggregation from './product-aggregation.svelte'
 	import ProductAvailability from './product-availability.svelte'
 	import ProductCartAndWishlistButtons from './product-cart-and-wishlist-buttons.svelte'
@@ -64,8 +65,17 @@
 	// return window on every store in every currency; `cmsPages` is the list the root layout
 	// resolved from the backend, so an unpublished policy is simply not offered.
 	const publishedCmsPages = $derived<string[]>(data?.cmsPages ?? [])
-	const hasShippingPolicy = $derived(publishedCmsPages.includes('shipping-policy'))
-	const hasRefundPolicy = $derived(publishedCmsPages.includes('refund-policy'))
+	// Under any of the page's names, as the footer links them: GoCommerce publishes `shipping` and
+	// `returns`, so asking for the long names alone hid both lines on every one of its stores.
+	const hasShippingPolicy = $derived(isCmsPageResolvable('/shipping-policy', publishedCmsPages))
+	const hasRefundPolicy = $derived(isCmsPageResolvable('/refund-policy', publishedCmsPages))
+	// The schema's return window is src/lib/config/policy.ts's constant, and it is stated only beside
+	// a page under the long name it was written for. A GoCommerce store's `returns` page starts as a
+	// sample that names no window (GoCommerce ext/cms/samples.go), so no store record backs a number
+	// for it; the visible line links the store's own page instead.
+	const statesReturnWindow = $derived(publishedCmsPages.includes('refund-policy'))
+	// From the payment methods the store has switched on (+page.ts).
+	const cod = $derived(data?.cod === true)
 
 	// The sticky mobile purchase bar, revealed only after the in-flow Add to bag has scrolled out
 	// of view — never from first paint, which is what the rule forbids, and never on a viewport
@@ -246,10 +256,10 @@
 		}))
 	)
 
-	// Stated only when the store publishes a refund policy, the same rule the purchase panel follows
-	// for its returns link. The window comes from src/lib/config/policy.ts.
+	// Stated only beside a `refund-policy` page (statesReturnWindow above); the window comes from
+	// src/lib/config/policy.ts.
 	const returnPolicy = $derived(
-		hasRefundPolicy
+		statesReturnWindow
 			? {
 					'@type': 'MerchantReturnPolicy',
 					applicableCountry: shippingCountries.length ? shippingCountries : data?.store?.country?.iso2,
@@ -520,20 +530,27 @@
 						</div>
 						<PincodeCheck />
 					</div>
-				{:else if hasShippingPolicy || hasRefundPolicy}
+				{:else if hasShippingPolicy || hasRefundPolicy || cod}
 					<!-- No delivery plugin on this store, so nothing is promised on the merchant's
-					     behalf: their own published policies are linked instead. -->
+					     behalf: their own published policies are linked instead, and cash on delivery is
+					     named only when the store has switched it on. -->
 					<div class="flex flex-col gap-2 border-t pt-3 text-sm">
 						{#if hasShippingPolicy}
 							<p class="flex items-center gap-2 text-muted-foreground">
 								<Truck class="size-4 shrink-0" aria-hidden="true" />
-								<PolicyLink href="/shipping-policy" class="underline underline-offset-4 hover:text-foreground">Shipping and delivery</PolicyLink>
+								<PolicyLink href="/shipping-policy" class="hit-44 underline underline-offset-4 transition-colors hover:text-foreground">Shipping and delivery</PolicyLink>
+							</p>
+						{/if}
+						{#if cod}
+							<p class="flex items-center gap-2 text-muted-foreground" data-testid="pdp-cod">
+								<Banknote class="size-4 shrink-0" aria-hidden="true" />
+								Cash on delivery available
 							</p>
 						{/if}
 						{#if hasRefundPolicy}
 							<p class="flex items-center gap-2 text-muted-foreground">
 								<RotateCcw class="size-4 shrink-0" aria-hidden="true" />
-								<PolicyLink href="/refund-policy" class="underline underline-offset-4 hover:text-foreground">Returns and refunds</PolicyLink>
+								<PolicyLink href="/refund-policy" class="hit-44 underline underline-offset-4 transition-colors hover:text-foreground">Returns and refunds</PolicyLink>
 							</p>
 						{/if}
 					</div>
