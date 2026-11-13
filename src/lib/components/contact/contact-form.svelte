@@ -249,12 +249,12 @@
 				</Button>
 
 				{#if termsOk || privacyOk}
+					<!-- The spaces round "and" are explicit: Svelte trims whitespace at a block's edges, and
+					     the line read "termsandprivacy policy". -->
 					<p class="contact-caption text-xs text-muted-foreground">
 						By sending this you agree to our
 						{#if termsOk}<PolicyLink href="/terms-and-conditions" class="text-foreground underline underline-offset-2">terms</PolicyLink
-							>{/if}{#if termsOk && privacyOk}
-							and
-						{/if}{#if privacyOk}<PolicyLink href="/privacy-policy" class="text-foreground underline underline-offset-2">privacy policy</PolicyLink>{/if}.
+							>{/if}{#if termsOk && privacyOk}{' '}and{' '}{/if}{#if privacyOk}<PolicyLink href="/privacy-policy" class="text-foreground underline underline-offset-2">privacy policy</PolicyLink>{/if}.
 					</p>
 				{/if}
 			</div>
