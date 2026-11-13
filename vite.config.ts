@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module'
 import { sveltekit } from '@sveltejs/kit/vite'
 import { type Plugin, defineConfig, loadEnv } from 'vite'
+import { noIpLookup } from './src/lib/build/no-ip-lookup'
 
 const require = createRequire(import.meta.url)
 
@@ -76,7 +77,7 @@ export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '')
 	const connector = activeConnector(env.PUBLIC_CONNECTOR)
 	return {
-		plugins: [connectorPeerShim(connector), sveltekit()],
+		plugins: [connectorPeerShim(connector), noIpLookup(), sveltekit()],
 		// The one place a connector package is named. `$connector` is what src/lib/core/connectors/
 		// active.ts imports, and `__CONNECTOR_NAME__` is the fallback short name for connectors old
 		// enough not to export a `connectorName` marker of their own (Litekart 2.0.x is one).
