@@ -10,6 +10,7 @@
 	import { Check, HeartIcon, Palette, ShoppingBag } from '@lucide/svelte'
 	import { fade, fly } from '$lib/motion'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
+	import BackInStock from './back-in-stock.svelte'
 	import { toast } from 'svelte-sonner'
 	import { isOutOfStock } from '$lib/product/stock'
 	import { addOnPicks, addPicks } from '$lib/product/add-on-picks.svelte'
@@ -33,6 +34,8 @@
 	const variant = $derived(productState.selectedVariant?.id ? productState.selectedVariant : null)
 	const stockSource = $derived<Record<string, any> | null>(variant ?? page.data?.product ?? null)
 	const outOfStock = $derived(isOutOfStock(stockSource))
+	// Read with the product (+page.ts): the store emails a saved item's list when it is back.
+	const restockAlerts = $derived(page.data?.restockAlerts === true)
 
 	const cartCount = $derived(productState.cartState?.cart?.lineItems?.length ?? 0)
 
@@ -254,6 +257,10 @@
 
 		{@render wishlistButton()}
 	</div>
+
+	{#if restockAlerts && outOfStock && !compact && !enquiryPlugin?.active}
+		<BackInStock {productId} variantId={variant?.id ?? null} label={variant?.title && variant.title !== 'default' ? variant.title : ''} />
+	{/if}
 
 	<!-- A quiet link, not a second primary button: the shopper can reach the bag they already have
 	     without the add action ever moving out from under their finger. -->
