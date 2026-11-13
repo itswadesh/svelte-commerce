@@ -13,6 +13,27 @@ export const cleanSchemaText = (value: unknown): string =>
 		.replace(/\s+/g, ' ')
 		.trim()
 
+/**
+ * JSON-LD without its empty values: null, blank strings, empty lists, and objects left with
+ * nothing but their `@type`. A store that never filled in its address published
+ * `"streetAddress": null` and an empty `sameAs`, which say nothing and fail validators. An object
+ * holding only an `@id` is a reference and stays. Undefined when nothing is left.
+ */
+export const compactSchema = (value: unknown): unknown => {
+	if (Array.isArray(value)) {
+		const items = value.map(compactSchema).filter((item) => item !== undefined)
+		return items.length ? items : undefined
+	}
+	if (value && typeof value === 'object') {
+		const entries = Object.entries(value)
+			.map(([key, item]) => [key, compactSchema(item)] as const)
+			.filter(([, item]) => item !== undefined)
+		return entries.some(([key]) => key !== '@type' && key !== '@context') ? Object.fromEntries(entries) : undefined
+	}
+	if (value === null || (typeof value === 'string' && !value.trim())) return undefined
+	return value
+}
+
 /** Join an origin and a slug with exactly one `/` (origin has no trailing slash, slugs are bare). */
 export const absoluteUrl = (origin: string, slug: unknown): string =>
 	`${origin}/${String(slug ?? '').replace(/^\/+/, '')}`
