@@ -12,6 +12,9 @@ describe('aliasedPath', () => {
 		expect(at('/pages/gift-wrap')).toBe('/p/gift-wrap')
 		expect(at('/search')).toBe('/products')
 		expect(at('/search?q=gold ring')).toBe('/products?search=gold%20ring')
+		expect(at('/pages/faq')).toBe('/faqs')
+		expect(at('/pages/faqs')).toBe('/faqs')
+		expect(at('/cart')).toBe('/checkout/cart')
 	})
 
 	it('leaves real pages alone', () => {

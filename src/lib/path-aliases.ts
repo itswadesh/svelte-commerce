@@ -8,13 +8,16 @@ const PAGES: Record<string, string> = {
 	terms: '/terms-and-conditions',
 	shipping: '/shipping-policy',
 	returns: '/refund-policy',
-	refunds: '/refund-policy'
+	refunds: '/refund-policy',
+	// The FAQ is its own route, not a CMS page.
+	faq: '/faqs'
 }
 
 /** Where a path the storefront does not serve should go, or null when it is not an alias. */
 export function aliasedPath(url: URL): string | null {
 	const path = url.pathname.replace(/\/+$/, '') || '/'
 	if (path === '/contact') return PAGES.contact
+	if (path === '/cart') return '/checkout/cart'
 	if (path === '/search') {
 		const q = url.searchParams.get('q') ?? url.searchParams.get('search')
 		return q ? `/products?search=${encodeURIComponent(q)}` : '/products'
