@@ -169,7 +169,8 @@
 		<span class="edp-gallery__badge" data-testid="product-gallery-badge">{badge}</span>
 	{/if}
 	{#if ratingScore > 0}
-		<a href="#reviews" class="edp-gallery__rating" aria-label="Rated {ratingScore} out of 5 from {ratings.length} {ratings.length === 1 ? 'review' : 'reviews'}">
+		<!-- Named by its own text, so what a voice user reads on screen ("4.0") is what they can say. -->
+		<a href="#reviews" class="edp-gallery__rating">
 			<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"
 				><path
 					fill="currentColor"
@@ -177,7 +178,8 @@
 				/></svg
 			>
 			<span>{ratingScore.toFixed(1)}</span>
-			<span class="edp-gallery__rating-count">| {ratings.length}</span>
+			<span class="sr-only">out of 5, from {ratings.length} {ratings.length === 1 ? 'review' : 'reviews'}</span>
+			<span class="edp-gallery__rating-count" aria-hidden="true">| {ratings.length}</span>
 		</a>
 	{/if}
 	</div>
