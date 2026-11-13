@@ -3,7 +3,7 @@
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
-	import { breadcrumbList, mediaUrl, stockAvailabilityUrl, weightValue } from '$lib/components/seo/schema.js'
+	import { breadcrumbList, mediaUrl, productGroupId, stockAvailabilityUrl, variantName, weightValue } from '$lib/components/seo/schema.js'
 	import { RETURN_WINDOW_DAYS } from '$lib/config/policy'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
@@ -308,13 +308,13 @@
 		})
 	)
 
-	// A product with more than one real variant is a ProductGroup. Its ID is the family's grouped SKU,
-	// or the parent SKU, which stays the same whichever variant is selected. Each variant carries its
-	// own name, SKU, URL, image and offer, with availability from the same rule as the Add to bag button.
+	// A product with more than one real variant is a ProductGroup. Its ID stays the same whichever
+	// variant is selected (productGroupId). Each variant carries its own name, SKU, URL, image and
+	// offer, with availability from the same rule as the Add to bag button.
 	const productGroup = $derived.by(() => {
 		const p = data?.product
 		const variants = (p?.variants || []).filter((v: any) => v?.id && v.title && v.title !== 'default')
-		const groupId = p?.groupedSku || p?.sku
+		const groupId = productGroupId(p)
 		if (!groupId || variants.length < 2) return null
 		return {
 			productGroupID: String(groupId),
@@ -330,7 +330,7 @@
 				)
 				return {
 					'@type': 'Product',
-					name: v.title,
+					name: variantName(p.title, v.title),
 					...(v.sku ? { sku: String(v.sku) } : {}),
 					...(v.barcode ? { gtin13: String(v.barcode) } : {}),
 					image: image || productImages,

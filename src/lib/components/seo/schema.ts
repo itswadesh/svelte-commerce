@@ -68,6 +68,26 @@ export const breadcrumbList = (
 	}
 }
 
+/**
+ * A ProductGroup's ID, the same whichever variant is chosen and never one variant's own SKU: the
+ * grouped SKU, the parent SKU when no variant carries it, else the product's handle. GoCommerce
+ * hands the first variant's SKU up as the product's, which made the group look like one size of
+ * itself (SNX-008).
+ */
+export const productGroupId = (p: { groupedSku?: unknown; sku?: unknown; slug?: unknown; id?: unknown; variants?: { sku?: unknown }[] }): string => {
+	const own = String(p?.sku ?? '')
+	const childSku = (p?.variants ?? []).some((v) => String(v?.sku ?? '') === own)
+	return String(p?.groupedSku || (own && !childSku ? own : '') || p?.slug || p?.id || '')
+}
+
+/** A variant's name as a shopping feed shows it: "Kurta set – Black / M", not "Black / M". */
+export const variantName = (product: unknown, variant: unknown): string => {
+	const name = cleanSchemaText(product)
+	const label = cleanSchemaText(variant)
+	if (!name || !label || label.toLowerCase().includes(name.toLowerCase())) return label || name
+	return `${name} – ${label}`
+}
+
 /** schema.org ItemAvailability is an enumeration of URIs, not bare names. */
 export const availabilityUrl = (stock: unknown): string =>
 	Number(stock) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'

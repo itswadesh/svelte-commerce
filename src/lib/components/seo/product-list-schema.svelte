@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import StructuredData from './structured-data.svelte'
-	import { availabilityUrl, cleanSchemaText } from './schema.js'
+	import { availabilityUrl, cleanSchemaText, mediaUrl } from './schema.js'
 
 	// ItemList JSON-LD for a list of products (listing pages, homepage featured grid).
 	//
@@ -49,7 +49,10 @@
 						'@type': 'Product',
 						url,
 						name: p?.title || p?.name,
-						image: toImages(p),
+						// Full addresses: some backends list site-relative paths, which Google cannot fetch.
+						image: toImages(p)
+							.map((src) => mediaUrl(origin, src))
+							.filter(Boolean),
 						...(description ? { description } : {}),
 						...(brandName ? { brand: { '@type': 'Brand', name: brandName } } : {}),
 						...(manufacturer

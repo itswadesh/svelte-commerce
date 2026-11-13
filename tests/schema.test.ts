@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { absoluteUrl, availabilityUrl, breadcrumbList, cleanSchemaText, mediaUrl, weightValue } from '../src/lib/components/seo/schema'
+import { absoluteUrl, availabilityUrl, breadcrumbList, cleanSchemaText, mediaUrl, productGroupId, variantName, weightValue } from '../src/lib/components/seo/schema'
 
 // The escaping applied by src/lib/components/seo/structured-data.svelte before it interpolates
 // serialized JSON into a script tag. Kept in sync with that one-liner.
@@ -87,5 +87,23 @@ describe('breadcrumbList', () => {
 
 	it('emits nothing when the home page would be the only crumb', () => {
 		expect(breadcrumbList('https://chillish.in', 'Home', [])).toBe('')
+	})
+})
+
+describe('productGroupId', () => {
+	it("is never one variant's own SKU", () => {
+		const variants = [{ sku: 'KURTA-BLACK-S' }, { sku: 'KURTA-BLACK-M' }]
+		expect(productGroupId({ sku: 'KURTA-BLACK-S', slug: 'kurta', id: 7, variants })).toBe('kurta')
+		expect(productGroupId({ sku: 'KURTA', slug: 'kurta', variants })).toBe('KURTA')
+		expect(productGroupId({ groupedSku: 'GRP-1', sku: 'KURTA-BLACK-S', variants })).toBe('GRP-1')
+		expect(productGroupId({ id: 7, variants })).toBe('7')
+	})
+})
+
+describe('variantName', () => {
+	it('puts the product name before the variant, once', () => {
+		expect(variantName("Men's kurta set", 'Black / M')).toBe("Men's kurta set – Black / M")
+		expect(variantName('Kurta', 'Kurta Black M')).toBe('Kurta Black M')
+		expect(variantName('Kurta', '')).toBe('Kurta')
 	})
 })
