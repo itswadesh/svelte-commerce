@@ -12,7 +12,9 @@
 	const noOfPage = $derived(Number(posts?.noOfPage) || 0)
 </script>
 
-<SeoHeader metaTitle="Blog | Insights & News" />
+<!-- An empty blog is a page with nothing to find: not indexed until it has a post. The title names the
+     store, as every other page's does, not a generic "Insights & News". -->
+<SeoHeader metaTitle={page.data?.store?.name ? `Blog | ${page.data.store.name}` : 'Blog'} noindex={!posts?.data?.length} />
 
 <div class="page-width py-10 md:py-16">
 	<h1 class="mb-8 text-center page-heading">Blog</h1>

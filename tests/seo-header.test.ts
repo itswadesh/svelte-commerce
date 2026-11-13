@@ -47,4 +47,20 @@ describe('seo-header.svelte', () => {
 		expect(meta('og:locale')).toBeNull()
 		expect(meta('robots')).toBe('noindex, follow')
 	})
+
+	it('writes no description rather than the bare store name', () => {
+		page.url = new URL('https://demo.shopnx.in/faqs') as typeof page.url
+		page.data = { store: { name: 'Demo' } }
+		render(SeoHeader, { props: { metaTitle: 'FAQs' } })
+		expect(meta('description')).toBeNull()
+		expect(meta('og:description')).toBeNull()
+		expect(meta('twitter:description')).toBeNull()
+	})
+
+	it("falls back to the store's own description when the page has none", () => {
+		page.url = new URL('https://demo.shopnx.in/faqs') as typeof page.url
+		page.data = { store: { name: 'Demo', description: '<p>Clothes for women &amp; men.</p>' } }
+		render(SeoHeader, { props: { metaTitle: 'FAQs' } })
+		expect(meta('description')).toContain('Clothes for women')
+	})
 })
