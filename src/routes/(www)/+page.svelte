@@ -108,6 +108,8 @@
 
 		const description = cleanSchemaText(themeDescription || store?.description)
 		const logo = data?.store?.logo
+		const telephone = store?.contact?.phone || store?.businessPhone
+		const email = store?.contact?.email || store?.businessEmail
 
 		return {
 			'@context': 'https://schema.org',
@@ -136,12 +138,10 @@
 						postalCode: store?.zip,
 						addressCountry: store?.country?.iso2
 					},
-			contactPoint: {
-				'@type': 'ContactPoint',
-				telephone: store?.contact?.phone || store?.businessPhone,
-				email: store?.contact?.email || store?.businessEmail,
-				contactType: 'customer service'
-			},
+			// StructuredData drops the empty fields; a contact point with neither a phone nor an email
+			// would still say "customer service" about nothing, so it goes too.
+			...(telephone || email ? { contactPoint: { '@type': 'ContactPoint', telephone, email, contactType: 'customer service' } } : {}),
+			legalName: store?.businessLegalName,
 			sameAs: social
 		}
 	})
