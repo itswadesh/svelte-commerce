@@ -181,9 +181,9 @@
 		--success-foreground: 0 0% 100%;
 		/* #198837, the engine's own default for the `sale` setting: 4.55:1 on white. */
 		--sale: 136.2 68.9% 31.6%;
-		/* 4.80:1 against white, both as a fill under --warning-foreground and as
-		   `text-warning` on the canvas. */
-		--warning: 32 92% 35%;
+		/* 31%, not 35%: the low-stock line measured 3.96:1 on the #F2E8DB band and 4.49:1 on the
+		   #FAF7F2 canvas (SNX-035). Now 4.81:1 and 5.45:1 as `text-warning`, 5.82:1 under white. */
+		--warning: 32 92% 31%;
 		--warning-foreground: 0 0% 100%;
 		/* One step deeper than the yellow; 11.41:1 under --primary-foreground. */
 		--primary-hover: 47 100% 52%;

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import * as Drawer from '$lib/components/ui/drawer/index.js'
-	import Button from '$lib/components/ui/button/button.svelte'
+	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte'
 	import { ChevronRight, Copy, X } from '@lucide/svelte'
 	import Input from '$lib/components/ui/input/input.svelte'
 	import { CouponDrawerRenderer } from '$lib/core/composables/index.js'
 	import { fade } from '$lib/motion'
-	import { date } from '$lib/core/utils/index.js'
+	import { cn, date } from '$lib/core/utils/index.js'
 	import { formatPrice } from '$lib/utils/price'
 	import { page } from '$app/state'
 	import { innerWidth } from 'svelte/reactivity/window'
@@ -20,13 +20,13 @@
 	     entry point otherwise. Only the public coupon list is gated on there being coupons. -->
 	{#snippet content({ coupons, isChecking, handleCheck, handleCouponClick, handleCopy })}
 		<Drawer.Root bind:open direction={innerWidth.current && innerWidth.current > 400 ? 'right' : 'bottom'} shouldScaleBackground={true}>
-			<Drawer.Trigger class="w-full {className ? 'h-full' : ''}">
-				<Button variant="outline" class="group w-full justify-between !px-6 !py-5 {className}">
-					Apply promo code
-					<span class="text-muted-foreground">
-						<ChevronRight class="h-4 w-4" />
-					</span>
-				</Button>
+			<!-- The trigger is the button itself: a Button inside it was a button in a button, which a
+			     keyboard reached twice and a screen reader read as nested controls (SNX-035). -->
+			<Drawer.Trigger class={cn('ed-btn-base', buttonVariants({ variant: 'outline' }), 'group w-full justify-between !px-6 !py-5', className)}>
+				Apply promo code
+				<span class="text-muted-foreground">
+					<ChevronRight class="h-4 w-4" aria-hidden="true" />
+				</span>
 			</Drawer.Trigger>
 			<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-[100dvh] sm:w-fit sm:max-w-xl [&>div:first-child]:hidden">
 				<div in:fade class="mx-auto w-full max-w-4xl pb-20 sm:pb-0">
