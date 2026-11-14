@@ -5,20 +5,19 @@
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
 	import ContactForm from '$lib/components/contact/contact-form.svelte'
-	import MapFacade from '$lib/components/contact/map-facade.svelte'
-	import { addressLines, contactPageSchema, hoursRows, inIndia, mapFor, phoneLink, whatsappLink } from '$lib/components/contact/contact-facts'
+	import { addressLines, contactPageSchema, hoursRows, inIndia, phoneLink, whatsappLink } from '$lib/components/contact/contact-facts'
 
 	const store = $derived(page?.data?.store)
 
-	// Only what the store record carries; anything it lacks is simply not shown. The address, map
-	// location, hours and country are there only when the store published them (GoCommerce D156).
+	// Only what the store record carries; anything it lacks is simply not shown. No map: the owner
+	// removed Google's map from contact pages (14 Nov 2026). The address, hours and country are
+	// there only when the store published them (GoCommerce D156).
 	const india = $derived(inIndia(store?.businessCountry || store?.address?.country))
 	const email = $derived(String(store?.contact?.email || store?.businessEmail || '').trim())
 	const phone = $derived(phoneLink(store?.contact?.phone || store?.businessPhone, india))
 	const chat = $derived(store?.plugins?.whatsappChatButton)
 	const whatsapp = $derived(chat?.active ? whatsappLink(chat.phone, india, chat.message) : null)
 	const lines = $derived(addressLines(store?.address))
-	const map = $derived(mapFor(store?.mapLocation, lines.join(', ')))
 	const hours = $derived(hoursRows(store?.openingHours))
 
 	// WhatsApp first, then a call: how most shoppers here would rather reach a shop (india.md).
@@ -29,7 +28,7 @@
 			email && { icon: Mail, title: 'Email us', value: email, href: `mailto:${email}`, external: false }
 		].filter((m) => !!m)
 	)
-	const hasFacts = $derived(methods.length > 0 || lines.length > 0 || !!map || hours.length > 0)
+	const hasFacts = $derived(methods.length > 0 || lines.length > 0 || hours.length > 0)
 
 	// Decided on the server from the store's own capabilities: a form on a channel that is not open
 	// would spend the shopper's message on an error. See store-capabilities.ts.
@@ -110,22 +109,15 @@
 					</ul>
 				{/if}
 
-				{#if lines.length || map}
+				{#if lines.length}
 					<section class="rounded-lg border bg-card p-4" aria-labelledby="contact-address-title">
 						<h2 id="contact-address-title" class="contact-title flex items-center gap-2 text-base font-semibold text-foreground">
 							<MapPin class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-							{lines.length ? 'Address' : 'Location'}
+							Address
 						</h2>
-						{#if lines.length}
-							<address class="mt-2 text-sm not-italic text-foreground">
-								{#each lines as line, i (i)}<span class="block">{line}</span>{/each}
-							</address>
-						{/if}
-						{#if map}
-							<div class={lines.length || map.embed ? 'mt-3' : ''}>
-								<MapFacade embed={map.embed} open={map.open} label={lines[0] || store?.name || 'the shop'} />
-							</div>
-						{/if}
+						<address class="mt-2 text-sm not-italic text-foreground">
+							{#each lines as line, i (i)}<span class="block">{line}</span>{/each}
+						</address>
 					</section>
 				{/if}
 

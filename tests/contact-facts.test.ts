@@ -4,7 +4,6 @@ import {
 	contactPageSchema,
 	hoursRows,
 	inIndia,
-	mapFor,
 	phoneLink,
 	twelveHour,
 	whatsappLink
@@ -68,56 +67,6 @@ describe('addressLines', () => {
 		expect(addressLines({ city: 'Pune', country: 'IN' })).toEqual(['Pune', 'India'])
 		expect(addressLines({ country: 'IN' })).toEqual([])
 		expect(addressLines(null)).toEqual([])
-	})
-})
-
-describe('mapFor', () => {
-	const q = '12 Market Road, Pune'
-	it('maps the address when the store gave no location', () => {
-		expect(mapFor('', q)).toEqual({
-			embed: 'https://www.google.com/maps?q=12%20Market%20Road%2C%20Pune&output=embed',
-			open: 'https://www.google.com/maps/search/?api=1&query=12%20Market%20Road%2C%20Pune'
-		})
-	})
-	it('pins coordinates over the address, because they exist to correct it', () => {
-		expect(mapFor('18.5204,73.8567', q)).toEqual({
-			embed: 'https://www.google.com/maps?q=18.5204%2C73.8567&output=embed',
-			open: 'https://www.google.com/maps/search/?api=1&query=18.5204%2C73.8567'
-		})
-	})
-	it('reads the pin out of a place link, and opens the link itself', () => {
-		const place = 'https://www.google.com/maps/place/Shop/@18.52,73.85,17z/data=!3m1!4b1!4m6!3m5!3d18.5204!4d73.8567'
-		expect(mapFor(place, q)).toEqual({ embed: 'https://www.google.com/maps?q=18.5204%2C73.8567&output=embed', open: place })
-		// Without the pin, a place link's view is centred on the place.
-		const view = 'https://www.google.com/maps/place/Shop/@18.52,73.85,17z'
-		expect(mapFor(view, q)?.embed).toBe('https://www.google.com/maps?q=18.52%2C73.85&output=embed')
-	})
-	it('never pins the centre of a search, which is wherever the map was when it was copied', () => {
-		const search = 'https://www.google.com/maps/search/tailor/@18.52,73.85,14z'
-		expect(mapFor(search, q)).toEqual({ embed: null, open: search })
-	})
-	it('frames an embed link on www.google.com, whatever country domain it was copied from', () => {
-		const embed = 'https://www.google.co.in/maps/embed?pb=!1m18!1m12!1m3!1d3783!2d73.8567!3d18.5204!2m3'
-		expect(mapFor(embed, '')).toEqual({
-			embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783!2d73.8567!3d18.5204!2m3',
-			open: 'https://www.google.com/maps/search/?api=1&query=18.5204%2C73.8567'
-		})
-	})
-	it('opens a share link as it is, and never draws the address it was set to correct', () => {
-		expect(mapFor('https://maps.app.goo.gl/AbCdEf', q)).toEqual({ embed: null, open: 'https://maps.app.goo.gl/AbCdEf' })
-		expect(mapFor('https://g.page/r/CabcDEF123', '')).toEqual({ embed: null, open: 'https://g.page/r/CabcDEF123' })
-	})
-	it('opens an embed link itself when it names no place and there is no address', () => {
-		const embed = 'https://www.google.com/maps/embed/v1/place?key=k&q=Shop'
-		expect(mapFor(embed, '')).toEqual({ embed, open: embed })
-	})
-	it('is nothing without a location or an address, and never frames another origin', () => {
-		expect(mapFor('', '')).toBeNull()
-		expect(mapFor('http://www.google.com/maps/embed?pb=x', '')).toBeNull()
-		for (const loc of ['https://www.google.co.in/maps/embed?pb=x', '18.5,73.8', '']) {
-			const embed = mapFor(loc, q)?.embed
-			expect(embed && new URL(embed).origin).toBe('https://www.google.com')
-		}
 	})
 })
 
