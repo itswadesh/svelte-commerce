@@ -10,6 +10,8 @@
 	import { page } from '$app/state'
 	import { onDestroy, onMount } from 'svelte'
 	import { dialog } from '$lib/actions/dialog.js'
+	import OrderBlockNotice from '$lib/components/order/order-block-notice.svelte'
+	import { orderBlock } from '$lib/order/rules'
 
 	const cartState = getCartState()
 	const storeData = $derived(page.data?.store)
@@ -23,6 +25,8 @@
 
 	const subtotal = $derived(formatPrice(cartState?.cart?.subtotal ?? cartState?.cart?.total ?? 0, storeData?.currencyCode))
 	const itemCount = $derived(cartState?.cart?.lineItems?.length ?? 0)
+	// A pause on orders or a minimum the bag is under (GoCommerce D271).
+	const block = $derived(orderBlock(storeData?.plugins, cartState?.cart?.subtotal))
 
 	const { onClose, onContinueShopping, onRemoveCartItem } = $props()
 	const modalHistoryKey = '__svelteCommerceCartSidebar'
@@ -224,8 +228,9 @@
 						{isBusy ? 'Updating your bag' : `${cartState.cart.qty} items in your bag, subtotal ${subtotal}`}
 					</p>
 
+					<OrderBlockNotice {block} currency={storeData?.currencyCode} class="mt-3" />
 					<Button
-						disabled={isBusy}
+						disabled={isBusy || !!block}
 						aria-busy={isBusy}
 						onclick={(e) => {
 							e.stopPropagation()

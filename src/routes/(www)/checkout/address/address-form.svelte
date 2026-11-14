@@ -16,8 +16,11 @@
 		address = $bindable(),
 		isLoading = false,
 		detailsOnly = false,
+		pickup = false,
 		onsave
 	}: {
+		/** Collected from the shop (GoCommerce D271): only the name, email and phone are asked. */
+		pickup?: boolean
 		address: any
 		isLoading?: boolean
 		/**
@@ -75,12 +78,17 @@
 	)
 
 	const POSTAL_FIELDS = ['address_1', 'address_2', 'zip', 'city']
+	const CONTACT_FIELDS = ['firstName', 'lastName', 'email', 'phone']
+	// Details alone go straight to the page's save, without the renderer's postal checks.
+	const short = $derived(detailsOnly || pickup)
 	// The shared rule wants bare digits; a shopper's spaces, dashes or leading 0 are tidied away
 	// before it looks, and the tidied number is what is saved.
 	const phoneRule = z.preprocess(tidyPhone, AddressSchema.phone)
 	const rules = $derived(
 		Object.fromEntries(
-			Object.entries({ ...AddressSchema, phone: phoneRule, email: emailRule }).filter(([key]) => !detailsOnly || !POSTAL_FIELDS.includes(key))
+			Object.entries({ ...AddressSchema, phone: phoneRule, email: emailRule }).filter(([key]) =>
+				pickup ? CONTACT_FIELDS.includes(key) : !detailsOnly || !POSTAL_FIELDS.includes(key)
+			)
 		)
 	)
 
@@ -111,8 +119,8 @@
 		fieldErrors = {}
 		formError = ''
 		// The renderer would hold the address to every postal field again; details alone go straight on.
-		if (detailsOnly) {
-			address.countryCode = candidate.countryCode
+		if (short) {
+			if (detailsOnly) address.countryCode = candidate.countryCode
 			saveAndReportFailure(address)
 			return
 		}
@@ -221,7 +229,7 @@
 					required
 				/>
 			</div>
-			{#if !detailsOnly}
+			{#if !short}
 				<Textbox
 					name="address_1"
 					error={fieldErrors.address_1}
@@ -240,8 +248,8 @@
 					label="Address Line 2"
 				/>
 			{/if}
-			<div class="grid grid-cols-2 gap-2">
-				{#if !detailsOnly}
+			<div class="grid grid-cols-2 gap-2" class:hidden={pickup}>
+				{#if !short}
 					<Textbox
 						name="zip"
 						error={fieldErrors.zip}
@@ -315,10 +323,10 @@
 				     The renderer's zod validation on submit already blocks incomplete addresses. -->
 				<Button type="submit" variant="outline" disabled={isLoading} class="h-11 w-full">
 					{#if isLoading}
-						<Spinner label={detailsOnly ? 'Saving your details' : 'Saving address'} />
+						<Spinner label={short ? 'Saving your details' : 'Saving address'} />
 					{:else}
 						<Save class="mr-2 h-4 w-4" />
-						{detailsOnly ? 'Save details' : 'Save address'}
+						{short ? 'Save details' : 'Save address'}
 					{/if}
 				</Button>
 			</div>
