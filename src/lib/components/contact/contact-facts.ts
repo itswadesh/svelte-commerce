@@ -78,59 +78,6 @@ export function addressLines(address: StoreAddress | null | undefined): string[]
 	return lines
 }
 
-const EMBED_ORIGIN = 'https://www.google.com'
-const COORDS = /^(-?\d{1,3}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)$/
-
-/**
- * The place a location names: typed coordinates, the pin in a place link (`!3d<lat>!4d<lng>`), or
- * the centre of a place link's view (`@lat,lng`). Only a place link's: in a search link the `@` is
- * wherever the map happened to be when it was copied, not anything the store chose.
- */
-function coordsIn(location: string, url: URL | null): string | null {
-	const pin = location.match(COORDS) ?? location.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/)
-	const place = url && /^\/maps\/(place\/|@)/.test(url.pathname) ? location.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/) : null
-	const pair = pin ?? place
-	return pair ? `${pair[1]},${pair[2]}` : null
-}
-
-function httpsUrl(s: string): URL | null {
-	try {
-		const u = new URL(s)
-		return u.protocol === 'https:' ? u : null
-	} catch {
-		return null
-	}
-}
-
-/**
- * Where the map comes from, and where "Open in Google Maps" goes.
- *
- * The store's own map location wins over its address, because it exists to correct a pin the
- * address puts in the wrong place: an "Embed a map" link is framed as it is, coordinates (typed,
- * or read out of a place link) are framed as a pin, and a link with neither (a share link, a
- * Business Profile) is opened but draws no map — a map of the address would be the very pin the
- * store set it to correct. With no location, the address is both. Every frame is on
- * www.google.com and nowhere else, so a country domain's embed link is moved there (same path,
- * same map). `embed` is null when there is nothing to draw; the link may still be there.
- */
-export function mapFor(location: unknown, addressQuery: string): { embed: string | null; open: string } | null {
-	const loc = String(location ?? '').trim()
-	const search = (q: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`
-	const frame = (q: string) => `${EMBED_ORIGIN}/maps?q=${encodeURIComponent(q)}&output=embed`
-	const url = loc ? httpsUrl(loc) : null
-	if (url && url.pathname.startsWith('/maps/embed')) {
-		const embed = EMBED_ORIGIN + url.pathname + url.search
-		const coords = coordsIn(loc.replace(/!2d(-?[\d.]+)!3d(-?[\d.]+)/, '!3d$2!4d$1'), url)
-		const q = coords ?? addressQuery
-		return { embed, open: q ? search(q) : embed }
-	}
-	const coords = loc ? coordsIn(loc, url) : null
-	if (coords) return { embed: frame(coords), open: url ? loc : search(coords) }
-	if (url) return { embed: null, open: loc }
-	if (addressQuery) return { embed: frame(addressQuery), open: search(addressQuery) }
-	return null
-}
-
 const DAYS: Array<[string, string, string]> = [
 	['mon', 'Monday', 'https://schema.org/Monday'],
 	['tue', 'Tuesday', 'https://schema.org/Tuesday'],
