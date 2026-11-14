@@ -58,7 +58,7 @@
 		"rest-api",
 		"connector"
 	],
-	"author": "Swadesh Behera",
+	"author": "Ayush Tripathy",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/itswadesh/svelte-commerce"

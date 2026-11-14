@@ -1,7 +1,7 @@
 # Use an official Node.js runtime as a parent image
 ARG BASE_IMAGE="node:24-slim"
 FROM ${BASE_IMAGE}
-LABEL author="Swadesh Behera"
+LABEL author="Ayush Tripathy"
 
 # Set the working directory inside the container
 WORKDIR /usr/app

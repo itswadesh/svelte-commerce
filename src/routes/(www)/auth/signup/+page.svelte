@@ -11,7 +11,7 @@
 	import AuthButton from '$lib/components/auth/auth-button.svelte'
 	const IS_DEV = import.meta.env.DEV
 
-	let firstName = $state(IS_DEV ? 'Swadesh' : '')
+	let firstName = $state(IS_DEV ? 'Ayush' : '')
 	let lastName = $state(IS_DEV ? 'Behera' : '')
 	let email = $state(IS_DEV ? 'hi@litekart.in' : '')
 	// let phone = $state(IS_DEV ? '+918249028220' : '')
