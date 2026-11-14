@@ -18,6 +18,8 @@ type Bag = {
 	couponCode?: string | null
 	giftCard?: { last4?: string } | null
 	shippingRateId?: string | null
+	/** Collected from the shop (GoCommerce D271), which the quote prices with no delivery. */
+	pickup?: boolean
 	shippingAddress?: { country?: string; countryCode?: string; state?: string } | null
 	lineItems?: { id?: string; qty?: number; price?: number }[]
 }
@@ -40,6 +42,7 @@ export function quoteKey(method: string, cart: Bag): string {
 		cart.couponCode,
 		cart.giftCard?.last4,
 		cart.shippingRateId,
+		cart.pickup,
 		to?.countryCode || to?.country,
 		to?.state,
 		cart.lineItems?.map((l) => [l.id, l.qty, l.price])

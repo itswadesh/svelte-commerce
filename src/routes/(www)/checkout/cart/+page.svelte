@@ -18,6 +18,8 @@
 	import { tweened } from 'svelte/motion'
 	import { cubicOut } from 'svelte/easing'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
+	import OrderBlockNotice from '$lib/components/order/order-block-notice.svelte'
+	import { orderBlock } from '$lib/order/rules'
 	import { toast } from 'svelte-sonner'
 	import { onDestroy, onMount } from 'svelte'
 	import FreeDeliveryBar from '$lib/components/cart/free-delivery-bar.svelte'
@@ -176,6 +178,8 @@
 	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart as any))
 
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
+	// A pause on orders or a minimum the bag is under (GoCommerce D271) holds checkout here.
+	const block = $derived(orderBlock(page?.data?.store?.plugins, (cartState.cart as any)?.subtotal))
 	const cartSubtotal = $derived(formatPrice(cartState.cart?.subtotal, currencyCode))
 </script>
 
@@ -502,10 +506,11 @@
 							</div>
 
 							{#if !cartModule.noItemsChecked}
+								<OrderBlockNotice {block} currency={currencyCode} class="mt-4" />
 								<CheckoutButton
 									onclick={cartModule.gotoCheckout}
 									loading={cartModule.loadingForCheckout}
-									disabled={isBusy}
+									disabled={isBusy || !!block}
 									total={cartTotal}
 									totalLabel={totalLabel(shippingResolved, taxPending)}
 									class="mt-4"

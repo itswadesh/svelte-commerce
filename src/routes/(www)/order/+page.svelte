@@ -13,6 +13,9 @@
 	import OrderQty from '$lib/components/order/order-qty.svelte'
 	import { filterMenu, type MenuGroup } from '$lib/order/menu'
 	import { formatPrice } from '$lib/utils/price'
+	import { orderBlock } from '$lib/order/rules'
+	import OrderBlockNotice from '$lib/components/order/order-block-notice.svelte'
+	import FulfilmentChoice from '$lib/components/order/fulfilment-choice.svelte'
 
 	let { data } = $props()
 
@@ -30,6 +33,9 @@
 	const count = $derived(lines.reduce((n: number, l: any) => n + (Number(l?.qty) || 0), 0))
 	const total = $derived(lines.reduce((n: number, l: any) => n + (Number(l?.price) || 0) * (Number(l?.qty) || 0), 0))
 	const countLabel = $derived(`${count} ${count === 1 ? 'item' : 'items'}`)
+	// The store's pause and minimum order, and its pickup offer (D271): each absent while its plugin is off.
+	const plugins = $derived(page.data?.store?.plugins)
+	const block = $derived(orderBlock(plugins, cartState?.cart?.subtotal ?? total))
 
 	let leaving = $state(false)
 	async function next() {
@@ -50,6 +56,9 @@
 <div class="page-width max-w-3xl py-4 sm:py-8">
 	<h1 class="page-heading">{storeName ? `Order from ${storeName}` : 'Order'}</h1>
 	<p class="mt-1 text-sm text-muted-foreground">Pick what you want, then tap Next to place your order.</p>
+	{#if block && 'paused' in block}
+		<OrderBlockNotice {block} class="mt-4" />
+	{/if}
 
 	{#if menu.length}
 		<label class="relative mt-4 block">
@@ -122,6 +131,13 @@
 		</div>
 	{/each}
 
+	{#if count > 0 && plugins?.pickup?.active}
+		<div class="mt-6"><FulfilmentChoice address={plugins.pickup.address} /></div>
+	{/if}
+	{#if count > 0 && block && 'short' in block}
+		<OrderBlockNotice {block} {currency} class="mt-4" />
+	{/if}
+
 	{#if count > 0}
 		<div class="sm:sticky sm:bottom-0 sm:z-sticky sm:mt-6 sm:border-t sm:border-border sm:bg-background sm:py-3">
 			<div class="sm:flex sm:items-center sm:justify-end sm:gap-6">
@@ -129,7 +145,7 @@
 					<span class="font-semibold text-foreground">{countLabel}</span>
 					<span class="tabular-nums text-muted-foreground">· {formatPrice(total, currency)}</span>
 				</p>
-				<CheckoutButton text="Next" total={formatPrice(total, currency)} totalLabel={countLabel} loading={leaving} onclick={next} class="sm:w-56" />
+				<CheckoutButton text="Next" total={formatPrice(total, currency)} totalLabel={countLabel} loading={leaving} disabled={!!block} onclick={next} class="sm:w-56" />
 			</div>
 		</div>
 	{/if}
