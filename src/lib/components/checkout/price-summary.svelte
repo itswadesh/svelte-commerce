@@ -39,8 +39,11 @@
 		pending = false,
 		error = '',
 		onretry,
+		pickup = false,
 		class: className = ''
 	}: {
+		/** Collected from the shop (GoCommerce D271): there is no delivery, so no delivery row. */
+		pickup?: boolean
 		subtotal?: number | null
 		/** What the lines save on their MRP (compare-at). Above zero, the MRP and its discount get rows of their own. */
 		mrpSaving?: number | null
@@ -154,18 +157,20 @@
 				</div>
 			{/if}
 
-			<div class="flex items-center justify-between gap-4 text-sm">
-				<dt class="font-medium text-muted-foreground">Shipping</dt>
-				<dd class={['font-bold text-foreground', figure]}>
-					{#if !shippingResolved && !freeDelivery}
-						<span class="font-medium text-muted-foreground">{unresolvedShippingText}</span>
-					{:else if isFreeShipping || !shippingResolved}
-						<span class="rounded-radius bg-success/5 px-2 py-0.5 text-xs font-bold text-success ring-1 ring-inset ring-success/30"> Free </span>
-					{:else}
-						{money(shipping)}
-					{/if}
-				</dd>
-			</div>
+			{#if !pickup}
+				<div class="flex items-center justify-between gap-4 text-sm">
+					<dt class="font-medium text-muted-foreground">Shipping</dt>
+					<dd class={['font-bold text-foreground', figure]}>
+						{#if !shippingResolved && !freeDelivery}
+							<span class="font-medium text-muted-foreground">{unresolvedShippingText}</span>
+						{:else if isFreeShipping || !shippingResolved}
+							<span class="rounded-radius bg-success/5 px-2 py-0.5 text-xs font-bold text-success ring-1 ring-inset ring-success/30"> Free </span>
+						{:else}
+							{money(shipping)}
+						{/if}
+					</dd>
+				</div>
+			{/if}
 
 			{#if fee}
 				<div class="flex items-center justify-between gap-4 text-sm" transition:slide>

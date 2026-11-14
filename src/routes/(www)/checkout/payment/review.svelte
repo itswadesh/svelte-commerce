@@ -28,6 +28,8 @@
 	)
 
 	const covered = $derived(coveredByGiftCard(quote.current))
+	// Collected from the shop (GoCommerce D271): the shop's address in place of the shopper's, and no delivery row.
+	const pickupAddress = $derived(page.data?.store?.plugins?.pickup?.active && cartState.cart?.pickup ? String(page.data.store.plugins.pickup.address ?? '') : null)
 
 	// A shopper can sit on payment for minutes, and an automatic code can run out meanwhile.
 	onMount(() => quote.retry())
@@ -114,8 +116,26 @@
 					</div>
 				{/if}
 
+				{#if pickupAddress !== null}
+					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
+							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
+								<MapPin class="size-4 text-primary" /> Pickup from the shop
+							</h2>
+							<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/address')} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
+								<Pencil class="mr-1 size-3.5" /> Edit
+							</Button>
+						</div>
+						<div class="pt-2 sm:pt-3 text-sm leading-relaxed text-muted-foreground">
+							<p class="font-bold text-foreground">
+								{cartState.cart.shippingAddress?.firstName}
+								{cartState.cart.shippingAddress?.lastName}
+							</p>
+							{#if pickupAddress}<p class="whitespace-pre-line">{pickupAddress}</p>{/if}
+						</div>
+					</div>
 				<!-- Delivery Address -->
-				{#if cartState.cart?.shippingAddress}
+				{:else if cartState.cart?.shippingAddress}
 					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
 						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
 							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
@@ -218,6 +238,7 @@
 							total={figures.total}
 							{currencyCode}
 							shippingResolved={!!cartState.cart.shippingAddress}
+							pickup={pickupAddress !== null}
 							taxPending={figures.taxPending}
 							pending={quote.pending}
 							error={quote.error}

@@ -8,6 +8,8 @@
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
 	import { page } from '$app/state'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
+	import { Input } from '$lib/components/ui/input'
+	import { Label } from '$lib/components/ui/label/index.js'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import { showAuthModal } from '$lib/core/components/index.js'
@@ -23,7 +25,10 @@
 	import WhatsappOptin from '$lib/components/checkout/whatsapp-optin.svelte'
 	import { browser } from '$app/environment'
 	import { loadWhatsappOffer, saveWhatsappConsent, type WhatsappOffer } from '$lib/whatsapp'
-	import { authService } from '$lib/core/services/index.js'
+	import { authService, cartService } from '$lib/core/services/index.js'
+	import FulfilmentChoice from '$lib/components/order/fulfilment-choice.svelte'
+	import OrderBlockNotice from '$lib/components/order/order-block-notice.svelte'
+	import { checkoutQuestions, orderBlock, unanswered } from '$lib/order/rules'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { onMount } from 'svelte'
 	import { trackBeginCheckout } from '$lib/analytics'
@@ -38,6 +43,21 @@
 
 	const isEmailOk = $derived(addressModule.isEmailOk)
 	const isPhoneOk = $derived(addressModule.isPhoneOk)
+
+	// Order on WhatsApp, part 2 (GoCommerce D271). Each is off, and changes nothing, while its plugin is.
+	const plugins = $derived(page.data?.store?.plugins)
+	// Collecting from the shop asks only the name, email and phone, for signed-in shoppers too.
+	const pickup = $derived(!!plugins?.pickup?.active && !!(cartState.cart as any)?.pickup)
+	const block = $derived(orderBlock(plugins, cartState.cart?.subtotal))
+	const questions = $derived(checkoutQuestions(plugins))
+	let answers = $state<Record<string, string>>({})
+	let answersSeeded = false
+	$effect(() => {
+		if (answersSeeded || !cartState.cart?.id) return
+		answersSeeded = true
+		answers = { ...((cartState.cart as any)?.answers ?? {}) }
+	})
+	const missingAnswer = $derived(unanswered(questions, answers))
 
 	// `saveContactInfo` runs its zod `.parse()` calls BEFORE opening its own try block, so an
 	// invalid or missing email/phone throws straight out of the handler: no toast, no inline
@@ -96,15 +116,23 @@
 	// button as its disabled label, which is both the least legible text in the flow and a moving
 	// target where the shopper expects one constant forward action (UX-301).
 	const continueBlocker = $derived(
-		!isEmailOk
-			? 'Add an email address to continue.'
-			: !isPhoneOk
-				? 'Add a phone number to continue.'
-				: !cartState.cart?.shippingAddress
-					? 'Add a delivery address to continue.'
-					: addressModule.editAddress
-						? 'Save your address to continue.'
-						: ''
+		block
+			? 'paused' in block
+				? 'We are not taking orders right now.'
+				: 'Your order is under the minimum.'
+			: !isEmailOk
+				? 'Add an email address to continue.'
+				: !isPhoneOk
+					? 'Add a phone number to continue.'
+					: !cartState.cart?.shippingAddress
+						? pickup
+							? 'Add your name to continue.'
+							: 'Add a delivery address to continue.'
+						: addressModule.editAddress
+							? 'Save your address to continue.'
+							: missingAnswer
+								? `Answer “${missingAnswer.text}” to continue.`
+								: ''
 	)
 
 	// The pinned footer carries whichever action actually moves the shopper forward. Until the guest
@@ -114,10 +142,14 @@
 	// this on the address alone left a guest with a saved address but no email staring at a
 	// permanently disabled "Select Address" while the only control that could fix it sat below the
 	// fold.
-	const fillingGuestAddress = $derived(isGuestCheckout && !(isEmailOk && isPhoneOk && cartState.cart?.shippingAddress))
+	const fillingGuestAddress = $derived(
+		(isGuestCheckout || pickup) && !(isEmailOk && isPhoneOk && cartState.cart?.shippingAddress)
+	)
 
 	const taxPending = $derived(taxIsPending(page?.data?.store?.currency?.includesTax, cartState.cart))
-	const barLabel = $derived(totalLabel(!!cartState.cart?.shippingAddress, taxPending))
+	// A pickup has no delivery to price, so its total is known before any address.
+	const shippingResolved = $derived(pickup || !!cartState.cart?.shippingAddress)
+	const barLabel = $derived(totalLabel(shippingResolved, taxPending))
 
 	// The bag said "FREE delivery on this order"; before an address this step said "Address required"
 	// for the same bag (SNX-024). Asked the way the bag's bar asks, so both steps read the same.
@@ -187,6 +219,21 @@
 	// on the cart (what the order is placed with), else the one in the address form. Not awaited, so
 	// a slow engine never holds up checkout; a client-side navigation does not cancel the request.
 	async function proceedToPayment() {
+		if (block) return
+		if (missingAnswer) {
+			document.getElementById(questionId(missingAnswer.text))?.focus()
+			return
+		}
+		// The answers go with the order; the engine refuses one that leaves a required question empty.
+		if (questions.length) {
+			const kept = Object.fromEntries(questions.map((q) => [q.text, String(answers[q.text] ?? '').trim()]))
+			try {
+				cartState.cart = await cartService.updateCart2({ cartId: cartState.cart?.id, answers: kept })
+			} catch (e) {
+				toast.error(e instanceof Error ? e.message : 'Could not save your answers. Please try again.')
+				return
+			}
+		}
 		if (whatsappOffer.enabled) {
 			void saveWhatsappConsent({
 				cartId: cartState.cart?.id,
@@ -197,6 +244,8 @@
 		}
 		await addressModule.handleProceedToPayment()
 	}
+
+	const questionId = (text: string) => `checkout-question-${questions.findIndex((q) => q.text === text)}`
 
 	async function handleGuestSubmit(address: any) {
 		try {
@@ -314,7 +363,7 @@
 						     `handleGuestSubmit` pushes both onto the cart before saving the address — so asking
 						     for them in a separate Contact Details step first made guests fill two forms with
 						     the same fields. -->
-						{#if !isGuestCheckout && (addressModule.isPhoneRequired || addressModule.isEmailRequired)}
+						{#if !pickup && !isGuestCheckout && (addressModule.isPhoneRequired || addressModule.isEmailRequired)}
 							<div class="overflow-hidden rounded-lg border border-border bg-background">
 								<div class="flex items-center justify-between border-b border-border px-5 py-4">
 									<div class="flex items-center space-x-3">
@@ -392,7 +441,27 @@
 						<!-- Shipping Address. Guests reach this straight away: their email and phone are fields
 						     of this form, so gating it on `isEmailOk && isPhoneOk` would hide the only place
 						     they can be entered. -->
-						{#if isGuestCheckout || (isEmailOk && isPhoneOk)}
+						{#if plugins?.pickup?.active}
+							<FulfilmentChoice address={plugins.pickup.address} />
+						{/if}
+						{#if pickup}
+							<div class="rounded-lg border border-border bg-background p-4 sm:p-6">
+								<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+									<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Your details</h2>
+									{#if isGuestCheckout}
+										<Button variant="link" onclick={() => showAuthModal('login')} class="h-auto self-start whitespace-normal p-0 text-left sm:self-auto">
+											Login to fill these in
+										</Button>
+									{/if}
+								</div>
+								<AddressForm
+									bind:address={addressModule.currentAddress}
+									isLoading={loadingForGuestCheckout}
+									onsave={handleGuestSubmit}
+									pickup
+								/>
+							</div>
+						{:else if isGuestCheckout || (isEmailOk && isPhoneOk)}
 							<div class="overflow-hidden rounded-lg border border-border bg-background">
 								{#if isGuestCheckout}
 									<!-- Guest checkout: inline address form, no login required -->
@@ -558,6 +627,27 @@
 								</div>
 							{/if}
 						{/if}
+						{#if questions.length}
+							<div class="space-y-4 rounded-lg border border-border bg-background p-4 sm:p-6">
+								<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">A few questions from the shop</h2>
+								{#each questions as question, i (question.text)}
+									<div class="flex flex-col gap-2">
+										<Label for="checkout-question-{i}"
+											>{question.text}{#if question.required}<span class="ml-0.5 text-destructive">*</span>{:else}<span
+													class="ml-1 font-normal text-muted-foreground">(optional)</span
+												>{/if}</Label
+										>
+										<Input
+											id="checkout-question-{i}"
+											bind:value={answers[question.text]}
+											required={question.required}
+											maxlength={500}
+											class="h-11"
+										/>
+									</div>
+								{/each}
+							</div>
+						{/if}
 						<WhatsappOptin
 							storeName={page?.data?.store?.name}
 							offer={whatsappOffer}
@@ -584,10 +674,13 @@
 										tax={cartState.cart.tax}
 										total={cartState.cart.total}
 										currencyCode={page?.data?.store?.currency?.code}
-										shippingResolved={!!cartState.cart.shippingAddress}
+										{shippingResolved}
+										{pickup}
 										{freeDelivery}
 										{taxPending}
 									/>
+
+									<OrderBlockNotice {block} currency={page?.data?.store?.currency?.code} />
 
 									{#if addressModule.showError}
 										<div class="mt-4 rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">

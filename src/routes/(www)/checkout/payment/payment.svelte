@@ -22,6 +22,8 @@
 	const discountCouponsPlugin = $derived(page.data?.store?.plugins?.isDiscountCoupons)
 
 	const cartState = paymentModule.cartState
+	// Collected from the shop (GoCommerce D271): no delivery row, and the shop's address in place of the shopper's.
+	const pickupAddress = $derived(page.data?.store?.plugins?.pickup?.active && cartState.cart?.pickup ? String(page.data.store.plugins.pickup.address ?? '') : null)
 
 	// Cash on delivery has no delivery to wait for in a basket of downloads (GoCommerce D254); the
 	// engine refuses it, so it is not offered.
@@ -290,7 +292,7 @@
 						<div class="overflow-hidden rounded-lg border border-border bg-background text-left">
 							<Button variant="plain" class="flex h-auto w-full items-center justify-between px-3 py-2.5 sm:px-6 sm:py-4" onclick={() => (showAddress = !showAddress)}>
 								<div class="flex flex-col items-start">
-									<span class="text-sm font-medium text-muted-foreground">{cartState.cart?.needAddress === false ? 'Order for' : 'Delivering order to'}</span>
+									<span class="text-sm font-medium text-muted-foreground">{pickupAddress !== null ? 'Pickup from the shop for' : cartState.cart?.needAddress === false ? 'Order for' : 'Delivering order to'}</span>
 									<span class="text-sm font-bold tracking-tight text-foreground">
 										{cartState.cart.shippingAddress.firstName}
 										{cartState.cart.shippingAddress.lastName}
@@ -304,6 +306,9 @@
 							{#if showAddress}
 								<div class="border-t border-border bg-background px-3 py-2 sm:px-6">
 									<div class="flex items-start justify-between gap-4">
+										{#if pickupAddress !== null}
+											<p class="flex-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{pickupAddress}</p>
+										{:else}
 										<div class="flex-1">
 											<p class="text-sm leading-relaxed text-muted-foreground">
 												{cartState.cart.shippingAddress?.address_1},<br />
@@ -315,6 +320,7 @@
 												<p class="text-xs leading-relaxed text-muted-foreground">{cartState.cart.shippingAddress?.address_2}</p>
 											{/if}
 										</div>
+										{/if}
 										<Button variant="outline" size="sm" class="h-7 px-3" onclick={paymentModule.handleAddressChange}>Change</Button>
 									</div>
 									{#if cartState.cart.phone}
@@ -363,6 +369,7 @@
 										{total}
 										currencyCode={page?.data?.store?.currency?.code}
 										shippingResolved={!!cartState.cart.shippingAddress}
+										pickup={pickupAddress !== null}
 										taxPending={figures.taxPending}
 										pending={quote.pending}
 										error={quote.error}
