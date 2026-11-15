@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" width="48" height="32" role="img" aria-label="Pay by UPI">
+	<rect x="1" y="1" width="46" height="30" rx="4" fill="#F1F5F2" stroke="#BBCBC0" stroke-width="1.5" />
+	<rect x="15" y="7" width="7" height="7" rx="1" fill="#FFFFFF" stroke="#5B8A6B" stroke-width="1.5" />
+	<rect x="26" y="7" width="7" height="7" rx="1" fill="#FFFFFF" stroke="#5B8A6B" stroke-width="1.5" />
+	<rect x="15" y="18" width="7" height="7" rx="1" fill="#FFFFFF" stroke="#5B8A6B" stroke-width="1.5" />
+	<path d="M26 18h3v3h-3zM30 22h3v3h-3zM30 18h3M26 25h2" fill="#5B8A6B" stroke="#5B8A6B" stroke-width="1.2" />
+</svg>

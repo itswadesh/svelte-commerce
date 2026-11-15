@@ -17,6 +17,7 @@
 	import GoogleSurvey from '$lib/components/google/google-survey.svelte'
 	import BoughtGiftCards from '$lib/components/order/bought-gift-cards.svelte'
 	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
+	import UpiPay from '$lib/components/order/upi-pay.svelte'
 
 	const userState = getUserState()
 	const cartState = getCartState()
@@ -202,6 +203,11 @@
 							class="mt-6 inline-flex items-center rounded-full border border-border bg-background px-4 py-1.5 text-sm font-medium text-muted-foreground"
 						>
 							Order #{orderNo}
+						</div>
+					{/if}
+					{#if outcome === 'upi' && firstOrder?.upi}
+						<div class="mx-auto mt-6 max-w-xl" in:fade>
+							<UpiPay order={firstOrder} />
 						</div>
 					{/if}
 					{#if outcome === 'whatsapp' && whatsappUrl}

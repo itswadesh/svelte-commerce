@@ -14,6 +14,7 @@
 	import OrderListSkeleton from '../../(my)/my/orders/_OrderListSkeleton.svelte'
 	import OrderTimeline from '$lib/components/order/order-timeline.svelte'
 	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
+	import UpiPay from '$lib/components/order/upi-pay.svelte'
 	import StatusCell from '$lib/components/common/status-cell.svelte'
 	import { orderService } from '$lib/core/services/index.js'
 	import { CheckCircle } from '@lucide/svelte'
@@ -95,6 +96,11 @@
 
 					<h6 class="mt-2 text-sm text-muted-foreground sm:mt-0">Order Date : {date(order?.createdAt)}</h6>
 				</div>
+				{#if order?.upi}
+					<div class="border-x p-3 sm:p-5">
+						<UpiPay {order} />
+					</div>
+				{/if}
 				{#if order?.downloads?.length}
 					<div class="border-x p-3 sm:p-5">
 						<OrderDownloads downloads={order.downloads} orderNo={order.orderNo} />
