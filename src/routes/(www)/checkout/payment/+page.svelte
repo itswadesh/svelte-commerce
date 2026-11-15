@@ -6,7 +6,7 @@
 	import { goto } from '$app/navigation'
 	import { checkoutService } from '$lib/core/services'
 	import { coveredByGiftCard } from '$lib/utils/price'
-	import { offerWhatsApp, placeWhatsAppOrder, WHATSAPP } from '$lib/checkout/whatsapp'
+	import { offerEngineMethod, offerWhatsApp, placeWhatsAppOrder, WHATSAPP } from '$lib/checkout/whatsapp'
 	import { toast } from 'svelte-sonner'
 	import { Button } from '$lib/components/ui/button/index.js'
 
@@ -15,9 +15,13 @@
 
 	let showReview = $state(false)
 
-	// Once the connector's list is in, Order on WhatsApp joins it when the store has it on (D255).
+	// Once the connector's list is in, Order on WhatsApp (D255) and Pay by UPI (D277) join it when
+	// the store has them on.
+	const UPI = 'UPI'
 	$effect(() => {
-		if (!paymentModule.loadingForPaymentMethods) offerWhatsApp(paymentModule)
+		if (paymentModule.loadingForPaymentMethods) return
+		offerWhatsApp(paymentModule)
+		offerEngineMethod(paymentModule, 'upi', UPI, 'Pay from any UPI app with a QR code or a tap, then enter the UPI reference.', '/payment/upi.svg')
 	})
 
 	// `placeOrder` sets `paymentLoader = true` up front, but its "gateway not ready yet" branches
@@ -32,6 +36,7 @@
 		try {
 			if (coveredByGiftCard(quote.current)) return await placeCovered()
 			if (paymentModule.SELECTED_PG_CODE === WHATSAPP) return await placeWhatsApp()
+			if (paymentModule.SELECTED_PG_CODE === UPI) return await placeUpi()
 			await paymentModule.placeOrder()
 		} finally {
 			paymentModule.paymentLoader = false
@@ -64,6 +69,18 @@
 		try {
 			const orderNo = await placeWhatsAppOrder(cartId)
 			await goto(`/checkout/success?order_no=${encodeURIComponent(orderNo)}&cart_id=${encodeURIComponent(cartId ?? '')}`)
+		} catch (err) {
+			toast.error((err as Error)?.message || 'Your order could not be placed. Please try again.')
+		}
+	}
+	/** Pay by UPI: the success page then shows the QR code, the app button and the reference box. */
+	async function placeUpi() {
+		const cartId = paymentModule.cartState.cart?.id
+		const svc = checkoutService as unknown as { checkout: (code: string, args: { cartId?: string }) => Promise<{ orderNo: string }> }
+		paymentModule.paymentLoader = true
+		try {
+			const placed = await svc.checkout('upi', { cartId })
+			await goto(`/checkout/success?order_no=${encodeURIComponent(placed.orderNo)}&cart_id=${encodeURIComponent(cartId ?? '')}`)
 		} catch (err) {
 			toast.error((err as Error)?.message || 'Your order could not be placed. Please try again.')
 		}

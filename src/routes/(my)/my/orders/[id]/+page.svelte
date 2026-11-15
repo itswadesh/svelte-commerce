@@ -28,6 +28,7 @@
 	import { MyOrdersIdRenderer } from '$lib/core/composables/index.js'
 	import BoughtGiftCards from '$lib/components/order/bought-gift-cards.svelte'
 	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
+	import UpiPay from '$lib/components/order/upi-pay.svelte'
 
 	let { class: klass = '', data, ...rest } = $props()
 
@@ -275,6 +276,10 @@
 									{/if}
 								</div>
 							</div>
+
+							{#if (order as any)?.upi}
+								<UpiPay order={order as any} />
+							{/if}
 
 							<OrderDownloads downloads={(order as any)?.downloads} orderNo={orderNumberOf(order)} />
 

@@ -20,20 +20,27 @@ type Checkout = {
 const svc = checkoutService as unknown as Checkout
 
 /** Adds Order on WhatsApp to the payment step when the store has it switched on. */
-export async function offerWhatsApp(pm: Module) {
-	if (!svc.listMethods || pm.allPaymentMethods.some((m) => m.code === WHATSAPP)) return
+export const offerWhatsApp = (pm: Module) =>
+	offerEngineMethod(pm, 'whatsapp', WHATSAPP, 'Send the order to the shop on WhatsApp, and agree there how you pay.', '/payment/whatsapp.svg')
+
+/**
+ * Adds a method the connector does not list (it lists only the flows it drives) to the payment
+ * step, from the engine's own list, when the store has it switched on: Order on WhatsApp, Pay by UPI.
+ */
+export async function offerEngineMethod(pm: Module, engineCode: string, code: string, description: string, img: string) {
+	if (!svc.listMethods || pm.allPaymentMethods.some((m) => m.code === code)) return
 	const engine = await svc.listMethods().catch(() => null)
-	const method = engine?.methods?.find((m) => m.code === 'whatsapp')
-	if (!method || pm.allPaymentMethods.some((m) => m.code === WHATSAPP)) return
+	const method = engine?.methods?.find((m) => m.code === engineCode)
+	if (!method || pm.allPaymentMethods.some((m) => m.code === code)) return
 	const alone = pm.allPaymentMethods.length === 0
 	const offered = {
-		id: 'whatsapp',
-		code: WHATSAPP,
-		engineCode: 'whatsapp',
+		id: engineCode,
+		code,
+		engineCode,
 		name: method.name,
 		title: method.name,
-		description: 'Send the order to the shop on WhatsApp, and agree there how you pay.',
-		img: '/payment/whatsapp.svg',
+		description,
+		img,
 		fee: 0,
 		active: true,
 		isActive: true
@@ -44,7 +51,7 @@ export async function offerWhatsApp(pm: Module) {
 		pm.showError = false
 		pm.errorMessage = ''
 		pm.showPaymentMethods = true
-		pm.SELECTED_PG_CODE = WHATSAPP
+		pm.SELECTED_PG_CODE = code
 	}
 }
 
