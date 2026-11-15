@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { clientAddress, isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
 
-const API = 'https://api.litekart.in'
+const API = 'https://api.example.com'
 
 describe('isApiPath', () => {
 	it('matches /api and everything under it, nothing else', () => {
@@ -41,7 +41,7 @@ describe('clientAddress', () => {
 describe('proxyApiRequest', () => {
 	it('drops transfer-encoding from a chunked body, which fetch refuses to send on', async () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
-		const request = new Request('https://demo.litekart.in/api/x', { method: 'POST', body: '{}', headers: { 'transfer-encoding': 'chunked', te: 'trailers' } })
+		const request = new Request('https://demo.example.com/api/x', { method: 'POST', body: '{}', headers: { 'transfer-encoding': 'chunked', te: 'trailers' } })
 		await proxyApiRequest(request, API, fetchFn)
 		const sent = new Headers((fetchFn.mock.calls[0] as [string, RequestInit])[1].headers)
 		expect(sent.has('transfer-encoding')).toBe(false)
@@ -50,14 +50,14 @@ describe('proxyApiRequest', () => {
 
 	it('forwards path, query and the store cookie to the backend', async () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{"ok":true}', { status: 200, headers: { 'content-type': 'application/json' } }))
-		const request = new Request('https://demo.litekart.in/api/products?limit=2', {
-			headers: { cookie: 'litekart_store_id=store_1', host: 'demo.litekart.in', 'cf-ray': 'abc', 'cdn-loop': 'cloudflare' }
+		const request = new Request('https://demo.example.com/api/products?limit=2', {
+			headers: { cookie: 'litekart_store_id=store_1', host: 'demo.example.com', 'cf-ray': 'abc', 'cdn-loop': 'cloudflare' }
 		})
 
 		const response = await proxyApiRequest(request, API, fetchFn)
 
 		const [target, init] = fetchFn.mock.calls[0] as [string, RequestInit]
-		expect(target).toBe('https://api.litekart.in/api/products?limit=2')
+		expect(target).toBe('https://api.example.com/api/products?limit=2')
 		const sent = new Headers(init.headers)
 		expect(sent.get('cookie')).toBe('litekart_store_id=store_1')
 		expect(sent.has('host')).toBe(false)
@@ -69,8 +69,8 @@ describe('proxyApiRequest', () => {
 
 	it('tolerates a trailing slash on the base URL', async () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
-		await proxyApiRequest(new Request('https://demo.litekart.in/api/menu'), `${API}/`, fetchFn)
-		expect(fetchFn.mock.calls[0][0]).toBe('https://api.litekart.in/api/menu')
+		await proxyApiRequest(new Request('https://demo.example.com/api/menu'), `${API}/`, fetchFn)
+		expect(fetchFn.mock.calls[0][0]).toBe('https://api.example.com/api/menu')
 	})
 
 	it("replaces a browser-sent X-Forwarded-For with the shopper's address", async () => {
@@ -103,7 +103,7 @@ describe('proxyApiRequest', () => {
 
 	it('forwards the body and method of a write', async () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}', { status: 201 }))
-		const request = new Request('https://demo.litekart.in/api/carts/add-to-cart', {
+		const request = new Request('https://demo.example.com/api/carts/add-to-cart', {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ productId: 'p1', qty: 1 })
@@ -121,7 +121,7 @@ describe('proxyApiRequest', () => {
 		const fetchFn = vi.fn<typeof fetch>(
 			async () => new Response('{"message":"Store ID is required"}', { status: 400, headers: { 'content-type': 'application/json' } })
 		)
-		const response = await proxyApiRequest(new Request('https://demo.litekart.in/api/menu'), API, fetchFn)
+		const response = await proxyApiRequest(new Request('https://demo.example.com/api/menu'), API, fetchFn)
 		expect(response.status).toBe(400)
 		expect(response.headers.get('content-type')).toBe('application/json')
 	})
@@ -130,7 +130,7 @@ describe('proxyApiRequest', () => {
 		const fetchFn = vi.fn<typeof fetch>(async () => {
 			throw new TypeError('fetch failed')
 		})
-		const response = await proxyApiRequest(new Request('https://demo.litekart.in/api/menu'), API, fetchFn)
+		const response = await proxyApiRequest(new Request('https://demo.example.com/api/menu'), API, fetchFn)
 		expect(response.status).toBe(502)
 		expect(response.headers.get('content-type')).toBe('application/json')
 	})

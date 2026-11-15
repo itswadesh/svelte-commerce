@@ -49,28 +49,28 @@ describe('seo-header.svelte', () => {
 	})
 
 	it('shares the first listed product on a store with no logo or icon, and nothing where none is listed', () => {
-		page.url = new URL('https://demo.shopnx.in/women') as typeof page.url
+		page.url = new URL('https://demo.example.com/women') as typeof page.url
 		page.data = { store: { name: 'Demo', logo: '', favicon: '' }, products: { data: [{ thumbnail: '/backend/media/dress.webp' }] } }
 		render(SeoHeader, { props: { metaTitle: 'Women' } })
-		expect(meta('og:image')).toBe('https://demo.shopnx.in/backend/media/dress.webp')
+		expect(meta('og:image')).toBe('https://demo.example.com/backend/media/dress.webp')
 		cleanup()
 		document.head.innerHTML = ''
 
-		page.url = new URL('https://demo.shopnx.in/') as typeof page.url
+		page.url = new URL('https://demo.example.com/') as typeof page.url
 		page.data = { store: { name: 'Demo', favicon: '/backend/media/icon.png' }, featuredProducts: [{ thumbnail: '/backend/media/dress.webp' }] }
 		render(SeoHeader, { props: { metaTitle: 'Demo' } })
-		expect(meta('og:image')).toBe('https://demo.shopnx.in/backend/media/icon.png')
+		expect(meta('og:image')).toBe('https://demo.example.com/backend/media/icon.png')
 		cleanup()
 		document.head.innerHTML = ''
 
-		page.url = new URL('https://demo.shopnx.in/faqs') as typeof page.url
+		page.url = new URL('https://demo.example.com/faqs') as typeof page.url
 		page.data = { store: { name: 'Demo' } }
 		render(SeoHeader, { props: { metaTitle: 'FAQs' } })
 		expect(meta('og:image')).toBeNull()
 	})
 
 	it('writes no description rather than the bare store name', () => {
-		page.url = new URL('https://demo.shopnx.in/faqs') as typeof page.url
+		page.url = new URL('https://demo.example.com/faqs') as typeof page.url
 		page.data = { store: { name: 'Demo' } }
 		render(SeoHeader, { props: { metaTitle: 'FAQs' } })
 		expect(meta('description')).toBeNull()
@@ -79,7 +79,7 @@ describe('seo-header.svelte', () => {
 	})
 
 	it("falls back to the store's own description when the page has none", () => {
-		page.url = new URL('https://demo.shopnx.in/faqs') as typeof page.url
+		page.url = new URL('https://demo.example.com/faqs') as typeof page.url
 		page.data = { store: { name: 'Demo', description: '<p>Clothes for women &amp; men.</p>' } }
 		render(SeoHeader, { props: { metaTitle: 'FAQs' } })
 		expect(meta('description')).toContain('Clothes for women')

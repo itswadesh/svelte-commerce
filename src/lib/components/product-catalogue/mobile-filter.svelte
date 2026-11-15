@@ -3,6 +3,7 @@
 	import * as Sheet from '$lib/components/ui/sheet/index.js'
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js'
 	import { GetColorName } from 'hex-color-to-color-name'
+	import { filterPaint } from '$lib/product/colour.js'
 	import { ArrowDownNarrowWide, Check, ChevronRight, Filter, SearchIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
@@ -419,10 +420,10 @@
 											class="ed-mf__opt flex min-h-12 flex-1 cursor-pointer items-center text-sm capitalize text-foreground"
 											class:is-on={on}
 										>
-											{#if value?.startsWith?.('#')}
+											{#if filterPaint(filterModule.selectedSection, value)}
 												<span class="flex items-center gap-2">
-													<span class="h-5 w-5 rounded-full border shadow-xs" style="background-color: {value};"></span>
-													{GetColorName(value)}
+													<span class="h-5 w-5 rounded-full border shadow-xs shrink-0" style="background: {filterPaint(filterModule.selectedSection, value)};" aria-hidden="true"></span>
+													{value?.startsWith?.('#') ? GetColorName(value) : value}
 												</span>
 											{:else}
 												{value}

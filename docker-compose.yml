@@ -17,7 +17,7 @@ services:
       # and the client can throw `undefined (reading 'env')` because the SvelteKit env
       # bootstrap never gets injected. Your deploy platform's env overrides these — set the
       # real production values there.
-      - PUBLIC_LITEKART_API_URL=${PUBLIC_LITEKART_API_URL:-https://staging.litekart.in}
+      - PUBLIC_LITEKART_API_URL=${PUBLIC_LITEKART_API_URL:-https://api.example.com}
       - PUBLIC_LITEKART_STORE_ID=${PUBLIC_LITEKART_STORE_ID}
       - PUBLIC_LITEKART_DOMAIN=${PUBLIC_LITEKART_DOMAIN}
       - PUBLIC_SITEMAP_URL=${PUBLIC_SITEMAP_URL}

@@ -13,6 +13,9 @@ describe('orderOutcome', () => {
 		['an order sent on WhatsApp, settled in the chat', { paymentStatus: 'Pending', paymentMethod: 'WHATSAPP' }, 'whatsapp'],
 		['an order sent on WhatsApp, marked paid', { paymentStatus: 'Paid', paymentMethod: 'WHATSAPP' }, 'paid'],
 		['an order sent on WhatsApp, cancelled unpaid', { paymentStatus: 'Pending', paymentMethod: 'WHATSAPP', status: 'cancelled' }, 'failed'],
+		['an order paid by UPI, not yet confirmed', { paymentStatus: 'Pending', paymentMethod: 'UPI' }, 'upi'],
+		['an order paid by UPI, marked paid', { paymentStatus: 'Paid', paymentMethod: 'UPI' }, 'paid'],
+		['an order paid by UPI, cancelled unpaid', { paymentStatus: 'Pending', paymentMethod: 'UPI', status: 'cancelled' }, 'failed'],
 		['unpaid and cancelled', { paymentStatus: 'Pending', paymentMethod: 'CASHFREE', status: 'cancelled' }, 'failed'],
 		['a backend reporting no payment state', { paymentMethod: 'STRIPE' }, 'received'],
 		['a payment state this page has never seen', { paymentStatus: 'refunded', paymentMethod: 'RAZORPAY' }, 'received'],
@@ -42,6 +45,7 @@ describe('what the page may claim', () => {
 		expect(isSale('paid')).toBe(true)
 		expect(isSale('pay-on-delivery')).toBe(true)
 		expect(isSale('whatsapp')).toBe(true)
+		expect(isSale('upi')).toBe(true)
 		expect(isSale('received')).toBe(true)
 	})
 

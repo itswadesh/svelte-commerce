@@ -6,6 +6,8 @@
 	import { breadcrumbList, mediaUrl, productGroupId, stockAvailabilityUrl, variantName, weightValue } from '$lib/components/seo/schema.js'
 	import { RETURN_WINDOW_DAYS } from '$lib/config/policy'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
+	import DeliveryCheck from '$lib/components/product-catalogue/delivery-check.svelte'
+	import { addressService } from '$lib/core/services'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import PolicyLink from '$lib/components/common/policy-link.svelte'
 	import { isCmsPageResolvable } from '$lib/components/common/cms-pages.js'
@@ -59,6 +61,14 @@
 	// connector or store without downloads.
 	const digital = $derived<{ files: number; formats: string[] } | null>(data?.product?.digital ?? null)
 	const showPincodeCheck = $derived(options.pdp_delivery_check && productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
+	// GoCommerce answers the same question from the store's own delivery zones (D286): shown when the
+	// connector can ask it, so a Litekart store keeps the warehouse check above and nothing else.
+	const showDeliveryCheck = $derived(
+		!digital &&
+			!showPincodeCheck &&
+			options.pdp_delivery_check &&
+			typeof (addressService as unknown as { checkDelivery?: unknown }).checkDelivery === 'function'
+	)
 
 	// Delivery and returns are stated only where the merchant has actually published the policy.
 	// The commented-out fallbacks this replaces promised free delivery over ₹999 and a 7-day
@@ -504,6 +514,10 @@
 				<div bind:this={inFlowCta}>
 					<ProductCartAndWishlistButtons />
 				</div>
+
+				{#if showDeliveryCheck}
+					<DeliveryCheck country={data?.store?.businessCountry || 'IN'} />
+				{/if}
 
 				{#if digital}
 					<div class="flex flex-col gap-1.5 border-t pt-3 text-sm">

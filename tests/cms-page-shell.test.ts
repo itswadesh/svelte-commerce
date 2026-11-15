@@ -12,7 +12,7 @@ describe('the CMS policy page shell', () => {
 	})
 
 	it('keeps one h1, and describes the page by its own opening words', () => {
-		page.url = new URL('https://demo.shopnx.in/terms-and-conditions') as typeof page.url
+		page.url = new URL('https://demo.example.com/terms-and-conditions') as typeof page.url
 		page.data = { store: { name: 'Demo' } }
 		const { container } = render(CmsPage, {
 			props: {
@@ -27,7 +27,7 @@ describe('the CMS policy page shell', () => {
 	})
 
 	it("uses the merchant's own SEO fields when the page has them", () => {
-		page.url = new URL('https://demo.shopnx.in/privacy-policy') as typeof page.url
+		page.url = new URL('https://demo.example.com/privacy-policy') as typeof page.url
 		page.data = { store: { name: 'Demo' } }
 		render(CmsPage, {
 			props: { title: 'Privacy policy', content: '<p>Text.</p>', meta: { metaTitle: 'Privacy at Demo', metaDescription: 'What we collect and why.' } }

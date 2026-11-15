@@ -5,6 +5,8 @@
 	import { onMount } from 'svelte'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
 	import CookieSettingsLink from '$lib/components/common/cookie-settings-link.svelte'
+	import { footerCredit } from '$lib/components/common/powered-by.js'
+	import { chromeSettings } from '$lib/composer/chrome-draft.svelte.js'
 
 	type ThemeFooter = NonNullable<ThemeHomepageContent['footer']>
 
@@ -15,6 +17,8 @@
 	// using $effect here can throw effect_orphan depending on how the footer is
 	// instantiated, and this listener doesn't depend on reactive state anyway.
 	let footerColsOpen = $state(true)
+
+	const credit = $derived(footerCredit(page.data?.store?.poweredBy, page.url.hostname, chromeSettings('footer', page.data)))
 
 	onMount(() => {
 		const mq = window.matchMedia('(min-width: 901px)')
@@ -59,6 +63,12 @@
 
 	{#if footer?.copyright}
 		<p class="lime-copyright">{footer.copyright}</p>
+	{/if}
+
+	{#if credit?.label}
+		<p class="lime-credit">
+			{#if credit.link}<a href={credit.link} target="_blank" rel="noopener noreferrer">{credit.label}</a>{:else}{credit.label}{/if}
+		</p>
 	{/if}
 
 	<CookieSettingsLink class="lime-cookies" />
@@ -166,6 +176,29 @@
 		margin: 60px 0 0;
 		color: #fff;
 		font-size: 13px;
+	}
+
+	.lime-credit {
+		margin: 8px 0 0;
+		color: rgb(255 255 255 / 0.8);
+		font-size: 13px;
+	}
+
+	.lime-credit a {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		transition: color 150ms ease;
+	}
+
+	.lime-credit a:hover,
+	.lime-credit a:focus-visible {
+		color: #fff;
+	}
+
+	.lime-credit a:focus-visible {
+		outline: 2px solid #fff;
+		outline-offset: 2px;
 	}
 
 	/* The button is CookieSettingsLink's, so the rule reaches it as a global under this footer. */

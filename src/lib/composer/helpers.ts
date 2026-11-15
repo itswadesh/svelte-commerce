@@ -500,3 +500,71 @@ export function videoSource(settings: Record<string, unknown> | null | undefined
 	const src = safeHref(settings?.video_file)
 	return src ? { kind: 'file', src } : null
 }
+
+/** One look of a line-up; label is its name, or "Look 2" for one left unnamed. */
+export type Look = { image: string; alt: string; name: string; label: string; products: any[] }
+
+/**
+ * A line-up's looks that have a picture, at most nine, each with the products it names in the
+ * shop's order. The engine sends every look's products once on the section, on sale now; an id
+ * with no product there (a draft, a deleted one) is skipped.
+ */
+export function lookItems(section: ComposerSection): Look[] {
+	const looks = section.settings?.looks
+	if (!Array.isArray(looks)) return []
+	const byId = new Map((section.products ?? []).map((p) => [String(p?.id), p]))
+	return looks
+		.map((raw, i) => {
+			const item = record(raw)
+			const name = text(item, 'name')
+			const label = name || `Look ${i + 1}`
+			const ids = Array.isArray(item.products) ? item.products : []
+			return {
+				image: safeHref(item.image),
+				alt: text(item, 'image_alt') || label,
+				name,
+				label,
+				products: ids.map((id) => byId.get(String(id))).filter(Boolean)
+			}
+		})
+		.filter((look) => look.image)
+		.slice(0, 9)
+}
+
+/** A photographed pair of a fitting room: the picture and the two product ids it shows. */
+export type Outfit = { image: string; alt: string; ids: string[] }
+export type FittingRoom = { tops: any[]; bottoms: any[]; outfits: Outfit[] }
+
+/**
+ * A fitting room (D284): its tops and its bottoms in the shop's order, at most six each, and the
+ * pairs it has a photo of. The engine sends the tops and bottoms once on the section, on sale now;
+ * an id with no product there (a draft, a deleted one) is skipped.
+ */
+export function fittingRoom(section: ComposerSection): FittingRoom {
+	const s = section.settings ?? {}
+	const byId = new Map((section.products ?? []).map((p) => [String(p?.id), p]))
+	const list = (v: unknown) => (Array.isArray(v) ? v : [])
+	const pick = (v: unknown) =>
+		list(v)
+			.map((id) => byId.get(String(id)))
+			.filter(Boolean)
+			.slice(0, 6)
+	const outfits = list(s.outfits)
+		.map((raw) => {
+			const item = record(raw)
+			return { image: safeHref(item.image), alt: text(item, 'image_alt'), ids: list(item.products).map(String) }
+		})
+		.filter((o) => o.image && o.ids.length === 2)
+	return { tops: pick(s.tops), bottoms: pick(s.bottoms), outfits }
+}
+
+/** The photo of this top and this bottom worn together, or null when the shop has none. */
+export function outfitFor(room: FittingRoom, top: any, bottom: any): Outfit | null {
+	const want = [String(top?.id), String(bottom?.id)]
+	return room.outfits.find((o) => want.every((id) => o.ids.includes(id))) ?? null
+}
+
+/** A colour setting as #rrggbb, or empty for anything else. */
+export function hexColor(value: unknown): string {
+	return typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value.trim()) ? value.trim() : ''
+}

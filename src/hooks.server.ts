@@ -16,7 +16,7 @@ import { services } from 'kitcommerce.config'
 export const init = initActiveConnector
 
 // A connector serving many stores from one deployment (GoCommerce's PUBLIC_GOCOMMERCE_BASE_DOMAIN:
-// `acme.shopnx.in` is store `acme`) needs the current request's host, and SSR shares one process
+// `acme.example.com` is store `acme`) needs the current request's host, and SSR shares one process
 // across concurrent requests, so it reads the host per call rather than being handed one. Reached
 // through a cast like every other connector hook (see connectors/active.ts), since most connectors
 // have no such hook. Outside a request (a hook invoked at boot) getRequestEvent throws; no host

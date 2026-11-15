@@ -85,7 +85,7 @@ describe('the /backend mount', () => {
 
 describe('tradePortalRequest', () => {
 	it('names the store itself, whatever the browser said, and keeps the session', () => {
-		const request = new Request('https://acme.shopnx.in/x/b2b/me', {
+		const request = new Request('https://acme.example.com/x/b2b/me', {
 			headers: { 'x-store': 'other', 'x-litekart-store': 'other', cookie: 'token=storefront', authorization: 'Bearer buyer' }
 		})
 		const sent = tradePortalRequest(request, 'acme').headers
@@ -96,7 +96,7 @@ describe('tradePortalRequest', () => {
 	})
 
 	it('carries the body of a write', async () => {
-		const request = new Request('https://acme.shopnx.in/x/b2b/leads', { method: 'POST', body: '{"name":"A"}', headers: { 'content-type': 'application/json' } })
+		const request = new Request('https://acme.example.com/x/b2b/leads', { method: 'POST', body: '{"name":"A"}', headers: { 'content-type': 'application/json' } })
 		expect(await tradePortalRequest(request, 'acme').text()).toBe('{"name":"A"}')
 	})
 })

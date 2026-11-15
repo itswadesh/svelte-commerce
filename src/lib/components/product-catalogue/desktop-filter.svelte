@@ -14,6 +14,7 @@
 	import { browser } from '$app/environment'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { GetColorName } from 'hex-color-to-color-name'
+	import { filterPaint } from '$lib/product/colour.js'
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { page } from '$app/state'
@@ -406,10 +407,10 @@
 										for={`gen-${value}`}
 										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
 									>
-										{#if value?.startsWith?.('#')}
+										{#if filterPaint(key, value)}
 											<div class="flex items-center gap-2">
-												<div class="h-4 w-4 rounded-full border border-border" style="background-color: {value};"></div>
-												{GetColorName(value)}
+												<span class="h-4 w-4 rounded-full border border-border shrink-0" style="background: {filterPaint(key, value)};" aria-hidden="true"></span>
+												{value?.startsWith?.('#') ? GetColorName(value) : value}
 											</div>
 										{:else}
 											{value}
@@ -443,10 +444,10 @@
 										for={`gen-${value}`}
 										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
 									>
-										{#if value?.startsWith?.('#')}
+										{#if filterPaint(key, value)}
 											<div class="flex items-center gap-2">
-												<div class="h-4 w-4 rounded-full border border-border" style="background-color: {value};"></div>
-												{GetColorName(value)}
+												<span class="h-4 w-4 rounded-full border border-border shrink-0" style="background: {filterPaint(key, value)};" aria-hidden="true"></span>
+												{value?.startsWith?.('#') ? GetColorName(value) : value}
 											</div>
 										{:else}
 											{value}

@@ -11,14 +11,13 @@
 	const userState = getUserState()
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	const IS_DEV = import.meta.env.DEV
 
-	let firstName = $state(IS_DEV ? 'Swadesh' : '')
-	let lastName = $state(IS_DEV ? 'Behera' : '')
-	let email = $state(IS_DEV ? 'hi1@litekart.in' : '')
-	let phone = $state(IS_DEV ? '+918249028220' : '')
-	let password = $state(IS_DEV ? 'litekart' : '')
-	let confirmPassword = $state(IS_DEV ? 'litekart' : '')
+	let firstName = $state('')
+	let lastName = $state('')
+	let email = $state('')
+	let phone = $state('')
+	let password = $state('')
+	let confirmPassword = $state('')
 	let isLoading = $state(false)
 
 	onMount(() => {
@@ -74,7 +73,8 @@
 			const res = await authService.joinAsAdmin({
 				firstName,
 				lastName,
-				businessName: 'Litekart',
+				// The form asks no business name; the owner's name stands in until they set one in the admin.
+				businessName: [firstName, lastName].filter(Boolean).join(' '),
 				phone,
 				email,
 				password,

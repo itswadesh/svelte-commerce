@@ -113,22 +113,22 @@ describe('compactSchema', () => {
 		const organization = {
 			'@context': 'https://schema.org',
 			'@type': 'Organization',
-			'@id': 'https://demo.shopnx.in/#organization',
+			'@id': 'https://demo.example.com/#organization',
 			name: 'Demo',
 			address: { '@type': 'PostalAddress', streetAddress: null, addressLocality: null, addressCountry: 'IN' },
 			contactPoint: { '@type': 'ContactPoint', telephone: null, email: '' },
 			legalName: undefined,
 			sameAs: [],
-			publisher: { '@id': 'https://demo.shopnx.in/#organization' },
+			publisher: { '@id': 'https://demo.example.com/#organization' },
 			offers: { '@type': 'Offer', price: 0, availability: 'https://schema.org/InStock' }
 		}
 		expect(compactSchema(organization)).toEqual({
 			'@context': 'https://schema.org',
 			'@type': 'Organization',
-			'@id': 'https://demo.shopnx.in/#organization',
+			'@id': 'https://demo.example.com/#organization',
 			name: 'Demo',
 			address: { '@type': 'PostalAddress', addressCountry: 'IN' },
-			publisher: { '@id': 'https://demo.shopnx.in/#organization' },
+			publisher: { '@id': 'https://demo.example.com/#organization' },
 			offers: { '@type': 'Offer', price: 0, availability: 'https://schema.org/InStock' }
 		})
 	})

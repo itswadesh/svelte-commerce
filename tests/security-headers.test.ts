@@ -28,7 +28,7 @@ describe('withSecurityHeaders', () => {
 
 describe('frameAncestors', () => {
 	it("lets the store's engine frame it", () => {
-		expect(frameAncestors('https://admin.shopnx.in/')).toBe("'self' https://admin.shopnx.in")
+		expect(frameAncestors('https://admin.example.com/')).toBe("'self' https://admin.example.com")
 		expect(frameAncestors(undefined)).toBe("'self'")
 		expect(frameAncestors('not a url')).toBe("'self'")
 	})

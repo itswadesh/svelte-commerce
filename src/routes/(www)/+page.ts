@@ -4,6 +4,7 @@ import { services } from 'kitcommerce.config'
 import type { ComposerLayout } from '$lib/composer/helpers.js'
 import { LAYOUT_DEPENDENCY } from '$lib/composer/editor-bridge.js'
 import { allowEditorFrame } from '$lib/composer/page-layout.js'
+import { imageShape } from '$lib/composer/image-shape.js'
 import type { PageLoad } from './$types'
 
 // The home page the merchant composed in the panel (GoCommerce's ext/layouts), when the connector
@@ -60,7 +61,13 @@ export const load: PageLoad = async (event) => {
 	// The theme editor re-reads the draft after each save: its product grids are resolved here.
 	event.depends(LAYOUT_DEPENDENCY)
 
-	const [featuredProducts, featuredCategories, layout] = await Promise.all([
+	// The banner slides take the shape of their first picture, wide and phone, so a banner with words
+	// on it shows whole; the box is the right size before the picture arrives.
+	const banners = (base as { page?: { desktopBanners?: { url?: string }[]; mobileBanners?: { url?: string }[] } }).page
+	const wideUrl = banners?.desktopBanners?.find((b) => b?.url)?.url
+	const phoneUrl = banners?.mobileBanners?.[0]?.url || wideUrl
+
+	const [featuredProducts, featuredCategories, layout, wideShape, phoneShape] = await Promise.all([
 		productService
 			.listFeaturedProducts({ page: 1, sort: '-createdAt' })
 			.then((r: { data?: unknown[] } | undefined) => r?.data ?? [])
@@ -69,13 +76,16 @@ export const load: PageLoad = async (event) => {
 			.fetchFeaturedCategories({ limit: 18 })
 			.then((r: { data?: unknown[] } | undefined) => r?.data ?? [])
 			.catch(() => []),
-		homeLayout(event.url.searchParams.get('preview'))
+		homeLayout(event.url.searchParams.get('preview')),
+		imageShape(wideUrl, event.fetch),
+		phoneUrl === wideUrl ? '' : imageShape(phoneUrl, event.fetch)
 	])
+	const bannerShape = { wide: wideShape, phone: phoneShape || wideShape }
 
 	// The panel's theme editor frames this page with ?editor=<its origin> (D126). Only a preview the
 	// engine accepted turns that on: the page may then be framed by that one origin, and listens to
 	// it. Without a valid key the parameter does nothing.
 	const editor = allowEditorFrame(event, layout, event.url.searchParams.get('editor'))
 
-	return { ...base, featuredProducts, featuredCategories, layout, editorOrigin: editor }
+	return { ...base, featuredProducts, featuredCategories, layout, bannerShape, editorOrigin: editor }
 }

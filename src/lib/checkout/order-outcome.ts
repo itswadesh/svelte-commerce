@@ -5,12 +5,13 @@
 /**
  * - `paid`, `pay-on-delivery`: a sale, and the page thanks the shopper.
  * - `whatsapp`: a sale settled in the shop's chat (GoCommerce D255); the shopper sends it there.
+ * - `upi`: a sale paid straight to the shop's UPI ID (GoCommerce D277), still to be paid or checked.
  * - `received`: the backend reports no payment state this page knows, so it claims none.
  * - `confirming`: paid online, or not, and the backend does not know yet.
  * - `failed`: not paid, and the shopper is told so.
  * - `unknown`: no order to read.
  */
-export type OrderOutcome = 'paid' | 'pay-on-delivery' | 'whatsapp' | 'received' | 'confirming' | 'failed' | 'unknown'
+export type OrderOutcome = 'paid' | 'pay-on-delivery' | 'whatsapp' | 'upi' | 'received' | 'confirming' | 'failed' | 'unknown'
 
 type OrderState = { paymentStatus?: unknown; paymentMethod?: unknown; status?: unknown } | null | undefined
 
@@ -32,12 +33,14 @@ export function orderOutcome(order: OrderState): OrderOutcome {
 	if (UNSETTLED.has(payment) && FAILED.has(word(order.status))) return 'failed'
 	if (PAY_ON_DELIVERY.has(word(order.paymentMethod))) return 'pay-on-delivery'
 	if (word(order.paymentMethod) === 'whatsapp') return 'whatsapp'
+	// Nothing but the shop's bank sees a UPI payment arrive, so the page asks for it, not waits.
+	if (word(order.paymentMethod) === 'upi' && UNSETTLED.has(payment)) return 'upi'
 	return UNSETTLED.has(payment) ? 'confirming' : 'received'
 }
 
 /** The outcomes that are a sale: only these count as a purchase or ask for a review. */
 export const isSale = (outcome: OrderOutcome) =>
-	outcome === 'paid' || outcome === 'pay-on-delivery' || outcome === 'whatsapp' || outcome === 'received'
+	outcome === 'paid' || outcome === 'pay-on-delivery' || outcome === 'whatsapp' || outcome === 'upi' || outcome === 'received'
 
 export const OUTCOME_COPY: Record<OrderOutcome, { title: string; heading: string; body: string }> = {
 	paid: {
@@ -54,6 +57,11 @@ export const OUTCOME_COPY: Record<OrderOutcome, { title: string; heading: string
 		title: 'Order placed',
 		heading: 'Send your order on WhatsApp',
 		body: "Your order is placed. Send it to the shop on WhatsApp, and they'll confirm it there and tell you how to pay."
+	},
+	upi: {
+		title: 'Order placed',
+		heading: 'Pay by UPI to complete your order',
+		body: 'Your order is placed. Pay with any UPI app, then enter the 12-digit UPI reference so the store can confirm your payment.'
 	},
 	received: {
 		title: 'Order received',

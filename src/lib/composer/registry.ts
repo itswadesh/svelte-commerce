@@ -14,6 +14,8 @@ import Newsletter from './sections/Newsletter.svelte'
 import ProductGrid from './sections/ProductGrid.svelte'
 import RichText from './sections/RichText.svelte'
 import ScrollingText from './sections/ScrollingText.svelte'
+import ShopTheLook from './sections/ShopTheLook.svelte'
+import FittingRoom from './sections/FittingRoom.svelte'
 import Slideshow from './sections/Slideshow.svelte'
 import Spotlight from './sections/Spotlight.svelte'
 import Stats from './sections/Stats.svelte'
@@ -45,5 +47,7 @@ export const SECTIONS: Record<string, Component<any>> = {
 	stats: Stats,
 	'logo-cloud': LogoCloud,
 	'scrolling-text': ScrollingText,
-	countdown: Countdown
+	countdown: Countdown,
+	'shop-the-look': ShopTheLook,
+	'fitting-room': FittingRoom
 }

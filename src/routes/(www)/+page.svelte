@@ -70,7 +70,7 @@
 	const themeLayout = $derived(data?.store?.themeLayout)
 	// The page the merchant composed in the panel wins over both; without one, everything below
 	// renders exactly as it did before the composer existed.
-	const composedLayout = $derived(withBanners(data?.layout, page))
+	const composedLayout = $derived(withBanners(data?.layout, page, data?.bannerShape))
 	const sectionContext = $derived({
 		content: themeContent,
 		brandName,

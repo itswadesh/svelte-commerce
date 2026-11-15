@@ -104,7 +104,7 @@ export default defineConfig(({ command, mode }) => {
 		},
 		//preview: { port: 80, strictPort: true, host: true },
 		server: {
-			allowedHosts: true, // This is required, else will "throw Blocked request. This host ("shopnx.in") is not allowed."
+			allowedHosts: true, // Required, else Vite answers "Blocked request. This host is not allowed." for a store's own domain.
 			host: true,
 			port: 3000,
 			proxy: {

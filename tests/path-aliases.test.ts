@@ -25,17 +25,17 @@ describe('aliasedPath', () => {
 
 	it("lists a sitemap's pages at the addresses that answer them, not at redirects", () => {
 		const xml = [
-			'<url><loc>https://demo.shopnx.in/pages/about</loc></url>',
-			'<url><loc>https://demo.shopnx.in/pages/returns</loc></url>',
-			'<url><loc>https://demo.shopnx.in/pages/gift-wrap</loc></url>',
-			'<url><loc>https://demo.shopnx.in/products/satin-saree</loc></url>'
+			'<url><loc>https://demo.example.com/pages/about</loc></url>',
+			'<url><loc>https://demo.example.com/pages/returns</loc></url>',
+			'<url><loc>https://demo.example.com/pages/gift-wrap</loc></url>',
+			'<url><loc>https://demo.example.com/products/satin-saree</loc></url>'
 		].join('')
 		expect(finalLocs(xml)).toBe(
 			[
-				'<url><loc>https://demo.shopnx.in/about-us</loc></url>',
-				'<url><loc>https://demo.shopnx.in/refund-policy</loc></url>',
-				'<url><loc>https://demo.shopnx.in/p/gift-wrap</loc></url>',
-				'<url><loc>https://demo.shopnx.in/products/satin-saree</loc></url>'
+				'<url><loc>https://demo.example.com/about-us</loc></url>',
+				'<url><loc>https://demo.example.com/refund-policy</loc></url>',
+				'<url><loc>https://demo.example.com/p/gift-wrap</loc></url>',
+				'<url><loc>https://demo.example.com/products/satin-saree</loc></url>'
 			].join('')
 		)
 	})

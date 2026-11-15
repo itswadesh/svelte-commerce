@@ -9,14 +9,12 @@
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 	import AuthButton from '$lib/components/auth/auth-button.svelte'
-	const IS_DEV = import.meta.env.DEV
 
-	let firstName = $state(IS_DEV ? 'Swadesh' : '')
-	let lastName = $state(IS_DEV ? 'Behera' : '')
-	let email = $state(IS_DEV ? 'hi@litekart.in' : '')
-	// let phone = $state(IS_DEV ? '+918249028220' : '')
-	let password = $state(IS_DEV ? 'litekart1' : '')
-	let confirmPassword = $state(IS_DEV ? 'litekart1' : '')
+	let firstName = $state('')
+	let lastName = $state('')
+	let email = $state('')
+	let password = $state('')
+	let confirmPassword = $state('')
 	let isLoading = $state(false)
 
 	const schemas = {

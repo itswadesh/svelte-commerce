@@ -58,7 +58,7 @@
 		"rest-api",
 		"connector"
 	],
-	"author": "Swadesh Behera",
+	"author": "Ipsita Sahoo",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/itswadesh/svelte-commerce"
@@ -74,7 +74,6 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"db:seed": "cross-env DB_SEEDING=true tsx src/server/db/seed.ts",
 		"db:migrate": "drizzle-kit push --config drizzle.config.ts && cross-env DB_SEEDING=true tsx src/server/db/seed.ts",
-		"gen:manifest": "node ./generate-manifest.js",
 		"design:extract": "node ./tools/varni-reskin/bin/design-contract.js extract",
 		"design:verify": "node ./tools/varni-reskin/bin/design-contract.js verify",
 		"test:wrapper": "./test-wrapper.js",
@@ -140,7 +139,7 @@
 	"dependencies": {
 		"@internationalized/date": "^3.7.0",
 		"@lucide/svelte": "^1.8.0",
-		"@misiki/gocommerce-connector": "^0.40.0",
+		"@misiki/gocommerce-connector": "^0.44.0",
 		"@misiki/kitcommerce-core": "^0.1.60",
 		"cheerio": "^1.2.0",
 		"culori": "^4.0.2",

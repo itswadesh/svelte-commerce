@@ -3,6 +3,7 @@
 	import ComposerButton from '../ComposerButton.svelte'
 	import Paragraphs from '../Paragraphs.svelte'
 	import { slideInterval, slideItems, type ComposerSection } from '../helpers.js'
+	import { safeShape } from '../image-shape.js'
 
 	/**
 	 * Several pictures, one at a time. It stays put unless the merchant switched on autoplay; even
@@ -15,6 +16,10 @@
 	const slides = $derived(slideItems(section.settings?.slides))
 	const autoplay = $derived(section.settings?.autoplay === true)
 	const interval = $derived(slideInterval(section.settings?.interval))
+	// The first picture's own shape when the page knows it, so a banner with words on it shows
+	// whole; without it the box keeps its fixed 4:3 on a phone and 16:7 above.
+	const wide = $derived(safeShape(section.settings?.aspect))
+	const phone = $derived(safeShape(section.settings?.mobile_aspect) || wide)
 
 	let index = $state(0)
 	let paused = $state(false)
@@ -71,6 +76,8 @@
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<section
 		class="cmp-slides"
+		style:--slide-shape={wide || undefined}
+		style:--slide-shape-phone={phone || undefined}
 		aria-roledescription="carousel"
 		aria-label={slides[0].heading || 'Slideshow'}
 		onmouseenter={() => (hovering = true)}
@@ -180,7 +187,7 @@
 	/* The box is sized before the picture arrives: no layout shift. */
 	.cmp-slide__media {
 		display: block;
-		aspect-ratio: 4 / 3;
+		aspect-ratio: var(--slide-shape-phone, 4 / 3);
 		background: hsl(var(--muted));
 	}
 
@@ -285,7 +292,7 @@
 
 	@media (min-width: 768px) {
 		.cmp-slide__media {
-			aspect-ratio: 16 / 7;
+			aspect-ratio: var(--slide-shape, 16 / 7);
 		}
 
 		/* From the tablet up the words sit on the picture, over a shade that keeps them readable
