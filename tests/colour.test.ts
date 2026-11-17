@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { colourPaint, productColours, swatchPaint } from '$lib/product/colour'
+import { colourPaint, isColourOption, productColours, swatchPaint } from '$lib/product/colour'
 
 describe('colourPaint', () => {
 	it('knows garment names, whatever their case and spacing', () => {
@@ -51,5 +51,13 @@ describe('productColours', () => {
 		expect(productColours({ options: [size] })).toEqual([])
 		expect(productColours({})).toEqual([])
 		expect(productColours(null)).toEqual([])
+	})
+})
+
+describe('isColourOption', () => {
+	it('knows the colour option by its name, since GoCommerce types every option as text', () => {
+		expect(isColourOption({ title: 'Colour', type: 'text' })).toBe(true)
+		expect(isColourOption({ name: 'Color', type: 'text' })).toBe(true)
+		expect(isColourOption({ title: 'Size', type: 'text' })).toBe(false)
 	})
 })

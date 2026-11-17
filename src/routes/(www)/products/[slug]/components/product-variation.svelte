@@ -8,7 +8,7 @@
 	import OptionPicker from './option-picker.svelte'
 	import { pickerChoices, usesSearchablePicker, variantFor, variantsWith } from '$lib/product/conversion'
 	import { themeOptions } from '$lib/composer/theme-options.js'
-	import { swatchPaint } from '$lib/product/colour.js'
+	import { isColourOption, swatchPaint } from '$lib/product/colour.js'
 	import { ChevronRight } from '@lucide/svelte'
 
 	const productState = useProductState()
@@ -196,7 +196,7 @@
 							{@const isSelected = status === 'selected'}
 							{@const isBlocked = status === 'unavailable' || status === 'soldout'}
 							{@const soldOutChoosable = status === 'soldout' && !blocks(status)}
-							{@const colour = option.type === 'Color' ? swatchColour(v) : null}
+							{@const colour = isColourOption(option) ? swatchColour(v) : null}
 
 							{#if colour}
 								<Button
@@ -205,9 +205,7 @@
 									aria-pressed={isSelected}
 									disabled={blocks(status)}
 									title={isBlocked ? `${v.value} — ${unavailableReason(status)}` : v.value}
-									class="edp-swatch relative size-11 rounded-full border border-border-strong p-1 md:size-10 {soldOutChoosable ? 'edp-soldout opacity-50' : ''} {isSelected
-										? 'edp-on ring-2 ring-primary ring-offset-2'
-										: ''}"
+									class="edp-swatch relative size-11 rounded-full border border-border-strong p-1 md:size-10 {soldOutChoosable ? 'edp-soldout opacity-50' : ''} {isSelected ? 'edp-on' : ''}"
 									onclick={(event) => choose(event, option, v)}
 								>
 									<span class="block h-full w-full rounded-full" style="background: {colour}"></span>
@@ -326,13 +324,32 @@
 		text-decoration: line-through;
 	}
 
+	/* Round whatever the theme's corner radius is, and the chosen one marked by a thicker ink
+	   border rather than a ring: the theme flattens buttons' box shadows, so a ring never showed. */
+	:global(.edp-swatch) {
+		border-radius: 9999px !important;
+		transition:
+			border-color var(--motion-fast, 150ms) ease,
+			transform var(--motion-fast, 150ms) ease;
+	}
+
+	:global(.edp-swatch:active:not(:disabled)) {
+		transform: scale(0.94);
+	}
+
 	:global([data-theme='default'] .edp-swatch) {
 		border-color: var(--ed-line-strong) !important;
 	}
 
-	/* The chosen swatch is marked by its ring, so only an unchosen, unfocused one is flattened. */
-	:global([data-theme='default'] .edp-swatch:not(.edp-on):not(:focus-visible)) {
-		box-shadow: none !important;
+	:global(.edp-swatch.edp-on),
+	:global([data-theme='default'] .edp-swatch.edp-on) {
+		border: 2px solid hsl(var(--primary-ink, var(--foreground))) !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global(.edp-swatch:active:not(:disabled)) {
+			transform: none;
+		}
 	}
 
 	:global([data-theme='default'] .edp-swatch:disabled) {
