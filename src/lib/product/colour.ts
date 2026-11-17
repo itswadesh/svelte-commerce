@@ -116,6 +116,12 @@ export type ProductColour = { name: string; paint: string | null }
 
 const COLOUR_OPTION = /^(colou?rs?|shades?)$/i
 
+/** A listing filter value's paint: a filter keyed "options.Colour" (or a bare code) gets a dot. */
+export function filterPaint(key: string, value: unknown): string | null {
+	const option = String(key ?? '').split('.').pop()!.replace(/_/g, ' ').trim()
+	return COLOUR_OPTION.test(option) || String(value ?? '').startsWith('#') ? colourPaint(value) : null
+}
+
 /** Whether an option is the colour one. GoCommerce types every option as text, so the name decides. */
 export function isColourOption(o: any): boolean {
 	return o?.type === 'Color' || COLOUR_OPTION.test(String(o?.name ?? o?.title ?? '').trim())

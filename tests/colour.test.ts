@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { colourPaint, isColourOption, productColours, swatchPaint } from '$lib/product/colour'
+import { colourPaint, filterPaint, isColourOption, productColours, swatchPaint } from '$lib/product/colour'
 
 describe('colourPaint', () => {
 	it('knows garment names, whatever their case and spacing', () => {
@@ -59,5 +59,14 @@ describe('isColourOption', () => {
 		expect(isColourOption({ title: 'Colour', type: 'text' })).toBe(true)
 		expect(isColourOption({ name: 'Color', type: 'text' })).toBe(true)
 		expect(isColourOption({ title: 'Size', type: 'text' })).toBe(false)
+	})
+})
+
+describe('filterPaint', () => {
+	it('paints a colour filter value and leaves other filters as words', () => {
+		expect(filterPaint('options.Colour', 'Navy')).toBe('#1f2a52')
+		expect(filterPaint('options.Colour', 'Sunset glow')).toBeNull()
+		expect(filterPaint('options.Size', 'Navy')).toBeNull()
+		expect(filterPaint('color', '#ff0000')).toBe('#ff0000')
 	})
 })
