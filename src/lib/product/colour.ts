@@ -116,10 +116,15 @@ export type ProductColour = { name: string; paint: string | null }
 
 const COLOUR_OPTION = /^(colou?rs?|shades?)$/i
 
+/** Whether an option is the colour one. GoCommerce types every option as text, so the name decides. */
+export function isColourOption(o: any): boolean {
+	return o?.type === 'Color' || COLOUR_OPTION.test(String(o?.name ?? o?.title ?? '').trim())
+}
+
 /** The colours a product comes in, in the store's order, when there is more than one; else none. */
 export function productColours(product: { options?: unknown } | null | undefined): ProductColour[] {
 	const options = Array.isArray(product?.options) ? product.options : []
-	const option = options.find((o: any) => o?.type === 'Color' || COLOUR_OPTION.test(String(o?.name ?? o?.title ?? '').trim()))
+	const option = options.find(isColourOption)
 	const values: any[] = Array.isArray(option?.values) ? option.values : []
 	const colours = values
 		.map((v) => ({ name: String(v?.value ?? '').trim(), paint: swatchPaint(v) }))
