@@ -79,7 +79,7 @@
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.11",
 		"razorpay": "^2.9.5",
-		"sharp": "^0.34.1",
+		"sharp": "^0.35.5",
 		"svelte": "^5.19.8",
 		"svelte-check": "^4.1.4",
 		"svelte-confetti": "^2.3.1",
