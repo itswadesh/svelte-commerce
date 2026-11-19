@@ -226,8 +226,6 @@ See [MEDUSA.md](./docs/MEDUSA.md) for the full Medusa setup guide.
 		<img alt="Stargazers" src="https://img.shields.io/github/stars/itswadesh/svelte-commerce?style=for-the-badge" ></a>
 	<a href="https://github.com/itswadesh/svelte-commerce/issues" target="_blank">
 		<img alt="Issues" src="https://img.shields.io/github/issues/itswadesh/svelte-commerce?style=for-the-badge" ></a>
-  <a href="https://t.me/itswadesh" target="_blank">
-    <img alt="Telegram" src="https://img.shields.io/badge/Telegram-itswadesh-blue.svg?style=for-the-badge"></a>
 </p>
 
 <br/>
@@ -237,12 +235,6 @@ See [MEDUSA.md](./docs/MEDUSA.md) for the full Medusa setup guide.
   </a>
   <a href="https://discord.gg/GgdAeccwDR" target="_blank">
     <img src="https://img.shields.io/badge/Discord-Community-blueviolet?logo=discord&style=for-the-badge" alt="Discord Community" width="200" height="28"/>
-  </a>
-  <a href="https://twitter.com/itswadesh" target="_blank">
-    <img src="https://img.shields.io/badge/Twitter-Follow-blue?logo=twitter&style=for-the-badge" alt="Twitter Follow" width="200" height="28"/>
-  </a>
-  <a href="https://reddit.com/u/itswadesh" target="_blank">
-    <img src="https://img.shields.io/badge/Reddit-Profile-FF4500?logo=reddit&style=for-the-badge" alt="Reddit Profile" width="200" height="28"/>
   </a>
 </p>
 

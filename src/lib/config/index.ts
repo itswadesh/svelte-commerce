@@ -3,13 +3,13 @@ export * from './website'
 export const adminUrl = 'https://admin.litekart.in'
 export const alert = 'The High Performance and Scalable Ecommerce'
 export const authorInfo = {
-	author: 'Swadesh Behera',
+	author: 'Ipsita Sahoo',
 	facebookAuthorPage: `https://www.facebook.com/codenx`,
 	facebookPageName: 'codenx',
 	githubPage: 'itswadesh',
-	linkedinProfile: 'itswadesh',
-	telegramUsername: 'itswadesh',
-	twitterUsername: 'itswadesh'
+	linkedinProfile: '',
+	telegramUsername: '',
+	twitterUsername: ''
 }
 export const currency = { symbol: '$', code: 'USD' }
 export const currencyCode = 'USD'
