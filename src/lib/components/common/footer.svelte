@@ -6,7 +6,7 @@
 	import { TrustpilotPlugin } from '$lib/core/components/index.js'
 	import { sanitize } from '$lib/core/utils/index.js'
 	import { keepResolvableLinks, withoutRepeatedPages } from './cms-pages.js'
-	import { platformCredit } from './powered-by.js'
+	import { footerCredit } from './powered-by.js'
 	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
 	import Newsletter from './newsletter.svelte'
 	import FooterMenu from './footer-menu.svelte'
@@ -77,11 +77,9 @@
 	// read from the store record and is simply absent when the store supplies none. It used to be a
 	// hard-coded "Powered by Litekart" on every page of every store, true of that store or not.
 	// Accepts either a plain string or `{ label, link }`.
-	const credit = $derived(
-		((storeData as Record<string, any>)?.poweredBy as string | { label?: string; link?: string } | undefined) ?? platformCredit(page.url.hostname)
-	)
-	const creditLabel = $derived(typeof credit === 'string' ? credit : credit?.label)
-	const creditLink = $derived(typeof credit === 'string' ? undefined : credit?.link)
+	const credit = $derived(footerCredit((storeData as Record<string, any>)?.poweredBy, page.url.hostname, chromeSettings('footer', page.data)))
+	const creditLabel = $derived(credit?.label)
+	const creditLink = $derived(credit?.link)
 
 	// The theme's footer columns are static copy, but five of their links point at CMS-authored
 	// pages. On a store that never published them — or a backend with no CMS at all — every one of
