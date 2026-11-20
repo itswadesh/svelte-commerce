@@ -16,7 +16,11 @@ type BannerPage = {
  * ponytail: a tile uses its wide picture on a phone too, because the section has one picture per
  * column. Give multi-column a phone picture if a store's tiles crop badly.
  */
-export function withBanners<T extends ComposerLayout | null | undefined>(layout: T, page: BannerPage): T {
+export function withBanners<T extends ComposerLayout | null | undefined>(
+	layout: T,
+	page: BannerPage,
+	shape: { wide?: string; phone?: string } = {}
+): T {
 	if (!layout?.sections?.length || layout.preview || !page) return layout
 	const slides = (page.desktopBanners ?? []).filter((b) => b.url)
 	const phone = page.mobileBanners ?? []
@@ -26,6 +30,9 @@ export function withBanners<T extends ComposerLayout | null | undefined>(layout:
 					id: 'banner-slides',
 					type: 'slideshow',
 					settings: {
+						// The first picture's own shape, so words on a banner are never cropped off.
+						aspect: shape.wide ?? '',
+						mobile_aspect: shape.phone ?? '',
 						slides: slides.map((b, i) => ({
 							image: b.url,
 							mobile_image: phone[i]?.url ?? b.url,

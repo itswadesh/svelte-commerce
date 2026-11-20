@@ -703,3 +703,12 @@ button. Sending it keeps the address on the shopper's wishlist and saves that si
 page says both: "Saved to your wishlist. We'll email … when it's back." With the setting off, which
 is the default, sold-out sizes stay disabled as before. Email only, because a wishlist holds only
 an address; the same address also hears when a saved item goes on sale.
+
+## 2026-11-20: Banner slides take their picture's own shape
+
+Merchants put words on their banners, and the slideshow's fixed 4:3 (phone) and 16:7 boxes cropped
+them: a 1.9:1 phone banner lost about 30% of its width. The home page now reads the first banner's
+size, wide and phone, from the file's header while it loads (about 100 ms, alongside the product
+fetch) and the slideshow box takes that shape, so the banner shows whole and the box is sized before
+the picture arrives (no layout shift). Shopify's "Adapt to image" height works the same way. A
+slideshow whose size cannot be read in 1.5 s, and a composed slideshow section, keeps the fixed shape.
