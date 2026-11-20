@@ -58,7 +58,7 @@
 		"rest-api",
 		"connector"
 	],
-	"author": "Swadesh Behera",
+	"author": "Ipsita Sahoo",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/itswadesh/svelte-commerce"
