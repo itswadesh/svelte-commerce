@@ -2,6 +2,8 @@
 	import { page } from '$app/state'
 	import type { ThemeHomepageContent } from '$lib/theme/index.js'
 	import CookieSettingsLink from '$lib/components/common/cookie-settings-link.svelte'
+	import { footerCredit } from '$lib/components/common/powered-by.js'
+	import { chromeSettings } from '$lib/composer/chrome-draft.svelte.js'
 
 	type ThemeFooter = NonNullable<ThemeHomepageContent['footer']>
 
@@ -14,6 +16,8 @@
 		description?: string
 		brandName?: string
 	} = $props()
+
+	const credit = $derived(footerCredit(page.data?.store?.poweredBy, page.url.hostname, chromeSettings('footer', page.data)))
 </script>
 
 <footer class="noor-footer">
@@ -28,6 +32,11 @@
 			<p>{description}</p>
 		{/if}
 		<CookieSettingsLink class="noor-cookies" />
+		{#if credit?.label}
+			<p class="noor-credit">
+				{#if credit.link}<a href={credit.link} target="_blank" rel="noopener noreferrer">{credit.label}</a>{:else}{credit.label}{/if}
+			</p>
+		{/if}
 	</div>
 
 	{#each footer?.columns || [] as column}
@@ -101,8 +110,18 @@
 		transition: color 0.2s ease;
 	}
 
-	.noor-footer a:hover {
+	.noor-footer a:hover,
+	.noor-footer a:focus-visible {
 		color: var(--ink);
+	}
+
+	.noor-footer .noor-credit {
+		margin-top: 8px;
+	}
+
+	.noor-credit a {
+		display: inline;
+		margin: 0;
 	}
 
 	/* The button is CookieSettingsLink's, so the rule reaches it as a global under this footer. */
