@@ -6,6 +6,7 @@
 	import { TrustpilotPlugin } from '$lib/core/components/index.js'
 	import { sanitize } from '$lib/core/utils/index.js'
 	import { keepResolvableLinks, withoutRepeatedPages } from './cms-pages.js'
+	import { platformCredit } from './powered-by.js'
 	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
 	import Newsletter from './newsletter.svelte'
 	import FooterMenu from './footer-menu.svelte'
@@ -76,7 +77,9 @@
 	// read from the store record and is simply absent when the store supplies none. It used to be a
 	// hard-coded "Powered by Litekart" on every page of every store, true of that store or not.
 	// Accepts either a plain string or `{ label, link }`.
-	const credit = $derived((storeData as Record<string, any>)?.poweredBy as string | { label?: string; link?: string } | undefined)
+	const credit = $derived(
+		((storeData as Record<string, any>)?.poweredBy as string | { label?: string; link?: string } | undefined) ?? platformCredit(page.url.hostname)
+	)
 	const creditLabel = $derived(typeof credit === 'string' ? credit : credit?.label)
 	const creditLink = $derived(typeof credit === 'string' ? undefined : credit?.link)
 
