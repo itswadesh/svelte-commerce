@@ -17,7 +17,10 @@
 			const res = await productService.listFeaturedProducts({
 				page: 1
 			})
-			products = res?.data
+			// The connector declares `listFeaturedProducts` as `PaginatedResponse<[Product]>`, i.e. a
+			// list of one-element tuples, while the API returns a flat product list. `flat()` is the
+			// type-safe (and, on a flat list, runtime no-op) bridge between the two.
+			products = res?.data?.flat()
 		} catch (e: any) {
 			toast.error(e?.message || 'Failed to load products')
 		} finally {
@@ -31,8 +34,8 @@
 		<div class="mb-6 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 			<div class="text-center md:text-left">
 				{#if block.metadata.title}
-					<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">{block.metadata.title}</h2>
-					<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
+					<h2 class="section-heading">{block.metadata.title}</h2>
+					<div class="mx-auto mt-2 h-1 w-12 bg-primary-ink md:mx-0"></div>
 				{/if}
 				{#if block.metadata.subtitle}
 					<p class="mt-4 text-sm font-medium text-muted-foreground">{block.metadata.subtitle}</p>

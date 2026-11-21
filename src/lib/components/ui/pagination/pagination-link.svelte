@@ -18,6 +18,7 @@
 <PaginationPrimitive.Page
 	{page}
 	bind:ref
+	aria-current={isActive ? 'page' : undefined}
 	class={cn(
 		buttonVariants({
 			variant: isActive ? 'default' : 'ghost',

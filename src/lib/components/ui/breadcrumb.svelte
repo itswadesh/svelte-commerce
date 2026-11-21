@@ -2,54 +2,55 @@
 	import { ChevronRight, Home } from '@lucide/svelte'
 	let { categoryHierarchy }: { categoryHierarchy?: Record<string, any>[] } = $props()
 
+	// Categories with a blank name or slug render as an empty, dead breadcrumb link, and
+	// reach the BreadcrumbList schema as positions with no name.
+	const crumbs = $derived(
+		(categoryHierarchy || []).filter((c) => String(c?.name ?? '').trim() && String(c?.slug ?? '').trim())
+	)
+
 	// let items = $state([])
 	// let isProductsPage = $derived(page.route?.id === '/(www)/products/[slug]')
 </script>
 
-<!-- {JSON.stringify(product.categoryHierarchy)} -->
-<nav class="flex overflow-hidden truncate" aria-label="Breadcrumb">
-	<div class="inline-flex items-center space-x-1 text-sm md:space-x-2">
-		<div class="inline-flex items-center">
-			<a href="/" class="inline-flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
-				<Home class="mr-2 h-4 w-4" />
-				Home
-			</a>
-		</div>
-		<ol class="hidden sm:inline-flex md:items-center md:space-x-2">
-			{#each categoryHierarchy as { slug, name, href }, i}
-				<li>
-					<div class="flex w-max items-center">
-						<ChevronRight class="h-4 min-h-4 w-4 min-w-4 text-gray-400" />
-						<div class="grid grid-cols-1">
-							<a href="/{slug}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white md:ml-2">
-								{name}
-							</a>
+{#if categoryHierarchy && categoryHierarchy.length > 0}
+	<nav class="flex overflow-x-auto scrollbar-none whitespace-nowrap sm:py-1" aria-label="Breadcrumb">
+		<div class="inline-flex items-center space-x-1 text-sm md:space-x-2">
+			<div class="inline-flex flex-shrink-0 items-center">
+				<a href="/" class="inline-flex min-h-6 items-center text-muted-foreground hover:text-foreground">
+					<Home class="mr-2 h-4 w-4 max-sm:hidden flex-shrink-0" />
+					Home
+				</a>
+			</div>
+			<ol class="inline-flex items-center space-x-1 md:space-x-2">
+				{#each crumbs as { slug, name }, i}
+					<li class="flex-shrink-0">
+						<div class="flex items-center">
+							<ChevronRight class="h-4 min-h-4 w-4 min-w-4 text-muted-foreground flex-shrink-0" />
+							<div class="grid grid-cols-1">
+								<a
+									href="/{slug}"
+									class="block min-h-6 leading-6 text-muted-foreground hover:text-foreground md:ml-2 {i === categoryHierarchy.length - 1 ? 'truncate max-w-[calc(100vw-9rem)] sm:max-w-[500px] lg:max-w-[760px] xl:max-w-[980px] 2xl:max-w-[1180px]' : ''}"
+									title={name}
+								>
+									{name}
+								</a>
+							</div>
 						</div>
-					</div>
-				</li>
-			{/each}
-		</ol>
+					</li>
+				{/each}
+			</ol>
+		</div>
+	</nav>
+{/if}
 
-		<!-- <ol class="flex sm:hidden">
-			{#if product.categoryHierarchy?.length > 1}
-				<li>
-					<div class="flex items-center">
-						<ChevronRight class="h-4 w-4 text-gray-400" />
-						<span class="ml-1 text-gray-600 dark:text-gray-300 md:ml-2">...</span>
-						<ChevronRight class="h-4 w-4 text-gray-400" />
-					</div>
-				</li>
-			{/if}
-			<li>
-				<div class="grid grid-cols-1">
-					<a
-						href={product.categoryHierarchy?.[items?.length - 1]?.href}
-						class="ml-1 truncate text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white md:ml-2"
-					>
-						{product.categoryHierarchy?.[product.categoryHierarchy?.length - 1]?.label}
-					</a>
-				</div>
-			</li>
-		</ol> -->
-	</div>
-</nav>
+<style>
+	/* Hide scrollbar for Chrome, Safari and Opera */
+	.scrollbar-none::-webkit-scrollbar {
+		display: none;
+	}
+	/* Hide scrollbar for IE, Edge and Firefox */
+	.scrollbar-none {
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+	}
+</style>

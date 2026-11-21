@@ -1,0 +1,137 @@
+import { describe, it, expect, vi } from 'vitest'
+import { clientAddress, isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
+
+const API = 'https://api.example.com'
+
+describe('isApiPath', () => {
+	it('matches /api and everything under it, nothing else', () => {
+		expect(isApiPath('/api')).toBe(true)
+		expect(isApiPath('/api/menu')).toBe(true)
+		expect(isApiPath('/apical-ring')).toBe(false)
+		expect(isApiPath('/products/api')).toBe(false)
+	})
+})
+
+describe('clientAddress', () => {
+	const event = (peer: string, cf?: string) => ({
+		getClientAddress: () => peer,
+		request: new Request('https://shop.example.com/', { headers: cf ? { 'cf-connecting-ip': cf } : {} })
+	})
+
+	it("reads the shopper from Cloudflare's header on a request from Cloudflare", () => {
+		expect(clientAddress(event('162.158.1.1', '203.0.113.9'))).toBe('203.0.113.9')
+		expect(clientAddress(event('2606:4700::1', '2001:db8::9'))).toBe('2001:db8::9')
+	})
+
+	it('ignores the header on a request from anywhere else, so nobody picks their own address', () => {
+		expect(clientAddress(event('198.51.100.7', '203.0.113.9'))).toBe('198.51.100.7')
+	})
+
+	it('falls back to the connection when the header is missing or not an address', () => {
+		expect(clientAddress(event('162.158.1.1'))).toBe('162.158.1.1')
+		expect(clientAddress(event('162.158.1.1', 'not-an-address'))).toBe('162.158.1.1')
+	})
+
+	it('answers nothing when the adapter cannot say', () => {
+		const broken = { getClientAddress: () => { throw new Error('no address') } }
+		expect(clientAddress(broken)).toBeUndefined()
+	})
+})
+
+describe('proxyApiRequest', () => {
+	it('drops transfer-encoding from a chunked body, which fetch refuses to send on', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		const request = new Request('https://demo.example.com/api/x', { method: 'POST', body: '{}', headers: { 'transfer-encoding': 'chunked', te: 'trailers' } })
+		await proxyApiRequest(request, API, fetchFn)
+		const sent = new Headers((fetchFn.mock.calls[0] as [string, RequestInit])[1].headers)
+		expect(sent.has('transfer-encoding')).toBe(false)
+		expect(sent.has('te')).toBe(false)
+	})
+
+	it('forwards path, query and the store cookie to the backend', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{"ok":true}', { status: 200, headers: { 'content-type': 'application/json' } }))
+		const request = new Request('https://demo.example.com/api/products?limit=2', {
+			headers: { cookie: 'litekart_store_id=store_1', host: 'demo.example.com', 'cf-ray': 'abc', 'cdn-loop': 'cloudflare' }
+		})
+
+		const response = await proxyApiRequest(request, API, fetchFn)
+
+		const [target, init] = fetchFn.mock.calls[0] as [string, RequestInit]
+		expect(target).toBe('https://api.example.com/api/products?limit=2')
+		const sent = new Headers(init.headers)
+		expect(sent.get('cookie')).toBe('litekart_store_id=store_1')
+		expect(sent.has('host')).toBe(false)
+		expect(sent.has('cf-ray')).toBe(false)
+		expect(sent.has('cdn-loop')).toBe(false)
+		expect(response.status).toBe(200)
+		expect(await response.json()).toEqual({ ok: true })
+	})
+
+	it('tolerates a trailing slash on the base URL', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		await proxyApiRequest(new Request('https://demo.example.com/api/menu'), `${API}/`, fetchFn)
+		expect(fetchFn.mock.calls[0][0]).toBe('https://api.example.com/api/menu')
+	})
+
+	it("replaces a browser-sent X-Forwarded-For with the shopper's address", async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		const request = new Request('https://shop.example/backend/api/orders/GC-1/open', {
+			method: 'POST',
+			headers: { 'x-forwarded-for': '198.51.100.7, 10.0.0.1' },
+			body: '{"contact":"a@b.co"}'
+		})
+
+		await proxyApiRequest(request, 'https://engine.example', fetchFn, '/backend', '203.0.113.9')
+
+		expect(new Headers(fetchFn.mock.calls[0][1]?.headers).get('x-forwarded-for')).toBe('203.0.113.9')
+	})
+
+	it('sends no X-Forwarded-For when it has no address for the shopper', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		const request = new Request('https://shop.example/backend/api/menu', { headers: { 'x-forwarded-for': '198.51.100.7' } })
+
+		await proxyApiRequest(request, 'https://engine.example', fetchFn, '/backend')
+
+		expect(new Headers(fetchFn.mock.calls[0][1]?.headers).has('x-forwarded-for')).toBe(false)
+	})
+
+	it('cuts the storefront-side mount off before forwarding', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}'))
+		await proxyApiRequest(new Request('https://shop.example/backend/api/carts?x=1'), 'https://engine.example/', fetchFn, '/backend')
+		expect(fetchFn.mock.calls[0][0]).toBe('https://engine.example/api/carts?x=1')
+	})
+
+	it('forwards the body and method of a write', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => new Response('{}', { status: 201 }))
+		const request = new Request('https://demo.example.com/api/carts/add-to-cart', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ productId: 'p1', qty: 1 })
+		})
+
+		const response = await proxyApiRequest(request, API, fetchFn)
+
+		const init = fetchFn.mock.calls[0][1] as RequestInit
+		expect(init.method).toBe('POST')
+		expect(await new Response(init.body).json()).toEqual({ productId: 'p1', qty: 1 })
+		expect(response.status).toBe(201)
+	})
+
+	it('passes backend errors through untouched', async () => {
+		const fetchFn = vi.fn<typeof fetch>(
+			async () => new Response('{"message":"Store ID is required"}', { status: 400, headers: { 'content-type': 'application/json' } })
+		)
+		const response = await proxyApiRequest(new Request('https://demo.example.com/api/menu'), API, fetchFn)
+		expect(response.status).toBe(400)
+		expect(response.headers.get('content-type')).toBe('application/json')
+	})
+
+	it('answers 502 JSON when the backend is unreachable', async () => {
+		const fetchFn = vi.fn<typeof fetch>(async () => {
+			throw new TypeError('fetch failed')
+		})
+		const response = await proxyApiRequest(new Request('https://demo.example.com/api/menu'), API, fetchFn)
+		expect(response.status).toBe(502)
+		expect(response.headers.get('content-type')).toBe('application/json')
+	})
+})

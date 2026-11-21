@@ -1,0 +1,280 @@
+<script lang="ts">
+	import { Button } from '$lib/components/ui/button'
+	import { ChevronLeft, CreditCard, LockKeyhole, Mail, MapPin, Pencil, Truck } from '@lucide/svelte'
+	import { checkoutFigures, coveredByGiftCard, formatPrice, totalLabel } from '$lib/utils/price'
+	import { page } from '$app/state'
+	import { onMount } from 'svelte'
+	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
+	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
+	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
+	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
+	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
+	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
+	import { fade } from '$lib/motion'
+
+	const { paymentModule, quote, onsubmit, onback } = $props()
+
+	const cartState = paymentModule.cartState
+
+	const selectedItems = $derived(cartState.cart?.lineItems?.filter((i: any) => i.isSelectedForCheckout) || [])
+	const selectedPaymentMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
+	const selectedShippingRate = $derived(paymentModule.shippingRates?.data?.find((r: any) => r.id === cartState.cart?.shippingRateId))
+	const deliveryPrice = $derived(quote.current && quote.confirmable(cartState.cart) ? quote.current.shippingCharges : selectedShippingRate?.base_rate)
+	const currencyCode = $derived(page?.data?.store?.currency?.code)
+	const quotedMethod = $derived(paymentModule.allPaymentMethods?.find((m: any) => m.code === quote.method))
+	const figures = $derived(
+		checkoutFigures(cartState.cart, quote.current ? quotedMethod : selectedPaymentMethod, page?.data?.store?.currency?.includesTax, quote.current)
+	)
+
+	const covered = $derived(coveredByGiftCard(quote.current))
+	// Collected from the shop (GoCommerce D271): the shop's address in place of the shopper's, and no delivery row.
+	const pickupAddress = $derived(page.data?.store?.plugins?.pickup?.active && cartState.cart?.pickup ? String(page.data.store.plugins.pickup.address ?? '') : null)
+
+	// A shopper can sit on payment for minutes, and an automatic code can run out meanwhile.
+	onMount(() => quote.retry())
+</script>
+
+<svelte:head>
+	<title>Checkout - Review Order</title>
+	<meta name="robots" content="noindex, nofollow" />
+</svelte:head>
+
+<div class="min-h-screen py-3 sm:py-8">
+	<div class="container mx-auto px-4">
+		<CheckoutHeader step={3} />
+
+		<div class="mb-3 flex items-center justify-between gap-3 sm:mb-8">
+			<h1 class="text-lg font-bold text-foreground sm:text-xl" style="font-family: var(--font-body);">Review your order</h1>
+			<Button variant="ghost" size="sm" onclick={onback} class="hit-44 group -mr-2 h-7 gap-1 px-2 text-muted-foreground hover:text-foreground max-md:min-h-0">
+				<ChevronLeft class="size-4 transition-transform duration-fast ease-standard motion-safe:group-hover:-translate-x-1" /> Back to payment
+			</Button>
+		</div>
+
+		<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_400px]">
+			<!-- Left Column. `min-w-0` keeps a wide min-content child from stretching the column past
+			     the viewport and scrolling the page sideways on a phone. -->
+			<div class="flex min-w-0 flex-col gap-3 sm:gap-4">
+				<!-- Items -->
+				<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+					<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
+						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">
+							Items ({selectedItems.length})
+						</h2>
+						<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/cart')} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
+							<Pencil class="mr-1 size-3.5" /> Edit
+						</Button>
+					</div>
+					<div class="divide-y divide-border">
+						{#each selectedItems as item}
+							{@const picture = linePicture(item)}
+							<div class="flex gap-3 py-2 text-sm sm:py-3">
+								<div class="relative size-14 shrink-0 sm:size-16 overflow-hidden rounded-radius border border-border bg-muted/20 p-1">
+									<!-- The shared lazy image draws its own fallback. The raw <img> here fell back to
+									     /placeholder.svg, which does not exist, so an item with no thumbnail rendered the
+									     browser's broken-image glyph on the last screen before paying (UX-314). -->
+									<LazyImg src={picture.src} alt={picture.alt} class="size-full object-contain" />
+								</div>
+								<div class="flex min-w-0 flex-1 flex-col justify-between py-1">
+									<div>
+										<p class="line-clamp-2 font-medium text-foreground">{item.title}</p>
+										{#if picture.designed}<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>{/if}
+										<!-- Two sizes of the same product are otherwise two identical rows here (UX-315). -->
+										{#if item.variantTitle}
+											<p class="text-xs text-muted-foreground">{item.variantTitle}</p>
+										{/if}
+										<p class="text-xs text-muted-foreground">Qty: {item.qty}</p>
+									</div>
+									<p class="font-bold text-foreground">
+										{formatPrice(item.price * item.qty, currencyCode)}
+									</p>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+
+				<!-- Contact -->
+				{#if cartState.cart?.email || cartState.cart?.phone}
+					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
+							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
+								<Mail class="size-4 text-primary" /> Contact
+							</h2>
+							<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/address')} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
+								<Pencil class="mr-1 size-3.5" /> Edit
+							</Button>
+						</div>
+						<div class="space-y-1 pt-2 sm:pt-3 text-sm text-muted-foreground">
+							{#if cartState.cart.email}
+								<p>Email: {cartState.cart.email}</p>
+							{/if}
+							{#if cartState.cart.phone}
+								<p>Phone: {cartState.cart.phone}</p>
+							{/if}
+						</div>
+					</div>
+				{/if}
+
+				{#if pickupAddress !== null}
+					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
+							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
+								<MapPin class="size-4 text-primary" /> Pickup from the shop
+							</h2>
+							<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/address')} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
+								<Pencil class="mr-1 size-3.5" /> Edit
+							</Button>
+						</div>
+						<div class="pt-2 sm:pt-3 text-sm leading-relaxed text-muted-foreground">
+							<p class="font-bold text-foreground">
+								{cartState.cart.shippingAddress?.firstName}
+								{cartState.cart.shippingAddress?.lastName}
+							</p>
+							{#if pickupAddress}<p class="whitespace-pre-line">{pickupAddress}</p>{/if}
+						</div>
+					</div>
+				<!-- Delivery Address -->
+				{:else if cartState.cart?.shippingAddress}
+					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
+							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
+								<MapPin class="size-4 text-primary" /> Delivery Address
+							</h2>
+							<Button variant="ghost" size="sm" href={appendOneTimeCartId('/checkout/address')} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
+								<Pencil class="mr-1 size-3.5" /> Edit
+							</Button>
+						</div>
+						<div class="pt-2 sm:pt-3 text-sm leading-relaxed text-muted-foreground">
+							<p class="font-bold text-foreground">
+								{cartState.cart.shippingAddress?.firstName}
+								{cartState.cart.shippingAddress?.lastName}
+							</p>
+							<p>{cartState.cart.shippingAddress?.address_1}</p>
+							{#if cartState.cart.shippingAddress?.address_2}
+								<p>{cartState.cart.shippingAddress?.address_2}</p>
+							{/if}
+							<p>
+								{cartState.cart.shippingAddress?.city}, {cartState.cart.shippingAddress?.state}, {cartState.cart.shippingAddress?.countryCode}
+								{cartState.cart.shippingAddress?.zip}
+							</p>
+							{#if cartState.cart.shippingAddress?.phone}
+								<p class="mt-1">{cartState.cart.shippingAddress?.phone}</p>
+							{/if}
+						</div>
+					</div>
+				{/if}
+
+				<!-- Shipping Method -->
+				{#if selectedShippingRate}
+					<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+						<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
+							<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
+								<Truck class="size-4 text-primary" /> Shipping Method
+							</h2>
+							<Button variant="ghost" size="sm" onclick={onback} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
+								<Pencil class="mr-1 size-3.5" /> Edit
+							</Button>
+						</div>
+						<div class="flex items-center justify-between pt-2 sm:pt-3 text-sm text-muted-foreground">
+							<div>
+								<p class="font-bold text-foreground">
+									{selectedShippingRate.name}
+									{#if !Number.isNaN(Number.parseFloat(selectedShippingRate?.estimated_min_days)) && !Number.isNaN(Number.parseFloat(selectedShippingRate?.estimated_max_days))}
+										{'(' + selectedShippingRate?.estimated_min_days + ' - ' + selectedShippingRate?.estimated_max_days + ' business days)'}
+									{/if}
+								</p>
+								{#if selectedShippingRate.description}
+									<p class="text-xs">{selectedShippingRate.description}</p>
+								{/if}
+							</div>
+							<span class="font-bold">
+								{deliveryPrice > 0 ? formatPrice(deliveryPrice, currencyCode) : 'FREE'}
+							</span>
+						</div>
+					</div>
+				{/if}
+
+				<!-- Payment Method -->
+				<div class="rounded-lg border border-border bg-background p-3 sm:p-6">
+					<div class="flex items-center justify-between border-b border-border pb-2 sm:pb-3">
+						<h2 class="flex items-center gap-2 text-base font-bold text-foreground" style="font-family: var(--font-body);">
+							<CreditCard class="size-4 text-primary" /> Payment Method
+						</h2>
+						<Button variant="ghost" size="sm" onclick={onback} class="hit-44 h-7 px-2 text-primary hover:text-primary/80 max-md:min-h-0">
+							<Pencil class="mr-1 size-3.5" /> Edit
+						</Button>
+					</div>
+					<div class="flex items-center gap-3 pt-2 sm:pt-3">
+						{#if selectedPaymentMethod?.img}
+							<div class="flex h-8 w-10 items-center justify-center rounded border border-border bg-background p-1 sm:h-10 sm:w-12">
+								<img src={selectedPaymentMethod.img} alt={selectedPaymentMethod?.name} class="h-full w-full object-contain" />
+							</div>
+						{/if}
+						<span class="text-sm font-bold tracking-tight text-foreground">
+							{covered ? `Gift card …${figures.giftCard?.last4}` : selectedPaymentMethod?.name || 'No payment method selected'}
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Right Column - Price Summary -->
+			<div class="flex h-fit flex-col gap-3">
+				<div class="space-y-3 rounded-lg border border-border bg-background p-3 sm:p-6">
+					<div class="mb-1 flex flex-col gap-1 sm:mb-6">
+						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Price summary</h2>
+						<div class="h-1 w-12 bg-primary max-sm:hidden"></div>
+					</div>
+					<div class="space-y-3 sm:space-y-4">
+						<PriceSummary
+							subtotal={figures.subtotal}
+							discount={figures.discount}
+							discountLabel={cartState.cart.couponCode ? `Discount (${cartState.cart.couponCode})` : 'Discount'}
+							coupon={figures.coupon}
+							giftCard={figures.giftCard}
+							shipping={figures.shipping}
+							fee={figures.fee}
+							tax={figures.tax}
+							total={figures.total}
+							{currencyCode}
+							shippingResolved={!!cartState.cart.shippingAddress}
+							pickup={pickupAddress !== null}
+							taxPending={figures.taxPending}
+							pending={quote.pending}
+							error={quote.error}
+							onretry={quote.retry}
+						/>
+
+						{#if quote.totalChanged}
+							<p role="status" class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive" in:fade>
+								{quote.totalChanged}
+							</p>
+						{/if}
+
+						{#if paymentModule.showError}
+							<div class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">
+								{paymentModule.errorMessage}
+							</div>
+						{/if}
+
+						<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3 max-sm:hidden">
+							<LockKeyhole class="h-3.5 w-3.5 text-muted-foreground" />
+							<p class="text-[10px] font-bold text-muted-foreground">Secure 256-bit encryption</p>
+						</div>
+
+						<CheckoutButton
+							text={covered ? 'Place order' : 'Confirm order'}
+							onclick={onsubmit}
+							disabled={(paymentModule.checkoutDisabled && !covered) || !quote.confirmable(cartState.cart)}
+							loading={paymentModule.paymentLoader}
+							total={quote.error ? '' : formatPrice(figures.total, currencyCode)}
+							totalLabel={totalLabel(!!cartState.cart.shippingAddress, figures.taxPending)}
+						/>
+					</div>
+				</div>
+
+				<OrderTrustBadges />
+			</div>
+		</div>
+	</div>
+</div>

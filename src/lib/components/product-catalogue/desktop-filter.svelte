@@ -1,13 +1,25 @@
 <script lang="ts">
+	import { taxonomy } from '$lib/core/connectors/taxonomy'
 	import { cn } from '$lib/core/utils/index.js'
 	import { X } from '@lucide/svelte'
-	import { fade, fly } from 'svelte/transition'
-	import { quintOut } from 'svelte/easing'
+	import { fade, fly } from '$lib/motion'
+
+	// An id is one token: a tag with no slug used its name, spaces and all, which broke the
+	// <label for> link and left the checkbox with no accessible name.
+	const idFrom = (value: string) =>
+		String(value)
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-|-$/g, '')
 	import { browser } from '$app/environment'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { GetColorName } from 'hex-color-to-color-name'
+	import { filterPaint } from '$lib/product/colour.js'
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button/index.js'
+	import { page } from '$app/state'
+	import Textbox from '../form/textbox.svelte'
+	import { categoryIndent, categoryParent } from './scope-filters.js'
 
 	type FilterProps = {
 		class?: string
@@ -17,41 +29,54 @@
 
 	const filterState = getDesktopFilterState()
 
-  function formatCategoryName(input: string) {
-    const x = filterState.formatFilterOptionName(input)
-    if (x.length > 27)
-      return x.substring(0, 24) + '...'
-    return x
-  }
+	// A backend that cannot filter by price reports no range at all — see the guard on the block
+	// below.
+	const priceFilterSupported = $derived(
+		Number.isFinite(filterState.minPossiblePrice) &&
+			Number.isFinite(filterState.maxPossiblePrice) &&
+			filterState.maxPossiblePrice > filterState.minPossiblePrice
+	)
+
+	function formatCategoryName(input: string) {
+		const x = filterState.formatFilterOptionName(input)
+		if (x.length > 27) return x.substring(0, 24) + '...'
+		return x
+	}
+
+	// max-height, not height. As a fixed height the rail was always a full viewport tall, so a store
+	// with one price filter drew an 866px column — and, with the wrapper's border-right, an 866px
+	// hairline — down the side of a two-row grid. It still scrolls internally when the facets are
+	// long. The old expression also emitted the literal `height: autopx` during SSR.
+	const panelHeightStyle = $derived(browser ? `max-height: ${Math.max(240, window.innerHeight - (filterState.containerTop || 0))}px` : '')
 </script>
 
-<div class="group sticky" style={`top: ${filterState.containerTop}px;`}>
+<div class="ed-df group sticky" style={`top: ${filterState.containerTop}px;`}>
 	<div
 		bind:this={filterState.container}
 		class={cn(
-			'intra-gap flex min-w-56 flex-col overflow-y-auto !pb-20 scrollbar-none scrollbar-track-transparent scrollbar-thumb-transparent  group-hover:scrollbar-track-inherit group-hover:scrollbar-thumb-inherit',
+			'ed-df__panel intra-gap flex min-w-0 flex-col overflow-y-auto !pb-6 scrollbar-none scrollbar-track-transparent scrollbar-thumb-transparent  group-hover:scrollbar-track-inherit group-hover:scrollbar-thumb-inherit',
 			className
 		)}
-		style={`height: ${browser ? window?.innerHeight - (filterState.containerTop || 0) : 'auto'}px`}
+		style={panelHeightStyle}
 	>
 		<div class="flex items-center justify-between">
-			<p class="text-lg font-bold">Filters</p>
+			<p class="ed-df__title text-sm font-bold">Filters</p>
 
 			{#if filterState.anyFilterApplied}
-				<Button variant="link" size="sm" class="h-auto p-0" onclick={filterState.clearFilters}>
+				<Button variant="link" size="sm" class="ed-df__clear h-auto p-0" onclick={filterState.clearFilters}>
 					<X class="mr-1 h-3 w-3" />
-					Clear
+					Clear all
 				</Button>
 			{/if}
 		</div>
 
-		<div class="w-full border-b border-gray-200"></div>
+		<div class="ed-df__rule w-full border-b border-border"></div>
 
 		<!-- Applied filters -->
-		<!-- <div class="flex w-full max-w-56 flex-col flex-wrap intra-gap text-[11px] text-gray-600">
+		<!-- <div class="flex w-full max-w-56 flex-col flex-wrap intra-gap text-[11px] text-muted-foreground">
 			{#if filterState.selectedTags.length > 0}
-				<div class="flex flex-row flex-wrap items-center bg-gray-50 p-2 rounded">
-					<span class="mr-1 font-bold uppercase tracking-tighter">Tags: </span>
+				<div class="flex flex-row flex-wrap items-center bg-muted p-2 rounded">
+					<span class="mr-1 font-bold tracking-tighter">Tags: </span>
 					{#each filterState.selectedTags as tag, idx}
 						<span class="whitespace-nowrap capitalize">{tag.name}</span>
 						{#if idx < filterState.selectedTags.length - 1}
@@ -62,7 +87,7 @@
 			{/if}
 
 			{#each Object.keys(filterState.selectedGeneralFilters) as key, idx}
-				<div class="flex flex-wrap bg-gray-50 p-2 rounded">
+				<div class="flex flex-wrap bg-muted p-2 rounded">
 					<span class="mr-1 whitespace-nowrap font-bold tracking-tighter capitalize">{key?.includes?.('.') ? key?.split('.')[1] : key}:</span>
 					{#each filterState.selectedGeneralFilters[key] as value, idx_i}
 						<div class="flex flex-row flex-wrap items-center">
@@ -78,14 +103,14 @@
 
 		<!-- Category list -->
 		{#if filterState.categories.length > 0}
-			<!-- <div class="mt-4 pt-4 border-t border-gray-100"></div> -->
+			<!-- <div class="mt-4 pt-4 border-t border-border"></div> -->
 			{#if filterState.showCategorySearch}
-				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
+				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 8 }}>
 					<input
 						bind:value={filterState.categorySearchQuery}
 						type="text"
 						placeholder="Search categories"
-						class="w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+						class="ed-df__search w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-input focus:outline-none focus:ring-2 focus:ring-primary"
 						onkeydown={filterState.handleCategorySearchKeyDown}
 						autofocus
 					/>
@@ -101,7 +126,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Categories</p>
+					<p class="ed-df__label text-sm font-bold text-foreground" in:fade>{taxonomy.many}</p>
 					<Button
 						variant="ghost"
 						size="icon"
@@ -109,7 +134,7 @@
 						onclick={() => filterState.toggleCategorySearch()}
 						aria-label="Toggle category search"
 					>
-						<svg
+						<svg aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							width="16"
 							height="16"
@@ -132,13 +157,19 @@
 			<div class="flex flex-col items-start justify-start text-sm">
 				{#if !filterState.showMoreCategories}
 					{@const categoriesToShow = filterState.filteredCategories.slice(0, 5)}
-					{#each categoriesToShow as category}
+					{#each categoriesToShow as category, i}
 						{@const formattedCategoryName = filterState.formatFilterOptionName(category.name)}
+						{@const parent = categoryParent(filterState.filteredCategories, i, filterState.categorySearchQuery)}
+						{@const label = parent ? `${formattedCategoryName}, in ${filterState.formatFilterOptionName(parent)}` : formattedCategoryName}
 						<Button
 							variant="link"
-							title={formattedCategoryName}
-							class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
-							onclick={() => filterState.handleCategoryClick(category)}
+							title={label}
+							aria-label={parent ? label : undefined}
+							class={cn(
+								'ed-df__catbtn group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent',
+								categoryIndent(category.depth, filterState.categorySearchQuery, 'rail')
+							)}
+							onclick={() => filterState.handleCategoryClick({ slug: category.slug, name: category.name })}
 						>
 							{#if category.thumbnail}
 								<img
@@ -147,22 +178,30 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
+							<span class="ed-df__cat flex-1 py-0.5 capitalize text-muted-foreground transition-colors group-hover:text-primary"
+								>{formatCategoryName(category.name)}</span
+							>
 						</Button>
 					{/each}
 					{#if filterState.filteredCategories.length > 5}
-						<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>
+						<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>
 							+ {filterState.filteredCategories.length - 5} more
 						</Button>
 					{/if}
 				{:else}
-					{#each filterState.filteredCategories as category}
+					{#each filterState.filteredCategories as category, i}
 						{@const formattedCategoryName = filterState.formatFilterOptionName(category.name)}
+						{@const parent = categoryParent(filterState.filteredCategories, i, filterState.categorySearchQuery)}
+						{@const label = parent ? `${formattedCategoryName}, in ${filterState.formatFilterOptionName(parent)}` : formattedCategoryName}
 						<Button
 							variant="link"
-							title={formattedCategoryName}
-							class="group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent"
-							onclick={() => filterState.handleCategoryClick(category)}
+							title={label}
+							aria-label={parent ? label : undefined}
+							class={cn(
+								'ed-df__catbtn group h-auto gap-2 overflow-hidden text-ellipsis whitespace-nowrap px-0 py-1 text-start hover:bg-transparent',
+								categoryIndent(category.depth, filterState.categorySearchQuery, 'rail')
+							)}
+							onclick={() => filterState.handleCategoryClick({ slug: category.slug, name: category.name })}
 						>
 							{#if category.thumbnail}
 								<img
@@ -171,25 +210,29 @@
 									class="h-8 w-8 rounded object-cover transition-opacity group-hover:opacity-80"
 								/>
 							{/if}
-							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formatCategoryName(category.name)}</span>
+							<span class="ed-df__cat flex-1 py-0.5 capitalize text-muted-foreground transition-colors group-hover:text-primary"
+								>{formatCategoryName(category.name)}</span
+							>
 						</Button>
 					{/each}
-					<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}>Show less</Button>
+					<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreCategories}
+						>Show less</Button
+					>
 				{/if}
 			</div>
 		{/if}
 
 		<!-- Tags List -->
 		{#if filterState.tags.length > 0}
-			<div class="w-full border-b border-gray-200"></div>
+			<div class="ed-df__rule w-full border-b border-border"></div>
 
 			{#if filterState.showTagSearch}
-				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
+				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 8 }}>
 					<input
 						bind:value={filterState.tagSearchQuery}
 						type="text"
 						placeholder="Search tags"
-						class="w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-primary"
+						class="ed-df__search w-full rounded-md border-0 py-2 pl-3 text-sm ring-1 ring-input focus:outline-none focus:ring-2 focus:ring-primary"
 						onkeydown={filterState.handleTagSearchKeyDown}
 						autofocus
 					/>
@@ -205,14 +248,14 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
+					<p class="ed-df__label text-sm font-bold text-foreground" in:fade>Tags</p>
 					<Button
-						class="flex w-8 items-center justify-center rounded-full text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700"
+						class="flex w-8 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground"
 						variant="ghost"
 						size="icon"
 						onclick={() => filterState.toggleTagSearch()}
 					>
-						<svg
+						<svg aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							width="16"
 							height="16"
@@ -238,20 +281,21 @@
 					{#each tagsToShow as tag}
 						<div class="flex flex-row items-center gap-2">
 							<Checkbox
-								id={`tag-${tag.slug || tag.name}`}
+								id={`tag-${idFrom(tag.slug || tag.name)}`}
 								checked={filterState.selectedTags.find((t: any) => t.name === tag.name) ? true : false}
 								onCheckedChange={(checked) => {
 									filterState.handleTagChange({ tag, checked })
 								}}
 							/>
 							<label
-								for={`tag-${tag.slug || tag.name}`}
-								class="flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">{tag.name}</label
+								for={`tag-${idFrom(tag.slug || tag.name)}`}
+								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
+								>{tag.name}</label
 							>
 						</div>
 					{/each}
 					{#if filterState.filteredTags.length > 5}
-						<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>
+						<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>
 							+ {filterState.filteredTags.length - 5} more
 						</Button>
 					{/if}
@@ -259,74 +303,95 @@
 					{#each filterState.filteredTags as tag}
 						<div class="flex flex-row items-center gap-2">
 							<Checkbox
-								id={`tag-${tag.slug || tag.name}`}
+								id={`tag-${idFrom(tag.slug || tag.name)}`}
 								checked={filterState.selectedTags.find((t: any) => t.name === tag.name) ? true : false}
 								onCheckedChange={(checked) => {
 									filterState.handleTagChange({ tag, checked })
 								}}
 							/>
 							<label
-								for={`tag-${tag.slug || tag.name}`}
-								class="flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">{tag.name}</label
+								for={`tag-${idFrom(tag.slug || tag.name)}`}
+								class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
+								>{tag.name}</label
 							>
 						</div>
 					{/each}
-					<Button variant="link" size="sm" class="mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}>Show less</Button>
+					<Button variant="link" size="sm" class="ed-df__more mt-1 h-auto justify-start p-0" onclick={filterState.toggleShowMoreTags}
+						>Show less</Button
+					>
 				{/if}
 			</div>
 
-			<div class="w-full border-b border-gray-200"></div>
+			<div class="ed-df__rule w-full border-b border-border"></div>
 		{/if}
 
-		<!-- Price Filter -->
-		<p class="text-sm font-bold uppercase text-gray-900">Price Range</p>
+		<!-- Price Filter. Backends that report no price stats (Vendure returns
+		     `priceStat: { min: undefined, max: undefined }`) rendered an empty slider over blank
+		     Min/Max boxes that filtered nothing, so the whole block is dropped unless the facets
+		     carry a real range. `max > min` also keeps the slider maths off a zero-width range. -->
+		{#if priceFilterSupported}
+			<p class="ed-df__label text-sm font-bold text-foreground">Price range</p>
 
-		<div class="relative mr-5 mt-2">
-			<!-- Range slider track -->
-			<div class="absolute h-1 w-full rounded bg-gray-100">
-				<div
-					class="absolute h-1 bg-primary"
-					style="left: {filterState.priceSliderLeftPercentage}%; right: {filterState.priceSliderRightPercentage}%"
-				></div>
+			<div class="ed-df__slider relative mr-5 mt-3">
+				<!-- Range slider track -->
+				<div class="ed-df__track absolute h-1 w-full rounded bg-muted">
+					<div
+						class="ed-df__fill absolute h-1 bg-primary-ink"
+						style="left: {filterState.priceSliderLeftPercentage}%; right: {filterState.priceSliderRightPercentage}%"
+					></div>
+				</div>
+
+				<!-- Range inputs -->
+				<input
+					type="range"
+					bind:value={filterState.minPrice}
+					aria-label="Choose minimum price"
+					min={filterState.minPossiblePrice}
+					max={filterState.maxPossiblePrice}
+					onchange={filterState.handleMinPriceChange}
+					class="pointer-events-none absolute top-1/2 h-11 w-full -translate-y-1/2 appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-background [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-border [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-border"
+				/>
+				<input
+					type="range"
+					bind:value={filterState.maxPrice}
+					min={filterState.minPossiblePrice}
+					aria-label="Choose maximum price"
+					max={filterState.maxPossiblePrice}
+					onchange={filterState.handleMaxPriceChange}
+					class="pointer-events-none absolute top-1/2 h-11 w-full -translate-y-1/2 appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-background [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-border [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-border"
+				/>
 			</div>
 
-			<!-- Range inputs -->
-			<input
-				type="range"
-				bind:value={filterState.minPrice}
-				aria-label="Choose minimum price"
-				min={filterState.minPossiblePrice}
-				max={filterState.maxPossiblePrice}
-				onchange={filterState.handleMinPriceChange}
-				class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
-			/>
-			<input
-				type="range"
-				bind:value={filterState.maxPrice}
-				min={filterState.minPossiblePrice}
-				aria-label="Choose maximum price"
-				max={filterState.maxPossiblePrice}
-				onchange={filterState.handleMaxPriceChange}
-				class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
-			/>
-		</div>
-
-		<!-- Price range display -->
-		<div class="mt-3 text-xs font-bold text-gray-500">
-			{filterState.priceRange}
-		</div>
+			<!-- Editable price bounds (kept in sync with the slider) -->
+			<!-- mt-2, not mt-4: .ed-df__slider is a zero-height box (its children are absolute), so the
+			     panel's own column gap already sits between the track and these inputs. -->
+			<div class="ed-df__prices mt-2 grid grid-cols-2 gap-3">
+				<Textbox
+					type="number"
+					label="Min ({page.data?.store?.currency?.symbol})"
+					onchange={filterState.handleMinPriceChange}
+					bind:value={filterState.minPrice}
+				/>
+				<Textbox
+					type="number"
+					label="Max ({page.data?.store?.currency?.symbol})"
+					onchange={filterState.handleMaxPriceChange}
+					bind:value={filterState.maxPrice}
+				/>
+			</div>
+		{/if}
 
 		<!-- Other generalized filters -->
 		{#if filterState.processedFilters}
 			{#each Object.keys(filterState.processedFilters) as key, idx}
-				<div class="w-full border-b border-gray-200"></div>
+				<div class="ed-df__rule w-full border-b border-border"></div>
 
-				<div class="intra-gap flex flex-col">
-					<p class="text-sm font-bold uppercase text-gray-900">
+				<div class="ed-df__group intra-gap flex flex-col">
+					<p class="ed-df__label text-sm font-bold text-foreground">
 						{filterState.formatFilterName(key)}
 					</p>
 
-					<div class="flex flex-col space-y-1 text-sm">
+					<div class="ed-df__opts flex flex-col space-y-1 text-sm">
 						{#if !filterState.showMoreGeneralFilters[idx]}
 							{@const valuesToShow = filterState.processedFilters[key].slice(0, 3)}
 							{#each valuesToShow as value}
@@ -338,11 +403,14 @@
 											filterState.handleGeneralFiltersChange({ key, value, checked })
 										}}
 									/>
-									<label for={`gen-${value}`} class="flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">
-										{#if value?.startsWith?.('#')}
+									<label
+										for={`gen-${value}`}
+										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
+									>
+										{#if filterPaint(key, value)}
 											<div class="flex items-center gap-2">
-												<div class="h-4 w-4 rounded-full border border-gray-200" style="background-color: {value};"></div>
-												{GetColorName(value)}
+												<span class="h-4 w-4 rounded-full border border-border shrink-0" style="background: {filterPaint(key, value)};" aria-hidden="true"></span>
+												{value?.startsWith?.('#') ? GetColorName(value) : value}
 											</div>
 										{:else}
 											{value}
@@ -354,7 +422,7 @@
 								<Button
 									variant="link"
 									size="sm"
-									class="mt-1 h-auto justify-start p-0"
+									class="ed-df__more mt-1 h-auto justify-start p-0"
 									onclick={() => {
 										filterState.showMoreGeneralFilters[idx] = true
 									}}
@@ -372,11 +440,14 @@
 											filterState.handleGeneralFiltersChange({ key, value, checked })
 										}}
 									/>
-									<label for={`gen-${value}`} class="flex-1 cursor-pointer py-1 capitalize text-gray-600 transition-colors hover:text-gray-900">
-										{#if value?.startsWith?.('#')}
+									<label
+										for={`gen-${value}`}
+										class="ed-df__opt flex-1 cursor-pointer py-1 capitalize text-muted-foreground transition-colors hover:text-foreground"
+									>
+										{#if filterPaint(key, value)}
 											<div class="flex items-center gap-2">
-												<div class="h-4 w-4 rounded-full border border-gray-200" style="background-color: {value};"></div>
-												{GetColorName(value)}
+												<span class="h-4 w-4 rounded-full border border-border shrink-0" style="background: {filterPaint(key, value)};" aria-hidden="true"></span>
+												{value?.startsWith?.('#') ? GetColorName(value) : value}
 											</div>
 										{:else}
 											{value}
@@ -387,7 +458,7 @@
 							<Button
 								variant="link"
 								size="sm"
-								class="mt-1 h-auto justify-start p-0"
+								class="ed-df__more mt-1 h-auto justify-start p-0"
 								onclick={() => {
 									filterState.showMoreGeneralFilters[idx] = false
 								}}
@@ -401,3 +472,191 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	/* ---- Refined Editorial · desktop filter sidebar (default theme only) ----
+	   Every rule is gated to [data-theme='default']; wine/organic/lime/noor
+	   keep the original Tailwind styling. */
+	/* One rhythm for the whole rail. `intra-gap` is 16px, and because each group separator is
+	   itself a child, every hairline cost 32px of surrounding space. */
+	:global([data-theme='default']) .ed-df__panel {
+		font-family: var(--ed-body);
+		color: var(--ed-ink);
+		gap: 10px;
+	}
+
+	/* Each group separator is itself a flex child, so a hairline costs two panel gaps. Pulling the
+	   rule tight against the group below it turns 20px of surrounding air into 8px, four times
+	   down a rail whose whole job is to fit its facets above the fold. */
+	:global([data-theme='default']) .ed-df__rule {
+		margin: 2px 0 -2px;
+	}
+
+	/* Option rows: 13px labels on a 28px row. Smaller than the 14px they were, but the row is the
+	   pointer target and 28px clears the WCAG 2.2 24px minimum — and this rail never renders below
+	   768px, so no phone-sized touch target depends on it. */
+	:global([data-theme='default']) .ed-df__opt,
+	:global([data-theme='default']) .ed-df__cat {
+		display: flex;
+		align-items: center;
+		min-height: 28px;
+		padding-top: 0;
+		padding-bottom: 0;
+		font-size: 0.8125rem;
+		line-height: 1.35;
+	}
+
+	/* The row is the target, so the padding lives on the label inside it, not on the button. */
+	:global([data-theme='default'] .ed-df__catbtn) {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	/* `intra-gap` is 16px and `space-y-1` another 4px between every option — 20px of rhythm inside
+	   a group whose rows are 28px tall. Both are neutralised here and nowhere else, so the other
+	   four themes keep the spacing they were built with. */
+	:global([data-theme='default']) .ed-df__group {
+		gap: 6px;
+	}
+
+	:global([data-theme='default'] .ed-df__opts > * + *) {
+		margin-top: 0;
+	}
+
+	:global([data-theme='default'] .ed-df__prices) {
+		margin-top: 0;
+		gap: 8px;
+	}
+
+	/* Panel title + Clear */
+	:global([data-theme='default']) .ed-df__title {
+		font-family: var(--ed-body);
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .ed-df__clear) {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+		font-weight: 600;
+	}
+
+	:global([data-theme='default'] .ed-df__clear:hover) {
+		color: hsl(var(--primary-ink));
+	}
+
+	/* Hairline group dividers */
+	:global([data-theme='default']) .ed-df__rule {
+		border-color: var(--ed-line);
+	}
+
+	/* Quiet section labels */
+	:global([data-theme='default']) .ed-df__label {
+		font-family: var(--ed-body);
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--ed-soft);
+	}
+
+	/* Category links + option (tag / attribute) labels */
+	:global([data-theme='default']) .ed-df__cat,
+	:global([data-theme='default']) .ed-df__opt {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+		transition: color var(--motion-fast) var(--motion-ease);
+	}
+
+	:global([data-theme='default']) .ed-df__opt:hover {
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .group:hover .ed-df__cat) {
+		color: hsl(var(--primary-ink));
+	}
+
+	/* +N more / Show less */
+	:global([data-theme='default'] .ed-df__more) {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	:global([data-theme='default'] .ed-df__more:hover) {
+		color: hsl(var(--primary-ink));
+		text-decoration: none;
+	}
+
+	/* Editorial checkboxes */
+	:global([data-theme='default'] .ed-df__panel [role='checkbox']) {
+		border-color: var(--ed-line-strong);
+		border-radius: 3px;
+		box-shadow: none;
+	}
+
+	/* Search-within inputs */
+	:global([data-theme='default']) .ed-df__search {
+		border: 1px solid var(--ed-line-strong);
+		border-radius: var(--ed-radius);
+		background: var(--ed-surface);
+		box-shadow: none;
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default']) .ed-df__search:focus {
+		outline: none;
+		border-color: hsl(var(--primary-ink));
+		box-shadow: none;
+	}
+
+	/* Price range slider */
+	:global([data-theme='default']) .ed-df__track {
+		height: 3px;
+		background: var(--ed-line);
+	}
+
+	:global([data-theme='default']) .ed-df__fill {
+		height: 3px;
+		background: hsl(var(--primary-ink));
+	}
+
+	:global([data-theme='default'] .ed-df__slider input[type='range']::-webkit-slider-thumb) {
+		width: 15px;
+		height: 15px;
+		border: 1px solid hsl(var(--primary-ink));
+		background: var(--ed-surface);
+		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
+	}
+
+	:global([data-theme='default'] .ed-df__slider input[type='range']::-moz-range-thumb) {
+		width: 15px;
+		height: 15px;
+		border: 1px solid hsl(var(--primary-ink));
+		background: var(--ed-surface);
+		box-shadow: 0 1px 4px rgba(27, 26, 23, 0.22);
+	}
+
+	/* Editable price bound inputs + labels */
+	:global([data-theme='default'] .ed-df__prices input) {
+		border: 1px solid var(--ed-line-strong);
+		border-radius: var(--ed-radius);
+		background: var(--ed-surface);
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default'] .ed-df__prices input:focus) {
+		outline: none;
+		border-color: hsl(var(--primary-ink));
+	}
+
+	:global([data-theme='default'] .ed-df__prices label) {
+		font-family: var(--ed-body);
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: var(--ed-soft);
+	}
+</style>

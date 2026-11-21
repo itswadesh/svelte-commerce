@@ -1,53 +1,123 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { onMount } from 'svelte'
+	import { fade } from 'svelte/transition'
 	import productNonVeg from '$lib/assets/product/non-veg.png'
 	import productVeg from '$lib/assets/product/veg.png'
-	import { date, formatPrice } from '$lib/core/utils'
+	import { date } from '$lib/core/utils'
+	import { addedTax, formatPrice } from '$lib/utils/price'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { linePicture } from '$lib/customizer/line'
 	import Button from '$lib/components/ui/button/button.svelte'
+	import { Input } from '$lib/components/ui/input'
+	import { Label } from '$lib/components/ui/label'
 	import OrderListSkeleton from '../../(my)/my/orders/_OrderListSkeleton.svelte'
 	import OrderTimeline from '$lib/components/order/order-timeline.svelte'
+	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
+	import UpiPay from '$lib/components/order/upi-pay.svelte'
 	import StatusCell from '$lib/components/common/status-cell.svelte'
-	import { OrderTrackingModule } from '$lib/core/composables/index.js'
+	import { orderService } from '$lib/core/services/index.js'
 	import { CheckCircle } from '@lucide/svelte'
 
-	const orderTrackingModule = new OrderTrackingModule()
+	// A guest opens their order with its number and the email or phone on it.
+	// The link in the order emails carries the order's key as well, and opens
+	// it with nothing to type; an order this browser already holds opens at once.
+	let order = $state<any>(null)
+	let loading = $state(false)
+	let orderNo = $state(page.url.searchParams.get('order') || '')
+	let contact = $state('')
+	let busy = $state(false)
+	let error = $state('')
+
+	const message = (e: unknown) => (e as { message?: string })?.message || 'Something went wrong. Please try again.'
+
+	onMount(async () => {
+		if (!orderNo) return
+		const key = page.url.searchParams.get('key')
+		// The key opens the order, so it leaves the address bar, the history and every analytics
+		// tag that records the page as soon as it is read.
+		if (key) {
+			const url = new URL(location.href)
+			url.searchParams.delete('key')
+			history.replaceState(history.state, '', url)
+		}
+		loading = true
+		try {
+			if (key) {
+				order = (await orderService.openOrderWithKey({ orderNo, key })).data[0]
+			} else {
+				order = await orderService.getOrder(orderNo)
+			}
+		} catch (err) {
+			// A key that no longer matches says so; otherwise the form asks.
+			if (key) error = 'This link no longer opens the order. Enter your email or phone instead.'
+		} finally {
+			loading = false
+		}
+	})
+
+	async function open(e?: SubmitEvent) {
+		e?.preventDefault()
+		if (busy || !orderNo.trim() || !contact.trim()) return
+		busy = true
+		error = ''
+		try {
+			order = (await orderService.openOrder({ orderNo, contact })).data[0]
+		} catch (err) {
+			error = message(err)
+		} finally {
+			busy = false
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>Order</title>
 </svelte:head>
 <div>
-	{#if orderTrackingModule.loading}
+	<!-- The page shipped no h1, so nothing named it in the document outline. Visually hidden: the
+	     order number below becomes the visible title once an order resolves. -->
+	<h1 class="sr-only">Track your order</h1>
+	{#if loading}
 		<div class="flex items-center justify-center">
 			<OrderListSkeleton />
 		</div>
-	{:else if orderTrackingModule.order && orderTrackingModule.order?.orderNo}
+	{:else if order && order?.orderNo}
 		<section class="container mx-auto">
 			<div class="my-5 overflow-hidden rounded-lg border sm:mb-10">
-				<div class="flex flex-wrap items-center justify-between rounded-lg rounded-b-none border-b bg-gray-50 px-5 py-3">
+				<div class="flex flex-wrap items-center justify-between rounded-lg rounded-b-none border-b bg-muted px-5 py-3">
 					<div class="flex items-center gap-4">
-						<h6>Order No : #{orderTrackingModule.order?.orderNo}</h6>
-						<StatusCell value={orderTrackingModule.order?.status} />
+						<h6>Order No : #{order?.orderNo}</h6>
+						<StatusCell value={order?.status} />
+						{#if order?.invoiceLink}
+							<a class="text-sm underline underline-offset-2" href={order.invoiceLink} target="_blank" rel="noopener">Download invoice</a>
+						{/if}
 					</div>
 
-					<h6 class="mt-2 text-sm text-gray-500 sm:mt-0">Order Date : {date(orderTrackingModule.order?.createdAt)}</h6>
+					<h6 class="mt-2 text-sm text-muted-foreground sm:mt-0">Order Date : {date(order?.createdAt)}</h6>
 				</div>
+				{#if order?.upi}
+					<div class="border-x p-3 sm:p-5">
+						<UpiPay {order} />
+					</div>
+				{/if}
+				{#if order?.downloads?.length}
+					<div class="border-x p-3 sm:p-5">
+						<OrderDownloads downloads={order.downloads} orderNo={order.orderNo} />
+					</div>
+				{/if}
 
 				<!-- Order detail  -->
 				<div class="flex flex-col lg:grid lg:grid-cols-2 lg:divide-x">
 					<div class="order-1 flex flex-col divide-y lg:order-none">
-						{#if orderTrackingModule.order?.lineItems}
-							<div class="divide-y divide-dashed text-xs text-zinc-500">
-								{#each orderTrackingModule.order?.lineItems as item}
+						{#if order?.lineItems}
+							<div class="divide-y divide-dashed text-xs text-muted-foreground">
+								{#each order?.lineItems as item}
+									{@const picture = linePicture(item)}
 									{#if item}
 										<div class="flex gap-2 p-5 lg:gap-5">
 											<a href={`/products/${item.slug}`} aria-label="Click to view the product details" class="shrink-0">
-												{#if item.isCustomized}
-													<img src={item.customizedImg} alt="{item.name} (Customized)" class="h-auto w-14 object-contain object-top" />
-												{:else}
-													<LazyImg src={item.thumbnail || item.img} alt={item.name} width="56" class="h-auto w-14 object-contain object-top" />
-												{/if}
+												<LazyImg src={picture.src} alt={picture.alt} width="56" class="h-auto w-14 object-contain object-top" />
 											</a>
 
 											<div class="flex w-full flex-1 flex-col gap-0.5 xl:pr-4">
@@ -68,6 +138,8 @@
 														</div>
 													{/if}
 												</div>
+
+												{#if picture.designed}<p class="font-medium text-foreground">Your design</p>{/if}
 
 												{#if item.qty}
 													<span>
@@ -118,12 +190,12 @@
 												<div class="flex flex-wrap items-center gap-1">
 													Item price :
 
-													<span class="whitespace-nowrap font-bold text-zinc-800">
+													<span class="whitespace-nowrap font-bold text-foreground">
 														{formatPrice(item.price, page?.data?.store?.currency?.code)}
 													</span>
 
 													{#if item?.mrp > item?.price}
-														<span class="whitespace-nowrap text-zinc-500 line-through">
+														<span class="whitespace-nowrap text-muted-foreground line-through">
 															<strike>
 																{formatPrice(item.mrp, page?.data?.store?.currency?.code)}
 															</strike>
@@ -140,12 +212,12 @@
 												<div class="flex flex-wrap items-center gap-1">
 													Sub Total :
 
-													<span class="whitespace-nowrap font-bold text-zinc-800">
+													<span class="whitespace-nowrap font-bold text-foreground">
 														{formatPrice(item.subtotal, page?.data?.store?.currency?.code)}
 													</span>
 
 													{#if item?.total > item?.subtotal}
-														<span class="whitespace-nowrap text-zinc-500 line-through">
+														<span class="whitespace-nowrap text-muted-foreground line-through">
 															<strike>
 																{formatPrice(item.total, page?.data?.store?.currency?.code)}
 															</strike>
@@ -165,7 +237,7 @@
 															<li>
 																<a href={file} download>
 																	<Button class="text-xs">
-																		Download File
+																		Download file
 
 																		{#if item?.files?.length > 1}
 																			{fx + 1}
@@ -180,11 +252,11 @@
 												{#if item?.status === 'delivered'}
 													<div class="mt-2 xl:mt-0 xl:w-1/3">
 														<a
-															href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
+															href="/products/{item?.slug}#review"
 															aria-label="Click to visit rate & review product"
-															class="max-w-max whitespace-nowrap font-semibold text-indigo-500 hover:underline focus:outline-none"
+															class="max-w-max whitespace-nowrap font-semibold text-primary hover:underline focus:outline-none"
 														>
-															Rate & Review Product
+															Rate & review product
 														</a>
 													</div>
 												{/if}
@@ -201,70 +273,66 @@
 					<div class="order-2 p-5 lg:order-none">
 						<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-5">
 							<div class="space-y-2">
-								<h5 class="font-semibold">Delivery Address</h5>
+								<h5 class="font-semibold">{order?.shippingAddress?.address_1 ? 'Delivery address' : 'Billing details'}</h5>
 
 								<p class="flex flex-col text-sm">
 									<span>
-										{orderTrackingModule.order?.shippingAddress?.firstName}
-										{orderTrackingModule.order?.shippingAddress?.lastName}
+										{order?.shippingAddress?.firstName}
+										{order?.shippingAddress?.lastName}
 
 										<br />
 
-										{orderTrackingModule.order?.shippingAddress?.address_1}
-										{#if orderTrackingModule.order?.shippingAddress?.address_2}
-											, {orderTrackingModule.order?.shippingAddress?.address_2}
+										{order?.shippingAddress?.address_1}
+										{#if order?.shippingAddress?.address_2}
+											, {order?.shippingAddress?.address_2}
 										{/if}
 
-										, {orderTrackingModule.order?.shippingAddress?.city}
+										, {order?.shippingAddress?.city}
 										<br />
-										{orderTrackingModule.order?.shippingAddress?.state},
-										<span class="uppercase"
-											>{orderTrackingModule.order?.shippingAddress?.country || orderTrackingModule.order?.shippingAddress?.countryCode}</span
-										>,
-										{orderTrackingModule.order?.shippingAddress?.zip}
+										{order?.shippingAddress?.state},
+										<span class="">{order?.shippingAddress?.country || order?.shippingAddress?.countryCode}</span>,
+										{order?.shippingAddress?.zip}
 									</span>
 								</p>
 
-								{#if orderTrackingModule.order?.shippingAddress?.phone}
+								{#if order?.shippingAddress?.phone}
 									<p class="text-sm">
-										{orderTrackingModule.order?.shippingAddress?.phone}
+										{order?.shippingAddress?.phone}
 									</p>
 								{/if}
 							</div>
 
 							<div class="space-y-2">
-								<h5 class="font-semibold">Billing Address</h5>
-								{#if orderTrackingModule.order?.billingAddressId === orderTrackingModule.order?.shippingAddressId}
+								<h5 class="font-semibold">Billing address</h5>
+								{#if order?.billingAddressId === order?.shippingAddressId}
 									<div class="flex items-center gap-2 text-sm text-muted-foreground">
-										<CheckCircle class="h-4 w-4 text-green-500" />
+										<CheckCircle class="h-4 w-4 text-success" />
 										<span>Same as shipping address</span>
 									</div>
-								{:else if orderTrackingModule.order?.billingAddress}
+								{:else if order?.billingAddress}
 									<p class="flex flex-col text-sm">
 										<span>
-											{orderTrackingModule.order?.billingAddress?.firstName}
-											{orderTrackingModule.order?.billingAddress?.lastName}
+											{order?.billingAddress?.firstName}
+											{order?.billingAddress?.lastName}
 
 											<br />
-											{orderTrackingModule.order?.billingAddress?.address_1}
+											{order?.billingAddress?.address_1}
 
-											{#if orderTrackingModule.order?.billingAddress?.address_2}
-												, {orderTrackingModule.order?.billingAddress?.address_2}
+											{#if order?.billingAddress?.address_2}
+												, {order?.billingAddress?.address_2}
 											{/if}
 
-											, {orderTrackingModule.order?.billingAddress?.city}
+											, {order?.billingAddress?.city}
 											<br />
-											{orderTrackingModule.order?.billingAddress?.state},
-											<span class="uppercase"
-												>{orderTrackingModule.order?.billingAddress?.country || orderTrackingModule.order?.billingAddress?.countryCode}</span
-											>,
-											{orderTrackingModule.order?.billingAddress?.zip}
+											{order?.billingAddress?.state},
+											<span class="">{order?.billingAddress?.country || order?.billingAddress?.countryCode}</span>,
+											{order?.billingAddress?.zip}
 										</span>
 									</p>
 
-									{#if orderTrackingModule.order?.billingAddress?.phone}
+									{#if order?.billingAddress?.phone}
 										<p class="text-sm">
-											{orderTrackingModule.order?.billingAddress?.phone}
+											{order?.billingAddress?.phone}
 										</p>
 									{/if}
 								{/if}
@@ -272,60 +340,72 @@
 						</div>
 					</div>
 
-					<div class="order-3 col-span-full flex justify-end !border-0 !border-t border-gray-200 bg-gray-50 p-5">
+					<div class="order-3 col-span-full flex justify-end !border-0 !border-t border-border bg-muted p-5">
 						<div class="flex w-full max-w-md flex-col items-start gap-2">
 							<p class="flex items-center">
-								<span class="mr-2 w-32">Subtotal</span>
+								<span class="mr-2 w-32 sm:w-48">Subtotal</span>
 
 								<span>
-									: &nbsp; {formatPrice(orderTrackingModule.order?.subtotal || 0, page?.data?.store?.currency?.code) || '0.00'}
+									: &nbsp; {formatPrice(order?.subtotal || 0, page?.data?.store?.currency?.code) || '0.00'}
 								</span>
 							</p>
 
-							{#if orderTrackingModule.order?.discount && orderTrackingModule.order?.discount > 0}
+							{#if order?.discount && order?.discount > 0}
 								<p class="flex items-center">
-									<span class="mr-2 w-32">Discount</span>
+									<span class="mr-2 w-32 sm:w-48">Discount</span>
 
 									<span>
 										: &nbsp;
 
-										{formatPrice(orderTrackingModule.order?.discount || 0, page?.data?.store?.currency?.code) || '0.00'}
+										{formatPrice(order?.discount || 0, page?.data?.store?.currency?.code) || '0.00'}
 									</span>
 								</p>
 							{/if}
 
 							<p class="flex items-center">
-								<span class="mr-2 w-32">Shipping</span>
+								<span class="mr-2 w-32 sm:w-48">Shipping</span>
 
 								<span>
 									: &nbsp;
-									{#if orderTrackingModule.order?.shippingCharges}
-										{formatPrice(orderTrackingModule.order?.shippingCharges, page?.data?.store?.currency?.code)}
+									{#if order?.shippingCharges}
+										{formatPrice(order?.shippingCharges, page?.data?.store?.currency?.code)}
 									{:else}
 										Free
 									{/if}
 								</span>
 							</p>
 
-							{#if orderTrackingModule.order?.codCharges}
+							{#if order?.codCharges > 0}
 								<p class="flex items-center">
-									<span class="mr-2 w-32">COD Charges</span>
+									<span class="mr-2 w-32 sm:w-48">Cash on delivery charge</span>
 
 									<span>
 										: &nbsp;
 
-										{formatPrice(orderTrackingModule.order?.codCharges, page?.data?.store?.currency?.code)}
+										{formatPrice(order?.codCharges, page?.data?.store?.currency?.code)}
 									</span>
 								</p>
 							{/if}
 
-							<hr class="w-full border-t border-zinc-200" />
+							{#if addedTax(order) > 0}
+								<p class="flex items-center">
+									<span class="mr-2 w-32 sm:w-48">Tax</span>
 
-							<div class="flex items-center text-sm font-bold text-zinc-800">
-								<span class="mr-2 w-32">Total</span>
+									<span>
+										: &nbsp;
+
+										{formatPrice(addedTax(order), page?.data?.store?.currency?.code)}
+									</span>
+								</p>
+							{/if}
+
+							<hr class="w-full border-t border-border" />
+
+							<div class="flex items-center text-sm font-bold text-foreground">
+								<span class="mr-2 w-32 sm:w-48">Total</span>
 
 								<span>
-									: &nbsp; {formatPrice(orderTrackingModule.order?.total || 0, page?.data?.store?.currency?.code)}
+									: &nbsp; {formatPrice(order?.total || 0, page?.data?.store?.currency?.code)}
 								</span>
 							</div>
 						</div>
@@ -334,18 +414,28 @@
 			</div>
 
 			<!-- Order Timeline -->
-			{#if orderTrackingModule.order.tracking?.length}
-				<OrderTimeline timeline={orderTrackingModule.order.tracking} />
+			{#if order.tracking?.length}
+				<OrderTimeline timeline={order.tracking} />
 			{/if}
 		</section>
 	{:else}
-		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
-			<h2 class="mb-2 text-2xl font-semibold text-gray-800">Invalid Order Tracking URL</h2>
-			<p class="mb-5 text-gray-600">The order tracking link appears to be invalid or has expired.</p>
-
-			<a href="/" aria-label="Return to homepage" data-sveltekit-preload-data>
-				<Button class="w-40 py-2 text-sm">Return Home</Button>
-			</a>
-		</div>
+		<section class="mx-auto flex min-h-[60vh] w-full max-w-sm flex-col justify-center px-4 py-10">
+			<h2 class="mb-1 text-2xl font-semibold text-foreground">Track your order</h2>
+			<p class="mb-6 text-sm text-muted-foreground">Enter your order number and the email or phone you ordered with.</p>
+			<form class="flex flex-col gap-4" onsubmit={open} in:fade={{ duration: 200 }}>
+				<div class="flex flex-col gap-1.5">
+					<Label for="order-no">Order number</Label>
+					<Input id="order-no" bind:value={orderNo} placeholder="GC-000049" autocomplete="off" required />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="order-contact">Email or phone</Label>
+					<Input id="order-contact" bind:value={contact} autocomplete="email" required />
+				</div>
+				{#if error}
+					<p class="text-sm text-destructive" role="alert">{error}</p>
+				{/if}
+				<Button type="submit" class="w-full" disabled={busy}>{busy ? 'Opening…' : 'Track order'}</Button>
+			</form>
+		</section>
 	{/if}
 </div>

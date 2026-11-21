@@ -1,28 +1,41 @@
-##### Stage 1 - Development - Generate dist folder
-FROM node:21 AS builder
-LABEL author="Swadesh Behera"
+# Use an official Node.js runtime as a parent image
+ARG BASE_IMAGE="node:24-slim"
+FROM ${BASE_IMAGE}
+LABEL author="Ipsita Sahoo"
 
-# RUN npm install -g npm
-
-# Add timezone
-RUN apt-get install -yq tzdata && \
-    ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata
-    
+# Set the working directory inside the container
 WORKDIR /usr/app
-COPY package.json ./
-COPY .npmrc ./
-ENV PUPPETEER_SKIP_DOWNLOAD="true"
-RUN npm install --force
-RUN cp -R node_modules prod_node_modules
+
+# Copy package.json and package-lock.json (if available) to the working directory
+COPY package*.json ./
+
+RUN npm install -g bun
+
+# Install dependencies
+RUN bun i
+
+# Copy the rest of your application's source code to the working directory
 COPY . .
-RUN npm run build
-##### Stage 2 - Production
-FROM builder as production
-WORKDIR /usr/app
-COPY --from=builder /usr/app/prod_node_modules ./node_modules
-COPY --from=builder /usr/app/package*.json ./
-ENV PUPPETEER_SKIP_DOWNLOAD="true"
+
+# Feeds kit.version.name (see svelte.config.js), shown in the footer. `.git` is copied in, so the
+# config can read the commit timestamp; GIT_SHA remains a stable last-resort fallback for per-deploy
+# version detection if git is ever unavailable.
+ARG GIT_SHA
+ENV GIT_SHA=${GIT_SHA}
+
+# Build. BUILD_TIME is computed ONCE here and exported into the single build process, so both the
+# client and server passes read the identical `yyyy-mm-dd hh:mm:ss` value — a per-pass `new Date()`
+# would desync the `__sveltekit_<hash>` global and break every page in prod (see svelte.config.js).
+RUN BUILD_TIME="$(date -u +'%Y-%m-%d %H:%M:%S')" bun run build
+
+# Expose the port that your application runs on
+# EXPOSE 3000
+
+# Define environment variables
 ENV NODE_ENV=production
-COPY --from=builder /usr/app/.svelte-kit ./.svelte-kit
-CMD [ "npm", "start" ]
+# A shopper's design is uploaded through this server, and its print file can be up to the engine's
+# 15 MB; adapter-node refuses a body over 512 KB unless told otherwise.
+ENV BODY_SIZE_LIMIT=16M
+
+# Start the application
+CMD ["bun", "start"]

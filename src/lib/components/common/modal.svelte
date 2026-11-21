@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition'
+	import { onDestroy, onMount } from 'svelte'
+	import { fade } from '$lib/motion'
 	import * as Card from '$lib/components/ui/card'
 	import type { WithElementRef } from 'bits-ui'
 	import type { HTMLAttributes } from 'svelte/elements'
 	import { ModalRenderer } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button'
+	import { dialog } from '$lib/actions/dialog.js'
 
 	type ModalProps = {
 		confirmButtonText?: string
@@ -19,9 +21,17 @@
 		useMaxHeight?: boolean
 		useMaxWidth?: boolean
 		rounded?: boolean
+		/**
+		 * Extra classes for the card element itself. `class` goes to Card.Content, which sits inside
+		 * a Card.Root carrying `overflow-hidden` — so a radius set through `class` is drawn and then
+		 * clipped square by the parent, and the border a caller sees is Root's, not its own. This is
+		 * the only way to reach that element.
+		 */
+		rootClass?: string
 		zIndex?: number
 		confirmButtonPosition?: 'top' | 'bottom'
 		loading?: boolean
+		manageHistory?: boolean
 		close?: () => any
 		submit?: () => any
 	}
@@ -32,41 +42,85 @@
 		hideFooter = false,
 		hideHeader = false,
 		class: className,
-		show,
+		show = $bindable(false),
 		title = 'Title',
 		hAuto = false,
 		wAuto = false,
 		useMaxHeight = false,
 		useMaxWidth = false,
 		rounded = true,
+		rootClass = '',
 		zIndex = 1000000,
 		confirmButtonPosition = 'bottom',
 		loading,
+		manageHistory = true,
 		children,
 		close,
 		submit
 	}: ModalProps & WithElementRef<HTMLAttributes<HTMLDivElement>> = $props()
+
+	const modalHistoryKey = '__svelteCommerceModal'
+	const titleId = $props.id()
+	let ownsHistoryEntry = false
+
+	function handleBrowserBack() {
+		if (!show || !ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		show = false
+	}
+
+	onMount(() => {
+		window.addEventListener('popstate', handleBrowserBack)
+		return () => window.removeEventListener('popstate', handleBrowserBack)
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined' || !manageHistory) return
+
+		if (show && !ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		} else if (!show && ownsHistoryEntry) {
+			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
+			ownsHistoryEntry = false
+			if (isCurrentModalEntry) history.back()
+		}
+	})
+
+	onDestroy(() => {
+		if (typeof window !== 'undefined' && manageHistory && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
+			history.back()
+		}
+	})
 </script>
 
 <ModalRenderer bind:show {disableSubmitButton} {submit} {close}>
 	{#snippet content({ handleSubmit, handleClose })}
 		{#if show}
-			<section
+			<!-- role/aria-modal + use:dialog: focus moves in on open, Tab stays inside, Escape closes
+			     and focus returns to whatever opened the modal. Backs login/signup/forgot-password. -->
+			<div
 				style="z-index: {zIndex};"
-				transition:fade={{ duration: 100 }}
-				class="frosted-black fixed inset-0 h-screen w-full items-center justify-center
+				transition:fade
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={hideHeader ? undefined : titleId}
+				aria-label={hideHeader ? title : undefined}
+				tabindex="-1"
+				use:dialog={handleClose}
+				class="frosted-black fixed inset-0 h-[100dvh] w-full items-center justify-center
       {show ? 'flex' : 'hidden'}"
 			>
 				<Card.Root
 					class="overflow-hidden border
-        {rounded ? '' : 'rounded-none'}
+        {rounded ? '' : 'rounded-none'} {rootClass}
         {wAuto ? '' : useMaxWidth ? 'w-full max-w-[80vw]' : 'width'}
         {hAuto ? '' : useMaxHeight ? 'max-h-[80vh] ' : 'h-[80vh]'}"
 				>
 					<div class="{hAuto ? '' : useMaxHeight ? 'max-h-[80vh] ' : 'h-[80vh]'} overflow-y-auto">
 						{#if !hideHeader}
 							<Card.Header style="z-index: {zIndex};" class="sticky top-0 flex w-full flex-row items-center justify-between gap-4 border-b p-4 px-6">
-								<h2 class="text-lg capitalize sm:text-xl">
+								<h2 id={titleId} class="text-lg capitalize sm:text-xl">
 									{title}
 								</h2>
 
@@ -109,7 +163,7 @@
 						</form>
 					</div>
 				</Card.Root>
-			</section>
+			</div>
 		{/if}
 	{/snippet}
 </ModalRenderer>

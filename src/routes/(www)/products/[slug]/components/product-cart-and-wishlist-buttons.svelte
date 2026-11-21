@@ -1,27 +1,122 @@
 <script lang="ts">
+	import { getContext, tick } from 'svelte'
 	import { page } from '$app/state'
+	import { EDITOR, openEditor, type EditorHandle } from '$lib/customizer/editor.svelte'
+	import { madeToDesign } from '$lib/product/designable'
 	import { Button } from '$lib/components/ui/button'
+	import Spinner from '$lib/components/common/spinner.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { formatPrice } from '$lib/core/utils'
-	import { Check, ChevronRight, HeartIcon, LoaderCircle, ShoppingCart, MoveRight, ShoppingBag } from '@lucide/svelte'
-	import { fly } from 'svelte/transition'
+	import { formatPrice } from '$lib/utils/price'
+	import { Check, HeartIcon, Palette, ShoppingBag } from '@lucide/svelte'
+	import { fade, fly } from '$lib/motion'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
-	import { quintOut } from 'svelte/easing'
-	import { goto } from '$app/navigation'
+	import BackInStock from './back-in-stock.svelte'
+	import { toast } from 'svelte-sonner'
+	import { isOutOfStock } from '$lib/product/stock'
+	import { addOnPicks, addPicks } from '$lib/product/add-on-picks.svelte'
+	import { bumpTotal } from '$lib/product/upsells'
 
-	const { showWishlist = true } = $props()
+	/**
+	 * `compact` is the sticky mobile bar: CTA only, no secondary link, no wishlist.
+	 */
+	const { showWishlist = true, compact = false } = $props()
 
 	const productState = useProductState()
 	const enquiryPlugin = $derived(page.data?.store?.plugins?.enquiryMode)
 
 	let showEnquiryModal = $state(false)
 
-  function handleClick() {
-    if (productState.cartState.showCheckout)
-      goto('/checkout/cart')
-    else
-      productState.handleAddToCart()
-  }
+	// Availability is read from the selected variant with the product record as the fallback, so
+	// the CTA is correct during SSR too. It used to be gated on `productState.isLoading`, which is
+	// true for the whole server render, so the label carried no availability at all until
+	// hydration finished.
+	// The rule itself is shared with the product schema (src/lib/product/stock.ts).
+	const variant = $derived(productState.selectedVariant?.id ? productState.selectedVariant : null)
+	const stockSource = $derived<Record<string, any> | null>(variant ?? page.data?.product ?? null)
+	const outOfStock = $derived(isOutOfStock(stockSource))
+	// Read with the product (+page.ts): the store emails a saved item's list when it is back.
+	const restockAlerts = $derived(page.data?.restockAlerts === true)
+
+	const cartCount = $derived(productState.cartState?.cart?.lineItems?.length ?? 0)
+
+	const editor = getContext<EditorHandle | undefined>(EDITOR)
+	const designable = $derived(madeToDesign(page.data?.product) || !!editor?.hasSetup)
+	let opening = $state(false)
+
+	async function design() {
+		if (!editor?.hasSetup) {
+			opening = true
+			await editor?.reloadSetup()
+			await tick()
+			opening = false
+			if (!editor?.hasSetup) {
+				toast.error("Couldn't open the designer.", { action: { label: 'Try again', onClick: design } })
+				return
+			}
+		}
+		openEditor()
+	}
+
+	// The figure on the button: the chosen variant's price and every add-on ticked in "Complete the
+	// set" (D133), so the sticky bar on a phone says what the tap will cost.
+	const productId = $derived(String(page.data?.product?.id ?? ''))
+	const picked = $derived(addOnPicks.productId === productId ? addOnPicks.items : [])
+	const unitPrice = $derived(Number(productState.selectedVariant?.price || page.data?.product?.price) || 0)
+	const buttonPrice = $derived(unitPrice > 0 ? formatPrice(bumpTotal(unitPrice, picked), page.data?.store?.currency?.code) : '')
+
+	const thumbnail = $derived(productState.selectedVariant?.img || productState.selectedVariant?.image || page.data?.product?.thumbnail || '')
+
+	// Success is owned here rather than read from `cartState.addToCartMessage`. The store never
+	// sets the 'Added to cart' string the old green style waited for, so that state could not fire;
+	// and the message it does set ('Proceed to checkout') used to rewrite the primary button into
+	// "Go to bag" for five seconds, so a shopper who picked another size and pressed the button
+	// again got the cart drawer instead of a second line item.
+	const SUCCESS_MS = 2200
+	let justAdded = $state(false)
+	// Which face the add button shows; keyed so each change crossfades instead of swapping.
+	const atcState = $derived(productState.isAdding ? 'adding' : justAdded ? 'added' : outOfStock ? 'oos' : 'idle')
+	let wishToggled = $state(false)
+	let resetTimer: ReturnType<typeof setTimeout> | undefined
+
+	$effect(() => () => clearTimeout(resetTimer))
+
+	async function addToBag() {
+		// Core's cart store catches a failed add itself (it shows the error toast) and
+		// handleAddToCart still resolves true, so the store's own flag is the success signal:
+		// `showCheckout` turns on only once the cart has accepted the line. It is cleared first so a
+		// success from an earlier add, still inside its five-second window, cannot vouch for this one.
+		const cartState = productState.cartState
+		if (cartState) cartState.showCheckout = false
+		const added = await productState.handleAddToCart()
+		if (!added || !cartState?.showCheckout) {
+			// handleAddToCart raises its desktop "Added to bag" card whenever it resolves true.
+			productState.showAddToCartMessage = false
+			return
+		}
+
+		await addPicks(productId, productState.cartState)
+
+		justAdded = true
+		clearTimeout(resetTimer)
+		resetTimer = setTimeout(() => (justAdded = false), SUCCESS_MS)
+
+		// The confirmation card below is desktop-only, so phones had no confirmation at all. The
+		// shared toast covers them — but only when nothing else is already confirming: the cart
+		// sidebar opens itself on `showCheckout`, and a toast on top of the open drawer would be
+		// the third acknowledgement of one tap.
+		const drawerWillConfirm = !!(productState.cartState?.isOpen || productState.cartState?.showCheckout)
+		if (!drawerWillConfirm && typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches) {
+			toast.success('Added to bag', {
+				description: page.data?.product?.title,
+				action: {
+					label: 'View bag',
+					onClick: () => {
+						if (productState.cartState) productState.cartState.isOpen = true
+					}
+				}
+			})
+		}
+	}
 </script>
 
 {#snippet wishlistButton()}
@@ -29,105 +124,213 @@
 		<Button
 			variant="outline"
 			size="icon"
-			class="h-full w-20 lg:w-24"
-			onclick={productState.handleWishlistClick}
+			class="edp-wish h-full w-11 shrink-0 md:w-10"
+			onclick={() => {
+				wishToggled = true
+				productState.handleWishlistClick()
+			}}
 			aria-label="Add to wishlist"
 		>
 			{#if productState.wishlistLoading}
-				<LoaderCircle class="h-7 w-7 animate-spin text-primary" />
+				<Spinner size={5} label="Updating wishlist" class="text-primary" />
 			{:else}
 				<HeartIcon
-					class="h-7 w-7 {productState.wishlisted
-						? 'scale-110 fill-red-500 text-red-500'
-						: 'text-gray-900'} transition-transform duration-300"
+					class="!h-5 !w-5 stroke-[1.3] {productState.wishlisted
+						? `fill-destructive text-destructive ${wishToggled ? 'motion-pop' : ''}`
+						: 'text-foreground'}"
 				/>
 			{/if}
 		</Button>
 	{/if}
 {/snippet}
 
-{#if productState.showAddToCartMessage}
-	<!-- Added to cart message toast-like notification -->
+<!-- Adding to the bag also opens the cart drawer, which shows the same line item with the same
+     "View bag" affordance. Two confirmations of one action, stacked on top of each other, so this
+     card stands down whenever the drawer is the thing on screen. -->
+{#if productState.showAddToCartMessage && !productState.cartState?.isOpen && !compact}
 	<div
-		transition:fly={{ x: 50, duration: 300, easing: quintOut }}
-		class="fixed hidden md:block right-4 top-24 z-[100] w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl"
+		in:fly={{ x: 24 }}
+		out:fade
+		class="edp-toast fixed right-4 top-24 z-toast hidden w-full max-w-sm rounded-lg border bg-card p-3 shadow-z-10 md:block"
+		role="status"
 	>
-		<div class="flex items-center gap-4">
-			<div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-100 bg-gray-50">
-				<img
-					src={productState.selectedVariant?.image || page.data?.product?.thumbnail}
-					alt="Product"
-					class="h-full w-full object-contain"
-				/>
-			</div>
+		<div class="flex items-center gap-3">
+			{#if thumbnail}
+				<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md border bg-muted">
+					<img src={thumbnail} alt="" width="48" height="48" class="h-full w-full object-contain" />
+				</div>
+			{/if}
 			<div class="flex flex-1 flex-col gap-1">
-				<p class="text-xs font-bold uppercase tracking-tight text-gray-900">Added to Bag</p>
-				<p class="line-clamp-1 text-[11px] text-gray-500">{page.data?.product?.title}</p>
-				<p class="text-xs font-bold text-primary">
-					{formatPrice(productState.selectedVariant?.price, page?.data?.store?.currency?.code)}
+				<p class="text-sm font-semibold text-foreground">Added to bag</p>
+				<p class="line-clamp-1 text-xs text-muted-foreground">{page.data?.product?.title}</p>
+				<p class="text-xs font-bold text-foreground">
+					{formatPrice(productState.selectedVariant?.price || page.data?.product?.price, page.data?.store?.currency?.code)}
 				</p>
 			</div>
 			<Button
-				href="/checkout/cart"
 				size="sm"
 				class="px-4"
+				onclick={() => {
+					if (productState.cartState) productState.cartState.isOpen = true
+				}}
 			>
-				View Bag
+				View bag
 			</Button>
 		</div>
 	</div>
 {/if}
 
-<div class="flex h-[4rem] items-center gap-4 lg:h-[3rem]">
-	<div class="flex-1 h-full">
-		{#if enquiryPlugin?.active}
-			<EnquiryModal
-				onClose={() => (showEnquiryModal = false)}
-				isOpen={showEnquiryModal}
-				productId={page.data?.product?.id}
-				productTitle={page.data?.product?.title}
-			/>
-			<Button
-				onclick={() => (showEnquiryModal = true)}
-				class="h-full w-full"
-			>
-				{enquiryPlugin?.buttonText || 'Enquire'}
-			</Button>
-		{:else}
-			<div class="flex h-full w-full gap-2">
+<div class="flex flex-col gap-2">
+	<div class="flex h-11 items-center gap-2 md:h-10">
+		<div class="h-full flex-1">
+			{#if enquiryPlugin?.active}
+				<EnquiryModal
+					onClose={() => (showEnquiryModal = false)}
+					isOpen={showEnquiryModal}
+					productId={page.data?.product?.id}
+					productTitle={page.data?.product?.title}
+				/>
+				<Button onclick={() => (showEnquiryModal = true)} class="edp-atc h-full w-full">
+					{enquiryPlugin?.buttonText || 'Enquire'}
+				</Button>
+			{:else if designable}
 				<Button
-					class="h-full flex justify-center items-center gap-2 text-base flex-1 uppercase font-semibold {productState
-						.cartState.addToCartMessage == 'Added to cart'
-						? 'bg-green-600 hover:bg-green-700'
-						: ''}"
+					data-testid="design-yours-button"
+					class="edp-atc flex h-full w-full items-center justify-center gap-2 text-sm font-semibold"
 					size="lg"
-					disabled={productState.addToCartButtonDisabled}
-					onclick={handleClick}
+					aria-haspopup="dialog"
+					aria-busy={opening}
+					disabled={outOfStock || opening}
+					onclick={design}
 				>
-					{#if !productState.isLoading && (!page.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? !productState.selectedVariant?.stock : !page.data?.product.stock)}
-						Out of Stock
-					{:else if productState.cartState.showCheckout}
-						Go to bag
-						<ChevronRight class="h-5 w-5" />
+					{#if outOfStock}
+						<span>Out of stock</span>
 					{:else}
-						<ShoppingBag class="h-5 w-5" />
-					<span class="">Add to bag</span>
+						{#if opening}
+							<Spinner label="Opening the designer" />
+						{:else}
+							<Palette class="h-4 w-4" aria-hidden="true" />
+						{/if}
+						<span>Design yours</span>
+						{#if buttonPrice}
+							<span class="tabular-nums" aria-hidden="true">· {buttonPrice}</span>
+							<span class="sr-only">for {buttonPrice}</span>
+						{/if}
 					{/if}
 				</Button>
+			{:else}
+				<!-- One action, one label. Loading, success and out-of-stock are states of this button,
+				     never a different button in its place. -->
+				<Button
+					data-testid="add-to-cart-button"
+					class="edp-atc flex h-full w-full items-center justify-center gap-2 text-sm font-semibold {justAdded
+						? 'bg-success text-success-foreground hover:bg-success'
+						: ''}"
+					size="lg"
+					aria-busy={productState.isAdding}
+					disabled={productState.isAdding || outOfStock}
+					onclick={addToBag}
+				>
+					{#key atcState}
+						<span class="inline-flex items-center gap-2" in:fade>
+							{#if productState.isAdding}
+								<Spinner label="Adding to bag" />
+								<span>Adding…</span>
+							{:else if justAdded}
+								<Check class="motion-pop-in h-4 w-4" aria-hidden="true" />
+								<span>Added</span>
+							{:else if outOfStock}
+								<span>Out of stock</span>
+							{:else}
+								<ShoppingBag class="h-4 w-4" aria-hidden="true" />
+								<span>Add to bag</span>
+								{#if buttonPrice}
+									<span class="tabular-nums" aria-hidden="true">· {buttonPrice}</span>
+									<span class="sr-only">for {buttonPrice}</span>
+								{/if}
+							{/if}
+						</span>
+					{/key}
+				</Button>
+			{/if}
+		</div>
 
-				<!-- {#if productState.cartState.showCheckout}
-					<Button
-						href="/checkout/cart"
-						class="h-full flex-1"
-						size="lg"
-					>
-						Go to bag
-						<MoveRight class="ml-2 h-4 w-4" />
-					</Button>
-				{/if} -->
-			</div>
-		{/if}
+		{@render wishlistButton()}
 	</div>
 
-	{@render wishlistButton()}
+	{#if restockAlerts && outOfStock && !compact && !enquiryPlugin?.active}
+		<BackInStock {productId} variantId={variant?.id ?? null} label={variant?.title && variant.title !== 'default' ? variant.title : ''} />
+	{/if}
+
+	<!-- A quiet link, not a second primary button: the shopper can reach the bag they already have
+	     without the add action ever moving out from under their finger. -->
+	{#if !compact && cartCount > 0}
+		<Button variant="link" href="/checkout/cart" class="h-auto self-start p-0 text-sm font-medium">
+			Go to bag ({cartCount})
+		</Button>
+	{/if}
+	{#if !compact && !enquiryPlugin?.active && page.data?.store?.plugins?.productEnquiries?.active}
+		<EnquiryModal
+			onClose={() => (showEnquiryModal = false)}
+			isOpen={showEnquiryModal}
+			productId={page.data?.product?.id}
+			productTitle={page.data?.product?.title}
+		/>
+		<button
+			type="button"
+			class="self-start py-2 text-sm underline underline-offset-2 transition-opacity duration-200 hover:opacity-70 active:opacity-50"
+			onclick={() => (showEnquiryModal = true)}
+		>
+			Ask about this product
+		</button>
+	{/if}
 </div>
+
+<style>
+	/* Refined Editorial — default theme only. Primary fill CTA + bordered ghost wishlist. */
+	:global([data-theme='default'] .edp-atc) {
+		border-radius: var(--ed-radius) !important;
+		font-size: var(--type-ui) !important;
+		font-weight: 600;
+		transition:
+			transform var(--motion-fast) var(--motion-ease),
+			opacity var(--motion-fast) var(--motion-ease),
+			background-color var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
+	}
+
+	:global([data-theme='default'] .edp-atc:hover:not(:disabled)) {
+		transform: translateY(-2px);
+	}
+
+	:global([data-theme='default'] .edp-atc:active:not(:disabled)) {
+		transform: scale(0.97);
+	}
+
+	:global([data-theme='default'] .edp-wish) {
+		border: 1px solid var(--ed-line-strong) !important;
+		border-radius: var(--ed-radius) !important;
+		background: transparent !important;
+		transition:
+			border-color var(--motion-fast) var(--motion-ease),
+			background var(--motion-fast) var(--motion-ease);
+	}
+
+	:global([data-theme='default'] .edp-wish:hover) {
+		border-color: var(--ed-ink) !important;
+		background: hsl(var(--muted)) !important;
+	}
+
+	:global([data-theme='default'] .edp-toast) {
+		border: 1px solid var(--ed-line) !important;
+		border-radius: var(--ed-radius) !important;
+		background: var(--ed-surface) !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global([data-theme='default'] .edp-atc:hover:not(:disabled)),
+		:global([data-theme='default'] .edp-atc:active:not(:disabled)) {
+			transform: none;
+		}
+	}
+</style>

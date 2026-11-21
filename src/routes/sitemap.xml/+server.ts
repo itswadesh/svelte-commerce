@@ -1,25 +1,18 @@
 import { env } from '$env/dynamic/public'
 import { env as privateEnv } from '$env/dynamic/private'
 import type { RequestHandler } from '@sveltejs/kit'
-import { StoreService } from '@misiki/litekart-connector'
+// Resolve StoreService through the services barrel, never a connector package by name: the
+// active connector is whichever one kitcommerce.config.ts exports, and naming
+// @misiki/litekart-connector here would break the build for anyone who swapped it for their
+// own backend's connector.
+import { StoreService } from '$lib/core/services'
+import { engineSitemap } from '$lib/server/engine-sitemap'
 
-async function medusaSitemap(baseUrl: string) {
-  const { generateSitemap } = await import('@misiki/medusa-connector')
-  const xml = await generateSitemap({
-    baseUrl,
-    productPath: '/products/',
-    categoryPath: '/',
-    pagePath: '/'
-  });
-  return new Response(xml, {
-    headers: { 'Content-Type': 'application/xml' }
-  });
-}
+export const GET: RequestHandler = async (event) => {
+  const fromEngine = await engineSitemap(event, 'sitemap.xml')
+  if (fromEngine) return fromEngine
 
-export const GET: RequestHandler = async ({ url, fetch, cookies }) => {
-  if (env.PUBLIC_MEDUSA_API_URL) {
-    return medusaSitemap(url.origin)
-  }
+  const { fetch, cookies } = event
   const storeId = cookies.get('litekart_store_id') || ''
 
   const storeService = new StoreService(fetch)
@@ -35,7 +28,8 @@ export const GET: RequestHandler = async ({ url, fetch, cookies }) => {
     return new Response(xmlError, {
       status: 404,
       headers: {
-        'Content-Type': 'application/xml; charset=utf-8'
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'no-store'
       }
     })
   }
@@ -62,6 +56,11 @@ export const GET: RequestHandler = async ({ url, fetch, cookies }) => {
     const headers = new Headers(response.headers)
     headers.delete('content-encoding')
     headers.delete('content-length')
+    // The upstream Cache-Control is the bucket's (a one-year max-age on a production store), which
+    // lets crawlers and CDNs keep a stale index long after the catalogue changes. Our own short
+    // lifetime replaces it; an error is never cached.
+    headers.delete('expires')
+    headers.set('cache-control', response.ok ? 'public, max-age=3600' : 'no-store')
 
     return new Response(response.body, {
       status: response.status,
@@ -69,7 +68,7 @@ export const GET: RequestHandler = async ({ url, fetch, cookies }) => {
     })
   } catch (error) {
     console.error('Failed to fetch sitemap:', error)
-    return new Response('Sitemap not found', { status: 404 })
+    return new Response('Sitemap not found', { status: 404, headers: { 'Cache-Control': 'no-store' } })
   }
 }
 

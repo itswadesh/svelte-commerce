@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { LoaderIcon, X } from '@lucide/svelte'
+	import { Check, LoaderIcon, X } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '../common/modal.svelte'
-	import { AuthButton } from '$lib/core/components/index.js'
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 	import { SignupRenderer } from '$lib/core/composables/index.js'
 	import { page } from '$app/state'
 
-	let { show = $bindable() } = $props()
+	let { show = $bindable(), manageHistory = true } = $props()
 
 	let info = $state({
 		firstName: '',
@@ -16,150 +16,158 @@
 		password: '',
 		confirmPassword: ''
 	})
+
+	const passwordsMismatch = $derived(info.confirmPassword.length > 0 && info.password !== info.confirmPassword)
 </script>
 
 <SignupRenderer bind:show bind:info>
 	{#snippet content({ isLoading, handleSubmit, closeModal, schemas })}
-		<Modal {show} rounded={false} hideHeader hideFooter useMaxHeight class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none" hAuto wAuto>
+		<Modal
+			bind:show
+			{manageHistory}
+			rounded={false}
+			hideHeader
+			hideFooter
+			useMaxHeight
+			class="p-0 max-sm:h-[100dvh] max-sm:w-screen max-sm:!rounded-none"
+			rootClass="shadow-z-10 sm:rounded-radius"
+			hAuto
+			wAuto
+		>
+			<!-- Same shell, rhythm and control sizes as the login modal: a shopper moves between the
+			     two in one click, so they cannot be two different scales. Five fields means this one
+			     scrolls, hence the flex column and max height the login dialog does not need. -->
 			<div
-				class="w-full transform space-y-6 border border-gray-100/50 bg-white p-6 shadow-2xl transition-all dark:border-gray-700/50 dark:bg-gray-900/80 sm:max-w-[480px] sm:rounded-radius sm:p-8 ring-1 ring-white/20 dark:ring-white/5"
+				class="flex max-h-[100dvh] w-full flex-col space-y-5 overflow-y-auto bg-card p-5 text-foreground max-sm:min-h-[100dvh] max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:max-h-[92vh] sm:w-[400px] sm:p-6"
 			>
-				<!-- Close Icon -->
-				<div class="sticky top-3 z-50 flex items-center justify-end sm:absolute sm:right-5 sm:top-5">
+				<div class="flex shrink-0 items-center justify-between gap-3">
+					{#if page?.data?.store?.logo}
+						<img src={page.data.store.logo} alt={page.data.store.name} class="h-7 w-auto object-contain" />
+					{:else}
+						<!-- No logo: the store's name as a wordmark. Its first letter in a bordered square read as a
+						     keyboard key, a shortcut nobody had defined. -->
+						<span class="min-w-0 truncate text-base font-semibold">{page?.data?.store?.name ?? ''}</span>
+					{/if}
 					<button
-						aria-label="Close modal button"
-						class="rounded-full bg-gray-100/50 p-2 text-gray-600 transition-all hover:bg-gray-200 hover:text-gray-900 dark:bg-gray-800/50 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+						type="button"
+						aria-label="Close"
+						class="-mr-1.5 inline-flex size-9 items-center justify-center rounded-radius text-muted-foreground transition-colors hover:bg-muted hover:text-foreground max-md:size-11"
 						onclick={closeModal}
 					>
-						<X class="h-5 w-5" />
+						<X class="size-5" />
 					</button>
 				</div>
 
-				<div class="flex flex-col items-center space-y-3 text-center">
-					{#if page?.data?.store?.logo}
-						<div class="mb-2 flex h-12 items-center justify-center">
-							<img src={page.data.store.logo} alt={page.data.store.name} class="h-10 object-contain dark:brightness-110" />
-						</div>
-					{:else}
-						<div class="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700">
-							<span class="text-2xl font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
-						</div>
-					{/if}
-					<div class="space-y-1.5">
-						<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Create your account</h1>
-						<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Join us and start your shopping journey</p>
-					</div>
+				<!-- The header used to stack two badges before the heading: the store mark, and under it
+				     a 48px primary-tinted circle holding a UserPlus icon. The icon said nothing the
+				     heading did not, so it is gone and the store mark stands alone. -->
+				<div class="shrink-0">
+					<h2 class="text-xl font-semibold">Create account</h2>
+					<p class="mt-1 text-sm text-muted-foreground">Save your details for faster checkout and order tracking.</p>
 				</div>
 
 				<form class="space-y-4" onsubmit={handleSubmit} aria-label="Sign up form">
-					<div class="grid grid-cols-2 gap-4">
+					<div class="space-y-3 [&>div]:mb-0">
+						<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 [&>div]:mb-0">
+							<Textbox
+								name="firstName"
+								bind:value={info.firstName}
+								placeholder="John"
+								schema={schemas.firstName}
+								label="First name"
+								class="h-11 md:h-10"
+								required
+								autocomplete="given-name"
+							/>
+							<Textbox
+								name="lastName"
+								bind:value={info.lastName}
+								placeholder="Doe"
+								schema={schemas.lastName}
+								label="Last name"
+								class="h-11 md:h-10"
+								required
+								autocomplete="family-name"
+							/>
+						</div>
+
 						<Textbox
-							name="firstName"
-							bind:value={info.firstName}
-							placeholder="John"
-							schema={schemas.firstName}
-							label="First Name"
-							class="h-12"
+							name="email"
+							type="email"
+							bind:value={info.email}
+							placeholder="you@example.com"
+							schema={schemas.email}
+							label="Email address"
+							class="h-11 md:h-10"
 							required
-							aria-label="First name"
-							autocomplete="given-name"
+							autocomplete="email"
 						/>
+
 						<Textbox
-							name="lastName"
-							bind:value={info.lastName}
-							placeholder="Doe"
-							schema={schemas.lastName}
-							label="Last Name"
-							class="h-12"
+							name="password"
+							type="password"
+							bind:value={info.password}
+							placeholder="At least 8 characters"
+							schema={schemas.password}
+							label="Password"
+							class="h-11 md:h-10"
 							required
-							aria-label="Last name"
-							autocomplete="family-name"
+							autocomplete="new-password"
+						/>
+
+						<!-- The mismatch used to share a filled, ring-bordered card with a standing password
+						     hint, so a card sat inside the dialog to hold one line of text that was usually
+						     reassurance nobody asked for. The requirement now lives in the field's own
+						     placeholder, and this space is used only when something is actually wrong. -->
+						<Textbox
+							name="confirmPassword"
+							type="password"
+							bind:value={info.confirmPassword}
+							placeholder="Repeat your password"
+							schema={schemas.confirmPassword}
+							label="Confirm password"
+							error={passwordsMismatch ? 'Passwords do not match yet.' : undefined}
+							class="h-11 md:h-10"
+							required
+							autocomplete="new-password"
 						/>
 					</div>
 
-					<Textbox
-						name="email"
-						type="email"
-						bind:value={info.email}
-						placeholder="you@example.com"
-						schema={schemas.email}
-						label="Email address"
-						class="h-12"
-						required
-						aria-label="Email address"
-						autocomplete="email"
-					/>
-
-					<Textbox
-						name="password"
-						type="password"
-						bind:value={info.password}
-						placeholder="••••••••"
-						schema={schemas.password}
-						label="Password"
-						class="h-12"
-						required
-						aria-label="Password"
-						autocomplete="new-password"
-					/>
-
-					<Textbox
-						name="confirmPassword"
-						type="password"
-						bind:value={info.confirmPassword}
-						placeholder="••••••••"
-						schema={schemas.confirmPassword}
-						label="Confirm password"
-						class="h-12"
-						required
-						aria-label="Confirm password"
-						autocomplete="new-password"
-					/>
-
-					<Button
-						type="submit"
-						class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
-						disabled={isLoading || info.password !== info.confirmPassword}
-						aria-label={isLoading ? 'Creating account...' : info.password !== info.confirmPassword ? 'Passwords do not match' : 'Create account'}
-					>
+					<Button type="submit" class="h-11 w-full text-sm font-semibold md:h-10" disabled={isLoading || passwordsMismatch}>
 						{#if isLoading}
-							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+							<LoaderIcon class="mr-2 size-4 animate-spin" aria-hidden="true" />
+							Creating account…
+						{:else}
+							Create account
 						{/if}
-						{isLoading ? 'Creating account...' : info.password !== info.confirmPassword ? 'Passwords do not match' : 'Create account'}
 					</Button>
-				</form>
 
-				<div class="space-y-4 text-center">
-					<p class="text-sm text-gray-500">Already have an account?</p>
-					<AuthButton type="login">
-						<Button
-							variant="link"
-							class="inline-block text-gray-600 transition-colors hover:text-gray-900 dark:hover:text-gray-300"
+					<!-- One route back to sign-in, not two. A mobile-only ghost "Login" button used to sit
+					     in the header row as well as this line, so a phone showed the same action twice. -->
+					<p class="text-center text-sm text-muted-foreground">
+						Already have an account?
+						<AuthButton
+							type="login"
 							aria-label="Sign in to your account"
+							class="inline cursor-pointer font-medium text-foreground underline-offset-4 hover:underline">Sign in</AuthButton
 						>
-							Sign in to your account
-						</Button>
-					</AuthButton>
-				</div>
+					</p>
 
-				{#if page?.data?.store?.plugins?.isMultiVendor?.active}
-					<div class="relative py-4">
-						<div class="absolute inset-0 flex items-center">
-							<div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
-						</div>
-						<div class="relative flex justify-center text-sm">
-							<span class="bg-white px-2 text-gray-500 dark:bg-gray-800 dark:text-gray-400">or</span>
-						</div>
-					</div>
-
-					<a
-						href="/auth/join-as-vendor"
-						class="inline-block w-full rounded-lg border border-gray-600 px-4 py-2 text-center text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-500 dark:text-gray-300 dark:hover:bg-gray-900/20"
-						aria-label="Join as a vendor"
-					>
-						Join as a Vendor
-					</a>
-				{/if}
+					{#if page?.data?.store?.plugins?.isMultiVendor?.active}
+						<!-- Was an "or" divider above a full-width bordered button, which gave a secondary
+						     link the visual weight of a second call to action. -->
+						<p class="text-center text-xs leading-relaxed text-muted-foreground">
+							Selling with us?
+							<a
+								href="/auth/join-as-vendor"
+								class="inline-flex items-center gap-1 font-medium text-foreground underline-offset-4 hover:underline"
+								aria-label="Join as a vendor"
+							>
+								<Check class="size-3.5" aria-hidden="true" /> Join as a vendor
+							</a>
+						</p>
+					{/if}
+				</form>
 			</div>
 		</Modal>
 	{/snippet}

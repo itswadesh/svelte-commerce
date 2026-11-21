@@ -1,340 +1,387 @@
 <script lang="ts">
 	import { toast } from '@misiki/kitcommerce-core'
-	import { Image, Star, StarIcon, X, Check, Camera, MessageSquare, ThumbsUp } from '@lucide/svelte'
+	import { BadgeCheck, Star, StarIcon, X, Camera, ChevronLeft, ChevronRight, UserRound } from '@lucide/svelte'
 	import { date } from '$lib/core/utils/index.js'
-	import * as Tabs from '$lib/components/ui/tabs/index.js'
 	import { page } from '$app/state'
-	import { invalidateAll } from '$app/navigation'
+	import { invalidateAll, replaceState } from '$app/navigation'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { productService } from '$lib/core/services/index.js'
+	import { showAuthModal } from '$lib/core/components/index.js'
+	import { productService, uploadService } from '$lib/core/services/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Textarea } from '$lib/components/ui/textarea/index.js'
-	import { fade, fly, scale } from 'svelte/transition'
-	import { quintOut } from 'svelte/easing'
+	import { fade, scale } from '$lib/motion'
+	import { REVIEW_PARAM, reviewReturnPath } from '$lib/utils/review-return'
 
 	const productState = useProductState()
-	const accRating = $derived.by(() => {
-		if (!page.data?.product?.ratings?.length) return 0
-		const total = page.data?.product?.ratings?.reduce((acc, cur) => acc + cur.rating, 0)
-		const rating = total / page.data?.product?.ratings?.length
-		return Math.floor(rating * 10) / 10
+
+	const signedIn = $derived(!!productState.userState?.user?.userId)
+
+	function writeReview() {
+		if (signedIn) productState.showReviewForm = true
+		else showAuthModal('login', { redirect: reviewReturnPath(page.url) })
+	}
+
+	// Sign-in lands back here with ?review=1: open the form once, then drop the flag.
+	$effect(() => {
+		if (page.url.searchParams.get(REVIEW_PARAM) !== '1' || !signedIn) return
+		productState.showReviewForm = true
+		const url = new URL(page.url)
+		url.searchParams.delete(REVIEW_PARAM)
+		// On a cold load this effect can run before the router has started, when replaceState throws.
+		setTimeout(() => replaceState(url, page.state))
 	})
 
+	const ratings = $derived(page.data?.product?.ratings ?? [])
+
+	const accRating = $derived.by(() => {
+		if (!ratings.length) return 0
+		const total = ratings.reduce((acc: number, cur: { rating: number }) => acc + cur.rating, 0)
+		return Math.floor((total / ratings.length) * 10) / 10
+	})
+
+	// Review photos are stored as a comma-separated URL list in `img`.
+	const reviewImages = (r: any): string[] =>
+		r?.img
+			? String(r.img)
+					.split(',')
+					.map((s: string) => s.trim())
+					.filter(Boolean)
+			: []
+
+	const allPhotos = $derived(ratings.flatMap(reviewImages))
+	const PHOTO_STRIP = 3
+
+	const variantTitle = (variantId: string): string => {
+		const v = page.data?.product?.variants?.find((x: any) => x.id === variantId)
+		return v?.title && v.title !== 'default' ? v.title : ''
+	}
+
+	const distribution = $derived(
+		[5, 4, 3, 2, 1].map((stars) => {
+			const count = ratings.filter((r: any) => Math.round(r.rating) === stars).length
+			return { stars, count, pct: ratings.length ? Math.round((count / ratings.length) * 100) : 0 }
+		})
+	)
+
+	// Lightbox for review photos
+	let lightbox = $state<{ photos: string[]; index: number } | null>(null)
+	const openLightbox = (photos: string[], index = 0) => (lightbox = { photos, index })
+	const lightboxStep = (delta: number) => {
+		if (!lightbox) return
+		lightbox.index = (lightbox.index + delta + lightbox.photos.length) % lightbox.photos.length
+	}
+
+	// Review-form photo upload
+	let pendingPhotos = $state<{ file: File; preview: string }[]>([])
+	let submitting = $state(false)
+	const onPhotosPicked = (e: Event) => {
+		const files = [...((e.target as HTMLInputElement).files ?? [])].slice(0, 5 - pendingPhotos.length)
+		pendingPhotos = [...pendingPhotos, ...files.map((file) => ({ file, preview: URL.createObjectURL(file) }))]
+		;(e.target as HTMLInputElement).value = ''
+	}
+	const removePendingPhoto = (i: number) => {
+		URL.revokeObjectURL(pendingPhotos[i].preview)
+		pendingPhotos = pendingPhotos.filter((_, idx) => idx !== i)
+	}
+
+	async function submitReview() {
+		submitting = true
+		try {
+			let uploadedImages: string[] = []
+			if (pendingPhotos.length) {
+				const uploads = await uploadService.uploadMultipleToS3({
+					files: pendingPhotos.map((p) => p.file),
+					folderName: 'reviews',
+					type: 'image'
+				})
+				uploadedImages = (uploads ?? []).map((u: any) => u?.url).filter(Boolean)
+			}
+			await productService.addReview({
+				productId: page.data?.product.id,
+				variantId: productState.selectedVariant?.id,
+				rating: productState.select || 1,
+				review: productState.reviewMessage,
+				uploadedImages
+			})
+			productState.showReviewForm = false
+			pendingPhotos.forEach((p) => URL.revokeObjectURL(p.preview))
+			pendingPhotos = []
+			await invalidateAll()
+			toast.success('Review published! Thanks for sharing.')
+		} catch (error: any) {
+			toast.error(error?.message || 'Could not post review. Try again?')
+		} finally {
+			submitting = false
+		}
+	}
+
 	const ratingLabels = [
-		{ text: 'Very Disappointed', color: 'text-red-500' },
-		{ text: 'Slightly Disappointed', color: 'text-orange-500' },
-		{ text: 'Good', color: 'text-emerald-500' },
-		{ text: 'Very Good', color: 'text-emerald-600' },
-		{ text: 'Excellent', color: 'text-emerald-700' }
+		{ text: 'Very disappointed', color: 'text-destructive' },
+		{ text: 'Slightly disappointed', color: 'text-warning' },
+		{ text: 'Good', color: 'text-success' },
+		{ text: 'Very good', color: 'text-success' },
+		{ text: 'Excellent', color: 'text-success' }
 	]
 </script>
 
-<!-- Reviews Section -->
+<!-- Customer Ratings -->
 {#if page.data.store?.plugins?.isProductReviewsAndRatings?.active}
-	<section class="">
-		{#if page.data?.product?.ratings?.length}
-			<div class="intra-gap grid grid-cols-1 lg:grid-cols-12">
-				<!-- Left Column: Summary & Stats -->
-				<div class="lg:sticky lg:top-24 lg:col-span-4 lg:h-fit">
-					<div class="space-y-6 lg:space-y-8">
-						<div class="flex flex-col items-center text-center lg:items-start lg:text-left">
-							<h2 class="mb-1 text-2xl font-bold tracking-tight text-foreground lg:mb-2 lg:text-2xl">Reviews</h2>
-							<p class="text-sm text-muted-foreground lg:text-base">Real feedback from our community</p>
+	<section id="reviews" class="edp-rev scroll-mt-24">
+		<h2 class="edp-rev-title section-heading mb-6 border-b border-border pb-4">Customer ratings</h2>
 
-							<div class="mt-6 flex items-baseline gap-2 lg:mt-8">
-								<span class="text-5xl font-black text-primary lg:text-6xl">{accRating || '0.0'}</span>
-								<span class="text-lg font-semibold text-muted-foreground/60 lg:text-xl">/ 5.0</span>
-							</div>
+		{#if ratings.length}
+			<!-- Summary: average / distribution / customer photos -->
+			<div class="grid grid-cols-1 gap-8 border-b border-border pb-8 md:grid-cols-2 lg:grid-cols-12 lg:gap-10">
+				<div class="flex flex-col items-center text-center lg:col-span-3 lg:items-start lg:text-left">
+					<div class="flex items-baseline gap-1">
+						<span class="edp-rev-score text-3xl font-semibold text-foreground">{accRating || '0.0'}</span>
+						<span class="text-xl font-semibold text-muted-foreground">/5</span>
+					</div>
+					<div class="mt-2 flex items-center gap-0.5">
+						{#each { length: 5 } as _, i}
+							<Star
+								fill={i < Math.round(accRating) ? 'currentColor' : 'none'}
+								class="h-5 w-5 {i < Math.round(accRating) ? 'text-primary' : 'text-muted-foreground/50'}"
+							/>
+						{/each}
+					</div>
+					<p class="mt-2 text-sm text-muted-foreground">
+						Based on {ratings.length}
+						{ratings.length === 1 ? 'review' : 'reviews'}
+					</p>
+					<Button class="mt-4" onclick={writeReview}>Write a review</Button>
+				</div>
 
-							<div class="mt-2 flex items-center gap-1.5 lg:mt-3">
-								<div class="flex items-center gap-0.5">
-									{#each { length: 5 } as _, i}
-										<Star
-											fill={i < Math.floor(accRating) ? 'currentColor' : 'none'}
-											class="h-5 w-5 {i < Math.floor(accRating) ? 'text-primary' : 'text-muted-foreground'}"
-										/>
-									{/each}
+				<div class="lg:col-span-5">
+					<div class="space-y-2.5">
+						{#each distribution as row}
+							<div class="flex items-center gap-3">
+								<span class="w-12 shrink-0 text-right text-sm text-muted-foreground">{row.stars} star</span>
+								<div class="relative h-3.5 flex-1 overflow-hidden rounded-full border border-primary/40 bg-background">
+									<div
+										class="absolute inset-y-0 left-0 w-full origin-left bg-primary transition-transform duration-emphasis ease-standard"
+										style="transform: scaleX({row.pct / 100})"
+									></div>
 								</div>
-								<span class="ml-2 text-sm font-medium text-muted-foreground">
-									{page.data?.product?.ratings?.length || 0} global ratings
-								</span>
+								<span class="w-10 shrink-0 text-sm text-muted-foreground">{row.pct}%</span>
 							</div>
-						</div>
-
-						<!-- Rating Distribution -->
-						<div class="rounded-md bg-muted/10 p-6 ring-1 ring-border">
-							<div class="space-y-4">
-								{#each [5, 4, 3, 2, 1] as stars}
-									{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars - 1).length || 0}
-									{@const percentage = page.data?.product?.ratings?.length ? (count / page.data?.product?.ratings?.length) * 100 : 0}
-									<div class="group flex items-center gap-4">
-										<button class="flex w-12 items-center gap-1.5 text-sm font-bold text-muted-foreground transition-colors hover:text-primary">
-											{stars}
-											<StarIcon class="h-3.5 w-3.5 fill-current" />
-										</button>
-										<div class="relative h-2.5 flex-1 overflow-hidden rounded-full bg-muted">
-											<div
-												class="absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-700 ease-out"
-												style="width: {percentage}%"
-											></div>
-										</div>
-										<div class="w-10 text-right text-sm font-bold text-muted-foreground/50 group-hover:text-foreground">
-											{count}
-										</div>
-									</div>
-								{/each}
-							</div>
-						</div>
-
-						<div class="space-y-4">
-							<Button
-								class="h-12 w-full"
-								onclick={() => (productState.showReviewForm = true)}
-							>
-								Write a Review
-							</Button>
-						</div>
+						{/each}
 					</div>
 				</div>
 
-				<!-- Right Column: Reviews Feed -->
-				<div class="lg:col-span-8">
-					<Tabs.Root value="product" class="w-full">
-						<div class="intra-gap flex flex-col sm:flex-row sm:items-center sm:justify-between">
-							<Tabs.List class="flex h-11 w-full items-center justify-center rounded-md bg-muted/30 p-1 text-muted-foreground sm:inline-flex sm:w-auto">
-								<Tabs.Trigger
-									value="product"
-									class="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 sm:flex-none"
+				{#if allPhotos.length}
+					<div class="lg:col-span-4">
+						<div class="flex gap-3">
+							{#each allPhotos.slice(0, PHOTO_STRIP) as photo, i}
+								<button
+									class="edp-rev-photo group relative aspect-square w-full max-w-[140px] flex-1 overflow-hidden rounded-md ring-1 ring-border"
+									onclick={() => openLightbox(allPhotos, i)}
+									aria-label="View customer photo {i + 1} of {allPhotos.length}"
 								>
-									Product Reviews
-								</Tabs.Trigger>
-								<Tabs.Trigger
-									value="brand"
-									class="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 sm:flex-none"
-								>
-									Brand Feedback
-								</Tabs.Trigger>
-							</Tabs.List>
+									<img
+										src={photo}
+										alt="Customer review"
+										class="h-full w-full object-cover transition-transform duration-emphasis motion-safe:group-hover:scale-105"
+										loading="lazy"
+									/>
+									{#if i === PHOTO_STRIP - 1 && allPhotos.length > PHOTO_STRIP}
+										<span class="absolute inset-0 flex items-center justify-center bg-black/45 text-sm font-semibold text-white">
+											+{allPhotos.length - PHOTO_STRIP} more
+										</span>
+									{/if}
+								</button>
+							{/each}
+						</div>
+					</div>
+				{/if}
+			</div>
+
+			<!-- Review rows -->
+			<div class="divide-y divide-border">
+				{#each ratings as rating}
+					{@const photos = reviewImages(rating)}
+					{@const size = variantTitle(rating.variantId)}
+					<div class="grid grid-cols-1 gap-4 py-7 lg:grid-cols-12 lg:gap-8">
+						<div class="lg:col-span-4">
+							<div class="flex items-center gap-2.5">
+								<span class="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
+									<UserRound class="h-4 w-4" />
+								</span>
+								<span class="font-semibold text-foreground">{rating.name || 'Guest'}</span>
+								<span class="text-sm text-muted-foreground">{rating.createdAt ? date(rating.createdAt) : ''}</span>
+							</div>
+							<div class="mt-2.5 flex items-center gap-0.5">
+								{#each { length: 5 } as _, i}
+									<StarIcon class="h-4.5 w-4.5 {i < Math.round(rating.rating) ? 'fill-primary text-primary' : 'text-muted-foreground/40'}" />
+								{/each}
+							</div>
+							{#if rating.verified}
+								<p class="mt-2 flex items-center gap-1 text-sm text-muted-foreground">
+									<BadgeCheck class="h-4 w-4 text-primary" aria-hidden="true" /> Verified purchase
+								</p>
+							{/if}
+							{#if size}
+								<p class="mt-2 text-sm text-muted-foreground">Size: {size}</p>
+							{/if}
 						</div>
 
-						<Tabs.Content value="product" class="intra-pt space-y-4">
-							{#each page.data?.product?.ratings as rating, i}
-								<div
-									class="relative flex flex-col gap-4 rounded-md bg-background p-5 ring-1 ring-border transition-all hover:shadow-xl sm:gap-6 sm:p-6"
-									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
-								>
-									<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-										<div class="flex items-center gap-3 sm:gap-4">
-											<div class="relative flex-shrink-0">
-												<div
-													class="flex h-10 w-10 items-center justify-center rounded-full bg-muted/10 ring-2 ring-background ring-offset-2 sm:h-12 sm:w-12"
-												>
-													{#if rating?.img}
-														<img src={rating.img} alt={rating.name} class="h-full w-full rounded-full object-cover" />
-													{:else}
-														<span class="text-base font-black text-muted-foreground/50 sm:text-lg">
-															{(rating.name || 'G')[0].toUpperCase()}
-														</span>
-													{/if}
-												</div>
-												<div
-													class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background sm:h-5 sm:w-5"
-												>
-													<Check class="h-2.5 w-2.5 stroke-[3] sm:h-3 sm:w-3" />
-												</div>
-											</div>
-											<div class="min-w-0">
-												<h4 class="truncate font-bold text-foreground">{rating.name || 'Guest'}</h4>
-												<div class="flex flex-wrap items-center gap-x-2 text-[10px] font-medium text-muted-foreground sm:text-xs">
-													<span>{rating.createdAt ? date(rating.createdAt) : 'Recently'}</span>
-													<span class="h-1 w-1 rounded-full bg-border"></span>
-												</div>
-											</div>
-										</div>
-										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/20 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
-											{#each { length: 5 } as _, i}
-												<StarIcon class="h-3 w-3 {i <= rating.rating ? 'fill-primary text-primary' : 'text-muted-foreground'} sm:h-3.5 sm:w-3.5" />
-											{/each}
-										</div>
-									</div>
-
-									<div class="space-y-4">
-										{#if rating.review}
-											<p class="text-base leading-relaxed text-foreground/80 first-letter:uppercase sm:text-lg">
-												"{rating.review}"
-											</p>
-										{/if}
-
-										{#if rating.images?.length}
-											<div class="flex flex-wrap gap-2 sm:gap-3">
-												{#each rating.images as img}
-													<button
-														class="group relative aspect-square w-20 overflow-hidden rounded-md ring-2 ring-background transition-all hover:ring-primary sm:w-24"
-													>
-														<img src={img} alt="Review" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-														<div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10"></div>
-													</button>
-												{/each}
-											</div>
-										{/if}
-									</div>
+						<div class="lg:col-span-8">
+							{#if rating.review}
+								<p class="leading-relaxed text-foreground/85">{rating.review}</p>
+							{/if}
+							{#if photos.length}
+								<div class="mt-4 flex flex-wrap gap-2.5">
+									{#each photos as photo, i}
+										<button
+											class="edp-rev-photo group aspect-square w-20 overflow-hidden rounded-md ring-1 ring-border transition-all hover:ring-primary sm:w-24"
+											onclick={() => openLightbox(photos, i)}
+											aria-label="View review photo {i + 1} from {rating.name || 'customer'}"
+										>
+											<img
+												src={photo}
+												alt=""
+												class="h-full w-full object-cover transition-transform duration-emphasis motion-safe:group-hover:scale-105"
+												loading="lazy"
+											/>
+										</button>
+									{/each}
 								</div>
-							{/each}
-						</Tabs.Content>
-
-						<Tabs.Content value="brand" class="intra-pt space-y-6">
-							{#each page.data?.product?.brandReviews as rating, i}
-								<div
-									class="relative flex flex-col gap-4 rounded-md bg-background p-5 ring-1 ring-border transition-all hover:shadow-xl sm:gap-6 sm:p-6"
-									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
-								>
-									<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-										<div class="flex items-center gap-3 sm:gap-4">
-											<div class="relative flex-shrink-0">
-												<div
-													class="flex h-10 w-10 items-center justify-center rounded-full bg-muted/10 ring-2 ring-background ring-offset-2 sm:h-12 sm:w-12"
-												>
-													{#if rating?.img}
-														<img src={rating.img} alt={rating.name} class="h-full w-full rounded-full object-cover" />
-													{:else}
-														<span class="text-base font-black text-muted-foreground/50 sm:text-lg">
-															{(rating.name || 'G')[0].toUpperCase()}
-														</span>
-													{/if}
-												</div>
-												<div
-													class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background sm:h-5 sm:w-5"
-												>
-													<Check class="h-2.5 w-2.5 stroke-[3] sm:h-3 sm:w-3" />
-												</div>
-											</div>
-											<div class="min-w-0">
-												<h4 class="truncate font-bold text-foreground">{rating.name || 'Guest'}</h4>
-												<div class="flex flex-wrap items-center gap-x-2 text-[10px] font-medium text-muted-foreground sm:text-xs">
-													<span>{rating.createdAt ? date(rating.createdAt) : 'Recently'}</span>
-													<span class="h-1 w-1 rounded-full bg-border"></span>
-												</div>
-											</div>
-										</div>
-										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/20 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
-											{#each { length: 5 } as _, i}
-												<StarIcon class="h-3 w-3 {i <= rating.rating ? 'fill-primary text-primary' : 'text-muted-foreground'} sm:h-3.5 sm:w-3.5" />
-											{/each}
-										</div>
-									</div>
-
-									<div class="space-y-4">
-										{#if rating.review}
-											<p class="text-base leading-relaxed text-foreground/80 first-letter:uppercase sm:text-lg">
-												"{rating.review}"
-											</p>
-										{/if}
-
-										{#if rating.images?.length}
-											<div class="flex flex-wrap gap-2 sm:gap-3">
-												{#each rating.images as img}
-													<button
-														class="group relative aspect-square w-20 overflow-hidden rounded-md ring-2 ring-background transition-all hover:ring-primary sm:w-24"
-													>
-														<img src={img} alt="Review" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
-														<div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10"></div>
-													</button>
-												{/each}
-											</div>
-										{/if}
-									</div>
-								</div>
-							{:else}
-								<div
-									class="flex flex-col items-center justify-center py-12 text-center text-muted-foreground bg-muted/30 rounded-md border-2 border-dashed border-border"
-								>
-									<MessageSquare class="h-10 w-10 mb-3 opacity-20 sm:h-12 sm:w-12 sm:mb-4" />
-									<p class="font-bold text-base sm:text-lg">No brand feedback yet</p>
-									<p class="text-xs sm:text-sm">Be the first to share your experience!</p>
-								</div>
-							{/each}
-						</Tabs.Content>
-					</Tabs.Root>
-				</div>
+							{/if}
+						</div>
+					</div>
+				{/each}
 			</div>
 		{:else}
 			<!-- Empty State -->
-			<div class="flex flex-col items-center justify-center py-12 text-center sm:py-20">
-				<div
-					class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border sm:mb-8 sm:h-24 sm:w-24"
-				>
-					<Star class="h-10 w-10 sm:h-12 sm:w-12" />
+			<div class="flex flex-col items-center justify-center py-12 text-center sm:py-16">
+				<div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
+					<Star class="h-10 w-10" />
 				</div>
-				<h2 class="mb-2 text-2xl font-bold tracking-tight text-foreground sm:mb-3 sm:text-3xl">No reviews yet</h2>
-				<p class="mb-8 max-w-xs text-base text-muted-foreground sm:mb-10 sm:max-w-sm sm:text-lg">
-					Be the first to share your thoughts on this product and help other shoppers.
-				</p>
-				<Button
-					class="h-12 sm:h-14 px-8 sm:px-8"
-					onclick={() => (productState.showReviewForm = true)}
-				>
-					Write the First Review
-				</Button>
+				<h3 class="mb-2 text-2xl font-bold tracking-tight text-foreground">No reviews yet</h3>
+				<p class="mb-8 max-w-sm text-muted-foreground">Be the first to share your thoughts on this product and help other shoppers.</p>
+				<Button class="h-12 px-8" onclick={writeReview}>Write the first review</Button>
 			</div>
 		{/if}
 	</section>
 
-	<!-- Review Form Modal Overlay -->
-	{#if productState.showReviewForm}
-		<div class="fixed inset-0 z-[100] flex items-center justify-center bg-foreground backdrop-blur-sm sm:p-4" transition:fade={{ duration: 200 }}>
-			<div
-				class="font-montserrat relative h-full w-full overflow-hidden bg-background sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-radius sm:shadow-2xl"
-				transition:scale={{ start: 0.95, duration: 300, easing: quintOut }}
+	<!-- Photo lightbox -->
+	{#if lightbox}
+		<!-- Intro-only fade: an outro transition here can wedge mid-removal and leave an
+		     invisible full-screen node that blocks all clicks. -->
+		<div
+			class="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 p-4"
+			in:fade
+			onclick={() => (lightbox = null)}
+			onkeydown={(e) => {
+				if (e.key === 'Escape') lightbox = null
+				if (e.key === 'ArrowRight') lightboxStep(1)
+				if (e.key === 'ArrowLeft') lightboxStep(-1)
+			}}
+			role="dialog"
+			aria-label="Review photo viewer"
+			tabindex="-1"
+		>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="absolute right-4 top-4 rounded-full text-white hover:bg-white/10 hover:text-white"
+				onclick={(e: MouseEvent) => {
+					e.stopPropagation()
+					lightbox = null
+				}}
+				aria-label="Close photo viewer"
 			>
-				<!-- Modal Header -->
-				<div
-					class="sticky top-0 z-10 flex items-center justify-between border-b border-border px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6"
+				<X class="h-6 w-6" />
+			</Button>
+			{#if lightbox.photos.length > 1}
+				<Button
+					variant="ghost"
+					size="icon"
+					class="absolute left-3 rounded-full text-white hover:bg-white/10 hover:text-white"
+					onclick={(e: MouseEvent) => {
+						e.stopPropagation()
+						lightboxStep(-1)
+					}}
+					aria-label="Previous photo"
 				>
+					<ChevronLeft class="h-7 w-7" />
+				</Button>
+				<Button
+					variant="ghost"
+					size="icon"
+					class="absolute right-3 top-1/2 rounded-full text-white hover:bg-white/10 hover:text-white"
+					onclick={(e: MouseEvent) => {
+						e.stopPropagation()
+						lightboxStep(1)
+					}}
+					aria-label="Next photo"
+				>
+					<ChevronRight class="h-7 w-7" />
+				</Button>
+			{/if}
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions, a11y_click_events_have_key_events -->
+			<img
+				src={lightbox.photos[lightbox.index]}
+				alt="Customer review photo {lightbox.index + 1} of {lightbox.photos.length}"
+				class="max-h-[85vh] max-w-[92vw] rounded-md object-contain"
+				onclick={(e) => e.stopPropagation()}
+			/>
+			{#if lightbox.photos.length > 1}
+				<span class="absolute bottom-4 rounded-full bg-white/10 px-3 py-1 text-xs text-white">
+					{lightbox.index + 1} / {lightbox.photos.length}
+				</span>
+			{/if}
+		</div>
+	{/if}
+
+	<!-- Review Form Modal -->
+	{#if productState.showReviewForm}
+		<div class="fixed inset-0 z-[100] flex items-center justify-center bg-foreground/70 backdrop-blur-sm sm:p-4" transition:fade>
+			<div
+				class="relative h-full w-full overflow-hidden bg-background sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-radius sm:shadow-2xl"
+				transition:scale={{ start: 0.96 }}
+			>
+				<div class="sticky top-0 z-10 flex items-center justify-between border-b border-border px-6 py-4 backdrop-blur-md sm:px-8 sm:py-5">
 					<div>
-						<h3 class="text-xl font-black tracking-tight text-foreground sm:text-2xl">Write a Review</h3>
+						<h3 class="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">Write a review</h3>
 						<p class="text-xs font-medium text-muted-foreground sm:text-sm">Share your experience with us</p>
 					</div>
-					<Button
-						variant="ghost"
-						size="icon"
-						onclick={() => (productState.showReviewForm = false)}
-						class="rounded-full"
-					>
+					<Button variant="ghost" size="icon" onclick={() => (productState.showReviewForm = false)} class="rounded-full">
 						<X class="h-6 w-6" />
 					</Button>
 				</div>
 
-				<!-- Modal Body -->
-				<div class="custom-scrollbar max-h-[calc(100vh-140px)] overflow-y-auto px-6 py-8 sm:max-h-[calc(90vh-180px)] sm:px-8 sm:py-10">
-					<div class="space-y-10 sm:space-y-12">
+				<div class="max-h-[calc(100dvh-140px)] overflow-y-auto px-6 py-6 sm:max-h-[calc(90vh-170px)] sm:px-8 sm:py-8">
+					<div class="space-y-8">
 						<!-- Rating Selection -->
-						<div class="space-y-4 sm:space-y-6">
-							<span class="block text-base font-bold text-foreground sm:text-lg">Overall Rating</span>
-							<div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+						<div class="space-y-3">
+							<span class="block text-base font-bold text-foreground">Overall rating</span>
+							<div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
 								<div class="flex items-center gap-1">
 									{#each { length: 5 } as _, i}
 										<Button
 											variant="plain"
-											class="h-12 w-12 p-0"
+											class="h-11 w-11 p-0"
+											aria-label="Rate {i + 1} {i === 0 ? 'star' : 'stars'}"
+											aria-pressed={productState.select !== null && productState.select === i + 1}
 											onclick={() => productState.onSelect(i + 1)}
 										>
 											<Star
 												fill={productState.select !== null && productState.select >= i + 1 ? 'currentColor' : 'none'}
 												strokeWidth={1.5}
-												class="!h-10 !w-10 transition-colors {productState.select !== null && productState.select >= i + 1
+												class="!h-9 !w-9 transition-colors {productState.select !== null && productState.select >= i + 1
 													? 'text-primary'
-													: 'text-muted-foreground'} sm:!h-12 sm:!w-12"
+													: 'text-muted-foreground'}"
 											/>
 										</Button>
 									{/each}
 								</div>
-
 								{#if productState.select !== null}
 									<div
-										class="rounded-full px-4 py-1.5 text-xs font-black ring-1 ring-inset {ratingLabels[productState.select - 1].color
+										class="rounded-full px-4 py-1.5 text-xs font-semibold ring-1 ring-inset {ratingLabels[productState.select - 1].color
 											.replace('text-', 'bg-')
-											.replace('-500', '-50')} {ratingLabels[productState.select - 1].color} sm:text-sm"
-										in:scale={{ start: 0.9, duration: 200 }}
+											.replace('-500', '-50')} {ratingLabels[productState.select - 1].color}"
+										in:scale={{ start: 0.9 }}
 									>
 										{ratingLabels[productState.select - 1].text}
 									</div>
@@ -343,54 +390,53 @@
 						</div>
 
 						<!-- Review Message -->
-						<div class="space-y-4">
-							<label for="review" class="block text-base font-bold text-foreground sm:text-lg">Your Story</label>
-							<div class="relative">
-								<Textarea
-									id="review"
-									placeholder="What did you love? What could be better? We're all ears."
-									bind:value={productState.reviewMessage}
-									class="min-h-[140px] rounded-md border-2 border-border p-4 text-base transition-all focus:ring-0 sm:min-h-[160px] sm:p-6 sm:text-lg"
-								/>
-								<div class="absolute bottom-4 right-4 text-[10px] font-bold text-muted-foreground/30 sm:text-xs">
-									{productState.reviewMessage?.length || 0} characters
-								</div>
+						<div class="space-y-3">
+							<label for="review" class="block text-base font-bold text-foreground">Your story</label>
+							<Textarea
+								id="review"
+								placeholder="What did you love? What could be better? We're all ears."
+								bind:value={productState.reviewMessage}
+								class="min-h-[130px] rounded-md border-2 border-border p-4 text-base focus:ring-0"
+							/>
+						</div>
+
+						<!-- Photos -->
+						<div class="space-y-3">
+							<span class="block text-base font-bold text-foreground"
+								>Add photos <span class="text-sm font-normal text-muted-foreground">(optional, up to 5)</span></span
+							>
+							<div class="flex flex-wrap gap-3">
+								{#each pendingPhotos as photo, i}
+									<div class="relative aspect-square w-20 overflow-hidden rounded-md ring-1 ring-border">
+										<img src={photo.preview} alt="Selected review upload {i + 1}" class="h-full w-full object-cover" />
+										<button
+											class="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white"
+											onclick={() => removePendingPhoto(i)}
+											aria-label="Remove photo {i + 1}"
+										>
+											<X class="h-3 w-3" />
+										</button>
+									</div>
+								{/each}
+								{#if pendingPhotos.length < 5}
+									<label
+										class="flex aspect-square w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+									>
+										<Camera class="h-5 w-5" />
+										<span class="text-[10px] font-semibold">Add</span>
+										<input type="file" accept="image/*" multiple class="sr-only" onchange={onPhotosPicked} />
+									</label>
+								{/if}
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<!-- Modal Footer -->
-				<div class="border-t border-border bg-background/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6">
-					<div class="flex items-center justify-end gap-3 sm:gap-4">
-						<Button
-							variant="ghost"
-							onclick={() => (productState.showReviewForm = false)}
-							class="h-10 sm:h-12 px-4 sm:px-6"
-						>
-							Discard
-						</Button>
-						<Button
-							disabled={productState.select === null || !productState.reviewMessage}
-							class="h-10 sm:h-12 px-6 sm:px-10"
-							onclick={async () => {
-								try {
-									await productService.addReview({
-										productId: page.data?.product.id,
-										variantId: productState.selectedVariant?.id,
-										rating: productState.select || 1,
-										review: productState.reviewMessage,
-										uploadedImages: productState.uploadedImagestoSave
-									})
-									productState.showReviewForm = false
-									await invalidateAll()
-									toast.success('Review published! Thanks for sharing.')
-								} catch (error: any) {
-									toast.error(error?.message || 'Could not post review. Try again?')
-								}
-							}}
-						>
-							Post Review
+				<div class="border-t border-border bg-card px-6 py-4 sm:px-8 sm:py-5">
+					<div class="flex items-center justify-end gap-3">
+						<Button variant="ghost" onclick={() => (productState.showReviewForm = false)} class="h-11 px-5">Discard</Button>
+						<Button disabled={productState.select === null || !productState.reviewMessage || submitting} class="h-11 px-8" onclick={submitReview}>
+							{submitting ? 'Posting…' : 'Post review'}
 						</Button>
 					</div>
 				</div>
@@ -400,22 +446,32 @@
 {/if}
 
 <style>
-	:global(.font-montserrat) {
-		font-family: 'Montserrat', sans-serif;
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-rev) {
+		border-top: 1px solid var(--ed-line);
+		padding-top: var(--space-section);
+		margin-top: var(--space-section);
 	}
 
-	.rating-bar-glow {
-		box-shadow: 0 0 12px rgba(var(--primary), 0.2);
+	/* The section-title step, like "Related products" below it. Was 28.8-38.4px, the largest text
+	   on the page and bigger than the product's own name. */
+	:global([data-theme='default'] .edp-rev-title) {
+		font-family: var(--ed-display);
+		font-weight: var(--weight-heading);
+		letter-spacing: var(--tracking-title);
+		font-size: var(--type-section-title);
+		line-height: var(--leading-title);
+		color: var(--ed-ink);
+		border-color: var(--ed-line);
 	}
 
-	.custom-scrollbar::-webkit-scrollbar {
-		width: 4px;
+	:global([data-theme='default'] .edp-rev-score) {
+		font-family: var(--ed-display);
+		font-weight: 700;
+		color: var(--ed-ink);
 	}
-	.custom-scrollbar::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background: hsl(var(--border));
-		border-radius: 4px;
+
+	:global([data-theme='default'] .edp-rev-photo) {
+		border-radius: var(--ed-radius);
 	}
 </style>

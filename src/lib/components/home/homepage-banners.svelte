@@ -31,10 +31,10 @@
 				<div class="py-12">
 					{#if title}
 						<div class="mb-10 flex flex-col items-center text-center">
-							<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
+							<h2 class="section-heading">
 								{title}
 							</h2>
-							<div class="mt-4 h-1 w-12 bg-primary"></div>
+							<div class="mt-4 h-1 w-12 bg-primary-ink"></div>
 						</div>
 					{/if}
 					<div class="grid grid-cols-{itemsPerRow} gap-4 md:gap-8">
@@ -43,7 +43,7 @@
 								<a
 									href={banner.link || link}
 									aria-label={banner.title || banner.link}
-									class="group relative block w-full overflow-hidden rounded-none shadow-sm transition-all duration-500 hover:shadow-xl"
+									class="border group relative block w-full overflow-hidden rounded-none transition-shadow duration-panel hover:border-border-strong"
 								>
 									<div class="relative overflow-hidden">
 										<LazyImg
@@ -53,12 +53,12 @@
 											class="relative w-full"
 										/>
 										<div
-											class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+											class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-panel group-hover:opacity-100"
 										>
 											{#if banner.title}
 												<div class="absolute bottom-6 left-6 text-white">
 													<h3 class="text-xl font-bold">{banner.title}</h3>
-													<p class="mt-1 text-sm font-medium text-white/80">Explore Collection</p>
+													<p class="mt-1 text-sm font-medium text-white/80">Explore collection</p>
 												</div>
 											{/if}
 										</div>

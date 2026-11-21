@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { faqService } from '$lib/core/services'
-	import { page } from '$app/state'
-	import { onMount } from 'svelte'
-	import { ChevronDownIcon, ChevronUpIcon } from '@lucide/svelte'
-	import { fade, slide } from 'svelte/transition'
-	import { SeoHeader } from '$lib/core/components/index.js'
+	import { ChevronDownIcon } from '@lucide/svelte'
+	import { Button } from '$lib/components/ui/button'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import StructuredData from '$lib/components/seo/structured-data.svelte'
+	import { cleanSchemaText } from '$lib/components/seo/schema.js'
 
 	interface FAQ {
 		id: string
@@ -12,82 +11,81 @@
 		answer: string
 	}
 
-	type APIResponse = FAQ[] | { data: FAQ[] }
+	let { data } = $props()
 
-	let loading = $state(false)
-	let error = $state('')
-	let faqs = $state<{ data: FAQ[] }>({ data: [] })
-	const { plugins } = page.data.store
-	let selectedFaqId: string = $state('')
+	const faqs = $derived((data?.faqs ?? []) as FAQ[])
 
-	function toggleFaq(faqId: string) {
-		selectedFaqId = selectedFaqId === faqId ? '' : faqId
-	}
-
-	async function loadFaqs() {
-		try {
-			loading = true
-			error = ''
-			const response = (await faqService.listFaqs({ page: 1 })) as APIResponse
-			faqs = { data: Array.isArray(response) ? response : response.data || [] }
-		} catch (err) {
-			console.error(err)
-			error = 'Failed to load FAQs. Please try again later.'
-		} finally {
-			loading = false
+	// FAQPage markup built from the questions this page actually renders — the only place on the
+	// site where FAQ structured data describes visible content.
+	const faqSchema = $derived.by(() => {
+		const entries = faqs.filter((faq) => faq?.question && faq?.answer)
+		if (!entries.length) return ''
+		return {
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: entries.map((faq) => ({
+				'@type': 'Question',
+				name: cleanSchemaText(faq.question),
+				acceptedAnswer: { '@type': 'Answer', text: cleanSchemaText(faq.answer) }
+			}))
 		}
-	}
-
-	onMount(loadFaqs)
+	})
 </script>
 
-<SeoHeader metaTitle="Frequently Asked Questions" />
+<SeoHeader metaTitle="Frequently asked questions" />
 
-<div class="mx-auto max-w-3xl px-4 py-8">
-	<h1 class="mb-8 text-center text-3xl font-bold text-gray-900">Frequently Asked Questions</h1>
+<StructuredData schema={faqSchema} />
 
-	{#if loading}
-		<div class="flex min-h-[200px] items-center justify-center" transition:fade>
-			<div class="flex w-full animate-pulse flex-col gap-4">
-				{#each Array(3) as _}
-					<div class="h-16 rounded bg-gray-100"></div>
-				{/each}
-			</div>
-		</div>
-	{:else if error}
-		<div class="py-8 text-center text-red-600" transition:fade>
-			<p>{error}</p>
-			<button class="mt-4 rounded-lg bg-gray-100 px-4 py-2 transition-colors hover:bg-gray-200" onclick={loadFaqs}> Try Again </button>
-		</div>
-	{:else if faqs?.data?.length}
-		<div class="space-y-4">
-			{#each faqs.data as faq (faq.id)}
-				<div class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
-					<button
-						class="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-gray-50"
-						onclick={() => toggleFaq(faq.id)}
-						aria-expanded={selectedFaqId === faq.id}
-						aria-controls="faq-{faq.id}"
-					>
-						<span class="flex-1 pr-4 text-lg font-medium text-gray-900">{faq.question}</span>
-						<span class="transform text-gray-500 transition-transform duration-200" class:rotate-180={selectedFaqId === faq.id}>
-							<ChevronDownIcon class="h-5 w-5" />
-						</span>
-					</button>
+<div class="page-width py-10 md:py-16">
+	<div class="mx-auto max-w-3xl">
+		<h1 class="mb-8 text-center page-heading">Frequently asked questions</h1>
 
-					{#if selectedFaqId === faq.id}
-						<div id="faq-{faq.id}" class="px-6 pb-4" transition:slide|local={{ duration: 200 }}>
-							<div class="prose prose-sm max-w-none text-gray-600 prose-p:my-0 prose-li:my-0">
+		{#if faqs.length}
+			<div class="space-y-4">
+				{#each faqs as faq (faq.id)}
+					<!-- Native disclosure: the answer stays in the server HTML whether or not it is open,
+				     so crawlers read question and answer together. Also keyboard/AT accessible with
+				     no JS state to keep in sync. -->
+					<details class="faq overflow-hidden rounded-lg border bg-card shadow-xs">
+						<summary class="flex w-full cursor-pointer items-center justify-between px-6 py-4 text-left transition-colors hover:bg-muted/50">
+							<span class="flex-1 pr-4 text-lg font-medium text-foreground">{faq.question}</span>
+							<span class="faq-chevron text-muted-foreground transition-transform duration-fast">
+								<ChevronDownIcon class="h-5 w-5" />
+							</span>
+						</summary>
+
+						<div id="faq-{faq.id}" class="px-6 pb-4">
+							<div class="prose prose-sm prose-neutral max-w-none text-muted-foreground prose-a:text-primary">
 								{@html faq.answer}
 							</div>
 						</div>
-					{/if}
+					</details>
+				{/each}
+			</div>
+		{:else}
+			<!-- A shopper who followed the FAQs link was looking for something. One grey sentence with no
+		     way onward sends them back to the navigation to guess again. -->
+			<div class="mx-auto max-w-md py-10 text-center">
+				<p class="text-muted-foreground">There are no questions and answers here yet.</p>
+				<p class="mt-2 text-sm text-muted-foreground">For anything about an order, delivery or a return, write to us and we will answer directly.</p>
+				<div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+					<Button href="/contact-us" class="h-11">Contact us</Button>
+					<Button href="/products" variant="outline" class="h-11">Browse products</Button>
 				</div>
-			{/each}
-		</div>
-	{:else}
-		<div class="py-8 text-center text-gray-500" transition:fade>
-			<p>No FAQs available at the moment.</p>
-		</div>
-	{/if}
+			</div>
+		{/if}
+	</div>
 </div>
+
+<style>
+	/* Hide the default disclosure triangle; the chevron is the affordance. */
+	.faq > summary {
+		list-style: none;
+	}
+	.faq > summary::-webkit-details-marker {
+		display: none;
+	}
+	.faq[open] .faq-chevron {
+		transform: rotate(180deg);
+	}
+</style>

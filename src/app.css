@@ -2,63 +2,535 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-	:root {
-		--ring: 0 0% 55%;
-		--font-primary: 'Montserrat', sans-serif;
-		--card: 0 0% 100%;
-		--input: 0 0% 89.8%;
-		--border: 0 0% 89.8%;
-		--radius: 0.5rem;
-		--popover: 0 0% 100%;
-		--success: 142 65% 36%;
-		--secondary: 21 30% 22%;
-		--background: 177 100% 100%;
-		--foreground: 21.18 30.36% 21.96%;
-		--destructive: 352 96% 40%;
-		--sidebar-ring: 0 0% 55%;
-		--sidebar-accent: 0 0% 95.9%;
-		--sidebar-border: 0 0% 91%;
-		--card-foreground: 21 30% 22%;
-		--sidebar-primary: 0 0% 55%;
-		--muted-foreground: 0 0% 61%;
-		--popover-foreground: 0 0% 0%;
-		--sidebar-background: 0 0% 98%;
-		--sidebar-foreground: 21 30% 22%;
-		--success-foreground: 126.89 100% 40.98%;
-		--destructive-foreground: 0 0% 100%;
-		--sidebar-accent-foreground: 21 30% 22%;
-		--sidebar-primary-foreground: 21 30% 22%;
-	}
-
-	.dark {
-	}
+/* Inter, self-hosted (OFL, lib/assets/fonts/Inter-OFL.txt). It came from fonts.googleapis.com, a
+   render-blocking stylesheet on another origin: about 0.8s before first paint on a phone, and every
+   visitor's address sent to Google. One variable file covers every weight. The rupee sign sits in
+   Google's 85KB latin-ext slice, which a price on nearly every page pulled in for one glyph, so it
+   has a 1KB file of its own; latin-ext still loads for the rare accented letter. The latin file is
+   preloaded in src/routes/+layout.svelte. */
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('./lib/assets/fonts/inter-latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('./lib/assets/fonts/inter-rupee.woff2') format('woff2');
+	unicode-range: U+20B9;
+}
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('./lib/assets/fonts/inter-latin-ext.woff2') format('woff2');
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20B8, U+20BA-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @layer base {
+	/* A photo keeps the top of its frame, so a crop or a letterbox never loses a model's head. A utility class or a theme still overrides this. */
+	img {
+		object-position: top;
+	}
+
+	/*
+	 * The Lime theme names 'Queens' and 'YsabeauInfant' in its font stacks, but the licensed
+	 * font files were never added to static/lime/fonts/, so the @font-face rules that used to
+	 * live here 404'd on every page load of every theme. They are removed until the real files are
+	 * available; the stacks below fall back to serif / Inter in the meantime. To restore the
+	 * intended type, drop the licensed files into static/lime/fonts/ and re-add the two
+	 * @font-face blocks.
+	 */
+
+	:root {
+		--background: 0 0% 93.3%;
+		--foreground: 0 0% 0%;
+		--primary: 4.1 81.7% 50.6%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 215.5 98.4% 76.1%;
+		--secondary-foreground: 0 0% 6.7%;
+		--accent: 215.8 98.4% 52.2%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 80%;
+		--muted-foreground: 0 0% 21.2%;
+		--card: 0 0% 93.3%;
+		--card-foreground: 0 0% 0%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 0 0% 0%;
+		/* Must stay distinct from --background: `* { border-color: hsl(var(--border)) }` below
+		   means an identical value makes every divider, card outline and form-field border
+		   invisible (WCAG 1.4.11). This is also the fallback any unrecognised theme name gets. */
+		--border: 0 0% 85%;
+		--input: 0 0% 80%;
+		--ring: 4.1 81.7% 50.6%;
+		--radius: 0px;
+		--success: 142 65% 36%;
+		--success-foreground: 0 0% 100%;
+		--destructive: 4.1 82.9% 41.2%;
+		--destructive-foreground: 0 0% 100%;
+
+		/* Additive only. :root is the fallback palette any unrecognised theme name
+		   inherits, so nothing declared above this comment is re-valued here — these
+		   names render nothing until a component opts in. Each theme block that wants
+		   its own value declares it locally. */
+
+		/* Warning: dark amber, chosen so --warning-foreground (white) clears 4.5:1 on
+		   it (5.29:1) and so `text-warning` also clears 4.5:1 on this block's #EEE
+		   canvas (4.56:1). Both directions work, which is what the 33 frozen amber
+		   utilities need. */
+		--warning: 32 92% 33%;
+		--warning-foreground: 0 0% 100%;
+		/* --primary darkened one step: 50.6% -> 42%. 5.94:1 against white. */
+		--primary-hover: 4.1 81.7% 42%;
+		/* Control boundaries. 3.18:1 against this block's --background (#EEE), so a
+		   1px field or card edge meets WCAG 1.4.11. --border stays the quiet separator. */
+		--border-strong: 0 0% 52%;
+		/* Information strips (free delivery, delivery checks): a calm blue that carries white text
+		   at 5.96:1, and as text on its own 10% tint at 5.17:1. */
+		--info: 207 65% 38%;
+		--info-foreground: 0 0% 100%;
+		/* Savings: "% off" and offer lines, apart from success states. */
+		--sale: 142 65% 36%;
+
+		/* Motion. One scale for the storefront — see
+		   docs/superpowers/specs/2026-10-01-motion-layer-design.md. Fast is feedback; panel is
+		   drawers, dialogs and the route crossfade; emphasis is the product morph, success marks and
+		   card-image hover. Panels exit at --motion-exit, and nothing exits under 150ms.
+		   src/lib/motion/index.ts mirrors these numbers for script-driven transitions. */
+		--motion-fast: 150ms;
+		--motion-panel: 220ms;
+		--motion-emphasis: 300ms;
+		--motion-exit: 160ms;
+		--motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+		--motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+		/* One z-index scale. Every overlay reads these — through the Tailwind
+		   `z-sticky … z-skip` utilities, or through var() where a utility cannot
+		   reach (inline styles, component <style> blocks). */
+		--z-sticky: 30;
+		--z-overlay: 40;
+		--z-drawer: 50;
+		--z-modal: 60;
+		--z-popover: 70;
+		--z-toast: 80;
+		--z-skip: 90;
+
+		--sidebar-ring: 4.1 81.7% 50.6%;
+		--sidebar-accent: 0 0% 96%;
+		--sidebar-border: 0 0% 89%;
+		--sidebar-primary: 4.1 81.7% 50.6%;
+		--sidebar-background: 0 0% 98%;
+		--sidebar-foreground: 0 0% 0%;
+		--sidebar-accent-foreground: 0 0% 0%;
+		--sidebar-primary-foreground: 0 0% 100%;
+
+		--wine-red: #e8281a;
+		--wine-red-dark: #c01e12;
+		--wine-dark: #1a1a1a;
+		--wine-cream: #fff8f0;
+		--wine-cream2: #fef0dc;
+		--wine-light: #f9f5f0;
+		--wine-green: #2d6a4f;
+		--wine-gold: #f6a623;
+		--wine-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+		--wine-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.18);
+
+		/* Every shipped theme declares its own three font variables, so nothing inherits
+		   these; what reads them is markup rendered outside the [data-theme] wrapper —
+		   portalled dialogs, popovers, dropdowns and the toaster. Inter, the default
+		   theme's face, so those match the page; the system stack covers themes that
+		   do not download Inter. */
+		--font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		--font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		--font-primary: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+		/* One container contract per theme. `.page-width` (header + PLP shell), the footer inner
+		   and each theme homepage's own wrapper all read these, so the logo, hero, page body and
+		   footer sit on the same rail instead of four different max-widths and gutter scales. */
+		--container-max: 1240px;
+		--container-gutter: clamp(16px, 4vw, 32px);
+	}
+
+	/* The action colour used as ink: text, icons, borders and rings (`text-primary`,
+	   `border-primary` and the rest map here in tailwind.config.ts). A fill colour is not always
+	   readable as text on the canvas, and a light one such as the default theme's yellow is 1.4:1
+	   on white, so ink and fill are two tokens. Declared on every shell, so it resolves against that
+	   shell's own --primary, merchant overrides included. */
+	:root,
+	[data-theme] {
+		--primary-ink: var(--primary);
+	}
+
+	/* The default palette follows the owner's reference store (docs/decisions.md, 2026-10-29):
+	   white canvas, neutral near-black text, one yellow for the action with dark text on it,
+	   green for savings, blue for information. A store's own colours override every one of these. */
+	[data-theme='default'] {
+		--background: 0 0% 100%;
+		--foreground: 0 0% 10%;
+		/* 12.16:1 under --primary-foreground. As ink it would be 1.44:1, hence --primary-ink below. */
+		--primary: 47 100% 60%;
+		--primary-foreground: 0 0% 10%;
+		--primary-ink: var(--foreground);
+		--secondary: 0 0% 96%;
+		--secondary-foreground: 0 0% 10%;
+		--accent: 210 100% 50%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 96%;
+		/* Supporting text lives on three grounds here, not one: the white canvas, the `--muted`
+		   fill and the `--ed-canvas` band. 42% is 5.32:1 / 4.87:1 / 4.88:1, one value that clears
+		   4.5:1 on every ground it lands on. */
+		--muted-foreground: 0 0% 42%;
+		/* --border is the quiet separator: 1.38:1, a hairline that is still visible. Control
+		   boundaries use --input / --border-strong instead. */
+		--border: 0 0% 86%;
+		/* 3.24:1 against --background. An input is `border border-input bg-transparent`,
+		   so this 1px line is the only thing marking the field (WCAG 1.4.11). */
+		--input: 0 0% 56%;
+		/* Focus is its own token, not a copy of --primary: the global :focus-visible
+		   ring reads --ring, and a merchant re-branding --primary must not be able to
+		   silently move or erase the focus indicator. A darkened sibling of this
+		   theme's --accent (210 100% 50%); 6.03:1 against the white canvas. */
+		--ring: 212 92% 40%;
+		--radius: 8px;
+		/* The surface quartet. This block used to declare none of them, so every
+		   bg-card / bg-popover surface fell through to :root's 0 0% 93.3% — a grey
+		   block with pure-black text on a white page. */
+		--card: 0 0% 100%;
+		--card-foreground: 0 0% 10%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 0 0% 10%;
+		/* Re-declared locally: white on the inherited 142 65% 36% is 3.76:1 and fails
+		   AA on the discount badge and the coupon row. 142 65% 30% is 5.12:1. */
+		/* 28%, not 30%: success text on its own 10% tint reached only 4.47:1. */
+		--success: 142 65% 28%;
+		--success-foreground: 0 0% 100%;
+		/* #198837, the engine's own default for the `sale` setting: 4.55:1 on white. */
+		--sale: 136.2 68.9% 31.6%;
+		/* 31%, not 35%: the low-stock line measured 3.96:1 on the #F2E8DB band and 4.49:1 on the
+		   #FAF7F2 canvas (SNX-035). Now 4.81:1 and 5.45:1 as `text-warning`, 5.82:1 under white. */
+		--warning: 32 92% 31%;
+		--warning-foreground: 0 0% 100%;
+		/* One step deeper than the yellow; 11.41:1 under --primary-foreground. */
+		--primary-hover: 47 100% 52%;
+		/* 3.71:1 against white. */
+		--border-strong: 0 0% 52%;
+		--wine-red: hsl(var(--primary));
+		--wine-red-dark: #020617;
+		--wine-dark: #111827;
+		--wine-cream: #f8fafc;
+		--wine-cream2: #eef2f7;
+		--wine-light: #f8fafc;
+		--wine-green: #047857;
+		--wine-gold: #d97706;
+		/* Refined Editorial type system — applies wherever a default-theme component uses
+		   --font-heading / --font-body (nav, footer, product cards, PLP, PDP, homepage).
+		   Inter for headings and body alike (owner decision, docs/decisions.md 2026-10-27). */
+		--font-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
+		--font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+		--font-primary: 'Inter', ui-sans-serif, system-ui, sans-serif;
+		/* Editorial vocabulary, step 1 of 2. Each --ed-* name below is now an alias of
+		   the semantic token that owns the same role, so there is one source of truth
+		   per role instead of two. The ~310 `var(--ed-*)` call sites keep working
+		   unchanged, and re-theming --card, --border, --radius or --font-heading now
+		   moves the editorial surfaces with them.
+		   Step 2, in a later slice, deletes these aliases and rewrites the call sites
+		   onto the semantic names, which also un-gates the [data-theme='default'] rules
+		   that only exist because this vocabulary was theme-local. */
+		--ed-surface: hsl(var(--card));
+		--ed-ink: hsl(var(--foreground));
+		--ed-soft: hsl(var(--muted-foreground));
+		--ed-line: hsl(var(--border));
+		--ed-line-strong: hsl(var(--border-strong));
+		--ed-radius: var(--radius);
+		--ed-display: var(--font-heading);
+		/* The one name NOT folded. --ed-canvas is the light band tone behind the hero,
+		   the lookbook, the trust strip and the footer, and the semantic set has no
+		   token for that role: --background is the white canvas those bands sit against
+		   (aliasing it there erases the page's tonal rhythm), and --muted is overwritten
+		   on this shell at hydration by the store's admin palette (store-palette.svelte),
+		   which repaints the bands in the merchant's brand hue. Naming the role is a
+		   design decision for the homepage slice; until then this stays a literal. */
+		--ed-canvas: #f5f5f5;
+		/* Follows the shell's --font-body so the store's admin-set font applies; the theme's own
+		   Inter is the fallback. (This block is the ONE definition of the --ed-* set —
+		   DefaultHomepage used to restate it locally with slightly different contents.) */
+		--ed-body: var(--font-body, 'Inter', ui-sans-serif, system-ui, sans-serif);
+		--container-max: 1240px;
+		/* 16px on a phone, as UX_SYSTEM section 4 sets it: the 4px a 20px gutter took from each
+		   side belongs to the product photographs. */
+		--container-gutter: clamp(16px, 4vw, 48px);
+		/* Editorial alias — kept so existing `var(--ed-gutter)` rules keep working, but it is
+		   the shared container gutter now, not a second source of truth. */
+		--ed-gutter: var(--container-gutter);
+
+		/* Type scale: one size per role, so the same job reads the same on every page (UX_SYSTEM
+		   section 4 has the table). Fluid steps hold their phone size on phones and reach their
+		   desktop size near the 1240px rail. Weights: 400 body, 500 UI text, 600 labels and buttons,
+		   --weight-heading for headings, 800 the hero alone.
+		   These are the `standard` type scale and the `compact` density; a store's type_scale,
+		   heading_weight and density settings replace them (src/lib/composer/theme-tokens.ts, which a
+		   test holds to these numbers).
+		   Declared on this theme only. The composer's sections are shared by every theme and read
+		   these with their old values as the fallback, so another theme's composed page is unchanged. */
+		--type-label: 0.75rem; /* 12: eyebrows, counts, captions, header navigation; the floor */
+		--type-dense: 0.8125rem; /* 13: dense UI, the product card's was-price and saving */
+		--type-ui: 0.875rem; /* 14: links, buttons, controls, specs */
+		--type-body: 1rem; /* 16: paragraphs a shopper reads */
+		--type-heading: clamp(1rem, 1.45vw, 1.125rem); /* 16 -> 18: h3, and the hero's lead line */
+		--type-page-title: clamp(1.25rem, 1.95vw, 1.5rem); /* 20 -> 24: listing/account title, PDP price */
+		--type-product-title: clamp(1.5rem, 2.25vw, 1.75rem); /* 24 -> 28: the product page h1 */
+		--type-section-title: clamp(1.5rem, 2.6vw, 2rem); /* 24 -> 32: a heading over a band */
+		--type-display: clamp(2.125rem, 6.4vw, 4.25rem); /* 34 -> 68: the hero headline only (D140) */
+		--leading-display: 1.02;
+		--leading-title: 1.15;
+		--leading-heading: 1.3;
+		--leading-ui: 1.4;
+		--leading-body: 1.5;
+		--tracking-display: -0.025em;
+		--tracking-title: -0.015em;
+		--weight-heading: 700;
+
+		/* Spacing, on the 4px scale. One gap between page sections — and inside a full-bleed band,
+		   and between the page and its footer — one between a section's heading and its content, and
+		   one product-grid gap, so a grid of cards is spaced the same on the home page, the listing
+		   and under a product. */
+		--space-section: clamp(24px, 3vw, 40px);
+		--space-head: clamp(16px, 2.4vw, 24px);
+		--grid-gap-x: clamp(10px, 1.1vw, 16px);
+		--grid-gap-y: clamp(14px, 1.4vw, 20px);
+	}
+
+	/* Phones are compact (owner, 2026-11-12: "everything is big in mobile, lets keep things compact",
+	   pointing at Flipkart, Ajio and Myntra): type one step down, to the `compact` scale, under 640px.
+	   A store whose settings choose a larger scale or density takes the same step on a phone
+	   (theme-tokens.ts, phoneTokenDeclarations); a test holds both to TYPE_SCALES.compact. */
+	@media (max-width: 639px) {
+		[data-theme='default'] {
+			--type-label: 0.75rem;
+			--type-dense: 0.75rem;
+			--type-ui: 0.8125rem;
+			--type-body: 0.875rem;
+			--type-heading: clamp(0.9375rem, 1.3vw, 1rem);
+			--type-page-title: clamp(1.125rem, 1.75vw, 1.375rem);
+			--type-product-title: clamp(1.375rem, 1.95vw, 1.5rem);
+			--type-section-title: clamp(1.375rem, 2.25vw, 1.75rem);
+			--type-display: clamp(1.875rem, 5.6vw, 3.75rem);
+		}
+	}
+
+	[data-theme='wine'] {
+		--background: 0 0% 93.3%;
+		--foreground: 0 0% 0%;
+		--primary: 4.1 81.7% 50.6%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 215.5 98.4% 76.1%;
+		--secondary-foreground: 0 0% 6.7%;
+		--accent: 215.8 98.4% 52.2%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 80%;
+		--muted-foreground: 0 0% 21.2%;
+		/* Distinct from --background (0 0% 93.3%) — see the :root note above. */
+		--border: 0 0% 85%;
+		--input: 0 0% 80%;
+		--ring: 4.1 81.7% 50.6%;
+		--radius: 0px;
+		--container-max: 1180px;
+		--container-gutter: clamp(16px, 4vw, 32px);
+		--wine-red: #e8281a;
+		--wine-red-dark: #c01e12;
+		--wine-dark: #1a1a1a;
+		--wine-cream: #fff8f0;
+		--wine-cream2: #fef0dc;
+		--wine-light: #f9f5f0;
+		--wine-green: #2d6a4f;
+		--wine-gold: #f6a623;
+		--font-heading: 'Playfair Display', serif;
+		--font-body: 'Poppins', sans-serif;
+		--font-primary: 'Poppins', sans-serif;
+	}
+
+	[data-theme='organic'] {
+		--background: 0 0% 100%;
+		--foreground: 0 0% 13.3%;
+		--primary: 104 38% 51%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 85 25% 20%;
+		--secondary-foreground: 0 0% 100%;
+		--accent: 74 47% 52%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 95%;
+		--muted-foreground: 0 0% 45%;
+		/* Was 0 0% 97% against a white background — ~1.05:1, effectively invisible. */
+		--border: 0 0% 90%;
+		--input: 0 0% 86%;
+		--ring: 104 38% 51%;
+		--card: 0 0% 100%;
+		--card-foreground: 0 0% 13.3%;
+		--radius: 16px;
+		--container-max: 1600px;
+		--container-gutter: clamp(16px, 4vw, 32px);
+		--font-heading: 'Inter', sans-serif;
+		--font-body: 'Nunito', sans-serif;
+		--font-primary: 'Nunito', sans-serif;
+		--heading-font: 'Inter', sans-serif;
+	}
+
+	[data-theme='lime'] {
+		--background: 0 0% 100%;
+		--foreground: 317 100% 14%;
+		--primary: 317 100% 14%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 0 0% 96%;
+		--secondary-foreground: 317 100% 14%;
+		--accent: 329 50% 27%;
+		--accent-foreground: 0 0% 100%;
+		--muted: 0 0% 95%;
+		--muted-foreground: 0 0% 31%;
+		--border: 25 27% 78%;
+		--input: 25 27% 78%;
+		--ring: 317 100% 14%;
+		--card: 0 0% 100%;
+		--card-foreground: 317 100% 14%;
+		--radius: 0px;
+		--container-max: 1360px;
+		--container-gutter: clamp(14px, 4vw, 40px);
+		--font-heading: 'Queens', serif;
+		--font-body: 'YsabeauInfant', 'Inter', sans-serif;
+		--font-primary: 'YsabeauInfant', 'Inter', sans-serif;
+		--lime-plum: #460032;
+		--lime-wine: #6f1648;
+		--lime-blush: #f5f5f5;
+		--lime-line: #d9c6ba;
+	}
+
+	[data-theme='noor'] {
+		--background: 0 0% 100%;
+		--foreground: 0 0% 8%;
+		--primary: 0 0% 7%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 36 31% 94%;
+		--secondary-foreground: 0 0% 8%;
+		--accent: 32 28% 78%;
+		--accent-foreground: 0 0% 8%;
+		--muted: 35 22% 94%;
+		--muted-foreground: 25 5% 42%;
+		--border: 34 17% 86%;
+		--input: 34 17% 86%;
+		--ring: 0 0% 7%;
+		--card: 0 0% 100%;
+		--card-foreground: 0 0% 8%;
+		--radius: 0px;
+		--container-max: 1240px;
+		--container-gutter: clamp(16px, 4vw, 32px);
+		--font-heading: 'Cinzel', 'Times New Roman', serif;
+		--font-body: 'Montserrat', 'Inter', sans-serif;
+		--font-primary: 'Montserrat', 'Inter', sans-serif;
+		--noor-ink: #151515;
+		--noor-ivory: #f8f6f2;
+		--noor-line: #ded8cf;
+	}
+
 	* {
-		font-family: var(--font-primary);
 		border-color: hsl(var(--border));
 	}
+
+	/*
+	 * The sticky header collapses by ~54px when it condenses. It is in normal flow, so that removes
+	 * 54px from above the content, and Chrome's scroll anchoring then adjusts scrollY to keep the
+	 * anchored element still — which eats the gesture. Measured here on the mobile home page at the
+	 * collapse threshold: a 60px wheel step DOWN moved the page 12px BACKWARDS, and the following
+	 * step up moved 48px. That lurch, once each way, is what reads as a broken header, and it only
+	 * appears under directional scrolling, which is why scrollTo-based checks kept reporting it fine.
+	 *
+	 * Turning anchoring off lets the collapse behave like ordinary content moving up. The header's
+	 * own hysteresis (collapse past 90, expand under 10, in nav.svelte) already guards the
+	 * oscillation anchoring would otherwise help with here.
+	 */
+	html {
+		overflow-anchor: none;
+		scroll-behavior: smooth;
+		/* Focus not obscured (WCAG 2.4.11): when Tab scrolls a control into view, keep it clear of the
+		   sticky header above and of the fixed bars below (the phone sort/filter bar, the WhatsApp
+		   button). Without this a focused link could land underneath them. */
+		scroll-padding-top: 6.5rem;
+		scroll-padding-bottom: 6rem;
+	}
+
+	/* On a phone the WhatsApp button floats 80–136px above the bottom edge, inside 6rem of padding;
+	   a focused link in that band counted as visible and stayed under it. */
+	@media (max-width: 639px) {
+		html {
+			scroll-padding-bottom: 9.5rem;
+		}
+	}
+
 	body {
 		@apply bg-background text-foreground;
+		font-family: var(--font-body);
+		font-weight: 400;
+		line-height: 1.65;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	[data-theme] {
+		font-family: var(--font-body);
+	}
+
+	/* The body's 1.65 set every single-line label, button and link on this theme in a line box a
+	   third taller than its text; 1.5 (--leading-body) is the body leading UX_SYSTEM asks for. The
+	   body too, for the sheets and dialogs that open outside the themed wrapper. */
+	[data-theme='default'],
+	body:has([data-theme='default']) {
+		line-height: 1.5;
+	}
+
+	/* The 0.8px tracking below is caps-era spacing: on this theme's sentence-case Inter it spread
+	   tile names, footer column headings and the cart's headings apart. `:where` keeps this at the
+	   weight of one class, so a heading's own tracking or weight utility, or its role rule, still
+	   wins. The weight is the store's heading_weight. */
+	[data-theme='default'] :where(h1, h2, h3, h4, h5, h6) {
+		font-weight: var(--weight-heading);
+		letter-spacing: normal;
+	}
+
+	body:has([data-theme='lime']) {
+		--font-heading: 'Queens', serif;
+		--font-body: 'YsabeauInfant', 'Inter', sans-serif;
+		--font-primary: 'YsabeauInfant', 'Inter', sans-serif;
+		font-family: var(--font-body);
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		line-height: 1.15;
+		letter-spacing: 0.8px;
+	}
+
+	/* Accessibility: visible keyboard focus indicator on all interactive elements.
+	   Reads --ring, the token the design system names as the focus colour, not
+	   --primary: the two are separate values now, so re-branding cannot move focus. */
+	:focus-visible {
+		@apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
 	}
 }
-
-html {
-	scroll-behavior: smooth;
-}
-
-/*
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-} */
 
 @media only screen and (max-width: 980px) {
 	#tidio-chat-iframe {
 		bottom: 80px !important;
 	}
+
 	#reamaze-widget {
 		bottom: 80px !important;
 	}
@@ -66,10 +538,6 @@ html {
 
 .inter-gap {
 	@apply gap-3 sm:gap-5;
-}
-
-.inter-pt {
-	@apply pt-3 sm:gap-5;
 }
 
 .intra-gap {
@@ -80,10 +548,441 @@ html {
 	@apply pt-2 sm:pt-4;
 }
 
+/* The one page-title and section-title style, so no page restates sizes. The default theme's
+   values are the page-title role in UX_SYSTEM's type scale, below. */
 .page-heading {
-	@apply text-xl font-bold text-foreground sm:text-xl;
+	@apply text-xl font-semibold tracking-tight text-foreground sm:text-2xl;
 }
 
+.section-heading {
+	@apply text-lg font-semibold tracking-tight text-foreground sm:text-xl;
+}
+
+/* Headings take the store's heading weight on the default theme, 700 unset (the weight the composed
+   home page set, D140); these two were the last at 600 beside it. */
+[data-theme='default'] :is(.page-heading, .section-heading) {
+	font-weight: var(--weight-heading);
+}
+
+/* The listing title's size, leading and tracking, so an account or checkout title matches it. */
+[data-theme='default'] .page-heading {
+	font-size: var(--type-page-title);
+	line-height: var(--leading-title);
+	letter-spacing: var(--tracking-title);
+}
+
+/* The single container rail — see --container-max / --container-gutter in :root. Was
+   `mx-page lg:container lg:mx-auto`, i.e. 8px gutters below lg then a hard jump to Tailwind's
+   container (2rem padding, 1024/1280/1400px), which never lined up with any theme homepage. */
 .page-width {
-	@apply mx-page lg:container lg:mx-auto;
+	width: min(var(--container-max, 1240px), 100% - 2 * var(--container-gutter, 16px));
+	margin-inline: auto;
+}
+
+/* A bag line's thumbnail (drawer and cart page). LazyImg draws its own box in the store record's
+   ratio, square unless set, which shrank a portrait photo inside the thumbnail with bars beside
+   it. With both sides set that ratio no longer applies, and the photo fills the thumbnail. */
+.cart-thumb > div {
+	height: 100%;
+}
+
+/* The one gap between product cards, on a home shelf, a collection and under a product. It
+   outranks the grid's own gap utilities, which other themes keep. */
+[data-theme='default'] .product-grid {
+	column-gap: var(--grid-gap-x);
+	row-gap: var(--grid-gap-y);
+}
+
+/* ------------------------------------------------------------------ *
+ * Lime theme — PLP / PDP page fidelity
+ *
+ * The shared listing and product-detail routes are already token-driven,
+ * so under data-theme="lime" they inherit plum primary, square
+ * corners (--radius: 0) and serif headings for free. These rules add the
+ * finer parts of the source visual contract that tokens alone don't cover:
+ * REGULAR-weight serif headings (the source never uses bold), quiet plum
+ * accents, and square media. Everything is scoped to the lime theme
+ * so the default store and other themes are completely untouched.
+ * ------------------------------------------------------------------ */
+[data-theme='lime'] h1,
+[data-theme='lime'] h2,
+[data-theme='lime'] h3,
+[data-theme='lime'] h4,
+[data-theme='lime'] h5,
+[data-theme='lime'] h6 {
+	font-weight: 400;
+	letter-spacing: 0.01em;
+	color: var(--lime-plum, #460032);
+}
+
+/* PLP listing title + any shared page heading: regular-weight plum serif */
+[data-theme='lime'] .page-heading {
+	font-family: var(--font-heading);
+	font-weight: 400;
+	letter-spacing: 0.01em;
+	color: var(--lime-plum, #460032);
+}
+
+/* PDP: keep product imagery + thumbnails square, matching the source */
+[data-theme='lime'] .page-width img {
+	border-radius: 0;
+}
+
+/* Quiet, un-bold price/labels in the plum tone across the catalogue */
+[data-theme='lime'] [data-testid='product-card-selling-price'],
+[data-theme='lime'] [data-testid='product-card-mrp'] {
+	font-weight: 400;
+}
+
+/* Text that sets no size of its own follows the store's type scale. The shell, not <html>, so rem
+   keeps its meaning. */
+div[data-theme='default'] {
+	font-size: var(--type-body);
+}
+
+/* ── Unified editorial buttons ─────────────────────────────────────────────────
+   Every shadcn <Button> carries `.ed-btn-base`. On the default theme they all get
+   one editorial look — sharp radius, sentence-case label, flat (no shadow) —
+   to match the homepage / product-card / footer buttons. Variant colours
+   (bg-primary, ghost, outline…) are preserved; filled CTAs also lift on hover.
+   Unlayered so these win over Tailwind's utility layer without !important. */
+[data-theme='default'] .ed-btn-base {
+	border-radius: var(--ed-radius);
+	font-family: var(--font-body);
+	font-weight: 600;
+	transition:
+		transform var(--motion-fast) var(--motion-ease),
+		background-color var(--motion-fast) var(--motion-ease),
+		color var(--motion-fast) var(--motion-ease),
+		border-color var(--motion-fast) var(--motion-ease),
+		opacity var(--motion-fast) var(--motion-ease);
+}
+
+/* The flat editorial look, but only while the button is not focused. The global
+   `:focus-visible` rule paints its ring as a box-shadow, so a blanket
+   `box-shadow: none` here erased the focus indicator on every button on this
+   theme — the one control type where it matters most. Scoping it to
+   `:not(:focus-visible)` keeps buttons flat at rest and lets the shared ring
+   through, so no button needs a local focus style of its own. */
+[data-theme='default'] .ed-btn-base:not(:focus-visible) {
+	box-shadow: none;
+}
+
+/* Filled primary/secondary CTAs get the editorial hairline border + hover lift. */
+[data-theme='default'] .ed-btn-base.bg-primary {
+	border: 1px solid hsl(var(--primary));
+}
+[data-theme='default'] .ed-btn-base.bg-primary:hover,
+[data-theme='default'] .ed-btn-base.bg-secondary:hover {
+	opacity: 0.94;
+}
+
+/* Icon-only buttons carry no label — drop the tracking so the glyph stays centered. */
+[data-theme='default'] .ed-btn-base.w-9 {
+	letter-spacing: normal;
+}
+
+/* Movement only for those who have not asked for less: filled CTAs lift on hover, and every
+   editorial button gives under the finger (icon-only ones a little more). Gated by the media query
+   rather than reset under `reduce`, because a reset has to out-specify every rule it cancels, and
+   these selectors run to (0,5,0). The press rules come after the lift and outrank it, so a held
+   button presses rather than lifts. */
+@media (prefers-reduced-motion: no-preference) {
+	[data-theme='default'] .ed-btn-base.bg-primary:hover,
+	[data-theme='default'] .ed-btn-base.bg-secondary:hover {
+		transform: translateY(-2px);
+	}
+	[data-theme='default'] .ed-btn-base:active:not(:disabled) {
+		transform: scale(0.97);
+	}
+	[data-theme='default'] .ed-btn-base.w-9:active:not(:disabled) {
+		transform: scale(0.92);
+	}
+}
+
+/* ------------------------------------------------------------------ *
+ * Route transitions — src/lib/motion/route-transition.ts
+ *
+ * The page crossfades as one image pair, and the clicked product image morphs into the gallery
+ * through `product-media`. Nothing else is named. The old and new pages blend with plus-lighter,
+ * so chrome that is identical on both (header, bottom nav) stays visually still as long as both
+ * halves share one duration and easing, while every extra named group costs a main-thread size
+ * animation on each frame: naming the header and footer took a full-motion navigation from 48fps
+ * to 39fps when measured on 2026-10-01. The root group never moves, so its no-op animation goes.
+ * ------------------------------------------------------------------ */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: var(--motion-panel);
+	animation-timing-function: var(--motion-ease);
+}
+::view-transition-group(root) {
+	animation: none;
+}
+::view-transition-group(product-media) {
+	animation-duration: var(--motion-emphasis);
+	animation-timing-function: var(--motion-ease);
+}
+[data-vt-morph] {
+	view-transition-name: product-media;
+}
+
+/* vaul-svelte drawers (size guide, coupons, the phone sort and filter, similar products) slide for
+   500ms, from their own stylesheet and from inline styles they set on close. The panel token
+   instead: !important to beat the inline close, and never while a finger drags the drawer, which
+   has to follow it without lag. */
+html [data-vaul-drawer]:not(.vaul-dragging) {
+	transition-duration: var(--motion-panel) !important;
+	transition-timing-function: var(--motion-ease) !important;
+}
+html [data-vaul-overlay] {
+	transition-duration: var(--motion-panel) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+	/* No slide: the drawer sits in place and fades in and out at the same length. */
+	html [data-vaul-drawer] {
+		transform: none !important;
+		transition-property: opacity !important;
+		opacity: 0;
+	}
+	html [data-vaul-drawer][data-vaul-drawer-visible='true']:not([data-state='closed']) {
+		opacity: 1;
+	}
+}
+
+/* ------------------------------------------------------------------ *
+ * Micro-interactions — docs/superpowers/specs/2026-10-01-motion-layer-design.md §4
+ * ------------------------------------------------------------------ */
+@keyframes motion-pop {
+	0%,
+	100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.2);
+	}
+}
+@keyframes motion-pop-in {
+	from {
+		opacity: 0;
+		transform: scale(0.6);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+@keyframes motion-bump {
+	0%,
+	100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.15);
+	}
+}
+@keyframes motion-rise {
+	from {
+		opacity: 0;
+		transform: translateY(2px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+@keyframes motion-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.motion-pop {
+	animation: motion-pop var(--motion-emphasis) var(--motion-ease);
+}
+.motion-pop-in {
+	animation: motion-pop-in var(--motion-emphasis) var(--motion-ease) both;
+}
+.motion-bump {
+	animation: motion-bump var(--motion-panel) var(--motion-ease);
+}
+.motion-rise {
+	animation: motion-rise var(--motion-fast) var(--motion-ease) both;
+}
+
+/* Press feedback for controls that are not a shadcn <Button>. */
+.motion-press {
+	transition: transform var(--motion-fast) var(--motion-ease);
+}
+.motion-press:active:not(:disabled) {
+	transform: scale(0.92);
+}
+
+/* A hover underline that wipes in from the left. `data-current="true"` keeps it drawn. */
+.motion-underline {
+	position: relative;
+}
+.motion-underline::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: var(--underline-offset, -4px);
+	height: 2px;
+	background: hsl(var(--primary-ink));
+	transform: scaleX(0);
+	transform-origin: left;
+	transition:
+		transform var(--motion-fast) var(--motion-ease),
+		opacity var(--motion-fast) var(--motion-ease);
+}
+.motion-underline:hover::after,
+.motion-underline:focus-visible::after,
+.motion-underline[data-current='true']::after {
+	transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html .motion-pop {
+		animation: none;
+	}
+	html .motion-pop-in,
+	html .motion-bump,
+	html .motion-rise {
+		animation-name: motion-fade-in;
+	}
+	html .motion-press:active:not(:disabled) {
+		transform: none;
+	}
+	html .motion-underline::after {
+		transform: scaleX(1);
+		opacity: 0;
+	}
+	html .motion-underline:hover::after,
+	html .motion-underline:focus-visible::after,
+	html .motion-underline[data-current='true']::after {
+		opacity: 1;
+	}
+}
+
+/* ------------------------------------------------------------------ *
+ * Checkout bar — src/lib/components/buttons/checkout-button.svelte
+ *
+ * Below 640px (Tailwind's `max-sm`) each checkout step's forward action is pinned to the bottom of
+ * the screen; the component's own utilities place it. It slides up into place as it appears, and
+ * under reduced motion it fades in instead. While a bar is on the page the body gains its height,
+ * so the end of the page still scrolls clear of it, and a step that shows no bar keeps no reserve.
+ * From 640px up none of this applies and the button sits in the summary card.
+ * ------------------------------------------------------------------ */
+@keyframes checkout-bar-in {
+	from {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+}
+@media (max-width: 639.98px) {
+	.checkout-bar {
+		animation: checkout-bar-in var(--motion-panel) var(--motion-ease) both;
+	}
+	body:has(.checkout-bar) {
+		padding-bottom: calc(4.25rem + env(safe-area-inset-bottom));
+	}
+}
+
+/* A control drawn under 44px, like the cart's 32px stepper on phones, keeps a 44px tap target. */
+.hit-44 {
+	position: relative;
+}
+.hit-44::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: max(100%, 44px);
+	height: max(100%, 44px);
+	transform: translate(-50%, -50%);
+}
+@media (prefers-reduced-motion: reduce) {
+	html .checkout-bar {
+		animation-name: motion-fade-in;
+	}
+}
+
+/* ------------------------------------------------------------------ *
+ * Reduced motion
+ *
+ * This block used to cover .ed-btn-base and nothing else, and even that at
+ * (0,2,0) — the same specificity as the rule it was cancelling, in the same
+ * stylesheet, so it only won by source order. Everything else kept animating.
+ *
+ * Two rules make the overrides win now: they are unlayered, so they beat every
+ * Tailwind utility (`@layer utilities` always loses to unlayered CSS), and each
+ * selector is prefixed with `html ` so it also out-specifies the component
+ * <style> blocks, whose rules carry an extra `.svelte-*` class.
+ *
+ * Decorative loops stop. Progress affordances are slowed rather than frozen: a
+ * stopped spinner reads as a hung page, not as "loading". Entrance motion lands
+ * on its end state rather than being cancelled, because the elements start at
+ * opacity: 0 and cancelling the animation would leave them invisible.
+ *
+ * Overlays keep their full duration as pure fades; movement goes, feedback stays.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+	/* Buttons keep their colour and opacity feedback. Their lift and press are gated to
+	   `no-preference` where they are declared, so nothing here has to out-specify them. */
+	html [data-theme='default'] .ed-btn-base,
+	html .ed-btn-base {
+		transition-property: background-color, color, border-color, opacity;
+	}
+
+	/* Purely decorative loops. */
+	html .animate-ping,
+	html .animate-bounce {
+		animation: none !important;
+	}
+
+	/* Kept, but slowed out of the vestibular range. */
+	html .animate-spin {
+		animation-duration: 1.6s !important;
+		animation-timing-function: linear !important;
+	}
+	html .animate-pulse {
+		animation-duration: 3s !important;
+	}
+
+	/* Overlays (tailwindcss-animate: dialog, sheet, popover, dropdown, select, tooltip) keep their
+	   duration and lose their zoom and slide. The plugin builds its enter/exit keyframes from these
+	   variables, so neutralising them turns every overlay into a pure fade. Matched on the class
+	   substring, because most overlays carry `data-[state=open]:animate-in`, not a bare `animate-in`;
+	   !important because those state utilities sit at (0,2,0). */
+	html [class*='animate-in'],
+	html [class*='animate-out'] {
+		--tw-enter-scale: 1 !important;
+		--tw-enter-rotate: 0 !important;
+		--tw-enter-translate-x: 0 !important;
+		--tw-enter-translate-y: 0 !important;
+		--tw-exit-scale: 1 !important;
+		--tw-exit-rotate: 0 !important;
+		--tw-exit-translate-x: 0 !important;
+		--tw-exit-translate-y: 0 !important;
+	}
+
+	/* Route transitions: the crossfade stays (opacity), nothing travels or resizes. */
+	::view-transition-group(*) {
+		animation: none !important;
+	}
+
+	/* Editorial hero entrance. */
+	html .ed-hero__body > *,
+	html .ed-hero__media {
+		animation: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+
+	html {
+		scroll-behavior: auto;
+	}
 }

@@ -2,17 +2,18 @@
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { Button } from '$lib/components/ui/button/index.js'
+	import { sortByNumericValue } from '$lib/core/utils/index.js'
 
 	const productState = useProductState()
 </script>
 
 {#if page.data?.product?.ag && Object.keys(page.data?.product?.ag).length}
-	<div class="intra-gap flex flex-col">
+	<div class="intra-gap edp-aggregation flex flex-col">
 		{#each Object.entries(page.data?.product?.ag || {}) as [optionName, values]}
 			{#if Array.isArray(values)}
-				<div class="flex flex-col gap-3">
-					<div class="flex items-center gap-2">
-						<span class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+				<div class="flex flex-col gap-2">
+					<div class="flex min-h-6 items-center gap-2">
+						<span class="edp-opt-label text-sm font-semibold text-foreground">
 							{optionName}
 
 							{#if productState.selectedAggregations?.[optionName]}
@@ -20,18 +21,18 @@
 							{/if}
 						</span>
 
-						<span class="font-semibold">{productState.selectedAggregations?.[optionName] || ''}</span>
+						<span class="edp-opt-value font-semibold">{productState.selectedAggregations?.[optionName] || ''}</span>
 					</div>
 
-					<div class="flex flex-wrap items-center gap-3">
-						{#each [...values].sort() as value}
+					<div class="flex flex-wrap items-center gap-2">
+						{#each sortByNumericValue(values as string[]) as value}
 							<Button
 								variant={productState.selectedAggregations?.[optionName] === value ? 'default' : 'plain'}
 								disabled={!productState.isAggregationAvaliable(optionName, value)}
-								class="min-w-[3.5rem] !bg-primary px-4 py-2 {productState.selectedAggregations?.[optionName] === value
-									? 'border !border-accent !bg-transparent'
-									: '!bg-accent text-accent-foreground'}"
-								onclick={() => productState.toggleAggregation(optionName, value)}
+								class="edp-pill h-11 min-w-[3.5rem] border px-4 md:h-10 {productState.selectedAggregations?.[optionName] === value
+									? 'edp-on border-primary bg-primary text-primary-foreground'
+									: 'border-border-strong bg-background text-foreground hover:border-foreground'}"
+								onclick={() => productState.toggleAggregation(optionName, value, true)}
 							>
 								{value}
 							</Button>
@@ -42,3 +43,65 @@
 		{/each}
 	</div>
 {/if}
+
+<style>
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-aggregation .edp-opt-label) {
+		font-family: var(--ed-body);
+		/* Same 12px floor as the variation labels this row sits beside. */
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--ed-soft);
+	}
+
+	:global([data-theme='default'] .edp-aggregation .edp-opt-value) {
+		font-family: var(--ed-body);
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		color: var(--ed-ink);
+	}
+
+	/* Height stays on the utility classes (44px phone / 40px md up) so the density rule is
+	   readable at the call site; only the editorial surface is restated here. */
+	:global([data-theme='default'] .edp-aggregation .edp-pill) {
+		min-width: 3.25rem;
+		padding: 0 16px !important;
+		border-color: var(--ed-line-strong) !important;
+		border-radius: var(--ed-radius) !important;
+		background: transparent !important;
+		color: var(--ed-ink) !important;
+		font-family: var(--ed-body);
+		font-size: var(--type-ui);
+		font-weight: 500;
+		text-transform: none;
+		transition:
+			border-color var(--motion-fast) var(--motion-ease),
+			background var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
+	}
+
+	:global([data-theme='default'] .edp-aggregation .edp-pill:hover:not(:disabled)) {
+		border-color: var(--ed-ink) !important;
+	}
+
+	:global([data-theme='default'] .edp-aggregation .edp-pill.edp-on) {
+		/* The fill alone is 1.44:1 on white, so the chosen value also takes a 2px ink edge. */
+		border-color: hsl(var(--primary-ink)) !important;
+		background: hsl(var(--primary)) !important;
+		color: hsl(var(--primary-foreground)) !important;
+	}
+
+	/* As on the variant pills: flat and edged only while not focused, so the focus ring shows. */
+	:global([data-theme='default'] .edp-aggregation .edp-pill:not(:focus-visible)) {
+		box-shadow: none !important;
+	}
+
+	:global([data-theme='default'] .edp-aggregation .edp-pill.edp-on:not(:focus-visible)) {
+		box-shadow: inset 0 0 0 1px hsl(var(--primary-ink)) !important;
+	}
+
+	:global([data-theme='default'] .edp-aggregation .edp-pill:disabled) {
+		opacity: 0.4 !important;
+		text-decoration: line-through;
+	}
+</style>

@@ -1,31 +1,11 @@
 <script lang="ts">
+	import CmsPage from '../_cms-page.svelte'
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
-	import type { Page } from '$lib/core/types'
+	import type { PageProps } from './$types'
 
-	interface Props {
-		data: {
-			page: Page
-		}
-	}
-	let { data }: Props = $props()
+	let { data }: PageProps = $props()
 </script>
 
-<svelte:head>
-	<title>Terms & Conditions</title>
-</svelte:head>
+<CmsPage title="Terms & conditions" content={data?.page?.content} meta={data?.page} />
 
-<section class="mt-20 min-h-screen">
-	<div class="container mx-auto flex max-w-7xl flex-col px-4 md:px-10">
-		<div class="mx-auto flex max-w-max flex-col items-center py-5 text-center text-3xl font-bold sm:items-start sm:py-10 sm:text-4xl">
-			<h1>TERMS</h1>
-
-			<hr class="mt-2.5 w-20 border-t-4 border-zinc-900 opacity-50" />
-		</div>
-
-		<div class="prose-lg prose-h2:my-4 prose-p:my-0 prose-p:my-0 prose-li:my-0">
-			{@html data?.page?.content}
-		</div>
-	</div>
-</section>
-
-<Blocks layouts={data.page.layouts}/>
+<Blocks layouts={data?.page?.layouts} />

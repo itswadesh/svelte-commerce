@@ -1,40 +1,49 @@
-import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit'
+import type { Handle, HandleFetch, HandleServerError, ResolveOptions } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { getStore } from '@misiki/kitcommerce-core/utils'
+import { activeBackendProxy, initActiveConnector } from '$lib/core/connectors/init'
+import { resolveStorefrontTheme } from '$lib/theme/index.js'
+import { clientAddress, isApiPath, proxyApiRequest } from '$lib/server/api-proxy'
+import { compressResponse } from '$lib/server/compress'
+import { frameAncestors, withSecurityHeaders } from '$lib/server/security-headers'
+import { guardClosedStore } from '$lib/server/store-lock'
+import { isEngineOnlyPath, isTradePortalRequest, tradePortalRequest } from '$lib/server/trade-portal'
+import { gocommerceEngine, gocommerceStore } from '$lib/server/gocommerce'
+import { getRequestEvent } from '$app/server'
+import { services } from 'kitcommerce.config'
 
-export const init = async () => {
-  if (env.PUBLIC_MEDUSA_API_URL) {
-    const services = await import('@misiki/kitcommerce-core/services')
-    if (!services.BaseService)
-      throw new Error("PUBLIC_MEDUSA_API_URL is set but medusaa-connector is not being used")
-    console.log("Hook ran", env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY, env.PUBLIC_MEDUSA_API_URL)
-    services.BaseService.PUBLISHABLE_KEY = env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY
-    services.BaseService.BASE_URL = env.PUBLIC_MEDUSA_API_URL
-    services.BaseService.REGION_ID = env.PUBLIC_MEDUSA_REGION_ID
-  }
+export const init = initActiveConnector
 
-  if (env.PUBLIC_SALEOR_API_URL) {
-    const services = await import('@misiki/kitcommerce-core/services')
-    if (!services.BaseService)
-      throw new Error("PUBLIC_SALEOR_API_URL is set but saleor-connector is not being used")
-    services.BaseService.SALEOR_API_URL = env.PUBLIC_SALEOR_API_URL
-  }
+// A connector serving many stores from one deployment (GoCommerce's PUBLIC_GOCOMMERCE_BASE_DOMAIN:
+// `acme.example.com` is store `acme`) needs the current request's host, and SSR shares one process
+// across concurrent requests, so it reads the host per call rather than being handed one. Reached
+// through a cast like every other connector hook (see connectors/active.ts), since most connectors
+// have no such hook. Outside a request (a hook invoked at boot) getRequestEvent throws; no host
+// then means the connector's static store, which is what it would have used anyway.
+;(services as { setRequestHost?: (fn: () => string | undefined) => void }).setRequestHost?.(() => {
+	try {
+		return getRequestEvent().url.hostname
+	} catch {
+		return undefined
+	}
+})
 
-    if (env.PUBLIC_VENDURE_API_URL) {
-    const services = await import('@misiki/kitcommerce-core/services')
-    if (!services.BaseService)
-      throw new Error("PUBLIC_VENDURE_API_URL is set but vendure-connector is not being used")
-    services.BaseService._baseUrl = env.PUBLIC_VENDURE_API_URL
-  }
-}
+// The language the shopper chose in the footer, for the same reason: read per call, per request.
+;(services as { setRequestLanguage?: (fn: () => string | undefined) => void }).setRequestLanguage?.(() => {
+	try {
+		return getRequestEvent().cookies.get('gc_lang')
+	} catch {
+		return undefined
+	}
+})
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
 	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
 }
 
-export const handle: Handle = async ({ event, resolve }) => {
+const app: Handle = async ({ event, resolve }) => {
 	const url = new URL(event.request.url)
 	const isLocalOrIP = isLocalOrIpAddress(url.hostname)
 
@@ -42,6 +51,26 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// would pull a perfectly healthy container out of the load balancer.
 	if (url.pathname === '/health') {
 		return resolve(event)
+	}
+
+	// The active connector's browser calls, for a backend that answers no CORS. Runs under vite dev
+	// too, so no dev-proxy entry is needed. See activeBackendProxy.
+	const backend = activeBackendProxy()
+	if (backend && (url.pathname === backend.path || url.pathname.startsWith(`${backend.path}/`))) {
+		if (isEngineOnlyPath(url.pathname.slice(backend.path.length))) return new Response('Not found', { status: 404 })
+		return proxyApiRequest(event.request, backend.apiUrl, fetch, backend.path, clientAddress(event))
+	}
+
+	// A GoCommerce store's trade portal, at /portal on this host. See trade-portal.ts.
+	const engine = gocommerceEngine()
+	if (engine && isTradePortalRequest(event.request.method, url.pathname)) {
+		const request = tradePortalRequest(event.request, gocommerceStore(url.hostname))
+		return proxyApiRequest(request, engine, fetch, '', clientAddress(event))
+	}
+
+	// Browser-side `/api/*` calls: the production counterpart of the vite dev proxy. See api-proxy.ts.
+	if (env.PUBLIC_LITEKART_API_URL && isApiPath(url.pathname)) {
+		return proxyApiRequest(event.request, env.PUBLIC_LITEKART_API_URL, fetch, '', clientAddress(event))
 	}
 
 	if (url.protocol === 'http:' && !isLocalOrIP) {
@@ -53,7 +82,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (storeId && storeIdFromCookie !== storeId) {
 		event.cookies.set('litekart_store_id', storeId, { path: '/' })
 	} else if (!storeIdFromCookie) {
-		console.log( url.hostname,' url.hostname.............')
 		const domain = env.PUBLIC_LITEKART_DOMAIN || url.hostname
 		if (!domain) {
 			throw new Error(`Unable to retrieve hostname from URL. ${url.hostname}`)
@@ -62,7 +90,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 			const storeService = new StoreService(event.fetch)
 			let storeDetails = null
 			try {
-				storeDetails = await getStore({ storeId, domain }, storeService)
+				// getStore's declared params require storeId, but it resolves by domain alone at
+				// runtime — storeId is always undefined on this branch (the guard above handles it).
+				storeDetails = await getStore({ storeId: storeId as unknown as string, domain }, storeService)
 			} catch (e) {
 				// A 404 means "no store maps to this domain" → render a proper 404 page below.
 				// Re-throw anything else (API down, network) so it surfaces as a 500 rather than a
@@ -85,12 +115,53 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	const response = await resolve(event, {
-		filterSerializedResponseHeaders: (name) => name === 'content-type'
-	})
-	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
-	return response
+	// Flips once `transformPageChunk` below has stamped the opening <html> tag for this response.
+	let themeStamped = false
+
+	const options: ResolveOptions = {
+		filterSerializedResponseHeaders: (name) => name === 'content-type',
+		// SvelteKit emits a `Link: rel=modulepreload` header for EVERY client chunk (107 on the jws
+		// PDP). The browser starts all of them before the parser reaches the LCP <img>, saturating the
+		// connection and delaying the LCP image request by seconds. resolve_opts.preload is the only
+		// filter Kit exposes; its default (`type === 'js' || type === 'css'`) lets everything through.
+		// Measured on jws, Pixel 5 / 4x CPU / Slow 4G: LCP-TTFB 4952ms -> 1668ms, with all app JS
+		// still finishing within 216ms of before. Dropping js entirely reaches 763ms but delays
+		// hydration by 1.1s, which is the worse trade.
+		preload: ({ type, path }) => type === 'css' || path.includes('/entry/') || path.includes('/nodes/'),
+		// Second carrier for the active theme, on <html>. Every bits-ui portal — dialog, sheet,
+		// drawer, popover, dropdown, tooltip — and the toaster attach to `document.body`, which sits
+		// ABOVE the shell <div> in +layout.svelte that carries `data-theme`. Without an ancestor of
+		// their own they resolve the `:root` fallback: the wine palette, a 0px radius and a font this
+		// storefront never downloads. Stamping the same value on <html> here means the SSR'd document
+		// already carries it, so portals are themed before hydration and there is no flash.
+		//
+		// The shell keeps its attribute — it is the documented carrier for runtime theme switching —
+		// so this adds a carrier rather than moving one. Both are derived from `locals.storeDetails`
+		// through `resolveStorefrontTheme`, exactly as +layout.server.ts derives `data.theme`, so the
+		// two can never disagree. Load functions have already run by the time chunks are transformed,
+		// which is what makes `locals.storeDetails` readable here.
+		transformPageChunk: ({ html }) => {
+			// Called once per streamed chunk, and only the first one holds the opening tag. Stopping
+			// after the first successful stamp keeps a literal `<html` anywhere further down the
+			// document from being rewritten, and skips the resolve on every later chunk.
+			if (themeStamped) return html
+			// Theme names come from store data, so keep the attribute value to the character set
+			// `normalizeThemeName` can produce rather than interpolating a store string into markup.
+			const theme = resolveStorefrontTheme(event.locals.storeDetails).name.replace(/[^a-z0-9_-]/g, '')
+			if (!theme) return html
+			const lang = event.cookies.get('gc_lang')
+			const stamped = html
+				.replace(/<html(?=[\s>])/, `<html data-theme="${theme}"`)
+				.replace(/(<html[^>]*\slang=")[^"]*"/, (all, head) => (lang && /^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(lang) ? `${head}${lang}"` : all))
+			themeStamped = stamped !== html
+			return stamped
+		}
+	}
+	return guardClosedStore(event, () => resolve(event, options))
 }
+
+export const handle: Handle = async (input) =>
+	compressResponse(input.event.request, withSecurityHeaders(await app(input), frameAncestors(gocommerceEngine())))
 
 // Route server-side API calls straight to the backend (PUBLIC_LITEKART_API_URL) instead of letting
 // them hairpin through the public origin. When the storefront is behind a proxy/CDN (e.g. Cloudflare),

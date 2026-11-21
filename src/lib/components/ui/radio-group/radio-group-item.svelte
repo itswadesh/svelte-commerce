@@ -14,16 +14,13 @@
 
 <RadioGroupPrimitive.Item
 	bind:ref
-	class={cn(
-		'aspect-square size-4 rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
-		className
-	)}
+	class={cn('aspect-square size-4 rounded-full border border-primary text-primary shadow disabled:cursor-not-allowed disabled:opacity-50', className)}
 	{...restProps}
 >
 	{#snippet children({ checked })}
 		<div class="flex items-center justify-center">
 			{#if checked}
-				<Circle class="size-3.5 fill-primary" />
+				<Circle class="motion-pop-in size-3.5 fill-primary" />
 			{/if}
 		</div>
 	{/snippet}

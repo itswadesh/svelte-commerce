@@ -1,35 +1,80 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { ChevronDown, ChevronUp } from '@lucide/svelte'
-	import { Button } from '$lib/components/ui/button'
+	import { ChevronDown } from '@lucide/svelte'
+	import { slide } from '$lib/motion'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
+	const description = $derived(productState.selectedVariant?.description || data?.product?.description || '')
+	const hasDescription = $derived(
+		description
+			.replace(/<[^>]*>/g, '')
+			.replace(/&nbsp;/gi, '')
+			.trim().length > 0
+	)
 
 	let isOpen = $state(true)
 </script>
 
-	{#if productState.selectedVariant?.description || data?.product?.description}
-<div class="border-b border-gray-300">
-	  <button class="flex pb-2 w-full items-center justify-between gap-2 intra-pt text-base font-bold text-gray-900" onclick={() => (isOpen = !isOpen)}>
-			<span>Product Description</span>
+{#if hasDescription}
+	<div class="edp-acc border-b" data-testid="product-description">
+		<!-- aria-expanded/aria-controls: the open state was previously conveyed only by a swapped
+		     icon, so a screen reader announced an unlabelled button with no state and no link to
+		     the region it controls. -->
+		<button
+			type="button"
+			class="edp-acc-btn flex min-h-11 w-full items-center justify-between gap-3 py-2.5 text-left md:min-h-10"
+			aria-expanded={isOpen}
+			aria-controls="product-description-panel"
+			onclick={() => (isOpen = !isOpen)}
+		>
+			<span class="edp-acc-label text-sm font-semibold text-foreground">Product description</span>
 
-			{#if isOpen}
-				<ChevronUp class="h-4 w-4 text-gray-800" />
-			{:else}
-				<ChevronDown class="h-4 w-4 text-gray-800" />
-			{/if}
+			<!-- One chevron that rotates, not two that swap: the swap gave the icon no state to
+			     animate between, which is what read as "no animation". -->
+			<ChevronDown
+				class="size-4 shrink-0 text-muted-foreground transition-transform duration-panel ease-standard motion-reduce:transition-none {isOpen
+					? 'rotate-180'
+					: ''}"
+				aria-hidden="true"
+			/>
 		</button>
 
 		{#if isOpen}
-			<div class="grid grid-cols-1 overflow-x-auto pb-6">
+			<div id="product-description-panel" class="overflow-hidden" transition:slide>
 				<div
-					class="prose prose-sm max-w-none leading-relaxed text-gray-600 prose-headings:text-gray-900 prose-strong:text-gray-900 prose-li:list-disc [&>table]:w-full [&>table]:border-collapse [&_td]:border-b [&_td]:border-gray-50 [&_td]:py-3 [&_td]:text-sm [&_th]:border-b [&_th]:border-gray-100 [&_th]:py-3 [&_th]:text-left [&_th]:text-xs [&_th]:font-bold [&_th]:uppercase [&_th]:tracking-widest"
+					class="edp-prose prose prose-sm max-w-none pb-4 leading-relaxed text-muted-foreground prose-headings:text-foreground prose-strong:text-foreground prose-li:list-disc [&>table]:w-full [&>table]:border-collapse [&_td]:border-b [&_td]:py-2 [&_td]:text-sm [&_th]:border-b [&_th]:py-2 [&_th]:text-left [&_th]:text-xs [&_th]:font-medium [&_th]:text-muted-foreground"
 				>
-					{@html productState.selectedVariant?.description || data?.product?.description}
+					{@html description}
 				</div>
 			</div>
 		{/if}
-</div>
-	{/if}
+	</div>
+{/if}
+
+<style>
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-acc) {
+		border-bottom: 1px solid var(--ed-line);
+	}
+
+	:global([data-theme='default'] .edp-acc-label) {
+		font-family: var(--ed-body);
+		font-size: var(--type-ui);
+		font-weight: 600;
+		color: var(--ed-ink);
+	}
+
+	/* The body step, 16px at 1.5, as every paragraph a shopper reads on the home page. Was
+	   14.4px / 1.6, and before that 0.92rem/1.7, which read as a long loose column. */
+	:global([data-theme='default'] .edp-prose) {
+		color: var(--ed-soft);
+		font-size: var(--type-body);
+		line-height: var(--leading-body);
+	}
+
+	:global([data-theme='default'] .edp-prose :is(h1, h2, h3, h4, strong)) {
+		color: var(--ed-ink);
+	}
+</style>

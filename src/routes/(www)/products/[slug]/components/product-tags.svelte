@@ -8,9 +8,23 @@
 </script>
 
 {#if data?.product?.productTags?.length > 0}
-	<div class=" flex flex-wrap gap-2">
+	<div class="edp-tags flex flex-wrap gap-2">
 		{#each (data?.product.productTags || '').split(',') || [] as t}
-			<Badge variant="outline">{t}</Badge>
+			<Badge variant="outline" class="edp-tag">{t}</Badge>
 		{/each}
 	</div>
 {/if}
+
+<style>
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-tag) {
+		border: 1px solid var(--ed-line) !important;
+		border-radius: var(--ed-radius) !important;
+		background: transparent !important;
+		color: var(--ed-soft) !important;
+		font-family: var(--ed-body);
+		font-size: 0.75rem;
+		font-weight: 500;
+		padding: 4px 10px;
+	}
+</style>

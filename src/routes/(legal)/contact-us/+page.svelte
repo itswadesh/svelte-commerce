@@ -1,234 +1,190 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button'
-	import { Input } from '$lib/components/ui/input'
-	import { Label } from '$lib/components/ui/label'
-	import { Textarea } from '$lib/components/ui/textarea'
-	import { Check, AlertCircle, Mail, MessageSquare, Phone, MapPin, Send, Clock, ArrowRight } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { ContactUsRenderer } from '$lib/core/composables/index.js'
-	import { fade, fly } from 'svelte/transition'
+	import { ChevronRight, Clock, Mail, MapPin, MessageCircle, Phone } from '@lucide/svelte'
+	import { isCmsPageResolvable } from '$lib/components/common/cms-pages.js'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import StructuredData from '$lib/components/seo/structured-data.svelte'
+	import ContactForm from '$lib/components/contact/contact-form.svelte'
+	import { addressLines, contactPageSchema, hoursRows, inIndia, phoneLink, whatsappLink } from '$lib/components/contact/contact-facts'
 
-	let info = $state({
-		name: '',
-		email: '',
-		message: ''
-	})
+	const store = $derived(page?.data?.store)
 
-	const contactMethods = [
-		{
-			icon: Mail,
-			title: 'Email',
-			value: page?.data?.store?.businessEmail || 'support@sveltecommerce.com',
-			description: 'Our team will respond within 24 hours.'
-		},
-		{
-			icon: MessageSquare,
-			title: 'Live Chat',
-			value: 'Available 9am - 6pm',
-			description: 'Average response time: 5 minutes.'
-		}
-	]
+	// Only what the store record carries; anything it lacks is simply not shown. No map: the owner
+	// removed Google's map from contact pages (14 Nov 2026). The address, hours and country are
+	// there only when the store published them (GoCommerce D156).
+	const india = $derived(inIndia(store?.businessCountry || store?.address?.country))
+	const email = $derived(String(store?.contact?.email || store?.businessEmail || '').trim())
+	const phone = $derived(phoneLink(store?.contact?.phone || store?.businessPhone, india))
+	const chat = $derived(store?.plugins?.whatsappChatButton)
+	const whatsapp = $derived(chat?.active ? whatsappLink(chat.phone, india, chat.message) : null)
+	const lines = $derived(addressLines(store?.address))
+	const hours = $derived(hoursRows(store?.openingHours))
+
+	// WhatsApp first, then a call: how most shoppers here would rather reach a shop (india.md).
+	const methods = $derived(
+		[
+			whatsapp && { icon: MessageCircle, title: 'Chat on WhatsApp', value: whatsapp.label, href: whatsapp.href, external: true },
+			phone && { icon: Phone, title: 'Call us', value: phone.label, href: phone.href, external: false },
+			email && { icon: Mail, title: 'Email us', value: email, href: `mailto:${email}`, external: false }
+		].filter((m) => !!m)
+	)
+	const hasFacts = $derived(methods.length > 0 || lines.length > 0 || hours.length > 0)
+
+	// Decided on the server from the store's own capabilities: a form on a channel that is not open
+	// would spend the shopper's message on an error. See store-capabilities.ts.
+	const formAvailable = $derived(!!page.data?.contactFormOpen)
+
+	// The merchant's own page at /contact-us, when they have written one in the CMS, is the intro.
+	const cmsContent = $derived(page.data?.page?.content)
+
+	// Name only the policies this store has actually published.
+	const termsOk = $derived(isCmsPageResolvable('/terms-and-conditions', page.data?.cmsPages ?? []))
+	const privacyOk = $derived(isCmsPageResolvable('/privacy-policy', page.data?.cmsPages ?? []))
+
+	const schema = $derived(
+		contactPageSchema({
+			url: page.url.origin + page.url.pathname,
+			origin: page.url.origin,
+			name: store?.name,
+			schemaType: store?.schemaType,
+			email,
+			phone: phone?.label,
+			address: store?.address,
+			hours: store?.openingHours
+		})
+	)
 </script>
 
-<svelte:head>
-	<title>Contact Us | Svelte Commerce</title>
-</svelte:head>
+<SeoHeader
+	metaTitle={store?.name ? `Contact us | ${store.name}` : 'Contact us'}
+	metaDescription={`Get in touch with ${store?.name || 'us'} about orders, delivery, returns and product questions.`}
+/>
+<StructuredData {schema} />
 
-<div class="min-h-screen bg-[#fafafa] py-12 md:py-24">
-	<div class="container mx-auto max-w-6xl px-4">
-		<ContactUsRenderer bind:info>
-			{#snippet content({ error, success, nameError, messageError, emailError, loading, handleSubmit })}
-				<div class="grid gap-12 lg:grid-cols-12 lg:items-start">
-					<!-- Left Column: Content & Info -->
-					<div class="lg:col-span-5" in:fly={{ x: -20, duration: 600 }}>
-						<div class="mb-10">
-							<h1 class="text-4xl font-black tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
-								Let's Start a <span class="text-primary">Conversation</span>
-							</h1>
-							<p class="mt-6 text-lg leading-relaxed text-gray-500">
-								Have a question about an order or just want to say hi? We're here to help you create the perfect shopping experience.
-							</p>
-						</div>
+<div class="page-width py-6 md:py-10">
+	<header class="mb-6 max-w-2xl md:mb-8">
+		<h1 class="page-heading">Contact us</h1>
+		{#if cmsContent}
+			<div class="prose prose-sm prose-neutral mt-2 max-w-none md:prose-base prose-a:text-primary">
+				{@html cmsContent}
+			</div>
+		{:else}
+			<p class="mt-1 text-base text-muted-foreground">
+				{#if formAvailable}
+					Questions about an order, a delivery or a return? Send a message{methods.length ? ', or reach the shop directly' : ''}.
+				{:else if methods.length}
+					Questions about an order, a delivery or a return? Reach the shop directly.
+				{:else}
+					Most order, delivery and returns questions are answered in the <a href="/faqs" class="text-foreground underline underline-offset-2">FAQs</a>.
+				{/if}
+			</p>
+		{/if}
+	</header>
 
-						<!-- Contact Methods Grid -->
-						<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
-							{#each contactMethods as method}
-								<div class="group flex items-start gap-5 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
-									<div
-										class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition-colors group-hover:bg-primary group-hover:text-white"
-									>
-										<method.icon class="h-6 w-6" />
-									</div>
-									<div>
-										<h3 class="font-bold text-gray-900">{method.title}</h3>
-										<p class="mt-1 font-medium text-primary">{method.value}</p>
-										<p class="mt-1 text-sm text-gray-400">{method.description}</p>
-									</div>
-								</div>
-							{/each}
-						</div>
-
-						<!-- Socials or Additional Info -->
-						<div class="mt-10 border-t border-gray-100 pt-10">
-							<div class="prose-lg text-sm leading-relaxed text-gray-400 prose-p:my-0 prose-li:my-0">
-								{@html page?.data?.page?.content}
-							</div>
-						</div>
-					</div>
-
-					<!-- Right Column: Form -->
-					<div class="lg:col-span-7" in:fly={{ x: 20, duration: 600, delay: 200 }}>
-						{#if success}
-							<div
-								in:fade
-								class="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-xl md:p-12"
-							>
-								<div class="relative mb-8">
-									<div class="absolute inset-0 scale-150 animate-ping rounded-full bg-green-100 opacity-20"></div>
-									<div class="relative flex h-20 w-24 items-center justify-center rounded-full bg-green-50">
-										<Check class="h-10 w-10 text-green-600" />
-									</div>
-								</div>
-								<h2 class="text-3xl font-bold text-gray-900">Message Sent!</h2>
-								<p class="mt-4 max-w-sm text-lg text-gray-500">Thank you for reaching out. A member of our team will get back to you shortly.</p>
-								<!-- <Button 
-									variant="outline" 
-									class="mt-10 h-12 px-8 font-bold uppercase tracking-widest transition-all hover:bg-gray-50"
-									onclick={() => { success = false
-										 info = { name: '', email: '', message: '' } }}
+	<div class="grid items-start gap-6 {hasFacts && formAvailable ? 'lg:grid-cols-12 lg:gap-10' : 'max-w-2xl'}">
+		{#if hasFacts}
+			<div class="space-y-4 {formAvailable ? 'lg:col-span-5' : ''}">
+				{#if methods.length}
+					<ul class="grid gap-3" aria-label="Ways to reach the shop">
+						{#each methods as method (method.title)}
+							<li>
+								<a
+									href={method.href}
+									class="contact-card group flex min-h-16 items-center gap-3 rounded-lg border bg-card p-4"
+									{...method.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
 								>
-									Send Another Message
-								</Button> -->
-							</div>
-						{:else}
-							<div class="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl">
-								<div class="bg-gray-50/50 p-8 md:p-10">
-									<h2 class="text-2xl font-bold text-gray-900">Send us a message</h2>
-									<p class="mt-2 text-gray-500">Required fields are marked with an asterisk (*)</p>
-								</div>
+									<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-foreground">
+										<method.icon class="h-5 w-5" aria-hidden="true" />
+									</span>
+									<span class="min-w-0 flex-1">
+										<span class="block text-sm font-semibold text-foreground">{method.title}</span>
+										<!-- An email address has no spaces to wrap at; it must not push the page sideways at 360px. -->
+										<span class="block text-sm text-muted-foreground [overflow-wrap:anywhere]">{method.value}</span>
+										{#if method.external}<span class="sr-only">(opens WhatsApp)</span>{/if}
+									</span>
+									<ChevronRight class="contact-card__go h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+								</a>
+							</li>
+						{/each}
+					</ul>
+				{/if}
 
-								<form class="space-y-6 p-8 md:p-10" onsubmit={handleSubmit}>
-									{#if error}
-										<div class="flex items-center gap-3 rounded-xl bg-red-50 p-4 text-red-600" in:fade>
-											<AlertCircle class="h-5 w-5 shrink-0" />
-											<p class="text-sm font-medium">{error}</p>
-										</div>
-									{/if}
+				{#if lines.length}
+					<section class="rounded-lg border bg-card p-4" aria-labelledby="contact-address-title">
+						<h2 id="contact-address-title" class="contact-title flex items-center gap-2 text-base font-semibold text-foreground">
+							<MapPin class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+							Address
+						</h2>
+						<address class="mt-2 text-sm not-italic text-foreground">
+							{#each lines as line, i (i)}<span class="block">{line}</span>{/each}
+						</address>
+					</section>
+				{/if}
 
-									<div class="grid gap-6 sm:grid-cols-2">
-										<div class="space-y-2">
-											<Label for="name" class="text-xs font-black uppercase tracking-widest text-gray-400">Full Name *</Label>
-											<Input
-												id="name"
-												placeholder="John Doe"
-												bind:value={info.name}
-												class="h-12 border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {nameError
-													? 'border-red-500 focus:ring-red-500/20'
-													: ''}"
-												required
-											/>
-											{#if nameError}
-												<p class="text-[10px] font-bold uppercase tracking-tight text-red-500">{nameError}</p>
-											{/if}
-										</div>
+				{#if hours.length}
+					<section class="rounded-lg border bg-card p-4" aria-labelledby="contact-hours-title">
+						<h2 id="contact-hours-title" class="contact-title flex items-center gap-2 text-base font-semibold text-foreground">
+							<Clock class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+							Opening hours
+						</h2>
+						<table class="mt-2 w-full text-sm">
+							<tbody>
+								{#each hours as row (row.days)}
+									<tr class="border-t first:border-t-0">
+										<th scope="row" class="py-2 pr-4 text-left font-normal text-muted-foreground">{row.days}</th>
+										<td class="py-2 text-right tabular-nums text-foreground">{row.time}</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</section>
+				{/if}
+			</div>
+		{/if}
 
-										<div class="space-y-2">
-											<Label for="email" class="text-xs font-black uppercase tracking-widest text-gray-400">Email Address *</Label>
-											<Input
-												id="email"
-												type="email"
-												placeholder="john@example.com"
-												bind:value={info.email}
-												class="h-12 border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {emailError
-													? 'border-red-500 focus:ring-red-500/20'
-													: ''}"
-												required
-											/>
-											{#if emailError}
-												<p class="text-[10px] font-bold uppercase tracking-tight text-red-500">{emailError}</p>
-											{/if}
-										</div>
-									</div>
-
-									<div class="space-y-2">
-										<Label for="message" class="text-xs font-black uppercase tracking-widest text-gray-400">Your Message *</Label>
-										<Textarea
-											id="message"
-											placeholder="Tell us how we can help..."
-											rows={5}
-											class="min-h-[150px] resize-none border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {messageError
-												? 'border-red-500 focus:ring-red-500/20'
-												: ''}"
-											bind:value={info.message}
-											required
-										/>
-										{#if messageError}
-											<p class="text-[10px] font-bold uppercase tracking-tight text-red-500">{messageError}</p>
-										{/if}
-									</div>
-
-									<Button
-										type="submit"
-										class="group h-14 w-full text-base font-bold uppercase tracking-[0.2em] shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
-										disabled={loading}
-									>
-										{#if loading}
-											<div class="mr-3 h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
-											Processing...
-										{:else}
-											<Send class="mr-2 h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-											Send Message
-										{/if}
-									</Button>
-
-									<p class="text-center text-[10px] font-medium text-gray-400">
-										By clicking "Send Message", you agree to our
-										<a href="/terms-and-conditions" class="text-primary hover:underline">Terms</a> and
-										<a href="/privacy-policy" class="text-primary hover:underline">Privacy Policy</a>.
-									</p>
-								</form>
-							</div>
-						{/if}
-					</div>
-				</div>
-				<!-- {#if !success}
-				<div class="mt-24 grid gap-8 border-t border-gray-100 pt-16 sm:grid-cols-3">
-					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
-							<Clock class="h-5 w-5 text-gray-400" />
-						</div>
-						<div>
-							<h4 class="text-sm font-bold text-gray-900">Support Hours</h4>
-							<p class="text-xs text-gray-500">Mon - Fri: 9am - 6pm EST</p>
-						</div>
-					</div>
-					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
-							<MapPin class="h-5 w-5 text-gray-400" />
-						</div>
-						<div>
-							<h4 class="text-sm font-bold text-gray-900">Global Offices</h4>
-							<p class="text-xs text-gray-500">NY, London, Tokyo</p>
-						</div>
-					</div>
-					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
-							<Check class="h-5 w-5 text-gray-400" />
-						</div>
-						<div>
-							<h4 class="text-sm font-bold text-gray-900">Quick Response</h4>
-							<p class="text-xs text-gray-500">Guaranteed 24h turnaround</p>
-						</div>
-					</div>
-				</div>
-			{/if} -->
-			{/snippet}
-		</ContactUsRenderer>
+		{#if formAvailable}
+			<div class={hasFacts ? 'lg:col-span-7' : ''}>
+				<ContactForm subjects={page.data?.contactSubjects ?? []} thanks={page.data?.contactThanks ?? ''} {termsOk} {privacyOk} />
+			</div>
+		{/if}
 	</div>
 </div>
 
 <style>
-	:global(body) {
-		background-color: #fafafa;
+	/* Each way to reach the shop answers the pointer: a border on hover, a lift and an arrow nudge
+	   where the device hovers and movement is welcome, a press under the finger. The global
+	   :focus-visible ring marks it for the keyboard. */
+	.contact-card {
+		transition:
+			transform var(--motion-fast) var(--motion-ease),
+			border-color var(--motion-fast) var(--motion-ease);
+	}
+	.contact-card :global(.contact-card__go) {
+		transition: transform var(--motion-fast) var(--motion-ease);
+	}
+	@media (hover: hover) {
+		.contact-card:hover {
+			border-color: hsl(var(--foreground) / 0.35);
+		}
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		@media (hover: hover) {
+			.contact-card:hover {
+				transform: translateY(-2px);
+			}
+			.contact-card:hover :global(.contact-card__go) {
+				transform: translateX(2px);
+			}
+		}
+		.contact-card:active {
+			transform: scale(0.98);
+		}
+	}
+
+	/* The default theme reads the role ladder, so the store's type scale moves these; the other
+	   themes keep the classes. */
+	:global([data-theme='default']) .contact-title {
+		font-size: var(--type-heading);
+		line-height: var(--leading-heading);
 	}
 </style>

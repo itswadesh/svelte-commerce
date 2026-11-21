@@ -1,40 +1,29 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+import type { StoreDetails } from '$lib/core/types'
 
-import type { Me, Cart, Category } from '$lib/types'
-
-// and what to do when importing types
 declare global {
 	namespace App {
+		// `handleError` in hooks.server.ts returns a status alongside the message, so widen the
+		// default `App.Error` ({ message: string }) to carry it.
+		interface Error {
+			message: string
+			status?: number
+		}
 		interface Locals {
-			me: Me | null
-			q: string
-			sid: string
-			url: string
-			zip: string
-			currentPage: number
-			user: {
-				name: string
-				role: string
-			}
-			cart: Cart
-			cartId: string
-			cartQty: number
-			host: string
-			isDesktop: boolean
-			isShowBackButton: boolean
-			megamenu: Category
-			menu: [any]
-			origin: string
-			popularSearches: [any]
-			session: string
-			sid: string
-			store: any
-			storeId: string
-			zip: string
+			// Set in hooks.server.ts from storeService.getStoreByIdOrDomain(), which returns StoreDetails.
+			storeDetails?: StoreDetails
+			storeNotFound?: boolean
 		}
 		// interface PageData {}
-
+		interface PageState {
+			// The address a shopper just signed up with, for the page after sign-up. In the state
+			// rather than the URL, which every analytics tag records.
+			signupEmail?: string
+			customizerOpen?: boolean
+		}
 		// interface Platform {}
 	}
 }
+
+export {}

@@ -1,13 +1,20 @@
 import { describe, it, expect } from 'vitest'
+import { createRawSnippet } from 'svelte'
 import { render, screen } from '@testing-library/svelte'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../index'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card'
+
+// Svelte 5 components take a `children` snippet, so wrap plain test text in one
+const textSnippet = (text: string) =>
+	createRawSnippet<[]>(() => ({
+		render: () => `<span>${text}</span>`
+	}))
 
 // Basic smoke tests
 describe('Card Component', () => {
 	it('should render Card component', async () => {
 		const { container } = render(Card, {
 			props: {
-				children: 'Test content'
+				children: textSnippet('Test content')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -18,7 +25,7 @@ describe('Card Component', () => {
 		const { container } = render(Card, {
 			props: {
 				class: 'custom-class',
-				children: 'Test content'
+				children: textSnippet('Test content')
 			}
 		})
 		expect(container.firstChild).toHaveClass('custom-class')
@@ -27,7 +34,7 @@ describe('Card Component', () => {
 	it('should render CardContent component', async () => {
 		const { container } = render(CardContent, {
 			props: {
-				children: 'Content text'
+				children: textSnippet('Content text')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -37,7 +44,7 @@ describe('Card Component', () => {
 	it('should render CardHeader component', async () => {
 		const { container } = render(CardHeader, {
 			props: {
-				children: 'Header content'
+				children: textSnippet('Header content')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -46,7 +53,7 @@ describe('Card Component', () => {
 	it('should render CardTitle component', async () => {
 		const { container } = render(CardTitle, {
 			props: {
-				children: 'Card Title'
+				children: textSnippet('Card Title')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -56,7 +63,7 @@ describe('Card Component', () => {
 	it('should render CardDescription component', async () => {
 		const { container } = render(CardDescription, {
 			props: {
-				children: 'Card description'
+				children: textSnippet('Card description')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -66,7 +73,7 @@ describe('Card Component', () => {
 	it('should render CardFooter component', async () => {
 		const { container } = render(CardFooter, {
 			props: {
-				children: 'Footer content'
+				children: textSnippet('Footer content')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -76,7 +83,7 @@ describe('Card Component', () => {
 	it('should render complete card structure', async () => {
 		const { container } = render(Card, {
 			props: {
-				children: 'Complete Card Content'
+				children: textSnippet('Complete Card Content')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -86,7 +93,7 @@ describe('Card Component', () => {
 	it('should handle empty children gracefully', async () => {
 		const { container } = render(Card, {
 			props: {
-				children: ''
+				children: textSnippet('')
 			}
 		})
 		expect(container.firstChild).toBeInTheDocument()
@@ -105,7 +112,7 @@ describe('Card Component', () => {
 	it('should have proper semantic structure', async () => {
 		render(Card, {
 			props: {
-				children: 'Accessible Card'
+				children: textSnippet('Accessible Card')
 			}
 		})
 		expect(screen.getByText('Accessible Card')).toBeInTheDocument()
@@ -115,7 +122,7 @@ describe('Card Component', () => {
 		const { container } = render(Card, {
 			props: {
 				'data-testid': 'custom-card',
-				children: 'Test'
+				children: textSnippet('Test')
 			}
 		})
 		expect(container.firstChild).toHaveAttribute('data-testid', 'custom-card')

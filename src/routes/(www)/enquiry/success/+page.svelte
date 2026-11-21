@@ -7,22 +7,22 @@
 </script>
 
 <svelte:head>
-	<title>Enquiry Submitted Successfully</title>
+	<title>Enquiry submitted successfully</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50 py-12">
+<div class="min-h-screen bg-muted py-12">
 	<div class="container mx-auto max-w-3xl px-4">
-		<div class="rounded-lg bg-white p-6 shadow-lg md:p-8">
+		<div class="border rounded-lg bg-card p-6 md:p-8">
 			<!-- Success Header -->
 			<div class="mb-8 text-center">
 				<div class="mb-4 flex justify-center">
-					<div class="rounded-full bg-green-100 p-3">
-						<CheckCircle2 class="h-12 w-12 text-green-500" />
+					<div class="rounded-full bg-success/10 p-3">
+						<CheckCircle2 class="h-12 w-12 text-success" />
 					</div>
 				</div>
-				<h1 class="mb-2 text-2xl font-bold text-gray-900 md:text-3xl">{enquiryPlugin?.successHeader || 'Thank You For Your Enquiry!'}</h1>
-				<p class="text-gray-600">{enquiryPlugin?.successMessage || 'We will get back to you soon!'}</p>
-				<Button class="mt-5" onclick={() => goto('/products')}>Continue Shopping</Button>
+				<h1 class="mb-2 page-heading">{enquiryPlugin?.successHeader || 'Thank You For Your Enquiry!'}</h1>
+				<p class="text-muted-foreground">{enquiryPlugin?.successMessage || 'We will get back to you soon!'}</p>
+				<Button class="mt-5" onclick={() => goto('/products')}>Continue shopping</Button>
 			</div>
 		</div>
 	</div>

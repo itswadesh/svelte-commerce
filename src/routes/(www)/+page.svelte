@@ -1,294 +1,267 @@
 <script lang="ts">
-	import FeaturedProductsGrid from '$lib/components/product-catalogue/featured-products-grid.svelte'
-	import { X } from '@lucide/svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import CategoryList from '$lib/components/category/category-list.svelte'
-	import { fly } from 'svelte/transition'
-	import type { Product } from '$lib/core/types/index.js'
-	import HomepageCategoryListWithImage from '$lib/components/home/homepage-category-list-with-image.svelte'
-	import HomepageBanners from '$lib/components/home/homepage-banners.svelte'
-	import Banners from '$lib/components/home/banners.svelte'
-	import { SeoHeader, GoogleStructuredDataWebsite, GoogleStructuredDataOrganization, GoogleStructuredDataProductsList } from '$lib/core/components/index.js'
-	import Collections from '$lib/components/home/collections.svelte'
-	let { data } = $props()
-	import { HomepageModule } from '$lib/core/composables/index.js'
-	import { timestampToAgo } from '$lib/core/utils/index.js'
-	import Slider from '$lib/components/home/slider.svelte'
 	import { page as sveltePage } from '$app/state'
+	import { fly } from '$lib/motion'
+	import { X } from '@lucide/svelte'
+	import { withBanners } from '$lib/composer/banner-sections.js'
 	import { Button } from '$lib/components/ui/button'
-	import Blocks from '$lib/components/page-blocks/blocks.svelte'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import ShowcaseVideos from '$lib/components/showcases/showcase-videos.svelte'
+	import StructuredData from '$lib/components/seo/structured-data.svelte'
+	import ProductListSchema from '$lib/components/seo/product-list-schema.svelte'
+	import { cleanSchemaText } from '$lib/components/seo/schema.js'
+	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { setCollectionState } from '$lib/core/stores/collection.svelte.js'
-	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
-	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
+	import { timestampToAgo } from '$lib/core/utils/index.js'
+	import { resolveThemeContent } from '$lib/theme/index.js'
+	import { themeHomepages } from '$lib/theme/homepages.js'
+	import ThemeSections from '$lib/theme/ThemeSections.svelte'
+	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
+	import HomeComposer from '$lib/composer/HomeComposer.svelte'
+
+	let { data } = $props()
+
+	// `url.origin` already carries the scheme — prefixing it with another `https://` produced
+	// `https://https://example.com` and broke the WebSite -> Organization @id join.
+	const origin = $derived(sveltePage.url.origin)
 	const [aspectWidth, aspectHeight] = $derived(data?.store?.productImageAspectRatio?.split(':') || ['1', '1'])
 
-  setCollectionState()
+	setCollectionState()
 
-	// Type definition for page data needed for this component
 	interface ExtendedPage {
 		metaTitle?: string
 		metaDescription?: string
 		metaKeywords?: string
 		logo?: string
 		desktopBanners?: any[]
+		tabletBanners?: any[]
 		mobileBanners?: any[]
 		sections?: any[]
 	}
 
-	interface PageData {
-		page?: ExtendedPage
-		store?: any
-		storeId?: string
-	}
-
-	// Cast data.page to ExtendedPage type for TypeScript
 	const page = (data?.page || {}) as ExtendedPage
-
 	const homepageModule = new HomepageModule()
+	const activeTheme = $derived(data?.theme?.name || 'default')
+	const ThemeHomepage = $derived(themeHomepages[activeTheme] || themeHomepages['default'])
+	// Hardcoded theme content, with the store's admin-provided themeContent (store.theme.content)
+	// merged over it section by section (falls back to the theme defaults for anything unset).
+	const themeContent = $derived(resolveThemeContent(activeTheme, data?.store))
+	// The store's own name wins; a theme's brandName is demo copy for previewing the theme.
+	const brandName = $derived(data?.store?.name || themeContent.brandName || 'Store')
+	const themeDescription = $derived(themeContent.description || page?.metaDescription || '')
+
+	// Server data first, module second. `+page.ts` fetches both so they are in the SSR HTML;
+	// HomepageModule then populates its own copies on the client and takes over once it has them
+	// (it owns the load-more accumulator, so its list grows past this first page).
+	const featuredCategories = $derived(
+		homepageModule.featuredCategories?.length ? homepageModule.featuredCategories : (data?.featuredCategories ?? [])
+	)
+	const featuredProducts = $derived(homepageModule.featuredProducts?.length ? homepageModule.featuredProducts : (data?.featuredProducts ?? []))
+
+	// Only "loading" when there is nothing to show. The module starts with loading=true and only
+	// settles on the client, so passing it straight through made the server render eight skeleton
+	// cards over products the load function had already fetched: every visitor watched a swap, the
+	// swap shifted layout, and a crawler that runs no scripts found no product links on the
+	// storefront's highest-authority page.
+	const listLoading = $derived(homepageModule.loading && !featuredProducts.length)
+
+	// Section-driven themes ship their homepage as data (`themeLayout` from the API) and are
+	// rendered with the shared section library. Themes that still have a bespoke component fall
+	// back to it, so both kinds work side by side while themes are migrated.
+	const themeLayout = $derived(data?.store?.themeLayout)
+	// The page the merchant composed in the panel wins over both; without one, everything below
+	// renders exactly as it did before the composer existed.
+	const composedLayout = $derived(withBanners(data?.layout, page, data?.bannerShape))
+	const sectionContext = $derived({
+		content: themeContent,
+		brandName,
+		currencyCode: data?.store?.currency?.code,
+		aspectWidth,
+		aspectHeight,
+		featuredProducts,
+		featuredCategories,
+		loading: listLoading,
+		ProductCard
+	})
+	const filterButtons = $derived([
+		'All',
+		...featuredCategories
+			.map((category: any) => category?.name || category?.title)
+			.filter(Boolean)
+			.slice(0, 6)
+	])
+
+	// Organization JSON-LD, built here rather than via GoogleStructuredDataOrganization, whose
+	// prop defaults hardcode `@type: ['Organization','JewelryStore']` and `priceRange: '$$$'` —
+	// wrong for every non-jewellery store deployed from this white-label template, and not
+	// overridable by passing `undefined` (that just re-selects the default).
+	const organizationSchema = $derived.by(() => {
+		const store = data?.store
+		const social = store?.socialSharing?.active
+			? (Object.values(store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[])
+			: []
+		if (!social.length) {
+			const plugin = store?.plugins?.socialSharingButtons || {}
+			for (const key in plugin) {
+				if (key !== 'active' && plugin[key]) social.push(plugin[key])
+			}
+		}
+
+		const description = cleanSchemaText(themeDescription || store?.description)
+		const logo = data?.store?.logo
+		const telephone = store?.contact?.phone || store?.businessPhone
+		const email = store?.contact?.email || store?.businessEmail
+
+		return {
+			'@context': 'https://schema.org',
+			// The store declares its own entity type; anything else would be a guess.
+			'@type': store?.schemaType || 'Organization',
+			'@id': `${origin}/#organization`,
+			name: brandName,
+			url: origin,
+			...(logo ? { logo, image: logo } : {}),
+			...(description ? { description } : {}),
+			...(store?.priceRange ? { priceRange: store.priceRange } : {}),
+			address: store?.address
+				? {
+						'@type': 'PostalAddress',
+						streetAddress: store?.address?.street,
+						addressLocality: store?.address?.city,
+						addressRegion: store?.address?.state,
+						postalCode: store?.address?.pincode,
+						addressCountry: store?.address?.country
+					}
+				: {
+						'@type': 'PostalAddress',
+						streetAddress: store?.address_1,
+						addressLocality: store?.city,
+						addressRegion: store?.state,
+						postalCode: store?.zip,
+						addressCountry: store?.country?.iso2
+					},
+			// StructuredData drops the empty fields; a contact point with neither a phone nor an email
+			// would still say "customer service" about nothing, so it goes too.
+			...(telephone || email ? { contactPoint: { '@type': 'ContactPoint', telephone, email, contactType: 'customer service' } } : {}),
+			legalName: store?.businessLegalName,
+			sameAs: social
+		}
+	})
+
+	// WebSite JSON-LD. The SearchAction target has to be the URL the site's own search box submits
+	// to, and that is `/products?search=`. It used to publish `${origin}/{search_term_string}` on
+	// the reasoning that a bare slug was the canonical term route, but that route resolves a
+	// category or a product and 404s for everything else, so the markup advertised a search
+	// endpoint that answered almost no query.
+	//
+	// robots.txt disallows `/*?*search=` on purpose, to keep an unbounded set of query URLs out of
+	// the index. That means this entry point is unlikely to earn a sitelinks search box, which is
+	// the honest trade: describing the search a shopper can actually perform beats describing one
+	// that does not work.
+	const websiteSchema = $derived.by(() => {
+		const description = cleanSchemaText(data?.store?.description)
+		return {
+			'@context': 'https://schema.org',
+			'@type': 'WebSite',
+			name: data?.store?.name,
+			...(description ? { description } : {}),
+			url: origin,
+			publisher: { '@id': `${origin}/#organization` },
+			potentialAction: {
+				'@type': 'SearchAction',
+				target: {
+					'@type': 'EntryPoint',
+					urlTemplate: `${origin}/products?search={search_term_string}`
+				},
+				'query-input': 'required name=search_term_string'
+			}
+		}
+	})
 </script>
 
-<GoogleStructuredDataProductsList products={homepageModule.featuredProductsStructuredData} />
+<!-- Server-rendered: `+page.ts` loads featuredProducts, so this ItemList is populated in the SSR
+     HTML rather than appearing only after hydration. -->
+<ProductListSchema products={featuredProducts} />
 
-<GoogleStructuredDataOrganization
-	name={data?.store?.name || 'ArialShop'}
-	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
-	logo={data?.store?.logo}
-	description={data?.store?.description}
-	sameAs={data?.store?.socialSharing?.active
-		? (Object.values(data?.store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[])
-		: []}
-	address={data?.store?.address
-		? {
-				streetAddress: data?.store?.address?.street,
-				addressLocality: data?.store?.address?.city,
-				addressRegion: data?.store?.address?.state,
-				postalCode: data?.store?.address?.pincode,
-				addressCountry: data?.store?.address?.country
-			}
-		: undefined}
-	contactPoint={data?.store?.contact?.phone
-		? {
-				telephone: data?.store?.contact?.phone,
-				email: data?.store?.contact?.email,
-				contactType: 'customer service'
-			}
-		: undefined}
-/>
+<StructuredData schema={organizationSchema} />
 
-<GoogleStructuredDataWebsite
-	name={data?.store?.name || 'ArialShop'}
-	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
-	description={data?.store?.description}
-	searchUrl={`https://${PUBLIC_LITEKART_DOMAIN}/search?q={search_term_string}`}
-/>
+<StructuredData schema={websiteSchema} />
 
 <SeoHeader
-	metaTitle={page?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
-	metaDescription={page?.metaDescription ||
-		"Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
+	metaTitle={themeContent.seoTitle || page?.metaTitle || brandName}
+	metaDescription={themeDescription}
 	metaKeywords={page?.metaKeywords}
-	image={page?.logo}
+	image={themeContent.seoImage || page?.logo || data?.store?.logo}
 />
 
-<h1 class="sr-only">Shop Women's Fashion Online — Dresses, Co-ord Sets & More</h1>
-
-<!-- {#if homepageModule.featuredCategories?.length > 0}
-	<div class="mx-2 flex justify-center bg-gray-100 px-2 lg:container lg:mx-auto lg:hidden">
-		<CategoryList categories={homepageModule.featuredCategories} />
-	</div>
-{/if} -->
-
-<!-- Hello bar -->
-<!-- {#if helloBarPlugin?.active}
-	<div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
-		{@html helloBarPlugin?.content}
-	</div>
-{/if} -->
-
-<!-- {#if displayProduct === 'flex'}
-	<div class="fixed inset-0 z-40 {displayProduct} flex items-center justify-center bg-[rgba(0,0,0,0.7)] p-10">
-		<div class="absolute inset-0 h-full w-full cursor-pointer"></div>
-
-		<div
-			class="relative z-50 max-w-[90vw] rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 dark:text-white sm:max-h-[90vh] sm:w-full sm:max-w-[600px] sm:p-4"
-		>
-			<Button
-				variant="secondary"
-				size="icon"
-				class="absolute right-4 top-4 m-1 rounded-full"
-				onclick={hideProduct}
-				aria-label="Close"
-			>
-				<X class="h-6 w-6" />
-			</Button>
-
-			<ProductDetails {product} />
-		</div>
-	</div>
-{/if} -->
-
-<div class="relative w-full">
-	{#if homepageModule.loading || !page?.desktopBanners}
-		<div class="relative aspect-[4/3.5] md:aspect-[16/6] md:max-h-[calc(50vh+2px)] w-full">
-			<Skeleton class="h-full w-full rounded-none" />
-		</div>
-	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
-		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
-	{:else}
-		<!-- Fallback Hero Section when no banners are configured -->
-		<div class="relative w-full aspect-[4/3.5] md:aspect-[16/6] md:max-h-[50vh] bg-black px-6 text-white overflow-hidden flex items-center">
-			<!-- Decorative background glow -->
-			<div class="absolute right-0 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
-
-			<div class="relative mx-auto max-w-7xl">
-				<div class="grid gap-12 md:grid-cols-2">
-					<div class="flex flex-col justify-center">
-						<h2 class="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl text-white">
-							{data?.store?.name || 'Welcome to Our Store'}
-						</h2>
-						<p class="mb-8 text-base md:text-lg text-zinc-100 leading-relaxed max-w-[55ch]">
-							{@html data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
-						</p>
-						<Button
-							href="/products"
-							size="lg"
-							class="w-fit bg-primary text-black font-bold uppercase tracking-widest text-xs py-4 px-8 rounded-md hover:bg-primary/90 transition-colors duration-300"
-						>
-							Shop Now
-						</Button>
-					</div>
-					<div class="hidden items-center justify-center md:flex select-none" aria-hidden="true">
-						<div class="text-[10rem] font-black tracking-tighter text-white/20">
-							NEW
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+<!-- A draft seen through a preview key is for the merchant, never for a search engine. -->
+<svelte:head>
+	{#if composedLayout?.preview}
+		<meta name="robots" content="noindex, nofollow" />
 	{/if}
+</svelte:head>
+
+{#if composedLayout?.sections?.length || composedLayout?.preview}
+	<HomeComposer layout={composedLayout} {brandName} aspectRatio="{aspectWidth} / {aspectHeight}" editorOrigin={data?.editorOrigin ?? null} />
+{:else if themeLayout?.sections?.length}
+	<ThemeSections layout={themeLayout} ctx={sectionContext} />
+{:else}
+	<svelte:component
+		this={ThemeHomepage}
+		{themeContent}
+		{brandName}
+		{themeDescription}
+		storeLogo={data?.store?.logo}
+		storeName={data?.store?.name}
+		storeDescription={data?.store?.description}
+		{aspectWidth}
+		{aspectHeight}
+		{featuredCategories}
+		{featuredProducts}
+		{filterButtons}
+		{homepageModule}
+		loading={listLoading}
+		desktopBanners={page?.desktopBanners}
+		tabletBanners={page?.tabletBanners}
+		mobileBanners={page?.mobileBanners}
+		pageSections={page?.sections}
+		currencyCode={data?.store?.currency?.code}
+	/>
+{/if}
+
+<div class="page-width my-8">
+	<ShowcaseVideos place={{ on: 'home' }} />
 </div>
 
-<Slider />
+<!-- The theme owns the homepage design, so the admin `home` page record never replaces a section.
+     The editorial theme inherits two things from it and only when the merchant has filled them in:
+     the banner slider (into the hero) and the banner sections (as tile bands) — see
+     $lib/theme/default/page-inheritance.ts. Both are switchable per device on the admin Theme page.
+     The typed block designer (page.layouts) still has no storefront renderer. -->
 
-<Blocks layouts={sveltePage.data.page.layouts}/>
-
-<!-- <div class="page-width mb-8">
-	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
-</div> -->
-
-<!-- <Collections />-->
-
-<!-- {#if page?.sections?.length && page?.sections[0]?.isActive}
-	<div class="mx-2 mb-8 xl:mx-24">
-		<HomepageBanners bannersList={page?.sections} />
-	</div>
-{/if} -->
-
-<!-- <div class="page-width py-8 md:py-12">
-	<div class="mb-8 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
-		<div class="text-center md:text-left">
-			<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">New Arrivals</h2>
-			<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
-		</div>
-		<Button
-			href="/products"
-			class="group max-sm:hidden"
-      variant="link"
-		>
-			View All Arrivals
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-			</svg>
-		</Button>
-	</div>
-
-	{#if homepageModule.loadingFeaturedProducts}
-		<div class="intra-gap grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-			{#each Array(12) as _}
-				<div class="space-y-4">
-					<Skeleton class="w-full rounded-2xl" style="aspect-ratio: {aspectWidth}/{aspectHeight};" />
-					<div class="space-y-2">
-						<Skeleton class="h-4 w-3/4" />
-						<Skeleton class="h-4 w-1/2" />
-					</div>
-				</div>
-			{/each}
-		</div>
-	{:else}
-		<FeaturedProductsGrid
-			data={homepageModule.featuredProducts?.slice(0, 18)}
-			displayProduct={(prod: Product) => homepageModule.showProduct(prod)}
-			loadMore={homepageModule.loadMoreFeaturedProducts}
-		/>
-		<!-- {#if homepageModule.hasMoreFeaturedProducts}
-			<div class="mt-16 flex justify-center pb-12">
-				<Button
-					variant="default"
-					size="lg"
-					class="group relative overflow-hidden rounded-full px-12 py-5 text-sm font-black uppercase tracking-[0.2em] shadow-2xl"
-					onclick={homepageModule.loadMoreFeaturedProducts}
-				>
-					<div
-						class="absolute -inset-full top-0 z-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-shimmer"
-					></div>
-
-					<span class="relative z-10">Discover More</span>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:translate-y-1 group-hover:animate-bounce"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-					</svg>
-				</Button>
-			</div>
-		{/if}
-	{/if}
-</div>-->
-
-<!-- Notification to show recent order -->
 {#if homepageModule.showRecentOrderPopup}
-	<div transition:fly={{ x: 50, duration: 150 }} class="fixed bottom-20 right-4 z-50">
-		<div class="relative flex justify-between rounded-lg bg-white p-4 shadow-lg">
-			<a href="/products/{homepageModule.selectedRecentOrder?.slug || ''}" class="flex items-center justify-between">
-				<div class="flex space-x-2">
-					<div class="">
-						<img
-							src={homepageModule.selectedRecentOrder?.image ||
-								homepageModule.selectedRecentOrder?.img ||
-								homepageModule.selectedRecentOrder?.thumbnail}
-							alt={homepageModule.selectedRecentOrder?.title || 'Product'}
-							class="h-16 w-16 object-contain sm:h-28 sm:w-28"
-						/>
-					</div>
-					<div class="flex flex-col">
-						<p class="text-xs text-black sm:text-sm">
-							{homepageModule.selectedRecentOrder?.first_name || 'Someone'} from {homepageModule.selectedRecentOrder?.city || 'somewhere'}
-						</p>
-						<p class="text-xs text-gray-500 sm:text-sm">purchased a</p>
-						<p class="line-clamp-3 max-w-[200px] text-sm text-blue-600">
-							{homepageModule.selectedRecentOrder?.title || 'product'}
-						</p>
-						<p class="mt-auto text-xs text-gray-500 sm:text-xs">
-							{timestampToAgo(homepageModule.selectedRecentOrder?.created_at || homepageModule.selectedRecentOrder?.createdAt || '')}
-						</p>
-					</div>
+	<div transition:fly={{ x: 24 }} class="fixed bottom-20 right-4 z-50">
+		<div class="flex max-w-[320px] gap-3 border border-l-4 border-primary bg-card p-3.5">
+			<a href="/products/{homepageModule.selectedRecentOrder?.slug || ''}" class="flex gap-3 text-foreground">
+				<img
+					src={homepageModule.selectedRecentOrder?.image || homepageModule.selectedRecentOrder?.img || homepageModule.selectedRecentOrder?.thumbnail}
+					alt={homepageModule.selectedRecentOrder?.title || 'Product'}
+					class="h-[58px] w-[58px] object-cover"
+				/>
+				<div>
+					<p class="text-xs text-muted-foreground">
+						{homepageModule.selectedRecentOrder?.first_name || 'Someone'} from {homepageModule.selectedRecentOrder?.city || 'nearby'}
+					</p>
+					<strong class="block text-sm text-primary">{homepageModule.selectedRecentOrder?.title || 'a menu item'}</strong>
+					<span class="text-xs text-muted-foreground">
+						{timestampToAgo(homepageModule.selectedRecentOrder?.created_at || homepageModule.selectedRecentOrder?.createdAt || '')}
+					</span>
 				</div>
 			</a>
 			<Button
 				variant="ghost"
 				size="icon"
-				class="self-start h-8 w-8"
+				class="h-7 w-7 self-start"
 				onclick={() => (homepageModule.showRecentOrderPopup = false)}
-				aria-label="Close notification"
+				aria-label="Close recent order"
 			>
 				<X class="h-4 w-4" />
 			</Button>

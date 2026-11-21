@@ -3,119 +3,131 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '$lib/components/common/modal.svelte'
-	import { AuthButton } from '$lib/core/components/index.js'
+	import AuthButton, { authEmail } from '$lib/components/auth/auth-button.svelte'
 	import { ForgotPasswordModule, forgotPasswordSchema as schemas } from '$lib/core/composables/index.js'
 
 	import { page } from '$app/state'
 
-	let { show = $bindable() } = $props()
+	let { show = $bindable(), manageHistory = true } = $props()
 
 	const forgotPasswordModule = new ForgotPasswordModule()
+	// The address typed at sign-in, handed over without the URL.
+	forgotPasswordModule.email = authEmail.value
+
+	function closeModal() {
+		show = false
+		forgotPasswordModule.success = false
+		forgotPasswordModule.removeUrlParams()
+	}
 </script>
 
 <svelte:head>
-	<title>Forgot Password</title>
+	<title>Forgot password</title>
 </svelte:head>
-<Modal {show} rounded={false} hideHeader hideFooter useMaxHeight class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none" hAuto wAuto>
-	{#if !forgotPasswordModule.success}
-		<div
-			class="w-full transform space-y-6 border border-gray-100/50 bg-white/70 p-6 shadow-2xl backdrop-blur-xl transition-all dark:border-gray-700/50 dark:bg-gray-900/80 sm:max-w-[480px] sm:rounded-2xl sm:p-8 ring-1 ring-white/20 dark:ring-white/5"
-		>
-			<!-- Close Icon -->
-			<div class="sticky top-3 z-50 flex items-center justify-end sm:absolute sm:right-5 sm:top-5">
-				<button
-					aria-label="Close modal button"
-					class="rounded-full bg-gray-100/50 p-2 text-gray-600 transition-all hover:bg-gray-200 hover:text-gray-900 dark:bg-gray-800/50 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-					onclick={() => {
-						show = false
-						forgotPasswordModule.removeUrlParams()
-					}}
-				>
-					<X class="h-5 w-5" />
-				</button>
-			</div>
 
-			<div class="flex flex-col items-center space-y-3 text-center">
-				{#if page?.data?.store?.logo}
-					<div class="mb-2 flex h-12 items-center justify-center">
-						<img src={page.data.store.logo} alt={page.data.store.name} class="h-10 object-contain dark:brightness-110" />
-					</div>
-				{:else}
-					<div class="mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 shadow-sm ring-1 ring-gray-200 dark:from-gray-800 dark:to-gray-900 dark:ring-gray-700">
-						<span class="text-2xl font-bold text-gray-900 dark:text-white">{page?.data?.store?.name?.charAt(0) || 'L'}</span>
-					</div>
-				{/if}
-				<div class="space-y-1.5">
-					<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Forgot Password?</h1>
-					<p class="text-sm font-medium text-gray-500 dark:text-gray-400">Enter your email to receive reset instructions</p>
-				</div>
+<Modal
+	bind:show
+	{manageHistory}
+	rounded={false}
+	hideHeader
+	hideFooter
+	useMaxHeight
+	class="p-0 max-sm:h-[100dvh] max-sm:w-screen max-sm:!rounded-none"
+	rootClass="shadow-z-10 sm:rounded-radius"
+	hAuto
+	wAuto
+>
+	<!-- Same shell, rhythm and control sizes as the login and signup dialogs. A shopper reaches this
+	     one from "Forgot password?" inside the login modal, so a different scale here would read as
+	     a different product one click into the same flow. -->
+	<div
+		class="w-full space-y-5 bg-card p-5 text-foreground max-sm:flex max-sm:min-h-[100dvh] max-sm:flex-col max-sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:pt-[max(0.75rem,env(safe-area-inset-top))] sm:w-[380px] sm:p-6"
+	>
+		<div class="flex items-center justify-between gap-3">
+			{#if page?.data?.store?.logo}
+				<img src={page.data.store.logo} alt={page.data.store.name} class="h-7 w-auto object-contain" />
+			{:else}
+				<!-- No logo: the store's name as a wordmark. Its first letter in a bordered square read as a
+				     keyboard key, a shortcut nobody had defined. -->
+				<span class="min-w-0 truncate text-base font-semibold">{page?.data?.store?.name ?? ''}</span>
+			{/if}
+			<button
+				type="button"
+				aria-label="Close"
+				class="-mr-1.5 inline-flex size-9 items-center justify-center rounded-radius text-muted-foreground transition-colors hover:bg-muted hover:text-foreground max-md:size-11"
+				onclick={closeModal}
+			>
+				<X class="size-5" />
+			</button>
+		</div>
+
+		{#if !forgotPasswordModule.success}
+			<!-- The header used to stack the store mark and, under it, a 48px tinted circle holding a
+			     ShieldCheck. Two badges before the heading, and the shield only restated the copy. -->
+			<div>
+				<h2 class="text-xl font-semibold">Reset password</h2>
+				<p class="mt-1 text-sm text-muted-foreground">Enter your account email and we'll send a reset link.</p>
 			</div>
 
 			<form class="space-y-4" onsubmit={(e) => forgotPasswordModule.handleSubmit(e, false)}>
-				<Textbox
-					name="email"
-					type="email"
-					bind:value={forgotPasswordModule.email}
-					placeholder="swadesh@litekart.in"
-					schema={schemas.email}
-					label="Email"
-					class="h-12"
-					required
-				/>
+				<div class="[&>div]:mb-0">
+					<Textbox
+						name="email"
+						type="email"
+						bind:value={forgotPasswordModule.email}
+						autocomplete="email"
+						placeholder="you@example.com"
+						schema={schemas.email}
+						label="Email address"
+						info="The link expires shortly. If it does not arrive, check your spam folder."
+						class="h-11 md:h-10"
+						required
+					/>
+				</div>
 
-				<Button
-					type="submit"
-					class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
-					disabled={forgotPasswordModule.isLoading}
-				>
+				<Button type="submit" class="h-11 w-full text-sm font-semibold md:h-10" disabled={forgotPasswordModule.isLoading}>
 					{#if forgotPasswordModule.isLoading}
-						<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
+						<LoaderIcon class="mr-2 size-4 animate-spin" />
+						Sending reset link…
+					{:else}
+						Send reset link
 					{/if}
-					Send Reset Link
 				</Button>
+
+				<!-- One route back, not two. A mobile-only ghost "Login" button used to sit in the header
+				     row while this line was hidden below sm, so the same action appeared in two places
+				     depending on width instead of once in the same place at every width. -->
+				<p class="text-center text-sm text-muted-foreground max-sm:!mt-auto max-sm:pt-6">
+					Remembered it?
+					<AuthButton
+						type="login"
+						aria-label="Back to sign in"
+						class="inline cursor-pointer font-medium text-foreground underline-offset-4 hover:underline">Sign in</AuthButton
+					>
+				</p>
 			</form>
-
-			<div class="relative py-2">
-				<div class="absolute inset-0 flex items-center">
-					<div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
-				</div>
-				<div class="relative flex justify-center text-sm">
-					<span class="bg-white px-2 text-gray-500 dark:bg-gray-900 dark:text-gray-400">or</span>
-				</div>
+		{:else}
+			<!-- No store mark competing with it here, so this one circle is the only mark on the screen
+			     and can carry the moment. The overlaid second badge it used to wear is gone. -->
+			<div class="flex flex-col items-center text-center">
+				<span class="flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+					<Mail class="size-5" />
+				</span>
+				<h2 class="mt-3 text-xl font-semibold">Check your email</h2>
+				<p class="mt-1 text-sm text-muted-foreground">
+					We sent a reset link to <span class="font-medium text-foreground">{forgotPasswordModule.email}</span>. It can take a minute to arrive —
+					check spam if it does not.
+				</p>
 			</div>
 
-			<div class="text-center">
-				<AuthButton type="login">
-					<Button variant="link" class="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-						<svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-						</svg>
-						Back to Login
-					</Button>
+			<div class="space-y-2 max-sm:!mt-auto max-sm:pt-6">
+				<AuthButton type="login" aria-label="Back to sign in" class="block">
+					<Button class="h-11 w-full text-sm font-semibold md:h-10">Back to sign in</Button>
 				</AuthButton>
+				<Button variant="ghost" class="h-11 w-full text-sm md:h-10" onclick={() => (forgotPasswordModule.success = false)}
+					>Use a different email</Button
+				>
 			</div>
-		</div>
-	{:else}
-		<div class="flex-col items-center justify-center p-4">
-			<div class="w-full space-y-6 text-center">
-				<div class="flex flex-col items-center space-y-4">
-					<div class="rounded-full bg-gray-100 p-3">
-						<Mail class="h-6 w-6 text-gray-600" />
-					</div>
-					<div class="space-y-2">
-						<h1 class="text-2xl font-bold tracking-tight">Check your email</h1>
-						<p class="max-w-sm text-gray-500">
-							We've sent you a password reset link. Please check your email and follow the instructions to reset your password.
-						</p>
-					</div>
-				</div>
-
-				<div class="space-y-4">
-					<AuthButton type="login">
-						<Button variant="outline" class="w-full">Back to Login</Button>
-					</AuthButton>
-				</div>
-			</div>
-		</div>
-	{/if}
+		{/if}
+	</div>
 </Modal>

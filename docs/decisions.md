@@ -1,0 +1,714 @@
+# Decisions
+
+Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
+decision needs the owner.
+
+## 2026-11-07: Seven more home page sections, in the store's own colours
+
+The owner asked for more modern sections with a better layout (GoCommerce D243). Spotlight banner,
+bento grid, customer quotes, numbers, logos, scrolling text and countdown are registered, and a
+product grid can stand beside a large picture. They read the theme's tokens, so a shop's colours,
+type and rounding restyle them. Words over a photograph are the one exception: white over a shade
+(`--on-photo`, `--photo-shade`), because a photograph is not chosen with the theme. The spotlight is
+display-sized because it does a hero's job, and carries the page's h1 when it comes first. The
+figures and the scrolling words are also over the section-title step, as a deliberate editorial band
+a shop opts into. Nothing here is invented for the shop: a quote, a figure or a logo shows only once
+it has been entered, and a figure needs both its number and what it counts.
+
+## 2026-11-06: A GoCommerce store's trade portal opens on the store's own host
+
+Wholesale buyers are who the owner sells to, and they could not reach the portal: every store host
+comes here, so `/portal` was this app's 404. This server now forwards an explicit list to the engine
+(`src/lib/server/trade-portal.ts`, GoCommerce D233), naming the store by the visitor's host, so no
+proxy rule is needed. `/api/admin` and `/internal` are never forwarded, and the `/backend` mount now
+refuses them too, which it did not before. The footer offers "Trade account" only where the store has
+a live company and "Find a dealer" only where a dealer covers a territory, read from
+`GET /x/b2b/availability`: the module is on for every store of an install, so "the module is on" would
+have shown the link on every retail shop. A company's buyer at checkout is told so before filling
+anything in, and their bag moves to the portal's basket: its lines leave the bag, so the button can't
+double them, and a line that won't go, or that carries a shopper's own design, stays and is named.
+
+## 2026-10-31: A closed store shows its message on every page, and its password lets a visitor in
+
+The owner asked for "a password based lock at storefront with an option for message", like Shopify's
+storefront password page. GoCommerce already holds it as D170, where the owner's words are *"protect
+the store under password with a launching soon message, inside store settings."* The store-close
+plugin on Store settings closes the store with a message and, optionally, a password. The gocommerce
+connector hands it over as `store.closed: { message, password }` (`password` says only whether there
+is one) and adds `storeService.unlockStore` and `storeService.checkStorePass`. A backend that has
+neither is never locked, and the storefront reads nothing extra from it.
+
+- While a store is closed, every address answers with its lock page in place: the store's logo, or
+  its name, the message with its line breaks, and, when the store has a password, a password field
+  and an Enter button. Product pages, checkout, `robots.txt` and `sitemap.xml` are no exception. The
+  status is 503, with `X-Robots-Tag: noindex` and a `noindex` meta tag. 503 and not 403, because the
+  plugin also covers holidays and stock-takes: crawlers retry a 503 through a short closure, where
+  they drop a 4xx like a 404. A closure of many weeks loses pages from search like any long outage.
+  A 503 `robots.txt` lists nothing.
+- The form posts to the address it is on. The right password sets the pass cookie (httpOnly,
+  SameSite=Lax, this host only, for the engine's 30 days; `__Host-store_pass` and Secure on https,
+  `store_pass` on plain http) and answers 303 back to the same address, so there is no return
+  parameter to misuse. The `__Host-` name stops another store on the same base domain from planting
+  a cookie that would lock its visitors out. A wrong password says "That password isn't right." under
+  the field, and nothing typed goes into an address. A post from another site spends no try.
+- The engine allows 20 tries an hour per shopper and store, counted in each engine process. The
+  storefront sends it each shopper's address, so this works only when the storefront knows that
+  address (adapter-node's `ADDRESS_HEADER` and `XFF_DEPTH` behind a proxy or CDN, with the server
+  reachable only through that proxy) and the engine lists the storefront in
+  `GOCOMMERCE_TRUSTED_PROXIES`. Without both, every shopper counts as the storefront, and one
+  person's wrong tries lock out the rest for an hour. `.env.example` says the same.
+- Reloading the page after a wrong password sends it again and spends another try. A lock form sent
+  after the store opened, or from a second tab once the first got in, goes straight back to its page.
+- A pass that checks out is asked about again at most once a minute per store. Turning the lock on
+  or off, or changing the password, reaches shoppers within a minute. On an engine with a
+  secrets key, any save of the lock's settings signs every visitor out, a new message included; the
+  engine seals the password afresh on each save.
+- The theme editor's preview passes without the password, once the engine accepts its preview key. A
+  header or footer key opens only the home page, the one the editor frames.
+- The lock page ships no JavaScript beyond a few lines that mark the button busy and refuse a second
+  send, so it works the same without JavaScript. No tag, pixel or cookie banner loads on it. The
+  store's own head scripts still run there.
+- Limits. The lock hides the storefront's pages, not the engine's public API: the catalogue, the cart
+  and the checkout calls stay reachable through `/backend` (D170 keeps them open). SvelteKit's own
+  data requests pass too, because they carry what that API already serves and a locked visitor never
+  runs the app; gating them would throw the editor's product preview onto the lock page, since core's
+  product page drops the preview key when it picks a variant. So a tab that was open before the store
+  closed, or before the password changed, keeps moving between pages until its next full page load.
+  When the engine cannot list the store's plugins, the last answer stands; a server that has not
+  read it yet reads the store as open.
+
+## 2026-10-31: The payment step shows what checkout will charge, automatic code included
+
+The owner reported "checkout/payment coupon is not applied automatically". A GoCommerce store can
+mark a code "Apply automatically" (GoCommerce D179), and the engine picks the one that saves the
+basket most, but only when it places the order. The cash on delivery charge and tax added on top
+were also settled only then. So the payment step showed the full price with "Total before tax",
+and the order was charged a different sum. Engine D185 adds a quote: checkout's own arithmetic,
+rolled back, with nothing reserved.
+
+The payment and review steps now show that quote when the backend offers one
+(`checkoutService.getQuote`). The discount row names the code, with "Applied automatically" under
+it when the shopper typed none. A free-delivery code shows "Free delivery" on that row and "Free"
+on delivery. The tax row shows the exact tax, so the "Total before tax" label from the entry below
+goes on these two steps. The cash on delivery charge is the one for the chosen method. The total is
+the engine's own sum, which is the sum the order is charged.
+
+The quote is asked again when the method, the delivery option, the code, the address or the bag
+changes, and again when the review step opens. While it is asked, the last figures stay in place,
+faded, and Confirm order waits for the answer. When checkout would refuse the order, the summary
+shows checkout's own message and no total, with "Try again". The refusals are a line that changed,
+an address the store does not deliver to, and a method the store does not offer. A quote with no
+answer after 15 seconds is treated the same way, so a stalled request cannot hold checkout. A code
+the shopper types still wins over an automatic one. Removing it brings the automatic one back on the
+next quote.
+
+The cart and address steps keep their estimate, because the engine needs the country to quote, and
+tax and delivery depend on the address. A backend without a quote, or a GoCommerce engine before
+D185, shows the cart's own figures exactly as before.
+
+Checkout takes off one automatic code, the one that saves the most, and none while a code is typed.
+So "Applied automatically at checkout" marks that one code only. On the payment step it is the code
+the quote applied, in the bag's offers and in the coupon drawer. On the cart step, which has no
+quote, the bag's offers mark the code that saves the most, and mark none when a free-delivery code
+competes or two save the same, because what free delivery saves depends on the delivery chosen
+later. The drawer marks no code there. The offers drop the Apply button on an automatic code while
+no code is typed, because a typed code always wins, and applying an automatic code by hand would
+hold it even where another one saves more.
+
+Addendum, same day. A delivery rate's price, an automatic code's usage limit or end date, a tax rate
+or the method's charge can still change between the quote and Confirm order, and checkout used to
+charge the new sum unseen. Confirm order now hands the backend the total on screen
+(`checkoutService.expectTotal`), and checkout refuses an order whose own total differs, placing
+nothing (engine D185). On that refusal the review step stays open, the summary and the button show
+checkout's new figures at once, and a line above the button says "Your total changed to ₹1,201.
+Check the new total and confirm again." Only a fresh Confirm places the order. The storefront
+passes the figure it renders rather than letting the connector remember its last quote, so the total
+checked is the one the shopper saw, whoever else asked for a quote in between. A backend without a
+quote sends no total and behaves as before.
+
+## 2026-10-31: Captioned category pictures, collection titles on the picture, and a phone shelf that scrolls sideways
+
+The owner wants Chillish to match a reference store that shows its categories as a row of square
+pictures with the name under each, puts each collection's name and one line about it on its
+picture, and lets a phone swipe a shelf sideways instead of scrolling down a long two-across grid.
+GoCommerce D186 gives the columns section a `style` (`tiles` or `captioned`) and up to six columns,
+the collection list a `style` (`below` or `overlay`) with the first line of each collection's
+description on its card, and the product grid a `mobile_layout` (`grid` or `row`). Each is a
+store's choice; unset, or set to its first value, a section draws exactly as before.
+
+- Captioned columns are square pictures with the name under each at 14px, weight 500. They sit two
+  across on a phone, three from 768px (four when there are exactly four), and from 1024px as many
+  as there are up to six: five pictures sit five across. Fewer than four keep a four-across picture
+  size rather than growing. A column with no picture keeps its square box, so the names line up.
+  They are spaced like product cards (`--grid-gap-x`, `--grid-gap-y`). The name is the link and
+  covers the picture, so the whole tile is one target with one focus ring around it. With five or
+  six columns, tiles sit five or six across on a computer and text columns three across.
+- A collection on its picture is a square tile with its title in the heading face at 16px, white,
+  and the collection's first line under it at 12px in 85 % white. The engine sends that line cut at
+  a word near 160 characters. Title and line each stop at two lines, an implementation call: the
+  reference wraps its line onto a second line on a phone, and one line would cut most lines short
+  on a 150px tile. The words sit on a black shade of their own that is at least 60 % behind every
+  line, so they keep 4.5:1 over any photograph: at least 5.7:1 for the title and 4.7:1 for the
+  line over plain white, the worst case (measured on a white picture: 5.9:1 and 5.6:1). The
+  reference's shade is lighter, about 54 % at its title, which over a white photograph holds the
+  title at 4.5:1 and drops its line under 4:1. The line arrives only from a connector that passes
+  the card's `description`; until the GoCommerce connector does, an overlay card shows its title
+  alone.
+- The phone shelf: below 768px a product grid set to `row` is one line of cards about 165px wide
+  (42 % of a narrow screen), each snapping to the gutter, the line running to the screen's edges so
+  the next card shows, with no scroll bar. Tab reaches every card's links and brings each card into
+  view. It scrolls smoothly, and at once under reduced motion. From 768px it is the grid.
+- Motion: a captioned picture or a collection picture grows 4 % over 300ms on hover, and a
+  captioned tile fades to 75 % while pressed; a captioned column with no link does neither. Under
+  reduced motion the picture fades to 85 % instead of growing.
+
+## 2026-10-31: The filter's categories are a tree
+
+The owner's report: the listing's filter showed "Naruto keychains" alone where it must show
+"Keychains" with "Naruto keychains" under it. The desktop rail and the phone sheet now list each
+category under its parent, in the store's tree order, and a parent's count is its whole subtree's.
+A parent is a link to its own page, which sells everything under it.
+
+- A level under the root is one 12px step (the sheet's rows keep their own 4px before it), up to
+  three steps, so a deep tree still fits the rail. Three steps make 36px on the rail, and two make
+  28px in the sheet. Those two totals are off the spacing scale's list, but each step is on it.
+- A child's button names its parent for a screen reader ("Naruto keychains, in Keychains"), since
+  the indent shows the tree only to the eye.
+- A name search lists its matches flush. Search ranks them, so an indented match would read as a
+  child of whichever row ranked above it.
+- The rail still shows five rows before "+ N more", now in tree order. A parent with four or more
+  children fills those five rows and hides the roots after it until the shopper opens the rest.
+- The tree comes from the backend as a `depth` on each category (GoCommerce connector 0.29.0). A
+  backend that sends none draws the flat list exactly as before.
+- On a category's own page the rail lists its ancestors too, counted over that page's products,
+  as every filter count is.
+
+## 2026-10-31: A section can sit on a line or a band, the hero can fade, and the benefits can scroll
+
+The owner wants Chillish to match a reference store whose sections are parted by hairlines and
+alternating quiet bands, which opens on a full-width photograph fading into the page behind its
+headline with two buttons, and which runs its promises as a slow strip under it. GoCommerce D184
+gives every section in the page rail a `divider` (`none`, `line` or `band`), the hero a `style`
+(`block` or `fade`) with a second button, and the benefits strip a `style` (`band` or `marquee`).
+Each is a store's choice; unset, or set to its first value, a section draws exactly as before.
+
+- A line or a band keeps the page's own section gap inside it, so the hairline or the band's edge
+  sits one gap from the words on each side. The band is the theme's quiet background at 40 %.
+- The faded hero's title takes `--weight-heading`. For a store that picks it, this overrides the
+  800 weight of the "Bold and bright" hero (D140); the block keeps 800. Its picture loads first and
+  eagerly, as before, and the section's height is set before the picture arrives.
+- The scrolling strip is the first motion on the default theme that runs by itself. It moves only
+  `transform`, at about 30px a second (one copy of the list per 48 s at the slowest), and stops
+  while a mouse pointer is on it. A pause button at its end stops and starts it (WCAG 2.2.2), as
+  the slideshow's does, and a press wins over the pointer; the reference has none. That button,
+  not keyboard focus, is how a keyboard stops it: a strip that stopped on focus left the button
+  saying "Pause" over a strip already still. Under reduced motion it stands still, the promises
+  wrapped onto centred lines, with no button. The second copy that carries the loop is hidden
+  from assistive technology, so the promises are read once.
+
+## 2026-10-31: A store can set the small line above a section heading in capitals
+
+The owner wants Chillish to match a reference store whose shelves each carry a small capitalised
+line above the heading, a line under it and a "View all" link beside it, set in the CMS first:
+"focus mainly into cms and if something is not possible then go for svelte-commerce chnages".
+GoCommerce D183 (engine PR #229) gives the product grid, collection list, columns, questions and
+benefits strip `eyebrow` and `subtitle`, the text section `eyebrow`, and the grid, list and columns
+`view_all_text` beside `view_all_link`; the storefront draws them in `SectionHead.svelte`.
+
+The theme setting `eyebrow_case: upper` draws every small line above a heading, the hero's
+included, in capitals spaced 0.14em, the reference's measure. For a store that sets it, this
+overrides "No all-caps text on the default theme" (2026-10-26). Unset or `sentence`, a line reads
+as typed, so every other store is unchanged; the capitals come through `--eyebrow-case`, so
+`scripts/check-tokens.mjs` still finds no all-caps styling in a default-theme file.
+
+A section saved without the new words renders the same elements, classes and text as before;
+only Svelte's hydration comments and, for a product grid with a heading and no link, one
+whitespace-only text node inside the flex header differ, and neither is drawn. Under reduced motion
+the link's arrow stays still and an underline fades in on hover instead, so the link still answers
+the pointer.
+
+## 2026-10-31: A store that picks both fonts no longer downloads Inter
+
+The owner wants Chillish to match a reference store's type, Noto Serif headings at weight 500 and
+Source Sans 3 body text. The theme editor now offers both (GoCommerce PR #228), and the
+storefront loads them. For a store that picks its fonts in the theme editor, this overrides "Inter
+everywhere on the default theme" (2026-10-27). A store that picks none gets Inter exactly as before.
+
+When a store's theme settings name a heading font and a body font, the default theme's Inter
+stylesheet is not requested. Both faces load the weights the theme draws, 400 to 800, which Google
+serves as one variable file per face, so 800 costs no extra bytes. Loading the heading face at
+the store's heading weight alone would save 21 KB on Noto Serif (15 KB against 36 KB), but the theme
+also draws headings at fixed weights: the hero's 800, the footer's 600 and a collection or slide
+title's 500. A store that had already chosen a heading font would change look, so the saving waits
+for the hero to follow the heading weight, a later step through the theme editor. On a page with a
+₹ the pair costs 123 KB of font files, against Inter's 130 KB.
+
+Until a chosen face arrives, its latin text is drawn in Arial, or Times New Roman for a serif,
+resized to the face's metrics (`scripts/font-fallbacks.mjs`), so the swap does not move the page.
+The owner's standard is a layout shift of 0; with these faces the home page at 360 px measured
+0.018 before and 0 after, in desktop Chrome on Windows. Android has neither Arial nor Times New
+Roman, so there the local face most likely fails and the swap behaves as it did before (untested).
+
+## 2026-10-31: A store that adds tax on top says its checkout total is before tax
+
+A review found that on a store whose prices exclude tax (GoCommerce D177, `prices_include_tax`
+false), checkout called its bottom line "Total" and the order then charged more: ₹151 shown, ₹158.56
+charged on an 18% rate. The engine works tax out only when it places the order, and no cart or
+checkout endpoint quotes it before then. Until the engine offers that quote, the storefront does
+not work tax out itself, because a copy of the engine's tax rules would drift from them. Instead,
+when the cart says it leaves tax out (`taxIncluded` false) and carries none, and the store does
+not say its prices include tax, the cart, address, payment, review and failed steps label the
+figure "Total before tax", with "Any tax is added when you place your order." under it. The pinned
+bar uses the same label. The confirmation page, the order page and order tracking show a "Tax" row
+when the order's tax was added on top (`taxIncluded` false). A store whose prices include tax
+(`store.currency.includesTax` true) reads as before. A GoCommerce store that has not chosen gets
+the install default, tax added on top, so it shows the label. A cart that does not say it leaves
+tax out reads as before, whatever the store record says, because its total is already final.
+Litekart's demo store and `default-store.json` both say `includesTax` false on backends whose cart
+total is final. Showing the real total before the order needs an engine quote endpoint.
+
+## 2026-10-31: The payment step's total includes cash on delivery's extra charge
+
+The owner reported that the cash on delivery charge was not added on the payment step. A store can
+set an extra charge for cash on delivery (GoCommerce D165), and the engine adds it to a cash order,
+so a shopper agreed to one total and was charged another. The payment step now shows the charge
+beside the option before the choice ("Cash on delivery · ₹60 extra"). Choosing it adds a "Cash on
+delivery charge" line to the price summary, and the total and the review step include it. Another
+method shows neither. The confirmation page, the order page and order tracking show the charge
+from the order, and only when it is above zero. The figure is the payment method's `fee` and the
+order's `codCharges`, which the connector fills (gocommerce-connector 0.27.0). A connector that
+sends neither shows nothing new.
+
+## 2026-10-30: A product made to a design is never added plain
+
+The engine now marks every product `designable` and refuses a plain add of a designable one with
+`design_required` (GoCommerce #211, D174), because a quick add bought a blank print. The storefront
+follows the flag. A plain product's page no longer asks for a customizer setup. A designable
+product's page offers Design yours even when its setup failed to load: the button reads the setup
+again, and if it still cannot, says "Couldn't open the designer." with Try again, never Add to bag.
+Every card or list that offered a one-tap add (the listing, search, collections, cross-sells,
+related products, a seller's store page, the bag's suggestions and the wishlist) offers Design
+yours instead, a link to the product page. Buy again offers Design again, a link to the product
+page, for a past line that was designed and for a product made to a design. Undo after removing a
+designed line from the bag puts back the same design. A product with no flag, from an older engine
+or connector, behaves as before. When a stale flag still lets a plain add through, the cart service
+puts the refusal in plain words, "This one is made to your design. Design it first.", keeps the
+bag, and turns that product's cards to Design yours. The Lime and Noor cards are out of design scope
+and keep their quick add; there the reworded refusal is the guard. Complete-the-set add-ons carry no
+flag from the engine, so the same refusal is their only guard. The shopping assistant's
+recommendations keep their add button: the assistant runs only on Litekart, which neither sends the
+flag nor refuses a plain add.
+
+## 2026-10-30: A shopper designs their own print, and the bag shows it
+
+The owner asked for a product customizer like Zapvi's (GoCommerce D162, stage 2 of 3). On a product
+the merchant made designable, the product page's one action becomes "Design yours", because the
+product is made to a design. It opens the editor: full screen on a phone, with the mockup in the
+middle, close, undo, redo, zoom and preview along the top, the tools along the bottom and Add to bag
+under them; on a desktop, the canvas beside a tool panel. Only the tools the merchant switched on
+are offered (photo, words, shapes, background, stickers), with a layer list. One function draws the
+design for the screen, the preview and the print file, so what the shopper sees is what is printed.
+The print file is exactly `round(mm / 25.4 × dpi)` pixels a side, as a PNG so the print area's round
+corners stay clear. The merchant's consent line shows before a photo is chosen, and a photo under
+the setup's smallest size is flagged as likely to print soft, never refused. Add to bag uploads the
+preview and the print file, saves the design and adds it as a line of its own, with any add-ons
+ticked in "Complete the set". The bag, checkout, confirmation and order pages show the shopper's
+design in place of the product picture, labelled "Your design". A connector without the customizer,
+an older release of one, or a product that cannot be designed gives the ordinary page, so this ships
+before the connector release does. Templates, matching add-ons and a customization fee are stage 3.
+
+Uploads go through the storefront's own proxy, and adapter-node refuses a request body over
+`BODY_SIZE_LIMIT`, 512 KB unless set. Every chosen photo is redrawn in the browser, turned upright,
+and sent as a plain JPEG (a PNG only when it has see-through parts), at most 12 megapixels and twice
+the print file's longest side: the engine refuses HEIC, WebP and some costly files it could read,
+more pixels never print sharper, and a smaller upload is faster on a phone's data. The print file is
+a PNG and can still approach the engine's 15 MB limit, so a deployment selling designs sets
+`BODY_SIZE_LIMIT=16M`; the `Dockerfile` and `docker-compose.yml` do. A print file over the limit
+gets a plain message asking for a simpler design, not a silent failure, and every other failed
+upload, save or add says so in plain words, never in the engine's or HTTP's.
+
+## 2026-10-30: Criteo's OneTag, per store, behind the cookie choice
+
+The owner asked for Criteo's tag (`dynamic.criteo.com/js/ld/ld.js?a=<account>`). The account is
+each store's own: the engine's `criteo` plugin, which the gocommerce connector hands over as
+`store.plugins.criteo`. It is never hard-coded, because one deployment serves many stores. The tag
+loads on the first interaction. Criteo does not read Google's consent mode, so a saved cookie choice
+decides, and without one, visitors whose time zone is in the opt-in regions (Europe and the
+Atlantic islands, as `app.html` treats them) wait for "Accept all". A store with Criteo shows the
+cookie banner.
+
+Amended 2026-10-30, the owner: "send Criteo product, cart and purchase events too". Criteo is now one
+of the ad tags in `ad-tags.ts`, which hears the GA4 events the storefront already sends, so it loads,
+waits for consent and hears events exactly as the Meta and TikTok pixels do: a product view is
+`viewItem`, a listing `viewList` (its first three products), the basket page and the start of
+checkout `viewBasket` with each line's ID, price and quantity, and a purchase with an order number
+`trackTransaction` with its currency. Adding one item is not sent: Criteo's basket event wants the
+whole basket. No email is sent. The separate Criteo component is gone. Listing pages now send
+GA4's `view_item_list` and the bag page `view_cart`, which nothing sent before, so every tag hears
+them; their item IDs follow `view_item`'s (SKU, else the product ID), and a store's Criteo product
+feed must use the same IDs for the ads to show the right products.
+
+## 2026-10-30: Google reviews are Google's, live, and the survey uses the engine's order data
+
+The owner asked to "integrate google reviews" (engine D161). The home page's Google reviews section
+shows the store's Google rating, count and Google's most relevant reviews only after the engine has
+read them from Google, and only when the section nears the screen: Google's terms forbid keeping
+them, so every view is a call the store pays for, and nothing loads for a shopper who never scrolls
+there. It credits each author by name, photo and profile link, links each review on Google Maps and
+to Google's report page, says how the reviews were chosen, links to all of them, and carries the
+Google Maps logo, as Google's Places policies ask. It emits no structured data: Google's review
+snippet rules say not to mark up ratings from another site. The confirmation page's Google Customer
+Reviews offer no longer builds its fields here: the old block pasted a merchant ID from the static
+record into script text, read the email from the emptied cart, and invented a delivery date seven
+days out. The engine now builds every field from the order and offers no survey without a real
+delivery estimate. Google's scripts load after the page: the survey when the browser is idle, the
+store widget on the first interaction.
+
+## 2026-10-30: The strip above the header is one thin line
+
+The owner: "keep the heads up notification above header thinner". The header's announcement strip,
+the hello bar and the composer's announcement-bar section are each one 30px line at every width,
+down from 38–45px (55–75px on a phone, where long text wrapped to two or three lines). Text too
+long for the width ends in an ellipsis. The header strip's link fills the whole bar, and the
+composer section's link takes the bar's full height: 30px targets, above WCAG 2.2's 24px floor,
+rather than the 44px they borrowed from the bar's padding. The hello bar's messages are the
+merchant's own HTML, so a link at the end of a message too long for a phone is cut off with the
+rest of it; keep a linked message short.
+
+
+## 2026-10-29: A product's own badge is the label on its picture
+
+GoCommerce gives each product a one-line Badge (engine metadata key `badge`), and the theme setting
+`card_badge` gains `product_badge`, the default for a new store. The storefront takes the same
+default when the setting is unset: a card and the product page's picture show the badge the
+merchant wrote for that product, and a product without one shows no label, rather than its first
+tag. `first_tag` and `first_highlight` still pick those sources, and `none` shows nothing. The
+storefront reads the product's `metadata.badge`, the way highlights and free gifts arrive (D134).
+
+## 2026-10-29: Prices drop ".00" and group their digits the shopper's way
+
+Asked whether ₹2799.00 should read ₹2,799, the owner said "yes drop". A whole amount shows no
+`.00`, paise still show (₹499.50), and the digits are grouped for the currency: Indian grouping for
+rupees (₹12,999, ₹1,29,999), threes for every other currency. Core's `formatPrice` is
+package-owned, so the storefront wraps it once, in `src/lib/utils/price.ts`, and every price a
+shopper reads goes through it: cards, the product page, the bag, checkout, order pages, and the
+filter sheet's price range and price chip. Core's symbol and layout stay as they were. A test fails
+when a file imports core's `formatPrice` directly.
+
+## 2026-10-29: The default theme shops like Bewakoof, and the store decides each part
+
+The owner: "for the default theme, take reference from https://www.bewakoof.com/", and then "dont
+leave everything for storefront to decide. keep maximum modifyable at admin".
+
+Bewakoof is the reference for the default theme's merchandising patterns and density, not a look to
+copy: no logo, name, artwork, copy or pictures of theirs. What the default theme took from it:
+
+- **Palette.** A white canvas, neutral near-black text, one yellow (`--primary`, 47 100% 60%) for
+  the action with dark text on it (12.2:1), green for savings (`--sale`, #198837, the engine's
+  default for the `sale` setting), a calm blue for information (`--info`). Yellow cannot be ink
+  (1.44:1 on white), so `text-primary`, `border-primary`, rings and the like read `--primary-ink`,
+  the text colour on this theme, and selected pills and the current page take a dark edge. A line,
+  bar or dot in the accent (slider fills, step bars, the bottom bar's active dot, a radio's dot, a
+  switch that is on) is drawn in the ink too (`bg-primary-ink`), so a store's light accent never
+  draws a faint line on white.
+- **Cards.** The label top left on the picture, the rating pill bottom left, the brand line in bold
+  with the heart beside it under the picture, the name, then price, was-price and saving on one line.
+- **Listings.** Title and product count on one line, round sub-category pictures, filter chips that
+  open the filter sheet, the sticky Sort | Filter bar on a phone, a filter rail on a desktop.
+- **Product page.** The picture edge to edge on a phone with the label and rating on it, the brand
+  line, "2 left" under a low size, a Key highlights card of attribute pairs, the sticky Add to bag.
+
+Every one of those choices is a key in the store's GoCommerce theme settings (engine PR #182), and
+the storefront's value applies only when the key is unset: `sale`, `type_scale`, `heading_weight`,
+`density`, the `card_*`, `list_*` and `pdp_*` keys. Visual keys become CSS variables in
+`src/lib/composer/theme-tokens.ts`; the rest are parsed and checked in
+`src/lib/composer/theme-options.ts`. A value outside its list is dropped, as with the colours.
+
+The type and spacing keys move the one scale of the next entry; there is no second ladder.
+`type_scale` moves every `--type-*` step together: `standard` is that scale, with its 16px body,
+`compact` a step smaller with a 14px body, `large` a step larger with an 18px body. `heading_weight`
+sets `--weight-heading`, the weight of every heading but the hero. Unset it is 700, the scale's
+own weight, so the hero's 800 stays the one heavier line; GoCommerce's starting page saves
+`extrabold`, so a store that keeps it gets Bewakoof's heavier headings. `density` moves `--space-*`,
+`--grid-gap-*` and the page gutter, with `compact`, the scale's own values, when unset.
+
+Kept from settled decisions where the reference differs: sentence case, not Bewakoof's capitals
+("Add to bag", not "ADD TO BAG"); Inter, not a new face; the store's own colours over the theme's;
+nothing invented (no rating without reviews, no "N left" without the variant's own count, no
+offers, no "bestseller"); 2 / 3 / 4 / 5 product columns, not Bewakoof's three on a desktop (a store
+can choose three); the sticky Add to bag only once the in-page button has scrolled away. Bewakoof's
+free-shipping strip is not drawn: the engine gives the free-delivery threshold only for a cart, so
+there is no figure to show a shopper who has none.
+
+A card's name is one line by default (`card_title_lines: one`; two lines is the other choice), so
+UX_SYSTEM's preference for two lines is now the store's choice.
+
+The store defaults (`kitcommerce.config.ts`) no longer carry the Litekart demo shop's navy palette,
+which had painted every GoCommerce store in one merchant's colours over the theme's own.
+
+## 2026-10-29: The contact page shows what the store published, and a map only on a tap
+
+The owner asked for a better contact page "can include a google map", as a feature every store gets
+from its own settings (engine decision D156). The page shows WhatsApp, call and email cards, the
+address, opening hours and a map, each only when the store set it; one it did not set is simply
+absent, and the JSON-LD asserts the same and nothing more. Google's map does not load with the page:
+a still map drawn in CSS with a "Show map" button stands in its place, and the frame, always on
+`www.google.com`, is put in when the shopper taps. "Open in Google Maps" is a plain link beside it.
+A map location the page cannot draw (a share link) is opened, never replaced by a map of the
+address it was set to correct. An Indian number reads as `+91 98765 43210` only when the store's
+published country is India; nothing is guessed from the currency or the template's default
+country. The page sends no CSP header of its own: a header on one page of a client-routed site
+stays for the rest of the visit and would block the YouTube and payment frames on later pages.
+
+## 2026-10-29: One type and spacing scale on the default theme
+
+The owner asked for the default theme's font sizes, weights, alignment, spacing, density and line
+heights to be studied and made consistent. The scale is the role table in UX_SYSTEM section 4,
+held as `--type-*`, `--leading-*`, `--tracking-*`, `--weight-heading`, `--space-*` and
+`--grid-gap-*` tokens in `src/app.css` on the default theme, and the store's type and spacing
+settings move it (the entry above). What it settles: page and section titles take one weight on
+every page, 700 unless the store chose another, the weight the composed home page (D140) set, and
+only the hero is 800; a heading over a band is the same size wherever it appears (home shelves,
+customer ratings, related products); paragraphs a shopper reads are 16px at 1.5 on phones and
+desktops, while card and control text stays on the compact 12–14px steps (a card's price is
+16px); headings carry no positive tracking; and 12px is the floor for anything a shopper reads (the phone menu, at 9–12px,
+now meets it). The lime, noor, wine and organic themes keep their type; the composer's shared
+sections fall back to their old values there.
+
+## 2026-10-28: A new store's footer links its standard pages, shown once published
+
+The owner asked that every new store get its mandatory pages, linked from the footer. GoCommerce
+now drafts About us, Contact us, Privacy policy, Terms and conditions, Shipping policy and Refund
+and returns policy for each new store and puts all six in its footer (engine decision D145). The
+footer hides a link to any of those pages until the store publishes it, under every name a menu
+uses for it (`/privacy-policy`, `/pages/privacy`, `/p/privacy-policy`), so a draft is never a dead
+link or placeholder text in front of shoppers. Contact us is the storefront's own form and always
+shows. Which pages a store publishes is remembered per store for a minute, not per server process.
+
+## 2026-10-28: The composed home page is "Bold and bright"
+
+The owner chose "Bold and bright" for the default theme (engine D140). The composer's sections draw
+it from the theme tokens, so a shop's colours restyle it: the hero's words sit on a block of the
+accent colour (`--primary` with `--primary-foreground`) beside the picture, columns without
+paragraphs become chunky rounded tiles two across on a phone with the whole tile one link, the
+picture-with-words section is one rounded block of the quiet colour, and the benefits strip is a
+dark band with the page's text and background colours swapped. Headings are heavier. The default
+pictures come with the engine's starting page and are served by the engine
+(`/x/layouts/starter/1/…`, made absolute by the connector like any `/media/…` picture; the engine serves them without a store named, since a shopper's `<img>` names none): Unsplash
+photographs of Indian women for the hero and the picture beside words (the owner, 2026-10-28: "you
+can use unsplash royalty free images that include human (indian girls)", overriding the no-stock-photo
+rule for this theme) and Google Gemini pictures for the tiles. Tiles with a picture stay tiles, the
+picture inside the tile. The hero and the picture beside words read the shop's `image_alt`, falling
+back to the heading. A section whose picture a shop clears draws its colour block.
+
+The owner, 2026-10-28: "yes, show the bold starter to unpublished stores". The engine answers a home
+page never published with the starting page and its look, so this storefront draws it; the built-in
+home page now shows only while the theme editor is switched off.
+
+## 2026-10-28: Categories come from the Shopify taxonomy, switched on per store
+
+GoCommerce keeps Shopify's product taxonomy as the one master list of categories, and each store
+switches on the categories it wants from it. A new store gets no fixed starter list, and the full
+tree is not copied into every store. The owner chose this over starter sets per shop type and
+over keeping the taxonomy only as an optional whole-tree import. The storefront's filter and
+menus show only a store's active categories.
+
+## 2026-10-27: Product picture shape and fit are set in GoCommerce
+
+The shop sets the shape of product pictures (square, portrait 3:4, tall 2:3, landscape 4:3) and
+whether they fill the frame or show whole in the panel's theme settings (engine D128). They reach
+the cards as `--product-image-ratio` and `--product-image-fit` and win over any ratio a caller
+passes, so every card shows the shop's shape. Unset, the card falls back to the store record's
+`productImageAspectRatio` (square, from `kitcommerce.config.ts`) and shows the whole picture.
+
+## 2026-10-27: The backend picks the theme, or it is the default
+
+A backend with a theme feature (Litekart, GoCommerce) decides the theme through the store record,
+and the storefront uses it. A backend without one (Saleor, Medusa, Shopify) gets the default theme.
+A theme name this build does not ship also falls back to the default. `PUBLIC_STOREFRONT_THEME`
+was removed, so a deployment can no longer force a theme.
+
+## 2026-10-27: Inter everywhere on the default theme
+
+Headings, body, buttons, the logo wordmark and portalled dialogs all use Inter. Lora, the former
+heading serif, is no longer downloaded, and the hero's italic emphasis is upright, since Inter's
+italic is not loaded. A merchant's admin-set body font (`store.themeFontFamily`) still overrides
+the body face. The wine, organic, lime and noor themes keep their own fonts.
+
+## 2026-10-26: No all-caps text on the default theme
+
+Labels, buttons, eyebrows, status pills and step labels are sentence case, with no `uppercase`
+class, no `text-transform: uppercase` and no caps-only letter-spacing. The owner asked for it after
+the account, auth and shop pages were unified, so the whole storefront reads in one voice.
+`scripts/check-tokens.mjs` fails on all-caps styling in default-theme files. The wine, organic, lime
+and noor themes keep their own type treatment.
+
+## 2026-10-30: The app writes its own head tags
+
+Compared with another store's product page, ours shared links badly: the vendored SeoHeader always
+said og:type "website", passed site-relative pictures through (Facebook, WhatsApp and X fetch only
+full URLs), emitted an empty keywords tag and had no robots, locale or price tags.
+`src/lib/components/seo/seo-header.svelte` now writes the tags itself instead of wrapping it. Product
+pages are og:type "product" with product:price and product:availability; every picture, in the tags
+and in the JSON-LD, is a full URL; the robots tag carries only permissions (max-image-preview:large),
+never "index", so a page's own noindex is not contradicted. The product BreadcrumbList runs from Home
+to the product. A product weight is published only with a known unit. The fallback description no
+longer promises free delivery.
+
+## 2026-10-30: The store's ad and analytics tags, one bridge, behind the cookie choice
+
+The owner asked for the popular ad and analytics integrations (GoCommerce D160). The Meta pixel,
+Microsoft Clarity, Hotjar and the TikTok, Pinterest and Snap pixels are each the store's own ID
+from the engine, which the gocommerce connector hands over as `store.plugins.<name>`; none is ever
+hard-coded. Each loads the vendor's own base code on the shopper's first interaction, like Klaviyo,
+and only where the cookie choice allows: a saved choice decides (ad cookies for the four pixels,
+analytics for Clarity and Hotjar), and without one, visitors whose time zone is in the opt-in
+regions wait for the banner, which a store with any of these tags shows. The pixels hear the
+shopping events the storefront already sends GA4 (`view_item`, `add_to_cart`, `begin_checkout`,
+`purchase`) by listening on `window.gtag`, so there is one place events are fired, not one per
+vendor; `begin_checkout` is now sent from the address step. Meta's Purchase carries the order
+number as its eventID, which the engine's Conversions API also sends, so Meta counts the sale once.
+
+## 2026-10-30: Google Analytics, Ads and Tag Manager wait for the cookie choice like every other tag
+
+The engine's google-analytics plugin (GA4 measurement ID, Tag Manager container, Google Ads ID and
+conversion label) now reaches the store as `store.plugins.googleTagManager`, the shape Litekart
+used, and loads through the same bridge as the pixels: on the first interaction, only where the
+cookie choice allows (analytics for GA4 and Tag Manager, ad cookies for Ads), never while the
+address carries an email, a token or a key, and a choice taken back reloads without it. Core's
+`GoogleAnalytics` loader, which put Google's tags in the head of every page before any choice, is
+no longer rendered. GA4 and Ads share one Google tag on a data layer of its own (`gcLayer`): it gets
+the page's consent commands first, then only the events handed on after consent, each with its
+e-commerce parameters alone (core also attaches the shopper's hashed contact details, address, IP
+addresses and user agent, and signing out sends the whole user record). GA4's events go to GA4
+only; a purchase with a conversion label is the Ads conversion, so an Ads account counts a sale
+once. The page's own `dataLayer` keeps every event since the page opened, which is why neither tag
+reads it.
+
+A Tag Manager container takes over GA4 and Ads: the storefront then loads only the container, on
+its own layer too (`gtmLayer`), and hands it each event in the shape Google's Tag Manager
+e-commerce guide gives (`{ event, ecommerce }`). Google's advice is to deploy each product through
+one of the two, and a container can hold either, so loading the IDs as well could count every page
+view and sale twice; a store with a container sets GA4 and Ads up inside it, reading `gtmLayer`.
+
+GA4 starts on the first interaction, like every tag here, so a visit that never scrolls, taps or
+types is not counted; sessions and bounce figures will differ from a tag loaded in the page head.
+
+## 2026-10-30: Cookie settings in every footer
+
+A cookie choice has to be as easy to take back as it was to give (DPDP, GDPR). Every footer
+(default, lime, noor and checkout) offers "Cookie settings" on a store that loads a tag; it opens
+the consent banner again, and a choice taken back reloads the page without the tags.
+
+## 2026-10-30: No personal data in a URL
+
+The owner's standing rule: no email, phone, token or name in a URL, since every analytics tag
+records the page's address and the history keeps it. The page after sign-up gets the address in
+SvelteKit's navigation state and greets the shopper without it after a reload; the sign-in form
+hands the typed address to the reset form in memory instead of an `email` query.
+
+## 2026-11-06: The success page says what the payment did
+
+Reaching the page proves nothing: Cashfree resolves its window whatever the transaction did, and a
+webhook can land after the shopper does. So the page reads `paymentStatus`. It thanks a shopper and
+counts a purchase only for a paid order, cash on delivery, or a backend that reports no payment
+state; a pending online payment waits and looks again for 40 seconds, and a failed one says so.
+
+## 2026-11-09: Downloads are sold without a delivery address
+
+Owner: "we must build the digital product feature in gocommerce" (GoCommerce D254). A product page
+whose product has files says "Instant download" and its formats instead of delivery options. A
+basket of nothing but downloads asks only name, email, phone, state and country (the state for the
+GST invoice); no street, city or PIN code is asked or invented. Cash on delivery is not offered for
+it. A paid order lists its files on the success page, the order tracking page and the account order
+page; each Download button asks the engine for a ten-minute link when pressed, and a file the store
+has closed says why instead. Licence keys are out of scope by the owner's word.
+
+## 2026-11-12: A one-page order form, and Order on WhatsApp at checkout
+
+Owner, asked to add a WhatsApp order form for small shops: "yes start part 1", and of four layouts
+for the page the menu list (GoCommerce D255). `/order` lists every product on one page, grouped by
+its category with chips that jump to each group, a row per size with Add and then − / +, a search
+that needs every word typed, and a pinned bar with the item count, the total and Next to the
+address step. A sold-out size says so. The bag drawer does not open on that page, since its own bar
+already shows the order. When the store has Order on WhatsApp on, the payment step offers it from
+the engine's own method list (the connector drives only cash on delivery, Razorpay, Cashfree and
+hosted pages), places it through the connector's generic checkout, and the success page offers
+Send order on WhatsApp: a real wa.me link the engine wrote, with the order in it. A WhatsApp order
+counts as a sale like cash on delivery and claims no payment.
+
+## 2026-11-12: A card shows the product's whole name
+
+Owner: "keep the full text of the product title, if it goes to 3rd line then all product cards in
+that line must spread across 3 lines" (GoCommerce D258). `card_title_lines` gains `full`, now the
+default: the name wraps over as many lines as it needs. The card's name row is a row of the grid
+(subgrid), so every card in a row takes the height of its longest name and the prices stay level.
+One line and two lines remain the store's choice in the theme editor.
+
+## 2026-11-12: Phones are compact
+
+Owner: "everything is big in mobile, lets keep things compact, you can take reference from flipkart,
+ajio, myntra", and of the listing: "I don't think we need those filters at top, because already
+there is a filter button at bottom". Under 640px every store takes the compact density (16px page
+gutter, 24px between sections, 10px and 14px between cards) whatever its density setting, and its
+type one step down (a 14px body; a store that chose large type gets the standard scale). Desktop
+keeps the store's own settings. The listing's filter chips are not drawn below 768px, where the
+Sort and Filter bar is always on screen. Checkout tightens on a phone too: less padding around the
+page and the address card, first and last name side by side, PIN code and city side by side, and
+the bag's lines without their own box.
+
+## 2026-11-13: The bag page is highly compact
+
+Owner: "make this page highly compact checkout/cart". On a 390px phone the page went from 1,667px
+to 1,232px, and the whole bag, the promo box and the price summary fit on the first screen above
+the pinned bar. A line is about 120px: a 72px photo with the stepper and bin beside it, drawn at
+32px with a 44px tap target kept (`.hit-44`). The "You saved" banner moved into the price summary
+as one line, and a line's own saving shows only as its struck-out MRP on phones. Suggestions come
+after the summary on phones and under the bag on desktop. The trust badges are one short strip,
+the summary card and free delivery bar have less padding, and the pinned bar is one row: the total
+beside the button. The step bar, summary, badges and pinned bar are shared, so the other checkout
+steps tighten the same way.
+
+## 2026-11-13: Qty is one chip, and checkout's payment step is compact
+
+Owner: "keep the qty section minimal in cart page", "in checkout step 3 make it compact as well",
+and of the review screen's "Back to payment" button: "its too big". A bag line's quantity is a
+"Qty: 1" chip, as on the big Indian shopping apps: a real select lies invisible over it, 44px tall,
+so the phone's own picker opens and the tap target stays 44px. It offers 1 to 10, or up to the
+line's quantity when that is more. The payment and review steps take the bag page's phone spacing:
+smaller card padding and gaps, slimmer payment and delivery options, no accent bar or encryption
+note on phones (the trust badges say it), and "Back to payment" is a small text link beside the
+heading.
+
+## 2026-11-13: The product page states delivery, returns and cash on delivery only from store data
+
+From the demo.shopnx.in audit (SNX-014): product pages said nothing about delivery, returns or
+payment. Under Add to bag the page now links the store's own "Shipping and delivery" and "Returns
+and refunds" pages when it publishes them, under any of their names (GoCommerce publishes
+`shipping` and `returns`, which the page used to miss), and says "Cash on delivery available" only
+when cash on delivery is one of the store's switched-on payment methods. No delivery date and no
+return window is printed: GoCommerce quotes delivery days only for a cart and an address, and a
+store records no return window, so there is nothing to state yet. The product markup's
+MerchantReturnPolicy keeps its 7-day constant (`src/lib/config/policy.ts`) beside a
+`refund-policy` page only, because GoCommerce's starter `returns` page names no window. A unitless
+weight is no longer printed ("Weight 520"); it shows once the store has a weight unit.
+
+## 2026-11-13: A sold-out size offers "Notify me" while the store asks for wishlist emails
+
+From the demo.shopnx.in audit (SNX-025): a sold-out size was a dead end. GoCommerce emails a
+wishlist's address when a saved item is back (GoCommerce D248), but only while the wishlist
+module's "Ask for an email on the wishlist page" setting is on. While it is, a sold-out size stays
+choosable (struck through, muted), and choosing it puts "Notify me" with an email field under the
+button. Sending it keeps the address on the shopper's wishlist and saves that size to it, and the
+page says both: "Saved to your wishlist. We'll email … when it's back." With the setting off, which
+is the default, sold-out sizes stay disabled as before. Email only, because a wishlist holds only
+an address; the same address also hears when a saved item goes on sale.
+
+## 2026-11-20: Banner slides take their picture's own shape
+
+Merchants put words on their banners, and the slideshow's fixed 4:3 (phone) and 16:7 boxes cropped
+them: a 1.9:1 phone banner lost about 30% of its width. The home page now reads the first banner's
+size, wide and phone, from the file's header while it loads (about 100 ms, alongside the product
+fetch) and the slideshow box takes that shape, so the banner shows whole and the box is sized before
+the picture arrives (no layout shift). Shopify's "Adapt to image" height works the same way. A
+slideshow whose size cannot be read in 1.5 s, and a composed slideshow section, keeps the fixed shape.

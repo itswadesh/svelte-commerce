@@ -1,107 +1,182 @@
 <script lang="ts">
 	import { useProductState } from '$lib/core/composables/index.js'
+	import { getSettingState } from '$lib/core/stores/index.js'
 	import QrCodeDisplayer from '$lib/core/components/common/qr-code.svelte'
 	import { page } from '$app/state'
-	import { ChevronDown, ChevronUp } from '@lucide/svelte'
+	import { ChevronDown } from '@lucide/svelte'
+	import { slide } from '$lib/motion'
+	import { themeOptions } from '$lib/composer/theme-options.js'
 
 	const productState = useProductState()
+	const settingState = getSettingState()
 	const data = $derived(page.data)
 
 	let isOpen = $state(true)
+
+	// Every value is "selected variant, else the product record" — resolved once here instead of
+	// repeating the pair inside the markup, where it was written out twelve times and made the
+	// dimensions row an unreadable chain of nested {#if}s.
+	const variant = $derived<Record<string, any> | null>(productState.selectedVariant ?? null)
+	const product = $derived<Record<string, any> | null>(data?.product ?? null)
+	const pick = (key: string) => variant?.[key] || product?.[key]
+
+	const sku = $derived(pick('sku'))
+	const barcode = $derived(pick('barcode'))
+	// A weight is shown only with its unit: "Weight 520" could be grams or kilograms (SNX-012), and
+	// the product schema leaves a unitless weight out by the same rule.
+	// GoCommerce gives the unit with the weight (connector 0.39: always grams); other backends name one
+	// store-wide.
+	const weightUnit = $derived(pick('weightUnit') || page?.data?.store?.weight_unit || settingState?.selectedStore?.weight_unit || '')
+	const weight = $derived(weightUnit ? pick('weight') : '')
+	const qrcode = $derived(pick('qrcode'))
+	const originCountry = $derived(product?.originCountry)
+
+	/** W-… x H-… x L-…, with only the measurements the backend actually sent. */
+	const dimensions = $derived(
+		[
+			['W', pick('width')],
+			['H', pick('height')],
+			['L', pick('length')]
+		]
+			.filter(([, value]) => value !== undefined && value !== null && value !== '')
+			.map(([axis, value]) => `${axis}-${value}`)
+			.join(' x ')
+	)
+
+	// `attributes` is optional on several connectors; iterating it raw threw on any product
+	// without one. With the store's highlights grid on, the Key highlights card lists them instead.
+	const attributes = $derived<{ name: string; value: string }[]>(
+		themeOptions(data?.themeSettings).pdp_highlights_grid ? [] : (product?.attributes ?? [])
+	)
+
+	// A bordered header reading "Product Specifications" over nothing at all is worse than no
+	// section, so the whole block stands down when the backend sent no specs.
+	const hasSpecs = $derived(!!(sku || barcode || dimensions || weight || originCountry || attributes.length || qrcode))
 </script>
 
-<div class="">
-	<button class="flex w-full items-center justify-between gap-2 text-semibold font-bold pb-2 text-gray-900" onclick={() => (isOpen = !isOpen)}>
-		<span>Product Specifications</span>
+{#if hasSpecs}
+	<div class="edp-spec">
+		<button
+			type="button"
+			class="flex min-h-11 w-full items-center justify-between gap-3 py-2.5 text-left md:min-h-10"
+			aria-expanded={isOpen}
+			aria-controls="product-specifications-panel"
+			onclick={() => (isOpen = !isOpen)}
+		>
+			<span class="edp-acc-label text-sm font-semibold text-foreground">Product specifications</span>
+
+			<ChevronDown
+				class="size-4 shrink-0 text-muted-foreground transition-transform duration-panel ease-standard motion-reduce:transition-none {isOpen
+					? 'rotate-180'
+					: ''}"
+				aria-hidden="true"
+			/>
+		</button>
 
 		{#if isOpen}
-			<ChevronUp class="h-4 w-4 text-gray-800" />
-		{:else}
-			<ChevronDown class="h-4 w-4 text-gray-800" />
+			<div id="product-specifications-panel" class="overflow-hidden" transition:slide>
+				<!-- A definition list, because that is what this is: it gives assistive technology the
+				     label/value pairing that a grid of loose <p> tags did not. -->
+				<dl class="grid grid-cols-2 gap-x-4 gap-y-3 pb-3 lg:grid-cols-3">
+					{#if sku}
+						<div class="edp-spec-row">
+							<dt class="edp-spec-key">SKU</dt>
+							<dd class="edp-spec-val break-words">{String(sku)}</dd>
+						</div>
+					{/if}
+
+					{#if barcode}
+						<div class="edp-spec-row">
+							<dt class="edp-spec-key">Barcode</dt>
+							<dd class="edp-spec-val break-words">{barcode}</dd>
+						</div>
+					{/if}
+
+					{#if dimensions}
+						<div class="edp-spec-row">
+							<dt class="edp-spec-key">Dimensions</dt>
+							<dd class="edp-spec-val">{dimensions}</dd>
+						</div>
+					{/if}
+
+					{#if weight}
+						<div class="edp-spec-row">
+							<dt class="edp-spec-key">Weight</dt>
+							<dd class="edp-spec-val">{weight} {weightUnit}</dd>
+						</div>
+					{/if}
+
+					{#if originCountry}
+						<div class="edp-spec-row">
+							<dt class="edp-spec-key">Origin</dt>
+							<dd class="edp-spec-val">{originCountry}</dd>
+						</div>
+					{/if}
+
+					{#each attributes as { name, value }}
+						<div class="edp-spec-row">
+							<dt class="edp-spec-key">{name.replaceAll('_', ' ')}</dt>
+							<dd class="edp-spec-val">{value}</dd>
+						</div>
+					{/each}
+				</dl>
+
+				{#if qrcode}
+					<div class="edp-spec-qr mb-4 flex flex-col items-center gap-2 rounded-lg border bg-muted p-3">
+						<p class="text-xs font-medium text-muted-foreground">Product authenticity</p>
+						<QrCodeDisplayer base64Data={qrcode} />
+					</div>
+				{/if}
+			</div>
 		{/if}
-	</button>
+	</div>
+{/if}
 
-	{#if isOpen}
-		<div class="grid grid-cols-2 gap-y-4">
-			<!-- SKU and Barcode Section -->
-				{#if productState.selectedVariant?.sku || data?.product?.sku}
-					<div class="flex flex-col gap-1">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">SKU</p>
-						<p class="break-words break-all text-sm font-medium text-gray-600">
-							{String(productState.selectedVariant?.sku || data?.product?.sku)}
-						</p>
-					</div>
-				{/if}
+<style>
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-spec) {
+		border-top: 1px solid var(--ed-line);
+	}
 
-				{#if productState.selectedVariant?.barcode || data?.product?.barcode}
-					<div class="flex flex-col gap-1 text-left">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Barcode</p>
-						<p class="text-sm font-medium text-gray-900">
-							{productState.selectedVariant?.barcode || data?.product?.barcode}
-						</p>
-					</div>
-				{/if}
+	:global([data-theme='default'] .edp-spec .edp-acc-label) {
+		font-family: var(--ed-body);
+		font-size: var(--type-ui);
+		font-weight: 600;
+		color: var(--ed-ink);
+	}
 
-			<!-- Dimensions and Weight Section -->
-				{#if productState.selectedVariant?.width || data?.product?.width || productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.length || data?.product?.length}
-					<div class="flex flex-col gap-1">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Dimensions</p>
-						<p class="text-sm font-medium text-gray-900">
-							{#if productState.selectedVariant?.width || data?.product?.width}
-								W-{productState.selectedVariant?.width || data?.product?.width}
-							{/if}
+	/* Base (all themes): the labels were `text-[10px] ... uppercase`, i.e. 10px all-caps, under
+	   the 12px supporting-text floor and hard to read. 12px sentence case instead. */
+	.edp-spec-row {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
 
-							{#if (productState.selectedVariant?.width || data?.product?.width) && (productState.selectedVariant?.height || data?.product?.height)}
-								x
-							{/if}
+	.edp-spec-key {
+		font-size: 0.75rem;
+		line-height: 1.4;
+		color: hsl(var(--muted-foreground));
+	}
 
-							{#if productState.selectedVariant?.height || data?.product?.height}
-								H-{productState.selectedVariant?.height || data?.product?.height}
-							{/if}
+	.edp-spec-val {
+		font-size: 0.875rem;
+		line-height: 1.45;
+		font-weight: 500;
+		color: hsl(var(--foreground));
+	}
 
-							{#if (productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.width || data?.product?.width) && (productState.selectedVariant?.length || data?.product?.length)}
-								x
-							{/if}
+	:global([data-theme='default'] .edp-spec .edp-spec-key) {
+		color: var(--ed-soft);
+	}
 
-							{#if productState.selectedVariant?.length || data?.product?.length}
-								L-{productState.selectedVariant?.length || data?.product?.length}
-							{/if}
-						</p>
-					</div>
-				{/if}
+	:global([data-theme='default'] .edp-spec .edp-spec-val) {
+		color: var(--ed-ink);
+	}
 
-				{#if productState.selectedVariant?.weight || data?.product?.weight}
-					<div class="flex flex-col gap-1 text-right">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Weight</p>
-						<p class="text-sm font-medium text-gray-900">
-							{productState.selectedVariant?.weight || data?.product?.weight}
-							{page?.data?.store.weight_unit || productState.settingState?.selectedStore?.weight_unit}
-						</p>
-					</div>
-				{/if}
-
-				{#if data?.product?.originCountry}
-					<div class="flex flex-col gap-1">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Origin</p>
-						<p class="text-sm font-medium text-gray-900">{data?.product?.originCountry}</p>
-					</div>
-				{/if}
-
-			{#each data?.product?.attributes as { name, value }}
-				<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
-					<div class="flex flex-col gap-1">
-						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">{name}</p>
-						<p class="text-sm font-medium text-gray-900">{value}</p>
-					</div>
-				</div>
-			{/each}
-
-			{#if productState.selectedVariant?.qrcode || data?.product?.qrcode}
-				<div class="mt-4 flex flex-col items-center gap-2 rounded-lg bg-gray-50 p-4">
-					<p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Product Authenticity</p>
-					<QrCodeDisplayer base64Data={productState.selectedVariant?.qrcode || data?.product?.qrcode} />
-				</div>
-			{/if}
-		</div>
-	{/if}
-</div>
+	:global([data-theme='default'] .edp-spec-qr) {
+		border: 1px solid var(--ed-line);
+		border-radius: var(--ed-radius);
+		background: var(--ed-canvas);
+	}
+</style>

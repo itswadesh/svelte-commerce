@@ -1,37 +1,84 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
+	import { emiNoteText } from '$lib/product/emi-note'
 
 	const productState = useProductState()
+
+	const currency = $derived(page.data?.store?.currency)
+	const product = $derived(page.data?.product)
+	const variant = $derived(productState.selectedVariant)
+
+	const price = $derived(variant?.price || product?.price)
+	const mrp = $derived(variant?.price ? variant?.mrp : product?.mrp)
+	const discounted = $derived(Number(mrp) > 0 && Number(mrp) > Number(price))
+	const discountPct = $derived(discounted ? Math.round(((Number(mrp) - Number(price)) / Number(mrp)) * 100) : 0)
+
+	// The note was printed for every store regardless of the tax flag already sitting in page data.
+	// This store is configured tax-exclusive, so the shopper was told the listed price was final and
+	// then charged tax at checkout. It now says so only when the store actually prices inclusive;
+	// there is no "calculated at checkout" line, because no cart or checkout surface in this
+	// codebase shows a tax row that would back the promise.
+	const includesTax = $derived(currency?.includesTax === true)
+
+	// Shown only when the store switched the engine's emi-note on; see emiNoteText for what it may say.
+	const emiNote = $derived(emiNoteText(page.data?.store?.plugins?.emiNote, price, currency?.code))
 </script>
 
-<div class="intra-gap flex flex-col">
-	<div class="gap-1 flex flex-wrap items-baseline lg:flex-nowrap">
-		<div class="text-xl font-semibold  text-gray-900 dark:text-white">
-			{formatPrice(productState.selectedVariant?.price || page.data?.product?.price, page?.data?.store?.currency?.code)}
+<div class="edp-pricewrap flex flex-col tabular-nums">
+	<div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+		<div class="edp-price text-lg font-semibold text-foreground sm:text-xl" data-testid="product-price">
+			{formatPrice(price, currency?.code)}
 		</div>
 
-		{#if productState.selectedVariant?.price}
-			{#if productState.selectedVariant?.mrp && productState.selectedVariant?.mrp > productState.selectedVariant?.price}
-				<div class="text-sm line-through">
-					{formatPrice(productState.selectedVariant?.mrp, page?.data?.store?.currency?.code)}
-				</div>
-				<div class="text-lg  px-2 text-success">
-					{Math.round(((productState.selectedVariant?.mrp - productState.selectedVariant?.price) / productState.selectedVariant?.mrp) * 100)}% OFF
-				</div>
-			{/if}
-		{:else if page.data?.product?.price}
-			{#if page.data?.product?.mrp && page.data?.product?.mrp > page.data?.product?.price}
-					<div class="text-sm line-through">
-					{formatPrice(page.data?.product?.mrp, page?.data?.store?.currency?.code)}
-				</div>
-				<div class="text-lg  px-2 text-success">
-					{Math.round(((page.data?.product?.mrp - page.data?.product?.price) / page.data?.product?.mrp) * 100)}% Off
-				</div>
-			{/if}
+		{#if discounted}
+			<div class="edp-mrp text-sm text-muted-foreground line-through">
+				{formatPrice(mrp, currency?.code)}
+			</div>
+			<div class="edp-off text-sm font-semibold text-sale">
+				{discountPct}% off
+			</div>
 		{/if}
-			<span class="w-fit text-sm font-medium text-900 ml-1">Inclusive of all taxes</span>
+
+		{#if includesTax}
+			<span class="edp-tax w-fit text-sm font-normal text-muted-foreground">Inclusive of all taxes</span>
+		{/if}
 	</div>
 
+	{#if emiNote}
+		<p class="edp-emi mt-1 text-sm text-muted-foreground" data-testid="product-emi-note">{emiNote}</p>
+	{/if}
 </div>
+
+<style>
+	/* Refined Editorial — default theme only. */
+	:global([data-theme='default'] .edp-price) {
+		font-family: var(--ed-body);
+		/* Was a flat 1.6rem (25.6px) at every width, which made the price LARGER than the product
+		   title on a phone. The page-title step, 20-24px, keeps it one step under the name. */
+		font-size: var(--type-page-title);
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .edp-mrp) {
+		font-size: 0.875rem;
+		color: var(--ed-soft);
+		text-decoration: line-through;
+	}
+
+	:global([data-theme='default'] .edp-off) {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: hsl(var(--sale));
+	}
+
+	:global([data-theme='default'] .edp-tax),
+	:global([data-theme='default'] .edp-emi) {
+		font-size: 0.75rem;
+		font-weight: 400;
+		color: var(--ed-soft);
+	}
+</style>

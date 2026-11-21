@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte'
-import CartItem from '../cart-item.svelte'
-import { mockFactories, resetMocks } from '../test-utils'
+import CartItem from '$lib/components/cart/cart-item.svelte'
+import { mockFactories, resetMocks } from './test-utils'
 
 // Mock dependencies
 const mockCartState = {
@@ -247,6 +247,9 @@ describe('CartItem', () => {
 		await waitFor(() => {
 			expect(mockFireGTagEvent).toHaveBeenCalledWith('add_to_cart', expect.any(Object))
 		})
+		// One more unit was added, worth one unit's price, not the whole line's.
+		const added = mockFireGTagEvent.mock.calls.find(([name]) => name === 'add_to_cart')?.[1]
+		expect(added).toMatchObject({ qty: 1, total: 99.99, items: [expect.objectContaining({ qty: 1 })] })
 
 		// Test remove from cart event
 		const decreaseButton = screen.getByLabelText('Subtract 1 from qty')

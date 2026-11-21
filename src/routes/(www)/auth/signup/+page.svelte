@@ -8,15 +8,13 @@
 	const userState = getUserState()
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import { AuthButton } from '$lib/core/components/index.js'
-	const IS_DEV = import.meta.env.DEV
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
 
-	let firstName = $state(IS_DEV ? 'Swadesh' : '')
-	let lastName = $state(IS_DEV ? 'Behera' : '')
-	let email = $state(IS_DEV ? 'hi@litekart.in' : '')
-	// let phone = $state(IS_DEV ? '+918249028220' : '')
-	let password = $state(IS_DEV ? 'litekart1' : '')
-	let confirmPassword = $state(IS_DEV ? 'litekart1' : '')
+	let firstName = $state('')
+	let lastName = $state('')
+	let email = $state('')
+	let password = $state('')
+	let confirmPassword = $state('')
 	let isLoading = $state(false)
 
 	const schemas = {
@@ -61,11 +59,11 @@
 			})
 	}
 
-	async function handleSubmit(e) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault()
 		try {
 			isLoading = true
-			const res = await userState.signup({
+			const ok = await userState.signup({
 				firstName,
 				lastName,
 				email,
@@ -73,8 +71,10 @@
 				password,
 				origin: page.url.origin
 			})
+			// signup() swallows its own errors and returns false, so never claim success on a falsy result.
+			if (!ok) return
 			toast.success('Account created successfully')
-			goto(`/auth/signup/success?email=${encodeURIComponent(email)}`)
+			goto('/auth/signup/success', { state: { signupEmail: email } })
 		} catch (e: any) {
 			toast.error(e.message)
 		} finally {
@@ -88,22 +88,21 @@
 	<meta name="description" content="Create your account at {page?.data?.store?.name} to start shopping and discover amazing products." />
 </svelte:head>
 
-<main class="flex min-h-screen items-center justify-center border bg-gradient-to-br from-gray-50 to-white p-4 dark:from-gray-900 dark:to-gray-800">
-	<!-- Right side - Sign up form -->
-	<div class="w-full max-w-md transform space-y-4 rounded-lg rounded-xl border bg-white/80 p-8 backdrop-blur-sm transition-all dark:bg-gray-800/90">
-		<div class="space-y-2 text-center">
-			<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Create your account</h2>
-			<p class="text-gray-500 dark:text-gray-400">Join us and start your shopping journey</p>
+<div class="flex justify-center bg-background px-4 py-8 sm:py-16">
+	<div class="w-full max-w-[420px] space-y-4 rounded-radius border bg-card p-5 sm:p-6">
+		<div class="space-y-1 text-center">
+			<h2 class="text-2xl font-bold tracking-tight text-foreground">Create account</h2>
+			<p class="text-sm text-muted-foreground">Save details for faster checkout.</p>
 		</div>
 
-		<form class="space-y-4" onsubmit={handleSubmit} aria-label="Sign up form">
-			<div class="grid grid-cols-2 gap-4">
+		<form class="space-y-3" onsubmit={handleSubmit} aria-label="Sign up form">
+			<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
 				<Textbox
 					name="firstName"
 					bind:value={firstName}
 					placeholder="John"
 					schema={schemas.firstName}
-					label="First Name"
+					label="First name"
 					class="h-12"
 					required
 					aria-label="First name"
@@ -114,7 +113,7 @@
 					bind:value={lastName}
 					placeholder="Doe"
 					schema={schemas.lastName}
-					label="Last Name"
+					label="Last name"
 					class="h-12"
 					required
 					aria-label="Last name"
@@ -135,23 +134,11 @@
 				autocomplete="email"
 			/>
 
-			<!-- <Textbox
-					name="phone"
-					type="tel"
-					bind:value={phone}
-					placeholder="+1234567890"
-					schema={schemas.phone}
-					label="Phone number"
-					required
-					aria-label="Phone number"
-					autocomplete="tel"
-				/> -->
-
 			<Textbox
 				name="password"
 				type="password"
 				bind:value={password}
-				placeholder="••••••••"
+				placeholder="Enter a password"
 				schema={schemas.password}
 				label="Password"
 				class="h-12"
@@ -164,7 +151,7 @@
 				name="confirmPassword"
 				type="password"
 				bind:value={confirmPassword}
-				placeholder="••••••••"
+				placeholder="Confirm your password"
 				schema={schemas.confirmPassword}
 				label="Confirm password"
 				class="h-12"
@@ -175,7 +162,7 @@
 
 			<Button
 				type="submit"
-				class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+				class="h-12 w-full text-wrap px-4 py-2 text-base font-semibold transition-colors"
 				disabled={isLoading}
 				aria-label={isLoading ? 'Creating account...' : 'Create account'}
 			>
@@ -186,36 +173,40 @@
 			</Button>
 		</form>
 
-		<div class="space-y-4 text-center">
-			<p class="text-sm text-gray-500">Already have an account?</p>
-			<AuthButton type="login">
-				<Button
-					variant="link"
-					class="inline-block text-gray-600 transition-colors hover:text-gray-900 dark:hover:text-gray-300"
-					aria-label="Sign in to your account"
-				>
-					Sign in to your account
-				</Button>
-			</AuthButton>
+		<div class="text-center">
+			<p class="text-sm text-muted-foreground">
+				Already have an account?
+				<AuthButton type="login">
+					<Button
+						variant="link"
+						class="ml-1 inline-flex min-h-10 px-0 font-semibold text-foreground transition-colors hover:underline"
+						aria-label="Sign in to your account"
+					>
+						Sign in
+					</Button>
+				</AuthButton>
+			</p>
 		</div>
 
 		{#if page?.data?.store?.plugins?.isMultiVendor?.active}
-			<div class="relative py-4">
-				<div class="absolute inset-0 flex items-center">
-					<div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
+			<div class="space-y-3">
+				<div class="relative">
+					<div class="absolute inset-0 flex items-center">
+						<div class="w-full border-t border-border"></div>
+					</div>
+					<div class="relative flex justify-center text-xs">
+						<span class="bg-card px-2 text-muted-foreground">or</span>
+					</div>
 				</div>
-				<div class="relative flex justify-center text-sm">
-					<span class="bg-white px-2 text-gray-500 dark:bg-gray-800 dark:text-gray-400">or</span>
-				</div>
-			</div>
 
-			<a
-				href="/auth/join-as-vendor"
-				class="inline-block w-full rounded-lg border border-gray-600 px-4 py-2 text-center text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-500 dark:text-gray-300 dark:hover:bg-gray-900/20"
-				aria-label="Join as a vendor"
-			>
-				Join as a Vendor
-			</a>
+				<a
+					href="/auth/join-as-vendor"
+					class="inline-flex min-h-11 w-full items-center justify-center rounded-radius border border-border-strong px-4 py-2 text-center text-sm font-semibold text-foreground transition-colors hover:bg-muted hover:text-foreground"
+					aria-label="Join as a vendor"
+				>
+					Join as a Vendor
+				</a>
+			</div>
 		{/if}
 	</div>
-</main>
+</div>

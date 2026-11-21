@@ -15,10 +15,10 @@
 					<div class="mx-auto w-full">
 						<div class="mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
 							<div class="text-left">
-								<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
+								<h2 class="section-heading">
 									{data.name}
 								</h2>
-								<div class="mt-2 h-1 w-12 bg-primary"></div>
+								<div class="mt-2 h-1 w-12 bg-primary-ink"></div>
 								<!-- <p class="mt-4 text-sm font-medium text-muted-foreground">
 									Explore our handpicked selection of {data.name.toLowerCase()}
 								</p> -->

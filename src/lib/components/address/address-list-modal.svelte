@@ -27,24 +27,24 @@
 <Dialog bind:open={show}>
 	<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
 		<DialogHeader>
-			<DialogTitle>Select Address</DialogTitle>
+			<DialogTitle>Select address</DialogTitle>
 		</DialogHeader>
 		<div class="grid max-h-[400px] gap-4 overflow-y-auto py-4">
 			<Button variant="outline" class="w-full" onclick={addressState.handleAddNew}>
 				<Plus class="mr-2 h-4 w-4" />
-				Add New Address
+				Add new address
 			</Button>
 			{#each addresses as address (address.id)}
 				<div class="group flex items-center justify-between rounded-lg border p-4">
 					<div class="flex-1">
 						<p class="font-medium">{address.firstName} {address.lastName}</p>
-						<p class="text-sm text-gray-500">{address.address_1}</p>
-						<p class="text-sm text-gray-500">{address.address_2}</p>
-						<p class="text-sm text-gray-500">
+						<p class="text-sm text-muted-foreground">{address.address_1}</p>
+						<p class="text-sm text-muted-foreground">{address.address_2}</p>
+						<p class="text-sm text-muted-foreground">
 							{address.city}, {address.state}
 							{address.zip}
 						</p>
-						<p class="text-sm text-gray-500">{address.phone}</p>
+						<p class="text-sm text-muted-foreground">{address.phone}</p>
 					</div>
 					<div class="flex flex-col gap-2">
 						<div class="flex justify-between gap-2">
@@ -52,9 +52,15 @@
 								<PencilSimple class="h-4 w-4" />
 							</Button>
 							<!-- {#if addressState.cartState.cart?.shippingAddress?.id !== address.id} -->
-								<Button type="button" variant="ghost" disabled={addressState.cartState.cart?.shippingAddress?.id === address.id}  onclick={() => ondelete?.(address)} class="w-fit opacity-0 group-hover:opacity-100">
-									<Trash2 class="h-4 w-4" />
-								</Button>
+							<Button
+								type="button"
+								variant="ghost"
+								disabled={addressState.cartState?.cart?.shippingAddress?.id === address.id}
+								onclick={() => ondelete?.(address)}
+								class="w-fit opacity-0 group-hover:opacity-100"
+							>
+								<Trash2 class="h-4 w-4" />
+							</Button>
 							<!-- {/if} -->
 						</div>
 						<Button variant="default" onclick={() => addressState.handleSelect(address)}>Select</Button>

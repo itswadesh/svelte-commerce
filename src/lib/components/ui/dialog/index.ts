@@ -5,9 +5,9 @@ import Description from './dialog-description.svelte'
 import Footer from './dialog-footer.svelte'
 import Header from './dialog-header.svelte'
 import Overlay from './dialog-overlay.svelte'
+import Root from './dialog-root.svelte'
 import Title from './dialog-title.svelte'
 
-const Root: typeof Dialog.Root = Dialog.Root
 const Trigger: typeof Dialog.Trigger = Dialog.Trigger
 const Close: typeof Dialog.Close = Dialog.Close
 const Portal: typeof Dialog.Portal = Dialog.Portal

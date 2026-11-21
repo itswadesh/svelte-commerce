@@ -36,17 +36,17 @@
 	{#snippet content({ filteredData, selectedValue, closeAndFocusTrigger })}
 		<div class={cn('mb-3 space-y-2', klass)}>
 			{#if label}
-				<Label class="block text-sm font-medium text-gray-700">
+				<Label class="block text-sm font-medium text-foreground">
 					{label}
 					{#if optional}<span class="text-xs text-muted-foreground">(Optional)</span>{/if}
 				</Label>
 			{/if}
 			<div class="relative w-full" {...rest}>
 				<Popover.Root bind:open>
-					<Popover.Trigger bind:ref={triggerRef} asChild>
+					<Popover.Trigger bind:ref={triggerRef}>
 						{#snippet child({ props })}
 							<Button
-								aria-label="Open Select Options"
+								aria-label="Open select options"
 								variant="outline"
 								class="w-full justify-between font-normal"
 								{...props}
@@ -97,7 +97,7 @@
 			</div>
 		</div>
 		{#if errors && errors[id]}
-			<span class="text-red-500">{errors[id]}</span>
+			<span class="text-destructive">{errors[id]}</span>
 		{/if}
 	{/snippet}
 </FormSelectRenderer>

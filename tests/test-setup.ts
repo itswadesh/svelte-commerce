@@ -1,8 +1,6 @@
-// For Vitest, we need to import matchers differently
-import * as matchers from '@testing-library/jest-dom/matchers'
-import { expect } from 'vitest'
-
-expect.extend(matchers)
+// Registers the jest-dom matchers with `expect` *and* augments Vitest's `Assertion`
+// interface, so `toBeInTheDocument()` & co. are typed as well as available at runtime.
+import '@testing-library/jest-dom/vitest'
 
 // Global test utilities
 globalThis.matchMedia =

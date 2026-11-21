@@ -2,151 +2,262 @@
 	import CartItem from '$lib/components/cart/cart-item.svelte'
 	import { X, ShoppingBag } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { goto } from '$app/navigation'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/utils/price'
 	import { getCartState } from '@misiki/kitcommerce-core/stores'
-	import { cubicOut } from 'svelte/easing'
+	import { drawer, fade } from '$lib/motion'
 	import { page } from '$app/state'
+	import { onDestroy, onMount } from 'svelte'
+	import { dialog } from '$lib/actions/dialog.js'
+	import OrderBlockNotice from '$lib/components/order/order-block-notice.svelte'
+	import { orderBlock } from '$lib/order/rules'
 
 	const cartState = getCartState()
 	const storeData = $derived(page.data?.store)
 
+	// One busy flag for the whole panel. The old guard read `isUpdatingCart`, which the line-item
+	// update path never sets, so the checkout CTA stayed enabled and the subtotal stayed at full
+	// contrast while a quantity change was still in flight — a shopper could start checkout against
+	// a figure that was already wrong. The store flips `updatingItem[lineId]` around every line
+	// mutation, so the two together are the honest answer.
+	const isBusy = $derived(!!cartState?.isUpdatingCart || Object.values(cartState?.updatingItem || {}).some(Boolean))
+
+	const subtotal = $derived(formatPrice(cartState?.cart?.subtotal ?? cartState?.cart?.total ?? 0, storeData?.currencyCode))
+	const itemCount = $derived(cartState?.cart?.lineItems?.length ?? 0)
+	// A pause on orders or a minimum the bag is under (GoCommerce D271).
+	const block = $derived(orderBlock(storeData?.plugins, cartState?.cart?.subtotal))
+
 	const { onClose, onContinueShopping, onRemoveCartItem } = $props()
+	const modalHistoryKey = '__svelteCommerceCartSidebar'
+	const titleId = $props.id()
+	let ownsHistoryEntry = false
+	let isNavigatingFromCart = false
 
-	function slideFadeTopRight(node: Element, params: { delay?: number; duration?: number; easing?: any; transformOrigin?: any }) {
-		const existingTransform = getComputedStyle(node).transform.replace('none', '')
-
-		return {
-			delay: params.delay || 0,
-			duration: params.duration || 400,
-			easing: params.easing || cubicOut,
-			css: (t: number, u: number) =>
-				`transform-origin: ${params.transformOrigin || 'top right'}; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
+	// Bumps the badge when the count changes, but not for the first render or for the stored bag
+	// being restored after mount (`hasLoaded`): a page load is not news. A first add on a fresh
+	// session, where there is no bag until then, counts from 0.
+	let bumpKey = $state(0)
+	let cartRestored = $state(false)
+	let previousQty = 0
+	onMount(() => {
+		const settle = () => {
+			previousQty = cartState?.cart?.qty ?? 0
+			cartRestored = true
 		}
+		cartState?.hasLoaded?.then(settle, settle)
+	})
+	$effect(() => {
+		const qty = cartState?.cart?.qty ?? 0
+		if (!cartRestored) return
+		if (qty !== previousQty) bumpKey++
+		previousQty = qty
+	})
+
+	// The core nav composable exposes close as `(e) => { e.stopPropagation(); … }`, so every caller
+	// that has no event to hand it — the dialog action's Escape key, the popstate handler — threw a
+	// TypeError before anything closed. Escape left the drawer open and the focus trap in place,
+	// which is the one escape hatch a modal must always have. Give it a no-op event.
+	const noopEvent = { stopPropagation() {} } as unknown as Event
+	function closeCart(e?: Event) {
+		onClose?.(e ?? noopEvent)
+	}
+
+	// Auto-open the slide-out cart on any successful add/update action.
+	// `showCheckout` is flipped to true by the core store's add()/update() on a
+	// user action, but is NOT set during initial cart hydration, so watching it
+	// opens the drawer on "add to bag" without spurious opens on page load.
+	// Seed the baseline to the mount-time value so only a false→true transition
+	// that happens while this component is mounted opens the drawer (avoids a
+	// spurious open when returning to a shop page while showCheckout is still on).
+	let prevShowCheckout = !!cartState?.showCheckout
+
+	function handleBrowserBack() {
+		if (!cartState?.isOpen || !ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		cartState.isOpen = false
+		closeCart()
+	}
+
+	onMount(() => {
+		window.addEventListener('popstate', handleBrowserBack)
+		return () => window.removeEventListener('popstate', handleBrowserBack)
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined') return
+
+		if (cartState?.isOpen && !ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		} else if (!cartState?.isOpen && ownsHistoryEntry) {
+			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
+			ownsHistoryEntry = false
+			if (isCurrentModalEntry && !isNavigatingFromCart) history.back()
+			isNavigatingFromCart = false
+		}
+	})
+
+	onDestroy(() => {
+		if (typeof window !== 'undefined' && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
+			history.back()
+		}
+	})
+
+	// Not on the quick-order page (D255): a shopper there adds row after row, and its own pinned bar
+	// already shows the order, so a drawer over the list on every Add would hide the next row.
+	$effect(() => {
+		const showCheckout = !!cartState?.showCheckout
+		if (showCheckout && !prevShowCheckout && cartState && !cartState.isOpen && page.url.pathname !== '/order') {
+			cartState.isOpen = true
+		}
+		prevShowCheckout = showCheckout
+	})
+
+	async function proceedToCart() {
+		isNavigatingFromCart = true
+		if (typeof window !== 'undefined' && history.state?.[modalHistoryKey] === true) {
+			const nextState = { ...history.state }
+			delete nextState[modalHistoryKey]
+			history.replaceState(nextState, '', window.location.href)
+		}
+		if (cartState) cartState.isOpen = false
+		await goto('/checkout/cart')
 	}
 </script>
 
-<div class="relative" role="navigation">
+<!-- No role="navigation": a single toggle button is not a navigation landmark, and an unnamed
+     one just adds noise to the screen-reader landmark list. -->
+<div class="relative">
+	<!-- The box makes the target, not the 20px glyph: 44px on phones, 36px from md up, the same
+	     geometry as every other header action. -->
 	<button
-		variant="ghost"
-		size="icon"
-		class="rounded-full flex px-2"
-		aria-label="Toggle Cart"
+		data-testid="cart-icon"
+		class="motion-press flex h-9 w-9 items-center justify-center rounded-full max-md:h-11 max-md:w-11"
+		aria-label="Cart, {cartState?.cart?.qty ?? 0} items"
+		aria-expanded={!!cartState?.isOpen}
 		onclick={() => {
-			cartState.isOpen = !cartState.isOpen
+			if (cartState) cartState.isOpen = !cartState.isOpen
 		}}
 	>
 		<ShoppingBag class="h-5 w-5" />
 		{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
-			<span
-				class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary text-primary-foreground px-1.5 py-1 text-xs font-bold leading-none"
-			>
-				{cartState.cart.qty}
+			<!-- The outer span positions; the inner one animates, so the bump never fights the offset. At the
+			     glyph's corner, inside the header: pinned to the 44px box's corner and lifted by half its
+			     height, it rose above the top of the screen. -->
+			<span class="absolute -right-0.5 top-0.5">
+				{#key bumpKey}
+					<span
+						class="inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold leading-none text-primary-foreground {bumpKey
+							? 'motion-bump'
+							: ''}"
+					>
+						{cartState.cart.qty}
+					</span>
+				{/key}
 			</span>
 		{/if}
 	</button>
-	{#if cartState.isOpen}
-		<!-- close cart backdrop -->
-		<Button
-			variant="ghost"
-			class="fixed inset-0 z-50 h-svh w-full rounded-none bg-black/30 hover:bg-black/30"
-			aria-label="Close cart"
-			onclick={onClose}
-		>
-			<style>
-				body {
-					overflow: hidden;
-				}
-			</style>
-			<span class="sr-only">Close cart</span>
-		</Button>
+	{#if cartState?.isOpen}
+		<!-- close cart backdrop. Wrapped because transition directives only work on elements, not on
+		     the <Button> component; the wrapper is static, so the fixed button still covers the page. -->
+		<div transition:fade>
+			<Button
+				variant="ghost"
+				class="fixed inset-0 z-overlay h-auto w-full rounded-none border-0 bg-foreground/40 hover:bg-foreground/40"
+				aria-label="Close cart"
+				onclick={closeCart}
+			>
+				<style>
+					body {
+						overflow: hidden;
+					}
+				</style>
+				<span class="sr-only">Close cart</span>
+			</Button>
+		</div>
 
+		<!-- Named z step instead of `z-[10000000]`, tokens instead of `bg-card`: the theme wrapper
+		     now sits on <html>, so a panel painted in `bg-background` follows the active theme
+		     rather than freezing the default palette into the drawer. -->
 		<div
-			class="shadow-3xl ease-out-expo fixed right-0 top-0 z-[10000000] h-screen w-full overflow-y-auto bg-white transition-all duration-500 sm:w-[37.5%]"
-			transition:slideFadeTopRight={{ duration: 500 }}
+			class="fixed inset-y-0 right-0 z-modal flex w-full flex-col bg-background shadow-z-10 sm:w-[26rem]"
+			in:drawer={{ edge: 'right' }}
+			out:drawer={{ edge: 'right' }}
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby={titleId}
+			tabindex="-1"
+			use:dialog={closeCart}
 		>
-			<div class="relative z-50 flex h-full flex-col justify-between bg-white p-4">
-				<div class="sm:mx-3">
-					<h2 class="mb-4 mt-4 text-xl font-semibold text-gray-900">
-						My Shopping Cart
-					</h2>
-					<Button
-						variant="ghost"
-						size="icon"
-						class="absolute right-4 top-4 rounded-full"
-						aria-label="close cart"
-						onclick={onClose}
-					>
-						<X class="size-5" />
-					</Button>
+			<div class="flex shrink-0 items-center justify-between gap-2 border-b border-border px-4 py-3">
+				<h2 id={titleId} class="text-base font-semibold text-foreground">
+					Your bag
+					{#if itemCount > 0}
+						<span class="font-normal text-muted-foreground">({cartState.cart.qty})</span>
+					{/if}
+				</h2>
+				<Button variant="ghost" size="icon" class="-mr-2 rounded-full" aria-label="Close cart" onclick={closeCart}>
+					<X class="size-5" />
+				</Button>
+			</div>
 
+			{#if itemCount > 0}
+				<div class="min-h-0 flex-1 divide-y divide-border overflow-y-auto px-4">
 					{#each cartState.cart?.lineItems || [] as _, i}
-						<div class="rounded-lg transition-all duration-300 hover:bg-gray-50">
-							<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={onRemoveCartItem} />
-						</div>
+						<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={onRemoveCartItem} />
 					{/each}
 				</div>
 
-				<div
-					class="sticky bottom-0 {cartState.cart?.lineItems?.length > 0
-						? '-mx-4 border-t border-gray-100 bg-gray-50 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]'
-						: ''} py-6 sm:px-4"
-				>
-					<div class="space-y-1">
-						{#if cartState.cart?.lineItems?.length > 0}
-							<div class="mx-4 flex items-center justify-between">
-								<p class="text-xs font-bold text-muted sm:text-base">Total</p>
-								<p class="text-base font-bold text-gray-900 sm:text-xl">
-									{formatPrice(cartState?.cart?.total, storeData?.currencyCode)}
-								</p>
-							</div>
-							<p class="mx-4 text-right text-xs font-bold  tracking-tighter text-gray-400">MRP includes of all taxes</p>
+				<div class="shrink-0 border-t border-border bg-muted/40 px-4 py-4 pb-[calc(1rem_+_env(safe-area-inset-bottom))]">
+					<div class="flex items-baseline justify-between gap-4">
+						<p class="text-sm font-medium text-foreground">Subtotal</p>
+						{#if isBusy}
+							<!-- Stale figures at full contrast are worse than none: while a line update is in
+							     flight the amount is skeletoned rather than left asserting the old number. -->
+							<Skeleton class="h-6 w-24" />
 						{:else}
-							<div class="flex min-h-[80vh] flex-col items-center justify-center gap-3 bg-white">
-								<div class="mb-6 rounded-full bg-gray-50 p-8 ring-1 ring-gray-100">
-									<ShoppingBag class="h-12 w-12 text-gray-300" />
-								</div>
-								<span class="text-xl font-bold uppercase tracking-widest text-gray-900">Empty Cart!!</span>
-								<span class="max-w-xs px-2 text-center text-xs font-medium leading-relaxed text-gray-500"
-									>We didn't find any item inside cart, Go ahead, order some essentials from the menu</span
-								>
-								<Button
-									disabled={!!cartState.isUpdatingCart}
-									onclick={onContinueShopping}
-									class="mt-8 px-8"
-								>
-									Continue Shopping
-								</Button>
-							</div>
+							<p class="text-lg font-bold text-foreground">{subtotal}</p>
 						{/if}
 					</div>
-					{#if cartState?.cart?.total >= 0 && cartState.cart?.lineItems?.length > 0}
-						<div class="mx-4 pb-6 md:pb-0 mt-6 flex justify-between gap-3">
-							<Button
-								variant="outline"
-								disabled={!!cartState.isUpdatingCart}
-								onclick={onContinueShopping}
-								class="w-[48%] py-6"
-							>
-								Continue
-							</Button>
-							<Button
-								disabled={!!cartState.isUpdatingCart}
-								onclick={(e) => {
-									e.stopPropagation()
-									if (cartState) {
-										cartState.isOpen = false
-									}
-									goto('/checkout/cart')
-								}}
-								class="w-[48%] py-6"
-							>
-								Proceed
-							</Button>
-						</div>
-					{/if}
+					<p class="mt-1 text-xs text-muted-foreground">Shipping and taxes calculated at checkout.</p>
+
+					<!-- The drawer had no live region, so a screen-reader user heard nothing when a quantity
+					     change moved the subtotal. -->
+					<p class="sr-only" aria-live="polite" aria-atomic="true">
+						{isBusy ? 'Updating your bag' : `${cartState.cart.qty} items in your bag, subtotal ${subtotal}`}
+					</p>
+
+					<OrderBlockNotice {block} currency={storeData?.currencyCode} class="mt-3" />
+					<Button
+						disabled={isBusy || !!block}
+						aria-busy={isBusy}
+						onclick={(e) => {
+							e.stopPropagation()
+							proceedToCart()
+						}}
+						class="mt-4 h-12 w-full text-sm font-semibold"
+					>
+						Checkout
+					</Button>
+					<Button
+						variant="link"
+						onclick={onContinueShopping}
+						class="mt-1 h-11 w-full text-sm font-medium text-muted-foreground hover:text-foreground hover:no-underline"
+					>
+						Continue shopping
+					</Button>
 				</div>
-			</div>
+			{:else}
+				<div class="flex flex-1 flex-col items-center justify-center gap-2 px-6 pb-10 text-center">
+					<div class="mb-4 rounded-full bg-muted p-6">
+						<ShoppingBag class="h-9 w-9 text-muted-foreground" />
+					</div>
+					<p class="text-base font-semibold text-foreground">Your bag is empty</p>
+					<p class="max-w-xs text-sm leading-relaxed text-muted-foreground">Nothing here yet. Browse the store and add something you like.</p>
+					<Button onclick={onContinueShopping} class="mt-6 h-11 px-8">Start shopping</Button>
+				</div>
+			{/if}
 		</div>
 	{/if}
 </div>

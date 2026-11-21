@@ -1,30 +1,15 @@
 <script lang="ts">
-	import {
-		X,
-		UserCircle,
-		ChevronLeft,
-		Phone,
-		Mail,
-		Menu,
-		ChevronDown,
-		Heart,
-		Home,
-		LayoutGrid,
-		Tag,
-		Layers,
-		Package,
-		MapPin,
-		KeyRound,
-		LogOut
-	} from '@lucide/svelte'
+	import { X, UserCircle, ChevronDown, Phone, Mail, Menu, Heart, Home, Tag, Layers, Package, MapPin, KeyRound, LogOut } from '@lucide/svelte'
 	import MainNav from './main-nav.svelte'
 	import MegaMenu from './mega-menu.svelte'
 	import { page } from '$app/state'
+	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 	import MsSearch from './ms-search.svelte'
 	import AuthModal from '$lib/components/auth/auth-modal.svelte'
-	import { AuthButton } from '$lib/core/components/index.js'
-	import { fade, fly } from 'svelte/transition'
-	import { cubicOut } from 'svelte/easing'
+	// Local shadow of the vendored AuthButton — the packaged one is a <div role="button"> with
+	// no tabindex/key handler, so the auth modal was unreachable by keyboard. See the component.
+	import AuthButton from '$lib/components/auth/auth-button.svelte'
+	import { drawer, fade } from '$lib/motion'
 	import { NavModule } from '$lib/core/composables/index.js'
 	import { getWishlistState } from '@misiki/kitcommerce-core/stores'
 	import CartSidebar from './cart-sidebar.svelte'
@@ -32,13 +17,43 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { onDestroy, onMount } from 'svelte'
 	import NoorNav from '$lib/theme/noor/NoorNav.svelte'
-	import LimelightNav from '$lib/theme/limelight/LimelightNav.svelte'
+	import LimeNav from '$lib/theme/lime/LimeNav.svelte'
+	import { resolveThemeContent } from '$lib/theme/index.js'
+	import { dialog } from '$lib/actions/dialog.js'
+	import { chromeSettings } from '$lib/composer/chrome-draft.svelte.js'
+	import { headerView } from '$lib/composer/site-chrome.js'
 
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 	const navModule = new NavModule()
 	const userState = navModule.userState
 	const isHomepage = $derived(page.route?.id === '/(www)')
+	// Hysteresis: collapse and expand at different offsets. With a single threshold the
+	// header oscillates near the top — collapsing shrinks the sticky header, the browser's
+	// scroll anchoring drops scrollY back under the threshold, the header re-expands, and
+	// the cycle repeats. The gap must exceed the height lost on collapse (hello bar +
+	// row-height change ≈ 56px).
+	let isScrolled = $state(false)
+	// Height of the announcement or hello bar, if one renders. The sticky header sits this far above
+	// the viewport, so the bar scrolls away with the page and the rest of the header sticks:
+	// ordinary scrolling, with no animated height and no transform to trap the fixed drawers inside.
+	let barHeight = $state(0)
+
+	// Background scroll lock for the menu drawer. Without it the page behind the open drawer still
+	// scrolls under a touch drag, so closing the menu returned the shopper somewhere they never
+	// chose to be. Paired with the focus trap on the drawer itself.
+	$effect(() => {
+		if (!navModule.openSidebar) return
+		const previous = document.body.style.overflow
+		document.body.style.overflow = 'hidden'
+		return () => {
+			document.body.style.overflow = previous
+		}
+	})
+	$effect(() => {
+		if (navModule.scrollY > 90) isScrolled = true
+		else if (navModule.scrollY < 10) isScrolled = false
+	})
 	const sidebarHistoryKey = '__svelteCommerceMobileSidebar'
 	let ownsSidebarHistoryEntry = false
 
@@ -78,124 +93,197 @@
 			{ title: 'Orders', url: '/my/orders' },
 			// { title: 'Buy Again', url: '/my/buy-again' },
 			{ title: 'Addresses', url: '/my/addresses' },
-			{ title: 'Change Password', url: '/auth/change-password' }
 		]
+		// Only a signed-in shopper has a password to change; the other links ask a guest to sign in.
+		if (userState?.user?.userId) items.push({ title: 'Change password', url: '/auth/change-password' })
 		if (wishlistPlugin?.active) items.push({ title: 'Wishlist', url: '/my/wishlist' })
+		return items
 	})
 
 	const activeThemeName = $derived(page.data?.theme?.name ?? 'default')
 	const storeData = $derived(page?.data?.store ?? {})
+	// Admin-editable announcement bar (theme content). Fills the hello-bar slot unless the
+	// hello-bar plugin is active AND actually has content (an active-but-empty plugin should
+	// not suppress it), so the two never stack.
+	const themeContent = $derived(resolveThemeContent(activeThemeName, page.data?.store))
+	const themeHeader = $derived(themeContent?.header)
+	const themeAnnouncement = $derived(themeHeader?.hideAnnouncement === true ? '' : themeHeader?.announcement || '')
+	// The header the shop set in the theme editor (GoCommerce D131), published or a draft being
+	// edited, decides the strip once there is one: its words, its link, and whether it shows on
+	// every page. Until then the theme's strip, on the home page, exactly as before.
+	const chromeHeader = $derived.by(() => {
+		const settings = chromeSettings('header', page.data)
+		return settings ? headerView(settings) : null
+	})
+	const announcement = $derived(
+		chromeHeader
+			? chromeHeader.announcement
+			: themeAnnouncement
+				? { text: themeAnnouncement, link: themeHeader?.announcementHref || null, everyPage: false }
+				: null
+	)
+	const announcementShown = $derived(!!announcement && (announcement.everyPage || isHomepage))
+	// The shop can hide the header menu: then no menu row and no phone menu button, which is the
+	// only way into the drawer. Without a header page the menu shows, as before.
+	const menuShown = $derived(chromeHeader?.menu ?? true)
+	const helloBarHasContent = $derived(
+		!!(
+			navModule.helloBarPlugin?.active &&
+			(navModule.helloBarPlugin?.content || navModule.helloBarPlugin?.content2 || navModule.helloBarPlugin?.content3)
+		)
+	)
+
+	// Local expansion state for the nested mobile menu — tracks which header-menu parent is
+	// open. Kept here (not the composable's category-sized showSubCategory) so it indexes by
+	// the header menu itself.
+	let mobileNestOpen = $state<boolean[]>([])
+	function toggleMobileNest(i: number) {
+		mobileNestOpen[i] = !mobileNestOpen[i]
+	}
+
+	// A number stored with its country code but no plus (Litekart's 91...) gets one; a local
+	// ten-digit number does not, or +98765 43210 dials a different country.
+	const storePhone = $derived.by(() => {
+		const raw = String(page?.data?.store?.businessPhone ?? '').replace(/[^\d+]/g, '')
+		return raw.startsWith('+') || raw.length <= 10 ? raw : `+${raw}`
+	})
 </script>
 
 <svelte:window bind:scrollY={navModule.scrollY} />
 
-{#if activeThemeName === 'limelight'}
-	<LimelightNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} pathname={page.url.pathname} />
+{#if activeThemeName === 'lime'}
+	<LimeNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} {themeContent} pathname={page.url.pathname} />
 {:else if activeThemeName === 'noor'}
-	<NoorNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} pathname={page.url.pathname} />
+	<NoorNav {navModule} {wishlistPlugin} {wishlistState} {userState} {storeData} {themeContent} pathname={page.url.pathname} />
 {:else}
 	<header
+		class:ed={activeThemeName === 'default'}
+		style:top={barHeight ? `-${barHeight}px` : undefined}
 		class="{navModule.isProductListingPage
 			? 'max-sm:border-b'
-			: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between bg-white transition-all duration-200"
+			: ''} sticky top-0 z-50 w-full flex-col items-center justify-between bg-background shadow-xs"
 	>
-		<!-- Hello bar -->
-		{#if navModule.helloBarPlugin?.active && isHomepage}
-			<!-- <div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
+		<!-- Both bars sit in one always-mounted box, so its height drops to 0 on pages without one. -->
+		<div bind:clientHeight={barHeight}>
+			<!-- Announcement bar from theme content (admin Theme page) — a hello-bar plugin with
+		     content wins -->
+			{#if !helloBarHasContent && announcement && announcementShown}
+				<div class="announce-strip ed-announce bg-primary text-xs font-semibold text-primary-foreground" data-target="secondary">
+					{#if announcement.link}
+						<a href={announcement.link} class="announce-line transition-opacity hover:opacity-80">{announcement.text}</a>
+					{:else}
+						<p class="announce-line">{announcement.text}</p>
+					{/if}
+				</div>
+			{/if}
+
+			<!-- Hello bar (only when the plugin actually has content — an active-but-empty
+		     plugin used to render a stray empty dark band) -->
+			{#if helloBarHasContent && isHomepage}
+				<!-- <div class="bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
 				{@html helloBarPlugin?.content}
 			</div> -->
 
-			{#if navModule.helloBarPlugin?.content}
-				<div class="max-w-none bg-primary py-2 text-center text-xs text-primary-foreground sm:text-sm">
-					<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
-						{#if navModule.helloBarPlugin?.content}
-							<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
-						{/if}
-						{#if navModule.helloBarPlugin?.content2}
-							<li style="--index: 2;">{@html navModule.helloBarPlugin?.content2}</li>
-						{/if}
-						{#if navModule.helloBarPlugin?.content3}
-							<li style="--index: 3;">{@html navModule.helloBarPlugin?.content3}</li>
-						{/if}
-					</ul>
-				</div>
-			{:else}
-				<div class="bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
-					{@html navModule.helloBarPlugin?.content}
+				<div class="overflow-hidden">
+					{#if navModule.helloBarPlugin?.content}
+						<div class="announce-strip ed-announce bg-primary text-center text-xs text-primary-foreground sm:text-sm" data-target="secondary">
+							<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
+								{#if navModule.helloBarPlugin?.content}
+									<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
+								{/if}
+								{#if navModule.helloBarPlugin?.content2}
+									<li style="--index: 2;">{@html navModule.helloBarPlugin?.content2}</li>
+								{/if}
+								{#if navModule.helloBarPlugin?.content3}
+									<li style="--index: 3;">{@html navModule.helloBarPlugin?.content3}</li>
+								{/if}
+							</ul>
+						</div>
+					{:else}
+						<div class="bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
+							{@html navModule.helloBarPlugin?.content}
+						</div>
+					{/if}
 				</div>
 			{/if}
-		{/if}
-		<div class="page-width flex h-16 items-center justify-between bg-white sm:h-14">
-			<div class="hidden justify-center gap-3 sm:flex">
-				<Button
-					variant="ghost"
-					size="icon"
-					aria-label="Sidebar"
-					class="md:hidden"
-					onclick={() => {
-						navModule.openSidebar = true
-					}}
-				>
-					<Menu class="text-black" />
-				</Button>
-				<MainNav />
-			</div>
-
-			<div class="flex items-center justify-center sm:hidden">
-				{#if navModule.isProductListingPage}
-					<div class="flex items-center gap-2">
-						<Button variant="ghost" size="icon" aria-label="Go back" onclick={navModule.goBack}>
-							<ChevronLeft class="h-6 w-6 font-bold" />
-							<span class="sr-only">Go back</span>
-						</Button>
-
-						<div class="flex flex-col items-start">
-							{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
-								<p class="text-base font-semibold capitalize">
-									{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
-								</p>
-							{:else}
-								<p class="text-base font-semibold">Products</p>
-							{/if}
-
-							<p class="text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
-						</div>
-					</div>
-				{:else}
+		</div>
+		<!-- One fixed height: the row no longer slims on scroll, because animating height re-lays-out
+		     the page on every scroll frame. -->
+		<div class="ed-row page-width flex h-14 items-center justify-between bg-background">
+			<div class="hidden items-center justify-center gap-3 sm:flex">
+				<!-- `lg:hidden`, not `md:hidden`: MainNav only reveals its inline links at `lg`, so
+				     hiding this button at `md` left 768-1023px with no way to reach any category —
+				     no menu button, no links, and the category row below is plugin-gated. The two
+				     breakpoints now hand over to each other. -->
+				{#if menuShown}
 					<Button
 						variant="ghost"
 						size="icon"
-						aria-label="Sidebar"
-						class="md:hidden"
+						aria-label="Menu"
+						aria-expanded={navModule.openSidebar}
+						aria-controls="main-menu-drawer"
+						class="-ml-3 md:-ml-2 lg:hidden [&_svg]:size-5"
 						onclick={() => {
 							navModule.openSidebar = true
 						}}
 					>
-						<Menu class="text-black" />
+						<Menu class="text-foreground" />
 					</Button>
-					<MainNav />
 				{/if}
+				<MainNav menu={menuShown} />
 			</div>
 
-			{#if navModule.megaMenuPluginActive}
-				<div class="hidden md:block">
-					<MegaMenu />
-				</div>
+			<!-- Below `sm` the header keeps the same shape on every route. It used to swap itself for a
+			     back chevron plus the page title on listing routes, which left a phone shopper
+			     arriving from an ad or a shared link with no menu, no brand link and no search, and
+			     the one control there called history.back() — on a fresh tab that exits to
+			     about:blank. The listing already prints its own title and count in the page body. -->
+			<!-- The edge controls are 44px targets around 20px glyphs, so each is pulled out by its own
+			     padding (here and on the actions' row): the glyphs line up with the page's content edges,
+			     and every header icon is the same 20px (the Button's own default is 16px). -->
+			<div class="flex items-center justify-center gap-1 sm:hidden">
+				{#if menuShown}
+					<Button
+						variant="ghost"
+						size="icon"
+						aria-label="Menu"
+						aria-expanded={navModule.openSidebar}
+						aria-controls="main-menu-drawer"
+						class="-ml-3 [&_svg]:size-5"
+						onclick={() => {
+							navModule.openSidebar = true
+						}}
+					>
+						<Menu class="text-foreground" />
+					</Button>
+				{/if}
+				<MainNav menu={menuShown} />
+			</div>
+
+			{#if navModule.megaMenuPluginActive && menuShown}
+				<nav aria-label="Main navigation" class="hidden md:block">
+					<MegaMenu slim={isScrolled} />
+				</nav>
 			{/if}
-			<div class="flex items-center gap-2 sm:gap-2">
+			<!-- Touching 44px targets, so the three icons sit close, 24px apart, as on the big Indian
+			     shopping apps, without shrinking what a thumb has to hit. -->
+			<div class="-mr-3 flex items-center gap-0 md:-mr-2 md:gap-1">
 				<MsSearch />
 
 				{#if wishlistPlugin?.active}
-					<div class="relative hidden sm:block" role="navigation">
+					<!-- No `role="navigation"` here: it wrapped a single link, so assistive tech
+					     announced a navigation landmark containing one item. The wrapper stays only
+					     because the count badge is positioned against it. -->
+					<div class="relative hidden sm:block">
 						<a
 							href="/my/wishlist"
-							class="flex items-center justify-center rounded-full px-2 text-gray-700 transition-colors hover:text-black"
+							class="ed-action flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground max-md:h-11 max-md:w-11"
 							aria-label="Wishlist"
 						>
 							<Heart class="h-5 w-5" />
 							{#if wishlistState?.count > 0}
 								<span
-									class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-primary-foreground"
+									class="absolute -right-0.5 top-0.5 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold leading-none text-primary-foreground"
 								>
 									{wishlistState.count}
 								</span>
@@ -214,12 +302,16 @@
 					</div>
 				{/if}
 
-				<div class="flex h-full items-center px-2 font-sans">
+				<div class="flex h-full items-center font-sans">
 					{#if userState?.user?.role}
 						<ProfileDropdown onSignOut={navModule.handleSignOut} />
 					{:else}
+						<!-- The glyph is 20px, so the target has to come from the box around it: 44px on
+						     phones, the compact 36px from md up, matching the other header actions. -->
 						<AuthButton aria-label="Login" type="login">
-							<div class="flex items-center justify-center text-gray-700 transition-colors hover:text-black">
+							<div
+								class="ed-action flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground max-md:h-11 max-md:w-11"
+							>
 								<UserCircle class="h-5 w-5" />
 							</div>
 						</AuthButton>
@@ -232,39 +324,48 @@
 
 <!-- Sidebar -->
 {#if navModule.openSidebar}
-	<aside class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent font-sans">
+	<!-- A real dialog. This was a bare <aside>, which is also why it is a <div> now: an aside is a complementary landmark, not a modal. Focus stayed on the trigger, focus stayed on the trigger, the first tab presses
+	     walked the header behind it, Escape did nothing, the page scrolled underneath and closing
+	     dropped focus to <body>. On a phone this is the only navigation there is. `use:dialog`
+	     moves focus in, traps Tab, closes on Escape and restores focus to the trigger. -->
+	<div
+		id="main-menu-drawer"
+		class:ed={activeThemeName === 'default'}
+		class="fixed inset-0 z-drawer flex overflow-hidden bg-transparent font-sans"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="main-menu-drawer-title"
+		tabindex="-1"
+		use:dialog={() => (navModule.openSidebar = false)}
+	>
+		<!-- The scrim is decoration: a click target, not a control. It used to be
+		     `role="button" tabindex="0"`, so assistive tech announced a full-viewport button ahead
+		     of the menu and it took a tab stop. The dialog's own Escape handler is the keyboard
+		     route out. -->
 		<div
-			role="button"
-			tabindex="0"
-			aria-label="Close sidebar"
-			in:fade={{ duration: 300 }}
-			out:fade={{ duration: 300 }}
-			class="backdrop-blur-xs absolute inset-0 bg-black/40"
+			aria-hidden="true"
+			in:fade
+			out:fade
+			class="absolute inset-0 bg-black/40 backdrop-blur-xs"
 			onclick={() => {
 				navModule.openSidebar = false
 			}}
-			onkeydown={(e) => {
-				if (e.key === 'Enter' || e.key === ' ') {
-					navModule.openSidebar = false
-				}
-			}}
-		>
-			<span class="sr-only">Close sidebar</span>
-		</div>
+		></div>
 		<div
-			in:fly={{ x: -320, duration: 300, easing: cubicOut }}
-			out:fly={{ x: -320, duration: 300, easing: cubicOut }}
-			class="relative z-[60] flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-gray-100 bg-white text-foreground shadow-2xl"
+			in:drawer={{ edge: 'left' }}
+			out:drawer={{ edge: 'left' }}
+			class="ed-drawer relative z-10 flex h-full w-full max-w-[300px] flex-col overflow-hidden border-r border-border bg-background text-foreground shadow-z-10"
 		>
+			<h2 id="main-menu-drawer-title" class="sr-only">Main menu</h2>
 			<!-- Header -->
-			<div class="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+			<div class="ed-drawer-head flex items-center justify-between border-b border-border px-5 py-4">
 				<a href="/" class="flex items-center gap-2" onclick={() => (navModule.openSidebar = false)}>
-					{#if activeThemeName === 'noor'}
-						<img src="/noor/logo.png" class="h-8 object-contain" alt="Noor" />
-					{:else if page?.data?.store?.logo}
-						<img src={page?.data?.store?.logo} class="h-8 object-contain" alt={page?.data?.store?.name || 'Logo'} />
+					{#if page?.data?.store?.logo}
+						<!-- Through the CDN: store logos are uploaded at full resolution and this renders
+					     32px tall. Served raw it can be the heaviest above-the-fold asset on a store. -->
+						<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} width="128" height="32" class="h-8 w-auto object-contain" alt={page?.data?.store?.name || 'Logo'} />
 					{:else}
-						<span class="text-base font-black uppercase tracking-wider text-black">
+						<span class="text-base font-semibold text-foreground">
 							{page?.data?.store?.name || 'Svelte Commerce'}
 						</span>
 					{/if}
@@ -273,7 +374,7 @@
 					variant="ghost"
 					size="icon"
 					aria-label="Close sidebar"
-					class="h-8 w-8 rounded-full bg-gray-50 text-foreground hover:bg-gray-100"
+					class="h-8 w-8 rounded-full bg-muted text-foreground hover:bg-muted/70"
 					onclick={() => (navModule.openSidebar = false)}
 				>
 					<X class="h-4 w-4" />
@@ -281,7 +382,7 @@
 			</div>
 
 			<!-- User Profile Banner -->
-			<div class="border-b border-gray-100 bg-gray-50/50 px-5 py-4">
+			<div class="ed-drawer-user border-b border-border bg-muted/50 px-5 py-4">
 				{#if userState?.user?.role}
 					<div class="flex items-center gap-3">
 						<div class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary">
@@ -292,20 +393,20 @@
 							{/if}
 						</div>
 						<div class="overflow-hidden">
-							<p class="truncate text-xs font-bold text-gray-900">
-								{userState.user?.firstName || userState.user?.name || 'My Account'}
+							<p class="truncate text-xs font-bold text-foreground">
+								{userState.user?.firstName || userState.user?.name || 'My account'}
 							</p>
-							<p class="truncate text-[10px] font-medium text-gray-500">
+							<p class="truncate text-[10px] font-medium text-muted-foreground">
 								{userState.user?.email || ''}
 							</p>
 						</div>
 					</div>
 				{:else}
 					<div class="flex flex-col gap-1.5">
-						<span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Welcome Guest</span>
+						<span class="ed-drawer-label text-[10px] font-bold text-muted-foreground">Welcome guest</span>
 						<AuthButton aria-label="Login" type="login">
 							<div
-								class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all duration-200 hover:bg-primary/95"
+								class="ed-drawer-login flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all duration-200 hover:bg-primary/95"
 							>
 								<UserCircle class="h-4 w-4" />
 								<span>Login / Register</span>
@@ -319,136 +420,27 @@
 			<div class="flex-1 space-y-6 overflow-y-auto px-5 py-4">
 				<!-- Shop Section -->
 				<div>
-					<span class="mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">Shop & Explore</span>
+					<span class="ed-drawer-label mb-3 block text-[10px] font-bold text-muted-foreground">Shop & explore</span>
 					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 						<li>
 							<a
 								href="/"
-								class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+								class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 								onclick={() => (navModule.openSidebar = false)}
 							>
-								<Home class="h-4 w-4 text-gray-400" />
+								<Home class="h-4 w-4 text-muted-foreground" />
 								<span>Home</span>
 							</a>
 						</li>
 
-						<!-- MegaMenu Categories -->
-						{#if navModule.megaMenuPluginActive && navModule.menuItems?.length}
-							{#each navModule.menuItems as m, mx}
-								<li>
-									{#if m?.items?.length}
-										<div
-											class="flex w-full items-center justify-between rounded-md px-3 py-1 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-										>
-											<a
-												href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
-												aria-label="Click to visit category related products"
-												class="flex flex-1 items-center gap-3 py-1"
-												onclick={() => (navModule.openSidebar = false)}
-											>
-												<LayoutGrid class="h-4 w-4 text-gray-400" />
-												<span>{m.name}</span>
-											</a>
-
-											<Button
-												variant="ghost"
-												size="icon"
-												aria-label="Toggle subcategory"
-												class="h-7 w-7 rounded-full p-0 hover:bg-gray-200/50"
-												onclick={() => navModule.handleToggleSubMenu(m, mx)}
-											>
-												<ChevronDown
-													class="h-3.5 w-3.5 shrink-0 transition-transform duration-300
-													{navModule.showSubCategory[mx] ? '-rotate-180' : ''}"
-												/>
-											</Button>
-										</div>
-									{:else}
-										<a
-											href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
-											aria-label="Click to visit category related products"
-											class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-											onclick={() => (navModule.openSidebar = false)}
-										>
-											<LayoutGrid class="h-4 w-4 text-gray-400" />
-											<span>{m.name}</span>
-										</a>
-									{/if}
-
-									<!-- Category Level 2 -->
-									{#if navModule.showSubCategory[mx]}
-										<ul class="ml-6 mt-1 list-none space-y-1 border-l border-gray-100 p-0 pl-3">
-											{#each m.items as c, cx}
-												<li>
-													{#if c.items?.length}
-														<div
-															class="flex w-full items-center justify-between rounded-md px-2 py-1 text-[11px] font-semibold text-gray-500 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-														>
-															<a
-																href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
-																class="flex-1 py-1"
-																onclick={() => (navModule.openSidebar = false)}
-															>
-																{c.name}
-															</a>
-
-															<Button
-																variant="ghost"
-																size="icon"
-																aria-label="Toggle subcategory"
-																class="h-6 w-6 rounded-full p-0 hover:bg-gray-200/50"
-																onclick={() => navModule.handleToggleSubMenu2(c, cx)}
-															>
-																<ChevronDown
-																	class="h-3 w-3 shrink-0 transition-transform duration-300
-																	{navModule.showSubCategory2[cx] ? '-rotate-180' : ''}"
-																/>
-															</Button>
-														</div>
-													{:else}
-														<a
-															href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
-															aria-label="Click to visit category related products page"
-															class="flex w-full items-center rounded-md px-2 py-1.5 text-[11px] font-semibold text-gray-500 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-															onclick={() => (navModule.openSidebar = false)}
-														>
-															{c.name}
-														</a>
-													{/if}
-
-													<!-- Category Level 3 -->
-													{#if navModule.showSubCategory2[cx]}
-														<ul class="ml-4 mt-1 list-none space-y-1 border-l border-gray-100 p-0 pl-3">
-															{#each c.items as cc}
-																<li>
-																	<a
-																		href={cc.link ? cc.link : cc.slug ? '/' + cc.slug : '/products'}
-																		aria-label="Click to visit category related products page"
-																		class="flex w-full items-center rounded-md px-2 py-1 text-[10px] font-semibold text-gray-400 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-																		onclick={() => (navModule.openSidebar = false)}
-																	>
-																		{cc.name}
-																	</a>
-																</li>
-															{/each}
-														</ul>
-													{/if}
-												</li>
-											{/each}
-										</ul>
-									{/if}
-								</li>
-							{/each}
-						{/if}
-
 						<li>
 							<a
 								href="/products"
-								class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+								class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 								onclick={() => (navModule.openSidebar = false)}
 							>
-								<Tag class="h-4 w-4 text-gray-400" />
-								<span>All Products</span>
+								<Tag class="h-4 w-4 text-muted-foreground" />
+								<span>All products</span>
 							</a>
 						</li>
 					</ul>
@@ -457,18 +449,55 @@
 				<!-- NavMenu Section -->
 				{#if navModule.navMenu?.length}
 					<div>
-						<span class="mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">Quick Links</span>
+						<span class="ed-drawer-label mb-3 block text-[10px] font-bold text-muted-foreground">Quick links</span>
 						<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
-							{#each navModule.navMenu as menuItem}
+							{#each navModule.navMenu as menuItem, i}
 								<li>
-									<a
-										href={menuItem?.link}
-										class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
-										onclick={() => (navModule.openSidebar = false)}
-									>
-										<Layers class="h-4 w-4 text-gray-400" />
-										<span>{menuItem.name}</span>
-									</a>
+									{#if menuItem?.items?.length}
+										<div class="flex w-full items-center justify-between">
+											<a
+												href={menuItem?.link || (menuItem?.slug ? '/' + menuItem.slug : '/products')}
+												class="ed-drawer-link flex flex-1 items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
+												onclick={() => (navModule.openSidebar = false)}
+											>
+												<Layers class="h-4 w-4 text-muted-foreground" />
+												<span>{menuItem.name}</span>
+											</a>
+											<button
+												type="button"
+												class="ed-drawer-toggle grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted"
+												aria-label="Toggle {menuItem.name}"
+												aria-expanded={mobileNestOpen[i] ? 'true' : 'false'}
+												onclick={() => toggleMobileNest(i)}
+											>
+												<ChevronDown class="h-4 w-4 transition-transform duration-panel ease-standard {mobileNestOpen[i] ? '-rotate-180' : ''}" />
+											</button>
+										</div>
+										{#if mobileNestOpen[i]}
+											<ul class="m-0 ml-6 mt-1 flex list-none flex-col gap-1 border-l border-border p-0 pl-3">
+												{#each menuItem.items as child}
+													<li>
+														<a
+															href={child?.link || (child?.slug ? '/' + child.slug : '/products')}
+															class="ed-drawer-link block rounded-md px-3 py-1.5 text-[11px] font-medium text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
+															onclick={() => (navModule.openSidebar = false)}
+														>
+															{child.name}
+														</a>
+													</li>
+												{/each}
+											</ul>
+										{/if}
+									{:else}
+										<a
+											href={menuItem?.link}
+											class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
+											onclick={() => (navModule.openSidebar = false)}
+										>
+											<Layers class="h-4 w-4 text-muted-foreground" />
+											<span>{menuItem.name}</span>
+										</a>
+									{/if}
 								</li>
 							{/each}
 						</ul>
@@ -477,26 +506,26 @@
 
 				<!-- Account Section -->
 				<div>
-					<span class="mb-3 block text-[10px] font-bold uppercase tracking-wider text-gray-400">My Account</span>
+					<span class="ed-drawer-label mb-3 block text-[10px] font-bold text-muted-foreground">My account</span>
 					<ul class="m-0 flex w-full list-none flex-col gap-1.5 p-0 text-sm">
 						{#if menuItemsUser?.length}
 							{#each menuItemsUser as m}
 								<li>
 									<a
 										href={m.url}
-										class="flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-black"
+										class="ed-drawer-link flex items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:text-primary"
 										onclick={() => (navModule.openSidebar = false)}
 									>
 										{#if m.title === 'Profile'}
-											<UserCircle class="h-4 w-4 text-gray-400" />
+											<UserCircle class="h-4 w-4 text-muted-foreground" />
 										{:else if m.title === 'Orders'}
-											<Package class="h-4 w-4 text-gray-400" />
+											<Package class="h-4 w-4 text-muted-foreground" />
 										{:else if m.title === 'Addresses'}
-											<MapPin class="h-4 w-4 text-gray-400" />
-										{:else if m.title === 'Change Password'}
-											<KeyRound class="h-4 w-4 text-gray-400" />
+											<MapPin class="h-4 w-4 text-muted-foreground" />
+										{:else if m.title === 'Change password'}
+											<KeyRound class="h-4 w-4 text-muted-foreground" />
 										{:else if m.title === 'Wishlist'}
-											<Heart class="h-4 w-4 text-gray-400" />
+											<Heart class="h-4 w-4 text-muted-foreground" />
 										{/if}
 										<span>{m.title}</span>
 									</a>
@@ -507,14 +536,14 @@
 						{#if userState?.user?.role}
 							<li>
 								<button
-									class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-red-600 transition-all duration-200 hover:bg-red-50 hover:text-red-700"
+									class="ed-drawer-signout flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-destructive transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
 									onclick={() => {
 										navModule.openSidebar = false
 										navModule.handleSignOut()
 									}}
 								>
-									<LogOut class="h-4 w-4 text-red-400" />
-									<span>Sign Out</span>
+									<LogOut class="h-4 w-4 text-destructive/70" />
+									<span>Sign out</span>
 								</button>
 							</li>
 						{/if}
@@ -524,99 +553,279 @@
 
 			<!-- Footer Contact Box -->
 			{#if page?.data?.store?.businessEmail || page?.data?.store?.businessPhone}
-				<div class="border-t border-gray-100 bg-gray-50/50 p-5">
-					<span class="mb-2 block text-[9px] font-bold uppercase tracking-wider text-gray-400">Support Contact</span>
+				<div class="ed-drawer-foot border-t border-border bg-muted/50 p-5">
+					<span class="ed-drawer-label mb-2 block text-[9px] font-bold text-muted-foreground">Support contact</span>
 					<div class="flex flex-col gap-2">
 						{#if page?.data?.store?.businessEmail}
 							<a
 								href="mailto:{page?.data?.store?.businessEmail}"
 								aria-label="Email us"
-								class="flex items-center gap-2.5 text-[11px] font-medium text-gray-600 transition-colors duration-200 hover:text-black"
+								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
 							>
-								<Mail class="h-3.5 w-3.5 text-gray-400" />
+								<Mail class="h-3.5 w-3.5 text-muted-foreground" />
 								<span class="truncate">{page?.data?.store?.businessEmail}</span>
 							</a>
 						{/if}
 
 						{#if page?.data?.store?.businessPhone}
 							<a
-								href="tel:+{page?.data?.store?.businessPhone}"
+								href="tel:{storePhone}"
 								aria-label="Call us"
-								class="flex items-center gap-2.5 text-[11px] font-medium text-gray-600 transition-colors duration-200 hover:text-black"
+								class="ed-contact flex items-center gap-2.5 text-[11px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
 							>
-								<Phone class="h-3.5 w-3.5 text-gray-400" />
-								<span>+{page?.data?.store?.businessPhone}</span>
+								<Phone class="h-3.5 w-3.5 text-muted-foreground" />
+								<span>{storePhone}</span>
 							</a>
 						{/if}
 					</div>
 				</div>
 			{/if}
 		</div>
-	</aside>
+	</div>
 {/if}
 
 <AuthModal bind:show={navModule.showAuthModal} />
 
 <style>
-	.minimum-width-rem {
-		min-width: 360px;
+	/* ============================================================
+	   Refined Editorial header + drawer — default theme only.
+	   `.ed` is added via class:ed only when activeThemeName === 'default',
+	   so wine/organic keep their existing look untouched.
+	   ============================================================ */
+	header.ed {
+		background: var(--ed-surface);
+		box-shadow: none;
+		border-bottom: 1px solid var(--ed-line);
+		font-family: var(--ed-body);
+		color: var(--ed-ink);
 	}
 
-	@media screen and (max-width: 350px) {
-		.minimum-width-rem {
-			min-width: 300px;
+	.ed .ed-row {
+		background: transparent;
+	}
+
+	/* The strip above the header, announcement or hello bar: one 30px line at every width. Text too
+	   long for a phone ends in an ellipsis instead of wrapping the bar to three lines, and a link
+	   fills the bar, so the whole strip is a full-width 30px target. In rem, so it grows with the
+	   shopper's own text size. */
+	.announce-strip {
+		height: 1.875rem;
+		overflow: hidden;
+	}
+
+	.announce-line,
+	.sliding-list li {
+		display: block;
+		height: 100%;
+		padding-inline: 16px;
+		line-height: 1.875rem;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* A hello-bar message is rich text: its paragraphs run inline so the ellipsis applies to them. */
+	.sliding-list li :global(:is(p, div)) {
+		display: inline;
+	}
+
+	.sliding-list li :global(br) {
+		display: none;
+	}
+
+	.ed .ed-announce {
+		font-size: var(--type-dense);
+		font-weight: 500;
+	}
+
+	a.announce-line:active {
+		opacity: 0.6;
+	}
+
+	/* Inset: a ring drawn outside the bar would be cut off at the top of the page. The bar's own ink,
+	   because on the other themes --ring is the bar's colour; the default theme keeps its focus token. */
+	a.announce-line:focus-visible {
+		box-shadow: inset 0 0 0 2px hsl(var(--primary-foreground));
+	}
+
+	.ed a.announce-line:focus-visible {
+		box-shadow: inset 0 0 0 2px hsl(var(--ring));
+	}
+
+	/* Header action icons (wishlist, account) — ink, accent on hover */
+	.ed .ed-action {
+		color: var(--ed-ink);
+		transition:
+			color var(--motion-fast) var(--motion-ease),
+			transform var(--motion-fast) var(--motion-ease);
+	}
+
+	.ed .ed-action:active {
+		transform: scale(0.92);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ed .ed-action:active {
+			transform: none;
 		}
+	}
+
+	.ed .ed-action:hover {
+		color: hsl(var(--primary-ink));
+	}
+
+	/* The mobile product-listing header rules that lived here are gone with the markup they
+	   dressed: the listing route now keeps the ordinary header instead of swapping it for a back
+	   chevron and a repeated page title. */
+
+	/* ---------- Mobile drawer ---------- */
+	.ed .ed-drawer {
+		background: var(--ed-surface);
+		border-right-color: var(--ed-line);
+		color: var(--ed-ink);
+	}
+
+	.ed .ed-drawer-head,
+	.ed .ed-drawer-user,
+	.ed .ed-drawer-foot {
+		border-color: var(--ed-line);
+	}
+
+	.ed .ed-drawer-user,
+	.ed .ed-drawer-foot {
+		background: var(--ed-canvas);
+	}
+
+	.ed .ed-drawer-label {
+		font-family: var(--ed-body);
+		color: var(--ed-soft);
+		font-weight: 600;
+		/* 12px, the type scale's floor; these were 9-10px. */
+		font-size: var(--type-label);
+	}
+	/* The menu is a phone's only navigation: 14px links, each a 44px target (they were 12px in a
+	   32px row, and 11px for a category's own links). */
+	.ed :is(.ed-drawer-link, .ed-drawer-signout, .ed-drawer-login) {
+		min-height: 44px;
+		font-size: var(--type-ui);
+	}
+	.ed :is(.ed-drawer-link, .ed-drawer-signout) {
+		display: flex;
+		align-items: center;
+		font-weight: 500;
+	}
+	.ed .ed-drawer-toggle {
+		width: 44px;
+		height: 44px;
+	}
+	.ed .ed-drawer-user p {
+		font-size: var(--type-label);
+	}
+
+	.ed .ed-drawer-link {
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+		border-radius: var(--ed-radius);
+		transition:
+			background var(--motion-fast) var(--motion-ease),
+			color var(--motion-fast) var(--motion-ease);
+	}
+
+	.ed .ed-drawer-link:hover {
+		background: var(--ed-canvas);
+		color: hsl(var(--primary-ink));
+	}
+
+	.ed .ed-drawer-link :global(svg) {
+		color: var(--ed-soft);
+		transition: color var(--motion-fast) var(--motion-ease);
+	}
+
+	.ed .ed-drawer-link:hover :global(svg) {
+		color: hsl(var(--primary-ink));
+	}
+
+	.ed .ed-contact {
+		min-height: 44px;
+		color: var(--ed-soft);
+		font-size: var(--type-label);
+		transition: color var(--motion-fast) var(--motion-ease);
+	}
+
+	.ed .ed-contact:hover {
+		color: hsl(var(--primary-ink));
+	}
+
+	.ed .ed-contact :global(svg) {
+		color: var(--ed-soft);
 	}
 
 	.sliding-list {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		height: 1.8rem;
-		overflow: hidden;
+		height: 100%;
 		position: relative;
 	}
 
+	/* Hidden messages are also visibility: hidden. They share the bar's box, so an invisible one on
+	   top would otherwise take the clicks and the tab stops of the one being shown. */
 	.sliding-list li {
-		height: 1.8rem;
-		line-height: 1.8rem;
 		position: absolute;
+		top: 0;
 		width: 100%;
 		opacity: 0;
+		visibility: hidden;
 		animation: slideUp var(--anim-duration) linear infinite;
 		animation-delay: calc(var(--index) * (var(--anim-duration) / var(--item-count)));
 	}
 
 	.sliding-list li:first-child {
 		opacity: 1;
-		top: 0;
-	}
-
-	@media screen and (max-width: 300px) {
-		.sliding-list {
-			height: 1rem;
-		}
-		.sliding-list li {
-			height: 1rem;
-			line-height: 1rem;
-		}
+		visibility: visible;
 	}
 
 	@keyframes slideUp {
 		0%,
 		3% {
-			top: 100%;
+			transform: translateY(100%);
 			opacity: 0;
+			visibility: hidden;
 		}
 		5%,
 		33% {
-			top: 0;
+			transform: none;
 			opacity: 1;
+			visibility: visible;
 		}
 		36%,
 		100% {
-			top: -100%;
+			transform: translateY(-100%);
 			opacity: 0;
+			visibility: hidden;
+		}
+	}
+
+	/* Reduced motion: the messages swap in place with the same fade, without sliding. */
+	@keyframes fadeSwap {
+		0%,
+		3%,
+		36%,
+		100% {
+			opacity: 0;
+			visibility: hidden;
+		}
+		5%,
+		33% {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.sliding-list li {
+			animation-name: fadeSwap;
 		}
 	}
 </style>

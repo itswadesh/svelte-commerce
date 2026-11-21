@@ -4,12 +4,19 @@
 	import { getImageCDNUrl } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
-	import { fade } from 'svelte/transition'
+	import { fade, fly, motionMs } from '$lib/motion'
 	import { onMount } from 'svelte'
+	import { Portal } from 'bits-ui'
+	import { draftMenuItems } from '$lib/composer/chrome-draft.svelte.js'
+
+	// Slim variant for the scrolled header: drops the menu list's vertical padding.
+	// (jws also dropped the list's margin and border here; this list carries neither.)
+	let { slim = false } = $props()
 
 	// Admin-configured header menu takes priority over the raw category megamenu.
 	// Menu-builder nodes keep their children under `items`; category nodes use `children`.
-	const headerMenuItems = $derived(page.data.store?.menu?.find((x: any) => x.menuId === 'header')?.items)
+	// In the theme editor, the menu a header draft names stands in for it (D131).
+	const headerMenuItems = $derived(draftMenuItems('header') ?? page.data.store?.menu?.find((x: any) => x.menuId === 'header')?.items)
 
 	// The renderer doesn't expose loading state, so settle the same megamenu promise here
 	// to tell "still loading" (skeleton) apart from "loaded but empty" (empty nav).
@@ -32,28 +39,81 @@
 		if (page?.data?.store?.plugins?.imageCdn?.active) return getImageCDNUrl(x, width)
 		return x
 	}
+
+	// Closing on mouse-leave is delayed, not immediate. The panel is centred under the whole row
+	// rather than under its own trigger, so the pointer usually travels diagonally to reach it and
+	// briefly leaves the <li>; closing on the first leave event would snatch the menu away
+	// mid-movement. Re-entering within the grace period cancels the close.
+	const CLOSE_GRACE_MS = 180
+	let closeTimer: ReturnType<typeof setTimeout> | null = null
+
+	function cancelPendingClose() {
+		if (closeTimer) {
+			clearTimeout(closeTimer)
+			closeTimer = null
+		}
+	}
+
+	function scheduleClose(close: () => void) {
+		cancelPendingClose()
+		closeTimer = setTimeout(() => {
+			closeTimer = null
+			close()
+		}, CLOSE_GRACE_MS)
+	}
 </script>
 
 <MegaMenuRenderer>
-	{#snippet content({ headerItems: menuItems, toggleMenuItemChildren, selectedCategory, openChildMenu, closeChildMenu })}
-		{@const items = headerMenuItems ?? menuItems}
+	{#snippet content({ toggleMenuItemChildren, selectedCategory, openChildMenu, closeChildMenu })}
+		{@const items = headerMenuItems ?? []}
 		{#if items?.length}
 			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none">
 				{#each items as category, index}
+					<!-- onmousemove alone left the whole subcategory tree unreachable by keyboard (and by
+					     touch — mousemove doesn't fire on tap). focusin/focusout drive the same open/close
+					     for keyboard, Escape backs out; the panel's own :focus-within rule is in <style>. -->
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<!-- Escape is handled on the <li> on purpose: focus can be on any link inside the open
+					     panel, not just the trigger, and the panel is what needs closing. -->
 					<li
 						class="hoverable"
 						onmousemove={() => {
+							cancelPendingClose()
 							openChildMenu(category.name, index)
 						}}
 						onmouseleave={() => {
-							//closeChildMenu(index, true)
+							// Was commented out, so the panel only ever hid via CSS: aria-expanded stayed
+							// true, the links stayed in the tab order and the trigger kept its open styling
+							// long after the pointer had gone.
+							scheduleClose(() => closeChildMenu(index, true))
+						}}
+						onfocusin={() => {
+							cancelPendingClose()
+							openChildMenu(category.name, index)
+						}}
+						onfocusout={(e) => {
+							if (!e.currentTarget.contains(e.relatedTarget as Node | null)) closeChildMenu(index, true)
+						}}
+						onkeydown={(e) => {
+							if (e.key !== 'Escape') return
+							// Put focus back on the trigger before the panel unmounts. Closing while focus
+							// sat on a link inside it left document.activeElement on <body>, dropping a
+							// keyboard user out of the header entirely.
+							const trigger = e.currentTarget.querySelector('a')
+							cancelPendingClose()
+							closeChildMenu(index, true)
+							trigger?.focus()
 						}}
 					>
 						<a
+							aria-haspopup={childrenOf(category)?.length ? 'true' : undefined}
+							aria-expanded={childrenOf(category)?.length ? !!toggleMenuItemChildren[index] : undefined}
 							href={category.link || '/' + category.slug}
-							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap py-3 text-sm font-semibold uppercase  text-gray-900 transition-all duration-300 hover:text-gray-900 active:scale-95
-								{selectedCategory === category.name ? 'text-primary after:scale-x-100' : 'after:scale-x-0'}
-								after:ease-out-expo after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
+							class="ed-mm-link motion-underline flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap [--underline-offset:0px] {slim
+								? 'py-1.5'
+								: 'py-3'} text-sm font-semibold text-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95
+								{selectedCategory === category.name ? 'text-primary' : ''}"
+							data-current={selectedCategory === category.name}
 							style="font-family: var(--font-body);"
 							onclick={() => closeChildMenu(index, false)}
 						>
@@ -61,10 +121,11 @@
 
 							{#if childrenOf(category)?.length}
 								<svg
+									aria-hidden="true"
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"
 									fill="currentColor"
-									class="ease-out-expo h-3.5 w-3.5 shrink-0 transition-transform duration-300
+									class="h-3.5 w-3.5 shrink-0 transition-transform duration-panel ease-standard
             {selectedCategory === category.name ? '-rotate-180 transform' : ''}"
 								>
 									<path
@@ -77,16 +138,19 @@
 						</a>
 
 						{#if toggleMenuItemChildren[index] && childrenOf(category)?.length}
+							<!-- The panel mounts while it is already hovered, so its CSS transition never runs on open:
+							     the script one does. Closing keeps the CSS fade inside the grace period. -->
 							<div
-								class="mega-menu ease-out-expo absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-all duration-500"
+								in:fly={{ y: 4, duration: motionMs('fast') }}
+								class="ed-mm-panel mega-menu absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-border bg-card shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-[opacity,transform,visibility] duration-fast ease-standard"
 							>
 								<div class="flex">
-									<div class="grid max-h-[70vh] flex-1 grid-cols-4 gap-8 overflow-y-auto p-10 scrollbar-thin">
+									<div class="grid max-h-[70vh] flex-1 grid-cols-4 gap-x-8 gap-y-2 overflow-y-auto px-10 py-7 scrollbar-thin">
 										{#each sortByRank(childrenOf(category)) as c}
-											<div class="flex flex-col gap-5">
+											<div class="flex flex-col gap-2">
 												<a
 													href={c.link || '/' + c.slug}
-													class="flex items-center gap-2 text-sm font-semibold text-gray-900 transition-all hover:translate-x-1"
+													class="ed-mm-cat flex items-center gap-2 text-sm font-semibold text-foreground transition-all motion-safe:hover:translate-x-1"
 													onclick={() => closeChildMenu(index, false)}
 												>
 													{#if c?.thumbnail}
@@ -105,12 +169,12 @@
 												</a>
 
 												{#if childrenOf(c)}
-													<ul class="flex flex-col gap-2.5">
+													<ul class="flex flex-col gap-1.5">
 														{#each sortByRank(childrenOf(c)) as c1}
 															<li>
 																<a
 																	href={c1.link || '/' + c1.slug}
-																	class="flex items-center gap-2 text-[13px] font-medium text-gray-700 transition-all hover:translate-x-1 hover:text-primary"
+																	class="ed-mm-sub flex items-center gap-2 text-[13px] font-medium text-foreground transition-all hover:text-primary motion-safe:hover:translate-x-1"
 																	onclick={() => closeChildMenu(index, false)}
 																>
 																	{#if c1?.thumbnail}
@@ -146,11 +210,8 @@
 									{/if}
 								</div>
 
-								<div class="border-t border-gray-100 bg-gray-50 px-10 py-4">
-									<a
-										href={category.link || '/' + category.slug}
-										class="text-xs font-semibold text-muted-foreground transition-colors"
-									>
+								<div class="ed-mm-foot border-t border-border bg-muted px-10 py-4">
+									<a href={category.link || '/' + category.slug} class="ed-mm-viewall text-xs font-semibold text-muted-foreground transition-colors">
 										View all {category.name}
 									</a>
 								</div>
@@ -159,11 +220,39 @@
 					</li>
 				{/each}
 			</ul>
+			<!-- Backdrop. Deliberately a sibling of the <ul>, not a child of the hovered <li>, so it
+			     cannot keep the panel open. Without it a 90vw white panel dropped onto a live hero and a
+			     mis-aimed click hit a call to action instead of dismissing the menu.
+			     Portalled to <body> on purpose. Rendered here, inside the sticky header, its z-overlay was
+			     measured against the header's own children (the header is a stacking context), so it
+			     painted over the category triggers: hovering one opened the panel, the backdrop slid
+			     under the pointer, the trigger saw a mouseleave and closed it, the backdrop went, the
+			     trigger was under the pointer again — open, close, open, for as long as the pointer
+			     stayed. From <body>, z-overlay sits below the header's z-50: the whole header stays
+			     undimmed and clickable while the page recedes. -->
+			{#if selectedCategory}
+				<Portal>
+					<div
+						class="fixed inset-0 z-overlay bg-black/40"
+						aria-hidden="true"
+						transition:fade
+						onclick={() => {
+							cancelPendingClose()
+							// Close by the index that is actually open: closeChildMenu clears
+							// toggleMenuItemChildren[index], so a hardcoded 0 would blank the selected
+							// category while leaving another index's panel mounted.
+							toggleMenuItemChildren.forEach((isOpen, i) => {
+								if (isOpen) closeChildMenu(i, true)
+							})
+						}}
+					></div>
+				</Portal>
+			{/if}
 		{:else if headerMenuItems === undefined && !megamenuSettled}
 			<!-- Only while the category megamenu is still loading; a settled-but-empty menu renders nothing. -->
-			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none" transition:fade={{ duration: 100 }}>
+			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none" transition:fade>
 				{#each Array(6) as _}
-					<li class="py-3">
+					<li class={slim ? 'py-1.5' : 'py-3'}>
 						<Skeleton class="h-5 w-24 rounded-full" />
 					</li>
 				{/each}
@@ -173,14 +262,67 @@
 </MegaMenuRenderer>
 
 <style>
+	/* ---------- Refined Editorial header menu — default theme only ---------- */
+	:global([data-theme='default'] .ed-mm-link) {
+		color: var(--ed-soft);
+		font-weight: 600;
+		font-size: var(--type-label);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default'] .ed-mm-link:hover) {
+		color: var(--ed-ink);
+	}
+
+	:global([data-theme='default'] .ed-mm-panel) {
+		background: var(--ed-surface);
+		border-color: var(--ed-line);
+		border-radius: 0 0 var(--ed-radius) var(--ed-radius);
+		box-shadow: 0 24px 48px -24px rgba(27, 26, 23, 0.28);
+	}
+
+	:global([data-theme='default'] .ed-mm-cat) {
+		color: var(--ed-ink);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default'] .ed-mm-cat:hover) {
+		color: hsl(var(--primary-ink));
+	}
+
+	:global([data-theme='default'] .ed-mm-sub) {
+		color: var(--ed-soft);
+		font-family: var(--ed-body);
+	}
+
+	:global([data-theme='default'] .ed-mm-sub:hover) {
+		color: hsl(var(--primary-ink));
+	}
+
+	:global([data-theme='default'] .ed-mm-foot) {
+		background: var(--ed-canvas);
+		border-color: var(--ed-line);
+	}
+
+	:global([data-theme='default'] .ed-mm-viewall) {
+		color: var(--ed-soft);
+	}
+
+	:global([data-theme='default'] .ed-mm-viewall:hover) {
+		color: hsl(var(--primary-ink));
+	}
+
 	.mega-menu {
 		visibility: hidden;
 		opacity: 0;
-		transform: translate(-50%, 10px);
+		transform: translate(-50%, 4px);
 		z-index: 9999;
 	}
 
-	.hoverable:hover .mega-menu {
+	/* :focus-within as well as :hover — otherwise the panel that focusin renders stays
+	   visibility:hidden and the keyboard path is still dead. */
+	.hoverable:hover .mega-menu,
+	.hoverable:focus-within .mega-menu {
 		visibility: visible;
 		opacity: 1;
 		transform: translate(-50%, 0);
@@ -188,5 +330,12 @@
 
 	.hoverable {
 		position: static;
+	}
+
+	/* The panel still fades in, but no longer drops. */
+	@media (prefers-reduced-motion: reduce) {
+		.mega-menu {
+			transform: translate(-50%, 0);
+		}
 	}
 </style>

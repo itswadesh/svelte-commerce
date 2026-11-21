@@ -1,26 +1,124 @@
 <div align="center">
 <h2>Svelte Commerce</h2>
+<h3>The production-ready open-source headless commerce storefront</h3>
+
+**[Website](https://kitcommerce.store/svelte-commerce/)** ·
+**[Running in production](https://arialshop.com)** ·
+**[Backends](https://kitcommerce.store/svelte-commerce/backends/)** ·
+**[Themes](https://kitcommerce.store/svelte-commerce/themes/)** ·
+**[Docs](./docs/README.md)**
+
 </div>
 
 <div >
 
-**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with third-party payment gateways and analytics tools.**
+**Svelte Commerce is a production-ready open-source headless ecommerce storefront built with SvelteKit and TypeScript. It connects to commerce backends through APIs, so you can build fast, SEO-friendly storefronts independently of your ecommerce backend — Shopify, WooCommerce, Vendure, Saleor, Medusa and 21 more.**
 
 ## Backend support
 
-Svelte Commerce talks to any backend through a connector package. Switch backends by
-changing a single export in `kitcommerce.config.ts`:
+Svelte Commerce talks to any backend through a connector package. **No file in this repo names a
+connector.** Every service resolves through `$lib/core/services`, and which connector answers is
+decided by what `package.json` installs. Switching backends is two steps:
 
-```ts
-// pick exactly one
-export * as services from "@misiki/shopify-connector"
-// export * as services from "@misiki/litekart-connector"
-// export * as services from '@misiki/medusa-connector'
-// export * as services from '@misiki/vendure-connector'
-// export * as services from '@misiki/saleor-connector'
-// export * as services from '@misiki/commercetools-connector'
-// export * as services from '@misiki/woocommerce-connector'
+**1. Install the connector** in place of the stock one, so `npm i` — and any Docker build, which
+installs from `package.json` alone — resolves it:
+
+```sh
+npm uninstall @misiki/litekart-connector
+npm i @misiki/shopify-connector   # or vendure, medusa, saleor, ...
 ```
+
+**2. Set that backend's env** in `.env` — `PUBLIC_SHOPIFY_API_URL`, `PUBLIC_MEDUSA_API_URL`, the
+`PUBLIC_LITEKART_*` trio, and so on. The convention is `PUBLIC_<BACKEND>_API_URL`, with any extra
+credentials read from the same prefix, so a connector this repo has never heard of configures
+itself the same way. Per-backend guides are in [`docs/`](./docs/README.md).
+
+There is no third step, and nothing to uncomment. `vite.config.ts` resolves whichever
+`@misiki/*-connector` is installed and exposes it as `$connector`;
+`src/lib/core/connectors/active.ts` is the one module that wraps it, for every backend. Set
+`PUBLIC_CONNECTOR` to override that — to attach a connector this repo has never heard of
+(`PUBLIC_CONNECTOR='@my-co/custom-connector'`), or to choose when several are installed.
+
+`@misiki/kitcommerce-core` imports `@misiki/litekart-connector` by name — its peerDependency — so
+a shim in `vite.config.ts` redirects that specifier onto the connector you installed. It does
+nothing while Litekart is installed.
+
+## All 26 connectors — and a request to the people who build these platforms
+
+Each connector maps one platform's API onto a shared 43-service surface (`product`, `cart`,
+`checkout`, `order`, `auth`, `address`, …). Coverage below is **measured, not asserted**: a script
+traces which services actually reach the HTTP layer, following each connector's own request helpers.
+
+Every endpoint was written by reading the platform's **authoritative source** — the OpenAPI spec,
+the RAML, the router registration, or the controller code itself. We did not guess routes, and
+where a route could not be verified we left an explicit placeholder rather than ship a
+plausible-looking path that 404s in a merchant's store.
+
+**But none of these have been run against a live production instance.** That is the single biggest
+gap, and the one thing platform maintainers can fix that we cannot.
+
+| Platform | npm package | Coverage | Cart | Checkout | Order | Auth | Help wanted with |
+| :--- | :--- | :--- | :-: | :-: | :-: | :-: | :--- |
+| [Litekart](https://litekart.in) | `@misiki/litekart-connector` | **39/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [Vendure](https://www.vendure.io) | `@misiki/vendure-connector` | **39/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [Medusa](https://medusajs.com) | `@misiki/medusa-connector` | **31/43** | — | ✅ | ✅ | ⛔ | address, auth, cart, category, payment-method, product, search, user |
+| [Broadleaf Commerce](https://www.broadleafcommerce.com) | `@misiki/broadleaf-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [Saleor](https://saleor.io) | `@misiki/saleor-connector` | **28/43** | — | — | — | ⛔ | address, auth, cart, category, checkout, coupon, order, page, payment-method, search, user |
+| [Shopware](https://www.shopware.com) | `@misiki/shopware-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | coupon |
+| [Virto Commerce](https://virtocommerce.com) | `@misiki/virto-connector` | **28/43** | ✅ | ✅ | ✅ | ✅ | — |
+| [WooCommerce](https://woocommerce.com) | `@misiki/woocommerce-connector` | **27/43** | ✅ | ✅ | ✅ | ⛔ | auth, wishlist |
+| [Magento Open Source](https://business.adobe.com/products/commerce/magento/open-source.html) | `@misiki/magento-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | review, wishlist |
+| [Spree Commerce](https://spreecommerce.org) | `@misiki/spree-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | review |
+| [X-Cart](https://www.x-cart.com) | `@misiki/x-cart-connector` | **26/43** | ✅ | ✅ | ✅ | ✅ | vendor |
+| [EverShop](https://evershop.io) | `@misiki/evershop-connector` | **25/43** | ✅ | ✅ | ✅ | ✅ | review, vendor, wishlist |
+| [Spryker](https://spryker.com) | `@misiki/spryker-connector` | **25/43** | ✅ | ✅ | ✅ | ✅ | coupon |
+| [nopCommerce](https://www.nopcommerce.com) | `@misiki/nopcommerce-connector` | **24/43** | ✅ | ✅ | ✅ | ✅ | coupon, currency |
+| [PrestaShop](https://prestashop.com) | `@misiki/prestashop-connector` | **24/43** | ✅ | ✅ | ✅ | ⛔ | auth, payment-method, review, wishlist |
+| [Sylius](https://sylius.com) | `@misiki/sylius-connector` | **24/43** | ✅ | ✅ | ✅ | ✅ | page, vendor, wishlist |
+| [Swell](https://www.swell.is) | `@misiki/swell-connector` | **23/43** | ✅ | ✅ | ✅ | ✅ | review, state, vendor, wishlist |
+| [Bagisto](https://bagisto.com) | `@misiki/bagisto-connector` | **22/43** | ✅ | ✅ | ✅ | ✅ | coupon, page, payment-method, vendor |
+| [commercetools](https://commercetools.com) | `@misiki/commercetools-connector` | **21/43** | ✅ | ✅ | ✅ | ✅ | country, currency, page, vendor |
+| [OroCommerce](https://oroinc.com) | `@misiki/orocommerce-connector` | **21/43** | ✅ | ✅ | ✅ | ✅ | currency, review, vendor, wishlist |
+| [Sharetribe](https://www.sharetribe.com) | `@misiki/sharetribe-connector` | **21/43** | — | ✅ | ✅ | ✅ | address, cart, country, coupon, state, wishlist |
+| [CS-Cart](https://www.cs-cart.com) | `@misiki/cs-cart-connector` | **20/43** | ✅ | ✅ | ✅ | ⛔ | address, auth, country, coupon, currency, state, wishlist |
+| [Shuup](https://github.com/shuup/shuup) | `@misiki/shuup-connector` | **19/43** | ✅ | ✅ | ✅ | ✅ | country, coupon, page, review, state, wishlist |
+| [Shopify](https://www.shopify.com) | `@misiki/shopify-connector` | **16/27** | ✅ | ✅ | ✅ | ✅ | country, page, profile, review, vendor, wishlist |
+| [Django Oscar](https://github.com/django-oscar/django-oscar) | `@misiki/oscar-connector` | **15/43** | ✅ | ✅ | ✅ | ✅ | coupon, currency, page, payment-method, review, search, state, vendor, wishlist |
+| [OpenCart](https://www.opencart.com) | `@misiki/opencart-connector` | **9/43** | ✅ | ✅ | ✅ | ⛔ | address, auth, category, coupon, page, profile, search, user, vendor, wishlist |
+
+✅ wired · ⛔ throws `NotSupportedError` — the platform has no real endpoint, and a stub that
+mints a session for any password is an auth bypass, not a placeholder · — not yet wired
+
+**A low number is often the correct answer, not a to-do.** OpenCart core ships exactly ten API
+controllers — cart, coupon, currency, customer, login, order, payment, reward, shipping, voucher —
+and no product, category or search controller at all. Its 9/43 is the honest ceiling for that API.
+Services excluded from "help wanted" are Litekart-native concepts (`reels`, `deals`, `chat`,
+`gallery`, `popularity`, `banner`, …) that have no equivalent on any third-party platform.
+
+### 📣 How you can help
+
+If you build or maintain one of these platforms, in priority order:
+
+1. **A sandbox or demo instance we can point a storefront at.** Even short-lived. Worth more than
+   any code review — it turns "verified against the spec" into "verified against reality".
+2. **Ten minutes telling us our idioms are wrong.** We picked one way to do pagination, filtering,
+   sorting and session handling per platform. If it is not how you would do it, saying so saves us
+   a wrong assumption baked into every service.
+3. **Answers on the gaps above.** Most are "does this platform have X at all?" — instant for you,
+   guesswork for us.
+4. **A pointer to the right docs.** Three URLs we were given were dead (`spree.readthedocs.io`,
+   `api.sylius.com`, django-oscar-api's route page) and we fell back to reading source.
+
+Per-platform open questions are in **[CONNECTORS.md](./docs/CONNECTORS.md#per-platform-notes-and-what-wed-like-to-ask-you)** —
+e.g. does Shopware's Store API have standalone voucher lookup? Is REST planned for
+`Magento_Review`/`Magento_Wishlist`, which ship no `webapi.xml`? Is `listing → Product` the mapping
+Sharetribe would recommend?
+
+Open an issue or PR on the connector repo under [github.com/misiki-in](https://github.com/misiki-in),
+or start a [discussion](https://github.com/itswadesh/svelte-commerce/discussions/new/choose).
+We will credit you in the connector README.
+
+### Storefront capability matrix
 
 | Capability                    | Litekart | Shopify | Medusa | Vendure | Saleor | WooCommerce |
 | ----------------------------- | :------: | :-----: | :----: | :-----: | :----: | :---------: |
@@ -49,6 +147,11 @@ export * as services from "@misiki/shopify-connector"
 > and Saleor connectors cover the core commerce path — browse, product, cart, checkout,
 > order — and are actively being extended. PRs welcome.
 
+> **Maintainers of these platforms:** we would rather ask than guess. The fastest way to help is
+> a sandbox instance we can point a storefront at, or ten minutes telling us our endpoint idioms
+> are wrong. Specific open questions per platform are in
+> [CONNECTORS.md](./docs/CONNECTORS.md#per-platform-notes-and-what-wed-like-to-ask-you).
+
 ### Required backend settings
 
 Each backend needs a few settings changed before the storefront will work end to end.
@@ -56,8 +159,9 @@ Each backend needs a few settings changed before the storefront will work end to
 **Vendure**
 
 - `authOptions.requireVerification` → `false`
-- `isPhoneMandatory` → `false`
-- `isEmailMandatory` → `false`
+
+See [VENDURE.md](./docs/VENDURE.md) for the full Vendure setup guide (env, store identity,
+architecture, limitations, troubleshooting).
 
 **Saleor**
 
@@ -66,9 +170,13 @@ Each backend needs a few settings changed before the storefront will work end to
 - Allow unpaid orders in **order settings** → enabled
 - Allow unpaid orders in **channel settings** → enabled
 
+See [SALEOR.md](./docs/SALEOR.md) for the full Saleor setup guide.
+
 **Medusa**
 
 - Set a publishable API key and add your storefront origin to the Store CORS config.
+
+See [MEDUSA.md](./docs/MEDUSA.md) for the full Medusa setup guide.
 
 ### Demos
 
@@ -148,12 +256,6 @@ Reach out to me with queries!
 
 </div>
 <br/>
-<h2 class="text-center text-sm font-semibold text-gray-600">TRUSTED BY TEAMS AROUND THE WORLD</h2> 
-<p>
-<img hspace="10" alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
-<img hspace="10" alt="LRNR" src=".github/lrnr.svg" class="h-8 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
-</p>
-<br/>
 
 ## What is it?
 
@@ -161,45 +263,56 @@ Reach out to me with queries!
 - It is possible to connect with any eCommerce backend that provides an API.
 - We are working on adapters for Medusa, Shopify, and WooCommerce.
 
-## Features
-
-- 👨🏻‍💻 It's both SSR and SPA
-- 🚀 Superfast
-- 🔗 It is possible to connect with any eCommerce backend if the backend has a REST API
-- 🔓 Svelte Commerce is free and open source. Download and modify it the way you want
-- 🛒 Most of the essential features for eCommerce are already integrated
-- 💰 No need to make a big leap or invest a huge amount. Just take this open source project and attach it to your existing backend.
-
 ## Get Started
 
-```
+```sh
 git clone https://github.com/itswadesh/svelte-commerce.git
 cd svelte-commerce
-npm i
+cp .env.example .env
+npm install
 npm run dev
 ```
 
-That's all!
+`.env.example` points at the public Litekart demo API, so the storefront works straight away. Edit
+`.env` to point at your own backend, and see [Backend support](#backend-support) to switch connectors.
 
-Open http://localhost:3000 on Chrome. Your app should be live with awesome svelte-commerce up and running
+Open http://localhost:5173 — your storefront should be up and running.
+
+Other useful scripts:
+
+```sh
+npm run build     # production build
+npm run preview   # preview the production build locally
+npm start         # run the built app with the Node adapter
+npm run check     # sync connector types + svelte-check
+```
 
 ## Configuration
 
-There is 1 place to configure
+Two files: `kitcommerce.config.ts` and `.env`.
 
-1. `kitcommerce.config.ts`
-   This is used to define which service to use. Only 1 of the listed services can be active at a time. Valid values are:
-   - `export * as services from "@misiki/shopify-connector"`
-   - `export * as services from "@misiki/litekart-connector"`
-   - `export * as services from '@misiki/medusa-connector'`
-   - `export * as services from '@misiki/vendure-connector'`
-   - `export * as services from '@misiki/saleor-connector'`
-   - `export * as services from '@misiki/commercetools-connector'`
-   - `export * as services from '@misiki/woocommerce-connector'`
+1. **Backend and connector package** — the three steps in
+   [Backend support](#backend-support) above.
+2. **Store identity** — `kitcommerce.config.ts`'s default export holds overrides (name, logo,
+   favicon, currency, menus, plugins, cssVariables), merged over
+   `src/lib/core/connectors/default-store.json`. Leave it `{}` on Litekart: the API serves all of it.
+3. **Env** — copy `.env.example` to `.env`. Each backend's variables are listed in its
+   [platform guide](./docs/README.md).
+
+## Documentation
+
+Full docs live in [`docs/`](./docs/README.md), including a setup guide for every one of the 26
+supported backends:
+
+- [docs/README.md](./docs/README.md) — index of all 26 platform guides, with coverage and wiring status
+- [CONNECTORS.md](./docs/CONNECTORS.md) — the capability matrix and open questions for platform maintainers
+- Most complete: [LITEKART.md](./docs/LITEKART.md) · [VENDURE.md](./docs/VENDURE.md) · [MEDUSA.md](./docs/MEDUSA.md) · [SALEOR.md](./docs/SALEOR.md)
+- Also supported: [SHOPIFY.md](./docs/SHOPIFY.md) · [WOOCOMMERCE.md](./docs/WOOCOMMERCE.md) · [MAGENTO.md](./docs/MAGENTO.md) · [SHOPWARE.md](./docs/SHOPWARE.md) · [COMMERCETOOLS.md](./docs/COMMERCETOOLS.md) · [and 17 more](./docs/README.md#backends)
+- [CHANGELOG.md](./docs/CHANGELOG.md) — release history
 
 ## Deployment
 
-Click on the button to directly deploy to Netlify or Vercel. Zero configuration required.
+Click on the button to directly deploy to Netlify, Vercel or ZopDay. Zero configuration required.
 
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce" aria-label="Click to deploy into netlify">
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
@@ -207,14 +320,9 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN)
 
-The following environment variables are mandatory:
-
-```
-PUBLIC_LITEKART_DOMAIN=arialshop.com
-PUBLIC_LITEKART_API_URL=https://api.litekart.in
-```
-
-You can replace the env variable with your store domain
+<a href="https://zop.dev/zopday/app/deploy?image=ghcr.io/itswadesh/svelte-commerce:latest&amp;port=3000&amp;name=svelte-commerce" aria-label="Click to deploy into ZopDay">
+<img src="https://zop.dev/deploytozopday-inkhard.svg" alt="Deploy to ZopDay" height="32">
+</a>
 
 ### Docker
 

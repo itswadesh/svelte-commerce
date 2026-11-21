@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import LoginModal from './login-modal.svelte'
 	import SignupModal from './signup-modal.svelte'
 	import { onNavigate } from '$app/navigation'
@@ -9,6 +9,70 @@
 	let { show = $bindable() } = $props()
 
 	let type: AuthType = $state('login')
+	const modalHistoryKey = '__svelteCommerceAuthModal'
+	let ownsHistoryEntry = false
+	let scrollLock:
+		| {
+				scrollY: number
+				path: string
+				bodyOverflow: string
+				bodyPosition: string
+				bodyTop: string
+				bodyWidth: string
+				htmlOverflow: string
+		  }
+		| undefined
+
+	function lockPageScroll() {
+		if (typeof window === 'undefined' || scrollLock) return
+
+		const scrollY = window.scrollY
+		scrollLock = {
+			scrollY,
+			path: location.pathname,
+			bodyOverflow: document.body.style.overflow,
+			bodyPosition: document.body.style.position,
+			bodyTop: document.body.style.top,
+			bodyWidth: document.body.style.width,
+			htmlOverflow: document.documentElement.style.overflow
+		}
+
+		document.documentElement.style.overflow = 'hidden'
+		document.body.style.overflow = 'hidden'
+		document.body.style.position = 'fixed'
+		document.body.style.top = `-${scrollY}px`
+		document.body.style.width = '100%'
+	}
+
+	function unlockPageScroll() {
+		if (typeof window === 'undefined' || !scrollLock) return
+
+		const { scrollY, path, bodyOverflow, bodyPosition, bodyTop, bodyWidth, htmlOverflow } = scrollLock
+		document.documentElement.style.overflow = htmlOverflow
+		document.body.style.overflow = bodyOverflow
+		document.body.style.position = bodyPosition
+		document.body.style.top = bodyTop
+		document.body.style.width = bodyWidth
+		scrollLock = undefined
+		// Back where it was on the same page; at the top of a page the modal led to (signing up
+		// lands on its success page), whose own scroll to the top ran while the page was locked.
+		window.scrollTo(0, location.pathname === path ? scrollY : 0)
+	}
+
+	function removeAuthParamsFromCurrentUrl() {
+		const url = new URL(window.location.href)
+		for (const parameter of ['show_auth', 'login', 'signup', 'forgot-password']) {
+			url.searchParams.delete(parameter)
+		}
+		history.replaceState(history.state, '', url)
+	}
+
+	function handleBrowserBack() {
+		if (!show || !ownsHistoryEntry) return
+		ownsHistoryEntry = false
+		show = false
+		removeAuthParamsFromCurrentUrl()
+	}
 
 	const checkStateAndAct = () => {
 		const urlParams = new URLSearchParams(window?.location?.search)
@@ -39,17 +103,49 @@
 		checkStateAndAct()
 	})
 
+	onMount(() => {
+		window.addEventListener('popstate', handleBrowserBack)
+		return () => window.removeEventListener('popstate', handleBrowserBack)
+	})
+
+	$effect(() => {
+		if (typeof window === 'undefined') return
+
+		if (show && !ownsHistoryEntry) {
+			history.pushState({ ...history.state, [modalHistoryKey]: true }, '', window.location.href)
+			ownsHistoryEntry = true
+		} else if (!show && ownsHistoryEntry) {
+			const isCurrentModalEntry = history.state?.[modalHistoryKey] === true
+			ownsHistoryEntry = false
+			if (isCurrentModalEntry) history.back()
+		}
+	})
+
+	$effect(() => {
+		if (show) lockPageScroll()
+		else unlockPageScroll()
+	})
+
+	onDestroy(() => {
+		unlockPageScroll()
+		if (typeof window !== 'undefined' && ownsHistoryEntry && history.state?.[modalHistoryKey] === true) {
+			history.back()
+		}
+	})
+
 	onNavigate(() => {
 		checkStateAndAct()
 	})
 </script>
 
-<main>
+<!-- Not <main>: mounted on every page alongside each layout's real <main>,
+	 which is what axe reports as landmark-no-duplicate-main site-wide. -->
+<div>
 	{#if type === 'signup'}
-		<SignupModal bind:show />
+		<SignupModal bind:show manageHistory={false} />
 	{:else if type === 'login'}
-		<LoginModal bind:show />
+		<LoginModal bind:show manageHistory={false} />
 	{:else if type === 'forgot-password'}
-		<ForgotPasswordModal bind:show />
+		<ForgotPasswordModal bind:show manageHistory={false} />
 	{/if}
-</main>
+</div>

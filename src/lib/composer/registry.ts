@@ -1,0 +1,53 @@
+import type { Component } from 'svelte'
+import AnnouncementBar from './sections/AnnouncementBar.svelte'
+import Benefits from './sections/Benefits.svelte'
+import BentoGrid from './sections/BentoGrid.svelte'
+import CollectionList from './sections/CollectionList.svelte'
+import Countdown from './sections/Countdown.svelte'
+import Faq from './sections/Faq.svelte'
+import GoogleReviews from './sections/GoogleReviews.svelte'
+import Hero from './sections/Hero.svelte'
+import ImageWithText from './sections/ImageWithText.svelte'
+import LogoCloud from './sections/LogoCloud.svelte'
+import MultiColumn from './sections/MultiColumn.svelte'
+import Newsletter from './sections/Newsletter.svelte'
+import ProductGrid from './sections/ProductGrid.svelte'
+import RichText from './sections/RichText.svelte'
+import ScrollingText from './sections/ScrollingText.svelte'
+import ShopTheLook from './sections/ShopTheLook.svelte'
+import FittingRoom from './sections/FittingRoom.svelte'
+import Slideshow from './sections/Slideshow.svelte'
+import Spotlight from './sections/Spotlight.svelte'
+import Stats from './sections/Stats.svelte'
+import Testimonials from './sections/Testimonials.svelte'
+import Video from './sections/Video.svelte'
+
+/**
+ * The section types a composed page can use, each a trusted component of this storefront. The
+ * keys are the engine's section types (ext/layouts registry.go): a type the engine adds later is
+ * skipped here until a component is registered for it.
+ */
+export const SECTIONS: Record<string, Component<any>> = {
+	'announcement-bar': AnnouncementBar,
+	hero: Hero,
+	slideshow: Slideshow,
+	'product-grid': ProductGrid,
+	'collection-list': CollectionList,
+	'image-with-text': ImageWithText,
+	'rich-text': RichText,
+	'multi-column': MultiColumn,
+	video: Video,
+	faq: Faq,
+	newsletter: Newsletter,
+	'google-reviews': GoogleReviews,
+	benefits: Benefits,
+	spotlight: Spotlight,
+	'bento-grid': BentoGrid,
+	testimonials: Testimonials,
+	stats: Stats,
+	'logo-cloud': LogoCloud,
+	'scrolling-text': ScrollingText,
+	countdown: Countdown,
+	'shop-the-look': ShopTheLook,
+	'fitting-room': FittingRoom
+}

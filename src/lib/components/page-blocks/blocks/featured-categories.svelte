@@ -29,8 +29,8 @@
 		<div class="mb-6 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 			<div class="text-center md:text-left">
 				{#if block.metadata.title}
-					<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">{block.metadata.title}</h2>
-					<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
+					<h2 class="section-heading">{block.metadata.title}</h2>
+					<div class="mx-auto mt-2 h-1 w-12 bg-primary-ink md:mx-0"></div>
 				{/if}
 				{#if block.metadata.subtitle}
 					<p class="mt-4 text-sm font-medium text-muted-foreground">{block.metadata.subtitle}</p>
@@ -58,16 +58,16 @@
 		{:else}
 			{#each categories as { slug, name, link, thumbnail } (slug)}
 				<a href={link ? link : slug ? `/${slug}` : `/products`} class="group flex flex-col items-center focus:outline-none">
-					<div class="relative w-full overflow-hidden bg-muted shadow-sm transition-all duration-500 ease-out">
+					<div class="relative w-full overflow-hidden bg-muted">
 						<LazyImg
 							src={thumbnail || ''}
 							aspectRatio={block.metadata.aspectRatio}
 							alt={name}
-							class="h-full w-full object-contain transition-transform duration-700 ease-in-out"
+							class="h-full w-full object-contain transition-transform duration-emphasis ease-standard"
 						/>
 					</div>
 					{#if !block?.metadata?.hideCategoryName}
-						<span class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-300 lg:text-base">
+						<span class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-fast lg:text-base">
 							{name}
 						</span>
 					{/if}

@@ -2,10 +2,17 @@ import { fontFamily } from 'tailwindcss/defaultTheme'
 import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 
+// `bg-primary` is the action colour as a fill. Every other use of it (text, icons, borders, rings)
+// is ink on the canvas and reads --primary-ink, which a theme can point at a darker colour when its
+// fill would not be readable as text (src/app.css).
+const ink = { primary: { DEFAULT: 'hsl(var(--primary-ink) / <alpha-value>)' } }
+
 const config: Config = {
+	// Kept as `class` (never `media`) on purpose: the app ships `dark:` utilities but no dark
+	// token set and never adds the class, so `media` would flip them on for every visitor whose
+	// OS is in dark mode. The `dark` safelist entry is gone — nothing needs it emitted.
 	darkMode: ['class'],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
-	safelist: ['dark'],
 	theme: {
 		screens: {
 			mobiles: '322px',
@@ -17,7 +24,10 @@ const config: Config = {
 			sm: '640px',
 			md: '768px',
 			lg: '1024px',
-			xl: '1280px'
+			xl: '1280px',
+			// `theme.screens` replaces Tailwind's defaults, so `2xl:` emitted nothing until now
+			// (breadcrumb.svelte relies on it, and container.screens below already assumes it).
+			'2xl': '1536px'
 		},
 		container: {
 			center: true,
@@ -27,15 +37,25 @@ const config: Config = {
 			}
 		},
 		fontFamily: {
-			sans: ['Montserrat', ...fontFamily.sans]
+			sans: ['var(--font-body)', ...fontFamily.sans],
+			serif: ['var(--font-heading)', ...fontFamily.serif]
 		},
 		extend: {
 			spacing: {
-				page: '8px',
+				page: '8px'
 			},
 			borderColor: {
 				DEFAULT: 'hsl(var(--border) / <alpha-value>)',
+				...ink
 			},
+			textColor: ink,
+			ringColor: ink,
+			outlineColor: ink,
+			divideColor: ink,
+			textDecorationColor: ink,
+			accentColor: ink,
+			fill: ink,
+			stroke: ink,
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
 				input: 'hsl(var(--input) / <alpha-value>)',
@@ -44,7 +64,9 @@ const config: Config = {
 				foreground: 'hsl(var(--foreground) / <alpha-value>)',
 				primary: {
 					DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
-					foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
+					foreground: 'hsl(var(--primary-foreground) / <alpha-value>)',
+					// The accent as a line or a dot on the canvas, where a light fill would not show (src/app.css).
+					ink: 'hsl(var(--primary-ink) / <alpha-value>)'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
@@ -58,6 +80,20 @@ const config: Config = {
 					DEFAULT: 'hsl(var(--success) / <alpha-value>)',
 					foreground: 'hsl(var(--success-foreground) / <alpha-value>)'
 				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning) / <alpha-value>)',
+					foreground: 'hsl(var(--warning-foreground) / <alpha-value>)'
+				},
+				sale: 'hsl(var(--sale) / <alpha-value>)',
+				info: {
+					DEFAULT: 'hsl(var(--info) / <alpha-value>)',
+					foreground: 'hsl(var(--info-foreground) / <alpha-value>)'
+				},
+				// Additive. `primary-hover` gives the hover step a token instead of
+				// `hover:bg-primary/90`, which blends the button into whatever is behind it;
+				// `border-strong` is the >=3:1 control boundary that `border` is too quiet to be.
+				'primary-hover': 'hsl(var(--primary-hover) / <alpha-value>)',
+				'border-strong': 'hsl(var(--border-strong) / <alpha-value>)',
 				muted: {
 					DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
 					foreground: 'hsl(var(--muted-foreground) / <alpha-value>)'
@@ -85,12 +121,17 @@ const config: Config = {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			// The whole radius scale is derived from the active theme's --radius, so a square
+			// theme (wine / lime / noor declare `--radius: 0px`) stays square on cards, badges,
+			// dialogs, selects, alerts and skeletons too — previously only `rounded-radius`
+			// (buttons + inputs) read the token and everything else was fixed pixels.
+			// max(0px, …) keeps the smaller steps legal when --radius is 0.
 			borderRadius: {
-				xl: '24px',
-				lg: '8px',
-				md: '4px',
-				sm: '2px',
-        radius: 'var(--radius)'
+				xl: 'calc(var(--radius) + 4px)',
+				lg: 'var(--radius)',
+				md: 'max(0px, calc(var(--radius) - 2px))',
+				sm: 'max(0px, calc(var(--radius) - 4px))',
+				radius: 'var(--radius)'
 			},
 			keyframes: {
 				'accordion-down': {
@@ -116,12 +157,46 @@ const config: Config = {
 				shimmer: 'shimmer 1s infinite'
 			},
 			boxShadow: {
+				// `shadow-xs` is a Tailwind v4 name; on v3 it resolved to nothing, so all three
+				// sticky headers (nav, LimeNav, NoorNav) rendered flat. Defining it here fixes
+				// every call site at once. Value = v4's shadow-xs (== v3's shadow-sm).
+				xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
 				'z-1': '0 2px 4px rgba(0, 0, 0, 0.1)',
 				'z-2': '0 4px 8px rgba(0, 0, 0, 0.1)',
 				'z-10': '0 6px 12px rgba(0, 0, 0, 0.15)'
 			},
+			// Same story for `backdrop-blur-xs` (nav drawer scrim). v4 name, v3 engine.
+			backdropBlur: {
+				xs: '4px'
+			},
 			fontSize: {
 				xxs: '10px'
+			},
+			// One named z-index scale, backed by the --z-* properties in src/app.css so the
+			// call sites a utility cannot reach — inline styles and component <style> blocks —
+			// read the same numbers as `z-modal` and friends instead of bidding with arbitrary
+			// values from 60 to 1,000,000,000.
+			zIndex: {
+				sticky: 'var(--z-sticky)',
+				overlay: 'var(--z-overlay)',
+				drawer: 'var(--z-drawer)',
+				modal: 'var(--z-modal)',
+				popover: 'var(--z-popover)',
+				toast: 'var(--z-toast)',
+				skip: 'var(--z-skip)'
+			},
+			// The motion tokens from src/app.css. tailwindcss-animate copies transitionDuration and
+			// transitionTimingFunction into its animation utilities, so `duration-panel` on an
+			// `animate-in` overlay sets its animation length too.
+			transitionDuration: {
+				fast: 'var(--motion-fast)',
+				panel: 'var(--motion-panel)',
+				emphasis: 'var(--motion-emphasis)',
+				exit: 'var(--motion-exit)'
+			},
+			transitionTimingFunction: {
+				standard: 'var(--motion-ease)',
+				exit: 'var(--motion-ease-exit)'
 			}
 		}
 	},

@@ -1,66 +1,81 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition'
-	import { BlogRenderer } from '$lib/core/composables/index.js'
-	import { SeoHeader } from '$lib/core/components/index.js'
+	import { page } from '$app/state'
+	import SeoHeader from '$lib/components/seo/seo-header.svelte'
+	import Pagination from '$lib/components/common/pagination.svelte'
+	import { Button } from '$lib/components/ui/button'
+	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { dateOnly } from '$lib/core/utils'
+
+	const posts = $derived(page.data.blogs)
+	// The loader already reads `?page`, but nothing on the page could set it, so a store with more
+	// than one page of posts published a second page nobody could reach.
+	const noOfPage = $derived(Number(posts?.noOfPage) || 0)
 </script>
 
-<SeoHeader metaTitle="Blog | Insights & News" />
+<!-- An empty blog is a page with nothing to find: not indexed until it has a post. The title names the
+     store, as every other page's does, not a generic "Insights & News". -->
+<SeoHeader metaTitle={page.data?.store?.name ? `Blog | ${page.data.store.name}` : 'Blog'} noindex={!posts?.data?.length} />
 
-<BlogRenderer>
-	{#snippet content({ loading, error, posts, formatDate, loadBlogPosts })}
-		<div class="mx-auto max-w-4xl px-4 py-8">
-			<h1 class="mb-8 text-center text-4xl font-bold text-gray-900">Blog</h1>
+<div class="page-width py-10 md:py-16">
+	<h1 class="mb-8 text-center page-heading">Blog</h1>
 
-			{#if loading}
-				<div class="flex flex-col gap-8" transition:fade>
-					{#each Array(2) as _}
-						<div class="animate-pulse">
-							<div class="mb-4 h-64 rounded-lg bg-gray-100"></div>
-							<div class="mb-2 h-8 w-3/4 rounded bg-gray-100"></div>
-							<div class="h-4 w-1/2 rounded bg-gray-100"></div>
-						</div>
-					{/each}
-				</div>
-			{:else if error}
-				<div class="py-8 text-center text-red-600" transition:fade>
-					<p>{error}</p>
-					<button class="mt-4 rounded-lg bg-gray-100 px-4 py-2 transition-colors hover:bg-gray-200" onclick={loadBlogPosts}> Try Again </button>
-				</div>
-			{:else if posts.data.length}
-				<div class="grid gap-8 md:grid-cols-2">
-					{#each posts.data as post (post.id)}
-						<article class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
-							{#if post.imageUrl}
-								<img src={post.imageUrl} alt={post.title} class="h-48 w-full object-cover" />
+	{#if posts?.data?.length}
+		<div class="grid gap-8 md:grid-cols-2">
+			{#each posts.data as post (post.id)}
+				<article class="overflow-hidden rounded-lg border bg-card shadow-xs transition-shadow hover:shadow-z-1">
+					{#if post.imageUrl || post.thumbnail}
+						<a href={`/blog/${post.slug || post.id}`}>
+							<!-- Reserved 16:9 box: the cards used to jump as each image arrived. -->
+							<LazyImg src={post.imageUrl || post.thumbnail} alt={post.title} aspectRatio="16:9" class="h-full w-full object-cover" />
+						</a>
+					{/if}
+					<div class="p-6">
+						<div class="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
+							{#if post.author}
+								<span>{post.author}</span>
+								<span aria-hidden="true">•</span>
 							{/if}
-							<div class="p-6">
-								<div class="mb-3 flex items-center gap-2 text-sm text-gray-600">
-									<span>{post.author}</span>
-									<span>•</span>
-									<time datetime={post.createdAt}>{formatDate(post.createdAt)}</time>
-								</div>
-								<h2 class="mb-2 text-xl font-semibold text-gray-900">
-									<a href={`/blog/${post.id}`} class="transition-colors hover:text-blue-600">
-										{post.title}
-									</a>
-								</h2>
-								<p class="mb-4 text-gray-600">{post.excerpt}</p>
-								<div class="flex gap-2">
-									{#each post.tags as tag}
-										<span class="rounded-full bg-gray-100 px-2 py-1 text-sm text-gray-600">
-											{tag}
-										</span>
-									{/each}
-								</div>
+							<!-- The shared date helper, not a hard-coded en-US format. -->
+							<time datetime={post.createdAt}>{dateOnly(post.createdAt)}</time>
+						</div>
+						<h2 class="mb-2 text-xl font-semibold text-foreground">
+							<a href={`/blog/${post.slug || post.id}`} class="transition-colors hover:text-primary">
+								{post.title}
+							</a>
+						</h2>
+						{#if post.excerpt}
+							<p class="mb-4 text-muted-foreground">{post.excerpt}</p>
+						{/if}
+						{#if post.tags?.length}
+							<div class="flex flex-wrap gap-2">
+								{#each post.tags as tag}
+									<span class="rounded-md bg-muted px-2 py-1 text-sm text-muted-foreground">
+										{tag}
+									</span>
+								{/each}
 							</div>
-						</article>
-					{/each}
-				</div>
-			{:else}
-				<div class="py-8 text-center text-gray-500" transition:fade>
-					<p>No blog posts available at the moment.</p>
-				</div>
-			{/if}
+						{/if}
+					</div>
+				</article>
+			{/each}
 		</div>
-	{/snippet}
-</BlogRenderer>
+
+		{#if noOfPage > 1}
+			<div class="mt-10">
+				<Pagination {noOfPage} />
+			</div>
+		{/if}
+	{:else}
+		<!-- An empty list used to end in one grey sentence with nowhere to go next. -->
+		<div class="mx-auto max-w-md py-10 text-center">
+			<p class="text-muted-foreground">There are no posts here yet.</p>
+			<p class="mt-2 text-sm text-muted-foreground">
+				New writing is published here as it goes out. In the meantime, the shop and the FAQs are the quickest way to find what you need.
+			</p>
+			<div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+				<Button href="/products" class="h-11">Browse products</Button>
+				<Button href="/faqs" variant="outline" class="h-11">Read the FAQs</Button>
+			</div>
+		</div>
+	{/if}
+</div>

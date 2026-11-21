@@ -7,8 +7,12 @@
 	import { page } from '$app/state'
 	import Label from '../ui/label/label.svelte'
 	import { AddressSchema } from '$lib/core/components/index.js'
-	import { AddressFormRenderer } from '$lib/core/composables/index.js'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	// Local shadow of the vendored renderer — it never passed `isSaving` through, never awaited
+	// `onsave` and closed the dialog even when the save failed. See the file header.
+	import AddressFormRenderer from './address-form-renderer.svelte'
+	import Spinner from '$lib/components/common/spinner.svelte'
+	import PinAutofill from './pin-autofill.svelte'
+	import AddressLabelChips from './address-label-chips.svelte'
 
 	let {
 		show = $bindable(),
@@ -31,84 +35,128 @@
 
 <AddressFormRenderer bind:address bind:show {onback} {ondelete} {onsave}>
 	{#snippet content({ isSaving, handleBack, handleSubmit, handleDelete })}
-		<Dialog bind:open={show}>
-			<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
+		<!-- `onclose` was accepted and never called, so Escape, the overlay and the X left the page's
+		     `editAddress` flag set — which is exactly what greys out Continue to Payment. Every close
+		     route now runs the same handler as Save and Back (UX-080). -->
+		<Dialog bind:open={show} onOpenChange={(next: boolean) => !next && onclose?.()}>
+			<!-- The dialog is a centred fixed box with no height cap, so on a phone the address fields
+			     ran past the bottom of the screen and Save went with them. Cap it, scroll the fields,
+			     and keep the actions pinned as the dialog's last grid row. -->
+			<DialogContent class="max-h-[90dvh] grid-rows-[auto_minmax(0,1fr)] sm:max-w-[425px] [&>button]:!bg-transparent">
 				<DialogHeader>
 					<div class="flex items-center gap-2">
-						<Button variant="ghost" size="icon" onclick={handleBack}>
+						<Button variant="ghost" size="icon" aria-label="Back to address list" onclick={handleBack}>
 							<ArrowLeft class="h-4 w-4" />
 						</Button>
-						<DialogTitle>{isEdit ? 'Edit Address' : 'Add New Address'}</DialogTitle>
+						<DialogTitle>{isEdit ? 'Edit address' : 'Add new address'}</DialogTitle>
 					</div>
 				</DialogHeader>
-				<form onsubmit={handleSubmit} class="grid py-4">
-					<div class="grid grid-cols-2 gap-2">
+				<form onsubmit={handleSubmit} class="flex min-h-0 flex-col">
+					<div class="grid min-h-0 flex-1 overflow-y-auto py-4">
+						<div class="grid grid-cols-2 gap-2">
+							<Textbox
+								name="firstName"
+								bind:value={address.firstName}
+								autocomplete="given-name"
+								placeholder="First name"
+								schema={AddressSchema.firstName}
+								label="First name"
+								required
+							/>
+							<Textbox
+								name="lastName"
+								bind:value={address.lastName}
+								autocomplete="family-name"
+								placeholder="Last name"
+								schema={AddressSchema.lastName}
+								label="Last name"
+								required
+							/>
+						</div>
 						<Textbox
-							name="firstName"
-							bind:value={address.firstName}
-							placeholder="First Name"
-							schema={AddressSchema.firstName}
-							label="First Name"
+							info={page?.data?.store?.isPhoneMandatory ? '' : 'Phone number is recommended for delivery updates.'}
+							required={page.data?.store?.isPhoneMandatory}
+							name="phone"
+							type="tel"
+							bind:value={address.phone}
+							autocomplete="tel"
+							placeholder="+1234567890"
+							schema={AddressSchema.phone}
+							label="Phone"
+						/>
+						<Textbox
+							name="address_1"
+							bind:value={address.address_1}
+							autocomplete="address-line1"
+							placeholder="Street address"
+							schema={AddressSchema.address_1}
+							label="Address Line 1"
 							required
 						/>
 						<Textbox
-							name="lastName"
-							bind:value={address.lastName}
-							placeholder="Last Name"
-							schema={AddressSchema.lastName}
-							label="Last Name"
-							required
+							name="address_2"
+							autocomplete="address-line2"
+							bind:value={address.address_2}
+							placeholder="Apartment, suite, etc."
+							label="Address Line 2"
 						/>
+						<div class="grid grid-cols-2 gap-x-2">
+							<Textbox
+								name="city"
+								autocomplete="address-level2"
+								bind:value={address.city}
+								placeholder="City"
+								schema={AddressSchema.city}
+								label="City"
+								required
+							/>
+							<Textbox
+								name="state"
+								autocomplete="address-level1"
+								bind:value={address.state}
+								placeholder="State"
+								schema={AddressSchema.state}
+								label="State"
+								required
+							/>
+							<Select
+								id="countryCode"
+								title="Select country"
+								label="Country"
+								showSearch={true}
+								value={address.countryCode || page?.data?.store?.country?.code || 'AU'}
+								data={page?.data?.store?.countries || []}
+								valueField="code"
+								optionSelected={(v: any) => {
+									address.countryCode = v
+								}}
+							/>
+							<Textbox
+								name="zip"
+								autocomplete="postal-code"
+								bind:value={address.zip}
+								placeholder="12345"
+								schema={AddressSchema.zip}
+								label="ZIP Code"
+								required
+							/>
+							<PinAutofill bind:address country={address?.countryCode || page?.data?.store?.country?.code || ''} />
+						</div>
+						<!-- The address book's name for it (GoCommerce D134); the connector saves it as the label. -->
+						<AddressLabelChips bind:value={address.label} />
 					</div>
-					<Textbox
-						info={page?.data?.store?.isPhoneMandatory ? '' : 'Phone number is recommended for delivery updates.'}
-						required={page.data?.store?.isPhoneMandatory}
-						name="phone"
-						type="tel"
-						bind:value={address.phone}
-						placeholder="+1234567890"
-						schema={AddressSchema.phone}
-						label="Phone"
-					/>
-					<Textbox
-						name="address_1"
-						bind:value={address.address_1}
-						placeholder="Street Address"
-						schema={AddressSchema.address_1}
-						label="Address Line 1"
-						required
-					/>
-					<Textbox name="address_2" bind:value={address.address_2} placeholder="Apartment, suite, etc." label="Address Line 2" />
-					<div class="grid grid-cols-2 gap-x-2">
-						<Textbox name="city" bind:value={address.city} placeholder="City" schema={AddressSchema.city} label="City" required />
-						<Textbox name="state" bind:value={address.state} placeholder="State" schema={AddressSchema.state} label="State" required />
-						<Select
-							id="countryCode"
-							title="Select Country"
-							label="Country"
-							showSearch={true}
-							value={address.countryCode || page?.data?.store?.country?.code || 'AU'}
-							data={page?.data?.store?.countries || []}
-							valueField="code"
-							optionSelected={(v: any) => {
-								address.countryCode = v
-							}}
-						/>
-						<Textbox name="zip" bind:value={address.zip} placeholder="12345" schema={AddressSchema.zip} label="ZIP Code" required />
-					</div>
-					<br />
-					<div class="flex flex-col gap-2">
-						<Button type="submit" class="w-full">
+					<div class="flex flex-col gap-2 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] pt-3">
+						<Button type="submit" class="w-full" disabled={isSaving}>
 							{#if isSaving}
-								<LoadingDots />
+								<Spinner label="Saving address" />
 							{:else}
-								Save Contact
+								Save address
 							{/if}
 						</Button>
 						{#if isEdit}
-							<Button type="button" variant="link" onclick={handleDelete} class="w-full text-red-700">
+							<Button type="button" variant="link" onclick={handleDelete} class="w-full text-destructive">
 								<Trash2 class="h-4 w-4" />
-								Delete Address
+								Delete address
 							</Button>
 						{/if}
 					</div>

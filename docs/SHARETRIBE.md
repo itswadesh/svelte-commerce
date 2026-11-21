@@ -1,0 +1,127 @@
+# Running Svelte Commerce on Sharetribe
+
+This storefront can talk to a [Sharetribe](https://www.sharetribe.com) backend through the `@misiki/sharetribe-connector` connector.
+
+> **Status: connector published, storefront wiring not included.**
+> `@misiki/sharetribe-connector` exists at version `0.4.0`, but this repo ships env wiring and an override module for
+> Medusa, Saleor and Vendure only. Running Sharetribe means adding those two pieces yourself — both
+> are small, and this page says exactly what they are.
+
+## Status
+
+|                  |                                                 |
+| :--------------- | :---------------------------------------------- |
+| Connector        | `@misiki/sharetribe-connector`                  |
+| Version          | 0.4.0                                           |
+| Service coverage | **21/43**                                       |
+| Cart             | —                                               |
+| Checkout         | ✅                                              |
+| Auth             | ✅                                              |
+| Known gaps       | cart, coupon, address, country, state, wishlist |
+
+Coverage counts services wired to a real endpoint, out of the storefront service surface.
+See [CONNECTORS.md](./CONNECTORS.md) for how the score is computed and what the symbols mean.
+
+## Platform notes
+
+A marketplace, not a webshop. The mapping is `listing` to `Product` and `transaction` to `Order`. There is deliberately no cart, no coupon and no category tree — expect the storefront's cart and coupon surfaces to be inert.
+
+## Setup
+
+1. Install the connector in place of the stock one:
+
+   ```sh
+   npm uninstall @misiki/litekart-connector
+   npm i @misiki/sharetribe-connector
+   ```
+
+2. That is the whole switch — there is no file in this repo to edit. `vite.config.ts` resolves
+   whichever connector is installed and `src/lib/core/connectors/active.ts` wraps it, so
+   `kitcommerce.config.ts` never names a backend. Keeping more than one connector installed is
+   fine; name the one to run on:
+
+   ```env
+   PUBLIC_CONNECTOR='@misiki/sharetribe-connector'
+   ```
+
+3. Give the connector its base URL in `.env`:
+
+   ```env
+   PUBLIC_SHARETRIBE_API_URL=https://your-store.example.com
+   ```
+
+   `src/lib/core/connectors/init.ts` derives this backend's variables from its connector name
+   (`PUBLIC_SHARETRIBE_*`) and applies them at boot, in both hooks — the server one covers SSR, the client one covers the
+   browser, which must reach the same URL in production. Boot fails naming the variable if it is
+   missing, rather than letting every call fall through to a relative path.
+
+   The rest of this connector's credentials are read from the same prefix when you set them:
+   `PUBLIC_SHARETRIBE_API_KEY`, `PUBLIC_SHARETRIBE_API_SECRET`, `PUBLIC_SHARETRIBE_ACCESS_TOKEN`, `PUBLIC_SHARETRIBE_ACCESS_KEY`, `PUBLIC_SHARETRIBE_STORE_ID`, `PUBLIC_SHARETRIBE_CHANNEL_ID`, `PUBLIC_SHARETRIBE_CLIENT_ID`, `PUBLIC_SHARETRIBE_ASSET_URL`. Unset ones are not passed, so they never overwrite a value the connector already
+   holds.
+
+4. What the wrapper does. `@misiki/sharetribe-connector` already carries its own `setStaticStore`,
+   `serveRestLocally` and `connectorName`, and `src/lib/core/connectors/init.ts` registers the
+   first two on whatever connector is active. So store identity resolves from your config rather
+   than `/api/stores/public-details`, and any Litekart REST path the connector still inherits is
+   answered from local data or resolved empty instead of being requested.
+
+   `src/lib/core/connectors/active.ts` is thin on purpose, and it is the same file for every
+   backend: it re-exports whichever package is installed, resolves the `connectorName` marker,
+   and registers those two hooks at module load. Wrap a service there only when you want to
+   change what the connector already does.
+
+## Store identity
+
+With no Litekart API behind the storefront, store details (name, logo, currency, menus,
+plugin toggles, theme CSS variables) come from static config rather than an API:
+
+```
+src/lib/core/connectors/default-store.json   (full default store shape)
+        merged under
+kitcommerce.config.ts default export          (your overrides — highest priority)
+```
+
+Until you override it, the site shows the default store name ("Test"):
+
+```ts
+export default {
+	name: 'My Store',
+	logo: '/logo.svg',
+	currencyCode: 'USD'
+	// see src/lib/core/connectors/default-store.json for every available field
+}
+```
+
+## Known limitations
+
+Services not wired for this platform: **cart, coupon, address, country, state, wishlist**. Pages that depend on them render their
+empty state rather than failing.
+
+- Legal/CMS pages render their layout with empty content unless a page backend is wired.
+- Homepage content other than the live product list must come from the active theme's
+  static content — the standing rule for themes in this repo.
+- The Conversational Shopping assistant (`/api/commerce-assistant/*`) is Litekart-only and
+  stays hidden when another connector is active.
+
+## Open question for Sharetribe maintainers
+
+Is `listing` to `Product` the mapping you would recommend, or should a storefront model transactions as the primary entity?
+
+Answers are very welcome — see the request in
+[CONNECTORS.md](./CONNECTORS.md).
+
+## Troubleshooting
+
+- **Store shows "Test" / wrong branding** — set identity overrides in the
+  `kitcommerce.config.ts` default export.
+- **`[sharetribe] no native implementation for \`get /api/...\`` in the console** — the connector's
+  REST guard caught an inherited Litekart path and answered it empty rather than requesting it.
+  Each path is reported once. Harmless if that feature has no sharetribe equivalent; if it does,
+  implement it in the connector's matching service.
+- **`http proxy error: api/... ECONNREFUSED` in dev** — a Litekart REST path was requested from
+  outside the connector, so the guard never saw it (the guard covers everything routed through
+  the connector's `BaseService`). Vite proxies `/api` to `PUBLIC_LITEKART_API_URL` or
+  `localhost:7000`.
+- **Build fails on `@misiki/litekart-connector`** — `@misiki/kitcommerce-core` declares it as
+  a peer. `vite.config.ts` redirects that specifier to whichever `@misiki/*-connector` is
+  installed, so make sure exactly one is listed in `package.json`.

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+	import Spinner from '$lib/components/common/spinner.svelte'
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { Input } from '$lib/components/ui/input/index.js'
 	import { PincodeCheckRenderer, useProductState } from '$lib/core/composables/index.js'
@@ -13,7 +13,7 @@
 	{#snippet content({ showPincode, loading, hasSingleWarehouse, selectedWarehouse, resultText, checkPincode, toggleShowPincode })}
 		{#if !productState.warehouseLoaded}
 			<div class="flex w-full justify-center">
-				<LoadingDots />
+				<Spinner size={5} label="Loading delivery options" />
 			</div>
 		{:else if !hasSingleWarehouse}
 			{#if !showPincode}
@@ -22,23 +22,20 @@
 						type="number"
 						bind:value={pincode}
 						class="w-full rounded-md border-input bg-background p-2 [appearance:textfield] placeholder:text-muted-foreground/80 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-						placeholder="Enter Pincode"
-						aria-label="Enter Pincode"
+						placeholder="Enter pincode"
+						aria-label="Enter pincode"
+						aria-labelledby="pdp-delivery-label"
 					/>
 					<Button disabled={!(pincode && pincode > 0) || loading} onclick={checkPincode} class="min-w-[80px]">
 						{#if loading}
-							<LoadingDots />
+							<Spinner label="Checking pincode" />
 						{:else}
 							Check
 						{/if}
 					</Button>
 				</div>
-      {:else}
-				<Button
-					variant="plain"
-					onclick={toggleShowPincode}
-					class="flex min-h-[44px] items-center justify-start p-0 font-medium hover:bg-transparent"
-				>
+			{:else}
+				<Button variant="plain" onclick={toggleShowPincode} class="flex min-h-[44px] items-center justify-start p-0 font-medium hover:bg-transparent">
 					<span class="mr-2">Check Availability in your area</span>
 					<MapPin class="size-4 text-primary" />
 				</Button>
@@ -48,7 +45,7 @@
 		{#if resultText}
 			<div aria-live="polite" aria-atomic="true" class="min-h-[20px]">
 				{#if selectedWarehouse}
-					<p class="mt-1 text-sm font-medium text-green-600 dark:text-green-400">
+					<p class="mt-1 text-sm font-medium text-success">
 						Available in your area. Ships in {selectedWarehouse.leadTime} business days
 					</p>
 				{:else}
