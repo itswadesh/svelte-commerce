@@ -11,7 +11,7 @@ export const GOOGLE_CLIENT_ID =
 	'414060469322-n4raqj2rdbjhegvrtdk6mhbdm4sd0oc7.apps.googleusercontent.com'
 export const keywords = 'ecommerce, headless, pwa'
 export const logo = Logo
-export const phone = '+91-8249028220'
+export const phone = ''
 export const websiteLegalName = 'Misiki Technologies LLP'
 export const websiteName = 'Litekart'
 export const saasName = 'Litekart'
