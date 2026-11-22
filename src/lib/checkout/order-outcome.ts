@@ -4,6 +4,7 @@
 
 /**
  * - `paid`, `pay-on-delivery`: a sale, and the page thanks the shopper.
+ * - `part-paid`: a sale whose advance was paid online and whose rest is due in cash (GoCommerce D297).
  * - `whatsapp`: a sale settled in the shop's chat (GoCommerce D255); the shopper sends it there.
  * - `upi`: a sale paid straight to the shop's UPI ID (GoCommerce D277), still to be paid or checked.
  * - `received`: the backend reports no payment state this page knows, so it claims none.
@@ -11,9 +12,9 @@
  * - `failed`: not paid, and the shopper is told so.
  * - `unknown`: no order to read.
  */
-export type OrderOutcome = 'paid' | 'pay-on-delivery' | 'whatsapp' | 'upi' | 'received' | 'confirming' | 'failed' | 'unknown'
+export type OrderOutcome = 'paid' | 'part-paid' | 'pay-on-delivery' | 'whatsapp' | 'upi' | 'received' | 'confirming' | 'failed' | 'unknown'
 
-type OrderState = { paymentStatus?: unknown; paymentMethod?: unknown; status?: unknown } | null | undefined
+type OrderState = { paymentStatus?: unknown; paymentMethod?: unknown; status?: unknown; partialCod?: { advancePaid?: boolean } | null } | null | undefined
 
 const PAID = new Set(['paid', 'success', 'succeeded', 'captured', 'completed'])
 const FAILED = new Set(['failed', 'failure', 'declined', 'cancelled', 'canceled', 'expired', 'voided'])
@@ -31,6 +32,8 @@ export function orderOutcome(order: OrderState): OrderOutcome {
 	if (PAID.has(payment)) return 'paid'
 	if (FAILED.has(payment)) return 'failed'
 	if (UNSETTLED.has(payment) && FAILED.has(word(order.status))) return 'failed'
+	// Its payment status stays pending while the cash is due; the advance arriving is the success.
+	if (order.partialCod?.advancePaid) return 'part-paid'
 	if (PAY_ON_DELIVERY.has(word(order.paymentMethod))) return 'pay-on-delivery'
 	if (word(order.paymentMethod) === 'whatsapp') return 'whatsapp'
 	// Nothing but the shop's bank sees a UPI payment arrive, so the page asks for it, not waits.
@@ -40,13 +43,18 @@ export function orderOutcome(order: OrderState): OrderOutcome {
 
 /** The outcomes that are a sale: only these count as a purchase or ask for a review. */
 export const isSale = (outcome: OrderOutcome) =>
-	outcome === 'paid' || outcome === 'pay-on-delivery' || outcome === 'whatsapp' || outcome === 'upi' || outcome === 'received'
+	outcome === 'paid' || outcome === 'part-paid' || outcome === 'pay-on-delivery' || outcome === 'whatsapp' || outcome === 'upi' || outcome === 'received'
 
 export const OUTCOME_COPY: Record<OrderOutcome, { title: string; heading: string; body: string }> = {
 	paid: {
 		title: 'Order confirmed',
 		heading: 'Thank you for your order',
 		body: "Your payment went through and we've received your order. We'll notify you as soon as it's on its way."
+	},
+	'part-paid': {
+		title: 'Order confirmed',
+		heading: 'Thank you for your order',
+		body: "Your advance went through and we've received your order. You pay the rest in cash when it's delivered, and we'll notify you as soon as it's on its way."
 	},
 	'pay-on-delivery': {
 		title: 'Order confirmed',

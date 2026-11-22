@@ -44,6 +44,32 @@ export type CheckoutQuote = {
 	/** What a gift card on the cart pays (GoCommerce D250); `total` is what is left for the payment method. */
 	giftCard?: QuotedGiftCard | null
 	total: number
+	/** The split, quoted for part-paid cash on delivery alone (GoCommerce D297). */
+	partialCod?: PartialCodSplit | null
+}
+
+/** What part-paid cash on delivery takes online now and in cash at the door (GoCommerce D297). */
+export type PartialCodSplit = { payNow: number; payOnDelivery: number; refundNote: string }
+
+/**
+ * The split to show beside part-paid cash on delivery, or null where checkout would refuse it.
+ * The quote's own once it was asked for this method; until then the advance against the total on
+ * screen with this method's charge in place of the one quoted. Checkout offers it only on a total
+ * of at least `minTotal`, twice the advance, so below that it is not offered at all.
+ */
+export function partialCodSplit(
+	method: { advance?: number | null; minTotal?: number | null; fee?: number | null; refundNote?: string | null } | null | undefined,
+	quote: CheckoutQuote | null | undefined,
+	quotedForMethod: boolean,
+	cartTotal: number | null | undefined
+): PartialCodSplit | null {
+	if (quotedForMethod && quote?.partialCod) return quote.partialCod
+	const advance = Number(method?.advance)
+	if (!(advance > 0)) return null
+	const base = quote ? Number(quote.total) - (Number(quote.codCharges) || 0) : Number(cartTotal) || 0
+	const total = base + (Number(method?.fee) > 0 ? Number(method?.fee) : 0)
+	if (total < (Number(method?.minTotal) || 2 * advance)) return null
+	return { payNow: advance, payOnDelivery: Math.round((total - advance) * 100) / 100, refundNote: method?.refundNote ?? '' }
 }
 
 export type QuotedGiftCard = { last4: string; amount: number }

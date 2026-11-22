@@ -2,7 +2,8 @@
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronDown, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { checkoutFigures, coveredByGiftCard, formatPrice, paymentFee, totalLabel } from '$lib/utils/price'
+	import { checkoutFigures, coveredByGiftCard, formatPrice, partialCodSplit, paymentFee, totalLabel } from '$lib/utils/price'
+	import PartialCodSplit from '$lib/components/order/partial-cod-split.svelte'
 	import PriceSummary from '$lib/components/checkout/price-summary.svelte'
 	import { page } from '$app/state'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
@@ -25,13 +26,33 @@
 	// Collected from the shop (GoCommerce D271): no delivery row, and the shop's address in place of the shopper's.
 	const pickupAddress = $derived(page.data?.store?.plugins?.pickup?.active && cartState.cart?.pickup ? String(page.data.store.plugins.pickup.address ?? '') : null)
 
+	// Part-paid cash on delivery (GoCommerce D297): the split beside it, from the quote once it was
+	// asked for this method. Null where checkout would refuse it: a total under twice the advance.
+	const PARTIAL = 'COD_PARTIAL'
+	const splitFor = (m: any) => partialCodSplit(m, quote.current, quote.method === PARTIAL, cartState.cart?.total)
+	// Checkout refused it for this basket (422 partial_cod_unavailable), so it is no longer offered.
+	// ponytail: stays refused until the step is opened again; a basket that grows meanwhile does not bring it back.
+	let partialRefused = $state(false)
+
 	// Cash on delivery has no delivery to wait for in a basket of downloads (GoCommerce D254); the
-	// engine refuses it, so it is not offered.
+	// engine refuses it, so it is not offered, and nor is part payment with cash on delivery.
 	const methods = $derived(
-		(paymentModule.listOfPaymentMethods ?? []).filter(
-			(m: any) => cartState.cart?.needAddress !== false || String(m?.code).toLowerCase() !== 'cod'
-		)
+		(paymentModule.listOfPaymentMethods ?? []).filter((m: any) => {
+			const code = String(m?.code).toUpperCase()
+			if (code === PARTIAL) return cartState.cart?.needAddress !== false && !partialRefused && !!splitFor(m)
+			return cartState.cart?.needAddress !== false || code !== 'COD'
+		})
 	)
+
+	$effect(() => {
+		if (quote.errorCode === 'partial_cod_unavailable') partialRefused = true
+	})
+	// A chosen part payment that is no longer offered is unchosen, so nothing unofferable is reviewed.
+	$effect(() => {
+		if (paymentModule.SELECTED_PG_CODE !== PARTIAL || methods.some((m: any) => m.code === PARTIAL)) return
+		paymentModule.SELECTED_PG_CODE = ''
+		paymentModule.checkoutDisabled = true
+	})
 
 	const selectedMethod = $derived(paymentModule.listOfPaymentMethods?.find((m: any) => m.code === paymentModule.SELECTED_PG_CODE))
 	// A quote's charge belongs to the method it was asked for, which a re-quote in flight has not caught up with.
@@ -156,6 +177,9 @@
 							</div>
 						{/if}
 
+						{#if partialRefused && !covered}
+							<p class="text-sm text-muted-foreground" role="status" in:fade>Part payment with cash on delivery is not available for this order.</p>
+						{/if}
 						{#if covered}
 							<p class="rounded-radius border border-success/40 bg-success/5 p-4 text-sm font-medium text-foreground" in:fade>
 								Your gift card pays for the whole order. There is nothing more to pay.
@@ -170,8 +194,8 @@
 											? 'border-primary ring-1 ring-primary'
 											: 'border-border'}"
 									>
-										<div class="flex items-center gap-3 sm:gap-4">
-											<div class="relative flex h-5 w-5 items-center justify-center">
+										<div class="flex min-w-0 items-center gap-3 sm:gap-4">
+											<div class="relative flex h-5 w-5 shrink-0 items-center justify-center">
 												<input
 													type="radio"
 													name="paymentMethod"
@@ -183,11 +207,11 @@
 												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></div>
 											</div>
 
-											<div class="flex items-center gap-3">
-												<div class="flex h-8 w-10 items-center justify-center rounded border border-border bg-background p-1 sm:h-10 sm:w-12">
+											<div class="flex min-w-0 items-center gap-3">
+												<div class="flex h-8 w-10 shrink-0 items-center justify-center rounded border border-border bg-background p-1 sm:h-10 sm:w-12">
 													<img src={method?.img || localPaymentIcon(method)} alt={method?.name} class="h-full w-full object-contain" />
 												</div>
-												<div class="flex flex-col">
+												<div class="flex min-w-0 flex-col gap-1">
 													<span class="text-sm font-bold tracking-tight text-foreground">
 														{method?.name}
 														{#if methodFee}
@@ -198,6 +222,12 @@
 													</span>
 													{#if method?.description}
 														<span class="text-[10px] font-medium tracking-tighter text-muted-foreground">{@html method?.description}</span>
+													{/if}
+													{#if String(method?.code).toUpperCase() === PARTIAL}
+														{@const split = splitFor(method)}
+														{#if split}
+															<PartialCodSplit {...split} currencyCode={page?.data?.store?.currency?.code} />
+														{/if}
 													{/if}
 												</div>
 											</div>

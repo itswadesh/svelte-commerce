@@ -56,6 +56,8 @@ export class LiveQuote {
 	method = $state('')
 	/** Checkout's own sentence for why it would refuse now; it stays until an answer lands. */
 	error = $state('')
+	/** The refusal's code, such as `partial_cod_unavailable` for a basket part payment cannot take (D297). */
+	errorCode = $state('')
 	pending = $state(false)
 	totalChanged = $state('')
 	readonly supported: boolean
@@ -127,12 +129,14 @@ export class LiveQuote {
 					this.current = answer
 					this.method = method
 					this.error = ''
+					this.errorCode = ''
 					this.totalChanged = ''
 					this.pending = false
 				},
 				(err: unknown) => {
 					if (ask !== this.#asks) return
 					this.error = (err as Error | undefined)?.message || 'We could not work out your total. Please try again.'
+					this.errorCode = String((err as { code?: unknown } | undefined)?.code ?? '')
 					this.pending = false
 				}
 			)

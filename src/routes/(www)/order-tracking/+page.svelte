@@ -15,6 +15,7 @@
 	import OrderTimeline from '$lib/components/order/order-timeline.svelte'
 	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
 	import UpiPay from '$lib/components/order/upi-pay.svelte'
+	import PartialCodSplit from '$lib/components/order/partial-cod-split.svelte'
 	import StatusCell from '$lib/components/common/status-cell.svelte'
 	import { orderService } from '$lib/core/services/index.js'
 	import { CheckCircle } from '@lucide/svelte'
@@ -408,6 +409,11 @@
 									: &nbsp; {formatPrice(order?.total || 0, page?.data?.store?.currency?.code)}
 								</span>
 							</div>
+
+							{#if order?.partialCod}
+								<!-- Part-paid cash on delivery (GoCommerce D297). -->
+								<PartialCodSplit {...order.partialCod} paid={order.partialCod.advancePaid} currencyCode={order?.currencyCode || page?.data?.store?.currency?.code} />
+							{/if}
 						</div>
 					</div>
 				</div>

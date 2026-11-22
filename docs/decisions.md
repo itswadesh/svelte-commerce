@@ -712,3 +712,16 @@ size, wide and phone, from the file's header while it loads (about 100 ms, along
 fetch) and the slideshow box takes that shape, so the banner shows whole and the box is sized before
 the picture arrives (no layout shift). Shopify's "Adapt to image" height works the same way. A
 slideshow whose size cannot be read in 1.5 s, and a composed slideshow section, keeps the fixed shape.
+
+## 2026-11-22: Part-paid cash on delivery shows its split before and after payment
+
+GoCommerce D297 lets a store take a fixed advance online and the rest in cash. The payment step
+lists it like the other methods, with its extra charge, and under its name "Pay ₹X now · ₹Y in cash
+on delivery" and the store's refund rule. Nothing is chosen for the shopper. It is hidden where
+checkout would refuse it: a basket with nothing to deliver (as cash on delivery is), a total under
+twice the advance, and once checkout answers `partial_cod_unavailable` for the basket, when a line
+says it is not available for this order. Choosing it re-quotes, so the split is the engine's own.
+Placing it opens the window of the gateway the engine names for the advance, Razorpay or Cashfree.
+Such an order's payment status stays pending until the cash is collected, so the success page treats
+the advance arriving as the sale ("Your advance went through") and the success, order and tracking
+pages show "Paid online ₹X · Due in cash ₹Y".

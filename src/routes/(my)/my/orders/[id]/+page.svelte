@@ -29,6 +29,7 @@
 	import BoughtGiftCards from '$lib/components/order/bought-gift-cards.svelte'
 	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
 	import UpiPay from '$lib/components/order/upi-pay.svelte'
+	import PartialCodSplit from '$lib/components/order/partial-cod-split.svelte'
 
 	let { class: klass = '', data, ...rest } = $props()
 
@@ -38,6 +39,8 @@
 	// number is what says a real order came back; without it the empty state belongs on screen.
 	const orderNumberOf = (order: any) => order?.orderNo ?? order?.orderNumber ?? order?.number ?? ''
 	const isRealOrder = (order: any) => !!orderNumberOf(order)
+	// Part-paid cash on delivery (GoCommerce D297): pending until the cash is in, but the advance arriving is the success.
+	const advanceIn = (order: any) => !!order?.partialCod?.advancePaid
 
 	// `formatPrice(undefined, …)` renders the string "$undefined". A money row the backend did not
 	// supply is shown as an em dash instead, the way an unknown value should read.
@@ -355,6 +358,11 @@
 											{/if}
 										</div>
 
+										{#if (order as any)?.partialCod}
+											<!-- Part-paid cash on delivery (GoCommerce D297). -->
+											<PartialCodSplit {...(order as any).partialCod} paid={(order as any).partialCod.advancePaid} currencyCode={order?.currencyCode || page?.data?.store?.currency?.code} />
+										{/if}
+
 										<div class="mt-6 flex items-center justify-between gap-2 border-t border-border pt-6">
 											<div class="flex items-center gap-2">
 												<CreditCardIcon class="h-4 w-4 text-muted-foreground" />
@@ -363,11 +371,11 @@
 											<span
 												class="text-xs font-bold {!order?.paymentStatus
 													? 'text-muted-foreground'
-													: order.paymentStatus?.toLowerCase() === 'paid'
+													: order.paymentStatus?.toLowerCase() === 'paid' || advanceIn(order)
 														? 'text-success'
 														: 'text-destructive'}"
 											>
-												{order?.paymentStatus || '—'}
+												{advanceIn(order) && order.paymentStatus?.toLowerCase() !== 'paid' ? 'Advance paid' : order?.paymentStatus || '—'}
 											</span>
 										</div>
 									</div>
