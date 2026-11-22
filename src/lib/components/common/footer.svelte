@@ -3,6 +3,7 @@
 	import { version } from '$app/environment'
 	import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 	import { page } from '$app/state'
+	import { env } from '$env/dynamic/public'
 	import { TrustpilotPlugin } from '$lib/core/components/index.js'
 	import { sanitize } from '$lib/core/utils/index.js'
 	import { keepResolvableLinks, withoutRepeatedPages } from './cms-pages.js'
@@ -303,6 +304,16 @@
 									{/if}
 								{/if}
 							</span>
+							<!-- A shopper's way to tell the platform about a store that breaks its rules (/report, GoCommerce D290).
+							     Only the GoCommerce engine takes reports, so other backends show nothing. -->
+							{#if env.PUBLIC_GOCOMMERCE_API_URL}
+								<a
+									href="/report"
+									rel="nofollow"
+									class="-my-2 self-start py-2 text-xs text-muted-foreground underline underline-offset-2 transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:self-auto">
+									Report this store
+								</a>
+							{/if}
 							<CookieSettingsLink
 								class="-my-2 self-start py-2 text-xs text-muted-foreground underline underline-offset-2 transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:self-auto"
 							/>
