@@ -37,6 +37,7 @@
 			if (coveredByGiftCard(quote.current)) return await placeCovered()
 			if (paymentModule.SELECTED_PG_CODE === WHATSAPP) return await placeWhatsApp()
 			if (paymentModule.SELECTED_PG_CODE === UPI) return await placeUpi()
+			if (paymentModule.SELECTED_PG_CODE === PARTIAL) return await placePartialCod()
 			await paymentModule.placeOrder()
 		} finally {
 			paymentModule.paymentLoader = false
@@ -85,6 +86,65 @@
 			toast.error((err as Error)?.message || 'Your order could not be placed. Please try again.')
 		}
 	}
+	/**
+	 * Part-paid cash on delivery (GoCommerce D297). The engine names the gateway that takes the
+	 * advance, Razorpay or Cashfree, and this runs that gateway's own window for the advance alone,
+	 * as core's PaymentModule does for the gateway's own method; the rest is paid in cash.
+	 */
+	const PARTIAL = 'COD_PARTIAL'
+	type Advance =
+		| { gateway: 'razorpay'; order_no: string; id: string; key_id: string; amount: number; currency: string }
+		| { gateway: 'cashfree'; order_no: string; payment_session_id: string; environment?: string }
+	async function placePartialCod() {
+		const cartId = paymentModule.cartState.cart?.id ?? ''
+		const cart = paymentModule.cartState.cart as { name?: string; phone?: string; email?: string; shippingAddress?: { phone?: string; email?: string; firstName?: string } } | undefined
+		const svc = checkoutService as unknown as { checkoutCodPartial: (args: { cartId?: string; origin?: string }) => Promise<Advance> }
+		const w = window as unknown as { Razorpay?: new (o: object) => { open(): void }; Cashfree?: (o: object) => { checkout(o: object): Promise<{ error?: { message?: string }; paymentDetails?: unknown }> } }
+		const processed = (gateway: string, orderNo: string) =>
+			goto(`/checkout/process?pg=${gateway}&order_no=${encodeURIComponent(orderNo)}&cart_id=${encodeURIComponent(cartId)}`)
+		paymentModule.paymentLoader = true
+		try {
+			const pay = await svc.checkoutCodPartial({ cartId, origin: window.location.origin })
+			if (pay.gateway === 'razorpay') {
+				if (!w.Razorpay) await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+				if (!w.Razorpay) throw new Error('The payment window could not be loaded. Please try again.')
+				new w.Razorpay({
+					key: pay.key_id,
+					amount: pay.amount,
+					currency: pay.currency,
+					order_id: pay.id,
+					description: `Advance for order #${pay.order_no}`,
+					handler: () => processed('razorpay', pay.order_no),
+					prefill: {
+						name: cart?.name || cart?.shippingAddress?.firstName || '',
+						contact: cart?.phone || cart?.shippingAddress?.phone || '',
+						email: cart?.email || cart?.shippingAddress?.email || ''
+					}
+				}).open()
+				return
+			}
+			await paymentModule.loadCashfreeScript()
+			if (!w.Cashfree) throw new Error('The payment window could not be loaded. Please try again.')
+			const result = await w.Cashfree({ mode: pay.environment === 'sandbox' ? 'sandbox' : 'production' }).checkout({
+				paymentSessionId: pay.payment_session_id,
+				redirectTarget: '_modal'
+			})
+			if (result.error) toast.error(result.error.message || 'Payment closed or failed')
+			if (result.paymentDetails) await processed('cashfree', pay.order_no)
+		} catch (err) {
+			toast.error((err as Error)?.message || 'Your order could not be placed. Please try again.')
+		}
+	}
+
+	function loadScript(src: string) {
+		return new Promise<void>((resolve) => {
+			const script = document.createElement('script')
+			script.src = src
+			script.onload = script.onerror = () => resolve()
+			document.head.appendChild(script)
+		})
+	}
+
 	// The module's cart type is loose; this asks only what the empty state needs.
 	const bag = $derived(paymentModule.cartState as { cart?: { lineItems?: unknown[] } | null; isUpdatingCart?: boolean } | undefined)
 	const bagIsEmpty = $derived(Array.isArray(bag?.cart?.lineItems) && bag.cart.lineItems.length === 0 && !bag?.isUpdatingCart)

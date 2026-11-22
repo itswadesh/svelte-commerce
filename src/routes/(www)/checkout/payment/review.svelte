@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { ChevronLeft, CreditCard, LockKeyhole, Mail, MapPin, Pencil, Truck } from '@lucide/svelte'
-	import { checkoutFigures, coveredByGiftCard, formatPrice, totalLabel } from '$lib/utils/price'
+	import { checkoutFigures, coveredByGiftCard, formatPrice, partialCodSplit, totalLabel } from '$lib/utils/price'
+	import PartialCodSplit from '$lib/components/order/partial-cod-split.svelte'
 	import { page } from '$app/state'
 	import { onMount } from 'svelte'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
@@ -28,6 +29,12 @@
 	)
 
 	const covered = $derived(coveredByGiftCard(quote.current))
+	// Part-paid cash on delivery (GoCommerce D297): what the gateway's window will ask for, and what is left in cash.
+	const split = $derived(
+		!covered && paymentModule.SELECTED_PG_CODE === 'COD_PARTIAL'
+			? partialCodSplit(selectedPaymentMethod, quote.current, quote.method === 'COD_PARTIAL', cartState.cart?.total)
+			: null
+	)
 	// Collected from the shop (GoCommerce D271): the shop's address in place of the shopper's, and no delivery row.
 	const pickupAddress = $derived(page.data?.store?.plugins?.pickup?.active && cartState.cart?.pickup ? String(page.data.store.plugins.pickup.address ?? '') : null)
 
@@ -215,6 +222,11 @@
 							{covered ? `Gift card …${figures.giftCard?.last4}` : selectedPaymentMethod?.name || 'No payment method selected'}
 						</span>
 					</div>
+					{#if split}
+						<div class="pt-2">
+							<PartialCodSplit {...split} {currencyCode} />
+						</div>
+					{/if}
 				</div>
 			</div>
 

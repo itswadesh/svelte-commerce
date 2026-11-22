@@ -18,6 +18,7 @@
 	import BoughtGiftCards from '$lib/components/order/bought-gift-cards.svelte'
 	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
 	import UpiPay from '$lib/components/order/upi-pay.svelte'
+	import PartialCodSplit from '$lib/components/order/partial-cod-split.svelte'
 
 	const userState = getUserState()
 	const cartState = getCartState()
@@ -336,6 +337,11 @@
 							<div class="flex items-center justify-between pt-1 text-muted-foreground">
 								<span>Paid with</span>
 								<span>Gift card</span>
+							</div>
+						{:else if firstOrder?.partialCod}
+							<!-- Part-paid cash on delivery (GoCommerce D297): what went online and what is due at the door. -->
+							<div class="pt-1">
+								<PartialCodSplit {...firstOrder.partialCod} paid={firstOrder.partialCod.advancePaid} {currencyCode} />
 							</div>
 						{:else if firstOrder?.paymentMethod}
 							<div class="flex items-center justify-between pt-1 text-muted-foreground">
