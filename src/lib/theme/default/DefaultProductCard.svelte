@@ -312,6 +312,10 @@
 		display: grid;
 		grid-row: span 4;
 		grid-template-rows: subgrid;
+		/* One column as wide as the card. Left to auto, Safari sized it from the picture's aspect
+		   ratio and its height: 100% when the card sits inside a list item (a collection page), and
+		   the card grew to 33 million pixels tall, so the grid looked empty. */
+		grid-template-columns: minmax(0, 1fr);
 		row-gap: 0;
 		align-content: start;
 		width: 100%;
