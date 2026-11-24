@@ -33,8 +33,23 @@
 	import { onMount } from 'svelte'
 	import { trackBeginCheckout } from '$lib/analytics'
 	import { replaceState } from '$app/navigation'
+	import { PaymentModule } from '$lib/core/composables/index.js'
+	import { LiveQuote } from '$lib/checkout/quote.svelte'
+	import { offerStoreMethods, placeOrder } from '$lib/checkout/place-order'
+	import Payment from '../payment/payment.svelte'
+	import { fly } from '$lib/motion'
 
 	const addressModule = new AddressModule()
+
+	// One-page checkout (GoCommerce D328): with the store's plugin on, delivery, payment and Place order
+	// join this page below the address, from the payment step's own module and component, so both
+	// layouts quote and place an order the same way. Read once: the store record does not change
+	// under a shopper, and core's modules can only be made while the page is set up. Off, nothing
+	// here is made and the page is the address step it always was.
+	const onePage = !!page.data?.store?.plugins?.onePageCheckout?.active
+	const pay = onePage ? new PaymentModule() : null
+	const quote = pay ? new LiveQuote(pay) : null
+	if (pay) $effect(() => offerStoreMethods(pay))
 	const cartState = addressModule.cartState
 	// A basket with nothing to post (GoCommerce D254) is asked for the buyer's details, not a delivery
 	// address. Connectors that do not say keep the address step as it was.
@@ -218,11 +233,12 @@
 	// The answers go when the shopper moves on to payment, when the phone is final: the contact phone
 	// on the cart (what the order is placed with), else the one in the address form. Not awaited, so
 	// a slow engine never holds up checkout; a client-side navigation does not cancel the request.
-	async function proceedToPayment() {
-		if (block) return
+	// On one page that moment is Place order. False when the order cannot go on.
+	async function saveBeforePayment(): Promise<boolean> {
+		if (block) return false
 		if (missingAnswer) {
 			document.getElementById(questionId(missingAnswer.text))?.focus()
-			return
+			return false
 		}
 		// The answers go with the order; the engine refuses one that leaves a required question empty.
 		if (questions.length) {
@@ -231,7 +247,7 @@
 				cartState.cart = await cartService.updateCart2({ cartId: cartState.cart?.id, answers: kept })
 			} catch (e) {
 				toast.error(e instanceof Error ? e.message : 'Could not save your answers. Please try again.')
-				return
+				return false
 			}
 		}
 		if (whatsappOffer.enabled) {
@@ -242,7 +258,22 @@
 				marketing: whatsappOffer.marketing && whatsappMarketing
 			})
 		}
-		await addressModule.handleProceedToPayment()
+		return true
+	}
+
+	async function proceedToPayment() {
+		if (await saveBeforePayment()) await addressModule.handleProceedToPayment()
+	}
+
+	// What one page shows once the order has somewhere to go: the same facts the payment step needs.
+	const payReady = $derived(!!pay && isEmailOk && isPhoneOk && !!cartState.cart?.shippingAddress && !addressModule.editAddress)
+	// Core checks the billing address when the address step moves on; one page has no such moment.
+	const placeBlocker = $derived(
+		continueBlocker ||
+			(!addressModule.isBillingAddressSameAsShipping && !cartState.cart?.billingAddress?.address_1 ? 'Add a billing address to continue.' : '')
+	)
+	async function placeOnePage() {
+		if (pay && quote && (await saveBeforePayment())) await placeOrder(pay, quote)
 	}
 
 	const questionId = (text: string) => `checkout-question-${questions.findIndex((q) => q.text === text)}`
@@ -260,7 +291,8 @@
 				await authService.logout().catch(() => {})
 				await addressModule.saveAddressToCart()
 			}
-			if (isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress) {
+			// On one page, delivery and payment appear below once the address is saved.
+			if (!onePage && isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress) {
 				await proceedToPayment()
 			}
 		} finally {
@@ -270,7 +302,7 @@
 </script>
 
 <svelte:head>
-	<title>Address - {page?.data?.store?.name || ''}</title>
+	<title>{onePage ? 'Checkout' : 'Address'} - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
 <div class="min-h-screen py-4 sm:py-8">
@@ -278,7 +310,7 @@
 		<CheckoutHeader step={2} />
 
 		<!-- Same as the cart step: the progress indicator is a control, not the page heading. -->
-		<h1 class="sr-only">{detailsOnly ? 'Your details' : 'Delivery address'}</h1>
+		<h1 class="sr-only">{onePage ? 'Checkout' : detailsOnly ? 'Your details' : 'Delivery address'}</h1>
 		<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
 		  <div>
 				<p class="font-semibold tracking-tight text-xl">My addresses</p>
@@ -654,9 +686,31 @@
 							bind:orderUpdates={whatsappOrderUpdates}
 							bind:marketing={whatsappMarketing}
 						/>
+						{#if payReady && pay && quote}
+							<div in:fly={{ y: 8 }}>
+								<Payment part="main" paymentModule={pay} {quote} />
+							</div>
+						{:else if onePage}
+							<!-- The rest of the page, named before it can be filled, so a shopper sees the whole
+							     checkout at once rather than wondering what follows the address. -->
+							<section class="rounded-lg border border-dashed border-border p-4 sm:p-6" aria-labelledby="checkout-pay-later">
+								<h2 id="checkout-pay-later" class="text-base font-bold text-muted-foreground" style="font-family: var(--font-body);">
+									Delivery and payment
+								</h2>
+								<p class="mt-1 text-sm text-muted-foreground">
+									{pickup || detailsOnly ? 'Save your details' : 'Save your address'} to choose how it reaches you and how to pay.
+								</p>
+							</section>
+						{/if}
 					</div>
 
 					<!-- Right Column - Order Summary -->
+					{#if payReady && pay && quote}
+						<div class="flex flex-col gap-3" in:fly={{ y: 8 }}>
+							<OrderBlockNotice {block} currency={page?.data?.store?.currency?.code} />
+							<Payment part="aside" paymentModule={pay} {quote} onplace={placeOnePage} {placeBlocker} />
+						</div>
+					{:else}
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-border bg-background p-6">
 							<div class="mb-6 flex flex-col gap-1">
@@ -705,6 +759,18 @@
 												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
 												totalLabel={barLabel}
 											/>
+										{:else if onePage}
+											<!-- Nothing to pay with yet; the one forward action is named for where it ends. -->
+											{#if placeBlocker}
+												<p class="text-sm text-muted-foreground">{placeBlocker}</p>
+											{/if}
+											<CheckoutButton
+												text="Place order"
+												onclick={() => {}}
+												disabled
+												total={formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}
+												totalLabel={barLabel}
+											/>
 										{:else}
 											{#if continueBlocker}
 												<p class="text-sm text-muted-foreground">{continueBlocker}</p>
@@ -725,6 +791,7 @@
 
 						<OrderTrustBadges />
 					</div>
+					{/if}
 				</div>
 			{/if}
 		{/await}
