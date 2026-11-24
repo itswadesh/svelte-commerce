@@ -725,3 +725,20 @@ Placing it opens the window of the gateway the engine names for the advance, Raz
 Such an order's payment status stays pending until the cash is collected, so the success page treats
 the advance arriving as the sale ("Your advance went through") and the success, order and tracking
 pages show "Paid online ₹X · Due in cash ₹Y".
+
+## 2026-11-24: "Back to <main category>" on search results, on phones and in the app
+
+The owner asked for a back button to the previous main category after every search, then for it to
+show on the phone storefront and in the installed app only. A search results page
+(`/products?search=…`) shows "Back to Women" (say), linking to the top-level category the shopper
+last browsed this session; from a subcategory it is that subcategory's top-level parent. A shopper
+who searched without opening any category sees no button, rather than an invented destination. Each
+new search from the results page keeps pointing at the same category. The category is kept in a
+session cookie, not sessionStorage, so the server draws the button in its first HTML and nothing
+shifts on hydration. It shows below the `md` breakpoint (the listing's own phone/desktop switch) and
+in the installed app at any width; a desktop browser tab is unchanged. On for every store, with no
+setting.
+
+"Installed app" is either the store's Android APK (misiki-in/shopnx-android, a Capacitor WebView
+that appends `ShopNxApp` to its user agent) or a PWA in `display-mode: standalone`. `app.html` marks
+both with an `in-app` class on `<html>` before the body paints.

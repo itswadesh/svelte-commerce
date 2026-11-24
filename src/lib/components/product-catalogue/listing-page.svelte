@@ -13,6 +13,11 @@
 	import { X } from '@lucide/svelte'
 	import { facetKeys, hasFacetValues, readAppliedFilters, urlWithoutAnyFilter, urlWithoutFilter } from './scope-filters.js'
 	import { formatPrice } from '$lib/utils/price'
+	import BackLink from '$lib/components/common/back-link.svelte'
+	import type { MainCategory } from '$lib/components/common/main-category'
+
+	// Where a search results page sends the shopper back to: the main category they were in.
+	let { back = null }: { back?: MainCategory | null } = $props()
 
 	const data = $derived(page.data)
 	// The listing's layout is the store's choice (its theme settings); unset, the defaults apply.
@@ -80,6 +85,10 @@
 		{/if}
 
 		<div class="ed-plp__main inter-gap flex min-w-0 flex-1 flex-col">
+			{#if back}
+				<BackLink href="/{back.slug}" label="Back to {back.name}" />
+			{/if}
+
 			<ListingHeader {selectedSort} onSortChange={applySort} />
 
 			<SubcategoryRow />
