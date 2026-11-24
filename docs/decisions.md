@@ -3,6 +3,16 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-11-24: Umami and Plausible load with the page, without waiting for the cookie choice
+
+A merchant reported that Umami counted no visits: nothing here loaded it or Plausible. The gocommerce
+connector (0.45.1) now hands both over from the engine, and the layout puts each in the head with
+the vendor's own snippet once its script URL is https, Umami's website ID a UUID and Plausible's
+domain a hostname. Unlike the ad tags they do not wait for consent or the first interaction:
+neither sets a cookie or keeps an identifier on the device, and a visit that leaves untouched is
+exactly what they are there to count. Like the ad tags, neither loads while the address carries an
+email, token, key or preview. Chosen without the owner, as the sensible default; easy to reverse.
+
 ## 2026-11-07: Seven more home page sections, in the store's own colours
 
 The owner asked for more modern sections with a better layout (GoCommerce D243). Spotlight banner,
