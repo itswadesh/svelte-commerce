@@ -10,6 +10,11 @@
 		     state instead of an empty box. -->
 		<script>
 			document.documentElement.classList.add('js')
+			// `in-app`: the store running as an installed app, where there is no browser Back button
+			// to fall back on. The store's Android APK (misiki-in/shopnx-android, a Capacitor WebView)
+			// appends "ShopNxApp" to its user agent; an installed PWA reports display-mode standalone.
+			// Set before the body paints, so the app-only controls never appear late.
+			if (/ShopNxApp/.test(navigator.userAgent) || matchMedia('(display-mode: standalone)').matches) document.documentElement.classList.add('in-app')
 		</script>
 		<!-- Google Consent Mode v2 defaults, set before any tag loads. Regions that require opt-in
 		     (EEA, UK, Switzerland) start denied until the visitor chooses in the cookie banner

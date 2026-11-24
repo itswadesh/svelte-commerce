@@ -6,6 +6,7 @@
 	import { scopeListingFilters } from '$lib/components/product-catalogue/scope-filters'
 	import { page } from '$app/state'
 	import ListingScehma from '$lib/components/product-catalogue/listing-scehma.svelte'
+	import { mainCategoryCookie, mainOfTrail } from '$lib/components/common/main-category'
 
 	setDesktopFilterState()
 	setCategoryFilterState()
@@ -17,6 +18,12 @@
 	// The slug load returns { products } with the category under products.categoryHierarchy
 	// (there is no data.page here); the last entry is the current category.
 	const category = $derived(data?.products?.categoryHierarchy?.at(-1))
+
+	// Remembered for the search results' "Back to <main category>" (products/+page.svelte).
+	$effect(() => {
+		const main = mainOfTrail(data?.products?.categoryHierarchy)
+		if (main) document.cookie = mainCategoryCookie(main)
+	})
 
 	// Readable fallback derived from the URL slug (e.g. "engagement-rings" -> "Engagement rings")
 	const slugTitle = $derived(
