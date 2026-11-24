@@ -88,18 +88,22 @@
 	{/if}
 </svelte:head>
 
-<div class="relative">
-	<!-- Phones and the installed app only, like the search page's "Back to <category>": the app has no
-	     browser Back button, and a desktop tab already has one. Opposite the share button. -->
+<!-- Phones and the installed app only, like the search page's "Back to <category>": the app has no
+     browser Back button, and a desktop tab already has one. Drawn on the main picture's top-left, so
+     it stays clear of the thumbnail rail and inside the phone's full-bleed picture. -->
+{#snippet back()}
 	<a
 		href={backHref}
 		onclick={goBack}
 		aria-label={cameFromStore ? 'Back' : `Back to ${fallback?.name ?? 'home'}`}
-		class="edp-gallery-float edp-back absolute left-3 top-3 z-10 grid size-11 place-items-center rounded-full bg-card text-foreground shadow-z-1 transition-[transform,background-color] duration-fast ease-standard hover:bg-muted motion-safe:active:scale-[0.97] md:hidden [.in-app_&]:grid"
+		class="edp-gallery-float absolute left-3 top-3 z-10 grid size-11 place-items-center rounded-full bg-card text-foreground shadow-z-1 transition-[transform,background-color] duration-fast ease-standard hover:bg-muted motion-safe:active:scale-[0.97] md:hidden [.in-app_&]:grid"
 		data-testid="product-back"
 	>
 		<ChevronLeft class="size-5" aria-hidden="true" />
 	</a>
+{/snippet}
+
+<div class="relative">
 	{#if page?.data?.store?.plugins?.socialSharingButtons}
 		<div
 			class="edp-gallery-float edp-share absolute right-3 top-3 z-10 block rounded-full bg-card shadow-z-1 max-md:[&_button]:min-h-11 max-md:[&_button]:min-w-11"
@@ -111,6 +115,7 @@
 		<div class="relative">
 			<ProductGallery images={productState.productImagesArray || []}>
 				{#snippet corner()}
+					{@render back()}
 					{#if productState.productsOfSameCategory?.length}
 						<!-- Phones only: 12px in from the picture's bottom corner, level with the rating
 						     opposite, and the same size as the share button above it. -->
@@ -170,6 +175,7 @@
 		<!-- A product with no media used to render nothing at all, leaving the whole left column of the
 		     page blank beside the buy box. Reserve the same square the gallery would occupy and say
 		     plainly that there is no photograph, rather than letting the layout look broken. -->
+		{@render back()}
 		<div
 			class="flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-lg border bg-muted text-muted-foreground"
 			data-testid="product-image"
@@ -192,9 +198,6 @@
 	@media (max-width: 639px) {
 		:global([data-theme='default']) .edp-share {
 			right: calc(12px - var(--container-gutter));
-		}
-		:global([data-theme='default']) .edp-back {
-			left: calc(12px - var(--container-gutter));
 		}
 	}
 </style>
