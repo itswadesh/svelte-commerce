@@ -215,7 +215,39 @@ const BUFFER = 20
 // records the page's address, so none loads while the address bar holds one; the pages that read
 // them take them out once read.
 // A draft's preview key is one too.
-const PRIVATE_QUERY = /[?&](email|token|key|preview)=/i
+export const PRIVATE_QUERY = /[?&](email|token|key|preview)=/i
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const HOSTNAME = /^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i
+
+/** An https address, as the browser will read it, or '' for anything else. */
+function httpsUrl(value: unknown): string {
+	try {
+		const url = new URL(String(value ?? '').trim())
+		return url.protocol === 'https:' && !url.username && !url.password ? url.href : ''
+	} catch {
+		return ''
+	}
+}
+
+/**
+ * Umami and Plausible, which the store switched on with a well-formed script URL, website ID and
+ * domain; anything else loads nothing. Unlike the tags above they set no cookie and keep nothing on
+ * the shopper's device, so they need no consent and load with the page, which is also what counts a
+ * visit that leaves without touching anything.
+ */
+export function siteAnalytics(plugins: Record<string, any> | null | undefined) {
+	const umami = plugins?.umami
+	const plausible = plugins?.plausible
+	const umamiSrc = httpsUrl(umami?.scriptUrl)
+	const websiteId = String(umami?.websiteId ?? '').trim()
+	const plausibleSrc = httpsUrl(plausible?.scriptUrl)
+	const domain = String(plausible?.domain ?? '').trim()
+	return {
+		umami: umami?.active && umamiSrc && UUID.test(websiteId) ? { src: umamiSrc, websiteId } : null,
+		plausible: plausible?.active && plausibleSrc && HOSTNAME.test(domain) ? { src: plausibleSrc, domain } : null
+	}
+}
 // The product page reports its view and so does core's product state, a moment apart.
 const SAME_VIEW_MS = 10_000
 

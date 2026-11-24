@@ -1,5 +1,39 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { consentAllows, enabledTags, startAdTags, vendorCalls } from '$lib/ad-tags'
+import { consentAllows, enabledTags, siteAnalytics, startAdTags, vendorCalls } from '$lib/ad-tags'
+
+describe('siteAnalytics', () => {
+	const ID = '94db1cb1-74f4-4a40-ad6c-962362670409'
+	const umami = (scriptUrl: string, websiteId = ID, active = true) => siteAnalytics({ umami: { active, scriptUrl, websiteId } }).umami
+	const plausible = (domain: string, scriptUrl = 'https://plausible.io/js/script.js', active = true) =>
+		siteAnalytics({ plausible: { active, domain, scriptUrl } }).plausible
+
+	it('loads Umami and Plausible switched on with a well-formed URL, ID and domain', () => {
+		expect(umami('https://stats.example.com/script.js')).toEqual({ src: 'https://stats.example.com/script.js', websiteId: ID })
+		expect(plausible('shop.example.com')).toEqual({ src: 'https://plausible.io/js/script.js', domain: 'shop.example.com' })
+	})
+
+	it('loads neither while off or unset', () => {
+		expect(siteAnalytics(undefined)).toEqual({ umami: null, plausible: null })
+		expect(siteAnalytics({ umami: { active: false }, plausible: { active: false } })).toEqual({ umami: null, plausible: null })
+		expect(umami('https://stats.example.com/script.js', ID, false)).toBeNull()
+		expect(plausible('shop.example.com', undefined, false)).toBeNull()
+	})
+
+	it('refuses a script that is not https, an ID that is not a UUID and a domain that is not a hostname', () => {
+		for (const url of [
+			'http://stats.example.com/script.js',
+			'javascript:alert(1)',
+			'//stats.example.com/s.js',
+			'https://u:p@stats.example.com/s.js',
+			''
+		])
+			expect(umami(url), url).toBeNull()
+		for (const id of ['abc', ID + '"><script>', '']) expect(umami('https://stats.example.com/script.js', id), id).toBeNull()
+		for (const domain of ['https://shop.example.com', 'shop.example.com/x', 'shop', 'a.com" onload="x', ''])
+			expect(plausible(domain), domain).toBeNull()
+		expect(plausible('shop.example.com', 'http://plausible.io/js/script.js')).toBeNull()
+	})
+})
 
 const ALL = {
 	facebookPixel: { active: true, id: '1234567890' },
@@ -209,7 +243,16 @@ describe('vendorCalls', () => {
 
 	it('GA4 hears every event, to GA4 alone, with its e-commerce parameters and nothing personal', () => {
 		const purchase = { transaction_id: 'GC-1', currency: 'INR', value: 10, items: [item] }
-		const personal = { hashedEmail: 'abc', hashedPhone: 'def', iPv4: '1.2.3.4', iPv6: '::1', user_agent: 'x', city: 'Pune', zip: '411001', vendor_email: 'v@x.in' }
+		const personal = {
+			hashedEmail: 'abc',
+			hashedPhone: 'def',
+			iPv4: '1.2.3.4',
+			iPv6: '::1',
+			user_agent: 'x',
+			city: 'Pune',
+			zip: '411001',
+			vendor_email: 'v@x.in'
+		}
 		expect(vendorCalls('purchase', { ...purchase, ...personal } as any, ['ga4'])).toEqual([['ga4', 'event', 'purchase', purchase]])
 		expect(vendorCalls('search', { search_term: 'tee' } as any, ['ga4'], { ga4: 'G-ABC123XYZ' })).toEqual([
 			['ga4', 'event', 'search', { search_term: 'tee', send_to: 'G-ABC123XYZ' }]
@@ -264,7 +307,25 @@ describe('startAdTags', () => {
 		document.head.innerHTML = '<script></script>'
 		localStorage.clear()
 		history.replaceState(null, '', '/')
-		for (const k of ['fbq', '_fbq', 'ttq', 'TiktokAnalyticsObject', 'pintrk', 'snaptr', 'clarity', 'hj', '_hjSettings', 'gcLayer', 'gcGtag', 'gtmLayer', 'gtmGtag', 'ga-disable-G-ABC123XYZ', 'ga-disable-AW-1234567890', 'criteo_q']) delete w[k]
+		for (const k of [
+			'fbq',
+			'_fbq',
+			'ttq',
+			'TiktokAnalyticsObject',
+			'pintrk',
+			'snaptr',
+			'clarity',
+			'hj',
+			'_hjSettings',
+			'gcLayer',
+			'gcGtag',
+			'gtmLayer',
+			'gtmGtag',
+			'ga-disable-G-ABC123XYZ',
+			'ga-disable-AW-1234567890',
+			'criteo_q'
+		])
+			delete w[k]
 		w.dataLayer = []
 		w.gtag = function () {
 			w.dataLayer.push(arguments)
@@ -513,7 +574,7 @@ describe('startAdTags', () => {
 		expect(google()).toEqual(['https://www.googletagmanager.com/gtm.js?id=GTM-K9ZZ1&l=gtmLayer'])
 		w.gtag('event', 'purchase', { ...purchase, hashedEmail: 'abc' })
 		w.gtag('consent', 'update', { ad_storage: 'denied' })
-		const layer = w.gtmLayer.map((m: any) => (m && typeof m === 'object' && 0 in m ? [...m] : m.event ?? m))
+		const layer = w.gtmLayer.map((m: any) => (m && typeof m === 'object' && 0 in m ? [...m] : (m.event ?? m)))
 		expect(layer).toEqual([
 			['consent', 'default', { ad_storage: 'granted', analytics_storage: 'granted' }],
 			'gtm.js',
@@ -555,7 +616,10 @@ describe('startAdTags', () => {
 		await interact()
 		stop()
 		// The store added a container, which takes over GA4 and Ads.
-		stop = startAdTags(enabledTags({ googleTagManager: { ...GOOGLE, tags: [...GOOGLE.tags, 'GTM-K9ZZ1'] } }), { timeZone: 'Asia/Kolkata', reload }).stop
+		stop = startAdTags(enabledTags({ googleTagManager: { ...GOOGLE, tags: [...GOOGLE.tags, 'GTM-K9ZZ1'] } }), {
+			timeZone: 'Asia/Kolkata',
+			reload
+		}).stop
 		await interact()
 		expect(reload).toHaveBeenCalledOnce()
 		expect(w['ga-disable-G-ABC123XYZ']).toBe(true)

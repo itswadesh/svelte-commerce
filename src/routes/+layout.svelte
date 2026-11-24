@@ -6,6 +6,7 @@
 	import { setUserState } from '$lib/core/stores/index.js'
 	import KlaviyoPlugin from '$lib/core/components/plugins/klaviyo-plugin.svelte'
 	import AdTags from '$lib/components/common/ad-tags.svelte'
+	import { PRIVATE_QUERY, siteAnalytics } from '$lib/ad-tags'
 	import Attribution from '$lib/components/common/attribution.svelte'
 	import ConsentBanner from '$lib/components/common/consent-banner.svelte'
 	import GoogleStoreWidget from '$lib/components/google/google-store-widget.svelte'
@@ -149,6 +150,17 @@
 	const themeFontsUrl = $derived(getThemeFontsUrl(themeName))
 	const preloadInter = $derived(preloadsInter(themeName, publishedTokens))
 
+	// Umami and Plausible, with the vendor's own snippet. Both count client-side navigation
+	// themselves (Umami hooks pushState and replaceState, Plausible pushState and popstate). Like the
+	// ad tags, neither loads while the address carries a credential: the first page view would send it. Once in, they stay: a script tag put in again would start a second tracker.
+	// ponytail: a page that strips its credential with history.replaceState leaves page.url stale, so
+	// they come in on the next navigation; reading location there would count that page too.
+	const siteTags = $derived(siteAnalytics(data?.store?.plugins))
+	let siteTagsAllowed = $state(!PRIVATE_QUERY.test(page.url.search))
+	$effect(() => {
+		if (!PRIVATE_QUERY.test(page.url.search)) siteTagsAllowed = true
+	})
+
 	// Mobile browsers paint their own chrome — the address-bar strip on Chrome for Android, the
 	// status-bar backdrop once the storefront is installed — in a default grey unless the page names
 	// a colour, so there was a visible seam above a header that is itself `bg-background`. Take the
@@ -280,6 +292,12 @@
 	{/if}
 	{#if data?.store?.plugins?.headerScripts?.active}
 		{@html data?.store?.plugins?.headerScripts?.html}
+	{/if}
+	{#if siteTagsAllowed && siteTags.umami}
+		<script defer src={siteTags.umami.src} data-website-id={siteTags.umami.websiteId}></script>
+	{/if}
+	{#if siteTagsAllowed && siteTags.plausible}
+		<script defer data-domain={siteTags.plausible.domain} src={siteTags.plausible.src}></script>
 	{/if}
 </svelte:head>
 
