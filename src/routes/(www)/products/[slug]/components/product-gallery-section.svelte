@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { ImageOff } from '@lucide/svelte'
+	import { ChevronLeft, ImageOff } from '@lucide/svelte'
 	import { page } from '$app/state'
+	import { afterNavigate } from '$app/navigation'
+	import { mainInTree, mainOfTrail, type MainCategory } from '$lib/components/common/main-category'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import * as Drawer from '$lib/components/ui/drawer/index.js'
 	import * as Carousel from '$lib/components/ui/carousel/index.js'
@@ -11,6 +13,45 @@
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 
 	const productState = useProductState()
+
+	// Back goes back in history when the previous page was this store's own; landing here from
+	// outside (a shared link, a notification opening the app) it goes to the product's main
+	// category instead, or home when there is none, so it never leaves the store.
+	// Only a move from another page counts: the product page rewrites its own address when a variant
+	// is picked (same path, often replacing the entry), and that is not somewhere to go back to.
+	let cameFromStore = $state(false)
+	afterNavigate(({ from, to }) => {
+		let referrer = ''
+		try {
+			referrer = document.referrer && new URL(document.referrer).origin
+		} catch {}
+		if ((from && from.url.pathname !== to?.url.pathname) || referrer === location.origin) cameFromStore = true
+	})
+
+	const categorySlug = $derived(page.data?.product?.category?.slug || page.data?.product?.categoryHierarchy?.at(-1)?.slug || '')
+	// The category tree knows a subcategory's parent; the product's own trail may hold only the leaf.
+	let fromTree = $state<MainCategory | null>(null)
+	$effect(() => {
+		const slug = categorySlug
+		let live = true
+		fromTree = null
+		Promise.resolve(page.data?.store?.megamenu)
+			.then((tree) => live && (fromTree = mainInTree(tree, slug)))
+			.catch(() => {})
+		return () => (live = false)
+	})
+	const fallback = $derived(
+		fromTree ??
+			mainInTree(page.data?.store?.menu?.find?.((m: { menuId?: string }) => m?.menuId === 'header')?.items, categorySlug) ??
+			mainOfTrail(page.data?.product?.categoryHierarchy)
+	)
+	const backHref = $derived(fallback ? `/${fallback.slug}` : '/')
+
+	function goBack(event: MouseEvent) {
+		if (!cameFromStore) return
+		event.preventDefault()
+		history.back()
+	}
 	// The LCP element is the first gallery image, and it sits deep in the document (~246KB on jws,
 	// behind the inlined style block), so the parser did not request it until ~1.2s after TTFB even
 	// though the image itself costs far less than that to transfer. The delay is discovery, not bytes.
@@ -48,6 +89,17 @@
 </svelte:head>
 
 <div class="relative">
+	<!-- Phones and the installed app only, like the search page's "Back to <category>": the app has no
+	     browser Back button, and a desktop tab already has one. Opposite the share button. -->
+	<a
+		href={backHref}
+		onclick={goBack}
+		aria-label={cameFromStore ? 'Back' : `Back to ${fallback?.name ?? 'home'}`}
+		class="edp-gallery-float edp-back absolute left-3 top-3 z-10 grid size-11 place-items-center rounded-full bg-card text-foreground shadow-z-1 transition-[transform,background-color] duration-fast ease-standard hover:bg-muted motion-safe:active:scale-[0.97] md:hidden [.in-app_&]:grid"
+		data-testid="product-back"
+	>
+		<ChevronLeft class="size-5" aria-hidden="true" />
+	</a>
 	{#if page?.data?.store?.plugins?.socialSharingButtons}
 		<div
 			class="edp-gallery-float edp-share absolute right-3 top-3 z-10 block rounded-full bg-card shadow-z-1 max-md:[&_button]:min-h-11 max-md:[&_button]:min-w-11"
@@ -140,6 +192,9 @@
 	@media (max-width: 639px) {
 		:global([data-theme='default']) .edp-share {
 			right: calc(12px - var(--container-gutter));
+		}
+		:global([data-theme='default']) .edp-back {
+			left: calc(12px - var(--container-gutter));
 		}
 	}
 </style>
