@@ -742,3 +742,13 @@ setting.
 "Installed app" is either the store's Android APK (misiki-in/shopnx-android, a Capacitor WebView
 that appends `ShopNxApp` to its user agent) or a PWA in `display-mode: standalone`. `app.html` marks
 both with an `in-app` class on `<html>` before the body paints.
+
+## 2026-11-24: A back button on the product page, on phones and in the app
+
+The owner asked for a back button on the product page for the app, then for the phone storefront
+too. A round 44 px button sits at the picture's top-left, opposite share, below `md` and in the
+installed app (see the entry above); a desktop browser tab is unchanged. It goes back in history
+when the previous page was this store's own (an in-store navigation to another path, or a
+same-origin referrer); a product opened from outside (a shared link, the app's first screen) goes to
+the product's main category instead, found in the category tree, then the header menu, then the
+product's own trail, or home when there is none. So it never takes the shopper out of the store.
