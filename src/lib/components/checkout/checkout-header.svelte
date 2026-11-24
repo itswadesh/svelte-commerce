@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { goto } from '$app/navigation'
+	import { page } from '$app/state'
 	import { appendOneTimeCartId, cn } from '$lib/core/utils/index.js'
 
 	let { step = 1 } = $props()
+	// One-page checkout (GoCommerce D328): address and payment are one step, so every step's header has three.
+	const onePage = $derived(!!page.data?.store?.plugins?.onePageCheckout?.active)
 </script>
 
 <!-- Shown on mobile too: it is the only step context and the only way back to cart/address there.
@@ -51,9 +54,10 @@
 			>
 				2
 			</div>
-			<span class="ml-2 text-xs font-bold {step === 2 ? '' : 'hidden sm:inline'}">Address</span>
+			<span class="ml-2 text-xs font-bold {step === 2 ? '' : 'hidden sm:inline'}">{onePage ? 'Checkout' : 'Address'}</span>
 		</Button>
 
+		{#if !onePage}
 		<div class="h-px w-4 bg-border sm:w-8 md:w-16"></div>
 
 		<!-- Step 3: Payment -->
@@ -75,6 +79,7 @@
 			</div>
 			<span class="ml-2 text-xs font-bold {step === 3 ? '' : 'hidden sm:inline'}">Payment</span>
 		</Button>
+		{/if}
 
 		<div class="h-px w-4 bg-border sm:w-8 md:w-16"></div>
 
@@ -93,7 +98,7 @@
 					step === 4 ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
 				)}
 			>
-				4
+				{onePage ? 3 : 4}
 			</div>
 			<span class="ml-2 text-xs font-bold {step === 4 ? '' : 'hidden sm:inline'}">Placed</span>
 		</Button>

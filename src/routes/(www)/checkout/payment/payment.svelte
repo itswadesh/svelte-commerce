@@ -14,8 +14,27 @@
 	import GiftCardBox from '$lib/components/checkout/gift-card-box.svelte'
 	import { localPaymentIcon } from '$lib/core/connectors/payment-icons'
 	import { fade } from '$lib/motion'
+	import OrderItems from '$lib/components/checkout/order-items.svelte'
 
-	const { paymentModule, quote, onreview } = $props()
+	// `part` (GoCommerce D328): the one-page checkout draws this step's two halves in its own columns,
+	// 'main' (delivery and payment method) and 'aside' (items, coupons, summary and Place order),
+	// both from one PaymentModule. Without it this is the payment step, whole, as before.
+	const {
+		paymentModule,
+		quote,
+		onreview = undefined,
+		part = undefined,
+		onplace = undefined,
+		placeBlocker = ''
+	}: {
+		paymentModule: any
+		quote: any
+		onreview?: () => void
+		part?: 'main' | 'aside'
+		onplace?: () => void
+		/** Why the one-page checkout cannot place the order yet, from the sections above this one. */
+		placeBlocker?: string
+	} = $props()
 
 	// Check if phone is required based on login type
 	const isPhoneRequired = page.data?.store?.isPhoneMandatory
@@ -49,6 +68,7 @@
 	})
 	// A chosen part payment that is no longer offered is unchosen, so nothing unofferable is reviewed.
 	$effect(() => {
+		if (part === 'aside') return
 		if (paymentModule.SELECTED_PG_CODE !== PARTIAL || methods.some((m: any) => m.code === PARTIAL)) return
 		paymentModule.SELECTED_PG_CODE = ''
 		paymentModule.checkoutDisabled = true
@@ -102,6 +122,8 @@
 	)
 
 	$effect(() => {
+		// The aside shares the module with the main half; one of them picks the rate.
+		if (part === 'aside') return
 		const rates = paymentModule.shippingRates?.data ?? []
 		const firstRate = rates[0]
 		const picked = cartState?.cart?.shippingRateId
@@ -112,336 +134,382 @@
 </script>
 
 <svelte:head>
-	<title>Checkout - Secure Payment</title>
+	{#if !part}<title>Checkout - Secure Payment</title>{/if}
 </svelte:head>
 
-<div class="min-h-screen py-3 sm:py-8">
-	<div class="container mx-auto px-4">
-		<CheckoutHeader step={3} />
-		<!-- <div class="mb-8 flex justify-between items-center">
-		  <div>
-				<p class="font-bold tracking-tight text-xl">Payment</p>
+{#snippet methodList()}
+	{#if paymentModule.shippingRates?.error?.message}
+		<div class="mb-4 rounded-radius border border-destructive/40 bg-destructive/5 p-4 text-sm font-medium text-destructive">
+			We currently deliver only to
+			{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
+				<span class="font-semibold">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
+					{' '}
+				{/if}
+			{/each}.
+
+			{#if paymentModule.shippingRates?.error?.moreCountriesCount}
+				<span class="font-semibold"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
+			{/if} Your selected country is <span class="font-semibold">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
+		</div>
+	{/if}
+
+	<div class="h-fit space-y-2 sm:space-y-6">
+		<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">{covered ? 'Payment' : 'Select payment method'}</h2>
+		{#if paymentModule.showError}
+			<div class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">
+				{paymentModule.errorMessage}
 			</div>
-			<Button variant="link" onclick={() => {
-				goto("/checkout/address")
-			}} >
-				Back to address
-			</Button>
-		</div> -->
+		{/if}
 
-		{#if paymentModule.loadingForPaymentMethods || quote.awaitingFirst(cartState.cart)}
-			<!-- The shape of the step that is coming. A lone spinner in an empty region is the wrong
-			     answer anywhere, and least defensible at the payment step. -->
-			<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_400px]" aria-busy="true" aria-label="Loading payment options">
-				<div class="flex min-w-0 flex-col gap-3 sm:gap-6">
-					<div class="space-y-3 rounded-lg border p-6">
-						<Skeleton class="h-4 w-40" />
-						{#each Array(3) as _}
-							<Skeleton class="h-14 w-full rounded-md" />
-						{/each}
-					</div>
-				</div>
-				<div class="space-y-3 rounded-lg border p-6">
-					<Skeleton class="h-4 w-32" />
-					{#each Array(4) as _}
-						<Skeleton class="h-4 w-full" />
-					{/each}
-					<Skeleton class="mt-4 h-11 w-full rounded-md" />
-				</div>
-			</div>
-		{:else}
-			<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_400px]">
-				<!-- Left Column. `min-w-0` keeps a wide min-content child from stretching the column
-				     past the viewport and scrolling the page sideways on a phone. -->
-				<div class="flex min-w-0 flex-col gap-3 sm:gap-6">
-					{#if paymentModule.shippingRates?.error?.message}
-						<div class="mb-4 rounded-radius border border-destructive/40 bg-destructive/5 p-4 text-sm font-medium text-destructive">
-							We currently deliver only to
-							{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
-								<span class="font-semibold">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
-									{' '}
-								{/if}
-							{/each}.
-
-							{#if paymentModule.shippingRates?.error?.moreCountriesCount}
-								<span class="font-semibold"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
-							{/if} Your selected country is <span class="font-semibold">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
-						</div>
-					{/if}
-
-					<div class="h-fit space-y-2 sm:space-y-6">
-						<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">{covered ? 'Payment' : 'Select payment method'}</h2>
-						{#if paymentModule.showError}
-							<div class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive">
-								{paymentModule.errorMessage}
-							</div>
-						{/if}
-
-						{#if partialRefused && !covered}
-							<p class="text-sm text-muted-foreground" role="status" in:fade>Part payment with cash on delivery is not available for this order.</p>
-						{/if}
-						{#if covered}
-							<p class="rounded-radius border border-success/40 bg-success/5 p-4 text-sm font-medium text-foreground" in:fade>
-								Your gift card pays for the whole order. There is nothing more to pay.
-							</p>
-						{:else if paymentModule.showPaymentMethods}
-							<div class="grid grid-cols-1 gap-2 sm:gap-4">
-								{#each methods as method}
-									{@const methodFee = paymentFee(method)}
-									<label
-										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-background px-3 py-2.5 sm:px-6 sm:py-5 {paymentModule.selectedPGCode ==
-											method?.code && paymentModule.listOfPaymentMethods?.length !== 1
-											? 'border-primary ring-1 ring-primary'
-											: 'border-border'}"
-									>
-										<div class="flex min-w-0 items-center gap-3 sm:gap-4">
-											<div class="relative flex h-5 w-5 shrink-0 items-center justify-center">
-												<input
-													type="radio"
-													name="paymentMethod"
-													value={method?.code}
-													checked={paymentModule.SELECTED_PG_CODE === method?.code}
-													onchange={() => (paymentModule.SELECTED_PG_CODE = method?.code)}
-													class="peer h-5 w-5 appearance-none rounded-full border-2 border-border transition-all checked:border-primary"
-												/>
-												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></div>
-											</div>
-
-											<div class="flex min-w-0 items-center gap-3">
-												<div class="flex h-8 w-10 shrink-0 items-center justify-center rounded border border-border bg-background p-1 sm:h-10 sm:w-12">
-													<img src={method?.img || localPaymentIcon(method)} alt={method?.name} class="h-full w-full object-contain" />
-												</div>
-												<div class="flex min-w-0 flex-col gap-1">
-													<span class="text-sm font-bold tracking-tight text-foreground">
-														{method?.name}
-														{#if methodFee}
-															<span class="font-medium text-muted-foreground"
-																>· {formatPrice(methodFee.amount, page?.data?.store?.currency?.code)} extra</span
-															>
-														{/if}
-													</span>
-													{#if method?.description}
-														<span class="text-[10px] font-medium tracking-tighter text-muted-foreground">{@html method?.description}</span>
-													{/if}
-													{#if String(method?.code).toUpperCase() === PARTIAL}
-														{@const split = splitFor(method)}
-														{#if split}
-															<PartialCodSplit {...split} currencyCode={page?.data?.store?.currency?.code} />
-														{/if}
-													{/if}
-												</div>
-											</div>
-										</div>
-
-										{#if method?.badges?.length}
-											<div class="flex gap-2">
-												{#each method.badges as badge}
-													<span class="rounded-radius bg-background px-2 py-0.5 text-[9px] font-bold text-muted-foreground ring-1 ring-border">
-														{badge}
-													</span>
-												{/each}
-											</div>
-										{/if}
-									</label>
-								{/each}
-							</div>
-						{/if}
-					</div>
-
-					{#if paymentModule.shippingRates?.data?.length}
-						<div class="grid h-fit grid-cols-1 space-y-2 pt-1 sm:space-y-6 sm:pt-4">
-							<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Select shipping method</h2>
-
-							<div class="flex flex-col gap-2 sm:gap-3">
-								{#each paymentModule.shippingRates?.data as rate}
-									<label
-										for={rate.id}
-										class="flex items-center justify-between rounded-lg border bg-background px-3 py-2.5 transition sm:p-5-[transform,border-color,background-color] duration-fast ease-standard motion-safe:active:scale-[0.99] {cartState
-											?.cart?.shippingRateId === rate.id
-											? ''
-											: 'shadow-sm'}"
-									>
-										<div class="flex items-center gap-3 sm:gap-4">
-											<div class="relative flex h-5 w-5 items-center justify-center">
-												<input
-													type="radio"
-													name="shippingRate"
-													id={rate.id}
-													checked={cartState?.cart?.shippingRateId === rate.id}
-													onchange={() => paymentModule.handleShippingRateChange(rate)}
-													class="peer h-5 w-5 appearance-none rounded-full border-2 border-border transition-all checked:border-primary"
-												/>
-												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></div>
-											</div>
-
-											<div class="flex flex-col gap-0.5">
-												<span class="text-sm font-bold tracking-tight text-foreground">
-													{rate.name}
-												</span>
-												<div class="flex items-center gap-2">
-													{#if !Number.isNaN(Number.parseFloat(rate?.estimated_min_days)) && !Number.isNaN(Number.parseFloat(rate?.estimated_max_days))}
-														<span class="text-[10px] font-bold tracking-tighter text-primary">
-															{rate?.estimated_min_days} - {rate?.estimated_max_days} Days
-														</span>
-														<span class="h-1 w-1 rounded-full bg-border"></span>
-													{/if}
-													<span class="text-[10px] font-medium tracking-tighter text-muted-foreground">{rate.description}</span>
-												</div>
-											</div>
-										</div>
-										<div class="text-right">
-											<span class="text-sm font-bold text-foreground">
-												{rate.base_rate > 0 ? formatPrice(rate.base_rate, page?.data?.store?.currency?.code) : 'FREE'}
-											</span>
-										</div>
-									</label>
-								{/each}
-							</div>
-						</div>
-					{/if}
-				</div>
-
-				<!-- Right Column - Order Summary -->
-				<div class="flex flex-col gap-3">
-					<!-- coupon applied-->
-					{#if cartState.cart.couponCode}
-						<div class="flex items-center justify-between px-1 text-sm sm:text-base">
-							<p class="font-medium">Coupon applied</p>
-							<div class="flex items-center gap-2 rounded-radius border border-border bg-background p-2 px-3">
-								<p class="text-sm font-medium text-muted-foreground">
-									{cartState.cart.couponCode}
-								</p>
-								<Button variant="ghost" size="icon" class="h-auto w-auto p-1 text-destructive" onclick={paymentModule.removeAppliedCoupon}>
-									<X class="size-4" />
-								</Button>
-							</div>
-						</div>
-					{/if}
-
-					{#if cartState?.cart?.shippingAddress}
-						<div class="overflow-hidden rounded-lg border border-border bg-background text-left">
-							<Button variant="plain" class="flex h-auto w-full items-center justify-between px-3 py-2.5 sm:px-6 sm:py-4" onclick={() => (showAddress = !showAddress)}>
-								<div class="flex flex-col items-start">
-									<span class="text-sm font-medium text-muted-foreground">{pickupAddress !== null ? 'Pickup from the shop for' : cartState.cart?.needAddress === false ? 'Order for' : 'Delivering order to'}</span>
-									<span class="text-sm font-bold tracking-tight text-foreground">
-										{cartState.cart.shippingAddress.firstName}
-										{cartState.cart.shippingAddress.lastName}
-									</span>
-								</div>
-								<ChevronDown
-									class="h-5 w-5 text-muted-foreground transition-transform duration-panel ease-standard {showAddress ? 'rotate-180' : ''}"
+		{#if partialRefused && !covered}
+			<p class="text-sm text-muted-foreground" role="status" in:fade>Part payment with cash on delivery is not available for this order.</p>
+		{/if}
+		{#if covered}
+			<p class="rounded-radius border border-success/40 bg-success/5 p-4 text-sm font-medium text-foreground" in:fade>
+				Your gift card pays for the whole order. There is nothing more to pay.
+			</p>
+		{:else if paymentModule.showPaymentMethods}
+			<div class="grid grid-cols-1 gap-2 sm:gap-4">
+				{#each methods as method}
+					{@const methodFee = paymentFee(method)}
+					<label
+						class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-background px-3 py-2.5 sm:px-6 sm:py-5 {paymentModule.selectedPGCode ==
+							method?.code && paymentModule.listOfPaymentMethods?.length !== 1
+							? 'border-primary ring-1 ring-primary'
+							: 'border-border'}"
+					>
+						<div class="flex min-w-0 items-center gap-3 sm:gap-4">
+							<div class="relative flex h-5 w-5 shrink-0 items-center justify-center">
+								<input
+									type="radio"
+									name="paymentMethod"
+									value={method?.code}
+									checked={paymentModule.SELECTED_PG_CODE === method?.code}
+									onchange={() => (paymentModule.SELECTED_PG_CODE = method?.code)}
+									class="peer h-5 w-5 appearance-none rounded-full border-2 border-border transition-all checked:border-primary"
 								/>
-							</Button>
-
-							{#if showAddress}
-								<div class="border-t border-border bg-background px-3 py-2 sm:px-6">
-									<div class="flex items-start justify-between gap-4">
-										{#if pickupAddress !== null}
-											<p class="flex-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{pickupAddress}</p>
-										{:else}
-										<div class="flex-1">
-											<p class="text-sm leading-relaxed text-muted-foreground">
-												{cartState.cart.shippingAddress?.address_1},<br />
-												{cartState.cart.shippingAddress.locality ? cartState.cart.shippingAddress.locality + ',' : ''}
-												{cartState.cart.shippingAddress.city}, {cartState.cart.shippingAddress.state} - {cartState.cart.shippingAddress.zip}<br />
-												{cartState.cart.shippingAddress.country}
-											</p>
-											{#if cartState.cart.shippingAddress?.address_2}
-												<p class="text-xs leading-relaxed text-muted-foreground">{cartState.cart.shippingAddress?.address_2}</p>
-											{/if}
-										</div>
-										{/if}
-										<Button variant="outline" size="sm" class="h-7 px-3" onclick={paymentModule.handleAddressChange}>Change</Button>
-									</div>
-									{#if cartState.cart.phone}
-										<p class="mt-2 text-xs font-bold text-foreground">
-											Phone: {cartState.cart.phone}
-										</p>
-									{/if}
-								</div>
-							{/if}
-						</div>
-					{/if}
-
-					<!-- Same gate as the cart step: a store with no discount engine shows no promo box
-					     rather than one that refuses every code. -->
-					{#if discountCouponsPlugin?.active !== false}
-						<!-- The same offers the bag shows (D133), so a code can still be applied at the last step. -->
-						<CartOffers
-							subtotal={cartState?.cart?.subtotal}
-							applied={cartState?.cart?.couponCode}
-							quoted={quotedAuto}
-							apply={(code) => cartState.applyCoupon(code)}
-						/>
-						<CouponsDrawer marked={quotedAuto} />
-					{/if}
-
-					<GiftCardBox {cartState} />
-
-					<div class="space-y-3 sm:space-y-4">
-						<div class="space-y-3 rounded-lg border border-border bg-background p-3 sm:space-y-4 sm:p-6">
-							<div class="mb-1 flex flex-col gap-1 sm:mb-6">
-								<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Price summary</h2>
-								<div class="h-1 w-12 bg-primary max-sm:hidden"></div>
+								<div class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></div>
 							</div>
-							{#if paymentModule.loadingForCart}
-								<PriceSummary loading />
-							{:else}
-								<div class="space-y-3 sm:space-y-4">
-									<PriceSummary
-										subtotal={figures.subtotal}
-										discount={figures.discount}
-										coupon={figures.coupon}
-										giftCard={figures.giftCard}
-										shipping={figures.shipping}
-										fee={figures.fee}
-										tax={figures.tax}
-										{total}
-										currencyCode={page?.data?.store?.currency?.code}
-										shippingResolved={!!cartState.cart.shippingAddress}
-										pickup={pickupAddress !== null}
-										taxPending={figures.taxPending}
-										pending={quote.pending}
-										error={quote.error}
-										onretry={quote.retry}
-									/>
 
-									<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3 max-sm:hidden">
-										<LockKeyhole class="h-3.5 w-3.5 text-muted-foreground" />
-										<p class="text-[10px] font-bold text-muted-foreground">Secure 256-bit encryption</p>
-									</div>
-
-									{#if missingDetails.length === 0}
-										{#if reviewBlocker}
-											<p class="text-sm text-muted-foreground">{reviewBlocker}</p>
+							<div class="flex min-w-0 items-center gap-3">
+								<div class="flex h-8 w-10 shrink-0 items-center justify-center rounded border border-border bg-background p-1 sm:h-10 sm:w-12">
+									<img src={method?.img || localPaymentIcon(method)} alt={method?.name} class="h-full w-full object-contain" />
+								</div>
+								<div class="flex min-w-0 flex-col gap-1">
+									<span class="text-sm font-bold tracking-tight text-foreground">
+										{method?.name}
+										{#if methodFee}
+											<span class="font-medium text-muted-foreground"
+												>· {formatPrice(methodFee.amount, page?.data?.store?.currency?.code)} extra</span
+											>
 										{/if}
-										<CheckoutButton
-											text="Review order"
-											onclick={onreview}
-											disabled={!!reviewBlocker || !!quote.error}
-											loading={paymentModule.paymentLoader}
-											total={quote.error ? '' : formatPrice(total, page?.data?.store?.currency?.code)}
-											totalLabel={barLabel}
-										/>
-									{:else}
-										<p class="rounded-radius border border-warning/40 bg-warning/10 p-3 text-sm text-foreground">
-											This order still needs {missingDetails.join(' and ')}.
-										</p>
-										<CheckoutButton
-											text="Add delivery details"
-											onclick={paymentModule.handleAddressChange}
-											total={quote.error ? '' : formatPrice(total, page?.data?.store?.currency?.code)}
-											totalLabel={barLabel}
-										/>
+									</span>
+									{#if method?.description}
+										<span class="text-[10px] font-medium tracking-tighter text-muted-foreground">{@html method?.description}</span>
+									{/if}
+									{#if String(method?.code).toUpperCase() === PARTIAL}
+										{@const split = splitFor(method)}
+										{#if split}
+											<PartialCodSplit {...split} currencyCode={page?.data?.store?.currency?.code} />
+										{/if}
 									{/if}
 								</div>
-							{/if}
+							</div>
 						</div>
 
-						<OrderTrustBadges />
-					</div>
-				</div>
+						{#if method?.badges?.length}
+							<div class="flex gap-2">
+								{#each method.badges as badge}
+									<span class="rounded-radius bg-background px-2 py-0.5 text-[9px] font-bold text-muted-foreground ring-1 ring-border">
+										{badge}
+									</span>
+								{/each}
+							</div>
+						{/if}
+					</label>
+				{/each}
 			</div>
 		{/if}
 	</div>
+{/snippet}
+
+{#snippet rates()}
+	{#if paymentModule.shippingRates?.data?.length}
+		<div class="grid h-fit grid-cols-1 space-y-2 pt-1 sm:space-y-6 sm:pt-4">
+			<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Select shipping method</h2>
+
+			<div class="flex flex-col gap-2 sm:gap-3">
+				{#each paymentModule.shippingRates?.data as rate}
+					<label
+						for={rate.id}
+						class="flex items-center justify-between rounded-lg border bg-background px-3 py-2.5 transition sm:p-5-[transform,border-color,background-color] duration-fast ease-standard motion-safe:active:scale-[0.99] {cartState
+							?.cart?.shippingRateId === rate.id
+							? ''
+							: 'shadow-sm'}"
+					>
+						<div class="flex items-center gap-3 sm:gap-4">
+							<div class="relative flex h-5 w-5 items-center justify-center">
+								<input
+									type="radio"
+									name="shippingRate"
+									id={rate.id}
+									checked={cartState?.cart?.shippingRateId === rate.id}
+									onchange={() => paymentModule.handleShippingRateChange(rate)}
+									class="peer h-5 w-5 appearance-none rounded-full border-2 border-border transition-all checked:border-primary"
+								/>
+								<div class="absolute h-2.5 w-2.5 rounded-full bg-primary-ink opacity-0 transition-opacity peer-checked:opacity-100"></div>
+							</div>
+
+							<div class="flex flex-col gap-0.5">
+								<span class="text-sm font-bold tracking-tight text-foreground">
+									{rate.name}
+								</span>
+								<div class="flex items-center gap-2">
+									{#if !Number.isNaN(Number.parseFloat(rate?.estimated_min_days)) && !Number.isNaN(Number.parseFloat(rate?.estimated_max_days))}
+										<span class="text-[10px] font-bold tracking-tighter text-primary">
+											{rate?.estimated_min_days} - {rate?.estimated_max_days} Days
+										</span>
+										<span class="h-1 w-1 rounded-full bg-border"></span>
+									{/if}
+									<span class="text-[10px] font-medium tracking-tighter text-muted-foreground">{rate.description}</span>
+								</div>
+							</div>
+						</div>
+						<div class="text-right">
+							<span class="text-sm font-bold text-foreground">
+								{rate.base_rate > 0 ? formatPrice(rate.base_rate, page?.data?.store?.currency?.code) : 'FREE'}
+							</span>
+						</div>
+					</label>
+				{/each}
+			</div>
+		</div>
+	{/if}
+{/snippet}
+
+{#snippet aside()}
+	{#if part}
+		<OrderItems cart={cartState.cart} currencyCode={page?.data?.store?.currency?.code} />
+	{/if}
+
+	<!-- coupon applied-->
+	{#if cartState.cart.couponCode}
+		<div class="flex items-center justify-between px-1 text-sm sm:text-base">
+			<p class="font-medium">Coupon applied</p>
+			<div class="flex items-center gap-2 rounded-radius border border-border bg-background p-2 px-3">
+				<p class="text-sm font-medium text-muted-foreground">
+					{cartState.cart.couponCode}
+				</p>
+				<Button variant="ghost" size="icon" class="h-auto w-auto p-1 text-destructive" onclick={paymentModule.removeAppliedCoupon}>
+					<X class="size-4" />
+				</Button>
+			</div>
+		</div>
+	{/if}
+
+	<!-- The one-page checkout shows the address in its own section above. -->
+	{#if cartState?.cart?.shippingAddress && !part}
+		<div class="overflow-hidden rounded-lg border border-border bg-background text-left">
+			<Button variant="plain" class="flex h-auto w-full items-center justify-between px-3 py-2.5 sm:px-6 sm:py-4" onclick={() => (showAddress = !showAddress)}>
+				<div class="flex flex-col items-start">
+					<span class="text-sm font-medium text-muted-foreground">{pickupAddress !== null ? 'Pickup from the shop for' : cartState.cart?.needAddress === false ? 'Order for' : 'Delivering order to'}</span>
+					<span class="text-sm font-bold tracking-tight text-foreground">
+						{cartState.cart.shippingAddress.firstName}
+						{cartState.cart.shippingAddress.lastName}
+					</span>
+				</div>
+				<ChevronDown
+					class="h-5 w-5 text-muted-foreground transition-transform duration-panel ease-standard {showAddress ? 'rotate-180' : ''}"
+				/>
+			</Button>
+
+			{#if showAddress}
+				<div class="border-t border-border bg-background px-3 py-2 sm:px-6">
+					<div class="flex items-start justify-between gap-4">
+						{#if pickupAddress !== null}
+							<p class="flex-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{pickupAddress}</p>
+						{:else}
+						<div class="flex-1">
+							<p class="text-sm leading-relaxed text-muted-foreground">
+								{cartState.cart.shippingAddress?.address_1},<br />
+								{cartState.cart.shippingAddress.locality ? cartState.cart.shippingAddress.locality + ',' : ''}
+								{cartState.cart.shippingAddress.city}, {cartState.cart.shippingAddress.state} - {cartState.cart.shippingAddress.zip}<br />
+								{cartState.cart.shippingAddress.country}
+							</p>
+							{#if cartState.cart.shippingAddress?.address_2}
+								<p class="text-xs leading-relaxed text-muted-foreground">{cartState.cart.shippingAddress?.address_2}</p>
+							{/if}
+						</div>
+						{/if}
+						<Button variant="outline" size="sm" class="h-7 px-3" onclick={paymentModule.handleAddressChange}>Change</Button>
+					</div>
+					{#if cartState.cart.phone}
+						<p class="mt-2 text-xs font-bold text-foreground">
+							Phone: {cartState.cart.phone}
+						</p>
+					{/if}
+				</div>
+			{/if}
+		</div>
+	{/if}
+
+	<!-- Same gate as the cart step: a store with no discount engine shows no promo box
+	     rather than one that refuses every code. -->
+	{#if discountCouponsPlugin?.active !== false}
+		<!-- The same offers the bag shows (D133), so a code can still be applied at the last step. -->
+		<CartOffers
+			subtotal={cartState?.cart?.subtotal}
+			applied={cartState?.cart?.couponCode}
+			quoted={quotedAuto}
+			apply={(code) => cartState.applyCoupon(code)}
+		/>
+		<CouponsDrawer marked={quotedAuto} />
+	{/if}
+
+	<GiftCardBox {cartState} />
+
+	<div class="space-y-3 sm:space-y-4">
+		<div class="space-y-3 rounded-lg border border-border bg-background p-3 sm:space-y-4 sm:p-6">
+			<div class="mb-1 flex flex-col gap-1 sm:mb-6">
+				<h2 class="text-base font-bold text-foreground" style="font-family: var(--font-body);">Price summary</h2>
+				<div class="h-1 w-12 bg-primary max-sm:hidden"></div>
+			</div>
+			{#if paymentModule.loadingForCart}
+				<PriceSummary loading />
+			{:else}
+				<div class="space-y-3 sm:space-y-4">
+					<PriceSummary
+						subtotal={figures.subtotal}
+						discount={figures.discount}
+						coupon={figures.coupon}
+						giftCard={figures.giftCard}
+						shipping={figures.shipping}
+						fee={figures.fee}
+						tax={figures.tax}
+						{total}
+						currencyCode={page?.data?.store?.currency?.code}
+						shippingResolved={!!cartState.cart.shippingAddress}
+						pickup={pickupAddress !== null}
+						taxPending={figures.taxPending}
+						pending={quote.pending}
+						error={quote.error}
+						onretry={quote.retry}
+					/>
+
+					<div class="mt-6 flex items-center justify-center gap-2 rounded-radius border border-border bg-background px-4 py-3 max-sm:hidden">
+						<LockKeyhole class="h-3.5 w-3.5 text-muted-foreground" />
+						<p class="text-[10px] font-bold text-muted-foreground">Secure 256-bit encryption</p>
+					</div>
+
+					{#if missingDetails.length === 0 && part}
+						<!-- One-page checkout: no review screen in between, so its checks are this button's. -->
+						{#if quote.totalChanged}
+							<p role="status" class="rounded-radius border border-destructive/40 bg-destructive/5 p-3 text-sm font-medium text-destructive" in:fade>
+								{quote.totalChanged}
+							</p>
+						{/if}
+						{#if placeBlocker || reviewBlocker}
+							<p class="text-sm text-muted-foreground" role="status" in:fade>{placeBlocker || reviewBlocker}</p>
+						{/if}
+						<CheckoutButton
+							text="Place order"
+							onclick={onplace}
+							disabled={!!placeBlocker || !!reviewBlocker || (paymentModule.checkoutDisabled && !covered) || !quote.confirmable(cartState.cart)}
+							loading={paymentModule.paymentLoader}
+							total={quote.error ? '' : formatPrice(total, page?.data?.store?.currency?.code)}
+							totalLabel={barLabel}
+						/>
+					{:else if missingDetails.length === 0}
+						{#if reviewBlocker}
+							<p class="text-sm text-muted-foreground">{reviewBlocker}</p>
+						{/if}
+						<CheckoutButton
+							text="Review order"
+							onclick={onreview}
+							disabled={!!reviewBlocker || !!quote.error}
+							loading={paymentModule.paymentLoader}
+							total={quote.error ? '' : formatPrice(total, page?.data?.store?.currency?.code)}
+							totalLabel={barLabel}
+						/>
+					{:else}
+						<p class="rounded-radius border border-warning/40 bg-warning/10 p-3 text-sm text-foreground">
+							This order still needs {missingDetails.join(' and ')}.
+						</p>
+						<CheckoutButton
+							text="Add delivery details"
+							onclick={paymentModule.handleAddressChange}
+							total={quote.error ? '' : formatPrice(total, page?.data?.store?.currency?.code)}
+							totalLabel={barLabel}
+						/>
+					{/if}
+				</div>
+			{/if}
+		</div>
+
+		<OrderTrustBadges />
+	</div>
+{/snippet}
+
+{#snippet skeletonMain()}
+	<div class="space-y-3 rounded-lg border p-6">
+		<Skeleton class="h-4 w-40" />
+		{#each Array(3) as _}
+			<Skeleton class="h-14 w-full rounded-md" />
+		{/each}
+	</div>
+{/snippet}
+
+{#snippet skeletonAside()}
+<div class="space-y-3 rounded-lg border p-6">
+	<Skeleton class="h-4 w-32" />
+	{#each Array(4) as _}
+		<Skeleton class="h-4 w-full" />
+	{/each}
+	<Skeleton class="mt-4 h-11 w-full rounded-md" />
 </div>
+{/snippet}
+
+{#if part}
+	<!-- One-page checkout (D328): delivery first, then payment, since that is the order the page reads in. -->
+	<div class={part === 'main' ? 'flex min-w-0 flex-col gap-3 sm:gap-6' : 'flex flex-col gap-3'}>
+		{#if paymentModule.loadingForPaymentMethods || quote.awaitingFirst(cartState.cart)}
+			{@render (part === 'main' ? skeletonMain : skeletonAside)()}
+		{:else if part === 'main'}
+			{@render rates()}
+			{@render methodList()}
+		{:else}
+			{@render aside()}
+		{/if}
+	</div>
+{:else}
+	<div class="min-h-screen py-3 sm:py-8">
+		<div class="container mx-auto px-4">
+			<CheckoutHeader step={3} />
+
+			{#if paymentModule.loadingForPaymentMethods || quote.awaitingFirst(cartState.cart)}
+				<!-- The shape of the step that is coming. A lone spinner in an empty region is the wrong
+				     answer anywhere, and least defensible at the payment step. -->
+				<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_400px]" aria-busy="true" aria-label="Loading payment options">
+					<div class="flex min-w-0 flex-col gap-3 sm:gap-6">
+						{@render skeletonMain()}
+					</div>
+					{@render skeletonAside()}
+				</div>
+			{:else}
+				<div class="grid gap-3 sm:gap-8 lg:grid-cols-[1fr_400px]">
+					<!-- Left Column. `min-w-0` keeps a wide min-content child from stretching the column
+					     past the viewport and scrolling the page sideways on a phone. -->
+					<div class="flex min-w-0 flex-col gap-3 sm:gap-6">
+						{@render methodList()}
+						{@render rates()}
+					</div>
+
+					<!-- Right Column - Order Summary -->
+					<div class="flex flex-col gap-3">
+						{@render aside()}
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+{/if}
