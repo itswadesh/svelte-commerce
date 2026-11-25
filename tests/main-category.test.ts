@@ -57,9 +57,11 @@ describe('which main category the back buttons go to', () => {
 			href: '/women',
 			label: 'Back to Women'
 		})
-		// Searched without browsing a category: the ordinary header, no invented destination.
-		expect(appHeaderFor('/(www)/products', url('?search=dress'), undefined, null)).toBeNull()
-		expect(appHeaderFor('/(www)/products', url(), undefined, women)).toBeNull()
+		// Searched without browsing a category: home, like All products itself.
+		expect(appHeaderFor('/(www)/products', url('?search=dress'), undefined, null)).toEqual({ title: '“dress”', href: '/', label: 'Back to home' })
+		// All products, plain, sorted or filtered, keeps the heading the page prints.
+		expect(appHeaderFor('/(www)/products', url(), undefined, women)).toEqual({ title: 'All products', href: '/', label: 'Back to home' })
+		expect(appHeaderFor('/(www)/products', url('?sort=price:asc&colour=Navy'), [], null)?.title).toBe('All products')
 		expect(appHeaderFor('/(www)/products/[slug]', url(), [women], women)).toBeNull()
 	})
 })

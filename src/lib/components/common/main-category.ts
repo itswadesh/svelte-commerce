@@ -44,18 +44,20 @@ export type AppHeader = { title: string; href: string; label: string }
 /**
  * The app-style header of a listing on a phone or in the app: "← <title>", where back goes up one
  * level and never out of the store. A category goes to its parent, a main category home. Search
- * results are titled with the query and go to the main category last browsed; with none
- * remembered the page keeps the ordinary header rather than inventing a destination. Null for
- * every other page.
+ * results are titled with the query and go to the main category last browsed, or home with none
+ * remembered. All products (/products, filtered or sorted) keeps its own heading and goes home.
+ * Null for every other page.
  */
 export function appHeaderFor(routeId: string | null | undefined, url: URL, trail: unknown, remembered: MainCategory | null): AppHeader | null {
+	const crumbs = Array.isArray(trail) ? trail.map((c) => named(c)).filter((c): c is MainCategory => !!c) : []
 	if (routeId === '/(www)/products') {
 		const query = url.searchParams.get('search')?.trim()
-		if (!query || !remembered) return null
-		return { title: `“${query}”`, href: `/${remembered.slug}`, label: `Back to ${remembered.name}` }
+		if (query && remembered) return { title: `“${query}”`, href: `/${remembered.slug}`, label: `Back to ${remembered.name}` }
+		// The heading the listing itself prints (listing-header.svelte), and back to home.
+		const title = query ? `“${query}”` : (crumbs.at(-1)?.name ?? 'All products')
+		return { title, href: '/', label: 'Back to home' }
 	}
-	if (routeId === '/(www)/[slug]' && Array.isArray(trail)) {
-		const crumbs = trail.map((c) => named(c)).filter((c): c is MainCategory => !!c)
+	if (routeId === '/(www)/[slug]') {
 		const here = crumbs.at(-1)
 		if (!here) return null
 		const up = crumbs.at(-2)
