@@ -105,3 +105,18 @@ export function sortOffers(offers: readonly BagOffer[]): BagOffer[] {
 		})
 		.map(({ o }) => o)
 }
+
+/**
+ * The codes a product page shows beside the delivery check (Bewakoof study, 2026-11-25): the
+ * store's listed codes, less any the engine says cannot be used here for a reason of its own (a
+ * code for other products, say). A minimum is named, never a price after the code: the page does
+ * not know what else the bag will hold.
+ */
+export function pageOffers(offers: readonly BagOffer[] | null | undefined): BagOffer[] {
+	return (offers ?? []).filter((o) => o?.code && !o.reason)
+}
+
+/** "On orders above ₹999", or '' for a code with no minimum. */
+export function offerMinimum(o: BagOffer, money: (n: number) => string): string {
+	return o.minAmount && o.minAmount > 0 ? `On orders above ${money(o.minAmount)}` : ''
+}
