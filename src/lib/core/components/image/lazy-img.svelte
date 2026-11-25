@@ -34,10 +34,10 @@
 		width = 'auto',
 		priority = false,
 		/**
-		 * Fetch this image now rather than when it nears the viewport, but at low fetch priority so
-		 * it never competes with the LCP element. Inside the product carousel every slide past the
-		 * first sits offscreen *horizontally*, so a lazy one would wait for the swipe. Callers turn
-		 * this on once the page has gone idle, so first paint is unaffected.
+		 * Render and fetch this image now rather than when it nears the viewport, but at low fetch
+		 * priority so it never competes with the LCP element. Inside the product carousel every slide
+		 * past the first sits offscreen *horizontally*, never intersects, and would wait for the swipe.
+		 * Callers turn this on once the page has gone idle, so first paint is unaffected.
 		 */
 		eager = false,
 		loading = undefined,
@@ -93,14 +93,32 @@
 		shownSrc = src
 		if (changed) usingFallback = false
 	})
+
+	// A non-priority picture is added only once its box comes within 200px of the screen, so the
+	// pictures load in the order they come into view. Putting every one in the server's HTML as
+	// native `loading="lazy"` instead (2026-11-25) let Chrome fetch whatever lay within its 1250 to
+	// 2500px lazy margin during first load, product page gallery slides at high priority among them:
+	// mobile Lighthouse LCP went from 2.29 to 2.74s on home and 2.80 to 3.03s on a product page.
+	let near = $state(false)
+	function whenNear(node: HTMLElement) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries.some((e) => e.isIntersecting)) {
+					near = true
+					observer.disconnect()
+				}
+			},
+			{ rootMargin: '200px 0px' }
+		)
+		observer.observe(node)
+		return { destroy: () => observer.disconnect() }
+	}
 </script>
 
-<!-- No placeholder and no intersection gate (owner, 2026-11-25). The <img> is in the server's HTML
-     with `loading="lazy"`, so the browser fetches the pictures on screen first, top to bottom, and
-     the rest as they near the viewport; the box keeps its ratio, empty, and the picture fades in
-     when it arrives (app.css). It used to be added only after hydration, once it was within 50px
-     of the screen, over a grey pulsing box. -->
+<!-- No placeholder (owner, 2026-11-25): the box keeps its ratio, empty, and the picture fades in
+     when it arrives (app.css). It used to sit over a grey pulsing box. -->
 <div
+	use:whenNear
 	class="relative bg-transparent w-full"
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 >
@@ -110,25 +128,27 @@
 			     (a page navigated to, a slide added), Svelte applies attributes in source order, and
 			     setting src first starts a load for the full-width candidate before srcset is ever
 			     considered — a 96px thumbnail ends up fetching the 1280px render. -->
-			<img
-				onerror={() => {
-					usingFallback = true
-				}}
-				{alt}
-				draggable="false"
-				fetchpriority={resolvedFetchPriority}
-				decoding="async"
-				style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
-				data-nimg="1"
-				loading={resolvedLoading}
-				srcset={cdnSrcset}
-				sizes={cdnSrcset ? sizes : undefined}
-				src={getImageCDNUrl(src, cdnW, h)}
-				height={attrH}
-				width={attrW}
-				class="h-full w-full object-contain {klass}"
-				{...rest}
-			/>
+			{#if priority || eager || near}
+				<img
+					onerror={() => {
+						usingFallback = true
+					}}
+					{alt}
+					draggable="false"
+					fetchpriority={resolvedFetchPriority}
+					decoding="async"
+					style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
+					data-nimg="1"
+					loading={resolvedLoading}
+					srcset={cdnSrcset}
+					sizes={cdnSrcset ? sizes : undefined}
+					src={getImageCDNUrl(src, cdnW, h)}
+					height={attrH}
+					width={attrW}
+					class="h-full w-full object-contain {klass}"
+					{...rest}
+				/>
+			{/if}
 		</div>
 	{:else}
 		<!-- Guarded the same way the CDN branch's wrapper is: with the `auto` defaults this used
@@ -139,20 +159,22 @@
 			class={klass}
 			style="{width !== 'auto' ? `width: ${width}px;` : ''} {height !== 'auto' ? `height: ${height}px;` : ''}"
 		>
-			<img
-				{alt}
-				{src}
-				draggable="false"
-				loading={resolvedLoading}
-				fetchpriority={resolvedFetchPriority}
-				decoding="async"
-				data-nimg="1"
-				style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
-				height={attrH}
-				width={attrW}
-				class="h-full w-full object-contain {klass}"
-				{...rest}
-			/>
+			{#if priority || eager || near}
+				<img
+					{alt}
+					{src}
+					draggable="false"
+					loading={resolvedLoading}
+					fetchpriority={resolvedFetchPriority}
+					decoding="async"
+					data-nimg="1"
+					style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
+					height={attrH}
+					width={attrW}
+					class="h-full w-full object-contain {klass}"
+					{...rest}
+				/>
+			{/if}
 		</div>
 	{/if}
 </div>
