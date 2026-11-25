@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { needsSize, sizeChoices, sizeOf, sizeOptionOf, withoutSize } from '../src/lib/product/size-choice.svelte'
+import { lineSizes, needsSize, sizeChoices, sizeOf, sizeOptionOf, withoutSize } from '../src/lib/product/size-choice.svelte'
 
 const size = { id: 1, title: 'Size', values: [{ value: 'S' }, { value: 'M' }, { value: 'L' }] }
 const colour = { id: 2, title: 'Colour', values: [{ value: 'Red' }, { value: 'Blue' }] }
@@ -67,5 +67,29 @@ describe('the sizes the sheet offers', () => {
 
 	it('offers nothing for a product with no size to choose', () => {
 		expect(sizeChoices({ options: [colour], variants: [] }, null)).toEqual([])
+	})
+})
+
+describe('changing a bag line’s size', () => {
+	it('offers the other sizes in the line’s colour, with the one it has', () => {
+		const sizes = lineSizes(shirt, { variantId: '4' })
+		expect(sizes?.title).toBe('Size')
+		expect(sizes?.value).toBe('S')
+		expect(sizes?.choices.map((c) => [c.value, c.variant.id])).toEqual([
+			['S', '4'],
+			['M', '5'],
+			['L', '3']
+		])
+	})
+
+	it('matches the line’s variant whether its id is a number or a string', () => {
+		const numeric = { ...shirt, variants: shirt.variants.map((x) => ({ ...x, id: Number(x.id) })) }
+		expect(lineSizes(numeric, { variantId: '2' })?.value).toBe('M')
+	})
+
+	it('has nothing to change for a line with no size, or a variant the product no longer has', () => {
+		expect(lineSizes({ options: [colour], variants: [v(1, 'S', 'Red')] }, { variantId: '1' })).toBeNull()
+		expect(lineSizes(shirt, { variantId: '99' })).toBeNull()
+		expect(lineSizes(null, { variantId: '1' })).toBeNull()
 	})
 })

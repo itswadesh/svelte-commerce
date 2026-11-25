@@ -9,6 +9,7 @@
 	import { formatPrice } from '$lib/utils/price'
 	import { linePicture } from '$lib/customizer/line'
 	import { page } from '$app/state'
+	import LineSize from './line-size.svelte'
 
 	const cartState = getCartState()
 	const userState = getUserState()
@@ -132,43 +133,46 @@
 		     line instead of adding one. `size="icon"` is the shared 44px-on-phone / 36px-from-md box
 		     the cart page uses, and the remove button is pushed to the far end of the row. -->
 		<div class="mt-auto flex items-center justify-between gap-3 pt-1">
-			<div class="flex items-center rounded-radius border border-border bg-background">
-				<Button
-					variant="ghost"
-					size="icon"
-					data-testid="decrease-quantity"
-					onclick={decrease}
-					class="rounded-r-none border-0"
-					aria-label="Decrease quantity of {cartProduct?.title}"
-					disabled={isBusy || cartProduct.qty <= 1}
-				>
-					<Minus class="size-4" />
-				</Button>
+			<div class="flex items-center gap-2">
+				<div class="flex items-center rounded-radius border border-border bg-background">
+					<Button
+						variant="ghost"
+						size="icon"
+						data-testid="decrease-quantity"
+						onclick={decrease}
+						class="rounded-r-none border-0"
+						aria-label="Decrease quantity of {cartProduct?.title}"
+						disabled={isBusy || cartProduct.qty <= 1}
+					>
+						<Minus class="size-4" />
+					</Button>
 
-				<span
-					data-testid="item-quantity"
-					class="flex min-w-[2.25rem] items-center justify-center px-1 text-sm font-semibold tabular-nums text-foreground"
-					aria-live="polite"
-					aria-atomic="true"
-				>
-					{#if isBusy}
-						<Spinner size={4} label="Updating quantity" />
-					{:else}
-						{cartProduct.qty}
-					{/if}
-				</span>
+					<span
+						data-testid="item-quantity"
+						class="flex min-w-[2.25rem] items-center justify-center px-1 text-sm font-semibold tabular-nums text-foreground"
+						aria-live="polite"
+						aria-atomic="true"
+					>
+						{#if isBusy}
+							<Spinner size={4} label="Updating quantity" />
+						{:else}
+							{cartProduct.qty}
+						{/if}
+					</span>
 
-				<Button
-					variant="ghost"
-					size="icon"
-					data-testid="increase-quantity"
-					class="rounded-l-none border-0"
-					aria-label="Increase quantity of {cartProduct?.title}"
-					disabled={isBusy}
-					onclick={increase}
-				>
-					<Plus class="size-4" />
-				</Button>
+					<Button
+						variant="ghost"
+						size="icon"
+						data-testid="increase-quantity"
+						class="rounded-l-none border-0"
+						aria-label="Increase quantity of {cartProduct?.title}"
+						disabled={isBusy}
+						onclick={increase}
+					>
+						<Plus class="size-4" />
+					</Button>
+				</div>
+				<LineSize line={cartProduct} />
 			</div>
 
 			<Button
