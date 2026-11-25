@@ -787,3 +787,13 @@ and cart stay as they are. It goes back in history only when an earlier page of 
 it in the tab (counted on each navigation, so a variant pick does not count and the browser's own
 back and forward are followed); otherwise it links to the product's main category, or home. The
 round button on the photo (2026-11-24) is gone, so there is one back button.
+
+## 2026-11-25: All products gets the same phone and app header
+
+The owner asked for the back button on /products too. All products, plain, sorted or filtered,
+now has the listing header on a phone and in the app: ←, the heading the page already prints
+("All products", or a category it is filtered to), search and cart, with back a plain link home.
+Search results from a shopper who browsed no category, which kept the ordinary header, now get it
+too, titled with the query and going home, so every /products view looks the same. Only /products
+and the category route use the shared listing component; collections, a vendor's shop, the
+categories index and the wishlist have their own markup and keep the ordinary header.
