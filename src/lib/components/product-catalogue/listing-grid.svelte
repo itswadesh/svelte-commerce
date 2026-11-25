@@ -201,6 +201,43 @@
 			</a>
 		{/if}
 	</div>
+
+	<!-- Somewhere to go next (Bewakoof study, 2026-11-25): the store's categories, the searches its
+	     backend reports as popular, and products in the store's own order, all read with the page
+	     (products/+page.ts). A block with nothing behind it is not drawn. -->
+	{#if searchTerm && data.noResults}
+		{@const next = data.noResults}
+		<div class="flex flex-col gap-6 pb-4" data-testid="no-results-next">
+			{#each [['Shop by category', next.categories], ['Popular searches', next.searches]] as [heading, links] (heading)}
+				{#if links.length}
+					<section>
+						<h2 class="mb-2 text-base font-semibold text-foreground">{heading}</h2>
+						<ul class="flex flex-wrap gap-2">
+							{#each links as link (link.href)}
+								<li>
+									<a
+										href={link.href}
+										class="nr-chip inline-flex h-11 items-center rounded-md border border-border-strong bg-background px-3 text-sm font-medium text-foreground md:h-9"
+										>{link.name}</a
+									>
+								</li>
+							{/each}
+						</ul>
+					</section>
+				{/if}
+			{/each}
+			{#if next.products.length}
+				<section>
+					<h2 class="mb-2 text-base font-semibold text-foreground">Recommended</h2>
+					<div class="ed-grid intra-gap grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4" data-cols-mobile={options.list_columns_mobile} data-cols-desktop={options.list_columns_desktop}>
+						{#each next.products as product (product.id)}
+							<ProductCard {product} />
+						{/each}
+					</div>
+				</section>
+			{/if}
+		</div>
+	{/if}
 {:else}
 	<div
 		data-testid="product-grid"
@@ -328,6 +365,25 @@
 	:global([data-theme='default']) .ed-more,
 	:global([data-theme='default']) .ed-end {
 		color: var(--ed-soft);
+	}
+
+	.nr-chip {
+		transition:
+			border-color var(--motion-fast, 150ms) ease,
+			background-color var(--motion-fast, 150ms) ease,
+			transform var(--motion-fast, 150ms) ease;
+	}
+	.nr-chip:hover {
+		border-color: hsl(var(--foreground));
+		background: hsl(var(--muted));
+	}
+	.nr-chip:active {
+		transform: scale(0.97);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.nr-chip:active {
+			transform: none;
+		}
 	}
 
 	/* Editorial pagination — hairline chips, primary fill for the active page */
