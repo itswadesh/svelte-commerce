@@ -6,8 +6,6 @@
 	import { page } from '$app/state'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import ListingScehma from '$lib/components/product-catalogue/listing-scehma.svelte'
-	import { browser } from '$app/environment'
-	import { mainCategoryFromCookies } from '$lib/components/common/main-category'
 
 	setDesktopFilterState()
 	setCategoryFilterState()
@@ -15,14 +13,6 @@
 	scopeListingFilters()
 
 	const data = $derived(page.data)
-
-	// A search sends the shopper back to the main category they last browsed, read fresh from the
-	// cookie on every search so a new term from this page keeps pointing at the same one. None
-	// visited this session: no button, rather than an invented destination.
-	const back = $derived.by(() => {
-		if (!page.url.searchParams.get('search')) return null
-		return browser ? mainCategoryFromCookies(document.cookie) : (data.mainCategory ?? null)
-	})
 </script>
 
 <ListingScehma />
@@ -40,4 +30,4 @@
 	image={data.page?.logo || data.store?.logo || ''}
 />
 
-<ListingPage {back} />
+<ListingPage />

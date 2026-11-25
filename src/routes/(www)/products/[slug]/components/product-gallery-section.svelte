@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { ChevronLeft, ImageOff } from '@lucide/svelte'
+	import { ImageOff } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { afterNavigate } from '$app/navigation'
-	import { mainInTree, mainOfTrail, type MainCategory } from '$lib/components/common/main-category'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import * as Drawer from '$lib/components/ui/drawer/index.js'
 	import * as Carousel from '$lib/components/ui/carousel/index.js'
@@ -13,45 +11,6 @@
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 
 	const productState = useProductState()
-
-	// Back goes back in history when the previous page was this store's own; landing here from
-	// outside (a shared link, a notification opening the app) it goes to the product's main
-	// category instead, or home when there is none, so it never leaves the store.
-	// Only a move from another page counts: the product page rewrites its own address when a variant
-	// is picked (same path, often replacing the entry), and that is not somewhere to go back to.
-	let cameFromStore = $state(false)
-	afterNavigate(({ from, to }) => {
-		let referrer = ''
-		try {
-			referrer = document.referrer && new URL(document.referrer).origin
-		} catch {}
-		if ((from && from.url.pathname !== to?.url.pathname) || referrer === location.origin) cameFromStore = true
-	})
-
-	const categorySlug = $derived(page.data?.product?.category?.slug || page.data?.product?.categoryHierarchy?.at(-1)?.slug || '')
-	// The category tree knows a subcategory's parent; the product's own trail may hold only the leaf.
-	let fromTree = $state<MainCategory | null>(null)
-	$effect(() => {
-		const slug = categorySlug
-		let live = true
-		fromTree = null
-		Promise.resolve(page.data?.store?.megamenu)
-			.then((tree) => live && (fromTree = mainInTree(tree, slug)))
-			.catch(() => {})
-		return () => (live = false)
-	})
-	const fallback = $derived(
-		fromTree ??
-			mainInTree(page.data?.store?.menu?.find?.((m: { menuId?: string }) => m?.menuId === 'header')?.items, categorySlug) ??
-			mainOfTrail(page.data?.product?.categoryHierarchy)
-	)
-	const backHref = $derived(fallback ? `/${fallback.slug}` : '/')
-
-	function goBack(event: MouseEvent) {
-		if (!cameFromStore) return
-		event.preventDefault()
-		history.back()
-	}
 	// The LCP element is the first gallery image, and it sits deep in the document (~246KB on jws,
 	// behind the inlined style block), so the parser did not request it until ~1.2s after TTFB even
 	// though the image itself costs far less than that to transfer. The delay is discovery, not bytes.
@@ -88,21 +47,6 @@
 	{/if}
 </svelte:head>
 
-<!-- Phones and the installed app only, like the search page's "Back to <category>": the app has no
-     browser Back button, and a desktop tab already has one. Drawn on the main picture's top-left, so
-     it stays clear of the thumbnail rail and inside the phone's full-bleed picture. -->
-{#snippet back()}
-	<a
-		href={backHref}
-		onclick={goBack}
-		aria-label={cameFromStore ? 'Back' : `Back to ${fallback?.name ?? 'home'}`}
-		class="edp-gallery-float absolute left-3 top-3 z-10 grid size-11 place-items-center rounded-full bg-card text-foreground shadow-z-1 transition-[transform,background-color] duration-fast ease-standard hover:bg-muted motion-safe:active:scale-[0.97] md:hidden [.in-app_&]:grid"
-		data-testid="product-back"
-	>
-		<ChevronLeft class="size-5" aria-hidden="true" />
-	</a>
-{/snippet}
-
 <div class="relative">
 	{#if page?.data?.store?.plugins?.socialSharingButtons}
 		<div
@@ -115,7 +59,6 @@
 		<div class="relative">
 			<ProductGallery images={productState.productImagesArray || []}>
 				{#snippet corner()}
-					{@render back()}
 					{#if productState.productsOfSameCategory?.length}
 						<!-- Phones only: 12px in from the picture's bottom corner, level with the rating
 						     opposite, and the same size as the share button above it. -->
@@ -175,7 +118,6 @@
 		<!-- A product with no media used to render nothing at all, leaving the whole left column of the
 		     page blank beside the buy box. Reserve the same square the gallery would occupy and say
 		     plainly that there is no photograph, rather than letting the layout look broken. -->
-		{@render back()}
 		<div
 			class="flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-lg border bg-muted text-muted-foreground"
 			data-testid="product-image"
