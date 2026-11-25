@@ -71,3 +71,19 @@ export function sizeChoices(product: Product, current: Variant | null | undefine
 
 /** The product whose size the shopper has picked on this visit; '' until they do. */
 export const sizeChoice = $state({ productId: '' })
+
+/**
+ * A bag line's size and the sizes it can change to, keeping its other choices (colour), or null
+ * when the line has no size to change: one size, no size option, or a variant the product no
+ * longer has.
+ */
+export function lineSizes(
+	product: Product,
+	line: { variantId?: unknown } | null | undefined
+): { title: string; value: string; choices: { value: string; variant: Variant; soldOut: boolean }[] } | null {
+	const option = sizeOptionOf(product)
+	const current = (product?.variants ?? []).find((v) => same(v.id, line?.variantId))
+	const value = option ? sizeOf(current, option) : undefined
+	if (!option || !value) return null
+	return { title: option.title || 'Size', value, choices: sizeChoices(product, current) }
+}

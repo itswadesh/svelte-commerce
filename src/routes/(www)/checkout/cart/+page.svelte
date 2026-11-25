@@ -26,6 +26,8 @@
 	import CartOffers from '$lib/components/cart/cart-offers.svelte'
 	import CartCrossSells from '$lib/components/cart/cart-cross-sells.svelte'
 	import { trackViewCart } from '$lib/analytics'
+	import LineSize, { lineProduct } from '$lib/components/cart/line-size.svelte'
+	import { lineSizes } from '$lib/product/size-choice.svelte'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
@@ -330,6 +332,8 @@
 
 							{#each cartState.cart?.lineItems || [] as item (item.id)}
 								{@const picture = linePicture(item)}
+								<!-- The size has its own chip beside Qty once the product says which value it is. -->
+								{@const size = lineSizes(lineProduct(item), item)?.value}
 								<!-- The row used to be one anchor with `target="_blank"` wrapping seven buttons, so
 								     assistive technology announced a link containing a stepper, invalid markup put
 								     interactive controls inside an anchor, and a tap on the row's empty space opened a
@@ -374,7 +378,7 @@
 													<div class="mt-1 flex flex-wrap gap-1 sm:mt-1.5 sm:gap-1.5">
 														{#each item.variant.options as option}
 															<!-- Some connectors send the value without its option name ("Black", not "Colour: Black"); the value alone still tells the shopper which size and colour they chose. -->
-															{#if option?.value}
+															{#if option?.value && option.value !== size}
 																<span class="inline-flex items-center rounded-sm border border-border px-1.5 text-xs text-muted-foreground sm:px-2 sm:py-0.5">
 																	{option.option?.title ? `${option.option.title}: ` : ''}{option.value}
 																</span>
@@ -422,7 +426,10 @@
 										{/if}
 
 										<div class="mt-auto flex items-center justify-between gap-3 sm:pt-2">
-											{@render quantitySelector(item)}
+											<div class="flex items-center gap-2">
+												{@render quantitySelector(item)}
+												<LineSize line={item} />
+											</div>
 											{@render removeButton(item)}
 										</div>
 									</div>
