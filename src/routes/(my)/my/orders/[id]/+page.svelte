@@ -15,7 +15,6 @@
 		ShoppingBag,
 		Tag,
 		Currency,
-		RefreshCw,
 		ChevronRight,
 		Package,
 		MapPin,
@@ -30,6 +29,7 @@
 	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
 	import UpiPay from '$lib/components/order/upi-pay.svelte'
 	import PartialCodSplit from '$lib/components/order/partial-cod-split.svelte'
+	import ReplacementRequest from '$lib/components/order/replacement-request.svelte'
 
 	let { class: klass = '', data, ...rest } = $props()
 
@@ -382,13 +382,9 @@
 								</div>
 							</div>
 
-							<!-- Exchange/Return -->
-							{#if order?.replaceValidTill != null && new Date().getTime() <= order?.replaceValidTill && !order?.isReplaceOrReturn}
-								<Button variant="secondary" href="/my/exchange?orderId={order?.orderId}&itemId={order?.itemId}" class="h-12 w-full gap-2">
-									<RefreshCw class="h-4 w-4" />
-									Exchange or return
-								</Button>
-							{/if}
+							<!-- Replacement requests (GoCommerce D335): shown only in a store that takes them, on a
+							     delivered order still inside its window, or once one has been asked for. -->
+							<ReplacementRequest order={order as any} />
 						</div>
 					</div>
 
