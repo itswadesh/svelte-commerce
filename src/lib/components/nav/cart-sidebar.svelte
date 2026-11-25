@@ -12,6 +12,8 @@
 	import { dialog } from '$lib/actions/dialog.js'
 	import OrderBlockNotice from '$lib/components/order/order-block-notice.svelte'
 	import { orderBlock } from '$lib/order/rules'
+	import FreeDeliveryBar from '$lib/components/cart/free-delivery-bar.svelte'
+	import { taxIsPending } from '$lib/utils/price'
 
 	const cartState = getCartState()
 	const storeData = $derived(page.data?.store)
@@ -27,6 +29,13 @@
 	const itemCount = $derived(cartState?.cart?.lineItems?.length ?? 0)
 	// A pause on orders or a minimum the bag is under (GoCommerce D271).
 	const block = $derived(orderBlock(storeData?.plugins, cartState?.cart?.subtotal))
+	// Whether the bag has reached the store's free delivery, as the bar in the footer reports it.
+	let freeDelivery = $state(false)
+	// What is still open until checkout: delivery unless the bar says it is free, and tax unless the
+	// prices include it (the bag page's own rule).
+	const pending = $derived(
+		[!freeDelivery && 'shipping', taxIsPending(storeData?.currency?.includesTax, cartState?.cart as any) && 'taxes'].filter(Boolean).join(' and ')
+	)
 
 	const { onClose, onContinueShopping, onRemoveCartItem } = $props()
 	const modalHistoryKey = '__svelteCommerceCartSidebar'
@@ -210,6 +219,13 @@
 				</div>
 
 				<div class="shrink-0 border-t border-border bg-muted/40 px-4 py-4 pb-[calc(1rem_+_env(safe-area-inset-bottom))]">
+					<!-- The bag page's free-delivery bar, from the same store rates: nothing when the store
+					     has no free delivery. -->
+					<FreeDeliveryBar
+						subtotal={cartState.cart?.subtotal}
+						country={(cartState.cart as any)?.shippingAddress?.country ?? ''}
+						bind:qualifies={freeDelivery}
+					/>
 					<div class="flex items-baseline justify-between gap-4">
 						<p class="text-sm font-medium text-foreground">Subtotal</p>
 						{#if isBusy}
@@ -220,7 +236,9 @@
 							<p class="text-lg font-bold text-foreground">{subtotal}</p>
 						{/if}
 					</div>
-					<p class="mt-1 text-xs text-muted-foreground">Shipping and taxes calculated at checkout.</p>
+					{#if pending}
+						<p class="mt-1 text-xs text-muted-foreground">{pending.replace(/^./, (c) => c.toUpperCase())} calculated at checkout.</p>
+					{/if}
 
 					<!-- The drawer had no live region, so a screen-reader user heard nothing when a quantity
 					     change moved the subtotal. -->
