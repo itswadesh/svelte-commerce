@@ -22,6 +22,11 @@
 	import { dialog } from '$lib/actions/dialog.js'
 	import { chromeSettings } from '$lib/composer/chrome-draft.svelte.js'
 	import { headerView } from '$lib/composer/site-chrome.js'
+	import { ArrowLeft } from '@lucide/svelte'
+	import { onNavigate } from '$app/navigation'
+	import ProductBack from './product-back.svelte'
+	import { browser } from '$app/environment'
+	import { appHeaderFor, mainCategoryFromCookies } from '$lib/components/common/main-category'
 
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
@@ -92,7 +97,7 @@
 			{ title: 'Profile', url: '/my/profile' },
 			{ title: 'Orders', url: '/my/orders' },
 			// { title: 'Buy Again', url: '/my/buy-again' },
-			{ title: 'Addresses', url: '/my/addresses' },
+			{ title: 'Addresses', url: '/my/addresses' }
 		]
 		// Only a signed-in shopper has a password to change; the other links ask a guest to sign in.
 		if (userState?.user?.userId) items.push({ title: 'Change password', url: '/auth/change-password' })
@@ -141,6 +146,38 @@
 		mobileNestOpen[i] = !mobileNestOpen[i]
 	}
 
+	// A listing on a phone or in the app wears an app-style header, "← <title>" with search and cart
+	// (owner, 2026-11-25). Back is a link one level up, never history, so a shopper who arrived from
+	// an ad or a shared link still cannot leave the store with it. Search results read the remembered
+	// main category from the cookie, fresh on each search, or from the server on a first load.
+	const appHeader = $derived(
+		appHeaderFor(
+			page.route?.id,
+			page.url,
+			page.data?.products?.categoryHierarchy,
+			browser ? mainCategoryFromCookies(document.cookie) : (page.data?.mainCategory ?? null)
+		)
+	)
+
+	// On a product page, the menu button becomes a back arrow on a phone or in the app (owner,
+	// 2026-11-25). How many pages of this store are behind the current one in this tab: a move to
+	// another page adds one, the browser's back and forward move by their delta. A variant pick
+	// rewrites the product's own address and does not count. A same-store referrer on a full load
+	// counts as one. Only above zero may the arrow use history; otherwise it is a plain link.
+	const onProduct = $derived(page.route?.id === '/(www)/products/[slug]')
+	// onNavigate, not afterNavigate: the product page picks its variant with a goto as it mounts,
+	// and that supersedes the link that opened it, so afterNavigate never reports the link.
+	let pagesBehind = $state(0)
+	onMount(() => {
+		try {
+			if (document.referrer && new URL(document.referrer).origin === location.origin) pagesBehind = 1
+		} catch {}
+	})
+	onNavigate(({ from, to, type, delta }) => {
+		if (type === 'popstate') pagesBehind = Math.max(0, pagesBehind + (delta ?? -1))
+		else if (from && to && from.url.pathname !== to.url.pathname) pagesBehind += 1
+	})
+
 	// A number stored with its country code but no plus (Litekart's 91...) gets one; a local
 	// ten-digit number does not, or +98765 43210 dials a different country.
 	const storePhone = $derived.by(() => {
@@ -158,6 +195,8 @@
 {:else}
 	<header
 		class:ed={activeThemeName === 'default'}
+		class:has-app-head={!!appHeader}
+		class:on-product={onProduct}
 		style:top={barHeight ? `-${barHeight}px` : undefined}
 		class="{navModule.isProductListingPage
 			? 'max-sm:border-b'
@@ -210,11 +249,31 @@
 		<!-- One fixed height: the row no longer slims on scroll, because animating height re-lays-out
 		     the page on every scroll frame. -->
 		<div class="ed-row page-width flex h-14 items-center justify-between bg-background">
-			<div class="hidden items-center justify-center gap-3 sm:flex">
+			<!-- The app-style listing header (see `appHeader`). Both it and the ordinary controls are in
+			     the server's HTML, and CSS picks one by width and by `in-app` (app.html), so nothing
+			     swaps on load. Below md and in the app it replaces the menu, brand, wishlist and
+			     account; search and cart stay. -->
+			{#if appHeader}
+				<div class="app-head min-w-0 flex-1 items-center gap-1">
+					<a
+						href={appHeader.href}
+						aria-label={appHeader.label}
+						class="-ml-3 grid size-11 shrink-0 place-items-center rounded-full text-foreground transition-[transform,background-color] duration-fast ease-standard motion-safe:active:scale-[0.92] [@media(hover:hover)]:hover:bg-muted"
+						data-testid="header-back"
+					>
+						<ArrowLeft class="size-5" aria-hidden="true" />
+					</a>
+					<span class="app-head__title truncate" data-testid="header-title">{appHeader.title}</span>
+				</div>
+			{/if}
+			<div class="web-head hidden items-center justify-center gap-3 sm:flex">
 				<!-- `lg:hidden`, not `md:hidden`: MainNav only reveals its inline links at `lg`, so
 				     hiding this button at `md` left 768-1023px with no way to reach any category —
 				     no menu button, no links, and the category row below is plugin-gated. The two
 				     breakpoints now hand over to each other. -->
+				{#if onProduct}
+					<ProductBack canGoBack={pagesBehind > 0} />
+				{/if}
 				{#if menuShown}
 					<Button
 						variant="ghost"
@@ -222,7 +281,7 @@
 						aria-label="Menu"
 						aria-expanded={navModule.openSidebar}
 						aria-controls="main-menu-drawer"
-						class="-ml-3 md:-ml-2 lg:hidden [&_svg]:size-5"
+						class="menu-btn -ml-3 md:-ml-2 lg:hidden [&_svg]:size-5"
 						onclick={() => {
 							navModule.openSidebar = true
 						}}
@@ -233,15 +292,16 @@
 				<MainNav menu={menuShown} />
 			</div>
 
-			<!-- Below `sm` the header keeps the same shape on every route. It used to swap itself for a
-			     back chevron plus the page title on listing routes, which left a phone shopper
-			     arriving from an ad or a shared link with no menu, no brand link and no search, and
-			     the one control there called history.back() — on a fresh tab that exits to
-			     about:blank. The listing already prints its own title and count in the page body. -->
+			<!-- An earlier listing header swapped itself for a back chevron and the title with no search,
+			     and its back called history.back(), which on a fresh tab exits to about:blank. The
+			     app-style header above keeps search and cart and goes up a level by link instead. -->
 			<!-- The edge controls are 44px targets around 20px glyphs, so each is pulled out by its own
 			     padding (here and on the actions' row): the glyphs line up with the page's content edges,
 			     and every header icon is the same 20px (the Button's own default is 16px). -->
-			<div class="flex items-center justify-center gap-1 sm:hidden">
+			<div class="web-head flex items-center justify-center gap-1 sm:hidden">
+				{#if onProduct}
+					<ProductBack canGoBack={pagesBehind > 0} />
+				{/if}
 				{#if menuShown}
 					<Button
 						variant="ghost"
@@ -249,7 +309,7 @@
 						aria-label="Menu"
 						aria-expanded={navModule.openSidebar}
 						aria-controls="main-menu-drawer"
-						class="-ml-3 [&_svg]:size-5"
+						class="menu-btn -ml-3 [&_svg]:size-5"
 						onclick={() => {
 							navModule.openSidebar = true
 						}}
@@ -261,7 +321,7 @@
 			</div>
 
 			{#if navModule.megaMenuPluginActive && menuShown}
-				<nav aria-label="Main navigation" class="hidden md:block">
+				<nav aria-label="Main navigation" class="web-head hidden md:block">
 					<MegaMenu slim={isScrolled} />
 				</nav>
 			{/if}
@@ -274,7 +334,7 @@
 					<!-- No `role="navigation"` here: it wrapped a single link, so assistive tech
 					     announced a navigation landmark containing one item. The wrapper stays only
 					     because the count badge is positioned against it. -->
-					<div class="relative hidden sm:block">
+					<div class="web-head relative hidden sm:block">
 						<a
 							href="/my/wishlist"
 							class="ed-action flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground max-md:h-11 max-md:w-11"
@@ -302,7 +362,7 @@
 					</div>
 				{/if}
 
-				<div class="flex h-full items-center font-sans">
+				<div class="web-head flex h-full items-center font-sans">
 					{#if userState?.user?.role}
 						<ProfileDropdown onSignOut={navModule.handleSignOut} />
 					{:else}
@@ -363,7 +423,13 @@
 					{#if page?.data?.store?.logo}
 						<!-- Through the CDN: store logos are uploaded at full resolution and this renders
 					     32px tall. Served raw it can be the heaviest above-the-fold asset on a store. -->
-						<img src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)} width="128" height="32" class="h-8 w-auto object-contain" alt={page?.data?.store?.name || 'Logo'} />
+						<img
+							src={getImageCDNUrl(page?.data?.store?.logo, 240, 0)}
+							width="128"
+							height="32"
+							class="h-8 w-auto object-contain"
+							alt={page?.data?.store?.name || 'Logo'}
+						/>
 					{:else}
 						<span class="text-base font-semibold text-foreground">
 							{page?.data?.store?.name || 'Svelte Commerce'}
@@ -675,9 +741,63 @@
 		color: hsl(var(--primary-ink));
 	}
 
-	/* The mobile product-listing header rules that lived here are gone with the markup they
-	   dressed: the listing route now keeps the ordinary header instead of swapping it for a back
-	   chevron and a repeated page title. */
+	/* The app-style listing header: below md (where the listing itself switches to its phone layout)
+	   and in the installed app at any width. Everywhere else the ordinary header, untouched. */
+	.app-head,
+	header :global(.product-back) {
+		display: none;
+	}
+	/* The product page's back arrow takes the menu button's place, on the same terms. */
+	@media (max-width: 767.98px) {
+		header.on-product :global(.product-back) {
+			display: grid;
+		}
+		header.on-product :global(.menu-btn) {
+			display: none;
+		}
+	}
+	:global(.in-app) header.on-product :global(.product-back) {
+		display: grid;
+	}
+	:global(.in-app) header.on-product :global(.menu-btn) {
+		display: none;
+	}
+	.app-head__title {
+		font-size: var(--type-ui, 1rem);
+		font-weight: 600;
+	}
+	@media (max-width: 767.98px) {
+		header.has-app-head .app-head {
+			display: flex;
+		}
+		header.has-app-head .web-head {
+			display: none;
+		}
+		/* The listing's own heading would repeat the header's title, so it stays for screen readers
+		   and search engines only, and its product count stays visible. */
+		:global(body:has(header.has-app-head) .ed-lh__title) {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip: rect(0 0 0 0);
+			white-space: nowrap;
+		}
+	}
+	:global(.in-app) header.has-app-head .app-head {
+		display: flex;
+	}
+	:global(.in-app) header.has-app-head .web-head {
+		display: none;
+	}
+	:global(.in-app body:has(header.has-app-head) .ed-lh__title) {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
 
 	/* ---------- Mobile drawer ---------- */
 	.ed .ed-drawer {

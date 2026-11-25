@@ -39,6 +39,31 @@ export function mainInTree(tree: unknown, slug: string): MainCategory | null {
 	return named(top)
 }
 
+export type AppHeader = { title: string; href: string; label: string }
+
+/**
+ * The app-style header of a listing on a phone or in the app: "← <title>", where back goes up one
+ * level and never out of the store. A category goes to its parent, a main category home. Search
+ * results are titled with the query and go to the main category last browsed; with none
+ * remembered the page keeps the ordinary header rather than inventing a destination. Null for
+ * every other page.
+ */
+export function appHeaderFor(routeId: string | null | undefined, url: URL, trail: unknown, remembered: MainCategory | null): AppHeader | null {
+	if (routeId === '/(www)/products') {
+		const query = url.searchParams.get('search')?.trim()
+		if (!query || !remembered) return null
+		return { title: `“${query}”`, href: `/${remembered.slug}`, label: `Back to ${remembered.name}` }
+	}
+	if (routeId === '/(www)/[slug]' && Array.isArray(trail)) {
+		const crumbs = trail.map((c) => named(c)).filter((c): c is MainCategory => !!c)
+		const here = crumbs.at(-1)
+		if (!here) return null
+		const up = crumbs.at(-2)
+		return { title: here.name, href: up ? `/${up.slug}` : '/', label: up ? `Back to ${up.name}` : 'Back to home' }
+	}
+	return null
+}
+
 /** The cookie line that remembers `category` until the browser session ends. */
 export const mainCategoryCookie = (category: MainCategory) =>
 	`${MAIN_CATEGORY_COOKIE}=${encodeURIComponent(JSON.stringify(category))}; path=/; SameSite=Lax`

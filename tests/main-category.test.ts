@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { mainCategoryCookie, mainCategoryFromCookies, mainInTree, mainOfTrail, parseMainCategory } from '$lib/components/common/main-category'
+import {
+	appHeaderFor,
+	mainCategoryCookie,
+	mainCategoryFromCookies,
+	mainInTree,
+	mainOfTrail,
+	parseMainCategory
+} from '$lib/components/common/main-category'
 
 describe('which main category the back buttons go to', () => {
 	it('a subcategory listing remembers its top-level parent, not itself', () => {
@@ -36,5 +43,23 @@ describe('which main category the back buttons go to', () => {
 		expect(parseMainCategory('{"name":"Evil","slug":"/evil.com"}')).toBeNull()
 		expect(parseMainCategory('{"name":"Evil","slug":"javascript:alert(1)"}')).toBeNull()
 		expect(parseMainCategory('not json')).toBeNull()
+	})
+
+	it('the listing header goes up one level, and search results go to the main category', () => {
+		const url = (q = '') => new URL(`https://shop.test/x${q}`)
+		const women = { name: 'Women', slug: 'women' }
+		const dresses = { name: 'Dresses', slug: 'women-dresses' }
+		expect(appHeaderFor('/(www)/[slug]', url(), [women, dresses], null)).toEqual({ title: 'Dresses', href: '/women', label: 'Back to Women' })
+		expect(appHeaderFor('/(www)/[slug]', url(), [women], null)).toEqual({ title: 'Women', href: '/', label: 'Back to home' })
+		expect(appHeaderFor('/(www)/[slug]', url(), [], null)).toBeNull()
+		expect(appHeaderFor('/(www)/products', url('?search=dress'), undefined, women)).toEqual({
+			title: '“dress”',
+			href: '/women',
+			label: 'Back to Women'
+		})
+		// Searched without browsing a category: the ordinary header, no invented destination.
+		expect(appHeaderFor('/(www)/products', url('?search=dress'), undefined, null)).toBeNull()
+		expect(appHeaderFor('/(www)/products', url(), undefined, women)).toBeNull()
+		expect(appHeaderFor('/(www)/products/[slug]', url(), [women], women)).toBeNull()
 	})
 })

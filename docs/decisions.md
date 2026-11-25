@@ -762,3 +762,28 @@ when the previous page was this store's own (an in-store navigation to another p
 same-origin referrer); a product opened from outside (a shared link, the app's first screen) goes to
 the product's main category instead, found in the category tree, then the header menu, then the
 product's own trail, or home when there is none. So it never takes the shopper out of the store.
+
+## 2026-11-25: Listings and search results get an app-style header on phones and in the app
+
+The owner asked, with a reference screenshot of an app's header, for "← <category name>" in the
+header of listing pages. Below `md` and in the installed app, a category listing's header becomes a
+back arrow, the category's name (cut short with an ellipsis), search and cart; the menu, brand,
+wishlist and account leave that header. Back is a link one level up: a subcategory to its parent, a
+main category to home. It is never `history.back()`, so a shopper arriving from an ad or a shared
+link cannot leave the store with it, which is what got an earlier listing header removed. Search
+results take the same header titled with the query (“dress”), whose back goes to the main category
+last browsed. The query was chosen over the category name as the title because it names the page
+the shopper is on, as the category name does on a listing, while the arrow's accessible name says
+where it goes. With no category browsed, search results keep the ordinary header. This replaces the
+"Back to <category>" row above the results (2026-11-24). The listing's own heading would repeat the
+header's title, so there it is visually hidden but kept for screen readers and search engines, and
+its product count stays. Desktop browser tabs are unchanged.
+
+## 2026-11-25: The product page's back arrow moves to the header, in place of the menu
+
+The owner asked for the product page's back button in place of the hamburger icon. Below `md` and
+in the installed app, the header's menu button on a product page is a back arrow; the brand, search
+and cart stay as they are. It goes back in history only when an earlier page of this store is behind
+it in the tab (counted on each navigation, so a variant pick does not count and the browser's own
+back and forward are followed); otherwise it links to the product's main category, or home. The
+round button on the photo (2026-11-24) is gone, so there is one back button.
