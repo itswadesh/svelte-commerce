@@ -15,6 +15,9 @@
 	import { isOutOfStock } from '$lib/product/stock'
 	import { addOnPicks, addPicks } from '$lib/product/add-on-picks.svelte'
 	import { bumpTotal } from '$lib/product/upsells'
+	import { goto } from '$app/navigation'
+	import * as Drawer from '$lib/components/ui/drawer/index.js'
+	import { needsSize, sizeChoice, sizeChoices, sizeOptionOf } from '$lib/product/size-choice.svelte'
 
 	/**
 	 * `compact` is the sticky mobile bar: CTA only, no secondary link, no wishlist.
@@ -33,7 +36,12 @@
 	// The rule itself is shared with the product schema (src/lib/product/stock.ts).
 	const variant = $derived(productState.selectedVariant?.id ? productState.selectedVariant : null)
 	const stockSource = $derived<Record<string, any> | null>(variant ?? page.data?.product ?? null)
-	const outOfStock = $derived(isOutOfStock(stockSource))
+	// No size picked yet (size-choice.svelte.ts): the button asks for one, and is out of stock only
+	// when every size is.
+	const askSize = $derived(needsSize(page.data?.product, productState.selectedVariant))
+	const sizes = $derived(askSize ? sizeChoices(page.data?.product, productState.selectedVariant) : [])
+	const outOfStock = $derived(askSize ? sizes.every((s) => s.soldOut) : isOutOfStock(stockSource))
+	let sizeSheetOpen = $state(false)
 	// Read with the product (+page.ts): the store emails a saved item's list when it is back.
 	const restockAlerts = $derived(page.data?.restockAlerts === true)
 
@@ -80,7 +88,20 @@
 
 	$effect(() => () => clearTimeout(resetTimer))
 
+	// The size the sheet's pill names, then the add the shopper asked for in the first place.
+	function pickSize(choice: (typeof sizes)[number]) {
+		sizeChoice.productId = productId
+		productState.selectedVariant = choice.variant
+		goto(`?variant_id=${choice.variant.id}`, { replaceState: true, noScroll: true, keepFocus: true })
+		sizeSheetOpen = false
+		addToBag()
+	}
+
 	async function addToBag() {
+		if (askSize) {
+			sizeSheetOpen = true
+			return
+		}
 		// Core's cart store catches a failed add itself (it shows the error toast) and
 		// handleAddToCart still resolves true, so the store's own flag is the success signal:
 		// `showCheckout` turns on only once the cart has accepted the line. It is cleared first so a
@@ -178,6 +199,35 @@
 			</Button>
 		</div>
 	</div>
+{/if}
+
+<!-- Add to bag with no size picked asks for one here rather than adding the first size. -->
+{#if sizes.length}
+	<Drawer.Root bind:open={sizeSheetOpen}>
+		<Drawer.Content class="mx-auto max-w-lg" data-testid="size-sheet">
+			<div class="px-4 pb-[calc(1.5rem_+_env(safe-area-inset-bottom))] pt-3">
+				<Drawer.Header class="p-0 pb-3 text-left">
+					<Drawer.Title class="text-base font-semibold">Select {String(sizeOptionOf(page.data?.product)?.title || 'size').toLowerCase()}</Drawer.Title
+					>
+					<Drawer.Description class="sr-only">Choose a size to add {page.data?.product?.title} to your bag.</Drawer.Description>
+				</Drawer.Header>
+				<div class="flex flex-wrap gap-2" role="group" aria-label="Sizes">
+					{#each sizes as choice (choice.value)}
+						<Button
+							variant="plain"
+							data-testid="size-sheet-option"
+							disabled={choice.soldOut}
+							class="edp-pill h-11 min-w-[3.5rem] border border-border-strong bg-background px-4 text-sm font-medium text-foreground hover:border-foreground"
+							onclick={() => pickSize(choice)}
+						>
+							{choice.value}
+							{#if choice.soldOut}<span class="sr-only">— sold out</span>{/if}
+						</Button>
+					{/each}
+				</div>
+			</div>
+		</Drawer.Content>
+	</Drawer.Root>
 {/if}
 
 <div class="flex flex-col gap-2">

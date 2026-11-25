@@ -43,6 +43,7 @@
 	import { rememberPreview } from '$lib/composer/page-layout.js'
 	import { text, type ComposerLayout, type ComposerSection } from '$lib/composer/helpers.js'
 	import { themeOptions } from '$lib/composer/theme-options.js'
+	import { sizeChoice, sizeOf, sizeOptionOf, withoutSize } from '$lib/product/size-choice.svelte'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
@@ -109,6 +110,31 @@
 		const observer = new IntersectionObserver((entries) => (ctaOnScreen = entries[0]?.isIntersecting ?? true))
 		observer.observe(el)
 		return () => observer.disconnect()
+	})
+
+	// Size is the shopper's pick, never the first variant's (size-choice.svelte.ts). Until a size pill
+	// is pressed the selected variant is held without its size, so no pill shows pressed and Add to
+	// bag asks for one. The composable re-selects the full variant after every navigation, so this
+	// runs whenever the selection changes. A press is read from the click itself, not from the
+	// selection changing: the shopper may want the very size the composable had picked.
+	const sizeOption = $derived(sizeOptionOf(data?.product))
+	$effect(() => {
+		const variant = productState.selectedVariant
+		if (!sizeOption || sizeChoice.productId === String(data?.product?.id) || !sizeOf(variant, sizeOption)) return
+		productState.selectedVariant = withoutSize(variant, sizeOption)
+	})
+	let variationEl = $state<HTMLElement | null>(null)
+	$effect(() => {
+		const el = variationEl
+		const option = sizeOption
+		if (!el || !option) return
+		const pressed = (event: Event) => {
+			const target = event.target as HTMLElement | null
+			const pill = target?.closest('button:not(:disabled)')
+			if (pill && pill.closest('[role="group"]')?.getAttribute('aria-label') === option.title) sizeChoice.productId = String(data?.product?.id)
+		}
+		el.addEventListener('click', pressed)
+		return () => el.removeEventListener('click', pressed)
 	})
 
 	const showStickyBar = $derived(options.pdp_sticky_buy && isCompactViewport && !ctaOnScreen)
@@ -503,7 +529,9 @@
 
 				<ProductAggregation />
 
-				<ProductVariation />
+				<div bind:this={variationEl} class="contents">
+					<ProductVariation />
+				</div>
 
 				<!-- In flow on every viewport. The mobile CTA used to exist only inside the sticky
 				     bar, which is why that bar had to be pinned from first paint. The wrapper exists
@@ -552,7 +580,9 @@
 						{#if hasShippingPolicy}
 							<p class="flex items-center gap-2 text-muted-foreground">
 								<Truck class="size-4 shrink-0" aria-hidden="true" />
-								<PolicyLink href="/shipping-policy" class="hit-44 underline underline-offset-4 transition-colors hover:text-foreground">Shipping and delivery</PolicyLink>
+								<PolicyLink href="/shipping-policy" class="hit-44 underline underline-offset-4 transition-colors hover:text-foreground"
+									>Shipping and delivery</PolicyLink
+								>
 							</p>
 						{/if}
 						{#if cod}
@@ -564,7 +594,9 @@
 						{#if hasRefundPolicy}
 							<p class="flex items-center gap-2 text-muted-foreground">
 								<RotateCcw class="size-4 shrink-0" aria-hidden="true" />
-								<PolicyLink href="/refund-policy" class="hit-44 underline underline-offset-4 transition-colors hover:text-foreground">Returns and refunds</PolicyLink>
+								<PolicyLink href="/refund-policy" class="hit-44 underline underline-offset-4 transition-colors hover:text-foreground"
+									>Returns and refunds</PolicyLink
+								>
 							</p>
 						{/if}
 					</div>
