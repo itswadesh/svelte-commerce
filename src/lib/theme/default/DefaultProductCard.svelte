@@ -3,7 +3,6 @@
 	import { Plus, Minus, Heart, ImageOff } from '@lucide/svelte'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton'
 	import { getCartState } from '$lib/core/stores/index.js'
 	import type { CartLineItem } from '$lib/core/types/index.js'
 	import { formatPrice } from '$lib/utils/price'
@@ -86,30 +85,21 @@
 	let wantsSecond = $state(false)
 	let secondLoaded = $state(false)
 
-	// The image's own states. LazyImg keeps its pulsing placeholder up forever when a src 404s
-	// and shows the browser's broken-image glyph for priority images, which is two different
-	// broken presentations in one grid. Load and error are caught in the capture phase (neither
-	// event bubbles) so the card can swap in the shared empty surface instead.
-	let imageLoaded = $state(false)
+	// A picture that fails shows the browser's broken-image glyph; the card swaps in the shared
+	// empty surface instead. Error is caught in the capture phase, as it does not bubble.
 	// Restarts the heart pop on each toggle; 0 means "not touched yet", so a page load does not pop.
 	let popKey = $state(0)
 	let imageFailed = $state(false)
 
-	// An image that finished before hydration fires neither event, so its final state is read
-	// once from the element. `decode()` answers for both outcomes without guessing at
-	// naturalWidth, which is 0 for perfectly good SVGs.
+	// A picture that failed before hydration fires no event, so its final state is read once from
+	// the element. `decode()` answers without guessing at naturalWidth, which is 0 for good SVGs.
 	function trackImage(node: HTMLElement) {
 		const sync = () => {
 			const img = node.querySelector('img')
 			if (!img?.complete) return
-			img
-				.decode()
-				.then(() => {
-					imageLoaded = true
-				})
-				.catch(() => {
-					imageFailed = true
-				})
+			img.decode().catch(() => {
+				imageFailed = true
+			})
 		}
 
 		sync()
@@ -143,7 +133,6 @@
 							class="dpc__frame"
 							data-vt-product-media={product.slug}
 							use:trackImage
-							onloadcapture={() => (imageLoaded = true)}
 							onerrorcapture={() => (imageFailed = true)}
 						>
 							<LazyImg
@@ -158,11 +147,6 @@
 							<div class="dpc__frame dpc__second" class:is-ready={secondLoaded} aria-hidden="true" onloadcapture={() => (secondLoaded = true)}>
 								<LazyImg src={secondSrc} alt="" sizes="(min-width: 1280px) 14vw, (min-width: 1024px) 17vw, 21vw" class="dpc__img" />
 							</div>
-						{/if}
-						{#if !imageLoaded}
-							<!-- Covers LazyImg's own hard-coded grey pulse, and covers the gap a priority
-							     image leaves while it downloads, at the reserved size. -->
-							<Skeleton class="dpc__skeleton" />
 						{/if}
 					{:else}
 						<div class="dpc__empty" data-testid="product-card-empty-image">
@@ -333,7 +317,6 @@
 		margin: 0;
 		overflow: hidden;
 		border-radius: var(--ed-radius);
-		background: var(--ed-surface);
 	}
 
 	/* LazyImg wraps the <img> in its own aspect-ratio box (the store's image ratio). Force that
@@ -368,26 +351,10 @@
 		}
 	}
 
-	/* LazyImg's own placeholder is a hard-coded grey pulse that never stops when a src 404s, and
-	   priority images skip it altogether. The card owns the loading and error surfaces instead —
-	   the package component is not edited, its placeholder is simply not used here. */
-	.dpc__frame :global(.animate-pulse) {
-		display: none;
-	}
-
-	/* Loading and empty share one ground, so a card that is waiting and a card that has nothing
-	   to show read as the same reserved frame instead of two different faults. */
-	.dpc :global(.dpc__skeleton) {
-		position: absolute;
-		inset: 0;
-		z-index: 1;
-		border-radius: 0;
-	}
-
-	/* The card surface with a hairline, not the muted fill. A merchant palette can set --muted to a
-	   mid tone, and a grid of mid-grey blocks where the photographs belong reads as broken images
-	   rather than as "no photo yet". Matches the product page. */
-	.dpc :global(.dpc__skeleton),
+	/* While a picture downloads its frame is empty, the page's own ground, and the picture fades in
+	   (app.css). A product with no picture at all gets the card surface with a hairline, not the
+	   muted fill: a merchant palette can set --muted to a mid tone, and mid-grey blocks where the
+	   photographs belong read as broken images. Matches the product page. */
 	.dpc__empty {
 		background: hsl(var(--card));
 		border: 1px solid hsl(var(--border));
@@ -767,9 +734,6 @@
 	/* Still: no zoom, press or pop. The second picture and the colour changes still fade, so every
 	   hover and tap still answers. */
 	@media (prefers-reduced-motion: reduce) {
-		.dpc :global(.dpc__skeleton) {
-			animation: none;
-		}
 		.dpc__frame,
 		.dpc__media,
 		.dpc__wish,

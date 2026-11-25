@@ -58,8 +58,9 @@
 			<!-- Skeleton cards in the real grid, not a centred spinner: the rail keeps its height,
 			     so nothing below it jumps when the products arrive. The spinner this replaces was
 			     also invisible — `border-primary` is not a class this project defines, so it
-			     rendered as a transparent ring. -->
-			<div class="edp-related-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6" aria-hidden="true">
+			     rendered as a transparent ring. Kept invisible: the owner asked for no placeholder boxes
+			     (2026-11-25), only the reserved space. -->
+			<div class="edp-related-grid invisible grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6" aria-hidden="true">
 				{#each { length: 6 } as _}
 					<div class="flex flex-col gap-2">
 						<Skeleton class="w-full" style="aspect-ratio: {mediaRatio};" />

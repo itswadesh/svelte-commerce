@@ -23,7 +23,6 @@
 </script>
 
 <script lang="ts">
-	import { onMount } from 'svelte'
 	import { page } from '$app/state'
 
 	let {
@@ -35,15 +34,10 @@
 		width = 'auto',
 		priority = false,
 		/**
-		 * Render and fetch this image now, without waiting for it to intersect the viewport, but at
-		 * low fetch priority so it never competes with the LCP element.
-		 *
-		 * The intersection gate below means a non-priority image is not merely
-		 * `loading="lazy"` — its <img> is not in the DOM at all. Inside the product carousel every
-		 * slide past the first sits offscreen *horizontally*, so nothing intersects and the request
-		 * does not begin until the shopper swipes. They then wait a full round trip against the
-		 * placeholder on every swipe. Callers turn this on once the page has gone idle, so first
-		 * paint is unaffected.
+		 * Fetch this image now rather than when it nears the viewport, but at low fetch priority so
+		 * it never competes with the LCP element. Inside the product carousel every slide past the
+		 * first sits offscreen *horizontally*, so a lazy one would wait for the swipe. Callers turn
+		 * this on once the page has gone idle, so first paint is unaffected.
 		 */
 		eager = false,
 		loading = undefined,
@@ -89,119 +83,52 @@
 	// caller supplies `sizes`, so existing single-src usage is unchanged.
 	const cdnSrcset = $derived((sizes && lazyImgSrcset(src)) || undefined)
 
-	const extension = $derived(src?.split('.').pop())
+	let usingFallback = $state(false) // The CDN failed this picture; show the original address.
 
-	let loaded = $state(false)
-	let error = $state(false)
-	let isIntersecting = $state(false)
-	let containerRef: HTMLDivElement
-	let usingFallback = $state(false) // Track if we're using fallback
-
-	// Transparent placeholder
-	const transparentPlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-
-	let observer: IntersectionObserver
-
-	onMount(() => {
-		observer = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-          if (!isIntersecting) {
-					  isIntersecting = entry.isIntersecting
-          }
-				}
-			},
-			{
-				rootMargin: '50px',
-				threshold: 0
-			}
-		)
-
-		if (containerRef) {
-			observer.observe(containerRef)
-		}
-
-		return () => {
-			if (observer) {
-				observer.disconnect()
-			}
-		}
-	})
-
-	// Start over only when the address really changes. The effect also re-ran whenever the parent
-	// rebuilt the object `src` was read from (a cart refresh after +, a listing re-fetch) with the
-	// same address: `loaded` went false, the browser had nothing new to load, so no load event came
-	// and the picture stayed at opacity 0. That emptied every other line's picture in the bag.
+	// Retry the CDN only when the address really changes, not when the parent rebuilds the object
+	// `src` was read from (a cart refresh after +, a listing re-fetch) with the same address.
 	let shownSrc: string | null = null
 	$effect(() => {
 		const changed = shownSrc !== null && src !== shownSrc
 		shownSrc = src
-		if (!changed) return
-		loaded = false
-		error = false
-		usingFallback = false
+		if (changed) usingFallback = false
 	})
 </script>
 
+<!-- No placeholder and no intersection gate (owner, 2026-11-25). The <img> is in the server's HTML
+     with `loading="lazy"`, so the browser fetches the pictures on screen first, top to bottom, and
+     the rest as they near the viewport; the box keeps its ratio, empty, and the picture fades in
+     when it arrives (app.css). It used to be added only after hydration, once it was within 50px
+     of the screen, over a grey pulsing box. -->
 <div
-	bind:this={containerRef}
 	class="relative bg-transparent w-full"
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 >
-	{#if (!loaded || error) && !priority}
-		<!-- Visible loading placeholder (skipped for priority images, which render eagerly). -->
-		<div class="absolute inset-0 flex items-center justify-center bg-gray-50 animate-pulse">
-			<!-- <ImageIcon class="h-8 w-8 text-gray-400" /> -->
-		</div>
-	{/if}
-	<!-- {#if !loaded && !error}
-		<div class="absolute inset-0 flex items-center justify-center bg-gray-50/50" transition:fade={{ duration: 150 }}>
-			<div class="h-1 w-1/3 overflow-hidden rounded-full bg-primary/20">
-				<div class="h-full w-1/3 animate-[shimmer_1.5s_ease-in-out_infinite] rounded-full bg-primary"></div>
-			</div>
-		</div>
-	{/if} -->
 	{#if page?.data?.store?.plugins?.imageCdn?.active && !usingFallback}
 		<div class={klass}>
-			{#if isIntersecting || priority || eager}
-				<!-- srcset/sizes are declared BEFORE src on purpose. This <img> is created by the
-				     client (behind the IntersectionObserver gate), not by the HTML parser, so Svelte
-				     applies attributes in source order and setting src first starts a load for the
-				     full-width candidate before srcset is ever considered — a 96px thumbnail ends up
-				     fetching the 1280px render despite carrying a correct srcset. -->
-				<img
-					onload={() => {
-						loaded = true
-						error = false
-					}}
-					onerror={(e) => {
-						if (!usingFallback) {
-							usingFallback = true
-							loaded = false
-							error = false
-						} else {
-							error = true
-							loaded = false
-						}
-					}}
-					{alt}
-					draggable="false"
-					fetchpriority={resolvedFetchPriority}
-					decoding="async"
-	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
-					data-nimg="1"
-					loading={resolvedLoading}
-					srcset={cdnSrcset}
-					sizes={cdnSrcset ? sizes : undefined}
-					src={getImageCDNUrl(src, cdnW, h)}
-					height={attrH}
-					width={attrW}
-					class="h-full w-full object-contain transition-opacity duration-300 {klass}"
-					class:opacity-0={!(loaded || priority)}
-					class:opacity-100={loaded || priority}
-					{...rest}
-				/>
-			{/if}
+			<!-- srcset/sizes are declared BEFORE src on purpose. When the client creates this <img>
+			     (a page navigated to, a slide added), Svelte applies attributes in source order, and
+			     setting src first starts a load for the full-width candidate before srcset is ever
+			     considered — a 96px thumbnail ends up fetching the 1280px render. -->
+			<img
+				onerror={() => {
+					usingFallback = true
+				}}
+				{alt}
+				draggable="false"
+				fetchpriority={resolvedFetchPriority}
+				decoding="async"
+				style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
+				data-nimg="1"
+				loading={resolvedLoading}
+				srcset={cdnSrcset}
+				sizes={cdnSrcset ? sizes : undefined}
+				src={getImageCDNUrl(src, cdnW, h)}
+				height={attrH}
+				width={attrW}
+				class="h-full w-full object-contain {klass}"
+				{...rest}
+			/>
 		</div>
 	{:else}
 		<!-- Guarded the same way the CDN branch's wrapper is: with the `auto` defaults this used
@@ -212,49 +139,20 @@
 			class={klass}
 			style="{width !== 'auto' ? `width: ${width}px;` : ''} {height !== 'auto' ? `height: ${height}px;` : ''}"
 		>
-			{#if isIntersecting || priority || eager}
-				<img
-					onload={() => {
-						loaded = true
-						error = false
-					}}
-					onerror={(ev) => {
-						error = true
-						loaded = false
-					}}
-					{alt}
-					{src}
-					draggable="false"
-					loading={resolvedLoading}
-					fetchpriority={resolvedFetchPriority}
-					decoding="async"
-					data-nimg="1"
-	        style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
-					height={attrH}
-					width={attrW}
-					class="h-full w-full object-contain transition-opacity duration-300 {klass}"
-					class:opacity-0={!(loaded || priority)}
-					class:opacity-100={loaded || priority}
-					{...rest}
-				/>
-			{/if}
+			<img
+				{alt}
+				{src}
+				draggable="false"
+				loading={resolvedLoading}
+				fetchpriority={resolvedFetchPriority}
+				decoding="async"
+				data-nimg="1"
+				style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
+				height={attrH}
+				width={attrW}
+				class="h-full w-full object-contain {klass}"
+				{...rest}
+			/>
 		</div>
 	{/if}
 </div>
-
-<style>
-	@keyframes shimmer {
-		0% {
-			background-position: -200% 0;
-		}
-		100% {
-			background-position: 200% 0;
-		}
-	}
-
-	.shimmer {
-		background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
-		background-size: 200% 100%;
-		animation: shimmer 1.5s infinite;
-	}
-</style>

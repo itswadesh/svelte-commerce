@@ -258,8 +258,10 @@
 			{#if loadingMore}
 				<!-- Card-shaped, at the same aspect ratio as the real cards, so the page grows by the
 				     height the products will occupy instead of jumping when they arrive. This used to
-				     be two 8px grey dashes, which read as a rendering fault rather than as loading. -->
-				<div class="intra-gap grid w-full grid-cols-2" aria-label="Loading more products">
+				     be two 8px grey dashes, which read as a rendering fault rather than as loading. Kept invisible:
+				     the owner asked for no placeholder boxes (2026-11-25), only the reserved space. -->
+				<span class="sr-only">Loading more products</span>
+				<div class="intra-gap invisible grid w-full grid-cols-2" aria-hidden="true">
 					{#each Array(2) as _}
 						<div class="flex flex-col gap-2">
 							<Skeleton class="w-full rounded-md" style="aspect-ratio: var(--product-image-ratio, {cardRatio});" />

@@ -109,6 +109,10 @@
 		overflow: hidden;
 		border-radius: var(--radius, 0.5rem);
 		aspect-ratio: 4 / 3;
+	}
+
+	/* Empty while a picture downloads (app.css); a column with none keeps the filled box. */
+	.cmp-mc__media:not(:has(img)) {
 		background: hsl(var(--muted));
 	}
 

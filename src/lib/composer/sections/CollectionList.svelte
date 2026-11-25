@@ -73,12 +73,16 @@
 		color: hsl(var(--foreground));
 	}
 
-	/* A picture's box is set before it arrives, and a collection without one keeps the box. */
+	/* A picture's box is set before it arrives and stays empty until it fades in (app.css); a
+	   collection without one keeps the box, filled. */
 	.cmp-col-card__media {
 		display: block;
 		overflow: hidden;
 		border-radius: var(--radius, 0.5rem);
 		aspect-ratio: 4 / 5;
+	}
+
+	.cmp-col-card__media:not(:has(img)) {
 		background: hsl(var(--muted));
 	}
 

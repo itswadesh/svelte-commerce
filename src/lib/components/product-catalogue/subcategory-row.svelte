@@ -18,7 +18,7 @@
 			{#each items as item (item.href)}
 				<li class="shrink-0">
 					<a href={item.href} class="sub-row__link group flex w-[72px] flex-col items-center gap-1.5 md:w-20">
-						<span class="sub-row__pic block aspect-square w-16 overflow-hidden rounded-full border bg-muted md:w-[72px]">
+						<span class="sub-row__pic block aspect-square w-16 overflow-hidden rounded-full border md:w-[72px]">
 							{#if item.image}
 								<img src={item.image} alt="" loading="lazy" decoding="async" width="72" height="72" class="h-full w-full object-cover" />
 							{/if}

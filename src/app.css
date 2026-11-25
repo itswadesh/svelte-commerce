@@ -700,6 +700,20 @@ div[data-theme='default'] {
 	}
 }
 
+/* Pictures fade in as they arrive (owner, 2026-11-25). Nothing stands in for a picture while it
+   downloads: its box is reserved by its ratio and stays the page's own ground, and the picture fades
+   up over it once app.html marks it `data-shown`. Lazy pictures only: the eager one at the top is the
+   LCP and paints at once. `:where` keeps this at zero specificity, so a component that sets its own
+   opacity or transition on a picture still wins. Still motion: the picture simply appears. */
+@media (prefers-reduced-motion: no-preference) {
+	:where(html.js) :where(img[loading='lazy']) {
+		transition: opacity var(--motion-emphasis) var(--motion-ease);
+	}
+	:where(html.js) :where(img[loading='lazy']:not([data-shown])) {
+		opacity: 0;
+	}
+}
+
 /* ------------------------------------------------------------------ *
  * Route transitions — src/lib/motion/route-transition.ts
  *

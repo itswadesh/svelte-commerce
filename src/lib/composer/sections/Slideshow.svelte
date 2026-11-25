@@ -188,7 +188,6 @@
 	.cmp-slide__media {
 		display: block;
 		aspect-ratio: var(--slide-shape-phone, 4 / 3);
-		background: hsl(var(--muted));
 	}
 
 	.cmp-slide__media img {

@@ -3,6 +3,21 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-11-25: Pictures load top to bottom and fade in, with no placeholder box
+
+The owner asked that storefront pictures load in the order they come into view, fade in subtly, and
+lose the placeholder section. Every picture is now in the server's HTML: the one at the top (hero or
+first product) eager with high priority, the rest `loading="lazy"`, so the browser fetches what is on
+screen first and the rest as they near the viewport. LazyImg used to add its `<img>` only after
+hydration, within 50px of the screen, over a grey pulsing box. Nothing stands in for a picture now:
+its box keeps its ratio (CLS stays 0) and shows the page's own ground. The grey and hairline boxes,
+the muted fills behind section pictures and the skeleton grids shown while products load are gone
+(the grids are kept, invisible, for their height). A picture fades in over 300ms once it arrives
+(`app.html` marks it, `app.css` fades it). The eager top picture paints at once, so LCP is not
+delayed; with reduced motion every picture simply appears. A product with no picture at all still
+gets its hairline frame, and the dark shade behind a hero's words stays, since it keeps white words
+readable while the photograph downloads.
+
 ## 2026-11-24: Umami and Plausible load with the page, without waiting for the cookie choice
 
 A merchant reported that Umami counted no visits: nothing here loaded it or Plausible. The gocommerce
