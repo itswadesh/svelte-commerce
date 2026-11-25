@@ -4,10 +4,44 @@
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { Ruler, X } from '@lucide/svelte'
 	import { fade } from '$lib/motion'
+	import { convertValue, type SizeChart, type SizeUnit } from '$lib/product/size-chart'
 
-	let { open = $bindable(false) } = $props()
+	/**
+	 * The size guide. With the shop's own chart (GoCommerce D329) it shows that, in inches or
+	 * centimetres, and a size can be chosen from its row; without one it is the ring chart below,
+	 * which is what a ring store has always had.
+	 */
+	let {
+		open = $bindable(false),
+		chart = null,
+		selected = '',
+		canPick = () => true,
+		onpick
+	}: {
+		open?: boolean
+		chart?: SizeChart | null
+		selected?: string
+		canPick?: (size: string) => boolean
+		onpick?: (size: string) => void
+	} = $props()
 
 	let innerWidth = $state(0)
+
+	// The shop's unit until the shopper switches; a new chart (another product) starts over.
+	let chosenUnit = $state<SizeUnit | null>(null)
+	const unit = $derived<SizeUnit>(chosenUnit ?? chart?.unit ?? 'in')
+	$effect(() => {
+		void chart
+		chosenUnit = null
+	})
+	const UNITS: SizeUnit[] = ['in', 'cm']
+	const unitName = (u: SizeUnit) => (u === 'in' ? 'inches' : 'centimetres')
+	const sameSize = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase()
+
+	const pick = (size: string) => {
+		onpick?.(size)
+		open = false
+	}
 
 	// US ring sizes with circumference and diameter (mm) — standard Zales chart
 	const ringSizes = [
@@ -55,8 +89,15 @@
 	<Drawer.Content class="sm:left-auto sm:right-0 sm:top-0 sm:mt-0 sm:h-[100dvh] sm:w-fit sm:max-w-md [&>div:first-child]:hidden">
 		<div in:fade class="mx-auto w-full max-w-md pb-8 sm:flex sm:h-[100dvh] sm:flex-col sm:pb-0">
 			<Drawer.Header class="text-left">
-				<Drawer.Title>Ring size guide</Drawer.Title>
-				<Drawer.Description class="text-sm text-muted-foreground">Find your perfect fit using the chart below or measure at home.</Drawer.Description>
+				{#if chart}
+					<Drawer.Title>Size guide</Drawer.Title>
+					<Drawer.Description class="text-sm text-muted-foreground">Measurements in {unitName(unit)}. Tap a size to choose it.</Drawer.Description>
+				{:else}
+					<Drawer.Title>Ring size guide</Drawer.Title>
+					<Drawer.Description class="text-sm text-muted-foreground"
+						>Find your perfect fit using the chart below or measure at home.</Drawer.Description
+					>
+				{/if}
 				<Drawer.Close
 					class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
 				>
@@ -65,64 +106,147 @@
 				</Drawer.Close>
 			</Drawer.Header>
 
-			<Tabs.Root value="chart" class="flex flex-1 flex-col overflow-hidden px-4">
-				<Tabs.List class="grid w-full grid-cols-2 rounded-md bg-muted p-1">
-					<Tabs.Trigger value="chart">Size chart</Tabs.Trigger>
-					<Tabs.Trigger value="measure">How to measure</Tabs.Trigger>
-				</Tabs.List>
-
-				<Tabs.Content value="chart" class="mt-4 flex-1 overflow-y-auto pb-4">
-					<div class="overflow-hidden rounded-lg border">
+			{#if chart}
+				<div class="flex flex-1 flex-col overflow-hidden px-4" data-testid="size-chart">
+					<div class="mb-3 flex justify-end">
+						<div class="inline-flex rounded-md border p-0.5" role="group" aria-label="Unit">
+							{#each UNITS as u (u)}
+								<button
+									type="button"
+									class="size-unit min-h-11 rounded px-4 text-sm font-medium transition-colors duration-150 {unit === u
+										? 'bg-primary text-primary-foreground'
+										: 'text-muted-foreground hover:text-foreground'}"
+									aria-pressed={unit === u}
+									onclick={() => (chosenUnit = u)}>{u === 'in' ? 'Inches' : 'Cm'}</button
+								>
+							{/each}
+						</div>
+					</div>
+					<div class="flex-1 overflow-auto pb-4">
 						<table class="w-full text-sm">
 							<thead class="bg-muted/60 text-xs text-muted-foreground">
 								<tr>
-									<th class="px-4 py-3 text-left font-semibold">US Size</th>
-									<th class="px-4 py-3 text-right font-semibold">Circumference (mm)</th>
-									<th class="px-4 py-3 text-right font-semibold">Diameter (mm)</th>
+									<th scope="col" class="px-3 py-3 text-left font-semibold">Size</th>
+									{#each chart.columns as column, i (i)}
+										<th scope="col" class="px-3 py-3 text-right font-semibold">{column}</th>
+									{/each}
 								</tr>
 							</thead>
 							<tbody>
-								{#each ringSizes as row}
-									<tr class="border-t transition-colors hover:bg-muted/40">
-										<td class="px-4 py-2.5 font-medium text-foreground">{row.size}</td>
-										<td class="px-4 py-2.5 text-right tabular-nums text-muted-foreground">{row.circumference.toFixed(1)}</td>
-										<td class="px-4 py-2.5 text-right tabular-nums text-muted-foreground">{row.diameter.toFixed(1)}</td>
+								{#each chart.rows as row (row.size)}
+									{@const on = sameSize(row.size, selected)}
+									{@const pickable = !!onpick && canPick(row.size)}
+									<tr class="border-t transition-colors duration-150 {on ? 'bg-muted' : pickable ? 'hover:bg-muted/40' : ''}">
+										<th scope="row" class="p-0 text-left font-medium text-foreground">
+											{#if pickable}
+												<button
+													type="button"
+													class="size-pick flex min-h-11 w-full items-center gap-2.5 px-3 text-left"
+													aria-pressed={on}
+													onclick={() => pick(row.size)}
+												>
+													<span
+														class="flex size-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-150 {on
+															? 'border-primary'
+															: 'border-border-strong'}"
+														aria-hidden="true"
+													>
+														{#if on}<span class="size-2 rounded-full bg-primary" in:fade></span>{/if}
+													</span>
+													{row.size}
+												</button>
+											{:else}
+												<span class="flex min-h-11 items-center px-3 pl-[2.375rem] {onpick ? 'text-muted-foreground' : ''}">{row.size}</span>
+											{/if}
+										</th>
+										{#each row.values as value, i (i)}
+											<td class="px-3 py-2.5 text-right tabular-nums text-muted-foreground">{value ? convertValue(value, chart.unit, unit) : '–'}</td>
+										{/each}
 									</tr>
 								{/each}
 							</tbody>
 						</table>
 					</div>
-					<p class="mt-3 text-xs text-muted-foreground">
-						Sizes shown in US standard. If you are between sizes, we recommend choosing the larger size.
-					</p>
-				</Tabs.Content>
+				</div>
+			{:else}
+				<Tabs.Root value="chart" class="flex flex-1 flex-col overflow-hidden px-4">
+					<Tabs.List class="grid w-full grid-cols-2 rounded-md bg-muted p-1">
+						<Tabs.Trigger value="chart">Size chart</Tabs.Trigger>
+						<Tabs.Trigger value="measure">How to measure</Tabs.Trigger>
+					</Tabs.List>
 
-				<Tabs.Content value="measure" class="mt-4 flex-1 overflow-y-auto pb-4">
-					<ol class="space-y-4">
-						{#each measureSteps as step, i}
-							<li class="flex gap-3">
-								<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-									{i + 1}
-								</span>
-								<span class="text-sm leading-relaxed text-foreground">{step}</span>
-							</li>
-						{/each}
-					</ol>
-					<div class="mt-6 rounded-lg border bg-muted/40 p-4">
-						<p class="text-sm font-semibold text-foreground">Tips for an accurate measurement</p>
-						<ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-							<li>Measure at the end of the day when fingers are at their largest.</li>
-							<li>Avoid measuring when your hands are cold.</li>
-							<li>Measure the finger you intend to wear the ring on.</li>
-						</ul>
-					</div>
-				</Tabs.Content>
-			</Tabs.Root>
+					<Tabs.Content value="chart" class="mt-4 flex-1 overflow-y-auto pb-4">
+						<div class="overflow-hidden rounded-lg border">
+							<table class="w-full text-sm">
+								<thead class="bg-muted/60 text-xs text-muted-foreground">
+									<tr>
+										<th class="px-4 py-3 text-left font-semibold">US Size</th>
+										<th class="px-4 py-3 text-right font-semibold">Circumference (mm)</th>
+										<th class="px-4 py-3 text-right font-semibold">Diameter (mm)</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each ringSizes as row}
+										<tr class="border-t transition-colors hover:bg-muted/40">
+											<td class="px-4 py-2.5 font-medium text-foreground">{row.size}</td>
+											<td class="px-4 py-2.5 text-right tabular-nums text-muted-foreground">{row.circumference.toFixed(1)}</td>
+											<td class="px-4 py-2.5 text-right tabular-nums text-muted-foreground">{row.diameter.toFixed(1)}</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+						</div>
+						<p class="mt-3 text-xs text-muted-foreground">
+							Sizes shown in US standard. If you are between sizes, we recommend choosing the larger size.
+						</p>
+					</Tabs.Content>
+
+					<Tabs.Content value="measure" class="mt-4 flex-1 overflow-y-auto pb-4">
+						<ol class="space-y-4">
+							{#each measureSteps as step, i}
+								<li class="flex gap-3">
+									<span
+										class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
+									>
+										{i + 1}
+									</span>
+									<span class="text-sm leading-relaxed text-foreground">{step}</span>
+								</li>
+							{/each}
+						</ol>
+						<div class="mt-6 rounded-lg border bg-muted/40 p-4">
+							<p class="text-sm font-semibold text-foreground">Tips for an accurate measurement</p>
+							<ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+								<li>Measure at the end of the day when fingers are at their largest.</li>
+								<li>Avoid measuring when your hands are cold.</li>
+								<li>Measure the finger you intend to wear the ring on.</li>
+							</ul>
+						</div>
+					</Tabs.Content>
+				</Tabs.Root>
+			{/if}
 		</div>
 	</Drawer.Content>
 </Drawer.Root>
 
 <style>
+	.size-pick,
+	.size-unit {
+		transition-property: color, background-color, transform;
+	}
+
+	.size-pick:active,
+	.size-unit:active {
+		transform: scale(0.98);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.size-pick:active,
+		.size-unit:active {
+			transform: none;
+		}
+	}
+
 	/* Refined Editorial — default theme only. Trigger only (Drawer content is portaled). */
 	:global([data-theme='default'] .edp-sizeguide) {
 		color: var(--ed-ink);

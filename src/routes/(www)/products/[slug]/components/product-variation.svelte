@@ -9,6 +9,8 @@
 	import { pickerChoices, usesSearchablePicker, variantFor, variantsWith } from '$lib/product/conversion'
 	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { isColourOption, swatchPaint } from '$lib/product/colour.js'
+	import { measurementsFor, rowFor, sizeChartOf } from '$lib/product/size-chart'
+	import { fade } from '$lib/motion'
 	import { ChevronRight } from '@lucide/svelte'
 
 	const productState = useProductState()
@@ -107,6 +109,23 @@
 	const theme = $derived(themeOptions(page.data?.themeSettings))
 	const lowStockAt = $derived(theme.pdp_low_stock_at)
 	const sizeGuide = $derived(theme.pdp_size_guide)
+	// The shop's own chart (GoCommerce D329) comes first: it is about this product, where the theme's
+	// size guide page is about the whole store.
+	const sizeChart = $derived(sizeChartOf(product))
+	const chartsOption = (option: Record<string, any>) =>
+		!!sizeChart && (/size/i.test(option.title ?? '') || (option.values ?? []).some((v: Record<string, any>) => rowFor(sizeChart, v.value)))
+	const valueOf = (option: Record<string, any>, size: string) =>
+		(option.values ?? []).find((v: Record<string, any>) => String(v.value).trim().toLowerCase() === size.trim().toLowerCase())
+	// A size in the chart can be chosen from it when the product has it and it is not blocked.
+	const canPickFrom = (option: Record<string, any>) => (size: string) => {
+		const v = valueOf(option, size)
+		return !!v && !blocks(statusOf(option.id, v.value))
+	}
+	const pickFromChart = (option: Record<string, any>) => (size: string) => {
+		const v = valueOf(option, size)
+		if (v) select(option, v)
+	}
+	const unitShort = $derived(sizeChart?.unit === 'cm' ? 'cm' : 'in')
 	// A sold-out value stays choosable while the store can email when it is back (SNX-025): choosing it
 	// is how a shopper reaches "Notify me" under the button.
 	const restockAlerts = $derived(page.data?.restockAlerts === true)
@@ -164,7 +183,9 @@
 						{/if}
 					</h2>
 
-					{#if sizeGuide && /size/i.test(option.title ?? '')}
+					{#if chartsOption(option)}
+						<SizeGuideDrawer chart={sizeChart} selected={selectedValue ?? ''} canPick={canPickFrom(option)} onpick={pickFromChart(option)} />
+					{:else if sizeGuide && /size/i.test(option.title ?? '')}
 						<a
 							href={sizeGuide}
 							class="edp-sizeguide inline-flex min-h-6 items-center gap-0.5 text-[length:var(--type-ui,0.875rem)] font-semibold text-info"
@@ -243,6 +264,18 @@
 							{/if}
 						{/each}
 					</div>
+				{/if}
+				{#if chartsOption(option)}
+					{@const fit = measurementsFor(sizeChart, selectedValue)}
+					<!-- The chosen size's measurements (D329). The region is always there so the line is announced when
+					     a size is chosen; it is empty, and takes no room, until then. -->
+					<p class="text-[length:var(--type-ui,0.875rem)] text-muted-foreground empty:hidden" aria-live="polite" data-testid="size-measurements">
+						{#if fit.length}
+							{#key selectedValue}
+								<span in:fade>{#each fit as m, i (m.name)}{#if i}<span class="mx-1.5" aria-hidden="true">·</span>{/if}{m.name} <span class="font-semibold text-foreground">{m.value}&nbsp;{unitShort}</span>{/each}</span>
+							{/key}
+						{/if}
+					</p>
 				{/if}
 			</div>
 		{/each}
