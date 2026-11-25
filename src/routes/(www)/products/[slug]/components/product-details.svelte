@@ -32,6 +32,7 @@
 	import ProductProof from './product-proof.svelte'
 	import ProductHighlights from './product-highlights.svelte'
 	import StoreCheck from './store-check.svelte'
+	import ProductOffers from './product-offers.svelte'
 	import { page } from '$app/state'
 	import { invalidate } from '$app/navigation'
 	import { Button } from '$lib/components/ui/button/index.js'
@@ -601,6 +602,9 @@
 						{/if}
 					</div>
 				{/if}
+
+				<!-- The store's coupon codes, each with Copy, beside the delivery check. -->
+				<ProductOffers />
 
 				{#if productState.trustBadgesPlugin?.active}
 					<div class="border-t pt-3">
