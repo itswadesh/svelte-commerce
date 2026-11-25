@@ -39,7 +39,7 @@
 		<div class="grid grid-cols-2 gap-2 px-2 mobiles:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6">
 			{#if loading}
 				{#each Array(6) as _}
-					<div class="flex flex-col items-center">
+					<div class="invisible flex flex-col items-center" aria-hidden="true">
 						<Skeleton class="aspect-square w-full" />
 						<Skeleton class="mt-4 h-4 w-2/3 rounded-full" />
 					</div>

@@ -50,7 +50,7 @@
 	<div class="grid gap-2" style="grid-template-columns: repeat({block.metadata.columnCount || 5}, 1fr); row-gap: {block.metadata.gridRowGap ?? 8}px; column-gap: {block.metadata.gridColumnGap ?? 8}px;">
 		{#if loadingForCategory}
 			{#each Array(6) as _}
-				<div class="flex flex-col items-center">
+				<div class="invisible flex flex-col items-center" aria-hidden="true">
 					<Skeleton class="aspect-square w-full" />
 					<Skeleton class="mt-4 h-4 w-2/3 rounded-full" />
 				</div>

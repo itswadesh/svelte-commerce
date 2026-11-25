@@ -16,7 +16,7 @@
 
 <div>
 	{#if loading}
-		<div class="space-y-12">
+		<div class="invisible space-y-12" aria-hidden="true">
 			<div>
 				<Skeleton class="mx-auto mb-6 h-8 w-48 rounded-full" />
 				<div class="grid grid-cols-2 gap-4">

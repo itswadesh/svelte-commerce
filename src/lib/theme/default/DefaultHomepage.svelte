@@ -429,7 +429,7 @@
 					</header>
 
 					{#if loading}
-						<div class="ed-products">
+						<div class="ed-products invisible" aria-hidden="true">
 							{#each Array(8) as _}
 								<div class="ed-skel">
 									<Skeleton class="ed-skel__img" />

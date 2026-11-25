@@ -129,7 +129,6 @@
 		overflow: hidden;
 		border-radius: calc(var(--radius, 0.5rem) * 1.5);
 		aspect-ratio: 4 / 3;
-		background: hsl(var(--muted));
 	}
 
 	.cmp-hero__media img {

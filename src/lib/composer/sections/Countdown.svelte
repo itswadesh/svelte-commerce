@@ -106,7 +106,6 @@
 
 	.cmp-count__media {
 		min-height: 220px;
-		background: hsl(var(--muted));
 	}
 
 	.cmp-count__media img {

@@ -15,6 +15,15 @@
 			// appends "ShopNxApp" to its user agent; an installed PWA reports display-mode standalone.
 			// Set before the body paints, so the app-only controls never appear late.
 			if (/ShopNxApp/.test(navigator.userAgent) || matchMedia('(display-mode: standalone)').matches) document.documentElement.classList.add('in-app')
+			// A lazy picture stays clear until its file arrives, then fades in (app.css). Load and error
+			// do not bubble, so one capture listener here sees every picture, including those in the
+			// server's HTML that finish before the app's code. An attribute, not a class: Svelte
+			// rewrites `class` when a component's classes change and would hide the picture again.
+			function imageShown(e) {
+				if (e.target.tagName === 'IMG') e.target.setAttribute('data-shown', '')
+			}
+			document.addEventListener('load', imageShown, true)
+			document.addEventListener('error', imageShown, true)
 		</script>
 		<!-- Google Consent Mode v2 defaults, set before any tag loads. Regions that require opt-in
 		     (EEA, UK, Switzerland) start denied until the visitor chooses in the cookie banner
