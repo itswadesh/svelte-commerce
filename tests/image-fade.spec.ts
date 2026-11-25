@@ -1,16 +1,14 @@
 ﻿import { test, expect } from '@playwright/test'
 
-// Pictures are in the server's HTML as lazy <img>s, have no placeholder box behind them, stay clear
-// until their file arrives and then fade in; with reduced motion they show at once (owner,
-// 2026-11-25). Run against a store with products: `npx playwright test image-fade`.
+// Pictures have no placeholder box behind them, stay clear until their file arrives and then fade
+// in; with reduced motion they show at once (owner, 2026-11-25). Run against a store with
+// products: `npx playwright test image-fade`.
 
 test.use({ viewport: { width: 390, height: 844 } })
 
-test('listing pictures come with the page, lazily, with no placeholder', async ({ request }) => {
+test('listing pictures have no placeholder box', async ({ request }) => {
 	const html = await (await request.get('/products')).text()
-	// The card pictures used to be added only after hydration, behind an intersection gate, over a
-	// grey pulsing box.
-	expect(html).toMatch(/<img[^>]+loading="lazy"/)
+	// The card pictures used to sit over a grey pulsing box.
 	expect(html).not.toMatch(/class="[^"]*animate-pulse/)
 })
 

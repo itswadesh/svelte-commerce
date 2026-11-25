@@ -6,10 +6,12 @@ decision needs the owner.
 ## 2026-11-25: Pictures load top to bottom and fade in, with no placeholder box
 
 The owner asked that storefront pictures load in the order they come into view, fade in subtly, and
-lose the placeholder section. Every picture is now in the server's HTML: the one at the top (hero or
-first product) eager with high priority, the rest `loading="lazy"`, so the browser fetches what is on
-screen first and the rest as they near the viewport. LazyImg used to add its `<img>` only after
-hydration, within 50px of the screen, over a grey pulsing box. Nothing stands in for a picture now:
+lose the placeholder section. The picture at the top (hero or first product) loads at once with high
+priority; every other one is added as its box comes within 200px of the screen (it was 50px), so
+pictures load in the order they come into view. Putting them all in the server's HTML as native
+`loading="lazy"` was tried first and reverted the same day: Chrome fetched everything within its
+1250 to 2500px lazy margin during first load, and mobile LCP rose from 2.29 to 2.74s on home and
+2.80 to 3.03s on a product page. Nothing stands in for a picture now:
 its box keeps its ratio (CLS stays 0) and shows the page's own ground. The grey and hairline boxes,
 the muted fills behind section pictures and the skeleton grids shown while products load are gone
 (the grids are kept, invisible, for their height). A picture fades in over 300ms once it arrives
