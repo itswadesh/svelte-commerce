@@ -797,3 +797,18 @@ Search results from a shopper who browsed no category, which kept the ordinary h
 too, titled with the query and going home, so every /products view looks the same. Only /products
 and the category route use the shared listing component; collections, a vendor's shop, the
 categories index and the wishlist have their own markup and keep the ordinary header.
+
+## 2026-11-25: Quick filter chips come back on phones: Size, Colour and New
+
+The owner approved the Bewakoof storefront study ("build all 8"), which puts one-tap chips above a
+listing on phones. This replaces the 2026-11-12 call that phones need no chips because the Sort and
+Filter bar is always there. Phones get three, not one per filter group: Size and Colour open the
+filter sheet on their group, and New sorts the newest first (tap again for the default order). A chip
+is drawn only when the listing has that facet, or more than one product for New, and the store's
+list_quick_filters switch still turns the row off. Desktop keeps its row of groups and gains New.
+
+## 2026-11-25: Size is chosen, never preselected
+
+From the same study: the product page used to open with the first size pressed, so a quick tap on
+Add to bag bought XS. No size is pressed now until the shopper picks one, and Add to bag without one
+opens a Select size sheet. A product with one size or no size option adds in one tap.
