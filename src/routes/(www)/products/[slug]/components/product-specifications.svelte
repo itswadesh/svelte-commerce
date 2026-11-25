@@ -20,7 +20,9 @@
 	const product = $derived<Record<string, any> | null>(data?.product ?? null)
 	const pick = (key: string) => variant?.[key] || product?.[key]
 
-	const sku = $derived(pick('sku'))
+	// A variant held without its size (size-choice.svelte.ts) has no SKU yet, and the product's own is
+	// one size's, so none is shown until a size is picked.
+	const sku = $derived(variant && !variant.id ? '' : pick('sku'))
 	const barcode = $derived(pick('barcode'))
 	// A weight is shown only with its unit: "Weight 520" could be grams or kilograms (SNX-012), and
 	// the product schema leaves a unitless weight out by the same rule.
