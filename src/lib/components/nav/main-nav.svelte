@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { Home } from '@lucide/svelte'
+	import { Home, ChevronDown } from '@lucide/svelte'
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 	import { chromeMenuItems } from '$lib/composer/chrome-draft.svelte.js'
 
@@ -10,7 +10,17 @@
 
 	// False when the shop hid the header menu: the logo stays, the links go.
 	let { menu = true }: { menu?: boolean } = $props()
+
+	// The dropdown opened from its chevron (touch, keyboard); hover and focus open it by CSS alone.
+	let openIndex = $state(-1)
 </script>
+
+<svelte:window
+	onkeydown={(e) => e.key === 'Escape' && (openIndex = -1)}
+	onclick={(e) => {
+		if (openIndex !== -1 && !(e.target as Element)?.closest?.('.nav-dd')) openIndex = -1
+	}}
+/>
 
 <div class="mr-4 md:flex">
 	<div class="flex gap-3">
@@ -54,14 +64,74 @@
 				<!-- Dynamic menu items. The 32px box is deliberate: these are standalone navigation
 				     targets, not links inside a sentence, so WCAG 2.2's inline exception does not cover
 				     them and a bare 20px text link misses the 24px minimum. -->
-				{#each headerItems as item}
-					<a
-						href={item.link}
-						class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center text-sm font-bold text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"
-						style="font-family: var(--font-body);"
-					>
-						{item?.name}
-					</a>
+				{#each headerItems as item, i}
+					{#if item?.items?.length}
+						<!-- A link with children opens a dropdown of them: on hover and on keyboard focus,
+						     and from the chevron for touch and screen readers. A third level shows
+						     indented under its parent inside the same panel. -->
+						<div
+							class="nav-dd relative"
+							class:nav-dd-open={openIndex === i}
+							role="presentation"
+							onmouseleave={() => openIndex === i && (openIndex = -1)}
+						>
+							<span class="inline-flex items-center">
+								<a
+									href={item.link}
+									class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center text-sm font-bold text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"
+									style="font-family: var(--font-body);"
+								>
+									{item?.name}
+								</a>
+								<button
+									type="button"
+									class="nav-dd-toggle ml-0.5 grid h-8 w-6 place-items-center rounded text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-90"
+									aria-label="Show {item?.name} links"
+									aria-expanded={openIndex === i ? 'true' : 'false'}
+									aria-controls="nav-dd-{i}"
+									onclick={() => (openIndex = openIndex === i ? -1 : i)}
+								>
+									<ChevronDown class="nav-dd-chevron h-3.5 w-3.5" aria-hidden="true" />
+								</button>
+							</span>
+							<ul id="nav-dd-{i}" class="nav-dd-panel absolute left-0 top-full z-50 m-0 min-w-[12rem] list-none rounded-md border border-border bg-background p-2 shadow-lg">
+								{#each item.items as child}
+									<li>
+										<a
+											href={child.link}
+											class="block rounded px-3 py-2 text-sm text-foreground transition-colors duration-fast ease-standard hover:bg-muted focus-visible:bg-muted"
+											onclick={() => (openIndex = -1)}
+										>
+											{child?.name}
+										</a>
+										{#if child?.items?.length}
+											<ul class="m-0 ml-3 list-none border-l border-border p-0 pl-2">
+												{#each child.items as grandchild}
+													<li>
+														<a
+															href={grandchild.link}
+															class="block rounded px-3 py-1.5 text-xs text-muted-foreground transition-colors duration-fast ease-standard hover:bg-muted hover:text-foreground focus-visible:bg-muted"
+															onclick={() => (openIndex = -1)}
+														>
+															{grandchild?.name}
+														</a>
+													</li>
+												{/each}
+											</ul>
+										{/if}
+									</li>
+								{/each}
+							</ul>
+						</div>
+					{:else}
+						<a
+							href={item.link}
+							class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center text-sm font-bold text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"
+							style="font-family: var(--font-body);"
+						>
+							{item?.name}
+						</a>
+					{/if}
 				{/each}
 			</nav>
 		{/if}
@@ -80,6 +150,46 @@
 <!-- Editorial menu links for the default theme only (scoped via [data-theme='default']).
      Wine/organic keep the current styling untouched. -->
 <style>
+	/* The dropdown: hidden until hovered, focused inside, or opened from its chevron. Opacity and
+	   a 4px rise, so it never shifts the header; with reduced motion it simply appears. */
+	.nav-dd-panel {
+		visibility: hidden;
+		opacity: 0;
+		transform: translateY(4px);
+		transition:
+			opacity 180ms ease,
+			transform 180ms ease,
+			visibility 0s linear 180ms;
+	}
+	.nav-dd:hover .nav-dd-panel,
+	.nav-dd:focus-within .nav-dd-panel,
+	.nav-dd-open .nav-dd-panel {
+		visibility: visible;
+		opacity: 1;
+		transform: translateY(0);
+		transition:
+			opacity 180ms ease,
+			transform 180ms ease,
+			visibility 0s;
+	}
+	.nav-dd :global(.nav-dd-chevron) {
+		transition: transform 180ms ease;
+	}
+	.nav-dd-open :global(.nav-dd-chevron),
+	.nav-dd:hover :global(.nav-dd-chevron) {
+		transform: rotate(180deg);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.nav-dd-panel,
+		.nav-dd:hover .nav-dd-panel,
+		.nav-dd:focus-within .nav-dd-panel,
+		.nav-dd-open .nav-dd-panel,
+		.nav-dd :global(.nav-dd-chevron) {
+			transform: none;
+			transition: none;
+		}
+	}
+
 	:global([data-theme='default'] .ed-nav-link) {
 		color: var(--ed-soft);
 		font-weight: 600;
