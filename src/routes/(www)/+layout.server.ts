@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
-import { isCheckoutStep, signInFirst } from '$lib/sign-in-first'
+import { isCheckoutStep, isOpenPage, signInFirst, signInScreen } from '$lib/sign-in-first'
 import { hasSession, storeSwitches } from '$lib/server/store-plugins'
 
 // Account surfaces that live in (www) instead of (my), so they never got the
@@ -16,10 +16,20 @@ export const load: LayoutServerLoad = async ({ cookies, setHeaders, url }) => {
 		redirect(307, `/?${searchParams.toString()}`)
 	}
 
+	// The store's switches, read only for a visitor with no session: nothing below concerns anyone
+	// signed in. Both gates sit here rather than on the pages, so SSR and client navigation both take them.
+	const switches = hasSession(cookies) ? null : await storeSwitches()
+
+	// A shop only signed-in customers may browse (GoCommerce D341): every page but signing in and the
+	// policy, contact and content pages is the sign-in screen, which nothing should index.
+	if (switches?.signInToShop?.active === true && !isOpenPage(url.pathname)) {
+		setHeaders({ 'X-Robots-Tag': 'noindex' })
+		redirect(303, signInScreen(url))
+	}
+
 	// A store with guest checkout off (GoCommerce D340) refuses a guest's order, so a guest is asked to
-	// sign in at the bag, before the address step, and comes back here after. Here rather than on the
-	// page so SSR and client navigation both take it.
-	if (isCheckoutStep(url.pathname) && !hasSession(cookies) && (await storeSwitches()).isGuestCheckout?.active === false) {
+	// sign in at the bag, before the address step, and comes back here after.
+	if (isCheckoutStep(url.pathname) && switches?.isGuestCheckout?.active === false) {
 		redirect(303, signInFirst(url.pathname + url.search))
 	}
 
