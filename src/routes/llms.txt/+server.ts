@@ -1,6 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit'
 import { layoutServer } from '$lib/core/load-functions/index.js'
 import { BlogService, categoryService } from '$lib/core/services/index.js'
+import { storeSwitches } from '$lib/server/store-plugins'
 
 // Replaces the old static/llms.txt, which described the open-source template ("# Svelte Commerce",
 // a GitHub link, a list of supported backends) and shipped byte-identical to every deployment. This
@@ -23,6 +24,9 @@ const stripHtml = (value: unknown) =>
 const quietly = <T>(work: () => Promise<T>): Promise<T | null> => work().catch(() => null)
 
 export const GET: RequestHandler = async (event) => {
+	// A shop only signed-in customers may browse (GoCommerce D341) has nothing to describe to an
+	// answer engine: every page it would list is the sign-in screen.
+	if ((await storeSwitches()).signInToShop?.active === true) return new Response('Not found', { status: 404 })
 	// A failed store lookup (bad domain mapping, upstream blip) still serves a usable route manifest
 	// rather than a 500.
 	const [layout, blogs, tree] = await Promise.all([
