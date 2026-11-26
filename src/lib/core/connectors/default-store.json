@@ -238,7 +238,7 @@
 			"active": false
 		},
 		"isGuestCheckout": {
-			"active": false
+			"active": true
 		},
 		"isPartialCheckout": {
 			"active": false

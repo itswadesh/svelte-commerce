@@ -1,5 +1,7 @@
 import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
+import { isCheckoutStep, signInFirst } from '$lib/sign-in-first'
+import { hasSession, storeSwitches } from '$lib/server/store-plugins'
 
 // Account surfaces that live in (www) instead of (my), so they never got the
 // (my) group's session guard. Same redirect shape the core (my) layout uses.
@@ -12,6 +14,13 @@ export const load: LayoutServerLoad = async ({ cookies, setHeaders, url }) => {
 		searchParams.set('login', 'true')
 		searchParams.set('redirect', `${url.pathname}?${url.searchParams.toString()}`)
 		redirect(307, `/?${searchParams.toString()}`)
+	}
+
+	// A store with guest checkout off (GoCommerce D340) refuses a guest's order, so a guest is asked to
+	// sign in at the bag, before the address step, and comes back here after. Here rather than on the
+	// page so SSR and client navigation both take it.
+	if (isCheckoutStep(url.pathname) && !hasSession(cookies) && (await storeSwitches()).isGuestCheckout?.active === false) {
+		redirect(303, signInFirst(url.pathname + url.search))
 	}
 
 	// /order-tracking opens an order from `?order=&key=` (the order emails' link), and /cart/<token> a
