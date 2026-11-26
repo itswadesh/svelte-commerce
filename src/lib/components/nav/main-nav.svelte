@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { Home, ChevronDown } from '@lucide/svelte'
+	import { afterNavigate } from '$app/navigation'
+	import { tick } from 'svelte'
+	import { ChevronDown } from '@lucide/svelte'
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 	import { chromeMenuItems } from '$lib/composer/chrome-draft.svelte.js'
+	import { megaColumns, menuKey, promoImage } from './mega-menu-columns'
 
 	// The store's header menu: the one the shop chose in the theme editor's header (D131), which the
 	// connector already files under `header`, or a draft's choice while the editor is open.
@@ -11,14 +14,100 @@
 	// False when the shop hid the header menu: the logo stays, the links go.
 	let { menu = true }: { menu?: boolean } = $props()
 
-	// The dropdown opened from its chevron (touch, keyboard); hover and focus open it by CSS alone.
+	// The header draws this component twice (one per width band), so ids are per instance.
+	const uid = $props.id()
+
+	// The open panel. One at a time; every panel is in the server's HTML, hidden by CSS, so the
+	// links are crawlable and nothing arrives late.
 	let openIndex = $state(-1)
+	let navEl: HTMLElement | undefined = $state()
+
+	// Hover intent: a pointer that only crosses an item on its way somewhere does not open it, and
+	// one moving diagonally from a trigger into the panel briefly leaves both without closing it.
+	const OPEN_MS = 150
+	const CLOSE_MS = 200
+	let timer: ReturnType<typeof setTimeout> | undefined
+	const later = (fn: () => void, ms: number) => {
+		clearTimeout(timer)
+		timer = setTimeout(fn, ms)
+	}
+	const close = () => {
+		clearTimeout(timer)
+		openIndex = -1
+	}
+
+	function enter(e: PointerEvent, i: number) {
+		if (e.pointerType !== 'mouse') return
+		// Back over the open item (its panel is inside it): stay. Another item opens after the same
+		// pause, even with a panel already open, so a diagonal path into this panel that crosses the
+		// next trigger does not swap panels on the way.
+		if (i === openIndex) clearTimeout(timer)
+		else later(() => (openIndex = i), OPEN_MS)
+	}
+	function leave(e: PointerEvent) {
+		if (e.pointerType === 'mouse') later(close, CLOSE_MS)
+	}
+
+	// The last pointer that pressed a trigger. A mouse click follows the link (hover already showed
+	// the panel); a tap or a keyboard Enter opens the panel first and follows on the second go.
+	let pointer = ''
+	function activate(e: MouseEvent, i: number) {
+		const viaMouse = pointer === 'mouse' && e.detail > 0
+		pointer = ''
+		if (viaMouse || openIndex === i) return
+		e.preventDefault()
+		clearTimeout(timer)
+		openIndex = i
+	}
+
+	const triggers = () => [...(navEl?.querySelectorAll<HTMLElement>(':scope > .mm-item > a, :scope > a') ?? [])]
+	const panelLinks = (i: number) => [...(navEl?.querySelectorAll<HTMLElement>(`#${uid}-mm-${i} a`) ?? [])]
+
+	async function triggerKey(e: KeyboardEvent, i: number, hasPanel: boolean) {
+		if (hasPanel && (e.key === ' ' || e.key === 'ArrowDown')) {
+			e.preventDefault()
+			if (e.key === ' ' && openIndex === i) return close()
+			openIndex = i
+			if (e.key === 'ArrowDown') {
+				await tick()
+				panelLinks(i)[0]?.focus()
+			}
+			return
+		}
+		if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return
+		const all = triggers()
+		const next = menuKey(e.key, all.indexOf(e.currentTarget as HTMLElement), all.length)
+		if (next === -1) return
+		e.preventDefault()
+		if (openIndex !== -1) close()
+		all[next]?.focus()
+	}
+
+	function panelKey(e: KeyboardEvent, i: number) {
+		const links = panelLinks(i)
+		const next = menuKey(e.key, links.indexOf(document.activeElement as HTMLElement), links.length)
+		if (next === -1) return
+		e.preventDefault()
+		links[next]?.focus()
+	}
+
+	function escape(e: KeyboardEvent) {
+		if (e.key !== 'Escape' || openIndex === -1) return
+		const i = openIndex
+		close()
+		// Back to the trigger, so a keyboard user is not dropped onto <body> when the panel hides.
+		if (navEl?.contains(document.activeElement))
+			triggers()
+				.find((t) => t.getAttribute('aria-controls') === `${uid}-mm-${i}`)
+				?.focus()
+	}
+
+	afterNavigate(close)
 </script>
 
 <svelte:window
-	onkeydown={(e) => e.key === 'Escape' && (openIndex = -1)}
 	onclick={(e) => {
-		if (openIndex !== -1 && !(e.target as Element)?.closest?.('.nav-dd')) openIndex = -1
+		if (openIndex !== -1 && !navEl?.contains(e.target as Node)) close()
 	}}
 />
 
@@ -48,86 +137,104 @@
 		     off, and the MegaMenu's own <nav> when it is on, so a screen reader gets one "Main
 		     navigation" region either way. Before this the header exposed no landmark at all. -->
 		{#if menu && !page?.data?.store?.plugins?.megamenu?.active}
-			<nav aria-label="Main navigation" class="ml-6 hidden items-center space-x-6 lg:flex">
-				<!-- Home link only when not on home page -->
-				<!-- {#if page?.url?.pathname !== '/'}
-				<a
-					href="/"
-					class="relative text-sm font-bold text-muted-foreground transition-all
-					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary-ink after:transition-all hover:text-foreground hover:after:w-full motion-safe:active:scale-95"
-					style="font-family: var(--font-body);"
-				>
-					<Home />
-				</a>
-			{/if} -->
-
-				<!-- Dynamic menu items. The 32px box is deliberate: these are standalone navigation
-				     targets, not links inside a sentence, so WCAG 2.2's inline exception does not cover
-				     them and a bare 20px text link misses the 24px minimum. -->
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+			<nav aria-label="Main navigation" class="ml-6 hidden items-center space-x-6 lg:flex" bind:this={navEl} onkeydown={escape}>
+				<!-- The 32px box is deliberate: these are standalone navigation targets, not links inside a
+				     sentence, so WCAG 2.2's inline exception does not cover them and a bare 20px text link
+				     misses the 24px minimum. -->
 				{#each headerItems as item, i}
-					{#if item?.items?.length}
-						<!-- A link with children opens a dropdown of them: on hover and on keyboard focus,
-						     and from the chevron for touch and screen readers. A third level shows
-						     indented under its parent inside the same panel. -->
+					{@const columns = megaColumns(item)}
+					{#if columns.length}
+						{@const open = openIndex === i}
+						{@const promo = promoImage(item)}
+						<!-- A top item with children opens a full-width panel under the header: each
+						     second-level item a column heading, its third-level links under it. The wrapper
+						     is not positioned, so the panel spans the sticky header, not this item. -->
 						<div
-							class="nav-dd relative"
-							class:nav-dd-open={openIndex === i}
+							class="mm-item"
 							role="presentation"
-							onmouseleave={() => openIndex === i && (openIndex = -1)}
+							onpointerenter={(e) => enter(e, i)}
+							onpointerleave={leave}
+							onfocusout={(e) => {
+								if (open && !e.currentTarget.contains(e.relatedTarget as Node | null)) close()
+							}}
 						>
-							<span class="inline-flex items-center">
-								<a
-									href={item.link}
-									class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center text-sm font-bold text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"
-									style="font-family: var(--font-body);"
-								>
-									{item?.name}
-								</a>
-								<button
-									type="button"
-									class="nav-dd-toggle ml-0.5 grid h-8 w-6 place-items-center rounded text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-90"
-									aria-label="Show {item?.name} links"
-									aria-expanded={openIndex === i ? 'true' : 'false'}
-									aria-controls="nav-dd-{i}"
-									onclick={() => (openIndex = openIndex === i ? -1 : i)}
-								>
-									<ChevronDown class="nav-dd-chevron h-3.5 w-3.5" aria-hidden="true" />
-								</button>
-							</span>
-							<ul id="nav-dd-{i}" class="nav-dd-panel absolute left-0 top-full z-50 m-0 min-w-[12rem] list-none rounded-md border border-border bg-background p-2 shadow-lg">
-								{#each item.items as child}
-									<li>
-										<a
-											href={child.link}
-											class="block rounded px-3 py-2 text-sm text-foreground transition-colors duration-fast ease-standard hover:bg-muted focus-visible:bg-muted"
-											onclick={() => (openIndex = -1)}
-										>
-											{child?.name}
+							<a
+								href={item.link}
+								class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center gap-1 text-sm font-bold text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"
+								class:text-foreground={open}
+								style="font-family: var(--font-body);"
+								aria-expanded={open ? 'true' : 'false'}
+								aria-controls="{uid}-mm-{i}"
+								data-current={open}
+								onpointerdown={(e) => (pointer = e.pointerType)}
+								onclick={(e) => activate(e, i)}
+								onkeydown={(e) => triggerKey(e, i, true)}
+							>
+								{item?.name}
+								<ChevronDown class="mm-chevron h-3.5 w-3.5" aria-hidden="true" />
+							</a>
+							<div
+								id="{uid}-mm-{i}"
+								class="mm-panel border-t border-border bg-background"
+								class:mm-open={open}
+								role="region"
+								aria-label={item?.name}
+								onkeydown={(e) => panelKey(e, i)}
+							>
+								<div class="page-width mm-body">
+									<div class="mm-cols">
+										{#each columns as col}
+											<div class="mm-col">
+												<a
+													href={col.link}
+													class="mm-head text-sm font-bold text-foreground transition-colors duration-fast ease-standard hover:text-primary-ink"
+													>{col.name}</a
+												>
+												{#if col.links.length}
+													<ul class="m-0 list-none p-0">
+														{#each col.links as link}
+															<li>
+																<a
+																	href={link.link}
+																	class="mm-link text-sm text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground"
+																	>{link.name}</a
+																>
+															</li>
+														{/each}
+													</ul>
+												{/if}
+											</div>
+										{/each}
+									</div>
+									{#if promo}
+										<a href={item.link} class="mm-promo" tabindex="-1" aria-hidden="true">
+											<img
+												src={getImageCDNUrl(promo, 480, 0)}
+												alt=""
+												width="240"
+												height="300"
+												loading="lazy"
+												class="h-full w-full rounded object-cover"
+											/>
 										</a>
-										{#if child?.items?.length}
-											<ul class="m-0 ml-3 list-none border-l border-border p-0 pl-2">
-												{#each child.items as grandchild}
-													<li>
-														<a
-															href={grandchild.link}
-															class="block rounded px-3 py-1.5 text-xs text-muted-foreground transition-colors duration-fast ease-standard hover:bg-muted hover:text-foreground focus-visible:bg-muted"
-															onclick={() => (openIndex = -1)}
-														>
-															{grandchild?.name}
-														</a>
-													</li>
-												{/each}
-											</ul>
-										{/if}
-									</li>
-								{/each}
-							</ul>
+									{/if}
+								</div>
+								<div class="page-width mm-foot border-t border-border">
+									<a
+										href={item.link}
+										class="mm-all text-sm font-semibold text-foreground transition-colors duration-fast ease-standard hover:text-primary-ink"
+										>View all {item?.name}</a
+									>
+								</div>
+							</div>
 						</div>
 					{:else}
 						<a
 							href={item.link}
 							class="ed-nav-link motion-underline inline-flex min-h-[32px] items-center text-sm font-bold text-muted-foreground transition-[color,transform] duration-fast ease-standard hover:text-foreground motion-safe:active:scale-95"
 							style="font-family: var(--font-body);"
+							onkeydown={(e) => triggerKey(e, i, false)}
 						>
 							{item?.name}
 						</a>
@@ -150,44 +257,83 @@
 <!-- Editorial menu links for the default theme only (scoped via [data-theme='default']).
      Wine/organic keep the current styling untouched. -->
 <style>
-	/* The dropdown: hidden until hovered, focused inside, or opened from its chevron. Opacity and
-	   a 4px rise, so it never shifts the header; with reduced motion it simply appears. */
-	.nav-dd-panel {
+	/* The mega panel: full width under the sticky header, overlaying the page so nothing below moves.
+	   Hidden (and out of the tab order) until opened; it fades and drops 6px, transform and opacity
+	   only. Under reduced motion it simply appears. */
+	.mm-panel {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 100%;
+		max-height: calc(100vh - 7rem);
+		overflow-y: auto;
 		visibility: hidden;
 		opacity: 0;
-		transform: translateY(4px);
-		transition:
-			opacity 180ms ease,
-			transform 180ms ease,
-			visibility 0s linear 180ms;
+		box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.28);
 	}
-	.nav-dd:hover .nav-dd-panel,
-	.nav-dd:focus-within .nav-dd-panel,
-	.nav-dd-open .nav-dd-panel {
+	.mm-panel.mm-open {
 		visibility: visible;
 		opacity: 1;
-		transform: translateY(0);
-		transition:
-			opacity 180ms ease,
-			transform 180ms ease,
-			visibility 0s;
 	}
-	.nav-dd :global(.nav-dd-chevron) {
-		transition: transform 180ms ease;
+	@media (prefers-reduced-motion: no-preference) {
+		.mm-panel {
+			transform: translateY(-6px);
+			transition:
+				opacity var(--motion-panel) var(--motion-ease),
+				transform var(--motion-panel) var(--motion-ease),
+				visibility 0s linear var(--motion-panel);
+		}
+		.mm-panel.mm-open {
+			transform: none;
+			transition:
+				opacity var(--motion-panel) var(--motion-ease),
+				transform var(--motion-panel) var(--motion-ease),
+				visibility 0s;
+		}
+		.mm-item :global(.mm-chevron) {
+			transition: transform var(--motion-fast) var(--motion-ease);
+		}
+		.mm-link:hover {
+			transform: translateX(2px);
+		}
 	}
-	.nav-dd-open :global(.nav-dd-chevron),
-	.nav-dd:hover :global(.nav-dd-chevron) {
+	.mm-item:has(.mm-open) :global(.mm-chevron) {
 		transform: rotate(180deg);
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.nav-dd-panel,
-		.nav-dd:hover .nav-dd-panel,
-		.nav-dd:focus-within .nav-dd-panel,
-		.nav-dd-open .nav-dd-panel,
-		.nav-dd :global(.nav-dd-chevron) {
-			transform: none;
-			transition: none;
-		}
+	.mm-body {
+		display: flex;
+		gap: 2.5rem;
+		padding-block: 1.75rem;
+	}
+	/* Columns of headings fill across, then wrap into rows, with as many as fit at 1024-1440px. */
+	.mm-cols {
+		flex: 1;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+		gap: 1.5rem 2.5rem;
+		align-content: start;
+	}
+	.mm-col {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		min-width: 0;
+	}
+	.mm-head,
+	.mm-link {
+		display: inline-flex;
+		align-items: center;
+		min-height: 32px;
+	}
+	.mm-head {
+		margin-bottom: 0.25rem;
+	}
+	.mm-promo {
+		flex: 0 0 15rem;
+		aspect-ratio: 4 / 5;
+	}
+	.mm-foot {
+		padding-block: 0.75rem;
 	}
 
 	:global([data-theme='default'] .ed-nav-link) {
