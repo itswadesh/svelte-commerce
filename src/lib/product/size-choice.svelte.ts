@@ -69,6 +69,29 @@ export function sizeChoices(product: Product, current: Variant | null | undefine
 	})
 }
 
+/**
+ * The record the page reads stock from: the badge under the price and the Add to bag button both
+ * ask this, so they cannot disagree. A picked variant answers for itself. With no size picked yet
+ * the answer comes from the sizes on offer for the other choices made (sizeChoices), not from the
+ * product's total: a colour whose every size is sold out is out of stock even while another
+ * colour has some, and a product with some sizes left is in stock until a sold-out size is picked.
+ */
+export function stockSourceOf<P extends NonNullable<Product> & Record<string, unknown>>(
+	product: P | null | undefined,
+	selected: Variant | null | undefined
+): Record<string, unknown> | null {
+	if (selected?.id) return selected
+	const variants = needsSize(product, selected) ? sizeChoices(product, selected).map((c) => c.variant) : []
+	if (!variants.length) return product ?? null
+	const buyable = variants.filter((v) => !isOutOfStock(v as never))
+	if (!buyable.length) return variants[0]
+	return {
+		manageInventory: buyable.every((v) => v.manageInventory !== false),
+		allowBackorder: buyable.some((v) => !!v.allowBackorder),
+		stock: buyable.reduce((n, v) => n + Math.max(0, Number(v.stock ?? 0)), 0)
+	}
+}
+
 /** The product whose size the shopper has picked on this visit; '' until they do. */
 export const sizeChoice = $state({ productId: '' })
 

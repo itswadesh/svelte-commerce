@@ -17,7 +17,7 @@
 	import { bumpTotal } from '$lib/product/upsells'
 	import { goto } from '$app/navigation'
 	import * as Drawer from '$lib/components/ui/drawer/index.js'
-	import { needsSize, sizeChoice, sizeChoices, sizeOptionOf } from '$lib/product/size-choice.svelte'
+	import { needsSize, sizeChoice, sizeChoices, sizeOptionOf, stockSourceOf } from '$lib/product/size-choice.svelte'
 
 	/**
 	 * `compact` is the sticky mobile bar: CTA only, no secondary link, no wishlist.
@@ -35,12 +35,11 @@
 	// hydration finished.
 	// The rule itself is shared with the product schema (src/lib/product/stock.ts).
 	const variant = $derived(productState.selectedVariant?.id ? productState.selectedVariant : null)
-	const stockSource = $derived<Record<string, any> | null>(variant ?? page.data?.product ?? null)
 	// No size picked yet (size-choice.svelte.ts): the button asks for one, and is out of stock only
-	// when every size is.
+	// when every size is. The stock record is the badge's too (stockSourceOf).
 	const askSize = $derived(needsSize(page.data?.product, productState.selectedVariant))
 	const sizes = $derived(askSize ? sizeChoices(page.data?.product, productState.selectedVariant) : [])
-	const outOfStock = $derived(askSize ? sizes.every((s) => s.soldOut) : isOutOfStock(stockSource))
+	const outOfStock = $derived(isOutOfStock(stockSourceOf(page.data?.product, productState.selectedVariant)))
 	let sizeSheetOpen = $state(false)
 	// Read with the product (+page.ts): the store emails a saved item's list when it is back.
 	const restockAlerts = $derived(page.data?.restockAlerts === true)

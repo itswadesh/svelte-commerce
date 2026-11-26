@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { lineSizes, needsSize, sizeChoices, sizeOf, sizeOptionOf, withoutSize } from '../src/lib/product/size-choice.svelte'
+import { lineSizes, needsSize, sizeChoices, sizeOf, sizeOptionOf, stockSourceOf, withoutSize } from '../src/lib/product/size-choice.svelte'
+import { isOutOfStock } from '../src/lib/product/stock'
 
 const size = { id: 1, title: 'Size', values: [{ value: 'S' }, { value: 'M' }, { value: 'L' }] }
 const colour = { id: 2, title: 'Colour', values: [{ value: 'Red' }, { value: 'Blue' }] }
@@ -67,6 +68,38 @@ describe('the sizes the sheet offers', () => {
 
 	it('offers nothing for a product with no size to choose', () => {
 		expect(sizeChoices({ options: [colour], variants: [] }, null)).toEqual([])
+	})
+})
+
+describe('the stock the badge and the button read', () => {
+	const tracked = (x: ReturnType<typeof v>) => ({ ...x, manageInventory: true, allowBackorder: false })
+	const out = (p: Parameters<typeof stockSourceOf>[0], selected: Parameters<typeof stockSourceOf>[1]) =>
+		isOutOfStock(stockSourceOf(p, selected) as never)
+	const product = { ...shirt, variants: shirt.variants.map(tracked), manageInventory: true, stock: 20 }
+
+	it('is out of stock when every size is sold out, whatever the product total says', () => {
+		const soldOut = { ...product, variants: product.variants.map((x) => ({ ...x, stock: 0 })) }
+		expect(out(soldOut, withoutSize(soldOut.variants[0], size))).toBe(true)
+		// Red is gone in every size while Blue still has some: the held colour answers, not the total.
+		const redGone = { ...product, variants: product.variants.map((x) => (x.title.endsWith('Red') ? { ...x, stock: 0 } : x)) }
+		expect(out(redGone, withoutSize(redGone.variants[0], size))).toBe(true)
+	})
+
+	it('is in stock with no size picked while some sizes are left', () => {
+		const held = withoutSize(product.variants[0], size)
+		expect(out(product, held)).toBe(false)
+		expect(stockSourceOf(product, held)?.stock).toBe(10)
+	})
+
+	it('is out of stock for a sold-out size once it is picked, and in for one that is not', () => {
+		expect(out(product, product.variants[1])).toBe(true)
+		expect(out(product, product.variants[0])).toBe(false)
+	})
+
+	it('reads the variant of a product with no size to choose', () => {
+		const single = { options: [], variants: [{ id: '1', title: 'default', stock: 0, manageInventory: true }], stock: 0 }
+		expect(stockSourceOf(single, single.variants[0])).toBe(single.variants[0])
+		expect(stockSourceOf(single, null)).toBe(single)
 	})
 })
 

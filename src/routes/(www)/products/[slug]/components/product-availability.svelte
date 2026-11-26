@@ -5,6 +5,7 @@
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import { Check, CircleAlert, PackageX, Clock } from '@lucide/svelte'
 	import { themeOptions } from '$lib/composer/theme-options.js'
+	import { stockSourceOf } from '$lib/product/size-choice.svelte'
 
 	/**
 	 * Whether the thing in the buy box can actually be bought.
@@ -23,8 +24,8 @@
 	/** At or below this, say how many are left instead of a bare "In stock" (the store's pdp_low_stock_at; 0 never). */
 	const lowStockAt = $derived(themeOptions(page.data?.themeSettings).pdp_low_stock_at)
 
-	const variant = $derived(productState.selectedVariant?.id ? productState.selectedVariant : null)
-	const source = $derived<Record<string, any> | null>(variant ?? page.data?.product ?? null)
+	// Shared with Add to bag (size-choice.svelte.ts), so the badge and the button never disagree.
+	const source = $derived<Record<string, any> | null>(stockSourceOf(page.data?.product, productState.selectedVariant))
 
 	const managed = $derived(source?.manageInventory !== false)
 	const stock = $derived(Number(source?.stock ?? 0))
