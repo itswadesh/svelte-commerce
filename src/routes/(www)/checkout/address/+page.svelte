@@ -24,6 +24,7 @@
 	import AddressForm from './address-form.svelte'
 	import WhatsappOptin from '$lib/components/checkout/whatsapp-optin.svelte'
 	import { browser } from '$app/environment'
+	import { signInFirst } from '$lib/sign-in-first'
 	import { loadWhatsappOffer, saveWhatsappConsent, type WhatsappOffer } from '$lib/whatsapp'
 	import { authService, cartService } from '$lib/core/services/index.js'
 	import FulfilmentChoice from '$lib/components/order/fulfilment-choice.svelte'
@@ -97,7 +98,17 @@
 		await addressModule.paginateAddress(1)
 	}
 
-	const isGuestCheckout = $derived(!userState?.user?.role)
+	// Off when the store turned guest checkout off (GoCommerce D340). The layout's server load already
+	// sends a guest to sign in; this catches a stale sign-in cookie, whose session the browser lost.
+	const guestsAllowed = $derived(page.data?.store?.plugins?.isGuestCheckout?.active !== false)
+	const isGuestCheckout = $derived(guestsAllowed && !userState?.user?.role)
+
+	$effect(() => {
+		if (!browser || guestsAllowed) return
+		Promise.resolve(userState.hasLoaded).then(() => {
+			if (!userState.user?.userId) goto(signInFirst(page.url.pathname + page.url.search), { replaceState: true })
+		})
+	})
 
 	// The payment step's Change link routes here as `?showEditAddress=true`, and the core module's
 	// mount() answers it with `handleAddressChangeClick()` — which for a guest opens the address
@@ -367,8 +378,8 @@
 					<div class="min-w-0 space-y-6">
 						<!-- Contact Details -->
 						{#await userState.hasLoaded then _}
-							<!-- Every logged-out visitor sees the guest-checkout banner. -->
-							{#if !userState.user?.userId}
+							<!-- Every logged-out visitor sees the guest-checkout banner, where the store takes guests. -->
+							{#if !userState.user?.userId && guestsAllowed}
 								<div class="rounded-lg border border-primary/30 bg-primary/10 p-3 sm:p-4">
 									<div class="flex items-start gap-3">
 										<ShoppingBag class="mt-0.5 size-5 shrink-0 text-primary" />
