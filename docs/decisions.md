@@ -3,6 +3,22 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-11-26: A full-width mega menu on desktop
+
+The owner asked for "proper megamenu like myntra in desktop". From 1024px, a header item with
+sub-items now opens a panel the width of the header, replacing the small dropdowns shipped
+earlier the same day: each second-level item is a column heading with its third-level links under
+it, columns wrap into rows when there are many, and every panel ends in "View all <item>". A
+picture column shows only when the menu data carries a picture; GoCommerce menus carry none, so
+none shows and none is made up. A fourth level is not drawn; its parent's page lists it. Hover waits
+150ms before opening and 200ms before closing, so a pointer crossing the row or moving diagonally
+into a panel does not snap it shut or swap it. A tap or Enter opens a panel and the second follows
+the link; a mouse click follows at once. Panels are in the server's HTML (hidden by CSS) so their
+links are crawlable, overlay the page (no layout shift), and fade with a 6px drop over 220ms, which
+reduced motion turns into an instant swap. Phones and tablets below 1024px keep the drawer.
+Merchants set it up in Content > Menus; there is nothing to switch on. When the store's megamenu
+plugin is on, that plugin still draws its own menu instead.
+
 ## 2026-11-25: Pictures load top to bottom and fade in, with no placeholder box
 
 The owner asked that storefront pictures load in the order they come into view, fade in subtly, and

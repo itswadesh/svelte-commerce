@@ -34,6 +34,7 @@ export default defineConfig({
 			// Before $app, which would otherwise claim them for a folder that does not exist.
 			'$app/state': resolve('./tests/stubs/app-state.ts'),
 			'$app/environment': resolve('./tests/stubs/app-environment.ts'),
+			'$app/navigation': resolve('./tests/stubs/app-navigation.ts'),
 			$app: resolve('./src/app'),
 			$env: resolve('./src/env'),
 			// The connector namespace (svelte.config.js aliases the real one for the app).
