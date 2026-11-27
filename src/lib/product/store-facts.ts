@@ -3,6 +3,7 @@
  * answers false when the connector has no such list or it cannot be read, so the page says nothing
  * it was not told.
  */
+import { pageOffers, type BagOffer } from './upsells'
 
 /** Whether the store takes cash on delivery: one of the payment methods it has switched on. */
 export async function takesCashOnDelivery(services: object): Promise<boolean> {
@@ -12,6 +13,17 @@ export async function takesCashOnDelivery(services: object): Promise<boolean> {
 	} catch {
 		return false
 	}
+}
+
+/**
+ * The store's coupon codes for the page's Offers (Bewakoof study, 2026-11-25). Without a bag the
+ * engine lists its order-wide codes, with one the bag's; a connector with no offers, or an engine
+ * that cannot say, gives none.
+ */
+export function storeOffers(services: object): Promise<BagOffer[]> {
+	const svc = (services as any).cartService as { getOffers?: () => Promise<BagOffer[]> } | undefined
+	if (typeof svc?.getOffers !== 'function') return Promise.resolve([])
+	return svc.getOffers().then(pageOffers, () => [])
 }
 
 /**

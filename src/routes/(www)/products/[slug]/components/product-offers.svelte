@@ -7,12 +7,21 @@
 
 	/**
 	 * The store's coupon codes beside the delivery check (Bewakoof study, 2026-11-25), each with a
-	 * Copy button for the bag's code box. Read with the product (+page.ts); a store with no listed
-	 * codes, or with discount codes switched off, shows nothing. What a code takes off and its
-	 * minimum are the store's own figures; no "as low as" price is worked out here.
+	 * Copy button for the bag's code box. Read with the product (+page.server.ts), then the bag's own
+	 * once the browser has asked (+page.ts); a store with no listed codes, or with discount codes
+	 * switched off, shows nothing. What a code takes off and its minimum are the store's own figures;
+	 * no "as low as" price is worked out here.
 	 */
 	const SHOWN = 3
-	const offers = $derived<BagOffer[]>(page.data?.store?.plugins?.isDiscountCoupons?.active === false ? [] : (page.data?.offers ?? []))
+	let bagOffers = $state<BagOffer[] | null>(null)
+	$effect(() => {
+		const asked: Promise<BagOffer[]> | undefined = page.data?.bagOffers
+		bagOffers = null
+		let current = true
+		asked?.then((o) => current && (bagOffers = o))
+		return () => (current = false)
+	})
+	const offers = $derived<BagOffer[]>(page.data?.store?.plugins?.isDiscountCoupons?.active === false ? [] : (bagOffers ?? page.data?.offers ?? []))
 	const money = (n: number) => formatPrice(n, page.data?.store?.currency?.code)
 	let expanded = $state(false)
 	const visible = $derived(expanded ? offers : offers.slice(0, SHOWN))
