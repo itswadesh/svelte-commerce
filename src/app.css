@@ -700,6 +700,24 @@ div[data-theme='default'] {
 	}
 }
 
+/* A button tapped before the app has started (app.html): it dims at once so the tap visibly took,
+   and breathes while it waits to be pressed for real. Under reduced motion it only dims. */
+[data-early-tap] {
+	opacity: 0.6;
+	cursor: progress;
+	transition: opacity var(--motion-fast) var(--motion-ease);
+}
+@media (prefers-reduced-motion: no-preference) {
+	[data-early-tap] {
+		animation: early-tap 900ms var(--motion-ease) infinite alternate;
+	}
+	@keyframes early-tap {
+		to {
+			opacity: 0.85;
+		}
+	}
+}
+
 /* Pictures fade in as they arrive (owner, 2026-11-25). Nothing stands in for a picture while it
    downloads: its box is reserved by its ratio and stays the page's own ground, and the picture fades
    up over it once app.html marks it `data-shown`. Lazy pictures only: the eager one at the top is the

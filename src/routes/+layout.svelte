@@ -44,6 +44,18 @@
 	setUserState()
 	allowEarlyPictures()
 
+	// The app is running: press again the buttons tapped before it was (app.html), in order.
+	$effect(() => {
+		const w = window as unknown as { __earlyTap?: EventListener; __earlyTaps?: HTMLElement[] }
+		if (w.__earlyTap) document.removeEventListener('click', w.__earlyTap, true)
+		const taps = w.__earlyTaps ?? []
+		w.__earlyTaps = []
+		for (const b of taps) {
+			b.removeAttribute('data-early-tap')
+			if (b.isConnected) b.click()
+		}
+	})
+
 	// Every page change crossfades; opening a product morphs its image. See route-transition.ts.
 	onNavigate((navigation) => {
 		// Land at the top the moment the new page is in the DOM, ahead of the crossfade's snapshot of
