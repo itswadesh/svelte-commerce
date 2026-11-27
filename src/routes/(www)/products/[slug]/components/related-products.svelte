@@ -22,9 +22,20 @@
 	let related = $state<any[] | null>(null)
 	const productId = $derived(page.data?.product?.id)
 	const productSlug = $derived(page.data?.product?.slug as string | undefined)
+	// The rail sits at the foot of the page, so it is asked for only as the shopper scrolls near it:
+	// asked at once, its requests and a dozen pictures (~300 KB) competed with the buy box for a
+	// phone's bandwidth while the page was starting (P1-11).
+	let rail = $state<HTMLElement | null>(null)
+	let near = $state(false)
+	$effect(() => {
+		if (!rail || near) return
+		const seen = new IntersectionObserver((entries) => entries.some((e) => e.isIntersecting) && (near = true), { rootMargin: '800px 0px' })
+		seen.observe(rail)
+		return () => seen.disconnect()
+	})
 	$effect(() => {
 		const slug = productSlug
-		if (!slug) return
+		if (!slug || !near) return
 		let live = true
 		related = null
 		productService
@@ -48,7 +59,7 @@
 </script>
 
 {#if loading || products.length > 0}
-	<div class="edp-related mb-12" data-testid="related-products">
+	<div class="edp-related mb-12" data-testid="related-products" bind:this={rail}>
 		<header class="edp-related-head">
 			<span class="edp-related-eyebrow">More to explore</span>
 			<h2 class="edp-related-title text-center text-lg font-semibold sm:text-xl">{heading || 'Related products'}</h2>
