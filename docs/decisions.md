@@ -3,20 +3,6 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
-## 2026-11-27: The contact page shows the store's pin on an OpenStreetMap map
-
-The panel's Map location and shopnx.in both promise shoppers a map, but since 14 Nov the contact
-page drew none: the owner had Google's map taken off contact pages, and the whole map went with it.
-The map is back without Google's: when the store's map location names a point (typed `lat,lng`, or
-the pin in a Google place or "Embed a map" link), the page shows an OpenStreetMap frame with that
-pin, lazy-loaded in a 4:3 box held before it loads (CLS 0), and an "Open in Google Maps" link for
-directions. No script loads with the page and no CSP change was needed (the page sends only
-`frame-ancestors`). A Google share link with no pin in it gets the link and no map; no location
-gets nothing. The address on its own is never mapped, because OpenStreetMap's embed takes a point,
-not an address. The point also goes into the JSON-LD as the organisation's `location`
-(`Place` with `GeoCoordinates`), valid on every Organization type. If the owner meant no map of
-any kind on 14 Nov, this is one revert.
-
 ## 2026-11-27: The first pictures of a page are in the server's HTML and show without fading
 
 The owner reported that on hyderabad.shopnx.in the home page's products were not visible until he

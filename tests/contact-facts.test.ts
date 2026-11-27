@@ -4,8 +4,6 @@ import {
 	contactPageSchema,
 	hoursRows,
 	inIndia,
-	mapFor,
-	parseMapLocation,
 	phoneLink,
 	twelveHour,
 	whatsappLink
@@ -72,51 +70,6 @@ describe('addressLines', () => {
 	})
 })
 
-describe('parseMapLocation', () => {
-	it('reads typed lat,lng, with or without spaces', () => {
-		expect(parseMapLocation('19.0760,72.8777')).toEqual({ lat: 19.076, lng: 72.8777 })
-		expect(parseMapLocation(' -33.86 , 151.21 ')).toEqual({ lat: -33.86, lng: 151.21 })
-	})
-	it('reads the pin out of a Google place link and an embed link', () => {
-		expect(parseMapLocation('https://www.google.com/maps/place/Shop/@18.5,73.8,17z/data=!3d18.5204!4d73.8567')).toEqual({
-			lat: 18.5204,
-			lng: 73.8567
-		})
-		expect(parseMapLocation('https://www.google.com/maps/embed?pb=!1m18!2d73.8567!3d18.5204!2m3')).toEqual({ lat: 18.5204, lng: 73.8567 })
-	})
-	it('ignores anything that is not a point on the globe', () => {
-		for (const bad of [
-			'',
-			null,
-			undefined,
-			'the shop by the river',
-			'19.07',
-			'19.07,72.88,3',
-			'abc,def',
-			'91,10',
-			'10,181',
-			'https://maps.app.goo.gl/AbCdEf'
-		]) {
-			expect(parseMapLocation(bad)).toBeNull()
-		}
-	})
-})
-
-describe('mapFor', () => {
-	it('frames a pin on OpenStreetMap and opens it in Google Maps', () => {
-		const map = mapFor('19.0760,72.8777')
-		expect(new URL(map!.embed!).origin).toBe('https://www.openstreetmap.org')
-		expect(map!.embed).toContain('marker=19.076,72.8777')
-		expect(map!.open).toBe('https://www.google.com/maps/search/?api=1&query=19.076,72.8777')
-	})
-	it('opens a share link as it is, but draws nothing', () => {
-		expect(mapFor('https://maps.app.goo.gl/AbCdEf')).toEqual({ embed: null, open: 'https://maps.app.goo.gl/AbCdEf' })
-	})
-	it('is nothing for no location, plain words or a link off Google', () => {
-		for (const bad of ['', null, 'near the bus stand', 'https://evil.example/maps', 'http://maps.app.goo.gl/x']) expect(mapFor(bad)).toBeNull()
-	})
-})
-
 describe('hoursRows', () => {
 	it('runs days with the same hours together, on the 12-hour clock, and names the closed ones', () => {
 		const week = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map((day) => ({ day, opens: '10:00', closes: '19:30' }))
@@ -156,10 +109,6 @@ describe('contactPageSchema', () => {
 				hoursAvailable: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: 'https://schema.org/Monday', opens: '10:00', closes: '19:00' }]
 			}
 		})
-	})
-	it('asserts the pin as the place the store is', () => {
-		const schema = contactPageSchema({ url: 'https://shop.example/contact-us', origin: 'https://shop.example', geo: { lat: 19.076, lng: 72.8777 } })
-		expect(schema.about).toMatchObject({ location: { '@type': 'Place', geo: { '@type': 'GeoCoordinates', latitude: 19.076, longitude: 72.8777 } } })
 	})
 	it('asserts nothing the store did not publish', () => {
 		const schema = contactPageSchema({ url: 'https://shop.example/contact-us', origin: 'https://shop.example' })
