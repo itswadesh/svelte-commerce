@@ -3,6 +3,15 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-11-27: Closing an account is a request to the store
+
+The "Permanently delete my account" button failed every time: the connector's `deleteUser` throws
+NotSupportedError, and the engine has no shopper-side closure route, only the store's own erasure in
+the panel (`DELETE /api/admin/x/identity/customers/{id}`). The page now says to email the store at its
+published email (left out when the store has none) or use the contact page. It drops the 30-day
+promise and the coupon terms the old page stated, which nobody had confirmed. A working closure
+request needs an engine route first.
+
 ## 2026-11-27: The first pictures of a page are in the server's HTML and show without fading
 
 The owner reported that on hyderabad.shopnx.in the home page's products were not visible until he

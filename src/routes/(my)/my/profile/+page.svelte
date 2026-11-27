@@ -72,7 +72,7 @@
 	<title>My Profile | Svelte Commerce</title>
 </svelte:head>
 
-<div class="mx-auto max-w-6xl md:py-8 md:py-12">
+<div class="mx-auto max-w-6xl md:py-12 md:py-8">
 	<div in:fly={{ y: 12 }} class="space-y-10">
 		<!-- Profile Header -->
 		<div class="flex items-center justify-between">
@@ -187,16 +187,10 @@
 			<div class="p-6 md:p-8">
 				<div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
 					<div class="max-w-md">
-						<h3 class="text-lg font-bold text-foreground">Delete account</h3>
-						<p class="mt-1 text-sm text-muted-foreground">Permanently delete your account and all associated data. This action cannot be undone.</p>
+						<h3 class="text-lg font-bold text-foreground">Close account</h3>
+						<p class="mt-1 text-sm text-muted-foreground">The store closes an account when you ask it to.</p>
 					</div>
-					<Button
-						variant="destructive"
-						class="h-12 px-6"
-						onclick={() => goto('/my/profile/delete')}
-					>
-						Request deletion
-					</Button>
+					<Button variant="destructive" class="h-12 px-6" onclick={() => goto('/my/profile/delete')}>How to close it</Button>
 				</div>
 			</div>
 		</div>
@@ -226,4 +220,3 @@
 		</div>
 	</div>
 {/if}
-
