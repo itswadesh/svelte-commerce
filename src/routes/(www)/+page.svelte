@@ -187,7 +187,7 @@
 
 <SeoHeader
 	metaTitle={themeContent.seoTitle || page?.metaTitle || brandName}
-	metaDescription={themeDescription}
+	metaDescription={themeContent.seoDescription || themeDescription}
 	metaKeywords={page?.metaKeywords}
 	image={themeContent.seoImage || page?.logo || data?.store?.logo}
 />
