@@ -24,6 +24,20 @@
 			}
 			document.addEventListener('load', imageShown, true)
 			document.addEventListener('error', imageShown, true)
+			// A tap on a button that lands before the app has started (seconds, on a phone on mobile data)
+			// used to do nothing at all (P1-11). Each such tap marks its button as working
+			// (`data-early-tap`, app.css) and is kept, and +layout.svelte presses the buttons again, in
+			// order, once the app is running. Form submit buttons are left alone: the browser already
+			// submits the form without the app.
+			window.__earlyTaps = []
+			window.__earlyTap = function (e) {
+				var b = e.target.closest && e.target.closest('button')
+				if (!b || b.disabled || (b.form && b.type !== 'button')) return
+				var taps = window.__earlyTaps
+				if (taps[taps.length - 1] !== b) taps.push(b)
+				b.setAttribute('data-early-tap', '')
+			}
+			document.addEventListener('click', window.__earlyTap, true)
 		</script>
 		<!-- Google Consent Mode v2 defaults, set before any tag loads. Regions that require opt-in
 		     (EEA, UK, Switzerland) start denied until the visitor chooses in the cookie banner
