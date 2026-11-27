@@ -18,7 +18,7 @@
 		title: string
 		content?: string | null
 		/** The CMS record's own SEO fields, when the merchant filled them in. */
-		meta?: { metaTitle?: string; metaDescription?: string } | null
+		meta?: { metaTitle?: string; metaDescription?: string; metaImage?: string | null } | null
 		children?: import('svelte').Snippet
 	}
 
@@ -45,6 +45,7 @@
 <SeoHeader
 	metaTitle={meta?.metaTitle || (storeName ? `${title} | ${storeName}` : title)}
 	metaDescription={meta?.metaDescription || excerpt(body)}
+	image={meta?.metaImage || ''}
 />
 
 <section class="page-width py-10 md:py-16">

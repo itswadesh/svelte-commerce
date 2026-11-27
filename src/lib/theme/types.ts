@@ -41,6 +41,8 @@ export interface ThemeHomepageContent {
 	brandName?: string
 	description: string
 	seoTitle?: string
+	/** The home page's meta description, from Store settings; `description` is shown copy. */
+	seoDescription?: string
 	seoImage?: string
 	hero: {
 		badge: string
