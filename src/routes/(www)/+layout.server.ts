@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
 import { isCheckoutStep, isOpenPage, signInFirst, signInScreen } from '$lib/sign-in-first'
-import { hasSession, storeSwitches } from '$lib/server/store-plugins'
+import { hasSession, shopAssistantOn, storeSwitches } from '$lib/server/store-plugins'
 
 // Account surfaces that live in (www) instead of (my), so they never got the
 // (my) group's session guard. Same redirect shape the core (my) layout uses.
@@ -54,5 +54,5 @@ export const load: LayoutServerLoad = async ({ cookies, setHeaders, url }) => {
 		})
 	}
 
-	return {}
+	return { shopAssistant: await shopAssistantOn() }
 }

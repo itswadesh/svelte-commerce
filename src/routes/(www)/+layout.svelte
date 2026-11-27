@@ -70,5 +70,8 @@
 
 <!-- Self-gates on the store's admin toggle via /api/commerce-assistant/config -->
 <ConversationalShopping />
-<!-- Self-gates on the engine's GET /x/shop-assistant/status -->
-<ShopAssistant />
+<!-- Mounted only where the store has the shop-assistant plugin, so an engine without the module is
+     never asked; inside, it still waits for GET /x/shop-assistant/status to say it is ready. -->
+{#if page.data?.shopAssistant}
+	<ShopAssistant />
+{/if}
