@@ -32,6 +32,16 @@ as they arrive without the fade. Pictures further down keep the 200px observer a
 A picture that comes from the cache shows at once. The product gallery keeps pacing its own slides
 and takes none of the 8. This narrows the 2026-11-25 decision; the rest of it stands.
 
+## 2026-11-27: Two-level menus keep the compact dropdown
+
+A self-hosting merchant reported that the mega menu turned their plain two-level menu into column
+headings with nothing under them, leaving a full-width panel mostly empty. A top item now gets the
+full-width panel only when at least one of its second-level items has links of its own; otherwise
+it opens a compact dropdown under itself, with the same hover delay, keyboard and tap behaviour. A
+per-item Dropdown/Mega choice in Content > Menus was asked for too but is not built: it needs a new
+menu-item field in the engine, the panel and the connector, and the automatic rule covers the case
+reported.
+
 ## 2026-11-26: A full-width mega menu on desktop
 
 The owner asked for "proper megamenu like myntra in desktop". From 1024px, a header item with

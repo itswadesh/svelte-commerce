@@ -63,6 +63,16 @@ describe('desktop mega menu', () => {
 		expect(panel.textContent).toContain('View all Women')
 	})
 
+	it('gives a two-level item a compact dropdown, not the full-width panel', () => {
+		const { container } = render(MainNav)
+		const men = trigger('Men')
+		const panel = container.querySelector(`#${CSS.escape(men.getAttribute('aria-controls')!)}`)!
+		expect(panel.closest('.mm-item')!.classList.contains('mm-dd')).toBe(true)
+		expect([...panel.querySelectorAll('a')].map((a) => a.getAttribute('href'))).toEqual(['/men-ethnic-wear'])
+		expect(panel.textContent).not.toContain('View all')
+		expect(trigger('Women').closest('.mm-item')!.classList.contains('mm-dd')).toBe(false)
+	})
+
 	it('opens on Enter, then follows the link on the second Enter', async () => {
 		render(MainNav)
 		const women = trigger('Women')

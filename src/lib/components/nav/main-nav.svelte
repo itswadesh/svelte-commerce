@@ -5,7 +5,7 @@
 	import { ChevronDown } from '@lucide/svelte'
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 	import { chromeMenuItems } from '$lib/composer/chrome-draft.svelte.js'
-	import { megaColumns, menuKey, promoImage } from './mega-menu-columns'
+	import { isMega, megaColumns, menuKey, promoImage } from './mega-menu-columns'
 
 	// The store's header menu: the one the shop chose in the theme editor's header (D131), which the
 	// connector already files under `header`, or a draft's choice while the editor is open.
@@ -147,11 +147,14 @@
 					{#if columns.length}
 						{@const open = openIndex === i}
 						{@const promo = promoImage(item)}
-						<!-- A top item with children opens a full-width panel under the header: each
-						     second-level item a column heading, its third-level links under it. The wrapper
-						     is not positioned, so the panel spans the sticky header, not this item. -->
+						{@const mega = isMega(columns)}
+						<!-- A grouped top item opens a full-width panel under the header: each second-level
+						     item a column heading, its third-level links under it. The wrapper is not
+						     positioned, so the panel spans the sticky header, not this item. A plain
+						     two-level item opens a compact dropdown under itself instead (mm-dd). -->
 						<div
 							class="mm-item"
+							class:mm-dd={!mega}
 							role="presentation"
 							onpointerenter={(e) => enter(e, i)}
 							onpointerleave={leave}
@@ -178,10 +181,25 @@
 								id="{uid}-mm-{i}"
 								class="mm-panel border-t border-border bg-background"
 								class:mm-open={open}
+								class:border={!mega}
+								class:rounded-md={!mega}
 								role="region"
 								aria-label={item?.name}
 								onkeydown={(e) => panelKey(e, i)}
 							>
+								{#if !mega}
+									<ul class="m-0 list-none p-2">
+										{#each columns as col}
+											<li>
+												<a
+													href={col.link}
+													class="mm-ddlink rounded px-3 text-sm text-foreground transition-colors duration-fast ease-standard hover:bg-muted focus-visible:bg-muted"
+													>{col.name}</a
+												>
+											</li>
+										{/each}
+									</ul>
+								{:else}
 								<div class="page-width mm-body">
 									<div class="mm-cols">
 										{#each columns as col}
@@ -227,6 +245,7 @@
 										>View all {item?.name}</a
 									>
 								</div>
+								{/if}
 							</div>
 						</div>
 					{:else}
@@ -299,6 +318,21 @@
 	}
 	.mm-item:has(.mm-open) :global(.mm-chevron) {
 		transform: rotate(180deg);
+	}
+	/* The compact dropdown: under its own item, as wide as its longest link. */
+	.mm-dd {
+		position: relative;
+	}
+	.mm-dd .mm-panel {
+		right: auto;
+		min-width: 12rem;
+		max-width: 20rem;
+	}
+	.mm-ddlink {
+		display: flex;
+		align-items: center;
+		min-height: 36px;
+		white-space: nowrap;
 	}
 	.mm-body {
 		display: flex;
