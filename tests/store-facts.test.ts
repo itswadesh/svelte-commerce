@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { askRestockAlert, restockAlertsOn, takesCashOnDelivery } from '$lib/product/store-facts'
+import { askRestockAlert, restockAlertsOn, storeOffers, takesCashOnDelivery } from '$lib/product/store-facts'
 
 const methods = (...codes: string[]) => ({ paymentMethodService: { list: async () => ({ data: codes.map((code) => ({ code })) }) } })
 
@@ -30,6 +30,20 @@ describe('restockAlertsOn', () => {
 	it('is off without the wishlist module, or a connector that cannot keep an address', async () => {
 		expect(await restockAlertsOn(store(null))).toBe(false)
 		expect(await restockAlertsOn(store({ collect_email: true }, null))).toBe(false)
+	})
+})
+
+describe('storeOffers', () => {
+	const offer = { code: 'HELLO5', title: '5% off', isPercent: true, value: 5, minAmount: null, applies: false, amount: null, remaining: null }
+
+	it("lists the cart service's codes the page can show", async () => {
+		const services = { cartService: { getOffers: async () => [offer, { ...offer, code: '' }] } }
+		expect((await storeOffers(services)).map((o) => o.code)).toEqual(['HELLO5'])
+	})
+
+	it('is empty from a connector with no offers, or when the engine cannot say', async () => {
+		expect(await storeOffers({})).toEqual([])
+		expect(await storeOffers({ cartService: { getOffers: async () => Promise.reject(new Error('offline')) } })).toEqual([])
 	})
 })
 
