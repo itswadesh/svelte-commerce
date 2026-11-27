@@ -11,8 +11,11 @@
 </script>
 
 <!-- svelte-ignore event_directive_deprecated -->
+<!-- `relative` so the clip holds absolutely placed content too: a slide's `sr-only` label is
+     placed against the nearest positioned ancestor, and with that outside this box the labels of
+     the off-screen slides made a 360px phone scroll sideways to 3000px until the app started. -->
 <div
-	class="overflow-hidden"
+	class="relative overflow-hidden"
 	use:emblaCarouselSvelte={{
 		options: {
 			container: '[data-embla-container]',
