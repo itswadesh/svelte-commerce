@@ -78,48 +78,6 @@ export function addressLines(address: StoreAddress | null | undefined): string[]
 	return lines
 }
 
-export type LatLng = { lat: number; lng: number }
-
-/**
- * The point a store's map location names (GoCommerce D156): typed `lat,lng`, or the pin in a
- * Google link — `!3d<lat>!4d<lng>` in a place link, `!2d<lng>!3d<lat>` in an "Embed a map" one.
- * Anything else (a share link, an address, numbers off the globe) is null: no pin is guessed.
- */
-export function parseMapLocation(raw: unknown): LatLng | null {
-	const s = String(raw ?? '').trim()
-	const num = '(-?\\d{1,3}(?:\\.\\d+)?)'
-	let m = s.match(new RegExp(`^${num}\\s*,\\s*${num}$`)) ?? s.match(new RegExp(`!3d${num}!4d${num}`))
-	let pair = m ? [m[1], m[2]] : null
-	if (!pair && (m = s.match(new RegExp(`!2d${num}!3d${num}`)))) pair = [m[2], m[1]]
-	if (!pair) return null
-	const [lat, lng] = pair.map(Number)
-	return Math.abs(lat) <= 90 && Math.abs(lng) <= 180 ? { lat, lng } : null
-}
-
-/**
- * The map block: an OpenStreetMap frame with the pin, and "Open in Google Maps" for directions.
- * OpenStreetMap, not Google: the owner took Google's map off contact pages (14 Nov 2026). A
- * Google link with no pin in it (a share link) still opens, but draws nothing.
- */
-export function mapFor(raw: unknown): { embed: string | null; open: string } | null {
-	const p = parseMapLocation(raw)
-	if (p) {
-		const d = 0.004
-		const bbox = [p.lng - d, p.lat - d, p.lng + d, p.lat + d].map((n) => n.toFixed(5)).join(',')
-		return {
-			embed: `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${p.lat},${p.lng}`,
-			open: `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`
-		}
-	}
-	try {
-		const u = new URL(String(raw ?? '').trim())
-		const google = /(^|\.)(google\.[a-z.]+|goo\.gl|g\.page)$/.test(u.hostname)
-		return u.protocol === 'https:' && google && !u.pathname.startsWith('/maps/embed') ? { embed: null, open: u.href } : null
-	} catch {
-		return null
-	}
-}
-
 const DAYS: Array<[string, string, string]> = [
 	['mon', 'Monday', 'https://schema.org/Monday'],
 	['tue', 'Tuesday', 'https://schema.org/Tuesday'],
@@ -170,9 +128,8 @@ export function contactPageSchema(args: {
 	phone?: string | null
 	address?: StoreAddress | null
 	hours?: OpeningHours[] | null
-	geo?: LatLng | null
 }) {
-	const { url, origin, name, email, phone, address, hours, geo } = args
+	const { url, origin, name, email, phone, address, hours } = args
 	const lines = addressLines(address)
 	const point = {
 		...(phone ? { telephone: phone } : {}),
@@ -210,9 +167,6 @@ export function contactPageSchema(args: {
 						}
 					}
 				: {}),
-			// `location` takes a Place on every Organization type, so the pin is asserted without
-			// claiming the store is a LocalBusiness.
-			...(geo ? { location: { '@type': 'Place', geo: { '@type': 'GeoCoordinates', latitude: geo.lat, longitude: geo.lng } } } : {}),
 			...(Object.keys(point).length ? { contactPoint: { '@type': 'ContactPoint', contactType: 'customer service', ...point } } : {})
 		}
 	}

@@ -1,26 +1,17 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { ChevronRight, Clock, ExternalLink, Mail, Map as MapIcon, MapPin, MessageCircle, Phone } from '@lucide/svelte'
+	import { ChevronRight, Clock, Mail, MapPin, MessageCircle, Phone } from '@lucide/svelte'
 	import { isCmsPageResolvable } from '$lib/components/common/cms-pages.js'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
 	import ContactForm from '$lib/components/contact/contact-form.svelte'
-	import {
-		addressLines,
-		contactPageSchema,
-		hoursRows,
-		inIndia,
-		mapFor,
-		parseMapLocation,
-		phoneLink,
-		whatsappLink
-	} from '$lib/components/contact/contact-facts'
+	import { addressLines, contactPageSchema, hoursRows, inIndia, phoneLink, whatsappLink } from '$lib/components/contact/contact-facts'
 
 	const store = $derived(page?.data?.store)
 
-	// Only what the store record carries; anything it lacks is simply not shown. The address, map
-	// location, hours and country are there only when the store published them (GoCommerce D156).
-	// The map is OpenStreetMap's, never Google's (owner, 14 Nov 2026), and only for a pin the store set.
+	// Only what the store record carries; anything it lacks is simply not shown. No map: the owner
+	// removed Google's map from contact pages (14 Nov 2026). The address, hours and country are
+	// there only when the store published them (GoCommerce D156).
 	const india = $derived(inIndia(store?.businessCountry || store?.address?.country))
 	const email = $derived(String(store?.contact?.email || store?.businessEmail || '').trim())
 	const phone = $derived(phoneLink(store?.contact?.phone || store?.businessPhone, india))
@@ -28,7 +19,6 @@
 	const whatsapp = $derived(chat?.active ? whatsappLink(chat.phone, india, chat.message) : null)
 	const lines = $derived(addressLines(store?.address))
 	const hours = $derived(hoursRows(store?.openingHours))
-	const map = $derived(mapFor(store?.mapLocation))
 
 	// WhatsApp first, then a call: how most shoppers here would rather reach a shop (india.md).
 	const methods = $derived(
@@ -38,7 +28,7 @@
 			email && { icon: Mail, title: 'Email us', value: email, href: `mailto:${email}`, external: false }
 		].filter((m) => !!m)
 	)
-	const hasFacts = $derived(methods.length > 0 || lines.length > 0 || hours.length > 0 || !!map)
+	const hasFacts = $derived(methods.length > 0 || lines.length > 0 || hours.length > 0)
 
 	// Decided on the server from the store's own capabilities: a form on a channel that is not open
 	// would spend the shopper's message on an error. See store-capabilities.ts.
@@ -60,8 +50,7 @@
 			email,
 			phone: phone?.label,
 			address: store?.address,
-			hours: store?.openingHours,
-			geo: parseMapLocation(store?.mapLocation)
+			hours: store?.openingHours
 		})
 	)
 </script>
@@ -150,34 +139,6 @@
 						</table>
 					</section>
 				{/if}
-
-				{#if map}
-					<section class="rounded-lg border bg-card p-4" aria-labelledby="contact-map-title">
-						<h2 id="contact-map-title" class="contact-title flex items-center gap-2 text-base font-semibold text-foreground">
-							<MapIcon class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-							Find us
-						</h2>
-						{#if map.embed}
-							<!-- The space is held before the frame loads, so nothing below it moves (CLS 0). -->
-							<iframe
-								src={map.embed}
-								title="Map showing where {store?.name || 'the shop'} is"
-								loading="lazy"
-								class="mt-3 block aspect-[4/3] w-full rounded-md border bg-muted"
-							></iframe>
-						{/if}
-						<a
-							href={map.open}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="map-link mt-3 inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-medium text-foreground underline underline-offset-4"
-						>
-							Open in Google Maps
-							<ExternalLink class="map-link__icon h-4 w-4" aria-hidden="true" />
-							<span class="sr-only">(opens in a new tab)</span>
-						</a>
-					</section>
-				{/if}
 			</div>
 		{/if}
 
@@ -216,33 +177,6 @@
 			}
 		}
 		.contact-card:active {
-			transform: scale(0.98);
-		}
-	}
-
-	/* "Open in Google Maps" answers like the cards: the underline darkens on hover, the arrow
-	   nudges out where movement is welcome, and the link dips under the finger. */
-	.map-link {
-		text-decoration-color: hsl(var(--foreground) / 0.35);
-		transition:
-			text-decoration-color var(--motion-fast) var(--motion-ease),
-			opacity var(--motion-fast) var(--motion-ease),
-			transform var(--motion-fast) var(--motion-ease);
-	}
-	.map-link :global(.map-link__icon) {
-		transition: transform var(--motion-fast) var(--motion-ease);
-	}
-	.map-link:hover {
-		text-decoration-color: currentColor;
-	}
-	.map-link:active {
-		opacity: 0.7;
-	}
-	@media (prefers-reduced-motion: no-preference) {
-		.map-link:hover :global(.map-link__icon) {
-			transform: translate(2px, -2px);
-		}
-		.map-link:active {
 			transform: scale(0.98);
 		}
 	}
