@@ -34,6 +34,13 @@ export function megaColumns(item: MenuNode | undefined): MegaColumn[] {
 		}))
 }
 
+/**
+ * Whether a top item gets the full-width panel. Only a grouped menu (some second-level item has its
+ * own links) does; a plain two-level menu gets a compact dropdown, since its items as column headings
+ * left a full-width panel mostly empty.
+ */
+export const isMega = (columns: MegaColumn[]) => columns.some((col) => col.links.length > 0)
+
 /** The promo picture, only when the menu data carries one. None is ever made up. */
 export const promoImage = (item: MenuNode | undefined) => item?.image || item?.thumbnail || undefined
 

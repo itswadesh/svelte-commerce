@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { megaColumns, menuKey, promoImage } from '$lib/components/nav/mega-menu-columns'
+import { isMega, megaColumns, menuKey, promoImage } from '$lib/components/nav/mega-menu-columns'
 
 const women = {
 	name: 'Women',
@@ -77,5 +77,12 @@ describe('menuKey', () => {
 		expect(menuKey('Tab', 0, 3)).toBe(-1)
 		expect(menuKey('Enter', 0, 3)).toBe(-1)
 		expect(menuKey('ArrowDown', 0, 0)).toBe(-1)
+	})
+})
+
+describe('isMega', () => {
+	it('is the full-width panel only when some second-level item has links of its own', () => {
+		expect(isMega(megaColumns(women))).toBe(true)
+		expect(isMega(megaColumns({ name: 'Men', link: '/men', items: [{ name: 'Shirts', link: '/shirts', items: [] }] }))).toBe(false)
 	})
 })
