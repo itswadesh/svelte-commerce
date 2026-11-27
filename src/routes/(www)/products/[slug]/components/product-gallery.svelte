@@ -9,7 +9,7 @@
 
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte'
-	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import LazyImg, { allowEarlyPictures } from '$lib/core/components/image/lazy-img.svelte'
 	import * as Carousel from '$lib/components/ui/carousel/index.js'
 	import type { CarouselAPI } from '$lib/components/ui/carousel/context.js'
 	import { Play, X } from '@lucide/svelte'
@@ -22,6 +22,11 @@
 	import { productBadge } from '$lib/product/badge.js'
 	import { dialog } from '$lib/actions/dialog'
 	import { fade } from '$lib/motion'
+
+	// The gallery paces its own pictures: the first slide is the LCP, the rest come once the page is
+	// idle (preloadRest). As early pictures the slides sit off screen sideways yet are fetched with
+	// the page, which is what slowed the product page's first paint on 2026-11-25.
+	allowEarlyPictures(0)
 
 	// `corner`: controls drawn on the swiped picture itself, so they keep to its corners on a phone,
 	// where the picture runs past the page's margins and the dots sit under it.
