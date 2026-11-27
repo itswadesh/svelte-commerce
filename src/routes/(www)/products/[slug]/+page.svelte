@@ -3,7 +3,9 @@
 	import { services } from 'kitcommerce.config'
 	import ProductDetails from './components/product-details.svelte'
 	import { ProductStateProvider } from '$lib/core/composables/index.js'
-	import Editor, { EDITOR, type EditorHandle } from '$lib/customizer/editor.svelte'
+	import { EDITOR, type EditorHandle } from '$lib/customizer/handle'
+	// Only a product that can be designed loads the editor (P1-11).
+	const loadEditor = () => import('$lib/customizer/editor.svelte')
 	import type { CustomizerSetup } from '$lib/customizer/document'
 	import { loadSetup } from '$lib/customizer/service'
 
@@ -32,8 +34,10 @@
 <ProductStateProvider>
 	<ProductDetails />
 	{#if customizer}
-		{#key customizer.productId}
-			<Editor setup={customizer} />
-		{/key}
+		{#await loadEditor() then { default: Editor }}
+			{#key customizer.productId}
+				<Editor setup={customizer} />
+			{/key}
+		{/await}
 	{/if}
 </ProductStateProvider>

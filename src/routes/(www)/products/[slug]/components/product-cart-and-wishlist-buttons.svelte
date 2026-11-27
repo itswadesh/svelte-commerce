@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getContext, tick } from 'svelte'
 	import { page } from '$app/state'
-	import { EDITOR, openEditor, type EditorHandle } from '$lib/customizer/editor.svelte'
+	import { EDITOR, openEditor, type EditorHandle } from '$lib/customizer/handle'
 	import { madeToDesign } from '$lib/product/designable'
 	import { Button } from '$lib/components/ui/button'
 	import Spinner from '$lib/components/common/spinner.svelte'

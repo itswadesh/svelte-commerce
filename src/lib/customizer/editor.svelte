@@ -1,18 +1,7 @@
 <script module lang="ts">
-	import { pushState, replaceState } from '$app/navigation'
+	import { replaceState } from '$app/navigation'
 	import { navigating, page } from '$app/state'
-
-	// A frame, such as the theme editor's preview, shares its history with the page around it, and a
-	// step back there can undo that page's own step: in a frame the editor neither adds nor leaves an entry.
-	const framed = () => window.parent !== window
-
-	export function openEditor() {
-		if (framed() || page.state.customizerOpen) replaceState('', { customizerOpen: true })
-		else pushState('', { customizerOpen: true })
-	}
-
-	export type EditorHandle = { readonly hasSetup: boolean; reloadSetup: () => Promise<void> }
-	export const EDITOR = Symbol('editor')
+	import { framed } from './handle'
 </script>
 
 <script lang="ts">
