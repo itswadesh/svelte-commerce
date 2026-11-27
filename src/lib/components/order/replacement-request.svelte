@@ -25,6 +25,8 @@
 		rejectReason: string | null
 		replacementOrderNo: string | null
 		pickupStatus: string | null
+		/** Connector 0.54: a return the store has recorded back. Absent on older connectors. */
+		returned?: boolean
 		createdAt: string
 	}
 	type Offer = {
@@ -140,6 +142,8 @@
 	function outcome(r: Request) {
 		if (r.status === 'rejected') return r.rejectReason ? `The store said: ${r.rejectReason}` : ''
 		if (r.status !== 'approved') return ''
+		// The engine moves no money on a return; the refund is the store's to make (D355).
+		if (r.returned) return 'The store has your item back and will be in touch about any refund.'
 		const parts = []
 		if (r.kind === 'replacement') {
 			parts.push(r.replacementOrderNo ? `Your replacement is order ${r.replacementOrderNo}, at no cost.` : 'Your replacement order is being placed, at no cost.')
