@@ -3,6 +3,14 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-11-27: No reels page; /reels goes to the catalogue
+
+/reels showed only its hidden "Fashion reels" heading: the engine has no reels, and the connector's
+`reelsService.list()` answers an empty page. The page, and the bottom-bar "Reels" item (shown only
+under Litekart's `isReel` plugin, which GoCommerce stores never carry), are removed, and /reels
+answers a 301 to /products so old links do not 404. Bring the page back only with a backend that
+serves reels.
+
 ## 2026-11-27: Closing an account is a request to the store
 
 The "Permanently delete my account" button failed every time: the connector's `deleteUser` throws

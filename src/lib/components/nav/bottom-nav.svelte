@@ -5,7 +5,7 @@
 	import { onDestroy, onMount } from 'svelte'
 	import { drawer } from '$lib/motion'
 	import { getCartState } from '$lib/core/stores/index.js'
-	import { ArrowLeft, Compass, Grid, Heart, Home, Play, ShoppingBag } from '@lucide/svelte'
+	import { ArrowLeft, Compass, Grid, Heart, Home, ShoppingBag } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { Separator } from '$lib/components/ui/separator'
 	import { cn } from '$lib/core/utils'
@@ -85,9 +85,6 @@
 				}
 			}
 		]
-		if (page?.data?.store?.plugins?.isReel?.active) {
-			items.splice(4, 0, { label: 'Reels', icon: Play, href: '/reels' })
-		}
 		return items
 	})
 
@@ -110,7 +107,8 @@
 					</div>
 					<span
 						class="truncate text-[9px] font-bold transition-colors duration-200 {isActive(item.href)
-							? 'font-semibold text-foreground': 'text-muted-foreground'}"
+							? 'font-semibold text-foreground'
+							: 'text-muted-foreground'}"
 					>
 						{item.label}
 					</span>
@@ -195,7 +193,7 @@
 								goto('/checkout/cart')
 							}}
 							size="lg"
-							class="w-full rounded-pill bg-primary px-8 py-4 text-xs font-bold text-primary-foreground transition-colors duration-fast hover:bg-primary-hover"
+							class="rounded-pill w-full bg-primary px-8 py-4 text-xs font-bold text-primary-foreground transition-colors duration-fast hover:bg-primary-hover"
 						>
 							Proceed to checkout
 						</Button>
