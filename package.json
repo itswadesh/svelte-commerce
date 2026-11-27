@@ -140,7 +140,7 @@
 		"@internationalized/date": "^3.7.0",
 		"@lucide/svelte": "^1.8.0",
 		"@misiki/gocommerce-connector": "^0.51.1",
-		"@misiki/kitcommerce-core": "^0.1.60",
+		"@misiki/kitcommerce-core": "^0.1.63",
 		"cheerio": "^1.2.0",
 		"culori": "^4.0.2",
 		"fuse.js": "^7.1.0",

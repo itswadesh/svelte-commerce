@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte'
+	import { forgetAbandonedWishlistTap } from './forget-abandoned-wishlist.svelte.js'
 	import LoginModal from './login-modal.svelte'
 	import SignupModal from './signup-modal.svelte'
 	import { onNavigate } from '$app/navigation'
@@ -125,6 +126,8 @@
 		if (show) lockPageScroll()
 		else unlockPageScroll()
 	})
+
+	forgetAbandonedWishlistTap(() => show)
 
 	onDestroy(() => {
 		unlockPageScroll()

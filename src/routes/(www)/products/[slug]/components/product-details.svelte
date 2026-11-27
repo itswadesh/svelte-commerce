@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LoginModal from '$lib/components/auth/login-modal.svelte'
+	import { forgetAbandonedWishlistTap } from '$lib/components/auth/forget-abandoned-wishlist.svelte.js'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import SeoHeader from '$lib/components/seo/seo-header.svelte'
 	import StructuredData from '$lib/components/seo/structured-data.svelte'
@@ -47,6 +48,7 @@
 	import { sizeChoice, sizeOf, sizeOptionOf, withoutSize } from '$lib/product/size-choice.svelte'
 
 	const productState = useProductState()
+	forgetAbandonedWishlistTap(() => productState.showLoginModal)
 	const data = $derived(page.data)
 	// The shop's product page template (GoCommerce D128): its sections around this page's core. Null
 	// — no template published, the editor off, an older connector — draws the page exactly as before.
