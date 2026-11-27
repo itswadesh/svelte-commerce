@@ -8,6 +8,7 @@
 	import { fireGTagEvent } from '$lib/core/utils/index.js'
 	import { formatPrice } from '$lib/utils/price'
 	import { linePicture } from '$lib/customizer/line'
+	import { shipsFromLabel } from '$lib/utils/ships-from'
 	import { page } from '$app/state'
 	import LineSize from './line-size.svelte'
 
@@ -113,6 +114,9 @@
 				{/if}
 				{#if picture.designed}
 					<p class="mt-0.5 text-xs font-medium text-foreground">Your design</p>
+				{/if}
+				{#if shipsFromLabel(cartProduct)}
+					<p class="mt-0.5 text-xs font-medium text-foreground">{shipsFromLabel(cartProduct)}</p>
 				{/if}
 			</div>
 
