@@ -1,6 +1,7 @@
 <script lang="ts">
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { linePicture } from '$lib/customizer/line'
+	import { shipsFromLabel } from '$lib/utils/ships-from'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import OrderListSkeleton from '../_OrderListSkeleton.svelte'
 	import BackButton from '$lib/components/common/back-button.svelte'
@@ -150,6 +151,14 @@
 																{#if item.variantTitle}
 																	<span class="h-1 w-1 self-center rounded-full bg-muted"></span>
 																	<span>{item.variantTitle}</span>
+																{/if}
+																<!-- The day the shopper was told at checkout (D356), kept on the line. -->
+																{#if shipsFromLabel(item)}
+																	<span class="h-1 w-1 self-center rounded-full bg-muted"></span>
+																	<span class="flex items-center gap-1.5 text-foreground">
+																		<Calendar class="h-3.5 w-3.5" aria-hidden="true" />
+																		{shipsFromLabel(item)}
+																	</span>
 																{/if}
 															</div>
 														</div>
