@@ -3,7 +3,8 @@
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { Badge } from '$lib/components/ui/badge/index.js'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
-	import { Check, CircleAlert, PackageX, Clock } from '@lucide/svelte'
+	import { Check, CircleAlert, PackageX, Clock, CalendarClock } from '@lucide/svelte'
+	import { shipsFromLabel } from '$lib/utils/ships-from'
 	import { themeOptions } from '$lib/composer/theme-options.js'
 	import { stockSourceOf } from '$lib/product/size-choice.svelte'
 
@@ -30,6 +31,12 @@
 	const managed = $derived(source?.manageInventory !== false)
 	const stock = $derived(Number(source?.stock ?? 0))
 	const backorder = $derived(!!source?.allowBackorder)
+	// The merchant's pre-order day (D356). The product record has none of its own, so an optionless
+	// product reads its one variant's before a variant is picked.
+	const shipsFrom = $derived.by(() => {
+		const variants = (page.data?.product?.variants ?? []) as unknown[]
+		return shipsFromLabel(source?.shipsFrom ? source : variants.length === 1 ? variants[0] : null)
+	})
 
 	const status = $derived.by(() => {
 		if (!source) return 'unknown'
@@ -41,7 +48,7 @@
 
 <!-- aria-live: price, SKU and this line all change together when a variant is picked, and this is
      the one that decides whether the shopper can buy at all. -->
-<div class="edp-avail flex min-h-7 items-center" aria-live="polite" data-testid="product-availability">
+<div class="edp-avail flex min-h-7 flex-wrap items-center gap-x-3 gap-y-1" aria-live="polite" data-testid="product-availability">
 	{#if status === 'unknown'}
 		<Skeleton class="h-5 w-28" />
 	{:else if status === 'out'}
@@ -64,5 +71,13 @@
 			<Check class="size-3.5" aria-hidden="true" />
 			In stock
 		</Badge>
+	{/if}
+	{#if shipsFrom && status !== 'out' && status !== 'unknown'}
+		{#key shipsFrom}
+			<span class="flex animate-in items-center gap-1.5 text-sm font-medium text-foreground duration-fast ease-standard fade-in-0" data-testid="product-ships-from">
+				<CalendarClock class="size-3.5" aria-hidden="true" />
+				{shipsFrom}
+			</span>
+		{/key}
 	{/if}
 </div>
