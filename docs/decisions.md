@@ -3,6 +3,18 @@
 Owner decisions for the storefront, newest first. Read before proposing a change; changing a settled
 decision needs the owner.
 
+## 2026-11-27: The first pictures of a page are in the server's HTML and show without fading
+
+The owner reported that on hyderabad.shopnx.in the home page's products were not visible until he
+scrolled. The 2026-11-25 change added every non-top picture only once an observer saw it near the
+screen, and that observer exists only after the app's code has run: on a phone on mobile data the
+product cards sat empty for seconds after the page painted (about 5s on emulated 4G with a slowed
+CPU). Now the first 8 pictures a page renders (in page order) are in the server's HTML as native
+`loading="lazy"`, at low fetch priority so they do not compete with the top picture, and are shown
+as they arrive without the fade. Pictures further down keep the 200px observer and the 300ms fade.
+A picture that comes from the cache shows at once. The product gallery keeps pacing its own slides
+and takes none of the 8. This narrows the 2026-11-25 decision; the rest of it stands.
+
 ## 2026-11-26: A full-width mega menu on desktop
 
 The owner asked for "proper megamenu like myntra in desktop". From 1024px, a header item with

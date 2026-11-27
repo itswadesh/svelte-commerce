@@ -24,6 +24,7 @@
 	import { guardStorePalette } from '$lib/components/common/store-palette-guard.js'
 	import { startRouteTransition } from '$lib/motion/route-transition'
 	import ChromeEditorBridge from '$lib/composer/ChromeEditorBridge.svelte'
+	import { allowEarlyPictures } from '$lib/core/components/image/lazy-img.svelte'
 
 	interface LayoutData {
 		store: StoreData
@@ -41,6 +42,7 @@
 	}
 	let { children, data }: { children: Snippet; data: LayoutData } = $props()
 	setUserState()
+	allowEarlyPictures()
 
 	// Every page change crossfades; opening a product morphs its image. See route-transition.ts.
 	onNavigate((navigation) => {

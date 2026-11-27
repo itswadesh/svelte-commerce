@@ -1,5 +1,6 @@
 <script lang="ts" module>
 	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
+	import { getContext, setContext } from 'svelte'
 
 	// Candidate widths offered to the browser when `sizes` is set. The browser picks the
 	// smallest one that satisfies the rendered size at the device's pixel density, so image
@@ -19,6 +20,35 @@
 		const urls = SRCSET_WIDTHS.map((sw) => getImageCDNUrl(src, sw, 0))
 		if (new Set(urls).size < 2) return ''
 		return urls.map((url, i) => `${url} ${SRCSET_WIDTHS[i]}w`).join(', ')
+	}
+
+	// The first pictures a page renders are in or near the first screen, so they go in the server's
+	// HTML, already shown, instead of waiting for the observer below. That observer only exists
+	// after hydration, which on a mid-range phone on mobile data is seconds after first paint: the
+	// home page's product cards sat empty all that time (owner, 2026-11-27: "until I scroll,
+	// products are not visible"). Counted in render order, which is page order, so the server and
+	// hydration agree. ponytail: a count, not a measurement, since the server cannot see the
+	// screen; 8 covers the hero and two rows of cards on a phone, the first row on a desktop.
+	const EARLY_PICTURES = 8
+	const EARLY = Symbol('early pictures')
+
+	/**
+	 * Called by the root layout, so each page load gets its allowance of early pictures. A component
+	 * that paces its own pictures (a carousel, whose slides sit off screen sideways) passes 0.
+	 */
+	export function allowEarlyPictures(count = EARLY_PICTURES) {
+		setContext(EARLY, { left: count })
+	}
+
+	function claimEarly(): boolean {
+		const allowance = getContext<{ left: number } | undefined>(EARLY)
+		return !!allowance && allowance.left-- > 0
+	}
+
+	// A picture that comes out of the cache is complete before the frame paints: show it at once
+	// rather than fading it in again.
+	function shownIfCached(img: HTMLImageElement) {
+		if (img.complete && img.naturalWidth) img.setAttribute('data-shown', '')
 	}
 </script>
 
@@ -60,7 +90,6 @@
 	} = $props()
 
 	const resolvedLoading = $derived(loading ?? (priority || eager ? 'eager' : 'lazy'))
-	const resolvedFetchPriority = $derived(fetchpriority ?? (priority ? 'high' : eager ? 'low' : 'auto'))
 
 	// Fallback CDN resize width for responsive (w-full) images that pass no explicit
 	// width. Without it the CDN URL omits width=/height= and serves the full-res original.
@@ -99,8 +128,13 @@
 	// native `loading="lazy"` instead (2026-11-25) let Chrome fetch whatever lay within its 1250 to
 	// 2500px lazy margin during first load, product page gallery slides at high priority among them:
 	// mobile Lighthouse LCP went from 2.29 to 2.74s on home and 2.80 to 3.03s on a product page.
-	let near = $state(false)
+	const early = claimEarly()
+	// Early pictures ask low, like `eager` ones: the count may reach pictures well down the page,
+	// and they must not compete with the LCP picture for the line.
+	const resolvedFetchPriority = $derived(fetchpriority ?? (priority ? 'high' : eager || early ? 'low' : 'auto'))
+	let near = $state(early)
 	function whenNear(node: HTMLElement) {
+		if (near) return
 		const observer = new IntersectionObserver(
 			(entries) => {
 				if (entries.some((e) => e.isIntersecting)) {
@@ -139,6 +173,8 @@
 					decoding="async"
 					style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 					data-nimg="1"
+					data-shown={early ? '' : undefined}
+					use:shownIfCached
 					loading={resolvedLoading}
 					srcset={cdnSrcset}
 					sizes={cdnSrcset ? sizes : undefined}
@@ -168,6 +204,8 @@
 					fetchpriority={resolvedFetchPriority}
 					decoding="async"
 					data-nimg="1"
+					data-shown={early ? '' : undefined}
+					use:shownIfCached
 					style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 					height={attrH}
 					width={attrW}
