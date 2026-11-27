@@ -272,7 +272,14 @@
 								</button>
 							</div>
 						{:else}
-							<button type="button" class="dpc__add" disabled={!!cartState?.isUpdatingCart} onclick={() => addToCart(product)}>
+							<!-- Named outright: while the bag updates its only content is the loading dots, which say nothing. -->
+							<button
+								type="button"
+								class="dpc__add"
+								aria-label="Add {displayName} to bag"
+								disabled={!!cartState?.isUpdatingCart}
+								onclick={() => addToCart(product)}
+							>
 								{#if cartState?.isUpdatingCart}
 									<LoadingDots />
 								{:else}

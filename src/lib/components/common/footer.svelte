@@ -295,7 +295,7 @@
 								{/if}
 								{#if creditLabel}
 									{#if creditLink}
-										<a href={creditLink} target="_blank" rel="noopener noreferrer" class="ml-1 text-foreground transition-colors hover:text-primary">
+										<a href={creditLink} target="_blank" rel="noopener noreferrer" class="ml-1 text-foreground underline underline-offset-2 transition-colors hover:text-primary">
 											{creditLabel}
 										</a>
 									{:else}
