@@ -10,6 +10,7 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label/index.js'
+	import { Textarea } from '$lib/components/ui/textarea'
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import { showAuthModal } from '$lib/core/components/index.js'
@@ -74,6 +75,17 @@
 		answers = { ...((cartState.cart as any)?.answers ?? {}) }
 	})
 	const missingAnswer = $derived(unanswered(questions, answers))
+
+	// The shopper's note for the order (GoCommerce D345), seeded once from the cart like the answers.
+	// The counter counts what maxlength counts, so the two never disagree.
+	const NOTE_MAX = 500
+	let note = $state('')
+	let noteSeeded = false
+	$effect(() => {
+		if (noteSeeded || !cartState.cart?.id) return
+		noteSeeded = true
+		note = String((cartState.cart as any)?.note ?? '')
+	})
 
 	// `saveContactInfo` runs its zod `.parse()` calls BEFORE opening its own try block, so an
 	// invalid or missing email/phone throws straight out of the handler: no toast, no inline
@@ -252,12 +264,21 @@
 			return false
 		}
 		// The answers go with the order; the engine refuses one that leaves a required question empty.
-		if (questions.length) {
-			const kept = Object.fromEntries(questions.map((q) => [q.text, String(answers[q.text] ?? '').trim()]))
+		// The note is kept on the engine's cart (GoCommerce D345), sent only when it changed.
+		const noteChanged = note.trim() !== String((cartState.cart as any)?.note ?? '')
+		if (questions.length || noteChanged) {
+			const kept = questions.length
+				? Object.fromEntries(questions.map((q) => [q.text, String(answers[q.text] ?? '').trim()]))
+				: undefined
 			try {
-				cartState.cart = await cartService.updateCart2({ cartId: cartState.cart?.id, answers: kept })
+				cartState.cart = await cartService.updateCart2({
+					cartId: cartState.cart?.id,
+					...(kept ? { answers: kept } : {}),
+					...(noteChanged ? { note: note.trim() } : {})
+				})
 			} catch (e) {
 				toast.error(e instanceof Error ? e.message : 'Could not save your answers. Please try again.')
+				if (noteChanged) document.getElementById('checkout-note')?.focus()
 				return false
 			}
 		}
@@ -691,6 +712,30 @@
 								{/each}
 							</div>
 						{/if}
+						<div class="flex flex-col gap-2 rounded-lg border border-border bg-background p-4 sm:p-6">
+							<Label for="checkout-note"
+								>Note for the order<span class="ml-1 font-normal text-muted-foreground">(optional)</span></Label
+							>
+							<p id="checkout-note-help" class="text-sm text-muted-foreground">
+								Gift message, GSTIN, landmark or delivery instructions
+							</p>
+							<Textarea
+								id="checkout-note"
+								bind:value={note}
+								rows={3}
+								maxlength={NOTE_MAX}
+								aria-describedby="checkout-note-help checkout-note-count"
+								class="resize-y transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none"
+							/>
+							<p
+								id="checkout-note-count"
+								class="self-end text-xs tabular-nums transition-colors duration-200 {note.length >= NOTE_MAX
+									? 'text-destructive'
+									: 'text-muted-foreground'}"
+							>
+								{note.length}/{NOTE_MAX}
+							</p>
+						</div>
 						<WhatsappOptin
 							storeName={page?.data?.store?.name}
 							offer={whatsappOffer}

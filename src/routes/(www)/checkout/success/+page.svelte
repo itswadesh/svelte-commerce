@@ -417,6 +417,17 @@
 						</div>
 					{/if}
 				</div>
+
+				{#if firstOrder?.note}
+					<!-- The shopper's own note for the order (GoCommerce D345), printed as text. -->
+					<div class="border-b border-muted/30 p-4 md:p-6">
+						<div class="mb-4 flex items-center gap-2 text-base font-bold text-foreground">
+							<MessageCircle class="h-5 w-5 text-primary" />
+							<h3>Note for the order</h3>
+						</div>
+						<p class="whitespace-pre-wrap break-words px-2 text-sm leading-relaxed text-foreground">{firstOrder.note}</p>
+					</div>
+				{/if}
 			{:else if hasOrderReference && !browserLookupDone}
 				<div class="space-y-3 border-b border-muted/30 p-6 md:p-12" aria-busy="true" aria-label="Loading order details">
 					<Skeleton class="h-6 w-40" />

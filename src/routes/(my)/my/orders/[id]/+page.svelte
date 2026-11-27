@@ -280,6 +280,16 @@
 								</div>
 							</div>
 
+							{#if (order as any)?.note}
+								<!-- The shopper's own note for the order (GoCommerce D345), printed as text. -->
+								<div class="overflow-hidden rounded-md border border-muted/20 bg-background">
+									<div class="bg-muted/20 px-6 py-3">
+										<h3 class="font-semibold text-foreground">Note for the order</h3>
+									</div>
+									<p class="whitespace-pre-wrap break-words p-3 text-sm leading-relaxed text-foreground sm:p-6">{(order as any).note}</p>
+								</div>
+							{/if}
+
 							{#if (order as any)?.upi}
 								<UpiPay order={order as any} />
 							{/if}
