@@ -217,9 +217,18 @@
 	let landedPath = ''
 
 	// Also re-check on every navigation so a stale webview updates promptly.
-	afterNavigate(({ to }) => {
+	afterNavigate(({ to, type }) => {
 		if (browser) updated.check()
 		if (!browser) return
+
+		// The first page load is not a change of page. afterNavigate also fires when the app hydrates,
+		// seconds after the HTML is readable on a slow phone, and sending the window to the top then
+		// threw away whatever the shopper had already scrolled: the home page jumped back up. The
+		// browser has already placed a fresh load (or restored a reload), so only remember the path.
+		if (type === 'enter') {
+			landedPath = to?.url.pathname ?? ''
+			return
+		}
 
 		// Land at the top when the page itself changes. SvelteKit normally handles this, but the
 		// product page replaces its URL with `?variant_id=…` (`replaceState`, `noScroll`) the moment it
