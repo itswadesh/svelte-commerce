@@ -116,6 +116,8 @@
 					<p class="pl-6 text-muted-foreground">
 						A refund to your original payment method has been started. It usually reaches your account in 5–7 working days.
 					</p>
+				{:else if view.paidDirect}
+					<p class="pl-6 text-muted-foreground">The store will refund your UPI payment to you directly.</p>
 				{/if}
 			</div>
 		{:else if view.cancellation?.status === 'rejected'}
