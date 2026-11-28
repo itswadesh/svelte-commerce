@@ -34,6 +34,7 @@
 	import OrderCancel from '$lib/components/order/order-cancel.svelte'
 
 	let { class: klass = '', data, ...rest } = $props()
+	let fresh = $state<any>(null)
 
 	// Every failure path in the connector resolves to a truthy empty object, so a stale bookmark, a
 	// mistyped id or an API outage rendered a fully-formed order page: a heading with no number, an
@@ -55,7 +56,10 @@
 </svelte:head>
 
 <MyOrdersIdRenderer>
-	{#snippet content({ loading, order })}
+	{#snippet content({ loading, order: loaded })}
+		<!-- The renderer reads the order once, on mount; a cancel hands back a fresh copy, so the status
+		     badge and line follow it without a reload. -->
+		{@const order = fresh && orderNumberOf(fresh) === orderNumberOf(loaded) ? fresh : loaded}
 		<div class="mx-auto max-w-6xl {klass}">
 			{#if loading}
 				<OrderListSkeleton />
@@ -116,7 +120,7 @@
 									</div>
 								</div>
 								<!-- Cancel before it ships (GoCommerce D366); renders nothing where the store does not take it. -->
-								<OrderCancel order={order as any} class="mt-6 border-t border-border pt-6" />
+								<OrderCancel order={order as any} account class="mt-6 border-t border-border pt-6" onchange={(o) => (fresh = o)} />
 							</div>
 
 							<!-- Items List -->
@@ -253,7 +257,9 @@
 									<div>
 										<div class="mb-3 flex items-center gap-2">
 											<MapPin class="h-4 w-4 text-muted-foreground" />
-											<h4 class="text-sm font-bold tracking-tight text-foreground">{order?.shippingAddress?.address_1 ? 'Shipping address' : 'Billing details'}</h4>
+											<h4 class="text-sm font-bold tracking-tight text-foreground">
+												{order?.shippingAddress?.address_1 ? 'Shipping address' : 'Billing details'}
+											</h4>
 										</div>
 										<div class="text-sm leading-relaxed text-muted-foreground">
 											<p class="font-bold text-foreground">
@@ -382,7 +388,11 @@
 
 										{#if (order as any)?.partialCod}
 											<!-- Part-paid cash on delivery (GoCommerce D297). -->
-											<PartialCodSplit {...(order as any).partialCod} paid={(order as any).partialCod.advancePaid} currencyCode={order?.currencyCode || page?.data?.store?.currency?.code} />
+											<PartialCodSplit
+												{...(order as any).partialCod}
+												paid={(order as any).partialCod.advancePaid}
+												currencyCode={order?.currencyCode || page?.data?.store?.currency?.code}
+											/>
 										{/if}
 
 										<div class="mt-6 flex items-center justify-between gap-2 border-t border-border pt-6">
