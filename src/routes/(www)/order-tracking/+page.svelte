@@ -16,6 +16,7 @@
 	import OrderDownloads from '$lib/components/order/order-downloads.svelte'
 	import UpiPay from '$lib/components/order/upi-pay.svelte'
 	import PartialCodSplit from '$lib/components/order/partial-cod-split.svelte'
+	import OrderCancel from '$lib/components/order/order-cancel.svelte'
 	import StatusCell from '$lib/components/common/status-cell.svelte'
 	import { orderService } from '$lib/core/services/index.js'
 	import { CheckCircle } from '@lucide/svelte'
@@ -97,6 +98,8 @@
 
 					<h6 class="mt-2 text-sm text-muted-foreground sm:mt-0">Order Date : {date(order?.createdAt)}</h6>
 				</div>
+				<!-- Cancel before it ships (GoCommerce D366); renders nothing where the store does not take it. -->
+				<OrderCancel {order} class="border-b px-5 py-4" onchange={(o) => (order = o)} />
 				{#if order?.upi}
 					<div class="border-x p-3 sm:p-5">
 						<UpiPay {order} />
