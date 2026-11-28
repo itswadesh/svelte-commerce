@@ -20,7 +20,12 @@
 	 * (which keeps the /backend proxy, the store header and the sign-in). It costs one more read of
 	 * the order. When the connector maps the fields and adds `cancelOrder`, move this onto them.
 	 */
-	let { order, class: klass = '', onchange }: { order: { orderNo: string }; class?: string; onchange?: (order: any) => void } = $props()
+	let {
+		order,
+		class: klass = '',
+		account = false,
+		onchange
+	}: { order: { orderNo: string }; class?: string; account?: boolean; onchange?: (order: any) => void } = $props()
 
 	type Engine = { data: (path: string, req?: Record<string, unknown>) => Promise<any> }
 	const engine = orderService as unknown as Partial<Engine>
@@ -40,8 +45,11 @@
 
 	// A guest holds the order by its access token, the key in the emailed link, which the connector
 	// keeps for every order this browser opened; without one the order is the signed-in account's.
+	// The account's own order page always asks as the account, even in the browser that placed the
+	// order and so holds its key, so the store sees the request as the customer's, not a guest's.
+	const tokenFor = () => (account ? undefined : keptOrderToken(number))
 	async function read() {
-		const token = keptOrderToken(number)
+		const token = tokenFor()
 		return token ? engine.data!(`/api/orders/${enc}`, { query: { token } }) : engine.data!(`/x/identity/me/orders/${enc}`, { auth: true })
 	}
 
@@ -70,7 +78,7 @@
 		if (busy || missing) return
 		busy = true
 		error = ''
-		const token = keptOrderToken(number)
+		const token = tokenFor()
 		try {
 			const raw = token
 				? await engine.data!(`/api/orders/${enc}/cancel`, { method: 'POST', body: { token, reason: reason.trim() } })
