@@ -12,18 +12,25 @@ export type Cancellation = {
 export type CancelView = {
 	cancellable: boolean
 	cancellation: Cancellation | null
-	/** Paid online, so approving refunds it. Cash on delivery, in full or part, is refunded by hand if at all. */
+	/** Paid through a gateway, so approving refunds it automatically. */
 	prepaid: boolean
+	/** Paid straight to the store's UPI ID, which no gateway can send back: the store refunds it by hand. */
+	paidDirect: boolean
 }
 
 const CASH = ['cod', 'cod_partial']
+// The engine's own method with no gateway behind it (a UPI transfer the shopper reports by reference).
+const DIRECT = ['upi']
 
 /** The engine's order (snake_case, as `/api/orders/{number}` answers it). */
 export function cancelView(raw: any): CancelView {
+	const provider = String(raw?.payment_provider ?? '').toLowerCase()
+	const paid = ['paid', 'refunded'].includes(String(raw?.payment_status ?? ''))
 	return {
 		cancellable: raw?.cancellable === true,
 		cancellation: raw?.cancellation?.status ? raw.cancellation : null,
-		prepaid: !CASH.includes(String(raw?.payment_provider ?? '').toLowerCase()) && ['paid', 'refunded'].includes(String(raw?.payment_status ?? ''))
+		prepaid: paid && !CASH.includes(provider) && !DIRECT.includes(provider),
+		paidDirect: paid && DIRECT.includes(provider)
 	}
 }
 

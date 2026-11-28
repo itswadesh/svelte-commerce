@@ -13,6 +13,10 @@ describe('cancelView', () => {
 		expect(cancelView({ payment_provider: 'cod', payment_status: 'pending' }).prepaid).toBe(false)
 		expect(cancelView({ payment_provider: 'cod_partial', payment_status: 'paid' }).prepaid).toBe(false)
 		expect(cancelView({ payment_provider: 'razorpay', payment_status: 'pending' }).prepaid).toBe(false)
+		// A direct UPI transfer is refunded by the store by hand, not "started" by a gateway.
+		expect(cancelView({ payment_provider: 'upi', payment_status: 'paid' }).prepaid).toBe(false)
+		expect(cancelView({ payment_provider: 'upi', payment_status: 'paid' }).paidDirect).toBe(true)
+		expect(cancelView({ payment_provider: 'razorpay', payment_status: 'paid' }).paidDirect).toBe(false)
 	})
 	it('reads a request only when it has a status', () => {
 		expect(cancelView({ cancellation: { status: 'pending' } }).cancellation?.status).toBe('pending')
