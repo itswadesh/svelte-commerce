@@ -31,6 +31,7 @@
 	import UpiPay from '$lib/components/order/upi-pay.svelte'
 	import PartialCodSplit from '$lib/components/order/partial-cod-split.svelte'
 	import ReplacementRequest from '$lib/components/order/replacement-request.svelte'
+	import OrderCancel from '$lib/components/order/order-cancel.svelte'
 
 	let { class: klass = '', data, ...rest } = $props()
 
@@ -114,6 +115,8 @@
 										{/if}
 									</div>
 								</div>
+								<!-- Cancel before it ships (GoCommerce D366); renders nothing where the store does not take it. -->
+								<OrderCancel order={order as any} class="mt-6 border-t border-border pt-6" />
 							</div>
 
 							<!-- Items List -->
