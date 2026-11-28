@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js'
 	import { goto } from '$app/navigation'
-	import { ChevronRight, LoaderCircle, LockKeyhole, MapPin, Pencil, ShoppingBag, Truck } from '@lucide/svelte'
+	import { ChevronDown, ChevronRight, LoaderCircle, LockKeyhole, MapPin, Pencil, Truck } from '@lucide/svelte'
 	import { formatPrice, taxIsPending, totalLabel } from '$lib/utils/price'
 	import Spinner from '$lib/components/common/spinner.svelte'
 	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
@@ -32,14 +32,14 @@
 	import OrderBlockNotice from '$lib/components/order/order-block-notice.svelte'
 	import { checkoutQuestions, orderBlock, unanswered } from '$lib/order/rules'
 	import { toast } from '@misiki/kitcommerce-core'
-	import { onMount } from 'svelte'
+	import { onMount, tick } from 'svelte'
 	import { trackBeginCheckout } from '$lib/analytics'
 	import { replaceState } from '$app/navigation'
 	import { PaymentModule } from '$lib/core/composables/index.js'
 	import { LiveQuote } from '$lib/checkout/quote.svelte'
 	import { offerStoreMethods, placeOrder } from '$lib/checkout/place-order'
 	import Payment from '../payment/payment.svelte'
-	import { fly } from '$lib/motion'
+	import { fly, slide } from '$lib/motion'
 
 	const addressModule = new AddressModule()
 
@@ -80,11 +80,13 @@
 	// The counter counts what maxlength counts, so the two never disagree.
 	const NOTE_MAX = 500
 	let note = $state('')
+	let noteOpen = $state(false)
 	let noteSeeded = false
 	$effect(() => {
 		if (noteSeeded || !cartState.cart?.id) return
 		noteSeeded = true
 		note = String((cartState.cart as any)?.note ?? '')
+		noteOpen = !!note
 	})
 
 	// `saveContactInfo` runs its zod `.parse()` calls BEFORE opening its own try block, so an
@@ -278,7 +280,11 @@
 				})
 			} catch (e) {
 				toast.error(e instanceof Error ? e.message : 'Could not save your answers. Please try again.')
-				if (noteChanged) document.getElementById('checkout-note')?.focus()
+				if (noteChanged) {
+					noteOpen = true
+					await tick()
+					document.getElementById('checkout-note')?.focus()
+				}
 				return false
 			}
 		}
@@ -305,12 +311,26 @@
 			(!addressModule.isBillingAddressSameAsShipping && !cartState.cart?.billingAddress?.address_1 ? 'Add a billing address to continue.' : '')
 	)
 	async function placeOnePage() {
+		// Leaving an address field to tap Place order starts a save of what was just typed; the order
+		// waits for it, so it goes with the address on screen. ponytail: an edit that leaves the form
+		// incomplete is not saved, and the order keeps the last complete address.
+		await guestSave?.catch(() => {})
 		if (pay && quote && (await saveBeforePayment())) await placeOrder(pay, quote)
 	}
 
 	const questionId = (text: string) => `checkout-question-${questions.findIndex((q) => q.text === text)}`
 
-	async function handleGuestSubmit(address: any) {
+	// Why the guest's address is saved before the order rather than with it: the engine's cart needs
+	// it before it can quote delivery (rates, free delivery, tax by state), offer COD and list the
+	// payment methods, all of which one page draws below the form. So the save stays, but on one page
+	// it happens by itself once the form is complete (`autosave`), with no Save button.
+	let guestSave: Promise<void> | null = null
+	function handleGuestSubmit(address: any, opts?: { auto?: boolean }) {
+		guestSave = saveGuest(address, !!opts?.auto)
+		return guestSave
+	}
+
+	async function saveGuest(address: any, auto: boolean) {
 		try {
 			loadingForGuestCheckout = true
 
@@ -324,7 +344,7 @@
 				await addressModule.saveAddressToCart()
 			}
 			// On one page, delivery and payment appear below once the address is saved.
-			if (!onePage && isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress) {
+			if (!onePage && !auto && isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress) {
 				await proceedToPayment()
 			}
 		} finally {
@@ -399,28 +419,19 @@
 					<div class="min-w-0 space-y-6">
 						<!-- Contact Details -->
 						{#await userState.hasLoaded then _}
-							<!-- Every logged-out visitor sees the guest-checkout banner, where the store takes guests. -->
+							<!-- A plain line, not a highlighted banner (merchant request, 2026-11-28): a guest just
+							     fills the form, and anyone with an account has the way in. -->
 							{#if !userState.user?.userId && guestsAllowed}
-								<div class="rounded-lg border border-primary/30 bg-primary/10 p-3 sm:p-4">
-									<div class="flex items-start gap-3">
-										<ShoppingBag class="mt-0.5 size-5 shrink-0 text-primary" />
-										<div>
-											<p class="text-sm font-semibold text-primary">You're checking out as a guest</p>
-											<p class="mt-1 text-sm text-primary">
-												No account needed — just enter your details below. Optionally,
-												<button
-													class="font-bold underline hover:text-primary"
-													onclick={() => {
-														showAuthModal('login')
-													}}
-												>
-													log in
-												</button>
-												to use your saved addresses and speed up checkout.
-											</p>
-										</div>
-									</div>
-								</div>
+								<p class="text-sm text-muted-foreground" data-testid="checkout-login-link">
+									Already have an account?
+									<button
+										type="button"
+										class="rounded-sm font-semibold text-foreground underline underline-offset-4 transition-[color,opacity] duration-fast hover:text-primary active:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
+										onclick={() => showAuthModal('login')}
+									>
+										Log in
+									</button>
+								</p>
 							{/if}
 						{/await}
 						<!-- Logged-in shoppers only. The guest form below already collects email and phone —
@@ -522,6 +533,7 @@
 									bind:address={addressModule.currentAddress}
 									isLoading={loadingForGuestCheckout}
 									onsave={handleGuestSubmit}
+									autosave={onePage}
 									pickup
 								/>
 							</div>
@@ -547,6 +559,7 @@
 											bind:address={addressModule.currentAddress}
 											isLoading={loadingForGuestCheckout}
 											onsave={handleGuestSubmit}
+											autosave={onePage}
 											{detailsOnly}
 										/>
 									</div>
@@ -601,6 +614,7 @@
 											bind:address={addressModule.currentAddress}
 											isLoading={loadingForGuestCheckout}
 											onsave={handleGuestSubmit}
+											autosave={onePage}
 											detailsOnly
 										/>
 									</div>
@@ -712,30 +726,6 @@
 								{/each}
 							</div>
 						{/if}
-						<div class="flex flex-col gap-2 rounded-lg border border-border bg-background p-4 sm:p-6">
-							<Label for="checkout-note"
-								>Note for the order<span class="ml-1 font-normal text-muted-foreground">(optional)</span></Label
-							>
-							<p id="checkout-note-help" class="text-sm text-muted-foreground">
-								Gift message, GSTIN, landmark or delivery instructions
-							</p>
-							<Textarea
-								id="checkout-note"
-								bind:value={note}
-								rows={3}
-								maxlength={NOTE_MAX}
-								aria-describedby="checkout-note-help checkout-note-count"
-								class="resize-y transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none"
-							/>
-							<p
-								id="checkout-note-count"
-								class="self-end text-xs tabular-nums transition-colors duration-200 {note.length >= NOTE_MAX
-									? 'text-destructive'
-									: 'text-muted-foreground'}"
-							>
-								{note.length}/{NOTE_MAX}
-							</p>
-						</div>
 						<WhatsappOptin
 							storeName={page?.data?.store?.name}
 							offer={whatsappOffer}
@@ -754,10 +744,55 @@
 									Delivery and payment
 								</h2>
 								<p class="mt-1 text-sm text-muted-foreground">
-									{pickup || detailsOnly ? 'Save your details' : 'Save your address'} to choose how it reaches you and how to pay.
+									{pickup || detailsOnly ? 'Add your details' : 'Add your address'} to choose how it reaches you and how to pay.
 								</p>
 							</section>
 						{/if}
+						<!-- After delivery and payment, and folded away until asked for (merchant request,
+						     2026-11-28): most orders carry no note. A note already on the cart opens it. -->
+						<div class="rounded-lg border border-border bg-background">
+							<button
+								type="button"
+								class="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-foreground transition-colors duration-fast hover:bg-muted/40 active:bg-muted/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-6"
+								aria-expanded={noteOpen}
+								aria-controls="checkout-note-panel"
+								onclick={() => (noteOpen = !noteOpen)}
+							>
+								<span>
+									Add a note for the order<span class="ml-1 font-normal text-muted-foreground">(optional)</span>
+								</span>
+								<ChevronDown
+									class="size-4 shrink-0 text-muted-foreground transition-transform duration-panel ease-standard motion-reduce:transition-none {noteOpen
+										? 'rotate-180'
+										: ''}"
+									aria-hidden="true"
+								/>
+							</button>
+							{#if noteOpen}
+								<div id="checkout-note-panel" class="flex flex-col gap-2 px-4 pb-4 sm:px-6 sm:pb-6" transition:slide>
+									<Label for="checkout-note" class="sr-only">Note for the order</Label>
+									<p id="checkout-note-help" class="text-sm text-muted-foreground">
+										Gift message, GSTIN, landmark or delivery instructions
+									</p>
+									<Textarea
+										id="checkout-note"
+										bind:value={note}
+										rows={3}
+										maxlength={NOTE_MAX}
+										aria-describedby="checkout-note-help checkout-note-count"
+										class="resize-y transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none"
+									/>
+									<p
+										id="checkout-note-count"
+										class="self-end text-xs tabular-nums transition-colors duration-200 {note.length >= NOTE_MAX
+											? 'text-destructive'
+											: 'text-muted-foreground'}"
+									>
+										{note.length}/{NOTE_MAX}
+									</p>
+								</div>
+							{/if}
+						</div>
 					</div>
 
 					<!-- Right Column - Order Summary -->

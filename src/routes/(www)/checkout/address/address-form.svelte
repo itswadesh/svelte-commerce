@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button/index.js'
-	import { AlertCircle, Save } from '@lucide/svelte'
+	import { AlertCircle, Check, LoaderCircle } from '@lucide/svelte'
+	import { fade } from '$lib/motion'
 	import Textbox from '$lib/components/form/textbox.svelte'
-	import Spinner from '$lib/components/common/spinner.svelte'
 	import { page } from '$app/state'
 	import { AddressSchema } from '$lib/core/components/index.js'
 	import { AddressFormRenderer, checkoutAddressSchema } from '$lib/core/composables/index.js'
@@ -17,10 +16,17 @@
 		isLoading = false,
 		detailsOnly = false,
 		pickup = false,
+		autosave = false,
 		onsave
 	}: {
 		/** Collected from the shop (GoCommerce D271): only the name, email and phone are asked. */
 		pickup?: boolean
+		/**
+		 * Save the address by itself once it is complete, with no button. The one-page checkout needs
+		 * it on the engine's cart before delivery rates, COD and the payment methods can be worked out,
+		 * and a separate Save step there was one more thing to tap (merchant request, 2026-11-28).
+		 */
+		autosave?: boolean
 		address: any
 		isLoading?: boolean
 		/**
@@ -29,7 +35,7 @@
 		 * out from it. No street, city or PIN code is invented to fill the gap.
 		 */
 		detailsOnly?: boolean
-		onsave?: (address: any) => void | Promise<void>
+		onsave?: (address: any, opts?: { auto?: boolean }) => void | Promise<void>
 	} = $props()
 
 	let show = $state(true)
@@ -92,13 +98,49 @@
 		)
 	)
 
+	// A field the shopper has never touched comes back as null, not '', and zod then reports
+	// "Expected string, received null" instead of the rule's own message. Normalise first.
+	function candidateOf(): Record<string, unknown> {
+		const candidate: Record<string, unknown> = Object.fromEntries(
+			Object.keys(rules).map((key) => [key, (address as Record<string, unknown>)?.[key] ?? ''])
+		)
+		candidate.countryCode = address?.countryCode || page?.data?.store?.country?.code || ''
+		return candidate
+	}
+
+	// Autosave: quiet while the shopper is still typing (no field errors for a half-filled form), and
+	// only once every rule the submit path checks passes, the renderer's own included, so it never
+	// saves what the footer button would refuse. The same address is not sent twice; a failed save is
+	// shown on the form and retried on the next change, not in a loop.
+	const AUTOSAVE_MS = 800
+	let lastAutosaved = ''
+
+	function saveQuietly() {
+		if (!autosave || isLoading || !address) return
+		const candidate = candidateOf()
+		const key = JSON.stringify(candidate)
+		if (key === lastAutosaved || !z.object(rules).safeParse(candidate).success) return
+		if (!short && !z.object(AddressSchema).safeParse({ ...address, phone: tidyPhone(address.phone), countryCode: candidate.countryCode }).success)
+			return
+		lastAutosaved = key
+		if (address.phone) address.phone = tidyPhone(address.phone)
+		address.countryCode = candidate.countryCode
+		saveAndReportFailure(address, true)
+	}
+
+	// Typing, pasting, browser autofill and the PIN code filling the city all land here; leaving a
+	// field saves straight away (onfocusout below), so a tap on Place order never races the timer.
+	$effect(() => {
+		if (!autosave || isLoading) return
+		if (JSON.stringify(candidateOf()) === lastAutosaved) return
+		const timer = setTimeout(saveQuietly, AUTOSAVE_MS)
+		return () => clearTimeout(timer)
+	})
+
 	function submitWithVisibleErrors(event: Event, handleSubmit: (e: Event) => void) {
 		event.preventDefault()
 		if (address?.phone) address.phone = tidyPhone(address.phone)
-		// A field the shopper has never touched comes back as null, not '', and zod then reports
-		// "Expected string, received null" instead of the rule's own message. Normalise first.
-		const candidate = Object.fromEntries(Object.keys(rules).map((key) => [key, (address as Record<string, unknown>)?.[key] ?? '']))
-		candidate.countryCode = address?.countryCode || page?.data?.store?.country?.code || ''
+		const candidate = candidateOf()
 		const result = z.object(rules).safeParse(candidate)
 		if (!result.success) {
 			const next: Record<string, string> = {}
@@ -130,10 +172,16 @@
 	// Whatever `onsave` throws — the backend rejecting the customer, a failed cart update — used to
 	// reach the shopper only as a toast. Show it on the form too, so a failed save can never look
 	// like a dead button again.
-	async function saveAndReportFailure(saved: any) {
+	// With no button, the shopper still sees the address go: a quiet line under the form.
+	let autosaved = $state<'' | 'saving' | 'saved'>('')
+
+	async function saveAndReportFailure(saved: any, auto = false) {
+		if (autosave) autosaved = 'saving'
 		try {
-			await onsave?.(saved)
+			await onsave?.(saved, { auto })
+			if (autosave) autosaved = 'saved'
 		} catch (e) {
+			autosaved = ''
 			fieldErrors = {}
 			formError = e instanceof Error ? e.message : 'Could not save this address. Please try again.'
 		}
@@ -169,6 +217,7 @@
 			bind:this={formEl}
 			novalidate
 			oninput={clearErrorOnInput}
+			onfocusout={saveQuietly}
 			onsubmit={(e) => submitWithVisibleErrors(e, handleSubmit)}
 			class="grid"
 		>
@@ -314,22 +363,23 @@
 					{/if}
 				</div>
 			</div>
-			<div class="mt-4 flex flex-col gap-2">
-				<!-- Outline, not a second full-width primary: the summary card's CTA is the one control
-				     that moves the order forward, and two identically weighted dark buttons carrying the
-				     same label told the shopper nothing about which one did (UX-081). Kept as the form's
-				     submit so Enter still saves, and it stays the in-flow action on a phone.
-				     No dirty-tracking gate: autofill and paste never fired keyup, so it stranded shoppers.
-				     The renderer's zod validation on submit already blocks incomplete addresses. -->
-				<Button type="submit" variant="outline" disabled={isLoading} class="h-11 w-full">
-					{#if isLoading}
-						<Spinner label={short ? 'Saving your details' : 'Saving address'} />
-					{:else}
-						<Save class="mr-2 h-4 w-4" />
-						{short ? 'Save details' : 'Save address'}
+			<!-- No Save button (merchant request, 2026-11-28): the summary's forward button submits
+			     this form with `requestSubmit()`, and on one page the address also saves itself. -->
+			{#if autosave}
+				<p class="mt-3 flex min-h-5 items-center gap-2 text-sm text-muted-foreground" aria-live="polite" data-testid="address-autosave">
+					{#if autosaved === 'saving'}
+						<span class="flex items-center gap-2" in:fade
+							><LoaderCircle class="size-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />Saving {short
+								? 'your details'
+								: 'your address'}</span
+						>
+					{:else if autosaved === 'saved'}
+						<span class="flex items-center gap-2" in:fade
+							><Check class="size-4 text-success" aria-hidden="true" />{short ? 'Details saved' : 'Address saved'}</span
+						>
 					{/if}
-				</Button>
-			</div>
+				</p>
+			{/if}
 		</form>
 	{/snippet}
 </AddressFormRenderer>

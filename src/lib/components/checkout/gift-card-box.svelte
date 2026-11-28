@@ -4,7 +4,8 @@
 	import { cartService } from '$lib/core/services'
 	import { formatPrice } from '$lib/utils/price'
 	import { fade, slide } from '$lib/motion'
-	import { Gift } from '@lucide/svelte'
+	import { ChevronDown, Gift } from '@lucide/svelte'
+	import { tick } from 'svelte'
 
 	/**
 	 * The gift card box (GoCommerce D250). The engine checks the code, and its refusal is shown as it
@@ -23,6 +24,17 @@
 	const supported = typeof svc.applyGiftCard === 'function' && typeof svc.removeGiftCard === 'function'
 	const card = $derived(cartState.cart?.giftCard ?? null)
 	const currencyCode = $derived(page?.data?.store?.currency?.code)
+
+	// Folded away like the promo code until the shopper asks for it (merchant request, 2026-11-28);
+	// a card already on the bag shows open, since what it pays is worth seeing.
+	let open = $state(false)
+	const shown = $derived(open || !!card)
+	async function toggle() {
+		open = !open
+		if (!open) return
+		await tick()
+		document.getElementById('gift-card-code')?.focus()
+	}
 
 	let code = $state('')
 	let busy = $state(false)
@@ -58,12 +70,35 @@
 
 {#if supported}
 	<section class="rounded-radius border border-border bg-background p-3 sm:p-4" aria-labelledby="gift-card-title" data-testid="gift-card-box">
-		<h2 id="gift-card-title" class="mb-2 flex sm:mb-3 items-center gap-2 text-sm font-semibold text-foreground">
-			<Gift class="size-4 text-primary" aria-hidden="true" />
-			Gift card
+		<h2 id="gift-card-title" class="text-sm font-semibold text-foreground">
+			{#if card}
+				<span class="flex items-center gap-2">
+					<Gift class="size-4 text-primary" aria-hidden="true" />
+					Gift card
+				</span>
+			{:else}
+				<button
+					type="button"
+					class="flex min-h-11 w-full items-center justify-between gap-2 rounded-radius text-left transition-colors duration-fast hover:text-primary active:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
+					aria-expanded={open}
+					aria-controls="gift-card-panel"
+					onclick={toggle}
+				>
+					<span class="flex items-center gap-2">
+						<Gift class="size-4 text-primary" aria-hidden="true" />
+						Add a gift card
+					</span>
+					<ChevronDown
+						class="size-4 shrink-0 text-muted-foreground transition-transform duration-panel ease-standard motion-reduce:transition-none {open ? 'rotate-180' : ''}"
+						aria-hidden="true"
+					/>
+				</button>
+			{/if}
 		</h2>
-		{#if card}
-			<div class="flex items-center justify-between gap-3" in:fade>
+		{#if !shown}
+			<!-- Folded: nothing below the heading. -->
+		{:else if card}
+			<div class="mt-2 flex items-center justify-between gap-3 sm:mt-3" in:fade>
 				<p class="min-w-0 text-sm text-foreground">
 					<span class="font-mono font-semibold">…{card.last4}</span>
 					<span class="text-muted-foreground">· {formatPrice(card.balance, currencyCode)} on it</span>
@@ -73,7 +108,7 @@
 				</Button>
 			</div>
 		{:else}
-			<form class="flex gap-2" onsubmit={apply} in:fade>
+			<form id="gift-card-panel" class="mt-2 flex gap-2 sm:mt-3" onsubmit={apply} transition:slide>
 				<label for="gift-card-code" class="sr-only">Gift card code</label>
 				<input
 					id="gift-card-code"
